@@ -1,0 +1,41 @@
+{% extends "/__admin__/admin_base.jinja2" %}
+{% block admin_content %}
+
+	<h2>All admins:</h2>
+	<ul>				
+		{% for a in all_admins %}
+			<li><b>{{ a.username }}</b></li>
+			<ul>
+				<li><b>Super admin:</b> {{ a.super_admin }}</li>
+				<li><b>Last login:</b>  {{ a.last_login }}</li>
+				<li><b>Date added:</b>  {{ a.date_joined }}</li>
+				<li><b>Is active:</b>   {{ a.active }}</li>
+			</ul>	
+		{% endfor %}
+	</ul>
+
+	<h2>Create a new admin</h2>
+
+	<h3 style="color: green;">{% if success_message %}{{ success_message }}{% endif %}</h3>
+
+	<form method="POST" action="/_admin/manage/admin/">
+		<input type="text" name="username" placeholder="username">
+		<input type="text" name="password" placeholder="password">
+	
+		<div>
+			<b style="font-family: arial; font-size: 14px;">Super-Admin:</b>
+			<select name="super_admin">
+				<option value="False" selected>False</option>
+				<option value="True">True</option>
+			</select>
+		</div>
+
+		<br>
+
+		<div>
+			<input type="submit" value="Create new admin" name="new-admin-button">
+		</div>
+
+		<div style="color: red;">{% if error_message %}{{ error_message }}{% endif %}</div>
+	</form>
+{% endblock %}

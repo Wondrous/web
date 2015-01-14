@@ -1,0 +1,27 @@
+{% extends "/__admin__/admin_base.jinja2" %}
+{% block admin_content %}
+	<h2>MojoRank Stats</h2>
+
+	<h3>CORE</h3>
+	<div><b>Total users:</b> 					 	<em>{{ stats_package['user_count'] }}</em></div>
+	<div><b>Total objects (posts):</b>	 		 	<em>{{ stats_package['object_count'] }}</em></div>
+	<div><b>Total global tags:</b> 					<em>{{ stats_package['global_tag_count'] }}</em></div>
+	<br>
+	<h3>BASIC</h3>
+	<div><b>Avg. posts per user:</b> 			 	<em>{{ stats_package['avg_posts_per_user'] }}</em></div>
+	<div><b>Avg. tags per post:</b> 				<em>{{ stats_package['avg_tags_per_post'] }}</em></div>
+	<div><b>Avg. unique tags per post:</b> 			<em>{{ stats_package['avg_unique_tags_per_post'] }}</em></div>
+	<div><b>Tag reuse per post:</b> 				<em>{{ stats_package['tag_reuse'] * 100 }}%</em></div>
+	<div><b>Avg. posts per global tag:</b> 			<em>{{ stats_package['avg_posts_per_global_tag'] }}</em></div>
+	<br>
+	<h3>OBJECT TAGS</h3>
+	<div><b>Total object upvotes:</b> 		 		<em>{{ stats_package['object_up_vote_count'] }}</em></div>
+	<div><b>Total object downvotes:</b>  	 		<em>{{ stats_package['object_down_vote_count'] }}</em></div>
+	<div><b>Total object votes:</b> 				<em>{{ stats_package['object_total_vote_count'] }}</em></div>
+	<div><b>Avg. votes on post per object tag:</b>	<em>{{ stats_package['avg_votes_on_object_per_individual_object_tag'] }}</em></div>
+	<div><b>Avg. total votes per post:</b>   	 	<em>{{ stats_package['avg_votes_per_object'] }}</em></div>
+	<br>
+	<h3>UNFORTUNATE THINGS</h3>
+	<div><b>Total reported posts:</b> 			 	<em>{{ stats_package['reported_object_count'] }}</em></div>
+	<div><b>Total disabled accounts:</b>     	 	<em>{{ stats_package['disabled_user_count'] }}</em></div>
+{% endblock %}

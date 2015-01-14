@@ -1,0 +1,14 @@
+<div class="profile-landing cover">
+
+	<h1 class="profile-landing-name">{{ profile_user.name }}</h1>
+	<img class="profile-landing-profile-picture round-50" src="{{ profile_user.user.profile_picture }}">
+
+	<div>
+		{% if not is_blocked %}
+			<button class="btn follow-btn round-3 animate-e-i-o">Request to Follow</button>
+			{#<div><button class="btn private-message-btn round-3 animate-e-i-o">Private Message</button></div>#}
+		{% else %}
+			<h2>Sorry, you've been blocked</h2>
+		{% endif %}
+	</div>
+</div>

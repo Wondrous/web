@@ -1,0 +1,37 @@
+{% extends "base.jinja2" %}
+{% block content %}
+	{% if result_list %}	
+		<div class="search-results-wrapper">
+			{% for d in result_list %}
+				{% if d['result_type'] == "tag" %}
+
+					<h4>Tags</h4>
+					{% for result in d['results'] %}
+						<a href="/tag/{{ result.tag_name }}">
+							<div class="search-result-item-wrapper" style="background-color: rgb(245,245,245);">
+								<span class="search-result-tag-text"><b>#</b>{{ result.tag_name }}</span>
+							</div>
+						</a>
+					{% endfor %}
+					
+				{% elif d['result_type'] == "person" %}
+					
+					<h4>Users</h4>
+					{% for result in d['results'] %}
+						<a href="/{{ result.user.username }}/">
+							<div class="search-result-item-wrapper">
+								<img src="{{result.user.profile_picture}}" class="round-50" style="height: 60px; width: auto;">
+								<span class="search-result-user-text">{{ result.name }}</span>
+							</div>
+						</a>
+					{% endfor %}
+					<hr>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="search-no-results">
+			Your search returned no results <span style="white-space:nowrap;">;....(</span>
+		</div>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+User-agent: *
+Disallow: /_admin/
+Disallow: /ajax/
+Disallow: /auth/
+Disallow: /community/
+Disallow: /search/
+Disallow: /tag/
+
+Allow: /info/about
+Allow: /info/tos
+Allow: /info/privacy
+
+#
+# beware, the sections below WILL NOT INHERIT from the above!
+# http://www.google.com/support/webmasters/bin/answer.py?hl=en&answer=40360
+#
+# Yahoo bot is evil.
+#
+User-agent: Slurp
+Disallow: /
+
+User-agent: Googlebot-Image
+Disallow: /

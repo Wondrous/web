@@ -1,0 +1,35 @@
+<div id="popup-box" class="popup-wrapper">
+
+	<div class="popup-box-topbar">
+		<h2 class="popup-box-header">Report this post</h2>
+	</div>
+
+	<form id="reportContentForm">
+		<div class="general-text" style="font-weight: bold; padding-bottom: 5px;">*Please select why you are reporting this content:</div>
+		<div>
+			<label class="general-text" for="option-offensive">
+				<input type="radio" id="option-offensive" name="reportOption" style="margin-right: 7px;" value="offensive" />Offensive
+			</label>
+		</div>
+		<div>
+			<label class="general-text" for="option-useless">
+				<input type="radio" id="option-useless" name="reportOption" style="margin-right: 7px;" value="useless" />Useless/Pointless
+			</label>
+		</div>
+		<div>
+			<label class="general-text" for="option-spam">
+				<input type="radio" id="option-spam" name="reportOption" style="margin-right: 7px;" value="spam" />Spam
+			</label>
+		</div>
+		<div>
+			<label class="general-text" for="option-other">
+				<input type="radio" id="option-other" name="reportOption" style="margin-right: 7px;" value="other" />Other
+			</label>
+		</div>
+
+		<textarea class="report-textarea" maxlength="300" placeholder="*Please add additional comments here (required)."></textarea>
+
+		<span class="general-button report-button">Report this post</span>
+		<span class="general-button report-button cancelReportButton"><b>Cancel</b></span>
+	</form>
+</div>

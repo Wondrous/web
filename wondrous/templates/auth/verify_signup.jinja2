@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html class="lo-html">
+<head>
+	<title>MojoRank | Finish signing up</title>
+
+	{% include "/includes/inc._head-meta.jinja2" %}
+	{% include "/includes/inc._head-js.jinja2" %}
+	{% include "/includes/inc._head-css.jinja2" %}
+</head>
+<body class="new-lo-bg cover" style="background-color: rgb(221,221,221);">
+	{% if not error_message %}
+		<div id="loading-mask"></div>
+		<div id="fb-root"></div>
+	{% endif %}
+	<a href="/" class="big-lo-logo-a">
+		<div class="lo-mojorank-big" style="color: rgb(141,141,141);">
+			<span class="mr-green">Mojo</span><span class="mr-blue">Rank</span>
+		</div>
+	</a>
+	<span class="lo-input-box round-2">
+		{% if error_message %}
+			<p class="auth-error-small">
+				{{ error_message }}
+			</p>
+		{% else %}
+			<h2 style="text-align: center;">Final step ;)</h2>
+			<h4 style="text-align: center; font-weight: normal;">You must log in here to complete the sign up process! <b>Otherwise, your account won't be created.</b></h4>
+			<script type="text/javascript" src="/static/js/fb-api-s.js"></script>
+			<span id="fb-auth" class="big-auth" onclick="FB.logout(); FB.login();"></span>
+
+			<h4 style="text-align: center; font-weight: normal; font-style: italic;">We use only your Facebook name and profile picture. That's it!</h4>
+
+			<img src="/static/pictures/p.loading.gif" id="loader" class="loader-lo" style="display: none;">
+
+			<div class="login-accept-terms">
+				By clicking the above button and signing up and logging in to MojoRank, you have reviewed and accepted our Privacy Policy and Terms of Service
+			</div>
+			<input id="verificationCode" style="display: none; position: absolute;" value="{{ verification_code }}">
+		{% endif %}
+	</span>
+</body>
+</html>

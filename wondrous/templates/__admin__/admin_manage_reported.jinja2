@@ -1,0 +1,101 @@
+{% extends "/__admin__/admin_base.jinja2" %}
+{% block admin_content %}
+
+	<div style="float: right; margin-right: 5%;">
+		<h5>Top Offenders</h5>
+		{% for d in top_offenders %}
+			<div style="font-size: 14px;"><a href="/_admin/manage/users/{{d[0]}}/"><b>{{ d[1] }}-rp</b> | {{ get_person(d[0]).name }} (id: {{ d[0] }})</a></div>
+		{% endfor %}
+	</div>
+
+	<h2>Reported Posts</h2>
+	<div style="width: 60%;">
+		{% for item in render_items %}			
+			<div style="margin: 20px; padding: 10px; border: 2px solid rgb(180,180,180);" class="object-{{ item.object_id }}">	
+				
+				<div style="font-size: 15px;">
+					{% if item.poster.user_type == 1 %}
+						<b>Poster:</b> <a href="/_admin/manage/users/{{item.poster_id}}/">{{ get_person(item.poster_id).name }} (id: {{ item.poster_id }})</a> | <b>{{ get_num_offenses(item.poster_id) }}-rp</b>
+					{% else %}
+					{% endif %}
+				</div>
+
+				<div style="font-size: 15px;">
+					{% if item.poster.user_type == 1 %}
+						<b>Reporter:</b> <a href="/_admin/manage/users/{{item.reporter_id}}/">{{ get_person(item.reporter_id).name }} (id: {{ item.reporter_id }})</a>
+					{% else %}
+					{% endif %}
+				</div>
+
+				<div style="font-size: 15px;">
+					<b>Why:</b>
+					{% if item.why_id == 1 %}
+						It's annoying or not interesting
+					{% elif item.why_id == 2 %}	
+						I'm involved in this post and I don't like it		
+					{% elif item.why_id == 3 %}
+						I think this is inappropriate for MojoRank
+					{% elif item.why_id == 4 %}
+						It's spam
+					{% endif %}
+				</div>
+
+				<div style="font-size: 15px;">
+					<b>Comment:</b>
+					{{ item.comment }}					
+				</div>
+
+				<div style="font-size: 15px;">
+					<b>Deleted:</b> {{ item.deleted }}					
+				</div>
+
+				<hr>
+
+				{% if item.object %}
+					{% if item.object.text %}
+						<div style="margin: 5px;">{{ item.object.text | safe }}</div>
+					{% endif %}
+					
+					<div style="color: blue;">
+						{% for t in item.tags %}
+							{% if t.global_tag.id == item.global_tag_id %}
+								<b>#{{ t.global_tag.tag_name }}</b>
+							{% else %}
+								#{{ t.global_tag.tag_name }}
+							{% endif %}
+
+						{% endfor %}
+					</div>
+
+					<hr>
+					<div class="popup-btn popup-yes round-2 style-warn confirmDelete" data-oid="{{item.object_id}}">Delete this object</div>
+				{% else %}
+					<div style="padding: 10px; border: 2px solid rgb(200,0,0); background-color: rgb(230,100,100); color: rgb(245,245,245);">
+						This item has been deleted and no longer exists. Or, it is currenlty de-activated.
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+
+	<script type="text/javascript">
+		$(document).on("click", ".confirmDelete", function() {
+		    var thisObjectID = $(this).data('oid');
+		    var postBody = $('.object-' + thisObjectID);
+		    $.ajax({
+		        type: "POST",
+		        url: "/_admin/ajax/delete_content/",
+		        data: {'object_id': thisObjectID,},
+		        success: function(e) {
+		            var error_message = e['error_message'];
+		            if (error_message === null) {
+		                postBody.slideUp(200).remove();
+		            } else {
+		                alert(error_message);
+		            }
+		        }
+		    });
+		});
+	</script>
+
+{% endblock %}

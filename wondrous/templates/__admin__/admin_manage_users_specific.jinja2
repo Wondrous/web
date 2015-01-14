@@ -1,0 +1,61 @@
+{% extends "/__admin__/admin_base.jinja2" %}
+{% block admin_content %}
+
+<h2>Search for a user</h2>
+<form action="/_admin/manage/users/" method="POST">
+	<input type="text" name="search_user_id" placeholder="User.id">
+	<input type="submit" name="search-user-id-button">
+	<div style="color: rgb(210,50,50);">{% if error_message %}{{ error_message }}{% endif %}</div>
+</form>
+
+<hr>
+
+{% if user.user.user_type == 1 %}
+	<h2>{{ user.name }}</h2>
+	
+	<h4>Profile Picture:</h4>
+	<img src="{{ user.user.profile_picture }}" style="height: 200px;">
+	
+	<h4>Cover Picture:</h4>
+	{% if user.user.cover_picture %}
+		<img src="{{ user.user.cover_picture }}" style="height: 200px;">
+	{% else %}
+		<span>No cover picture</span>
+	{% endif %}
+
+	<hr>
+
+	<ul>
+		<li><b>User ID:</b> {{ user.user.id }}</li>
+		<li><b>Username:</b> {{ user.user.email }}</li>
+		<li><b>Last login:</b> {{ user.user.last_login }}</li>
+		<li><b>Date joined:</b> {{ user.user.date_joined }}</li>
+		<li><b>Banned:</b> {{ user.user.banned }}</li>
+		<br>
+		<li><b>Upvotes:</b> {{ user.user.upvotes }}</li>
+		<li><b>Downvotes:</b> {{ user.user.downvotes }}</li>
+		<br>
+		<li><b>Gender:</b> {{ user.gender }}</li>
+		<li><b>Birthday:</b> {{ user.birthday }}</li>
+		<li><b>Locale:</b> {{ user.locale }}</li>
+		<li><b>AuthType ID:</b> {{ user.auth_type_id }} (1 = Native, 2 = Facebook)</li>
+	</ul>
+
+
+{% else %}
+	<b>Page: TODO</b>
+{% endif %}
+
+<div style="margin: 20px; margin-bottom: 50px;">
+	<em>Act with caution....</em>
+	<form action="/_admin/ajax/ban_user/" method="POST">
+		<input type="hidden" value="{{user.id}}" name="user_id">
+		{% if not user.user.banned %}
+			<input type="submit" name="ban-user-button" value="Ban This User" style="background-color: rgb(190,50,50); color: rgb(251,251,251); padding: 5px 12px; border: 0px;">
+		{% else %}
+			<input type="submit" name="ban-user-button" value="Un-ban This User" style="background-color: rgb(50,50,250); color: rgb(251,251,251); padding: 5px 12px; border: 0px;">
+		{% endif %}
+	</form>
+</div>
+
+{% endblock %}

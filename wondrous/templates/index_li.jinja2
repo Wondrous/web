@@ -1,0 +1,42 @@
+{% extends "base.jinja2" %}
+{% block content %}			
+	<div style="padding: 20px;">
+		<a href="/" class="tab nh {% if tab_name not in ['priority_feed'] %}tab-current{% endif %}">
+			<span class="tab-text">Majority</span>
+		</a>
+
+		<a href="/priority-feed/" class="tab nh {% if tab_name == 'priority_feed' %}tab-current{% endif %}">
+			<span class="tab-text">Priority</span>
+		</a>
+	</div>
+	
+	<div class="cover profile-content">
+
+		{% if tab_name == 'priority_feed' %}
+		
+			<h2>Priority Feed</h2>
+
+		{% else %}
+
+			<h2>Majority Feed</h2>
+
+			<div id="addPost">
+				{# 
+					New posts are asynchronously loaded into this div, assuming we let
+					users create posts from this feed -- to be determined.
+				#}
+			</div>
+
+		{% endif %}
+
+		{% if render_items %}
+			<div id="asyncPosts">
+				{# We asynchronously load posts into this div  #}
+			</div>
+		{% else %}
+			<div>Not much going on here. No posts to display.</div>
+		{% endif %}
+
+	</div>
+
+{% endblock %}

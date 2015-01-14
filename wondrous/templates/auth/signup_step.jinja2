@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html class="lo-html">
+<head>
+	<title>Wondrous.co | Complete your sign-up process (Step {{current_step}} of {{total_steps}})</title>
+
+	{% include "/includes/inc._head-meta.jinja2" %}
+	{% include "/includes/inc._head-js.jinja2" %}
+	{% include "/includes/inc._head-css.jinja2" %}
+</head>
+<body style="background-color: rgb(221,221,221);">
+
+	<h2>Step {{current_step}} of {{total_steps}}</h2>
+	<a href="/signup/step/{{next_step}}/">Next step</a>
+	
+</body>
+</html>

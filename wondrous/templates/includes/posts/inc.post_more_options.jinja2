@@ -1,0 +1,23 @@
+<span class="post-more-options round-top-right-5">
+
+	{# -- The three dots that show up when you hover over a post -- #}
+	<p class="mini-post-action-icon" style="color: rgb(91,91,91); cursor: default;">&#8226&#8226&#8226</p>
+
+	<div class="dropdown-box" style="top: 23px; width: 160px;">
+		<div>
+			<div class="dropdown-element linkToPost"><b>Get link to post</b></div>
+			
+			{# -- Display this input when user clicks the "Get Link to Post" -- #}
+			<input class="linkUrl" type="hidden" value="{{ item['url'] }}">
+			
+			{# -- The Delete/Report buttons -- #}
+			<hr class="dropdown-hr ">
+			{% if item['my_profile'] or item['is_poster']  %}
+				<div class="dropdown-element deleteContent">Delete this post</div>
+				<div class="dropdown-element reportContent" style="color: rgb(200,100,100);">Report this post</div>	
+			{% else %}
+				<div class="dropdown-element reportContent" style="color: rgb(200,100,100);">Report this post</div>
+			{% endif %}
+		</div>
+	</div>
+</span>
