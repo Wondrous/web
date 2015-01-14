@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Company: MOJORANK
+# Company: WONDROUS
 # Created by: John Zimmerman
 #
 # MODELS/__INIT__.PY
@@ -24,60 +24,60 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base.query = DBSession.query_property(Query)  # Setup the SQLAlchemy database engine
 
 from wondrous.models.admin import (
-	Admin,
+    Admin,
 )
 
 from wondrous.models.comment import (
-	ObjectComment,
+    ObjectComment,
 )
 
 from wondrous.models.content import (
-	DeletedContent,
-	DeletedObjectComment,
-	ReportedContent,
+    DeletedContent,
+    DeletedObjectComment,
+    ReportedContent,
 )
 
 from wondrous.models.notification import (
-	Notification,
+    Notification,
 )
 
 from wondrous.models.obj import (
-	Object,
-	ObjectLink,
-	ObjectFile,
+    Object,
+    ObjectLink,
+    ObjectFile,
     LinkToObject,
     FileToObject,
 )
 
 from wondrous.models.post import (
-	WallPost,
+    WallPost,
 )
 
 from wondrous.models.page import (
-	Page,  # UNUSED
-	UserToPage,  # UNUSED
+    Page,  # UNUSED
+    UserToPage,  # UNUSED
 )
 
 from wondrous.models.person import (
-	Person,
-	UnverifiedEmail,
-	WaitingList,
+    Person,
+    UnverifiedEmail,
+    WaitingList,
 )
 
 from wondrous.models.tag import (
-	GlobalTag,
-	ObjectTag,
+    GlobalTag,
+    ObjectTag,
 )
 
 from wondrous.models.user import (
-	BlockedUser,
-	User,
+    BlockedUser,
+    User,
 )
 
 from wondrous.models.vote import (
-	ObjectVote,
-	ObjectBookmarkVote,
-	UserVote,
+    ObjectVote,
+    ObjectBookmarkVote,
+    UserVote,
 )
 
 
