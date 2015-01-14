@@ -5,6 +5,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Apple Hidden Files
+.DS_Store
+
 # Distribution / packaging
 .Python
 alembic/versions/
