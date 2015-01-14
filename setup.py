@@ -11,22 +11,24 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 requires = [
     'pyramid',
     'pyramid_debugtoolbar',
+    'pyramid_jinja2',
     'pyramid_tm',
     'SQLAlchemy',
     'transaction',
     'zope.sqlalchemy',
     'waitress',
-    'psycopg2',
-    'pyramid_jinja2',
-    'pyramid_storage',
-    'bcrypt',  # brew install pkg-config libffi; export PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.0.13/lib/pkgconfig/ 
-    'boto',
-    'alembic',
-    'paste',
-    'Pillow',
-    'python-magic',  # brew install libmagic
-    'unidecode',
-    ]
+]
+
+# pip intall ...
+# psycopg2
+# pyramid_storage
+# bcrypt  # brew install pkg-config libffi; export PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.0.13/lib/pkgconfig/ 
+# boto
+# alembic
+# paste
+# Pillow
+# python-magic  # brew install libmagic
+# unidecode
 
 setup(name='wondrous',
       version='0.0',
