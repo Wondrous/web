@@ -1,25 +1,25 @@
 <div id="topBanner" class="top-banner">
-	<a href="/" style="color: rgb(235,235,235);">
-		<img src="/static/pictures/p.icon_50x50.png" class="banner-logo">
-	</a>
+    <a href="/" style="color: rgb(235,235,235);">
+        <img src="/static/pictures/p.icon_50x50.png" class="banner-logo">
+    </a>
 
 
-	<form method="GET" action="/search/" style="display: inline-block;">
-		<div class="container">
-			<input type="text" id="query" class="banner-input" value="{{query}}" placeholder="Search for people and #tags" name="q"  data-provide="typeahead" autocomplete="off">
-		</div>
-	</form>
-	
-	<span class="banner-more-options">
-		<span class="banner-options-icon">C</span>
-	</span>
-	
-	<a id="linkToProfile" href="/{{ current_user.user.username }}" class="general-text banner-user-name">
-		<img class="banner-user-img round-3" src="{{ current_user.user.profile_picture }}"/>
-		{{ current_user.first_name | safe }}
-	</a>
+    <form method="GET" action="/search/" style="display: inline-block;">
+        <div class="container">
+            <input type="text" id="query" class="banner-input" value="{{query}}" placeholder="Search for people and #tags" name="q"  data-provide="typeahead" autocomplete="off">
+        </div>
+    </form>
+    
+    <span class="banner-more-options">
+        <span class="banner-options-icon">C</span>
+    </span>
+    
+    <a id="linkToProfile" href="/{{ current_user.user.username }}" class="general-text banner-user-name">
+        <img class="banner-user-img round-3" src="{{ current_user.user.profile_picture }}"/>
+        {{ current_user.first_name | safe }}
+    </a>
 
-	<span id="right-menu" class="notification-count nc-general round-2"> <!--notification-alert-->
-		<span class="notification-count-text">0</span>
-	</span>
+    <span id="right-menu" class="notification-count nc-general round-2"> <!--notification-alert-->
+        <span class="notification-count-text">0</span>
+    </span>
 </div>

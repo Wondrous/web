@@ -102,4 +102,3 @@ class AdminManager(object):
 
         DBSession.add(new_admin)
         DBSession.flush()
-

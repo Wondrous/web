@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title>MojoRank Admin Panel</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Wondrous Admin Panel</title>
 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="/static/css/style.normalize.css">
-		<link rel="stylesheet" type="text/css" href="/static/css/style.global.css">
-		<link rel="stylesheet" type="text/css" href="/static/css/style._admin_global.css">
-	</head>
-	
-	<body style="background-color: rgb(245,245,245);">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.normalize.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/style.global.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/style._admin_global.css">
+    </head>
+    
+    <body style="background-color: rgb(245,245,245);">
 
-		<div class="admin-banner">
-			<span style="margin-left: 5%;">
-				<a class="admin-banner-tab {% if current_page == 'dashboard' %}current-tab{%endif%}" href="/_admin/">Dashboard</a>
-				<a class="admin-banner-tab {% if current_page == 'manage_admin' %}current-tab{%endif%}" href="/_admin/manage/admin/">Admins</a>
-				<a class="admin-banner-tab {% if current_page == 'statistics' %}current-tab{%endif%}" href="/_admin/stats/">Statistics</a>
-				<a class="admin-banner-tab {% if current_page == 'manage_reported' %}current-tab{%endif%}" href="/_admin/manage/reported/">Reported</a>
-				<a class="admin-banner-tab {% if current_page == 'manage_users' %}current-tab{%endif%}" href="/_admin/manage/users/">Users</a>
-			</span>
+        <div class="admin-banner">
+            <span style="margin-left: 5%;">
+                <a class="admin-banner-tab {% if current_page == 'dashboard' %}current-tab{%endif%}" href="/_admin/">Dashboard</a>
+                <a class="admin-banner-tab {% if current_page == 'manage_admin' %}current-tab{%endif%}" href="/_admin/manage/admin/">Admins</a>
+                <a class="admin-banner-tab {% if current_page == 'statistics' %}current-tab{%endif%}" href="/_admin/stats/">Statistics</a>
+                <a class="admin-banner-tab {% if current_page == 'manage_reported' %}current-tab{%endif%}" href="/_admin/manage/reported/">Reported</a>
+                <a class="admin-banner-tab {% if current_page == 'manage_users' %}current-tab{%endif%}" href="/_admin/manage/users/">Users</a>
+            </span>
 
-			<span style="position: absolute; right: 5%; margin-right: 70px; padding-top: 7px; color: rgb(150,150,150); font-weight: bold;">
-				{{ admin.username }}
-			</span>
+            <span style="position: absolute; right: 5%; margin-right: 70px; padding-top: 7px; color: rgb(150,150,150); font-weight: bold;">
+                {{ admin.username }}
+            </span>
 
-			<span style="position: absolute; right: 4%; color: rgb(190,190,190);">
-				<a class="admin-banner-tab" style="" href="/auth/logout/">Log out</a>
-			</span>
-		</div>
+            <span style="position: absolute; right: 4%; color: rgb(190,190,190);">
+                <a class="admin-banner-tab" style="" href="/auth/logout/">Log out</a>
+            </span>
+        </div>
 
-		<div class="main-content">
-			{% block admin_content %} 
-			{% endblock %}
-		</div>
-	</body>
+        <div class="main-content">
+            {% block admin_content %} 
+            {% endblock %}
+        </div>
+    </body>
 </html>

@@ -402,4 +402,3 @@ class DeletedObjectCommentManager(object):
 
             # Delete the originla comment
             DBSession.delete(oc)
-

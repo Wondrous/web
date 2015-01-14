@@ -1,19 +1,19 @@
 {% for comment in item['post_comments'] %}
-	<div class="comment-wrapper" id="comment-{{ comment['comment_id'] }}">
-		
-		{% set item_owner = get_item_owner(comment['poster_id']) %}
-		
-		<img class="comment-poster-img round-5" src="{{ item_owner.user.profile_picture }}">
-		<div class="comment-text-wrapper">
-			<span class="comment-poster-name">
-				<a class="blue-identifier" href="/{{ item_owner.user.username }}/">{{ item_owner.name }}</a>
-			</span>
-			<span class="comment-text">{{ comment['text'] | safe }}</span>
-		</div>
+    <div class="comment-wrapper" id="comment-{{ comment['comment_id'] }}">
+        
+        {% set item_owner = get_item_owner(comment['poster_id']) %}
+        
+        <img class="comment-poster-img round-5" src="{{ item_owner.user.profile_picture }}">
+        <div class="comment-text-wrapper">
+            <span class="comment-poster-name">
+                <a class="blue-identifier" href="/{{ item_owner.user.username }}/">{{ item_owner.name }}</a>
+            </span>
+            <span class="comment-text">{{ comment['text'] | safe }}</span>
+        </div>
 
-		{# -- The data necessary to delete a comment -- #}
-		{% if comment['poster_id'] == current_user.id or item['my_profile'] %}
-			<div data-cid="{{ comment['comment_id'] }}" class="comment-delete">X</div>
-		{% endif %}
-	</div>
+        {# -- The data necessary to delete a comment -- #}
+        {% if comment['poster_id'] == current_user.id or item['my_profile'] %}
+            <div data-cid="{{ comment['comment_id'] }}" class="comment-delete">X</div>
+        {% endif %}
+    </div>
 {% endfor %}

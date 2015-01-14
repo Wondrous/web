@@ -1,46 +1,46 @@
 {% extends "base.jinja2" %}
 {% block content %}
-	<div class="cover-photo center tag-bg" style="padding: 50px 0; background-color: rgb(251,251,251);">
-		<div class="big-name name-position" style="color: rgb(75,75,75);">
-			#{{ context_tag.upper() }}
-		</div>
-		<span id="thisGlobalTagName" style="display: none;">{{ context_tag.lower() }}</span>
-		<div id="z" style="position: relative; bottom: 0; visibility: hidden;"></div>
-	</div>
-	<div class="profile-tab-bar" style="background-color: rgb(241,241,241);">
-		<div style="position: relative; margin-left: 5%;">
-			
-			<span id="upvoteGlobalTagButton" class="vote-btn upvote nh {% if has_voted == 1 %}upvoted{%endif%}">
-				<p class="hand-icon" style="color: rgb(0,160,0);">u</p> {# 8 #}
-				<span class="vote-count">{{ valid_tag.upvotes }}</span>
+    <div class="cover-photo center tag-bg" style="padding: 50px 0; background-color: rgb(251,251,251);">
+        <div class="big-name name-position" style="color: rgb(75,75,75);">
+            #{{ context_tag.upper() }}
+        </div>
+        <span id="thisGlobalTagName" style="display: none;">{{ context_tag.lower() }}</span>
+        <div id="z" style="position: relative; bottom: 0; visibility: hidden;"></div>
+    </div>
+    <div class="profile-tab-bar" style="background-color: rgb(241,241,241);">
+        <div style="position: relative; margin-left: 5%;">
+            
+            <span id="upvoteGlobalTagButton" class="vote-btn upvote nh {% if has_voted == 1 %}upvoted{%endif%}">
+                <p class="hand-icon" style="color: rgb(0,160,0);">u</p> {# 8 #}
+                <span class="vote-count">{{ valid_tag.upvotes }}</span>
 
-				<div class="js-title titleUpvote">{% if has_voted == 1 %}Remove your upvote{%else%}Publically upvote this tag{%endif%}</div>
-			</span>
-			
-			<span id="downvoteGlobalTagButton" class="vote-btn downvote nh {% if has_voted == -1 %}downvoted{%endif%}" style="margin-right: 20px;">
-				<p class="hand-icon" style="color: rgb(255,150,140);">d</p> {# 2 #}
-				<span class="vote-count">{{ valid_tag.downvotes }}</span>
+                <div class="js-title titleUpvote">{% if has_voted == 1 %}Remove your upvote{%else%}Publically upvote this tag{%endif%}</div>
+            </span>
+            
+            <span id="downvoteGlobalTagButton" class="vote-btn downvote nh {% if has_voted == -1 %}downvoted{%endif%}" style="margin-right: 20px;">
+                <p class="hand-icon" style="color: rgb(255,150,140);">d</p> {# 2 #}
+                <span class="vote-count">{{ valid_tag.downvotes }}</span>
 
-				<div class="js-title titleDownvote">{% if has_voted == -1 %}Remove your downvote{%else%}Anonymously downvote this tag{%endif%}</div>
-			</span>
-		</div>
-	</div>
-	
-	<div class="cover profile-content">
-		{% if render_items %}
-			{% include "/includes/posts/inc.posts_tag.jinja2" %}
+                <div class="js-title titleDownvote">{% if has_voted == -1 %}Remove your downvote{%else%}Anonymously downvote this tag{%endif%}</div>
+            </span>
+        </div>
+    </div>
+    
+    <div class="cover profile-content">
+        {% if render_items %}
+            {% include "/includes/posts/inc.posts_tag.jinja2" %}
 
-			{% include "/includes/global/inc.pagination_footer.jinja2" %}
-		{% else %}
-			<hr>
-			<div class="no-posts" style="margin-top: 40px;">
-				<span class="no-posts-text">
-					Oh noooo! This tag has no posts yet. Try posting something!
-				</span>
-			</div>
-		{% endif %}
-	</div>
+            {% include "/includes/global/inc.pagination_footer.jinja2" %}
+        {% else %}
+            <hr>
+            <div class="no-posts" style="margin-top: 40px;">
+                <span class="no-posts-text">
+                    Oh noooo! This tag has no posts yet. Try posting something!
+                </span>
+            </div>
+        {% endif %}
+    </div>
 
-	{# JS scripts #}
-	{% include "/includes/posts/inc.post_js_files.jinja2" %}
+    {# JS scripts #}
+    {% include "/includes/posts/inc.post_js_files.jinja2" %}
 {% endblock %}

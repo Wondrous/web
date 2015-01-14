@@ -35,8 +35,6 @@ def main_app(global_config, **settings):
     initialize_sql(settings)
 
     config = Configurator(settings=settings)
-
-    # config = build_admin_routes(config)  # URL map on admin_routes.py
     config = build_routes(config)  # URL map on routes.py
 
     authn_policy = AuthTktAuthenticationPolicy(MAIN_AUTH_TKN, hashalg='sha512')
@@ -67,9 +65,7 @@ def admin_app(global_config, **settings):
     initialize_sql(settings)
 
     config = Configurator(settings=settings)
-
     config = build_admin_routes(config)  # URL map on admin_routes.py
-    config = build_routes(config)  # URL map on admin_routes.py
 
     authn_policy = AuthTktAuthenticationPolicy(ADMIN_AUTH_TKN, hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()

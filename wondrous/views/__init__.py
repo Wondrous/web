@@ -17,11 +17,11 @@ from pyramid.view import view_config
 
 @notfound_view_config(append_slash=True)
 def page_not_found(request):
-	return Response("""
-			<b>WONDROUS: 404 Error</b><br><br>
-			You broke the internet! JK....Wondrous just can't find the page
-			you're looking for. Sorry!
-		""")
+    return Response("""
+            <b>WONDROUS: 404 Error</b><br><br>
+            You broke the internet! JK....Wondrous just can't find the page
+            you're looking for. Sorry!
+        """)
 
 _here = os.path.dirname(__file__)
 _robots = open(os.path.join(_here, '../static', 'robots.txt')).read()

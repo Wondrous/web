@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html class="lo-html">
 <head>
-	<title>Wondrous.co | Log in to your account</title>
+    <title>Wondrous.co | Log in to your account</title>
 
-	{% include "/includes/global/inc._head-meta.jinja2" %}
-	{% include "/includes/global/inc._head-js.jinja2" %}
-	{% include "/includes/global/inc._head-css.jinja2" %}
+    {% include "/includes/global/inc._head-meta.jinja2" %}
+    {% include "/includes/global/inc._head-js.jinja2" %}
+    {% include "/includes/global/inc._head-css.jinja2" %}
 
-	<script type="text/javascript">
-		function focusOnLoad() {
-			document.getElementById("focusInput").focus();
-		}
-	</script>
+    <script type="text/javascript">
+        function focusOnLoad() {
+            document.getElementById("focusInput").focus();
+        }
+    </script>
 </head>
 <body style="background-color: rgb(255,255,255);  min-width: 0;" onload="focusOnLoad();">
 
-	<div class="top-banner banner-lo">
-		<a href="/" style="color: rgb(235,235,235);">
-			<img src="/static/pictures/p.icon_50x50.png" class="banner-logo">
-		</a>
-	</div>
+    <div class="top-banner banner-lo">
+        <a href="/" style="color: rgb(235,235,235);">
+            <img src="/static/pictures/p.icon_50x50.png" class="banner-logo">
+        </a>
+    </div>
 
-	<div style="position: relative; margin: 0 auto; text-align: center; width: 80%; top: 10%; ">
-		<h1 style="font-family: courier; color: rgb(71,71,71);">Log in</h1>
-		<form action="/login/" method="POST">
-			<div>
-				<input id="focusInput" class="input-basic round-3" type="text" name="user_identification" placeholder="Email or username" value="{% if user_identification %}{{ user_identification }}{% endif %}">
-			</div>
-			<div>
-				<input class="input-basic round-3" type="password" name="password" placeholder="Password">
-			</div>
-			<div style="font-weight: 300; color: rgb(220,100,100); margin: 5px;">{% if error_message %}{{ error_message }}{% endif %}</div>
-			<div>
-				<input class="input-basic round-3" type="submit" name="login_button" value="Log in!">
-			</div>
-		</form>
+    <div style="position: relative; margin: 0 auto; text-align: center; width: 80%; top: 10%; ">
+        <h1 style="font-family: courier; color: rgb(71,71,71);">Log in</h1>
+        <form action="/login/" method="POST">
+            <div>
+                <input id="focusInput" class="input-basic round-3" type="text" name="user_identification" placeholder="Email or username" value="{% if user_identification %}{{ user_identification }}{% endif %}">
+            </div>
+            <div>
+                <input class="input-basic round-3" type="password" name="password" placeholder="Password">
+            </div>
+            <div style="font-weight: 300; color: rgb(220,100,100); margin: 5px;">{% if error_message %}{{ error_message }}{% endif %}</div>
+            <div>
+                <input class="input-basic round-3" type="submit" name="login_button" value="Log in!">
+            </div>
+        </form>
 
-		<div class="login-accept-terms" style="text-align: center; margin: 10px auto; width: 300px;">
-			By clicking the above button and logging in to Cloaky, you have reviewed and accepted our Privacy Policy and Terms of Service
-		</div>
-	</div>
+        <div class="login-accept-terms" style="text-align: center; margin: 10px auto; width: 300px;">
+            By clicking the above button and logging in to Cloaky, you have reviewed and accepted our Privacy Policy and Terms of Service
+        </div>
+    </div>
 
 </body>
 </html>

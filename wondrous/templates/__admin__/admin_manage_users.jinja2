@@ -3,20 +3,20 @@
 
 <h2>Search for a user</h2>
 <form action="/_admin/manage/users/" method="POST">
-	<input type="text" name="search_user_id" placeholder="User.id">
-	<input type="submit" name="search-user-id-button">
-	<div style="color: rgb(210,50,50);">{% if error_message %}{{ error_message }}{% endif %}</div>
+    <input type="text" name="search_user_id" placeholder="User.id">
+    <input type="submit" name="search-user-id-button">
+    <div style="color: rgb(210,50,50);">{% if error_message %}{{ error_message }}{% endif %}</div>
 </form>
 
 <h2>All banned users</h2>
 <ul>
-	{% if all_banned_users %}
-		{% for user in all_banned_users %}
-			<li><a href="/_admin/manage/users/{{user.id}}/">{% if user.user_type == 1 %}{{get_person(user.id).name}}{%else%}<PAGE: TODO>{% endif %}</a></li>
-		{% endfor %}
-	{% else %}
-		<li>Oh joy, there are no banned users.</li>
-	{% endif %}
+    {% if all_banned_users %}
+        {% for user in all_banned_users %}
+            <li><a href="/_admin/manage/users/{{user.id}}/">{% if user.user_type == 1 %}{{get_person(user.id).name}}{%else%}<PAGE: TODO>{% endif %}</a></li>
+        {% endfor %}
+    {% else %}
+        <li>Oh joy, there are no banned users.</li>
+    {% endif %}
 </ul>
 
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends "base.jinja2" %}
 {% block content %}
 
-	{% if is_my_profile or (is_following or not is_private) %}
-		{% include "includes/profile/inc.profile_show.jinja2" %}
-	{% else %}
-		{% include "includes/profile/inc.profile_hide.jinja2" %}
-	{% endif %}
+    {% if is_my_profile or (is_following or not is_private) %}
+        {% include "includes/profile/inc.profile_show.jinja2" %}
+    {% else %}
+        {% include "includes/profile/inc.profile_hide.jinja2" %}
+    {% endif %}
 
 {% endblock %}

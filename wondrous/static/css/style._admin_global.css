@@ -1,30 +1,30 @@
 a:link, a:visited {
-	color: blue;
+    color: blue;
 }
 
 .admin-banner {
-	position: absolute;
-	top: 0;
-	height: 30px;
-	width: 100%;
-	min-width: 690px;
-	background-color: rgb(61,61,61);
-	z-index: 3;
+    position: absolute;
+    top: 0;
+    height: 30px;
+    width: 100%;
+    min-width: 690px;
+    background-color: rgb(61,61,61);
+    z-index: 3;
 }
 
 .admin-banner-tab:link {
-	position: relative;
-	display: inline-block;
+    position: relative;
+    display: inline-block;
 
-	height: 16px;
-	padding: 7px 10px;
+    height: 16px;
+    padding: 7px 10px;
 
-	background-color: rgb(61,61,61);
+    background-color: rgb(61,61,61);
 
-	font-size: 15px;
-	color: rgb(241,241,241);
-	font-weight: 100;
-	text-decoration: none;
+    font-size: 15px;
+    color: rgb(241,241,241);
+    font-weight: 100;
+    text-decoration: none;
 }
 
 .admin-banner-tab:visited {color: rgb(241,241,241);}
@@ -34,15 +34,15 @@ a:link, a:visited {
 .current-tab {background-color: rgb(40,40,40);}
 
 .big-data {
-	margin: 40px;
-	display: inline-block;
-	font-family: 'code_lightregular', arial, helvetica, sans-serif;
-	font-size: 150px;
+    margin: 40px;
+    display: inline-block;
+    font-family: 'code_lightregular', arial, helvetica, sans-serif;
+    font-size: 150px;
 }
 
 .big-data-title {
-	position: relative;
-	bottom: 0;
-	font-size: 30px;
-	color: rgb(44,44,44);
+    position: relative;
+    bottom: 0;
+    font-size: 30px;
+    color: rgb(44,44,44);
 }

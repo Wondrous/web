@@ -1,16 +1,16 @@
 <!DOCTYPE>
 <html>
 <head>
-	<title>MojoRank Admin Login</title>
+    <title>Wondrous Admin Login</title>
 </head>
 <body>
-	<form method="POST" action="/_admin/login/">
-		
-		<input type="text" name="username" placeholder="Username">
-		<input type="password" name="password" placeholder="Password">
-		<input type="submit" name="admin-login-button" value="Log in">
+    <form method="POST" action="/_admin/login/">
+        
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <input type="submit" name="admin-login-button" value="Log in">
 
-		<div>{% if error_message %}{{ error_message }}{% endif %}</div>
-	</form>
+        <div>{% if error_message %}{{ error_message }}{% endif %}</div>
+    </form>
 </body>
 </html>

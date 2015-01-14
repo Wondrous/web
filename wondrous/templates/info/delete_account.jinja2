@@ -1,14 +1,14 @@
 {% extends "base.jinja2" %}
 {% block content %}
-	<form action="/auth/delete/" method="POST">
-		<div style="position: relative; font-size: 15px; font-style: italic; width: 70%; margin-bottom: 10px;">
-			You can reactivate your account at any time by simply logging back on.
-			<br>
-			<b>In the meantime, ALL your data – your profile, your pictures, your posts, your comments, your votes, etc. – will be removed from the site and completely inaccessible to all other users.</b>
-		</div>
+    <form action="/auth/delete/" method="POST">
+        <div style="position: relative; font-size: 15px; font-style: italic; width: 70%; margin-bottom: 10px;">
+            You can reactivate your account at any time by simply logging back on.
+            <br>
+            <b>In the meantime, ALL your data – your profile, your pictures, your posts, your comments, your votes, etc. – will be removed from the site and completely inaccessible to all other users.</b>
+        </div>
 
-		<input type="submit" value="Completely deactivate my account" style="cursor: pointer;">
-		<input type="hidden" name="secret_number" value="666">
-		<input type="text" name="off-screen-bot-fucker" style="position: fixed; top: -100px; left: -100px;" value="">
-	</form>
+        <input type="submit" value="Completely deactivate my account" style="cursor: pointer;">
+        <input type="hidden" name="secret_number" value="666">
+        <input type="text" name="off-screen-bot-fucker" style="position: fixed; top: -100px; left: -100px;" value="">
+    </form>
 {% endblock %}
