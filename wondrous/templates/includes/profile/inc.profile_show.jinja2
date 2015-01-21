@@ -30,6 +30,7 @@
     {% elif tab == "bookmarked" %}
         Bookmarked (private)
     {% else %}
-        Posts
+        {% include "includes/posts/inc.new_post_dialogue.jinja2" %}
+        {% include "includes/posts/inc.posts_profile.jinja2" %}
     {% endif %}
 </div>

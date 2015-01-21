@@ -565,7 +565,7 @@ class _AssemblePost(object):
         """
 
         object_id = self.final_data['object_id']
-        total_upvotes = ObjectVoteManager.get_total_upvotes(object_id) # context_tag_id
+        total_upvotes = ObjectVoteManager.get_like_count(object_id) # context_tag_id
         has_voted = getattr(ObjectVoteManager.has_voted(self.current_user_id, object_id), 'vote_type', False) # context_tag_id
         
         self.final_data['upvotes']   = total_upvotes

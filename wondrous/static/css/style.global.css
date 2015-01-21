@@ -829,6 +829,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 .main-content {
     position: relative;
     margin-top: 45px;
+    min-height: 1000px;
     background-color: rgb(245,245,245);
 }
 
@@ -1113,20 +1114,17 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 .new-post {
     position: relative;
-    
-    padding: 15px;
-    /*padding-top: 14px;*/
     width: 100%;
     max-width: 300px;
-    
+    padding: 15px;
     margin: 0 auto;
     margin-top: 20px;
     
     background-color: rgb(100,100,200);
     background: webkit-linear-gradient(left, rgb(100,100,200), rgb(100,220,100));
-    background: -o-linear-gradient(right, rgb(100,100,200), rgb(100,220,100));
-    background: -moz-linear-gradient(right, rgb(100,100,200), rgb(100,220,100));
-    background: linear-gradient(to right, rgb(100,100,200), rgb(100,220,100));
+    background:   -moz-linear-gradient(right, rgb(100,100,200), rgb(100,220,100));
+    background:     -o-linear-gradient(right, rgb(100,100,200), rgb(100,220,100));
+    background:        linear-gradient(to right, rgb(100,100,200), rgb(100,220,100));
 
     text-align: center;
     cursor: pointer;
@@ -1153,7 +1151,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 .new-post-wrapper {
     position: relative;
-    display: none;
+    /*display: none;*/
     margin: 0 auto;
     margin-top: 20px;
     width: 100%;
@@ -1417,39 +1415,57 @@ body { font-family: sans-serif; }
          -o-transition: width 0.4s, height 0.4s;
             transition: width 0.4s, height 0.4s;
 
-    /* ---- */
     background-color: transparent;
+
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+         -o-border-radius: 10px;
+            border-radius: 10px;
+
+    -webkit-box-shadow: 0 0 0;
+       -moz-box-shadow: 0 0 0;
+         -o-box-shadow: 0 0 0;
+            box-shadow: 0 0 0;
 } .post-body:hover {
-    box-shadow: 0 2px 5px rgb(100,100,100);
+    -webkit-box-shadow: 0 2px 5px rgb(100,100,100);
+       -moz-box-shadow: 0 2px 5px rgb(100,100,100);
+         -o-box-shadow: 0 2px 5px rgb(100,100,100);
+            box-shadow: 0 2px 5px rgb(100,100,100);
     cursor: pointer;
 }
 
-/* both item and item content change size */
-.masonry-brick.is-expanded,
-.masonry-brick.is-expanded .post-body {
-    height: 120px;
+.post-content {
+    display: none;
+    background-color: rgb(251,251,251);
+    padding: 15px 12px;
+    color: rgb(51,51,51);
+    cursor: default;
 }
 
-.masonry-brick.is-expanded {
+.no-bottom-border {
+    -webkit-border-bottom-left-radius: 0;
+       -moz-border-bottom-left-radius: 0;
+         -o-border-bottom-left-radius: 0;
+            border-bottom-left-radius: 0;
+
+    -webkit-border-bottom-right-radius: 0;
+       -moz-border-bottom-right-radius: 0;
+         -o-border-bottom-right-radius: 0;
+            border-bottom-right-radius: 0;
+}
+
+/* both item and item content change size */
+.is-expanded {
     z-index: 2;
+    -webkit-box-shadow: 0 2px 5px rgb(100,100,100);
+       -moz-box-shadow: 0 2px 5px rgb(100,100,100);
+         -o-box-shadow: 0 2px 5px rgb(100,100,100);
+            box-shadow: 0 2px 5px rgb(100,100,100);
 }
 
 .masonry-brick.is-expanded .post-body {
     background: #F90;
 }
-
-/*
-@media screen and (max-width: 900px) {
-    .masonry-brick {
-    
-    }
-}
-
-@media screen and (max-width: 320px) {
-    .masonry-brick {
-    }   
-}
-*/
 
 /* ============================= */
 
@@ -1529,11 +1545,6 @@ body { font-family: sans-serif; }
     -webkit-box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
     -moz-box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
     box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
-}
-
-.post-content-wrapper {
-    display: none;
-    background-color: rgb(251,251,251);
 }
 
 .post-text {
