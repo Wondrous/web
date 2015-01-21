@@ -98,6 +98,25 @@ def _schemify(url):
 
     return url
 
+def _hashtagify(text):
+
+    """
+        PURPOSE: Take the post text and detect all the urls, 
+        and then for each url, "schemify it, and then "linkify"
+        it by wrapping it in an anchor tag.
+
+        USE: Call like: _hashtagify(<str>)
+
+        PARAMS: 1 required param:
+            text : str : REQUIRED : The full text of a post
+
+        RETURNS: The full text of a post with all links
+        wrapped in <a href="...">Anchor</a> tags
+    """
+
+    pattern = GLOBAL_CONFIGURATIONS['HASHTAG_REGEX_FULL']
+    return re.sub(pattern, (lambda t: r'<a class="post-hashtag" href="/tag/{t_url}">{t}</a> '.format(t=t.group(1), t_url=t.group(0)[1::])), text)
+
 
 class CreateNewPost(object):
 
@@ -414,7 +433,7 @@ class _AssemblePost(object):
 
         self.final_data['object_id'] = self.object_id
         self.final_data['poster_id'] = self.poster_id
-        self.final_data['text']      = _linkify(object_text)
+        self.final_data['text']      = _hashtagify(_linkify(object_text))
         self.final_data['_see_more'] = True if (len(object_text) > MAX_CHAR_SHOW_TEXT or text_line_count > MAX_BR_SHOW_TEXT) else False
         self.final_data['_font_size'], self.final_data['_line_height'] = self._get_font_attrs(object_text)
         self.final_data['subject']   = self.this_object.subject

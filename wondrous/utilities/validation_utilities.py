@@ -226,7 +226,7 @@ class _RegexCheck(object):
                 - The str_to_check contains only numbers
         """
 
-        pattern = '^[a-zA-Z0-9]+$'
+        pattern = GLOBAL_CONFIGURATIONS['HASHTAG_REGEX']
         return True if str_to_check and re.match(pattern, str_to_check, re.IGNORECASE) else False
 
 

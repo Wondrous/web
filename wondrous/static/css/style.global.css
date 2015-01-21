@@ -1509,7 +1509,7 @@ body { font-family: sans-serif; }
 }
 
 .post-subject-text {
-    font-size: 35px;
+    font-size: 30px;
     font-weight: bold;
     text-align: left;
     color: rgb(44,44,44);
@@ -1528,7 +1528,7 @@ body { font-family: sans-serif; }
 .post-subject-text-position {
     position: relative;
     display: block;
-    padding-left: 10px;
+    padding: 10px;
 }
 
 .post-see-more {
@@ -1576,6 +1576,11 @@ body { font-family: sans-serif; }
     color: rgb(255,255,255);
     background-color: rgb(68,68,68);
 } .post-link:visited {color: rgb(255,255,255);}
+
+.post-hashtag:link {
+    font-family: helvetica, arial, sans-serif;
+    color: rgb(0,0,255);
+} .post-hashtag:visited {color: rgb(0,0,255);}
 
 .post-image {
 /*  position: relative;

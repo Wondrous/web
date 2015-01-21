@@ -24,6 +24,8 @@ GLOBAL_CONFIGURATIONS = {
     "MAX_BR_SHOW_TEXT"    : 10,
 
     "URL_REGEX"           : u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',
+    "HASHTAG_REGEX"       : u'^[a-zA-Z0-9]+$',
+    "HASHTAG_REGEX_FULL"  : u'(#[a-zA-Z0-9]+)',  # TODO: This REGEX is not robost enough
 
     "EXIF_IMG_DIR_PATH"   : "~/tmp_exif_img_bucket/",  # Don't change unless you have a death wish
     "MAX_FILE_SIZE"       : 35000000,  # Kilobytes
