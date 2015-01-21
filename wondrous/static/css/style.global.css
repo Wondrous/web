@@ -1139,7 +1139,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     margin-left: 10px;
     outline: none;
     resize: none;
-    height: 1em;
+    font-weight: bold;
     padding: 9px 0 3px 0;
 }
 
