@@ -15,18 +15,26 @@
             });
 
             $(document).on('click', '.post-body', function() {
+                var SPEED = 0; //150;
                 var thisPost = $(this);
+                var thisBrick = thisPost.parent('.masonry-brick');
                 var thisPostContent = thisPost.find('.post-content');
                 var thisCoverPhoto = thisPost.find('.post-cover-photo');
 
                 $('.post-body').not(thisPost).removeClass('is-expanded');
-                $('.post-content').not(thisPostContent).slideUp(150);
+                $('.post-content').not(thisPostContent).slideUp(SPEED);
                 $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
+                $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
 
                 thisPost.toggleClass('is-expanded');
                 thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-                thisPostContent.slideToggle(150);
                 
+                // Omit this line to NOT put the post into 
+                // presentation-mode when it's clicked.
+                thisBrick.toggleClass('post-presentation');
+                
+                thisPostContent.slideToggle(SPEED);
+
                 container.masonry();
             });
           

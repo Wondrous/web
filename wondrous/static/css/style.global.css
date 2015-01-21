@@ -1467,6 +1467,10 @@ body { font-family: sans-serif; }
     background: #F90;
 }
 
+.post-presentation {
+    width: 66.666%;
+}
+
 /* ============================= */
 
 .post-cover-photo {
