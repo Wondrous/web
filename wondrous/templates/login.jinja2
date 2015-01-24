@@ -30,7 +30,11 @@
             <div>
                 <input class="input-basic round-3" type="password" name="password" placeholder="Password">
             </div>
-            <div style="font-weight: 300; color: rgb(220,100,100); margin: 5px;">{% if error_message %}{{ error_message }}{% endif %}</div>
+            <div style="font-weight: 300; color: rgb(220,100,100); margin: 5px;">
+            {% if error_message %}
+                {{ error_message }}
+            {% endif %}
+            </div>
             <div>
                 <input class="input-basic round-3" type="submit" name="login_button" value="Log in!">
             </div>
