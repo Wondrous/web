@@ -1,0 +1,10 @@
+grequests
+psycopg2
+pyramid_storage
+bcrypt
+boto
+alembic
+paste
+Pillow
+python-magic
+unidecode
