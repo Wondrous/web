@@ -8,3 +8,4 @@ paste
 Pillow
 python-magic
 unidecode
+sphinx

@@ -9,9 +9,9 @@
 #
 
 import uuid
-from datetime import datetime
-from unidecode import unidecode
+import unidecode
 
+from datetime import datetime
 from sqlalchemy import BigInteger
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -36,7 +36,7 @@ class UnverifiedEmail(Base):
         Defines the table which stores all emails which
         have been unverified in the signup process
     """
-    
+
     __tablename__ = 'unverified_email'
 
     id = Column(BigInteger, primary_key=True, nullable=False)
@@ -84,13 +84,13 @@ class UnverifiedEmailManager(object):
 
         """
             PURPOSE: Add a new unverified_email into the database
-        
+
             USE: Call like: UnverifiedEmailManager.add(<dict>)
-        
+
             PARAMS: 1 param: a dictionary, with each key as a column name:
                 email : str : default=None : The new, unverified email
                 code  : str : A UUID, 1-time-use code uniquely identifying a new user sign-up
-        
+
             RETURNS: None
         """
 
@@ -127,13 +127,13 @@ class UnverifiedEmailManager(object):
 
         email = email.lower()  # Make email all lower-case
 
-            
+
         # # Add to waitlist
         # wait_listed_email = WaitingListManager.get(email)
         # if not wait_listed_email:
         #   waiting_list_data = dict(email=email)
         #   WaitingListManager.add(waiting_list_data)
-        #   return None, """ 
+        #   return None, """
         #       You've been added to the waiting list and will
         #       be notified when you are invited to join Wondrous.
         #       Thanks for your interest!
@@ -153,7 +153,7 @@ class UnverifiedEmailManager(object):
         taken_email = UserManager.get(email=email)
         if taken_email:
             return None, """
-                The email you entered has already been taken. Please 
+                The email you entered has already been taken. Please
                 enter an email which has not already been used to sign up
             """
 
@@ -174,10 +174,10 @@ class UnverifiedEmailManager(object):
         # email, never signed up, but are now
         # entering the same email again
         email_obj = UnverifiedEmailManager.get(email)
-        
+
         # They are not in the system
         if not email_obj:
-            
+
             # Create code
             CODE = unicode(uuid.uuid4())
 
@@ -186,9 +186,9 @@ class UnverifiedEmailManager(object):
                 'email' : email,
                 'code'  : CODE,
             }
-            UnverifiedEmailManager.add(unverified_email_data)   
+            UnverifiedEmailManager.add(unverified_email_data)
             return email, None
-        
+
         # They're already in the system
         else:
             return None, """
@@ -212,7 +212,7 @@ class UnverifiedEmailManager(object):
 
 
 class WaitingList(Base):
-    
+
     """
         Defines all emails which have been submitted but
         are not allowed into Wondrous yet
@@ -266,26 +266,26 @@ class PersonManager(object):
 
         """
             PURPOSE: Get a person from the database
-        
+
             USE: Call like: PersonManager._get(<int>)
-        
+
             PARAMS: 1 param: an int, the id of the User to get
-            
+
             RETURNS: If found, a Person object
                      Otherwise, None
         """
 
         return Person.query.filter(Person.id == user_id).first()
 
- 
+
     @staticmethod
     def _add(person_data):
 
         """
             PURPOSE: Add a new person into the DB
-        
+
             USE: Call like: PersonManager._add(<dict>)
-        
+
             PARAMS: 1 param, a dict, with each key as column name:
                 -user_id
                 -first_name
@@ -293,7 +293,7 @@ class PersonManager(object):
                 -gender
                 -locale
                 -birthday
-        
+
             RETURNS: None
         """
 
@@ -302,7 +302,7 @@ class PersonManager(object):
         new_person.id           = person_data['user_id']
         new_person.first_name   = person_data['first_name']
         new_person.last_name    = person_data['last_name']
-        new_person.ascii_name   = unidecode("{fn} {ln}".format(fn=new_person.first_name, ln=new_person.last_name).decode('utf-8'))
+        new_person.ascii_name   = unidecode.unidecode("{fn} {ln}".format(fn=new_person.first_name, ln=new_person.last_name).decode('utf-8'))
         new_person.gender       = person_data['gender']
         new_person.locale       = person_data['locale']
         new_person.birthday     = person_data['birthday']

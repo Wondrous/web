@@ -84,7 +84,7 @@ from wondrous.models.vote import (
 def initialize_sql(settings):
 
     """ Called by the app on startup to setup bindings to the DB """
-    
+
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine

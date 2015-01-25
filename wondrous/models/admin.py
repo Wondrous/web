@@ -26,7 +26,7 @@ from wondrous.models import DBSession
 from wondrous.utilities.validation_utilities import PasswordManager
 
 class Admin(Base, PasswordManager):
-    
+
     __tablename__ = 'admin'
 
     id = Column(BigInteger, primary_key=True, nullable=False)
@@ -51,7 +51,7 @@ class AdminManager(object):
 
     @staticmethod
     def get(admin_id=None, username=None, is_active=True):
-        
+
         """
             PURPOSE: Get a MojoRank Admin from the database
 
