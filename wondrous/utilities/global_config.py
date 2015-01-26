@@ -37,7 +37,7 @@ SYS_CONTEXT_TAGS = {
     'wall' : '__wall__',
 }
 
-# Needs to be redone
+# TODO: Needs to be redone
 NOTIFICATION_REASON = [
     "comment_on_my_post",    # 0
     "involved_in_same_post", # 1

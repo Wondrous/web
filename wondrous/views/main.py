@@ -615,10 +615,6 @@ class ProfileHandler(BaseHandler):
             PURPOSE: This method handles the profile view for any given user
         """
         
-        # ROUTE: /profile/{user_id}/{tab}/
-        # tab: 'followers' or 'following' or 'bookmarked' (private)
-        # vote_type: 'posts' or 'tags' or 'users'
-        
         safe_in       = Sanitize.safe_input
         profile_un    = self.url_match(url_match='username')
         tab           = self.url_match(url_match='tab')
@@ -631,13 +627,13 @@ class ProfileHandler(BaseHandler):
             current_user_id = current_user.id
             profile_id = valid_person.id
 
-            # Manage notification
+            # TODO: Manage notification
             notification_id = safe_in(self.request.GET.get('nrid'))
             if notification_id:
                 NotificationManager.mark_as_read(notification_id, current_user_id)
 
             # Handle profile tab
-            tab = self._get_profile_tab(tab, bool(profile_id != current_user_id))
+            tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(profile_id != current_user_id)
 
             # Get the items to render based off the given parameter(s)
             items = GetItems.profile(current_user_id, profile_id, tab=tab)
@@ -678,13 +674,28 @@ class ProfileHandler(BaseHandler):
         else:
             return HTTPFound("/")
 
-    def _get_profile_tab(self, tab, is_not_my_profile):
+    def _get_profile_tab(self, tab):  # Arg[1] = is_not_my_profile
+
+        """
+            PURPOSE: Get the appropriate profile tab
+
+            USE: Call like: self._get_profile_tab(...)
+
+            PARAMS: 1 parameter
+                tab : str : REQUIRED : The profile route match for a tab
+
+            RETURNS: None if the tab is invalid (i.e., you get sent to the root 
+            profile route), or the actual string tab of the profile
+                str  : The tab if valid
+                    or
+                None : None if tab invalid 
+        """
 
         VALID_PROFILE_TABS = set([
             'followers',
             'following',
             'likes',
-            'bookmarked',  # This is a private tab
+            #'bookmarked',  # PUT ON HOLD. This is a private tab
         ])
 
         # Handle the profile tabbing
@@ -693,9 +704,10 @@ class ProfileHandler(BaseHandler):
         if tab:
             if tab not in VALID_PROFILE_TABS:
                 tab = None  # Profile tab is invalid
-                
-            if tab == "bookmarked" and is_not_my_profile:
-                tab = None  # You can only view the bookmarks on your own profile
+
+            # PUT ON HOLD FOR NOW                
+            # if tab == "bookmarked" and is_not_my_profile:
+            #     tab = None  # You can only view the bookmarks on your own profile
 
         return tab
 
