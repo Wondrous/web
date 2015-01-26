@@ -53,7 +53,7 @@ class AdminManager(object):
     def get(admin_id=None, username=None, is_active=True):
 
         """
-            PURPOSE: Get a MojoRank Admin from the database
+            PURPOSE: Get an Admin from the database
 
             USE: Call like: AdminManager.get(...)
 
