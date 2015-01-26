@@ -79,7 +79,7 @@ class AdminManager(object):
     def add(admin_data):
 
         """
-            PURPOSE: Add a new MojoRank Admin to the database
+            PURPOSE: Add a new Admin to the database
 
             USE: Call like: AdminManager.add(...)
 
