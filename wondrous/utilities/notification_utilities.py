@@ -2,13 +2,14 @@ from pynats import *
 import json
 
 CHANNEL_NOTIFICATION = "notification"
-DEFAULT_URI = 'nats://0.0.0.0:4222'
+DEFAULT_URI = 'nats://104.236.251.250:4222'
 
 c = Connection(url=DEFAULT_URI,verbose=False)
 
 global CONNECTED
 
 try:
+    print "connected!"
     c.connect()
     CONNECTED = True
 except Exception, e:

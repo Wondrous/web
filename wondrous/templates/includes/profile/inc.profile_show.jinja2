@@ -1,11 +1,14 @@
 <div class="profile-header">
     <img src="{{profile_user.user.profile_picture}}" class="profile-photo round-50">
-    
+
     <span class="profile-header-content">
         <span class="profile-name">{{ profile_user.name }}</span>
         <span class="profile-wscore">
             <span class="profile-wscore-text round-5">1</span>
         </span>
+        {% if not is_my_profile %}
+        <button id="upvoteUserButton">Follow</button>
+        {% endif %}
     </span>
 
     <span class="profile-header-nav">
@@ -13,6 +16,10 @@
         <a class="profile-header-nav-link {% if tab == "followers" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/followers/">Followers</a>
         <a class="profile-header-nav-link {% if tab == "following" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/following/">Following</a>
         <a class="profile-header-nav-link {% if tab == "likes" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/likes/">l!kes</a>
+
+        {% if is_my_profile %}
+            <a class="profile-header-nav-link {% if tab == "bookmarked" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/bookmarked/">Read Later</a>
+        {% endif %}
     </span>
 </div>
 <div class="profile-content">

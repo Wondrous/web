@@ -25,7 +25,7 @@ $(document).ready(function() {
     // Moved inside doc ready
     $(document).on("click", ".notification-big-alarm", function() {
         $("html, body").animate({scrollTop: 0}, 300);
-        
+
         $('.notification-row').slideDown(80);
         $('.notification-dropdown').show();
         return false;
@@ -83,3 +83,34 @@ $(document).ready(function() {
 });
 
 
+function messageReceived(text, id,channel) {
+    console.log(text);
+};
+
+var pushstream = new PushStream({
+    host:"104.236.251.250",
+    port:"80",
+    modes: 'websocket'
+});
+
+// pushstream.onmessage=messageReceived;
+pushstream.onmessage = function(text,id,channel) {
+    console.log(text,id,channel);
+};
+
+
+pushstream.onstatuschange = function(status){
+    if (status==PushStream.OPEN){
+    }else if (status==PushStream.CLOSED){
+    }
+};
+pushstream.onerror = function(error){
+    console.log("error",error);
+};
+try {
+    pushstream.addChannel("1");
+    pushstream.connect();
+    console.log("ws connected");
+} catch(e) {
+    alert(e)
+};

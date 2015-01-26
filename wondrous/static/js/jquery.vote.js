@@ -12,7 +12,7 @@ function objectVoteAjax(thisPost, objectID) {
         url: "/ajax/object_vote/",
         data: {'object_id': objectID},
         success: function(vote_data) {
-            
+
             var totalUpvotes   = vote_data['total_upvotes'];
             var totalDownvotes = vote_data['total_downvotes'];
             var hasVoted       = vote_data['has_voted'];
@@ -44,7 +44,7 @@ $(document).on('click', '#doubleUpvoteUserButton', function() {
 
 // Follow and unFollow (1 and 0)
 // This also handles a followRequest. A 0 -> 1 indicats a request.
-// The server side code will input an appropriate 
+// The server side code will input an appropriate
 // -1 to indicate the request.
 $(document).on('click', '#upvoteUserButton', function() {
     var thisButton = this;
@@ -88,6 +88,7 @@ function userVoteAjax(thisButton, voteType, profileID) {
         data: {'profile_id': profileID},
         success: function(vote_data) {
             // TODO
+            console.log(vote_data);
         }
     });
 }

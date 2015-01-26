@@ -31,15 +31,15 @@ class BaseVoteOperations(object):
         """
             PURPOSE: Determine whether a particular user
             has voted on a particular object
-        
+
             USE: Call like: BaseVoteOperations._has_voted(<cls_row>,<cls.row>,<int>,<int>)
-        
+
             PARAMS: 4 required params:
                 this_cls : The class of the database table being queried from
                 cls_row  : The class_name.row_attr (i.e., the column of the table)
                 user_id  : The id of the logged-in user
                 row_var  : Typically, the id of object potentially voted on
-        
+
             RETURNS: The object that user DID vote on,
                      Or, None if the user didn't vote on it.
         """
@@ -52,7 +52,7 @@ class BaseVoteOperations(object):
 
         """
             PURPOSE: Add a new vote into the database
-        
+
             USE: Call like: BaseVoteOperations._new_vote(<dict>)
 
             PARAMS: A dict with 6 params, all required:
@@ -62,7 +62,7 @@ class BaseVoteOperations(object):
                 vote_obj    : obj : If the vote already exists, it's this object
                 user_id     : int : The id of the logged-in user
                 VOTE_TYPE   : int : 2 (double upvote) or 1 (upvote) or -1 (downvote)
-        
+
             RETURNS: None
         """
 
@@ -90,12 +90,12 @@ class BaseVoteOperations(object):
 
         """
             PURPOSE: Delete an existing vote object
-        
+
             USE: Call like: BaseVoteOperations._del_vote(<obj>)
-        
+
             PARAMS: 1 required param: the vote
             object of the vote being deleted
-        
+
             RETURNS: None
         """
 
@@ -108,14 +108,14 @@ class BaseVoteOperations(object):
         """
             PURPOSE: Upvote an object, whether the object already
             exists or a new object has to be created
-        
+
             USE: Call like: BaseVoteOperations._upvote(<cls>,<int>,<int>)
-        
+
             PARAMS: 3 required params:
                 this_cls    : The class of the database table being added to
                 user_id     : The id of the logged-in user
                 receiver_id : The FK to relate the new vote back to its object
-        
+
             RETURNS: None
         """
 
@@ -128,14 +128,14 @@ class BaseVoteOperations(object):
         """
             PURPOSE: Upvote an object, whether the object already
             exists or a new object has to be created
-        
+
             USE: Call like: BaseVoteOperations._upvote(<cls>,<int>,<int>)
-        
+
             PARAMS: 3 required params:
                 this_cls    : The class of the database table being added to
                 user_id     : The id of the logged-in user
                 receiver_id : The FK to relate the new vote back to its object
-        
+
             RETURNS: None
         """
 
@@ -148,14 +148,14 @@ class BaseVoteOperations(object):
         """
             PURPOSE: Downvote an object, whether the object already
             exists or a new object has to be created
-        
+
             USE: Call like: BaseVoteOperations._downvote(<cls>,<int>,<int>)
-        
+
             PARAMS: 3 required params:
                 this_cls    : The class of the database table being added to
                 user_id     : The id of the logged-in user
                 receiver_id : The FK to relate the new vote back to its object
-        
+
             RETURNS: None
         """
 
@@ -168,14 +168,14 @@ class BaseVoteOperations(object):
         """
             PURPOSE: Upvote an object, whether the object already
             exists or a new object has to be created
-        
+
             USE: Call like: BaseVoteOperations._upvote(<cls>,<int>,<int>)
-        
+
             PARAMS: 3 required params:
                 this_cls    : The class of the database table being added to
                 user_id     : The id of the logged-in user
                 receiver_id : The FK to relate the new vote back to its object
-        
+
             RETURNS: None
         """
 
@@ -189,14 +189,14 @@ class BaseVoteOperations(object):
             PURPOSE: Remove (hard delete) an object vote,
             whether the object already exists or a new
             object has to be created
-        
+
             USE: Call like: BaseVoteOperations._novote(<cls>,<int>,<int>)
-        
+
             PARAMS: 3 required params:
                 this_cls    : The class of the database table being added to
                 user_id     : The id of the logged-in user
                 receiver_id : The FK to relate the new vote back to its object
-        
+
             RETURNS: None
         """
 
@@ -209,17 +209,17 @@ class BaseVoteOperations(object):
         """
             PURPOSE: Determine whether a new
             vote is an upvote or a downvote
-        
+
             USE: Call like: BaseVoteOperations._get_vote_type(<int>,<int>,<int>,<int>)
-        
+
             PARAMS: 2 required params:
                 double-upvote   : int : 2
                 upvote          : int : 1
                 downvote        : int : -1
                 double-downvote : int : -2
-        
-            RETURNS: A 2 if a double_upvote, 
-                     a 1 if an upvote, 
+
+            RETURNS: A 2 if a double_upvote,
+                     a 1 if an upvote,
                      a -1 if a downvote, OR
                      a -2 if a double_downvote
         """
@@ -261,11 +261,11 @@ class ObjectVote(Base):
 class ObjectVoteManager(BaseVoteOperations):
 
     """
-        PURPOSE: Contains all methods used to keep 
+        PURPOSE: Contains all methods used to keep
         track of likes on objects
     """
 
-    def __init__(self, user_id, obj_id):        
+    def __init__(self, user_id, obj_id):
         self.user_id  = user_id
         self.obj_id   = obj_id
         self.vote_obj = ObjectVoteManager.has_voted(self.user_id, self.obj_id)
@@ -274,13 +274,13 @@ class ObjectVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Add a new up/down-vote into the database
-        
+
             USE: *ONLY* called in BaseVoteOperations class
-        
+
             PARAMS: 2 params, one or the other: upvote and downvote
             *One* of them must be set to True. Both default to False
                 upvote : bool : default=False : False --> True OR,
-        
+
             RETURNS: None
         """
         double_upvote = downvote = double_downvote = False  # Only upvoted is supported
@@ -301,11 +301,11 @@ class ObjectVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: *HARD DELETE* a vote row from the database
-        
+
             USE: *ONLY* called in BaseVoteOperations class
-        
+
             PARAMS: (None)
-        
+
             RETURNS: (None)
 
             NOTE: For full documentation, see: BaseVoteOperations._del_vote(...)
@@ -317,7 +317,7 @@ class ObjectVoteManager(BaseVoteOperations):
     def has_voted(user_id, obj_id):
 
         """
-            Return weather or not a user has voted on a particular object
+            Return whether or not a user has voted on a particular object
 
             For full documentation, see: BaseVoteOperations._has_voted(...)
         """
@@ -340,17 +340,17 @@ class ObjectVoteManager(BaseVoteOperations):
 
         BaseVoteOperations._novote(cls, user_id, obj_id)
 
-    @staticmethod   
+    @staticmethod
     def get_like_count(obj_id):
 
         """
             PURPOSE: Get total upvotes (likes) of an individual object
-        
+
             USE: Call like: ObjectVoteManager.get_like_count(<int>)
-        
+
             PARAMS: 1 param: an int:
                 obj_id : int : REQUIRED : The id of the object to get likes
-        
+
             RETURNS: An int, the number of likes to the object
         """
 
@@ -362,14 +362,14 @@ class ObjectVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Get total of how many objects user has liked
-            
+
             NOTE: Used on a user's profile: Likes (get_liked_object_count)
-        
+
             USE: Call like: ObjectVoteManager.get_liked_object_count(<int>)
-        
+
             PARAMS: 1 param, an int:
                 profile_user_id : int : REQUIRED : The id of the user whose object-count we are querying
-        
+
             RETURNS: An int, the number of liked objects of a particular user
         """
 
@@ -381,12 +381,12 @@ class ObjectVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Get all objects a user has liked
-        
+
             USE: Call like: ObjectVoteManager.get_liked_objects_for_user(<int>)
-        
+
             PARAMS: 1 param, an int:
                 profile_user_id : int : REQUIRED : The id of the user whose object-voting we are querying
-        
+
             RETURNS: An int, the number of liked objects of a particular user
         """
 
@@ -395,19 +395,19 @@ class ObjectVoteManager(BaseVoteOperations):
 
     @staticmethod
     def total_likes_in_system():
-        
+
         """
             PURPOSE: Get total likes in the system
-            
+
             NOTE: Only used for analytics purposes for administers
-        
+
             USE: Call like: ObjectVoteManager.total_likes_in_system(<int>)
-        
+
             PARAMS: (None)
-        
+
             RETURNS: An int, the number of total likes in the system
         """
-        
+
         return ObjectVote.query.filter(ObjectVote.vote_type == 1).count()
 
 
@@ -438,11 +438,11 @@ class ObjectBookmarkVote(Base):
 class ObjectBookmarkVoteManager(BaseVoteOperations):
 
     """
-        PURPOSE: Contains all methods used to keep 
+        PURPOSE: Contains all methods used to keep
         track of bookmarks on objects
     """
 
-    def __init__(self, user_id, obj_id):        
+    def __init__(self, user_id, obj_id):
         self.user_id  = user_id
         self.obj_id   = obj_id
         self.vote_obj = ObjectBookmarkVoteManager.has_voted(self.user_id, self.obj_id)
@@ -451,13 +451,13 @@ class ObjectBookmarkVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Add a new up/down-vote into the database
-        
+
             USE: *ONLY* called in BaseVoteOperations class
-        
+
             PARAMS: 2 params, one or the other: upvote and downvote
             *One* of them must be set to True. Both default to False
                 upvote : bool : default=False : False --> True OR,
-        
+
             RETURNS: None
         """
         double_upvote = downvote = double_downvote = False  # Only upvoted is supported
@@ -478,11 +478,11 @@ class ObjectBookmarkVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: *HARD DELETE* a vote row from the database
-        
+
             USE: *ONLY* called in BaseVoteOperations class
-        
+
             PARAMS: (None)
-        
+
             RETURNS: (None)
 
             NOTE: For full documentation, see: BaseVoteOperations._del_vote(...)
@@ -522,15 +522,15 @@ class ObjectBookmarkVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Get total of how many objects user has bookmarked
-            
+
             NOTE: Used on a user's profile: Read later (get_bookmarked_object_count)
-        
+
             USE: Call like: ObjectBookmarkVoteManager.get_bookmarked_object_count(<int>)
-        
+
             PARAMS: 1 param, an int:
-                profile_user_id : int : REQUIRED : The id of the user whose bookmarked-object-count 
+                profile_user_id : int : REQUIRED : The id of the user whose bookmarked-object-count
                                                    we are querying
-        
+
             RETURNS: An int, the number of bookmarked objects of a particular user
         """
 
@@ -542,13 +542,13 @@ class ObjectBookmarkVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Get all objects a user has bookmarked
-        
+
             USE: Call like: ObjectBookmarkVoteManager.get_bookmarked_objects_for_user(<int>)
-        
+
             PARAMS: 1 param, an int:
-                profile_user_id : int : REQUIRED : The id of the user whose bookmarked-object-tag-voting 
+                profile_user_id : int : REQUIRED : The id of the user whose bookmarked-object-tag-voting
                                                    we are querying
-        
+
             RETURNS: An int, the number of bookmarked objects of a particular user
         """
 
@@ -580,13 +580,13 @@ class UserVote(Base):
 
 
 class UserVoteManager(BaseVoteOperations):
-    
+
     """
-        PURPOSE: Contains all methods used to keep 
+        PURPOSE: Contains all methods used to keep
         track of who follows who on the site
     """
 
-    def __init__(self, user_id, voted_on_id):       
+    def __init__(self, user_id, voted_on_id):
         self.user_id      = user_id  # The current user id, i.e., the voter
         self.voted_on_id  = voted_on_id  # The person being voted on
         self.vote_obj     = UserVoteManager.has_voted(self.user_id, self.voted_on_id)
@@ -595,16 +595,16 @@ class UserVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: Add a new up/down-vote into the database
-        
+
             USE: *ONLY* called in BaseVoteOperations class
-        
+
             PARAMS: 4 params, double_upvote, upvote, downvote, double_downvote
             *One* of them must be set to True. Both default to False
                 double_upvote   : bool : default=False : False --> True OR,
                 upvote          : bool : default=False : False --> True OR,
                 downvote        : bool : default=False : False --> True OR,
                 double_downvote : bool : default=False : False --> True
-        
+
             RETURNS: None
         """
 
@@ -625,11 +625,11 @@ class UserVoteManager(BaseVoteOperations):
 
         """
             PURPOSE: *HARD DELETE* a vote row from the database
-        
+
             USE: *ONLY* called in BaseVoteOperations class
-        
+
             PARAMS: (None)
-        
+
             RETURNS: (None)
 
             NOTE: For full documentation, see: BaseVoteOperations._del_vote(...)
@@ -656,7 +656,7 @@ class UserVoteManager(BaseVoteOperations):
         """
             BACKLOG (for now, until Priority feed is implemented)
             For full documentation, see: BaseVoteOperations._double_upvote(...)
-        """ 
+        """
 
         BaseVoteOperations._double_upvote(cls, user_id, voted_on_id)
 
@@ -698,12 +698,12 @@ class UserVoteManager(BaseVoteOperations):
 
             PURPOSE: Get grand total of how many users a
             particular user has doulbe-upvoted (i.e., "top friended")
-        
+
             USE: Call like: UserVoteManager.get_top_friend_count(<int>)
-        
+
             PARAMS: 1 param, an int:
                 profile_user_id : int : REQUIRED : The id of the user whose user-vote-count we are querying
-        
+
             RETURNS: An int, the number of upvoted users (following) of a particular user
         """
 
@@ -723,12 +723,12 @@ class UserVoteManager(BaseVoteOperations):
 
             PURPOSE: Get grand total of how many users a
             particular user has upvoted (i.e., "following")
-        
+
             USE: Call like: UserVoteManager.get_following_count(<int>)
-        
+
             PARAMS: 1 param, an int:
                 profile_user_id : int : REQUIRED : The id of the user whose user-vote-count we are querying
-        
+
             RETURNS: An int, the number of upvoted users (following) of a particular user
         """
 
@@ -748,12 +748,12 @@ class UserVoteManager(BaseVoteOperations):
             PURPOSE: Get grand total of how many users have upvoted
             another particular user, identified by profile_user_id,
             (i.e., "followers")
-        
+
             USE: Call like: UserVoteManager.get_follower_count(<int>)
-        
+
             PARAMS: 1 param, an int:
                 profile_user_id : int : REQUIRED : The id of the user whose upvoted-by-count we are querying
-        
+
             RETURNS: An int, the number of other users
             that have upvoted a particular user (as said before,
             identified by profile_user_id)

@@ -54,7 +54,7 @@ class BaseHandler(object):
         self.COMPANY_NAME = "Wondrous"
 
     def set_pagination_data(self, items, start, profile_id=None, PER_PAGE=GLOBAL_CONFIGURATIONS['POSTS_PER_PAGE']):
-        
+
         """
             PURPOSE: Set all the necessary instance variables
             for use in item pagination.
@@ -62,8 +62,8 @@ class BaseHandler(object):
             USE: Call like: self.set_pagination_data(...)
 
             NOTE: We no longer use direct pagination; however, in oder to
-            implement the infinite scroll, we append the next page's items. 
-            Infinite scroll is reliant on this data, and is built upon a 
+            implement the infinite scroll, we append the next page's items.
+            Infinite scroll is reliant on this data, and is built upon a
             paginated set of posts.
 
             PARAMS: 4 params, 2 of which are optional
@@ -85,18 +85,18 @@ class BaseHandler(object):
         # If we have any negative numbers,
         # default them to 0
         start = 0 if start < 0 else start
-        
+
         # Obviously, get current user id
         current_user_id = self.request.user.id
-        
-        # Create new pagination object to 
+
+        # Create new pagination object to
         # do all the hard work for us
         p = Pagination(start, PER_PAGE)
-        
-        # Only show hidden posts if current user 
+
+        # Only show hidden posts if current user
         # is the one who did the posting
         SHOW_HIDDEN = True if profile_id and (current_user_id == profile_id) else False
-        
+
         # Assign all relevant data to instance variables for
         # use in the calling method
         self.page_items  = p.load(items, display_hidden=SHOW_HIDDEN)
@@ -130,7 +130,7 @@ class AuthHandler(BaseHandler):
     #           this_user = UserManager.get(username=user_identification)
 
     #       if this_user and this_user.validate_password(password) and not this_user.user.is_banned:
-        
+
     #           # Reactivating a user when they log in
 
     #           this_user.user.last_login = datetime.now()  # Is this correct?
@@ -160,7 +160,7 @@ class AuthHandler(BaseHandler):
         safe_in  = Sanitize.safe_input
         safe_out = Sanitize.safe_output
         p        = self.request.POST
-        
+
         error_message = None
         credential    = None
         password      = None
@@ -179,7 +179,7 @@ class AuthHandler(BaseHandler):
                 this_user = this_person.user
 
             if this_person and this_user.validate_password(password) and not this_user.is_banned:
-        
+
                 # Reactivating a user when they log in
                 # TODO -- this needs to be more 'offical'
                 headers = self._set_session_headers(this_person)
@@ -207,18 +207,18 @@ class AuthHandler(BaseHandler):
     def is_banned(self):
 
         """
-            PURPOSE: This method handles the is_banned view for 
+            PURPOSE: This method handles the is_banned view for
             those unfortunate souls who seriously abuse the system.
         """
 
         user_id   = self.url_match(url_match='user_id', arg_type="int")
         if user_id:
-            
+
             # Get the user and check if they're banned from the site
             # if they attempt to access this view
             this_person = UserManager.get(user_id, is_active=False)
             if this_person and this_person.user.is_banned:
-                
+
                 # Show the page (note that the
                 # page requires no data)
                 return {}
@@ -237,7 +237,7 @@ class AuthHandler(BaseHandler):
 
         this_person = self.request.user  # The logged-in user
         this_person.user.last_logout = datetime.now()
-        
+
         headers = forget(self.request)
 
         # After every call, we redirect back to index
@@ -264,11 +264,11 @@ class AuthHandler(BaseHandler):
             if secret_number == "666" and user_id:
                 d = DisableUser(user_id)
                 disable_successful = d.disable()
-                
+
                 if disable_successful:
                     # On a successful disabling, we always finish we a logout
                     return HTTPFound(location="/auth/logout/")
-        
+
         # If something goes wrong, redirect back to index...
         return HTTPFound(location="/")
 
@@ -295,12 +295,12 @@ class AuthHandler(BaseHandler):
             """.format(cn=self.COMPANY_NAME)
 
         elif action == "add":
-            
+
             valid_email, error_message = UnverifiedEmailManager.validate(email)
             if not error_message:
-                
+
                 email_obj = UnverifiedEmailManager.get(valid_email)
-                if email_obj:       
+                if email_obj:
                     return HTTPFound("/auth/waitlist/success/")
                 else:
                     error_message = "There was an unexpected problem. Sorry :("
@@ -360,7 +360,7 @@ class AuthHandler(BaseHandler):
                 _s_em_taken = UserManager.get(email=email)
                 _s_valid_un = Sanitize.is_valid_username(username.lower())
                 _s_un_taken = UserManager.get(username=username)
-                
+
                 # Check for validity
                 if not _s_valid_fn:
                     error_message = "Your first name is {err}".format(len_err_fn)
@@ -378,7 +378,7 @@ class AuthHandler(BaseHandler):
                     error_message = "This username has already been taken. Please use a different one."
 
             if not error_message:
-                
+
                 # For the user table
                 user_data = {
                     'user_type'       : PERSON,
@@ -398,7 +398,7 @@ class AuthHandler(BaseHandler):
                 }
 
                 UserManager.add(user_data, user_type_data) # This adds to Person table as well
-                
+
                 this_person = UserManager.get(email=email)
                 headers = self._set_session_headers(this_person)
                 this_person.user.last_login = datetime.now()
@@ -435,7 +435,7 @@ class AuthHandler(BaseHandler):
         # If we're not in the signup sequence
         if url_step_num not in [current_step, current_step+1]:
             return HTTPFound(location="/signup/step/{step}/".format(step=current_step))
-        
+
         # If we're in the sequence, but we're advanced past last step
         elif url_step_num == LAST_STEP+1:
             this_person.signup_step_num += 1  # They've advanced 1 step
@@ -449,7 +449,7 @@ class AuthHandler(BaseHandler):
         # We're at the step we should be at...
         elif url_step_num == current_step:
             pass # No need to update step num
-        
+
         # Advance the step as long as we're not
         # advancing it past the max step number!
         elif this_person.signup_step_num < LAST_STEP:
@@ -475,7 +475,7 @@ class AuthHandler(BaseHandler):
         safe_in = Sanitize.safe_input
         code = safe_in(self.url_match(url_match='code'))
         error_message = None
-        
+
         # Get both/either the active=True or active=False
         # For this page it doesn't matter becasue as soon as the
         # first person actually signs up with the given code, the
@@ -499,7 +499,7 @@ class AuthHandler(BaseHandler):
             last_attempt = email_obj.most_recent_attempt.date()
             if vh.duration_expired(last_attempt, days=DURATION):
                 error_message = """
-                    The link you've clicked on has expired. 
+                    The link you've clicked on has expired.
                     Please re-enter your email on the homepage and try again
                 """
 
@@ -514,7 +514,7 @@ class AuthHandler(BaseHandler):
                 UnverifiedEmailManager.deactivate(email_obj.email)
         else:
             error_message = """
-                The link you've clicked on is no longer valid. 
+                The link you've clicked on is no longer valid.
                 Please re-enter your email on the homepage and try again
             """
 
@@ -614,13 +614,13 @@ class ProfileHandler(BaseHandler):
         """
             PURPOSE: This method handles the profile view for any given user
         """
-        
+
         safe_in       = Sanitize.safe_input
         profile_un    = self.url_match(url_match='username')
         tab           = self.url_match(url_match='tab')
         start         = self.request.GET.get('start', 0)  # The start-value of the items to get
         current_user  = self.request.user  # The logged-in user
-        
+
         # valid_person  = vh.valid_profile(profile_id)  # The profile's "owner"
         valid_person = UserManager.get(username=profile_un)
         if valid_person:
@@ -637,7 +637,7 @@ class ProfileHandler(BaseHandler):
 
             # Get the items to render based off the given parameter(s)
             items = GetItems.profile(current_user_id, profile_id, tab=tab)
-            
+
             # Set all data needed for pagination
             num_items = 15
             self.set_pagination_data(items, start, profile_id, PER_PAGE=num_items)
@@ -656,14 +656,14 @@ class ProfileHandler(BaseHandler):
                 'is_my_profile'      : bool(valid_person.id == current_user_id),
                 'tab'                : tab,
                 'get_item_owner'     : UserManager.get,  # unbound method
-                
+
                 'render_items'       : self.page_items,
                 'current_page_num'   : self.page_num,
                 'has_next'           : self.has_next,
                 'next_start'         : self.next_start,
                 'back_start'         : self.back_start,
                 'start_item_num'     : self.start,
-                
+
                 'following_count'    : following_count,
                 'follower_count'     : follower_count,
                 'has_voted'          : getattr(uvm.has_voted(current_user_id, profile_id), 'vote_type', False),
@@ -684,11 +684,11 @@ class ProfileHandler(BaseHandler):
             PARAMS: 1 parameter
                 tab : str : REQUIRED : The profile route match for a tab
 
-            RETURNS: None if the tab is invalid (i.e., you get sent to the root 
+            RETURNS: None if the tab is invalid (i.e., you get sent to the root
             profile route), or the actual string tab of the profile
                 str  : The tab if valid
                     or
-                None : None if tab invalid 
+                None : None if tab invalid
         """
 
         VALID_PROFILE_TABS = set([
@@ -705,7 +705,7 @@ class ProfileHandler(BaseHandler):
             if tab not in VALID_PROFILE_TABS:
                 tab = None  # Profile tab is invalid
 
-            # PUT ON HOLD FOR NOW                
+            # PUT ON HOLD FOR NOW
             # if tab == "bookmarked" and is_not_my_profile:
             #     tab = None  # You can only view the bookmarks on your own profile
 
@@ -721,7 +721,7 @@ class TagHandler(BaseHandler):
         """
             PURPOSE: This method handles the rendering of all #tags
         """
-        
+
         tag_name = self.url_match(url_match='tag_name')
         start    = self.request.GET.get('start', 0) # The start-value of the items to get
 
@@ -730,7 +730,7 @@ class TagHandler(BaseHandler):
         this_person  = self.request.user
 
         # Check credentials
-        if is_valid_tag and tag_obj:             
+        if is_valid_tag and tag_obj:
             tag_name = tag_obj.tag_name
 
             # Get the items to render based off the given parameter(s)
@@ -746,7 +746,7 @@ class TagHandler(BaseHandler):
                 'context_tag'      : tag_name,
                 'valid_tag'        : tag_obj,
                 'get_item_owner'   : UserManager.get,  # unbound method
-                
+
                 'render_items'     : self.page_items,
                 'current_page_num' : self.page_num,
                 'has_next'         : self.has_next,
@@ -754,7 +754,7 @@ class TagHandler(BaseHandler):
                 'back_start'       : self.back_start,
                 'start_item_num'   : self.start,
             }
-            return data 
+            return data
         else:
             return HTTPFound("/tag/")
 
@@ -766,7 +766,7 @@ class SearchHandler(BaseHandler):
     def search(self):
 
         """
-            PURPOSE: This method handles the static search view (not 
+            PURPOSE: This method handles the static search view (not
             the ajax live search feature.)
         """
 
@@ -777,8 +777,8 @@ class SearchHandler(BaseHandler):
         results     = None
         result_list = []
 
-        # NOTE: We must ignore any system tags, 
-        # which are prefiexed and postfixed by 
+        # NOTE: We must ignore any system tags,
+        # which are prefiexed and postfixed by
         # __double_undersocres__
         # So, the "_" cannot be in the query.
         if query and "_" not in query:
@@ -792,19 +792,19 @@ class SearchHandler(BaseHandler):
                         'results'     : results,
                         'result_type' : "tag"
                     }]
-            
-            # Otherwise, we could be searching 
+
+            # Otherwise, we could be searching
             # for a person OR tag
             else:
 
                 # Are we searching a person by email?
                 if Sanitize.is_valid_email(query):
-                    
+
                     # Given an email, we just look for people
                     results = UserManager.get(email=query)
-                    if results:             
+                    if results:
                         result_list = [{
-                            'results'     : [results], 
+                            'results'     : [results],
                             'result_type' : 'person'
                         }]
                 else:
@@ -852,9 +852,9 @@ class PostHandler(BaseHandler):
 
         valid_object = ObjectManager.get(object_id)
         if valid_object and valid_object.ouuid == object_uuid:
-            
+
             new_post_item = GetItems.single_object(valid_object, this_person_id)
-            
+
             # Manage notifications if we got here via a notification
             notification_id = safe_in(self.request.GET.get('nrid'))
             if notification_id:
@@ -947,8 +947,8 @@ class ExcSQL(BaseHandler):
             PURPOSE: To run any SQLAlchemy commands and effect the
             DB without having to laboriously craft up ridiculous SQL.
 
-            *** 
-                THIS IS FOR DEV PURPOSES ONLY AND SHOULD BE 
+            ***
+                THIS IS FOR DEV PURPOSES ONLY AND SHOULD BE
                 LEFT BLANK UNLESS ABSOLUTELY NECESSARY
             ***
         """
@@ -962,4 +962,3 @@ class ExcSQL(BaseHandler):
         # AdminManager.add(new_admin_data)
 
         return {}
-

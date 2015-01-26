@@ -145,23 +145,23 @@ class AjaxHandler(BaseHandler):
         # object_id = self.request.POST.get('oid')
 
         # if ajax_method == "community":
-            
+
         #   community_id = PersonToCommunityManager.get(current_user.id).community.id
         #   obj = ObjectManager.get(object_id)
-            
+
         #   if obj:
         #       community_post = GetItems.new_community_post(obj, community_id, current_user.id)
         #       if community_post:
         #           p = Pagination()
         #           page_item = p.load(community_post)
         #           return HtmlifyPost.get_html_output(page_item, current_user, for_community=True)
-        
+
         return None
 
     @login_required
     @view_config(route_name='ajax_post_handler', xhr=True, renderer='json')
     def ajax_post_handler(self):
-        
+
         # Basic setup
         p            = self.request.POST
         ajax_method  = self.url_match(url_match='ajax_method')
@@ -176,9 +176,9 @@ class AjaxHandler(BaseHandler):
         object_file_id       = p.get('object_file_id')
 
         # If nothing is present...
-        valid_post_data, content_error = vp.validate_post_content(post_subject, 
-                                                                  post_text, 
-                                                                  sanitized_post_links, 
+        valid_post_data, content_error = vp.validate_post_content(post_subject,
+                                                                  post_text,
+                                                                  sanitized_post_links,
                                                                   object_file_id)
         if content_error:
             post_error = content_error
@@ -189,12 +189,12 @@ class AjaxHandler(BaseHandler):
                 Gosh darn-it. Stop messing with the system. Nobody likes a rebel.
                 Basically, what we're saying is: You have no soul. Thank you, and have a good day.
             """
-                    
-        # Do we have too many tags? 
+
+        # Do we have too many tags?
         elif len(final_post_tags) > GLOBAL_CONFIGURATIONS['MAX_TAG_NUM']:
             # Too many tags!
             post_error = """
-                It'd be appreciated greatly if you'd limit 
+                It'd be appreciated greatly if you'd limit
                 the number of tags to no more than 15 at a time.
             """
 
@@ -206,13 +206,13 @@ class AjaxHandler(BaseHandler):
                 'user_id'        : current_user.id,
                 'profile_id'     : current_user.id,
                 'post_tags'      : final_post_tags,
-                
+
                 'post_subject'   : valid_post_data['post_subject'],
                 'post_text'      : valid_post_data['post_text'],
                 'post_links'     : valid_post_data['post_links'],
                 'object_file_id' : valid_post_data['object_file_id'],
             }
-            
+
             new_wall_post_obj = CreateNewPost.for_wall(new_post_data)
             new_post_item     = GetItems.new_wall_post(new_wall_post_obj, current_user.id)
 
@@ -231,6 +231,7 @@ class AjaxHandler(BaseHandler):
             'post_error' : post_error
         }
 
+
     @login_required
     @view_config(route_name='ajax_comment_handler', xhr=True, renderer='json')
     def ajax_comment_handler(self):
@@ -246,15 +247,15 @@ class AjaxHandler(BaseHandler):
         if not comment_text:
             # No comment_text was present
             comment_error = "Really? Please add a comment before you try to add a comment..."
-        
+
         elif len(comment_text) > GLOBAL_CONFIGURATIONS['MAX_COMMENT_LENGTH']:
             # The comment_text was too long
             comment_error = "We apologize, but your comment exceeded the maximum length number of characters."
-        
+
         elif not object_id:
             # The object_id was not present
             comment_error = "There was a dreadful error and your comment could not be posted."
-        
+
         elif not this_object:
             # The object_id provided does not exist
             comment_error = "Wow, you are a soulless. Devious actions are not welcome here."
@@ -271,8 +272,8 @@ class AjaxHandler(BaseHandler):
             # ObjectCommentManager.add calls DBSession.flush(),
             # so this newly entered comment will show up in all
             # proceeding queries
-            comment_id = ObjectCommentManager.add(object_comment_data) 
-            
+            comment_id = ObjectCommentManager.add(object_comment_data)
+
             # Send to object_poster if someone comments on the post,
             # and that someone is not the object_poster himself
             object_poster_id = ObjectManager.get(object_id).poster_id
@@ -287,7 +288,7 @@ class AjaxHandler(BaseHandler):
                         'object_uuid'  : this_object.ouuid,
                     }
                     NotificationManager.add(_notification_data)
-            
+
             # Send to ALL people who have previously commented on the post,
             # except for if a previous poster_id == object_poster_id, AND
             # when we hit the newly entered post's c.poster_id == this_person
@@ -295,14 +296,14 @@ class AjaxHandler(BaseHandler):
             for c in ObjectCommentManager.get_all_comments_for_object(object_id):
                 if c.poster_id not in sent_list:
 
-                    # If you're not the original poster, and you're not 
+                    # If you're not the original poster, and you're not
                     # the one posting the content
                     if c.poster_id != object_poster_id and c.poster_id != poster_id:
-                        
+
                         # Make sure one of them has not reported the post previously
                         # If they have, we don't want to send them a notification
                         if not ReportedContentManager.has_reported(c.poster_id, this_object_id):
-                            
+
                             # NOTIFY REASON[1] (Send to all previous poster_ids)
                             _notification_data = {
                                 'from_user_id' : poster_id,
@@ -337,6 +338,7 @@ class AjaxHandler(BaseHandler):
             return {
                 'comment_error' : comment_error,
             }
+
 
     @login_required
     @view_config(route_name='ajax_object_vote_handler', xhr=True, renderer='json')
@@ -375,7 +377,7 @@ class AjaxHandler(BaseHandler):
 
             else:
                 ovm.upvote(this_person_id, object_id)
-                
+
                 # NOTIFY REASON[2]
                 NotificationManager.add(_notification_data)
 
@@ -391,7 +393,7 @@ class AjaxHandler(BaseHandler):
     @view_config(route_name='ajax_user_vote_handler', xhr=True, renderer='json')
     def ajax_user_vote_handler(self):
 
-        """     
+        """
             --------------------------------------
             -- SCENARIOS -------------------------
             --------------------------------------
@@ -441,7 +443,7 @@ class AjaxHandler(BaseHandler):
 
         valid_profile = UserManager.get(profile_id)  # The profile's "owner"
         if valid_profile and profile_id != voter_id and ajax_method in ACTION_LIST:
-            
+
             profile_id = valid_profile.id
 
             has_voted = uvm.has_voted(voter_id, profile_id)  # This is the vote_object, not a boolean
@@ -458,7 +460,7 @@ class AjaxHandler(BaseHandler):
                     # logically check to see if an unblock is occurring.
                     return {}
 
-    
+
                 elif has_voted.vote_type == -1:
                     # You've put in a pending request.
                     # The requester can do nothing until
@@ -483,9 +485,9 @@ class AjaxHandler(BaseHandler):
                     if has_voted.vote_type == 1:
                         uvm.novote(voter_id, profile_id)
 
-                elif valid_profile.is_private:
+                elif valid_profile.user.is_private:
                     # The profile is private.
-                    # The profile_user wants to accept or 
+                    # The profile_user wants to accept or
                     # deny all people who want to follow them
                     # *A request must be sent out*
 
@@ -504,7 +506,7 @@ class AjaxHandler(BaseHandler):
 
                     # Follow the user
                     uvm.upvote(voter_id, profile_id)
-                    
+
                     # Send notification indicating a new follower
                     # NOTIFY REASON[4]
                     _notification_data['reason'] = NOTIFICATION_REASON[4]
@@ -527,7 +529,7 @@ class AjaxHandler(BaseHandler):
                         uvm.upvote(profile_id, voter_id)
 
                     elif ajax_method == 'upvote_deny':
-                        
+
                         # See above for explanation for why
                         # the args are reversed here.
                         uvm.novote(profile_id, voter_id)
@@ -557,7 +559,7 @@ class AjaxHandler(BaseHandler):
 
             elif ajax_method == 'double_downvote':
 
-                # Note: Either blocked_user OR is_blocked_user 
+                # Note: Either blocked_user OR is_blocked_user
                 # (or both) is/are None.
 
                 # Voter blocked profile
@@ -568,12 +570,12 @@ class AjaxHandler(BaseHandler):
 
                 # If the voter had blocked the profile user...
                 if blocked_user:
-                    
+
                     # UNBLOCK THE USER
 
                     # Remove row from the BlockedUser table
                     BlockedUserManager.delete(blocked_user)
-                    
+
                     # Remove the reciporical block
                     uvm.novote(profile_id, voter_id)
                     uvm.novote(voter_id, profile_id)
@@ -595,17 +597,17 @@ class AjaxHandler(BaseHandler):
                         'blocked_user_id' : profile_id,  # The person being blocked
                     }
                     BlockedUserManager.add(blocked_user_data)
-                    
+
                     # Add the reciporical block
                     uvm.double_downvote(profile_id, voter_id)
                     uvm.double_downvote(voter_id, profile_id)
 
 
             vote_data = {
-                'total_upvotes'    : uvm.get_total_upvotes(profile_id),
-                'total_downvotes'  : uvm.get_total_downvotes(profile_id),
-                'has_voted'        : getattr(uvm.has_voted(voter_id, profile_id), 'vote_type', False),
-                'upvoted_by_count' : uvm.get_upvoted_by_count(profile_id),
+                'total_following'    : uvm.get_following_count(profile_id),
+                'total_follower'  : uvm.get_follower_count(profile_id),
+                # 'has_voted'        : getattr(uvm.has_voted(voter_id, profile_id), 'vote_type', False),
+                # 'upvoted_by_count' : uvm.get_upvoted_by_count(profile_id),
             }
             return vote_data
         else:
@@ -624,7 +626,7 @@ class AjaxHandler(BaseHandler):
     @view_config(route_name='ajax_report_content_handler', xhr=True, renderer='json')
     def ajax_report_content_handler(self):
         current_user_id = self.request.user.id
-        
+
         _object_id = self.request.POST.get('object_id')
         why_id = self.request.POST.get('why_id')
         report_comment = self.request.POST.get('report_comment')
@@ -676,13 +678,13 @@ class AjaxHandler(BaseHandler):
     def ajax_delete_content_handler(self):
         current_user_id = self.request.user.id
         _object_id = self.request.POST.get('object_id')
-        
+
         my_post = on_my_wall = False
         error_message = None
 
         this_object = ObjectManager.get(_object_id)
         if this_object:
-            
+
             wall_post = WallPostManager.get(this_object.id)
             if wall_post:
                 on_my_wall = bool(wall_post.profile_id == current_user_id)
@@ -701,25 +703,25 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_delete_comment_handler', xhr=True, renderer='json')
     def ajax_delete_comment_handler(self):
-        
+
         p               = self.request.POST
         current_user_id = self.request.user.id
         _object_id      = p.get('object_id')
         _comment_id     = p.get('comment_id')
-        
+
         my_comment = on_my_wall = False
         error_message = None
 
         this_comment =  ObjectCommentManager.get(_comment_id, _object_id)
         if this_comment:
             this_object = ObjectManager.get(_object_id)
-            
+
             # The post is on my wall, hence, I can control all
             # comments on my wall, even if not from my post.
             wall_post = WallPostManager.get(this_object.id)
             if wall_post:
                 on_my_wall = bool(wall_post.profile_id == current_user_id)
-            
+
             # Or, my comment
             my_comment = bool(this_comment.poster_id == current_user_id)
 
@@ -746,8 +748,8 @@ class AjaxHandler(BaseHandler):
             if query[0] == "#":
                 query = query[1::]
                 results = GlobalTagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
-                
-                # This is to handle a case when there are 
+
+                # This is to handle a case when there are
                 # no tags for a given searched hashtag
                 if not results:
                     results = []
@@ -760,7 +762,7 @@ class AjaxHandler(BaseHandler):
                     })
             else:
                 if Sanitize.is_valid_email(query):
-                    
+
                     # Given an email, we just look for people
                     results = UserManager.get(email=query)
                     for result in results:
@@ -769,7 +771,7 @@ class AjaxHandler(BaseHandler):
                             'data'     : "/{un}".format(un=result.user.username),
                             'category' : "person",
                         })
-                else:                   
+                else:
                     # Add persons
                     query = unidecode(unicode(query))
                     results = PersonManager.get_like(query, ascii=True)
@@ -811,7 +813,7 @@ class AjaxHandler(BaseHandler):
             return data
 
         elif ajax_method == "get":
-        
+
             # try:
             #   bnum = int(batch) if batch else 1
             # except:
@@ -850,11 +852,11 @@ class AjaxFileUpload(BaseHandler):
         """
             PURPOSE: This method handles the uploading of files for files
             attached to a post body, and the profile photo for users
-            
+
             NOTE: Traditionally, we had allowed numerous different MIME types;
             however, we're streamlining it down to just the major file
             types: PDFs, JPGs, PNGs for uploads attached to a post, and just
-            PNGs and JPGs for profile photos. 
+            PNGs and JPGs for profile photos.
 
             Also, very important to note, this only handles 1 file upload at
             a time. If we want to ever allow a user to upload numerous items
@@ -873,7 +875,7 @@ class AjaxFileUpload(BaseHandler):
         if ajax_method == "file":
             file_url, original_file_name, file_size, mime_type, error_message = self._process_file(cgi_file_obj)
             if not error_message:
-                
+
                 object_file_data = {
                     'file_url'           : file_url,
                     'original_file_name' : original_file_name,
@@ -920,18 +922,18 @@ class AjaxFileUpload(BaseHandler):
             RETURNS: 5 variables:
                 file_url : str : The static Amazon S3 url of the uploaded file
                 original_fname : str : The file's original name
-                file_size : int : The number of kilobytes of the file 
+                file_size : int : The number of kilobytes of the file
                 mime_type : str : The MIME type of the uploaded file
                 error_message : str : Any associated error involved with the file upload, otherwise None
-        
+
             NOTE: To optimize this, we can split some of the image processing
             off into a seperate thread/processes. For example, getting the size of the file is
             an independent computation that can take as long as we need up until we
             add the file into the database. The rest of the image EXIF manipulation
             can be done independently of the file size, and likewwise, can be delegated
-            to a seperate thread/process as well. This is primarily useful in the case we have multiple 
+            to a seperate thread/process as well. This is primarily useful in the case we have multiple
             uploads per single post wherein we don't want to sequentially process each upload,
-            but rather, tackle them all at once. 
+            but rather, tackle them all at once.
         """
 
         file_url       = None
@@ -944,7 +946,7 @@ class AjaxFileUpload(BaseHandler):
 
             mime_list = magic.from_buffer(cgi_file_obj.file.read(), mime=True),
             mime_type = mime_list[0] if mime_list else None
-        
+
             # Determine which set of MIMES we accept
             if image_only:
                 ACCEPT_MIMES = _IMAGE_MIMES_NO_GIF
@@ -1004,7 +1006,7 @@ class AjaxFileUpload(BaseHandler):
 
             RETURNS: 2 params:
                 file_object : <Fieldstorage> : The fully updated Fieldstorage object
-                is_error : bool : A boolean value indicating if an error occurred 
+                is_error : bool : A boolean value indicating if an error occurred
         """
 
         is_error = False
@@ -1018,7 +1020,7 @@ class AjaxFileUpload(BaseHandler):
         with open(IMG_DISK_LOCATION, 'wb') as f:
             f.write(cgi_file_obj.file.read())
 
-            # This is gross, but necessry. Set a timeout for a 
+            # This is gross, but necessry. Set a timeout for a
             # worst-case-scenario write to disk.
             # If the file still hasn't been written to disk after X seconds,
             # quit the process and return None, True
@@ -1031,7 +1033,7 @@ class AjaxFileUpload(BaseHandler):
 
             try:
                 # Get the orientation if it exists
-                e = ExifEditor(IMG_DISK_LOCATION)       
+                e = ExifEditor(IMG_DISK_LOCATION)
                 orientation = e.getOrientation()
                 if orientation != 1:
                     e.setOrientation(1)
@@ -1039,7 +1041,7 @@ class AjaxFileUpload(BaseHandler):
                     # If the orientation == 1, we
                     # don't need to do anything to it.
                     # Delete the file from the tmp dir
-                    
+
                     os.remove(IMG_DISK_LOCATION)
                     return None, True
 
