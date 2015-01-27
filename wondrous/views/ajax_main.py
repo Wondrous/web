@@ -639,8 +639,8 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_toggle_profile_visibility_handler', xhr=True, renderer='json')
     def ajax_toggle_profile_visibility_handler(self):
-        current_user = self.request.user
-        current_user.user.is_private = not current_user.user.is_private
+        current_user = self.request.user.user
+        current_user.is_private = not current_user.is_private
         return {}
 
     @login_required
