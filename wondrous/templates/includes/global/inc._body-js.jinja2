@@ -215,24 +215,23 @@
             thisItemBody.slideToggle(SPEED);
         });
 
-        $(document).ready(function(){
-            $(document).on("click", ".privacy-toggle", function(){
-                $(this).toggleClass("down");
-                var isPrivate = false;
-                if ($(this).hasClass("down")) {
-                    $(this).text("On");
-                    isPrivate = true;
-                } else {
-                    $(this).text("Off");
-                    isPrivate = false;
-                }
+        $(document).on("click", ".privacy-toggle", function() {
+            $(this).toggleClass("down");
+            var isPrivate = false;
+            if ($(this).hasClass("down")) {
+                $(this).text("On");
+                isPrivate = true;
+            } else {
+                $(this).text("Off");
+                isPrivate = false;
+            }
 
-                $.ajax({
-                    type: "POST",
-                    url: "/ajax/toggle_profile_visibility",
-                    data: {},
-                    success: function() {}
-                });
+            $.ajax({
+                type: "POST",
+                url: "/ajax/toggle_profile_visibility/",
+                success: function() {
+                    // alert("updated");
+                }
             });
         });
     });

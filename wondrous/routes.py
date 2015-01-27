@@ -74,7 +74,7 @@ def build_routes(config):
     config.add_route('ajax_comment_handler',                   '/ajax/comment/')
     config.add_route('ajax_post_handler',                      '/ajax/post/{ajax_method}/')
     config.add_route('ajax_toggle_post_visibility_handler',    '/ajax/post_visibility/')
-    config.add_route('ajax_toggle_profile_visibility_handler', '/ajax/toggle_profile_visibility')
+    config.add_route('ajax_toggle_profile_visibility_handler', '/ajax/toggle_profile_visibility/')
     config.add_route('ajax_load_more_handler',                 '/ajax/load_more/')
 
     config.add_route('ajax_username_check_handler',            '/ajax/username_check/')
