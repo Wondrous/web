@@ -216,7 +216,7 @@
         });
 
         $(document).ready(function(){
-            $('.privacy-toggle').click(function(){
+            $(document).on("click", ".privacy-toggle", function(){
                 $(this).toggleClass("down");
                 var isPrivate = false;
                 if ($(this).hasClass("down")) {
@@ -227,13 +227,12 @@
                     isPrivate = false;
                 }
 
-            $.ajax({
-                type: "POST",
-                url: "/ajax/toggle_profile_visibility",
-                data: {},
-                success: function() {}
-            });
-
+                $.ajax({
+                    type: "POST",
+                    url: "/ajax/toggle_profile_visibility",
+                    data: {},
+                    success: function() {}
+                });
             });
         });
     });
