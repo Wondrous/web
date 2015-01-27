@@ -619,7 +619,7 @@ class AjaxHandler(BaseHandler):
 
             vote_data = {
                 'total_following'    : uvm.get_following_count(profile_id),
-                'total_follower'  : uvm.get_follower_count(profile_id),
+                'total_follower'     : uvm.get_follower_count(profile_id),
                 # 'has_voted'        : getattr(uvm.has_voted(voter_id, profile_id), 'vote_type', False),
                 # 'upvoted_by_count' : uvm.get_upvoted_by_count(profile_id),
             }

@@ -77,7 +77,7 @@ class User(Base, PasswordManager):
     def is_following(self, user_to_get_id):
         from wondrous.models.vote import UserVoteManager
         vote = UserVoteManager.has_voted(self.id, user_to_get_id)
-        return True if vote in [1,2] else False
+        return True if getattr(vote, 'vote_type', None) in [1,2] else False
 
 
 class UserManager(object):

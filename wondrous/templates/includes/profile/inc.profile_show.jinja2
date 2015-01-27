@@ -7,7 +7,13 @@
             <span class="profile-wscore-text round-5">1</span>
         </span>
         {% if not is_my_profile %}
-        <button id="upvoteUserButton">Follow</button>
+            <button id="upvoteUserButton">
+                {% if is_following %}
+                    UnFollow
+                {% else %}
+                    Follow
+                {% endif %}
+            </button>
         {% endif %}
     </span>
 
@@ -16,24 +22,47 @@
         <a class="profile-header-nav-link {% if tab == "followers" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/followers/">Followers</a>
         <a class="profile-header-nav-link {% if tab == "following" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/following/">Following</a>
         <a class="profile-header-nav-link {% if tab == "likes" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/likes/">l!kes</a>
-
-        {% if is_my_profile %}
-            <a class="profile-header-nav-link {% if tab == "bookmarked" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/bookmarked/">Read Later</a>
-        {% endif %}
     </span>
 </div>
 <div class="profile-content">
     <input type="hidden" id="profileID" value="{{profile_user.id}}">
     {% if tab == "followers" %}
-        Followers
+
+        {% if render_items %}
+            {% for u in render_items %}
+                <a href="/{{u.user.username}}/">
+                    <div>
+                        <img src="{{u.user.profile_picture}}" class="profile-photo-med round-50">
+                        <span class="profile-name-row">{{ u.name }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+                <div>You have no followers yet</div>
+        {% endif %}
+
     {% elif tab == "following" %}
-        Following
+        
+        {% if render_items %}
+            {% for u in render_items %}
+                <a href="/{{u.user.username}}/">
+                    <div>
+                        <img src="{{u.user.profile_picture}}" class="profile-photo-med round-50">
+                        <span class="profile-name-row">{{ u.name }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+                <div>You're not following anoyone yet</div>
+        {% endif %}
+
     {% elif tab == "likes" %}
         Likes
-    {% elif tab == "bookmarked" %}
-        Bookmarked (private)
     {% else %}
-        {% include "includes/posts/inc.new_post_dialogue.jinja2" %}
+        {% if is_my_profile %}
+            {% include "includes/posts/inc.new_post_dialogue.jinja2" %}
+        {% endif %}
+        
         {% include "includes/posts/inc.posts_profile.jinja2" %}
     {% endif %}
 </div>
