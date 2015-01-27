@@ -637,6 +637,13 @@ class AjaxHandler(BaseHandler):
         return {}
 
     @login_required
+    @view_config(route_name='ajax_toggle_profile_visibility_handler', xhr=True, renderer='json')
+    def ajax_toggle_profile_visibility_handler(self):
+        current_user = self.request.user
+        current_user.user.is_private = not current_user.user.is_private
+        return {}
+
+    @login_required
     @view_config(route_name='ajax_report_content_handler', xhr=True, renderer='json')
     def ajax_report_content_handler(self):
         current_user_id = self.request.user.id

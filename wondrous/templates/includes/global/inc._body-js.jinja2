@@ -214,6 +214,28 @@
             $('.info-settings-item-body').not(thisItemBody).slideUp(SPEED);
             thisItemBody.slideToggle(SPEED);
         });
+
+        $(document).ready(function(){
+            $('.privacy-toggle').click(function(){
+                $(this).toggleClass("down");
+                var isPrivate = false;
+                if ($(this).hasClass("down")) {
+                    $(this).text("On");
+                    isPrivate = true;
+                } else {
+                    $(this).text("Off");
+                    isPrivate = false;
+                }
+
+            $.ajax({
+                type: "POST",
+                url: "/ajax/toggle_profile_visibility",
+                data: {},
+                success: function() {}
+            });
+
+            });
+        });
     });
 </script>
 

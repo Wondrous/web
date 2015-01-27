@@ -60,38 +60,39 @@ def build_routes(config):
     config.add_route('info_account_delete_handler',         '/info/delete_account/')
 
     # AJAX
-    config.add_route('ajax_notification',                   '/ajax/notification/{ajax_method}/')
+    config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')
 
-    config.add_route('ajax_delete_comment_handler',         '/ajax/delete_comment/')
-    config.add_route('ajax_delete_content_handler',         '/ajax/delete_content/')
-    config.add_route('ajax_report_content_handler',         '/ajax/report_content/')
-    config.add_route('ajax_hide_tutorial',                  '/ajax/hide_tutorial/')
+    config.add_route('ajax_delete_comment_handler',            '/ajax/delete_comment/')
+    config.add_route('ajax_delete_content_handler',            '/ajax/delete_content/')
+    config.add_route('ajax_report_content_handler',            '/ajax/report_content/')
+    config.add_route('ajax_hide_tutorial',                     '/ajax/hide_tutorial/')
 
-    config.add_route('ajax_global_tag_vote_handler',        '/ajax/global_tag_vote/{ajax_method}/')
-    config.add_route('ajax_object_vote_handler',            '/ajax/object_vote/{ajax_method}/')
-    config.add_route('ajax_user_vote_handler',              '/ajax/user_vote/{ajax_method}/')
+    config.add_route('ajax_global_tag_vote_handler',           '/ajax/global_tag_vote/{ajax_method}/')
+    config.add_route('ajax_object_vote_handler',               '/ajax/object_vote/{ajax_method}/')
+    config.add_route('ajax_user_vote_handler',                 '/ajax/user_vote/{ajax_method}/')
 
-    config.add_route('ajax_comment_handler',                '/ajax/comment/')
-    config.add_route('ajax_post_handler',                   '/ajax/post/{ajax_method}/')
-    config.add_route('ajax_toggle_post_visibility_handler', '/ajax/post_visibility/')
-    config.add_route('ajax_load_more_handler',              '/ajax/load_more/')
+    config.add_route('ajax_comment_handler',                   '/ajax/comment/')
+    config.add_route('ajax_post_handler',                      '/ajax/post/{ajax_method}/')
+    config.add_route('ajax_toggle_post_visibility_handler',    '/ajax/post_visibility/')
+    config.add_route('ajax_toggle_profile_visibility_handler', '/ajax/toggle_profile_visibility')
+    config.add_route('ajax_load_more_handler',                 '/ajax/load_more/')
 
-    config.add_route('ajax_username_check_handler',         '/ajax/username_check/')
+    config.add_route('ajax_username_check_handler',            '/ajax/username_check/')
 
-    config.add_route('ajax_async_load_item',                '/ajax/async_load/{ajax_method}/')
-    config.add_route('ajax_async_get_item_list',            '/ajax/async_get_item_list/{ajax_method}/')
+    config.add_route('ajax_async_load_item',                   '/ajax/async_load/{ajax_method}/')
+    config.add_route('ajax_async_get_item_list',               '/ajax/async_get_item_list/{ajax_method}/')
 
-    config.add_route('ajax_search_handler',                 '/ajax/search/')
-    config.add_route('ajax_my_info',                        '/ajax/my_info/')
-    config.add_route('ajax_upload_file_handler',            '/ajax/upload/{ajax_method}/')
+    config.add_route('ajax_search_handler',                    '/ajax/search/')
+    config.add_route('ajax_my_info',                           '/ajax/my_info/')
+    config.add_route('ajax_upload_file_handler',               '/ajax/upload/{ajax_method}/')
 
     # INDEX
-    config.add_route('index_handler',                       '/')
-    config.add_route('index_priority_feed_handler',         '/priority-feed/')
+    config.add_route('index_handler',                          '/')
+    config.add_route('index_priority_feed_handler',            '/priority-feed/')
 
     # PROFILE -- MUST BE AT BOTTOM --
-    config.add_route('profile_handler',                     '/{username}/')
-    config.add_route('profile_tab_handler',                 '/{username}/{tab}/')
+    config.add_route('profile_handler',                        '/{username}/')
+    config.add_route('profile_tab_handler',                    '/{username}/{tab}/')
 
 
     return config
