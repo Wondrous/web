@@ -217,13 +217,10 @@
 
         $(document).on("click", ".privacy-toggle", function() {
             $(this).toggleClass("down");
-            var isPrivate = false;
             if ($(this).hasClass("down")) {
                 $(this).text("On");
-                isPrivate = true;
             } else {
                 $(this).text("Off");
-                isPrivate = false;
             }
 
             $.ajax({
