@@ -51,7 +51,10 @@
     {% elif tab == "likes" %}
         Likes
     {% else %}
-        {% include "includes/posts/inc.new_post_dialogue.jinja2" %}
+        {% if is_my_profile %}
+            {% include "includes/posts/inc.new_post_dialogue.jinja2" %}
+        {% endif %}
+        
         {% include "includes/posts/inc.posts_profile.jinja2" %}
     {% endif %}
 </div>
