@@ -4,6 +4,7 @@ $(document).ready(function() {
         url: "/ajax/notification/count/",
         data: {}, /* No data needed */
         success: function(r) {
+            console.log("notification count",r);
             updateNotificationData(1);
             updateNotificationCount(r);
         }
@@ -60,7 +61,9 @@ $(document).ready(function() {
                 if (un !== null && un.length > 0) {
                     $('.notification-none').remove();
                     // Render all notifications
+
                     for (var i in un) {
+
                         var displayType = null;
                         var unread = null;
 
@@ -74,43 +77,59 @@ $(document).ready(function() {
                         "</div>"+ "</a>";
 
                         $('.notificationUnreadBucket').append(notificationHTML);
+                        console.log("notification",un[i]);
+
                     }
                 }
             }
         });
     }
 
-});
+    function messageReceived(text, id,channel) {
+        console.log(text);
+    };
+
+    var pushstream = new PushStream({
+        host:"104.236.251.250",
+        port:"80",
+        modes: 'websocket'
+    });
+
+    // pushstream.onmessage=messageReceived;
+    pushstream.onmessage = function(text,id,channel) {
+        console.log(text,id,channel);
+    };
 
 
-function messageReceived(text, id,channel) {
-    console.log(text);
-};
+    pushstream.onstatuschange = function(status){
+        if (status==PushStream.OPEN){
+        }else if (status==PushStream.CLOSED){
+        }
+    };
+    pushstream.onerror = function(error){
+        console.log("error",error);
+    };
 
-var pushstream = new PushStream({
-    host:"104.236.251.250",
-    port:"80",
-    modes: 'websocket'
-});
-
-// pushstream.onmessage=messageReceived;
-pushstream.onmessage = function(text,id,channel) {
-    console.log(text,id,channel);
-};
-
-
-pushstream.onstatuschange = function(status){
-    if (status==PushStream.OPEN){
-    }else if (status==PushStream.CLOSED){
+    function connectToWebsocket(channel){
+        try {
+            pushstream.addChannel(''+channel);
+            pushstream.connect();
+            console.log("ws connected to ",channel);
+        } catch(e) {
+            alert(e)
+        };
     }
-};
-pushstream.onerror = function(error){
-    console.log("error",error);
-};
-try {
-    pushstream.addChannel("1");
-    pushstream.connect();
-    console.log("ws connected");
-} catch(e) {
-    alert(e)
-};
+
+    function getMyInfo() {
+        $.ajax({
+            type: "POST",
+            url: "/ajax/my_info/",
+            success: function(data) {
+                connectToWebsocket(data.id);
+            }
+        });
+    }
+
+    getMyInfo();
+
+});

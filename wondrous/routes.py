@@ -10,7 +10,7 @@
 
 """ Create routes here, and they get returned into __init__.py main() """
 
-# This is to prevent a user from 
+# This is to prevent a user from
 # trying to take the username "signup" or "tag".
 # We deem these paths to already be taken.
 TAKEN_PATHS = set([
@@ -77,14 +77,14 @@ def build_routes(config):
     config.add_route('ajax_load_more_handler',              '/ajax/load_more/')
 
     config.add_route('ajax_username_check_handler',         '/ajax/username_check/')
-    
+
     config.add_route('ajax_async_load_item',                '/ajax/async_load/{ajax_method}/')
     config.add_route('ajax_async_get_item_list',            '/ajax/async_get_item_list/{ajax_method}/')
 
     config.add_route('ajax_search_handler',                 '/ajax/search/')
-    
+    config.add_route('ajax_my_info',                        '/ajax/my_info/')
     config.add_route('ajax_upload_file_handler',            '/ajax/upload/{ajax_method}/')
-    
+
     # INDEX
     config.add_route('index_handler',                       '/')
     config.add_route('index_priority_feed_handler',         '/priority-feed/')
@@ -92,5 +92,6 @@ def build_routes(config):
     # PROFILE -- MUST BE AT BOTTOM --
     config.add_route('profile_handler',                     '/{username}/')
     config.add_route('profile_tab_handler',                 '/{username}/{tab}/')
+
 
     return config

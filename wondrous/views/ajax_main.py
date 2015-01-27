@@ -17,7 +17,7 @@ from PIL import Image
 from unidecode import unidecode
 
 from pyramid.view import view_config
-
+from pyramid.httpexceptions import HTTPFound,HTTPTemporaryRedirect
 from wondrous.models.comment import ObjectCommentManager
 
 from wondrous.models.content import DeletedContentManager
@@ -339,6 +339,19 @@ class AjaxHandler(BaseHandler):
                 'comment_error' : comment_error,
             }
 
+    @login_required
+    @view_config(route_name='ajax_my_info',xhr=True,renderer='json')
+    def ajax_my_info(self):
+        """
+            This is the method used to handle basic info handling after login
+            has occurred. This is to replace the templating system
+        """
+        me = self.request.user
+        data = {
+            'id':me.id
+        }
+
+        return data
 
     @login_required
     @view_config(route_name='ajax_object_vote_handler', xhr=True, renderer='json')
@@ -482,6 +495,7 @@ class AjaxHandler(BaseHandler):
 
                 if has_voted:
                     # UnFollow the user
+                    print "unfollowing the user"
                     if has_voted.vote_type == 1:
                         uvm.novote(voter_id, profile_id)
 

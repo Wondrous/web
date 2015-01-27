@@ -29,7 +29,7 @@ from wondrous.utilities.general_utilities import get_object_url
 
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 from wondrous.utilities.global_config import NOTIFICATION_REASON
-
+from wondrous.utilities.notification_utilities import send_notification
 
 class Notification(Base):
 
@@ -62,7 +62,7 @@ class NotificationManager(object):
 
             * Not needed when NOTIFICATION_REASON[4] (i.e., Up/down-voted me)
 
-            An example _notification_data dict: 
+            An example _notification_data dict:
                 _notification_data = dict(
                     from_user_id=1,
                     to_user_id=5,
@@ -81,7 +81,9 @@ class NotificationManager(object):
         notification_data['notification'] = text
         notification_data['url']          = url
 
+        need_to_send = False
         # Delete overlapping notifications
+        print "detected note",notification_data
         if _notification_data['reason'] in [NOTIFICATION_REASON[0], NOTIFICATION_REASON[1]]:
             NotificationManager._merge_unseen_object_comments(_notification_data['from_user_id'],
                                                             _notification_data['to_user_id'],
@@ -91,15 +93,19 @@ class NotificationManager(object):
             NotificationManager._merge_unseen_object_votes(_notification_data['from_user_id'],
                                                           _notification_data['to_user_id'],
                                                           url)
-        
+
         elif _notification_data['reason'] == NOTIFICATION_REASON[4]:
 
             # TODO: Merge follow requests IF the user.is_private = False
-            NotificationManager._merge_unseen_user_votes(_notification_data['from_user_id'],
+            need_to_send=NotificationManager._merge_unseen_user_votes(_notification_data['from_user_id'],
                                                         _notification_data['to_user_id'])
 
         # Add the new notification after the overlap handling
         NotificationManager._add(notification_data)
+
+        # Send to realtime push
+        if need_to_send:
+            send_notification(notification_data['to_user_id'],text)
 
     @staticmethod
     def _add(notification_data):
@@ -119,24 +125,24 @@ class NotificationManager(object):
 
         # Set vote type for use in text
         vote_type = "<span style='notification-text-upvote'>upvoted</span>"
-        
+
         # Construct body of text
         if nd['reason'] == NOTIFICATION_REASON[0]:
             text += " commented on your post"
             reason = 0
-        
+
         elif nd['reason'] == NOTIFICATION_REASON[1]:
             text += " commented on a post you were involved in"
             reason = 1
-        
+
         elif nd['reason'] == NOTIFICATION_REASON[2]:
             text += " {vt} your post".format(vt=vote_type)
             reason = 2
-        
+
         elif nd['reason'] == NOTIFICATION_REASON[3]:
             text += " posted to your wall"
             reason = 3
-        
+
         elif nd['reason'] == NOTIFICATION_REASON[4]:
             text += " is now following you"
             reason = 4
@@ -178,8 +184,11 @@ class NotificationManager(object):
                                                    filter(Notification.to_user_id == to_user_id).\
                                                    filter(Notification.reason == 4).\
                                                    filter(Notification.is_seen == False).all()
+
         for n in overlap_notifications:
             DBSession.delete(n)
+
+        return False if len(overlap_notifications)>0 else True
 
     @staticmethod
     def _merge_unseen_object_votes(from_user_id, to_user_id, url):
@@ -224,7 +233,7 @@ class NotificationManager(object):
 
     @staticmethod
     def set_all_seen_for_user(user_id):
-        for n in NotificationManager.get_unseen_notifications_for_user(user_id): 
+        for n in NotificationManager.get_unseen_notifications_for_user(user_id):
             n.is_seen = True
 
     @staticmethod
@@ -233,5 +242,3 @@ class NotificationManager(object):
         if this_n and this_n.to_user_id == user_id:
             this_n.is_read = True
             this_n.is_seen = True
-
-
