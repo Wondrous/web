@@ -636,7 +636,7 @@ class ProfileHandler(BaseHandler):
             tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(profile_id != current_user_id)
 
             # Get the items to render based off the given parameter(s)
-            items = GetItems.profile(current_user_id, profile_id, tab=tab)
+            items = GetItems.profile(profile_id, tab=tab)
 
             # Set all data needed for pagination
             num_items = 15

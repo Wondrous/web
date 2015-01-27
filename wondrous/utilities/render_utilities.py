@@ -1145,7 +1145,7 @@ class _GenerateItemList(object):
 class GetItems(object):
     
     @staticmethod
-    def profile(current_user_id, profile_user_id, tab=None):
+    def profile(profile_user_id, current_user_id=None, tab=None):
         
         # Get profile's following
         if tab == "following":

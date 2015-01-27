@@ -27,9 +27,27 @@
 <div class="profile-content">
     <input type="hidden" id="profileID" value="{{profile_user.id}}">
     {% if tab == "followers" %}
+
         Followers
+        {% if render_items %}
+            {% for u in render_items %}
+                <div><a href="/{{u.user.username}}/">{{ u.name }}</a></div>
+            {% endfor %}
+        {% else %}
+                <div>You have no followers yet</div>
+        {% endif %}
+
     {% elif tab == "following" %}
+        
         Following
+        {% if render_items %}
+            {% for u in render_items %}
+                <div><a href="/{{u.user.username}}/">{{ u.name }}</a></div>
+            {% endfor %}
+        {% else %}
+                <div>You're not following anoyone yet</div>
+        {% endif %}
+
     {% elif tab == "likes" %}
         Likes
     {% else %}
