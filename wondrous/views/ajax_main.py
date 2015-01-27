@@ -70,8 +70,19 @@ from wondrous.views.main import BaseHandler
 
 class AjaxHandler(BaseHandler):
 
+    """
+        PURPOSE: This class contains all the methods called via AJAX
+        for the main platform
+    """
+
     @view_config(route_name='ajax_username_check_handler', xhr=True, renderer='json')
     def ajax_login_check_handler(self):
+
+        """
+            PURPOSE: This method is called on the JS onkeyup event,
+            and it dyanmically checks to see if your new username is
+            valid and/or is already taken
+        """
 
         safe_in  = Sanitize.safe_input
         success  = None
@@ -79,7 +90,7 @@ class AjaxHandler(BaseHandler):
         username = safe_in(self.request.POST.get('un'))
 
         valid_un_regex = Sanitize.is_valid_username(username)
-        un_is_taken = UserManager.get(username=username)
+        un_is_taken    = UserManager.get(username=username)
 
         if valid_un_regex and not un_is_taken:
             success = "Your username looks great!"
@@ -97,6 +108,13 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_hide_tutorial', xhr=True, renderer='json')
     def ajax_hide_tutorial(self):
+
+        """
+            PURPOSE: This method is called when a user clicks
+            out of the tutorial. It indicates in the DB that
+            the user has completed the mini-tutorial on signup
+        """
+
         current_user = self.request.user
         if current_user:
             current_user.show_tutorial = False
@@ -107,12 +125,16 @@ class AjaxHandler(BaseHandler):
     def ajax_async_get_item_list(self):
 
         """
+            PURPOSE: This method is used to asynchronously fetch 
+            item ids to be rendered so that the templates don't do
+            any work processing them on the server.
+
             TODO:
             This needs to be updated to handle the user's dynamically
-            aggregated feed. NOT THE COMMUNITY.
+            aggregated feed.
 
             We can pass in a few different options:
-                - global_feed   : The main index feed
+                - majority_feed : The main index feed
                 - priority_feed : The top-user feed
                 - profile       : The feed for a given profile (This will come with a username/id)
                 - tag           : The posts for a given tag (This will come with a tag-name)
@@ -135,9 +157,13 @@ class AjaxHandler(BaseHandler):
     def ajax_async_load_item(self):
 
         """
+            PURPOSE: This method is used to asynchronously load each individual
+            item once the basic object ids have been fetched via the
+            ajax_async_get_item_list() method above.
+
             TODO:
             This needs to be updated to handle the user's dynamically
-            aggregated feed. NOT THE COMMUNITY.
+            aggregated feed.
         """
 
         # current_user = self.request.user
@@ -161,6 +187,10 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_post_handler', xhr=True, renderer='json')
     def ajax_post_handler(self):
+
+        """
+            PURPOSE: This method enables a user to make a new post to their wall
+        """
 
         # Basic setup
         p            = self.request.POST
@@ -236,13 +266,16 @@ class AjaxHandler(BaseHandler):
     @view_config(route_name='ajax_comment_handler', xhr=True, renderer='json')
     def ajax_comment_handler(self):
 
+        """
+            PURPOSE: This method enables a user to a comment to a post
+        """
+
         p             = self.request.POST
         this_person   = self.request.user
         comment_error = None
-
-        object_id    = p.get('object_id')
-        comment_text = vp.sanitize_post_text(p.get('comment_text', ''))
-        this_object  = ObjectManager.get(object_id)
+        object_id     = p.get('object_id')
+        comment_text  = vp.sanitize_post_text(p.get('comment_text', ''))
+        this_object   = ObjectManager.get(object_id)
 
         if not comment_text:
             # No comment_text was present
@@ -342,8 +375,9 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_my_info',xhr=True,renderer='json')
     def ajax_my_info(self):
+        
         """
-            This is the method used to handle basic info handling after login
+            PURPOSE: This is the method used to handle basic info handling after login
             has occurred. This is to replace the templating system
         """
         me = self.request.user
@@ -358,14 +392,14 @@ class AjaxHandler(BaseHandler):
     def ajax_object_vote_handler(self):
 
         """
-            This is the ajax handler that gets called when
+            PURPOSE: This is the ajax handler that gets called when
             a user "likes" (!) a post.
         """
 
         this_person_id = self.request.user.id
         object_id      = self.request.POST.get('object_id')
+        valid_object   = ObjectManager.get(object_id)
 
-        valid_object = ObjectManager.get(object_id)
         if valid_object:
 
             has_voted = ovm.has_voted(this_person_id, object_id)
@@ -628,17 +662,18 @@ class AjaxHandler(BaseHandler):
             return {}
 
     @login_required
-    @view_config(route_name='ajax_toggle_post_visibility_handler', xhr=True, renderer='json')
-    def ajax_toggle_post_visibility_handler(self):
-        poster_id = self.request.user.id
-        object_id = self.request.POST.get('object_id')
-
-        ObjectManager.toggle_object_visibility(object_id, poster_id)
-        return {}
-
-    @login_required
     @view_config(route_name='ajax_toggle_profile_visibility_handler', xhr=True, renderer='json')
     def ajax_toggle_profile_visibility_handler(self):
+
+        """
+            PURPOSE: This method enables users make their profiles
+            either publically accessible, or private.
+
+            If it is publically accessible, they do not need to
+            approve followers. If it is private, they must manually
+            approve all pending follow requests
+        """
+
         current_user = self.request.user.user
         current_user.is_private = not current_user.is_private
         return {}
@@ -646,6 +681,12 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_report_content_handler', xhr=True, renderer='json')
     def ajax_report_content_handler(self):
+
+        """
+            PURPOSE: This method enables users to report
+            content which they find offensive/spam/etc.
+        """
+
         current_user_id = self.request.user.id
 
         _object_id = self.request.POST.get('object_id')
@@ -697,13 +738,18 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_delete_content_handler', xhr=True, renderer='json')
     def ajax_delete_content_handler(self):
+
+        """
+            PURPOSE: This method enables users to delete one of their posts
+        """
+
         current_user_id = self.request.user.id
-        _object_id = self.request.POST.get('object_id')
+        _object_id      = self.request.POST.get('object_id')
+        my_post         = False
+        on_my_wall      = False
+        error_message   = None
+        this_object     = ObjectManager.get(_object_id)
 
-        my_post = on_my_wall = False
-        error_message = None
-
-        this_object = ObjectManager.get(_object_id)
         if this_object:
 
             wall_post = WallPostManager.get(this_object.id)
@@ -725,15 +771,20 @@ class AjaxHandler(BaseHandler):
     @view_config(route_name='ajax_delete_comment_handler', xhr=True, renderer='json')
     def ajax_delete_comment_handler(self):
 
+        """
+            PURPOSE: This method enables users to delete a comment if
+            it is either authored by them, or if it on one of their posts
+        """
+
         p               = self.request.POST
         current_user_id = self.request.user.id
         _object_id      = p.get('object_id')
         _comment_id     = p.get('comment_id')
+        my_comment      = False
+        on_my_wall      = False
+        error_message   = None
+        this_comment    = ObjectCommentManager.get(_comment_id, _object_id)
 
-        my_comment = on_my_wall = False
-        error_message = None
-
-        this_comment =  ObjectCommentManager.get(_comment_id, _object_id)
         if this_comment:
             this_object = ObjectManager.get(_object_id)
 
@@ -759,10 +810,14 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_search_handler', renderer='json')
     def ajax_search_handler(self):
-        safe_in = Sanitize.safe_input
-        query = safe_in(self.request.GET.get('q')) # The search term
 
-        results = None
+        """
+            PURPOSE: This method controls the autocomplete search bar's results
+        """
+
+        safe_in     = Sanitize.safe_input
+        query       = safe_in(self.request.GET.get('q')) # The search term
+        results     = None
         result_list = []
 
         if query and "_" not in query:
@@ -822,10 +877,10 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_notification', xhr=True, renderer='json')
     def ajax_notification(self):
-        # safe_in = Sanitize.safe_input
-        ajax_method = self.url_match(url_match='ajax_method')
+
+        ajax_method  = self.url_match(url_match='ajax_method')
         current_user = self.request.user
-        # batch = safe_in(self.request.GET.get('batch')) # The search term
+        # batch      = safe_in(self.request.GET.get('batch')) # The search term
 
         if ajax_method == "count":
 
@@ -890,7 +945,7 @@ class AjaxFileUpload(BaseHandler):
         # for name, fieldStorage in self.request.POST.items():
         #   cgi_file_obj = fieldStorage
         #   break
-        cgi_file_obj = self.request.POST['files[]']
+        cgi_file_obj   = self.request.POST['files[]']
         object_file_id = None
 
         if ajax_method == "file":
