@@ -83,7 +83,7 @@ class NotificationManager(object):
 
         need_to_send = False
         # Delete overlapping notifications
-        print "detected note",notification_data
+        # print "detected note",notification_data
         if _notification_data['reason'] in [NOTIFICATION_REASON[0], NOTIFICATION_REASON[1]]:
             NotificationManager._merge_unseen_object_comments(_notification_data['from_user_id'],
                                                             _notification_data['to_user_id'],

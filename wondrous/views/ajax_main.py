@@ -495,7 +495,7 @@ class AjaxHandler(BaseHandler):
 
                 if has_voted:
                     # UnFollow the user
-                    print "unfollowing the user"
+                    # print "unfollowing the user"
                     if has_voted.vote_type == 1:
                         uvm.novote(voter_id, profile_id)
 
