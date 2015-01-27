@@ -7,7 +7,13 @@
             <span class="profile-wscore-text round-5">1</span>
         </span>
         {% if not is_my_profile %}
-            <button id="upvoteUserButton">Follow</button>
+            <button id="upvoteUserButton">
+                {% if is_following %}
+                    UnFollow
+                {% else %}
+                    Follow
+                {% endif %}
+            </button>
         {% endif %}
     </span>
 
