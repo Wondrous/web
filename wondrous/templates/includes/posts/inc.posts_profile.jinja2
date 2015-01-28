@@ -4,6 +4,16 @@
 
 #}
 
+{% set test_bg = [
+    "http://upload.wikimedia.org/wikipedia/commons/6/66/Rochefort-beers.jpg",
+    "https://tctechcrunch2011.files.wordpress.com/2013/01/college.jpg",
+    "http://i1-news.softpedia-static.com/images/news2/Picture-of-the-Day-Real-Life-Simba-and-Mufasa-Caught-on-Camera-in-Tanzania-392687-2.jpg",
+    "http://upload.wikimedia.org/wikipedia/commons/2/2b/GoraBeluha.jpg",
+    "http://static.boredpanda.com/blog/wp-content/uploads/2014/09/20-Dogs-That-Look-Like-Something-Else13__300.jpg",
+    "http://globe-views.com/dcim/dreams/cactus/cactus-04.jpg"
+   ]
+%}
+
 {% if render_items %}
     {% for item in render_items %}
 
@@ -14,7 +24,7 @@
 
                 {# if item['subject'] #}
                     <div class="post-subject-text">
-                        <div class="post-cover-photo cover round-10" style="background-image: url(http://i1-news.softpedia-static.com/images/news2/Picture-of-the-Day-Real-Life-Simba-and-Mufasa-Caught-on-Camera-in-Tanzania-392687-2.jpg);">
+                        <div class="post-cover-photo cover round-10" style="background-image: url({{ test_bg | random() }});">
                             {% include "/includes/posts/inc.post_identification.jinja2" %}
                             <div class="post-subject-wrapper">
                                 <span class="post-subject-text-position">
