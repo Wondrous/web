@@ -472,10 +472,10 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     height: 36px;
     width: 36px;
 
-    -webkit-border-radius: 8px;
-       -moz-border-radius: 8px;
-         -o-border-radius: 8px;
-            border-radius: 8px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+         -o-border-radius: 5px;
+            border-radius: 5px;
 
 } .banner-logo:hover {
     -webkit-box-shadow: 0 1px 2px rgb(120,120,120);
@@ -1428,10 +1428,10 @@ body { font-family: sans-serif; }
 
     background-color: transparent;
 
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-         -o-border-radius: 10px;
-            border-radius: 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+         -o-border-radius: 5px;
+            border-radius: 5px;
 
     -webkit-box-shadow: 0 0 0;
        -moz-box-shadow: 0 0 0;
