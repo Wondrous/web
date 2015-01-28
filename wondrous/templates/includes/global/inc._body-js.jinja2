@@ -6,16 +6,16 @@
         $(function() {
 
             var container = $('.masonry');
-            container.imagesLoaded( function() {                
+            container.imagesLoaded(function () {                
                 container.masonry({
-                    transitionDuration : 0.2,
+                    transitionDuration : 1.2,
                     itemSelector       : ".masonry-brick",
                     columnWidth        : '.grid-sizer',
                 });
             });
 
             $(document).on('click', '.post-body', function() {
-                var SPEED = 0; //150;
+                var SPEED = 150; //150;
                 var thisPost = $(this);
                 var thisBrick = thisPost.parent('.masonry-brick');
                 var thisPostContent = thisPost.find('.post-content');
