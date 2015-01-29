@@ -1472,7 +1472,7 @@ body { font-family: sans-serif; }
 
 /* both item and item content change size */
 .is-expanded {
-    z-index: 2;
+    z-index: 5;
     -webkit-box-shadow: 0 2px 5px rgb(100,100,100);
        -moz-box-shadow: 0 2px 5px rgb(100,100,100);
          -o-box-shadow: 0 2px 5px rgb(100,100,100);
@@ -1485,6 +1485,8 @@ body { font-family: sans-serif; }
 
 .post-presentation {
     width: 66.666%;
+    z-index: 5;
+    position: relative;
 }
 
 /* ============================= */
@@ -2190,4 +2192,16 @@ svg {
     border-left: solid 2px #777;
     border-bottom:solid 2px  #eaeaea;
     border-right: solid 2px #eaeaea;
+}
+
+/* DS temporary addition to the global files */
+.dimmer {
+    background: #000;
+    opacity: 0.8;
+    position: fixed; 
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
 }
