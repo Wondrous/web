@@ -31,8 +31,10 @@ def send_notification(channel,message):
     if CONNECTED:
         data = {"channel":channel,"message":message}
         package = json.dumps(data, ensure_ascii=False)
-        c.publish(CHANNEL_NOTIFICATION,package)
-        print "Note. Util",channel,message
+        try:
+            c.publish(CHANNEL_NOTIFICATION,package)
+        except Exception, e:
+            pass
     else:
         # NOT CONNECTED
         pass

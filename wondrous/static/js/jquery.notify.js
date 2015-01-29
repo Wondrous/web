@@ -68,7 +68,8 @@ $(document).ready(function() {
         var notificationCount = $(".notification-count");
         var notificationCountText = $(".notification-count-text");
 
-        var nc = parseInt(notificationCount);
+        var nc = parseInt(notificationCountText.text());
+        console.log("incrementing",nc);
         nc++;
         if (nc === 0) {
             notificationCount.removeClass('notification-alert');
