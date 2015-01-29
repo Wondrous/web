@@ -1458,6 +1458,18 @@ body { font-family: sans-serif; }
     cursor: default;
 }
 
+.no-top-border {
+    -webkit-border-top-left-radius: 0;
+       -moz-border-top-left-radius: 0;
+         -o-border-top-left-radius: 0;
+            border-top-left-radius: 0;
+
+    -webkit-border-top-right-radius: 0;
+       -moz-border-top-right-radius: 0;
+         -o-border-top-right-radius: 0;
+            border-top-right-radius: 0;
+}
+
 .no-bottom-border {
     -webkit-border-bottom-left-radius: 0;
        -moz-border-bottom-left-radius: 0;
