@@ -33,10 +33,6 @@ from wondrous.utilities.notification_utilities import send_notification
 
 import logging
 
-logging.basicConfig(level=logging.DEBUG,
-    format='%(filename)s:%(lineno)-4d: %(message)s'
-)
-
 class Notification(Base):
 
     __tablename__ = 'notification'

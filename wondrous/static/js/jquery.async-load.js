@@ -1,8 +1,8 @@
 $(document).ready(function() {
     var itemNum = $("#startItemNum").val();
-    
+
     asyncLoad(itemNum);
-    
+
     var _throttleTimer = null;
     var _throttleDelay = 50;
     var $window = $(window);
@@ -24,7 +24,7 @@ $(document).ready(function() {
         // Throttle event:
         clearTimeout(_throttleTimer);
         _throttleTimer = setTimeout(function () {
-          
+
            if($(window).scrollTop() + window.innerHeight > $(document).height() - 100) {
                 var itemNum = $("#startItemNum").val();
                 asyncLoad(itemNum);
@@ -36,7 +36,7 @@ $(document).ready(function() {
     function asyncLoad(itemNum) {
 
         // --------------------------------
-        // Kickstart the load for the 
+        // Kickstart the load for the
         // next batch of items
         // --------------------------------
 
@@ -106,8 +106,8 @@ $(document).ready(function() {
     function _addPost(data, i) {
 
         // --------------------------------
-        // Add a new post to post to its respective 
-        // container and obviously, remove the SVG 
+        // Add a new post to post to its respective
+        // container and obviously, remove the SVG
         // loader for that container
         // --------------------------------
 

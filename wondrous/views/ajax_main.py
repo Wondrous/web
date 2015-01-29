@@ -12,6 +12,7 @@ import magic
 import os
 import time
 import uuid
+import logging
 
 from PIL import Image
 from unidecode import unidecode
@@ -166,21 +167,21 @@ class AjaxHandler(BaseHandler):
             aggregated feed.
         """
 
-        # current_user = self.request.user
-        # ajax_method = self.url_match(url_match='ajax_method')
-        # object_id = self.request.POST.get('oid')
+        current_user = self.request.user
+        ajax_method = self.url_match(url_match='ajax_method')
+        object_id = self.request.POST.get('oid')
 
-        # if ajax_method == "community":
+        if ajax_method == "community":
 
-        #   community_id = PersonToCommunityManager.get(current_user.id).community.id
-        #   obj = ObjectManager.get(object_id)
+          community_id = PersonToCommunityManager.get(current_user.id).community.id
+          obj = ObjectManager.get(object_id)
 
-        #   if obj:
-        #       community_post = GetItems.new_community_post(obj, community_id, current_user.id)
-        #       if community_post:
-        #           p = Pagination()
-        #           page_item = p.load(community_post)
-        #           return HtmlifyPost.get_html_output(page_item, current_user, for_community=True)
+          if obj:
+              community_post = GetItems.new_community_post(obj, community_id, current_user.id)
+              if community_post:
+                  p = Pagination()
+                  page_item = p.load(community_post)
+                  return HtmlifyPost.get_html_output(page_item, current_user, for_community=True)
 
         return None
 
@@ -496,6 +497,8 @@ class AjaxHandler(BaseHandler):
             has_voted = uvm.has_voted(voter_id, profile_id)  # This is the vote_object, not a boolean
 
             # Assuming we have a vote of some sort...
+            # First case is that the vote exists and but a block is in place against
+            # you. Or the vote type is -1 which means that you have a pending request
             if has_voted:
 
                 if has_voted.vote_type == -2 and ajax_method != 'double_downvote':
@@ -505,6 +508,7 @@ class AjaxHandler(BaseHandler):
                     # BUT, we need to handle the case of "UnBlocking" a
                     # user. So, if there's another double_downvote, we have to
                     # logically check to see if an unblock is occurring.
+                    logging.info("you have been blocked")
                     return {}
 
 
@@ -514,6 +518,7 @@ class AjaxHandler(BaseHandler):
                     # the other user accepts or denies.
                     # If the other user does nothing, they've
                     # equivalently blocked you.
+                    logging.info("you already have a pending request")
                     return {}
 
             # Prepare notification
@@ -525,12 +530,13 @@ class AjaxHandler(BaseHandler):
                 'object_uuid'  : None,  # We do not need these for _NR[4]
             }
 
+            # If the vote is request to follow
             if ajax_method == 'upvote':
                 if has_voted:
                     # UnFollow the user
-                    # print "unfollowing the user"
                     if has_voted.vote_type == 1:
                         uvm.novote(voter_id, profile_id)
+                        logging.info("unfollowed user")
 
                 elif valid_profile.user.is_private:
                     # The profile is private.
@@ -540,6 +546,7 @@ class AjaxHandler(BaseHandler):
 
                     # Request to follow the user
                     uvm.downvote(voter_id, profile_id)
+                    logging.info("you have submitted a request to follow")
 
                     # Send notification indicating a follow request
                     # NOTIFY REASON[5]
@@ -553,6 +560,7 @@ class AjaxHandler(BaseHandler):
 
                     # Follow the user
                     uvm.upvote(voter_id, profile_id)
+                    logging.info("you are following an user")
 
                     # Send notification indicating a new follower
                     # NOTIFY REASON[4]
@@ -574,6 +582,7 @@ class AjaxHandler(BaseHandler):
                         # the request. They are just changing the -1
                         # to a 1 for the requesting user.
                         uvm.upvote(profile_id, voter_id)
+                        logging.info("you have accepted a request")
                         _notification_data['reason'] = NOTIFICATION_REASON[6]
                         NotificationManager.add(_notification_data)
 
@@ -582,6 +591,7 @@ class AjaxHandler(BaseHandler):
                         # See above for explanation for why
                         # the args are reversed here.
                         uvm.novote(profile_id, voter_id)
+                        logging.info("you have denied a request")
 
 
             elif ajax_method == 'double_upvote':
@@ -624,7 +634,7 @@ class AjaxHandler(BaseHandler):
 
                     # Remove row from the BlockedUser table
                     BlockedUserManager.delete(blocked_user)
-
+                    logging.info("You have unblocked an user")
                     # Remove the reciporical block
                     uvm.novote(profile_id, voter_id)
                     uvm.novote(voter_id, profile_id)
@@ -646,7 +656,7 @@ class AjaxHandler(BaseHandler):
                         'blocked_user_id' : profile_id,  # The person being blocked
                     }
                     BlockedUserManager.add(blocked_user_data)
-
+                    logging.info("you have blocked an user")
                     # Add the reciporical block
                     uvm.double_downvote(profile_id, voter_id)
                     uvm.double_downvote(voter_id, profile_id)

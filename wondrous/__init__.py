@@ -26,6 +26,11 @@ from wondrous.utilities.user_utilities import AuthHelper
 MAIN_AUTH_TKN  = '23dkjDFJ23jjfSDFJ34jfQWK23jjfSDFDwJzXXZZZ33hsd8s8s8fsdjkfhjh568dfsks'
 ADMIN_AUTH_TKN = 'm2kjn23fkjSH345GIIHW122F3EIHGI345DF7G34533HFuhe241wfiug34hfswoihe09209209skhsSDFHSF'
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG,
+    format='%(filename)s:%(lineno)-4d: %(message)s'
+)
 
 def main_app(global_config, **settings):
 

@@ -7,6 +7,7 @@
 #
 # MODELS/VOTE.PY
 #
+import logging
 
 from datetime import datetime
 
@@ -230,7 +231,7 @@ class BaseVoteOperations(object):
             return 1
         elif downvote:
             return -1
-        elif double_upvote:
+        elif double_downvote:
             return -2
 
 
@@ -609,7 +610,6 @@ class UserVoteManager(BaseVoteOperations):
         """
 
         VOTE_TYPE = BaseVoteOperations._get_vote_type(double_upvote, upvote, downvote, double_downvote)
-
         vote_data = {
             'this_cls'    : UserVote,
             'cls_row'     : 'voted_on_id',

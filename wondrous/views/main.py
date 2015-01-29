@@ -28,6 +28,7 @@ from wondrous.models.person import UnverifiedEmailManager
 from wondrous.models.tag import GlobalTagManager
 
 from wondrous.models.user import UserManager
+from wondrous.models.user import BlockedUserManager
 
 from wondrous.models.vote import UserVoteManager as uvm
 
@@ -644,13 +645,14 @@ class ProfileHandler(BaseHandler):
 
             following_count = uvm.get_following_count(profile_id)
             follower_count  = uvm.get_follower_count(profile_id)
+            blocked_user = BlockedUserManager.get(current_user_id,profile_id)
 
             data = {
                 'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_person.name),
 
                 'current_user'       : current_user,
                 'profile_user'       : valid_person,
-
+                'is_blocked'         : blocked_user,
                 'is_following'       : current_user.user.is_following(valid_person.id),
                 'is_private'         : valid_person.user.is_private,
                 'is_my_profile'      : bool(valid_person.id == current_user_id),
@@ -973,7 +975,7 @@ class ExcSQL(BaseHandler):
         """
         from wondrous.models import reset_sql
         reset_sql()
-        
+
         # CREATE ADMIN
         from wondrous.models.admin import AdminManager
         new_admin_data = dict(

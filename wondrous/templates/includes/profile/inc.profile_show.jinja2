@@ -42,7 +42,7 @@
         {% endif %}
 
     {% elif tab == "following" %}
-        
+
         {% if render_items %}
             {% for u in render_items %}
                 <a href="/{{u.user.username}}/">
@@ -62,7 +62,7 @@
         {% if is_my_profile %}
             {% include "includes/posts/inc.new_post_dialogue.jinja2" %}
         {% endif %}
-        
+
         {% include "includes/posts/inc.posts_profile.jinja2" %}
     {% endif %}
 </div>

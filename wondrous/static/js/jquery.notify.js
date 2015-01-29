@@ -4,7 +4,6 @@ $(document).ready(function() {
         url: "/ajax/notification/count/",
         data: {}, /* No data needed */
         success: function(r) {
-            console.log("notification count",r);
             updateNotificationData(1);
             updateNotificationCount(r);
         }
@@ -107,7 +106,7 @@ $(document).ready(function() {
                         "</div>"+ "</a>";
 
                         $('.notificationUnreadBucket').append(notificationHTML);
-                        console.log("notification",un[i]);
+                        console.log("polled notification",un[i]);
 
                     }
                 }
@@ -148,6 +147,10 @@ $(document).ready(function() {
             alert(e)
         };
     }
+
+    $(window).on('beforeunload', function(){
+            pushstream.disconnect();
+    });
 
     function getMyInfo() {
         $.ajax({

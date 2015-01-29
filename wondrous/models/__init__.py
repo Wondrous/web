@@ -95,3 +95,4 @@ def reset_sql():
     # RESETS DATABASE!
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    DBSession.flush()
