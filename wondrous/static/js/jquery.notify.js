@@ -10,18 +10,32 @@ $(document).ready(function() {
         }
     });
 
-    (function poll() {
-     setTimeout(function() {
+    //manual polling, not needed
+    // (function poll() {
+    //  setTimeout(function() {
+    //      $.ajax({ url: "/ajax/notification/count/", success: function(r) {
+    //         current_notificationCount = $(".notification-count-text").text();
+    //         if (current_notificationCount < r['notification_count']) {
+    //             updateNotificationData(1);
+    //             updateNotificationCount(r);
+    //             pulsateBigAlarm();
+    //         }
+    //      }, dataType: "json", complete: poll });
+    //  }, 20000);
+    // })();
+
+    //start up loading
+    function poll(){
          $.ajax({ url: "/ajax/notification/count/", success: function(r) {
             current_notificationCount = $(".notification-count-text").text();
             if (current_notificationCount < r['notification_count']) {
                 updateNotificationData(1);
                 updateNotificationCount(r);
-                pulsateBigAlarm();
             }
-         }, dataType: "json", complete: poll });
-     }, 20000);
-    })();
+        }});
+    }
+
+    poll();
 
     // Moved inside doc ready
     $(document).on("click", ".notification-big-alarm", function() {
@@ -41,6 +55,21 @@ $(document).ready(function() {
         var notificationCountText = $(".notification-count-text");
 
         var nc = r['notification_count'];
+        if (nc === 0) {
+            notificationCount.removeClass('notification-alert');
+        } else if (nc > 0) {
+            notificationCount.addClass('notification-alert');
+        }
+
+        notificationCountText.text(nc);
+    }
+
+    function incrementNotificationCount(){
+        var notificationCount = $(".notification-count");
+        var notificationCountText = $(".notification-count-text");
+
+        var nc = parseInt(notificationCount);
+        nc++;
         if (nc === 0) {
             notificationCount.removeClass('notification-alert');
         } else if (nc > 0) {
@@ -85,10 +114,6 @@ $(document).ready(function() {
         });
     }
 
-    function messageReceived(text, id,channel) {
-        console.log(text);
-    };
-
     var pushstream = new PushStream({
         host:"104.236.251.250",
         port:"80",
@@ -97,6 +122,9 @@ $(document).ready(function() {
 
     // pushstream.onmessage=messageReceived;
     pushstream.onmessage = function(text,id,channel) {
+        console.log("pulsate");
+        pulsateBigAlarm();
+        incrementNotificationCount();
         console.log(text,id,channel);
     };
 

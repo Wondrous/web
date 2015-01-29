@@ -22,6 +22,7 @@ from zope.sqlalchemy import ZopeTransactionExtension
 Base = declarative_base(metadata=MetaData())
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base.query = DBSession.query_property(Query)  # Setup the SQLAlchemy database engine
+engine = None
 
 from wondrous.models.admin import (
     Admin,
@@ -84,7 +85,13 @@ from wondrous.models.vote import (
 def initialize_sql(settings):
 
     """ Called by the app on startup to setup bindings to the DB """
-
+    global engine
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+
+def reset_sql():
+    # FOR TESTING ONLY!
+    # RESETS DATABASE!
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)

@@ -26,11 +26,12 @@ from wondrous.utilities.user_utilities import AuthHelper
 MAIN_AUTH_TKN  = '23dkjDFJ23jjfSDFJ34jfQWK23jjfSDFDwJzXXZZZ33hsd8s8s8fsdjkfhjh568dfsks'
 ADMIN_AUTH_TKN = 'm2kjn23fkjSH345GIIHW122F3EIHGI345DF7G34533HFuhe241wfiug34hfswoihe09209209skhsSDFHSF'
 
+
 def main_app(global_config, **settings):
 
-    
+
     """ This function returns a Pyramid WSGI application. """
-    
+
     settings['app_root'] = abspath(dirname(dirname(__file__)))
     initialize_sql(settings)
 
@@ -39,7 +40,7 @@ def main_app(global_config, **settings):
 
     authn_policy = AuthTktAuthenticationPolicy(MAIN_AUTH_TKN, hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
-    
+
     config.set_authentication_policy(authn_policy)  # Needed for global user object
     config.set_authorization_policy(authz_policy)   # Needed becasue I have an Authentication policy
 
@@ -48,7 +49,7 @@ def main_app(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('pyramid_jinja2')
     config.add_jinja2_search_path("wondrous:templates")
-    
+
     config.scan(ignore=[
         "wondrous.views.admin",
         "wondrous.views.ajax_admin",
@@ -58,9 +59,9 @@ def main_app(global_config, **settings):
 
 
 def admin_app(global_config, **settings):
-    
+
     """ This function returns a Pyramid WSGI application. """
-    
+
     settings['app_root'] = abspath(dirname(dirname(__file__)))
     initialize_sql(settings)
 
@@ -69,7 +70,7 @@ def admin_app(global_config, **settings):
 
     authn_policy = AuthTktAuthenticationPolicy(ADMIN_AUTH_TKN, hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
-    
+
     config.set_authentication_policy(authn_policy)  # Needed for global user object
     config.set_authorization_policy(authz_policy)   # Needed becasue I have an Authentication policy
 
@@ -78,10 +79,10 @@ def admin_app(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('pyramid_jinja2')
     config.add_jinja2_search_path("wondrous:templates")
-    
+
     config.scan(ignore=[
         "wondrous.views.main",
         "wondrous.views.ajax_main",
     ])
-    
+
     return config.make_wsgi_app()

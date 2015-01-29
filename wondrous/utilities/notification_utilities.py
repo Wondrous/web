@@ -32,7 +32,7 @@ def send_notification(channel,message):
         data = {"channel":channel,"message":message}
         package = json.dumps(data, ensure_ascii=False)
         c.publish(CHANNEL_NOTIFICATION,package)
-        print "sending",channel,message
+        print "Note. Util",channel,message
     else:
         # NOT CONNECTED
         pass

@@ -938,6 +938,25 @@ class InfoHandler(BaseHandler):
         }
         return data
 
+def create_user(first_name,last_name,username,password,email):
+    user_data = {
+        'user_type'       : 1,
+        'username'        : username,
+        'email'           : email,
+        'password'        : password,
+        'profile_picture' : None,  # This is default
+    }
+
+    # For the person/page (in this case person) table
+    user_type_data = {
+        'first_name' : first_name,
+        'last_name'  : last_name,
+        'gender'     : None,  # Optional data to add later
+        'locale'     : None,  # Optional data to add later
+        'birthday'   : None,  # Optional data to add later
+    }
+
+    UserManager.add(user_data, user_type_data) # This adds to Person table as well
 
 class ExcSQL(BaseHandler):
     @view_config(route_name='exc_sql', xhr=False, renderer='json')
@@ -952,13 +971,20 @@ class ExcSQL(BaseHandler):
                 LEFT BLANK UNLESS ABSOLUTELY NECESSARY
             ***
         """
+        from wondrous.models import reset_sql
+        reset_sql()
+        
+        # CREATE ADMIN
+        from wondrous.models.admin import AdminManager
+        new_admin_data = dict(
+          username="root",
+          password="password",
+          super_admin=True,
+        )
+        AdminManager.add(new_admin_data)
 
-        # from wondrous.models.admin import AdminManager
-        # new_admin_data = dict(
-        #   username="jzimmerman",
-        #   password="my_random_password",
-        #   super_admin=True,
-        # )
-        # AdminManager.add(new_admin_data)
+        # Create two users
+        create_user("first","user","user1","password","user1@wondrous.co")
+        create_user("second","user","user2","password","user2@wondrous.co")
 
         return {}

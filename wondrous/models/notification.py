@@ -31,6 +31,12 @@ from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 from wondrous.utilities.global_config import NOTIFICATION_REASON
 from wondrous.utilities.notification_utilities import send_notification
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG,
+    format='%(filename)s:%(lineno)-4d: %(message)s'
+)
+
 class Notification(Base):
 
     __tablename__ = 'notification'
@@ -80,7 +86,7 @@ class NotificationManager(object):
         notification_data['reason']       = reason
         notification_data['notification'] = text
         notification_data['url']          = url
-
+        logging.warn("making notification {0}".format(notification_data))
         need_to_send = False
         # Delete overlapping notifications
         # print "detected note",notification_data
@@ -94,18 +100,18 @@ class NotificationManager(object):
                                                           _notification_data['to_user_id'],
                                                           url)
 
-        elif _notification_data['reason'] == NOTIFICATION_REASON[4]:
+        elif _notification_data['reason'] == NOTIFICATION_REASON[4] or _notification_data['reason'] == NOTIFICATION_REASON[5]:
 
             # TODO: Merge follow requests IF the user.is_private = False
-            need_to_send=NotificationManager._merge_unseen_user_votes(_notification_data['from_user_id'],
+            need_to_send = need_to_send=NotificationManager._merge_unseen_user_votes(_notification_data['from_user_id'],
                                                         _notification_data['to_user_id'])
 
         # Add the new notification after the overlap handling
         NotificationManager._add(notification_data)
 
         # Send to realtime push
-        if need_to_send:
-            send_notification(notification_data['to_user_id'],text)
+        if need_to_send or reason==6:
+            send_notification(notification_data['to_user_id'],str(notification_data))
 
     @staticmethod
     def _add(notification_data):
@@ -182,13 +188,15 @@ class NotificationManager(object):
         # set to public, repeat jackassary is not notified.
         overlap_notifications = Notification.query.filter(Notification.from_user_id == from_user_id).\
                                                    filter(Notification.to_user_id == to_user_id).\
-                                                   filter(Notification.reason == 4).\
+                                                   filter(or_(Notification.reason == 4,Notification.reason == 6)).\
                                                    filter(Notification.is_seen == False).all()
 
+        send_note = (len(overlap_notifications)==0) or (Notification.reason ==6)
+        logging.warn("sending notification {0}".format(len(overlap_notifications)))
         for n in overlap_notifications:
             DBSession.delete(n)
 
-        return False if len(overlap_notifications)>0 else True
+        return send_note
 
     @staticmethod
     def _merge_unseen_object_votes(from_user_id, to_user_id, url):

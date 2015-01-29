@@ -125,7 +125,7 @@ class AjaxHandler(BaseHandler):
     def ajax_async_get_item_list(self):
 
         """
-            PURPOSE: This method is used to asynchronously fetch 
+            PURPOSE: This method is used to asynchronously fetch
             item ids to be rendered so that the templates don't do
             any work processing them on the server.
 
@@ -375,7 +375,7 @@ class AjaxHandler(BaseHandler):
     @login_required
     @view_config(route_name='ajax_my_info',xhr=True,renderer='json')
     def ajax_my_info(self):
-        
+
         """
             PURPOSE: This is the method used to handle basic info handling after login
             has occurred. This is to replace the templating system
@@ -516,17 +516,16 @@ class AjaxHandler(BaseHandler):
                     # equivalently blocked you.
                     return {}
 
+            # Prepare notification
+            _notification_data = {
+                'from_user_id' : current_user.id,
+                'to_user_id'   : profile_id,
+                'reason'       : None,  # *** MUST BE SET BELOW ***
+                'object_id'    : None,  # We do not need these for _NR[4]
+                'object_uuid'  : None,  # We do not need these for _NR[4]
+            }
+
             if ajax_method == 'upvote':
-
-                # Prepare notification
-                _notification_data = {
-                    'from_user_id' : current_user.id,
-                    'to_user_id'   : profile_id,
-                    'reason'       : None,  # *** MUST BE SET BELOW ***
-                    'object_id'    : None,  # We do not need these for _NR[4]
-                    'object_uuid'  : None,  # We do not need these for _NR[4]
-                }
-
                 if has_voted:
                     # UnFollow the user
                     # print "unfollowing the user"
@@ -575,6 +574,8 @@ class AjaxHandler(BaseHandler):
                         # the request. They are just changing the -1
                         # to a 1 for the requesting user.
                         uvm.upvote(profile_id, voter_id)
+                        _notification_data['reason'] = NOTIFICATION_REASON[6]
+                        NotificationManager.add(_notification_data)
 
                     elif ajax_method == 'upvote_deny':
 
