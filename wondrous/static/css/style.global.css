@@ -1448,11 +1448,11 @@ body { font-family: sans-serif; }
 .post-content {
     display: none;
     background-color: rgb(251,251,251);
-    padding: 15px 12px;
+    padding: 20px;
 
     font-family: helvetica, arial, sans-serif;
-    font-weight: 100;
-    font-size: 17px;
+    font-weight: normal;
+    font-size: 16px;
 
     color: rgb(51,51,51);
     cursor: default;
