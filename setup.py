@@ -17,18 +17,8 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
+    'WebTest',
 ]
-
-# pip intall ...
-# psycopg2
-# pyramid_storage
-# bcrypt  # brew install pkg-config libffi; export PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.0.13/lib/pkgconfig/ 
-# boto
-# alembic
-# paste
-# Pillow
-# python-magic  # brew install libmagic
-# unidecode
 
 setup(name='wondrous',
       version='0.0',

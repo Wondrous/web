@@ -24,7 +24,7 @@ from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 class PasswordManager(object):
 
     def _set_password(self, password):
-        
+
         """
             PURPOSE: Hash and set the user's password
 
@@ -35,7 +35,7 @@ class PasswordManager(object):
 
             RETURNS: None
         """
-        
+
         hashed_password = password
 
         if isinstance(password, unicode):
@@ -57,10 +57,10 @@ class PasswordManager(object):
         self._password = hashed_password
 
     def _get_password(self):
-        
+
         """
             PURPOSE: Get the user's hashed password
-            
+
             USE: *DO NOT CALL DIRECTLY* This method
             is used as the getter for the password property
 
@@ -68,18 +68,18 @@ class PasswordManager(object):
 
             RETURNS: A String - the hashed password
         """
-        
+
         return self._password.encode('utf-8')
 
     def validate_password(self, password):
-        
+
         """
-            PURPOSE: Check the provided password 
+            PURPOSE: Check the provided password
             against the DB password
 
-            USE: "validate_password" is passed 
-            1 argument - "password". This is the 
-            clear text version that we will need to 
+            USE: "validate_password" is passed
+            1 argument - "password". This is the
+            clear text version that we will need to
             match against the hashed one in the database.
 
             PARAMS: 1 parameter, the password to validate
@@ -107,7 +107,7 @@ class _RegexCheck(object):
             PARAMS: the supposed name to check
 
             RETURNS: a boolean value if the username passes the
-            regex check. 
+            regex check.
 
             Regex Requirements:
                 - Can have a-z and A-Z
@@ -129,7 +129,7 @@ class _RegexCheck(object):
             PARAMS: the supposed email to check
 
             RETURNS: a boolean value if the email passes the
-            regex check. 
+            regex check.
 
             Regex Requirements:
                 -One @ sign
@@ -157,7 +157,7 @@ class _RegexCheck(object):
             PARAMS: the supposed username to check
 
             RETURNS: a boolean value if the username passes the
-            regex check. 
+            regex check.
 
             Regex Requirements:
                 - Must letters a-Z and A-Z, with optional numbers 0-9
@@ -170,7 +170,7 @@ class _RegexCheck(object):
                 -Only numbers or only letters (e.g., 345 or abc)
                 -Multiple periods (e.g., b.o.b.s.m.i.t.h)
         """
-    
+
         pattern_username   = '^[a-zA-Z0-9_]{1,15}$'
         pattern_all_digits = '^([0-9])+$'
 
@@ -178,9 +178,9 @@ class _RegexCheck(object):
         username = re.match(pattern_username, str_to_check, re.IGNORECASE)
         all_digits = re.match(pattern_all_digits, str_to_check, re.IGNORECASE)
 
-        return True if (str_to_check and 
-                        username and 
-                        not all_digits and 
+        return True if (str_to_check and
+                        username and
+                        not all_digits and
                         str_to_check.lower() not in TAKEN_PATHS) else False
 
     @staticmethod
@@ -193,7 +193,7 @@ class _RegexCheck(object):
             PARAMS: the supposed link to check
 
             RETURNS: a boolean value if the link passes the
-            regex check. 
+            regex check.
 
             Regex Requirements:
                 - Basically, this works with (http(s)://)__something__.__something__
@@ -216,7 +216,7 @@ class _RegexCheck(object):
             PARAMS: the supposed tag to check
 
             RETURNS: a boolean value if the tag passes the
-            regex check. 
+            regex check.
 
             Regex Requirements:
                 - a-z and A-Z
@@ -241,21 +241,21 @@ class Sanitize(object):
             any unicode characters to utf-8 encoding
             so Python 2.x.x doesn't freak out.
 
-            USE: For any inputted, textual data (which 
+            USE: For any inputted, textual data (which
             is almost any POST or GET data), push it through
             this method. Call like: Sanitize.safe_input(my_data [,strip=<True>])
             If you want to encode AND NOT strip leading/trailing
             whitespace, set the optional parameter strip=False.
 
-            PARAMS: 2 params, 1. text, a required string. 
+            PARAMS: 2 params, 1. text, a required string.
             2. strip, optional boolean indicator to NOT strip
             off trailing and leading whitespace. Provide as such:
-            safe_input(text, strip=False), otherwise, strip 
+            safe_input(text, strip=False), otherwise, strip
             defaults to True.
 
             RETURNS: The encoded and optionally
             stripped inputted string, 'text'.
-            If text is not True (i.e. empty or None), 
+            If text is not True (i.e. empty or None),
             then this method returns None.
         """
 
@@ -281,7 +281,7 @@ class Sanitize(object):
             push it through this method.
             Call like: Sanitize.safe_output(my_data).
 
-            NOTE: Using safe_output on a non-primitive 
+            NOTE: Using safe_output on a non-primitive
             object (i.e., something that's not a str,
             int, float) will raise an exception.
             Non-primitive objects cannot be "decoded".
@@ -299,17 +299,17 @@ class Sanitize(object):
     @staticmethod
     def strip_ampersand(username):
         pattern_ampersand  = '^([@＠])+$'
-    
+
         # Test first character for an @
         if username and re.match(pattern_ampersand, username[0], re.IGNORECASE):
             username = username[1:]
 
         return username
-            
+
 
     @staticmethod
     def length_check(object_to_check, min_length=0, max_length=255):
-        
+
         """
             PURPOSE: Checks to see if a given object (str) is
             a valid length.
@@ -328,7 +328,7 @@ class Sanitize(object):
         """
 
         string_length = len(str(object_to_check))
-        
+
         if string_length < min_length:
             error_message = "too short. It must be at least {num} characters.".format(num=str(min_length))
             return False, error_message
@@ -342,7 +342,7 @@ class Sanitize(object):
 
     @staticmethod
     def is_valid_email(object_to_check):
-        
+
         """
             PURPOSE: The checks to see if a given object (str) is
             a valid email.
@@ -363,11 +363,11 @@ class Sanitize(object):
         """
             PURPOSE: To check to see if a given object (str) is
             a valid username.
-        
+
             USE: Call like: Sanitize.is_valid_username(<str>)
-        
+
             PARAMS: 1 param, a str, the username to check
-        
+
             RETURNS: A boolean, True if the username is valid,
             or False if the username is invalid
         """
@@ -401,7 +401,7 @@ class ValidationHelper(object):
                 - I must wait 1 day before I can try again
                 - The next available day to try is January 3, 3045
                 - There was a 1 day wait period -- January 2nd
-                
+
                 - January 3rd - 1 day = January 2nd
                 - January 2nd > January 1st, hence I can try again
         """
@@ -411,7 +411,7 @@ class ValidationHelper(object):
 
     @staticmethod
     def valid_community(community_id, person_id):
-        
+
         """
             PURPOSE: Make sure the person person is valid,
             the community is valid, and that the valid
@@ -432,31 +432,31 @@ class ValidationHelper(object):
 
         community = CommunityManager.get(community_id)
         person_to_community = PersonToCommunityManager.get(person_id)
-        
+
         if community and person_to_community:
             return True if community.id == person_to_community.community_id else False
         else:
             return False
-            
+
 
 
     @staticmethod
     def valid_profile(profile_id):
 
         """
-            PURPOSE: This is basically an alias for the 
-            UserManager.get() method. 
+            PURPOSE: This is basically an alias for the
+            UserManager.get() method.
 
-            This checks to see if the profile_id (which 
+            This checks to see if the profile_id (which
             is the user's id) is found in the database.
-            
+
             USE: Provide a user_id (== profile_id) as the parameter.
 
             RETURNS: If it is, it returns the user object.
                      If not, it returns None.
 
-            NOTE: from wondrous.models import UserManager is included within 
-            the method to prevent a circular dependency between the 
+            NOTE: from wondrous.models import UserManager is included within
+            the method to prevent a circular dependency between the
             models.py file and this file (validation_utilities.py).
         """
 
@@ -495,20 +495,20 @@ class ValidationHelper(object):
             start_value = int(start_value)
             if start_value < 0:
                 start_value = 0
-        
+
         except (ValueError, TypeError):
             return None
-        
+
         return start_value
 
 
 class ValidatePost(object):
-    
+
     @staticmethod
     def sanitize_post_text(post_text):
 
         """
-            PURPOSE: This checks to make sure the 
+            PURPOSE: This checks to make sure the
             post text contains no excess white space.
 
             USE: Provide post_text as the parameter
@@ -553,7 +553,7 @@ class ValidatePost(object):
 
     @staticmethod
     def validate_post_content(post_subject, post_text, post_links, object_file_id):
-        
+
         """
             PURPOSE: To validate a post's content, and
             return an error message if content is not valid
@@ -598,7 +598,7 @@ class ValidatePost(object):
             pass
 
         if valid_post_text or valid_post_links or object_file_id:
-            
+
             final_post_data = {
                 'post_subject'   : valid_post_subject,
                 'post_text'      : valid_post_text,
@@ -615,9 +615,9 @@ class ValidateLink(object):
 
     @staticmethod
     def sanitize_post_link(post_link):
-        
+
         """
-            PURPOSE: This checks to make sure the 
+            PURPOSE: This checks to make sure the
             post link contains no excess white space.
             And, it converts any of link's unicode to ascii.
 

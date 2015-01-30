@@ -111,7 +111,7 @@ $(document).ready(function() {
         // --------------------------------
         $.ajax({
             type: "POST",
-            url: "/ajax/async_load/community/",
+            url: "/ajax/async_load/",
             data: {"oid": data[i].object_id},
             success: function(post_data) {
                 var asyncWrap = $("#async_o-"+data[i].object_id);
