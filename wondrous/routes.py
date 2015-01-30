@@ -30,34 +30,34 @@ def build_routes(config):
     config.add_route('exc_sql', '/exc_sql/')
 
     # AUTH
-    # config.add_route('auth_login_handler',                '/auth/login/{auth_type}/')
-    # config.add_route('auth_login_handler2',               '/auth/login/{auth_type}/{code}/')
-    config.add_route('auth_logout_handler',                 '/auth/logout/')
-    config.add_route('auth_delete_handler',                 '/auth/delete/')
-    config.add_route('auth_verify_handler',                 '/auth/verify/{code}/')
-    config.add_route('auth_is_banned_handler',              '/auth/is_banned/{user_id}/')
-    config.add_route('auth_waitlist',                       '/auth/waitlist/{action}/')
-    config.add_route('auth_signup_handler',                 '/signup/')
-    config.add_route('auth_signup_step_handler',            '/signup/step/{step_num}/')
-    config.add_route('login_handler',                       '/login/')
+    # config.add_route('auth_login_handler',                   '/auth/login/{auth_type}/')
+    # config.add_route('auth_login_handler2',                  '/auth/login/{auth_type}/{code}/')
+    config.add_route('auth_logout_handler',                    '/auth/logout/')
+    config.add_route('auth_delete_handler',                    '/auth/delete/')
+    config.add_route('auth_verify_handler',                    '/auth/verify/{code}/')
+    config.add_route('auth_is_banned_handler',                 '/auth/is_banned/{user_id}/')
+    config.add_route('auth_waitlist',                          '/auth/waitlist/{action}/')
+    config.add_route('auth_signup_handler',                    '/signup/')
+    config.add_route('auth_signup_step_handler',               '/signup/step/{step_num}/')
+    config.add_route('login_handler',                          '/login/')
 
     # SEARCH
-    config.add_route('search_handler',                      '/search/')
+    config.add_route('search_handler',                         '/search/')
 
     # TAG
-    config.add_route('tag_handler',                         '/tag/{tag_name}/')
+    config.add_route('tag_handler',                            '/tag/{tag_name}/')
 
     # SINGLE POST
-    config.add_route('post_handler',                        '/post/{object_id}/{object_uuid}/')
+    config.add_route('post_handler',                           '/post/{object_id}/{object_uuid}/')
 
     # INFO
-    config.add_route('info_about_handler',                  '/info/about/')
-    config.add_route('info_tos_handler',                    '/info/tos/')
-    config.add_route('info_privacy_handler',                '/info/privacy/')
-    config.add_route('info_feedback_handler',               '/info/feedback/')
-    config.add_route('info_settings_handler',               '/info/settings/')
-    config.add_route('info_delete_handler',                 '/info/delete/')
-    config.add_route('info_account_delete_handler',         '/info/delete_account/')
+    config.add_route('info_about_handler',                     '/info/about/')
+    config.add_route('info_tos_handler',                       '/info/tos/')
+    config.add_route('info_privacy_handler',                   '/info/privacy/')
+    config.add_route('info_feedback_handler',                  '/info/feedback/')
+    config.add_route('info_settings_handler',                  '/info/settings/')
+    config.add_route('info_delete_handler',                    '/info/delete/')
+    config.add_route('info_account_delete_handler',            '/info/delete_account/')
 
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')
