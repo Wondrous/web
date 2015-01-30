@@ -340,7 +340,7 @@ class _AssemblePost(object):
             USE: Instantiate like: p = _AssemblePost(<dict>,<int>)
                  Call like: final_post_data = p.assemble_data()
 
-            PARAMS: Provide 2 required parameters, and 1 optional:
+            PARAMS: Provide 2 required parameters and 1 optional:
                 data            : dict : REQUIRED : a dict() of item data, or the vote_obj
                 current_user_id : int  : REQUIRED : the id of the currently logged-in user
                 profile_user_id : int  : default=None : the id of the user whose profile the current_user_id is on

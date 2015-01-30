@@ -8,17 +8,20 @@
 # VIEWS/AJAX_MAIN.PY
 #
 
+import logging
 import magic
 import os
 import time
 import uuid
-import logging
 
 from PIL import Image
 from unidecode import unidecode
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPFound,HTTPTemporaryRedirect
+
+# from pyramid.httpexceptions import HTTPFound
+# from pyramid.httpexceptions import HTTPTemporaryRedirect
+
 from wondrous.models.comment import ObjectCommentManager
 
 from wondrous.models.content import DeletedContentManager
@@ -381,6 +384,7 @@ class AjaxHandler(BaseHandler):
             PURPOSE: This is the method used to handle basic info handling after login
             has occurred. This is to replace the templating system
         """
+
         # Logged-in ----------------------
         current_user = self.request.user
         if current_user:
@@ -399,13 +403,15 @@ class AjaxHandler(BaseHandler):
             data = {
                 'title'            : u"{cn} | Welcome {name}!".format(cn=self.COMPANY_NAME, name=current_user.name),
                 'tab_name'         : tab_name,
-                'username'     : current_user.user.username,
+                'username'         : current_user.user.username,
                 'render_items'     : self.page_items,
-                'id'               :current_user.user.id,
-                'first_name'        :current_user.first_name,
-                'show_tutorial'     :current_user.show_tutorial,
-                'profile_picture'    :current_user.user.profile_picture,
-                # Vars which deal with pagination
+                'id'               : current_user.user.id,
+                'first_name'       : current_user.first_name,
+                'show_tutorial'    : current_user.show_tutorial,
+                'profile_picture'  : current_user.user.profile_picture,
+                
+                # Vars which deal with pagination (most of 
+                # these are not in use and need to be cleaned up)
                 'current_page_num' : self.page_num,
                 'has_next'         : self.has_next,
                 'next_start'       : self.next_start,
