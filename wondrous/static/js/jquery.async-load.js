@@ -42,10 +42,9 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "/ajax/async_get_item_list/global_feed/",
+            url: "/ajax/async_get_item_list/majority/",
             data: {"start": itemNum},
             success: function(data) {
-
                 // Add in empty containers where each post will go
                 // to preserve the order of the posts when the ajax
                 // loads them
@@ -110,7 +109,6 @@ $(document).ready(function() {
         // container and obviously, remove the SVG
         // loader for that container
         // --------------------------------
-
         $.ajax({
             type: "POST",
             url: "/ajax/async_load/community/",

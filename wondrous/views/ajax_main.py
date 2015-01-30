@@ -63,6 +63,7 @@ from wondrous.utilities.render_utilities import GetItems
 from wondrous.utilities.render_utilities import Pagination
 from wondrous.utilities.render_utilities import HtmlifyComment
 from wondrous.utilities.render_utilities import HtmlifyPost
+from wondrous.utilities.render_utilities import to_json
 
 from wondrous.utilities.validation_utilities import Sanitize
 from wondrous.utilities.validation_utilities import ValidationHelper as vh
@@ -144,16 +145,18 @@ class AjaxHandler(BaseHandler):
                 - tag           : The posts for a given tag (This will come with a tag-name)
         """
 
-        # current_user = self.request.user
-        # ajax_method = self.url_match(url_match='ajax_method')
-        # start = self.request.POST.get('start', 0)  # The start-value of the items to get
+        current_user = self.request.user
+        ajax_method = self.url_match(url_match='ajax_method')
+        start = self.request.POST.get('start', 0)  # The start-value of the items to get
 
-        # if ajax_method == "community":
-        #   community_id = PersonToCommunityManager.get(current_user.id).community.id
-        #   items = GetItems.community(community_id, current_user.id, raw=True)
-        #   self.set_pagination_data(items, start, PER_PAGE=10)
-        #   return self.page_items
-        return []
+        retval = []
+        if ajax_method == "majority":
+            retval = GetItems.feed(current_user.id,'majority')
+
+        elif ajax_method == "priority":
+            pass
+
+        return retval
 
 
     @login_required
@@ -173,18 +176,22 @@ class AjaxHandler(BaseHandler):
         current_user = self.request.user
         ajax_method = self.url_match(url_match='ajax_method')
         object_id = self.request.POST.get('oid')
+        if object_id:
+            obj = ObjectManager.get(object_id)
+            if obj:
+                return to_json(obj)
 
-        if ajax_method == "community":
-
-          community_id = PersonToCommunityManager.get(current_user.id).community.id
-          obj = ObjectManager.get(object_id)
-
-          if obj:
-              community_post = GetItems.new_community_post(obj, community_id, current_user.id)
-              if community_post:
-                  p = Pagination()
-                  page_item = p.load(community_post)
-                  return HtmlifyPost.get_html_output(page_item, current_user, for_community=True)
+        # if ajax_method == "community":
+        #
+        #   community_id = PersonToCommunityManager.get(current_user.id).community.id
+        #   obj = ObjectManager.get(object_id)
+        #
+        #   if obj:
+        #       community_post = GetItems.new_community_post(obj, community_id, current_user.id)
+        #       if community_post:
+        #           p = Pagination()
+        #           page_item = p.load(community_post)
+        #           return HtmlifyPost.get_html_output(page_item, current_user, for_community=True)
 
         return None
 
@@ -409,8 +416,8 @@ class AjaxHandler(BaseHandler):
                 'first_name'       : current_user.first_name,
                 'show_tutorial'    : current_user.show_tutorial,
                 'profile_picture'  : current_user.user.profile_picture,
-                
-                # Vars which deal with pagination (most of 
+
+                # Vars which deal with pagination (most of
                 # these are not in use and need to be cleaned up)
                 'current_page_num' : self.page_num,
                 'has_next'         : self.has_next,

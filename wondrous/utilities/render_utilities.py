@@ -10,6 +10,8 @@
 
 import re
 from urlparse import urlparse
+from json import dumps
+from datetime import datetime
 
 from wondrous.models.comment import ObjectCommentManager
 
@@ -40,6 +42,18 @@ from wondrous.utilities.global_config import SYS_CONTEXT_TAGS
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
 
+def to_json(model):
+    """ Returns a JSON representation of an SQLAlchemy-backed object.
+    """
+    json = {}
+    json['pk'] = getattr(model, 'id')
+
+    for col in model._sa_class_manager.mapper.mapped_table.columns:
+        json[col.name] = getattr(model, col.name)
+        if isinstance(json[col.name],datetime):
+            json[col.name] = json[col.name].strftime("%Y-%m-%d %H:%M:%S")
+    return dumps(json)
+
 def delegate_assemble(item_list, current_user_id):
 
     """
@@ -59,7 +73,7 @@ def delegate_assemble(item_list, current_user_id):
 def _linkify(text):
 
     """
-        PURPOSE: Take the post text and detect all the urls, 
+        PURPOSE: Take the post text and detect all the urls,
         and then for each url, "schemify it, and then "linkify"
         it by wrapping it in an anchor tag.
 
@@ -101,7 +115,7 @@ def _schemify(url):
 def _hashtagify(text):
 
     """
-        PURPOSE: Take the post text and detect all the urls, 
+        PURPOSE: Take the post text and detect all the urls,
         and then for each url, "schemify it, and then "linkify"
         it by wrapping it in an anchor tag.
 
@@ -138,7 +152,7 @@ class CreateNewPost(object):
 
     @staticmethod
     def for_wall(new_post_data):
-        
+
         """
             PURPOSE: Use this to a post to a wall
 
@@ -151,8 +165,8 @@ class CreateNewPost(object):
                 -post_tags      -post_text
                 -profile_id     -post_links
                 -object_file_id -post_subject
-                
-                
+
+
             RETURNS: A new WallPost object
         """
 
@@ -168,7 +182,7 @@ class CreateNewPost(object):
 
     @staticmethod
     def _global_process(new_post_data, SYS_TAGS):
-        
+
         """
             PURPOSE: This is called when adding a new post post
             to any context
@@ -185,9 +199,9 @@ class CreateNewPost(object):
                     -user_id                -post_text
                     -post_tags              -post_links
                     -object_file_id         -post_subject
-                    -hidden_from_community  
-                -A set (the system context tags)    
-                
+                    -hidden_from_community
+                -A set (the system context tags)
+
             RETURNS: A new Object object
         """
 
@@ -270,12 +284,12 @@ class CreateNewPost(object):
     def __process_final_tags(SYS_TAGS, post_tags, new_obj_id):
 
         """
-            PURPOSE: 
+            PURPOSE:
                 1. For each tag, check if it exists in global_tags table...
                     - If it does, retrieve its global_tag_id
-                    - Otherwise, a. create a new row in global_tags table AND 
+                    - Otherwise, a. create a new row in global_tags table AND
                                  b. retrieve new row's global_tag_id
-                2. Create new rows (1 per tag) in object_tags using the 
+                2. Create new rows (1 per tag) in object_tags using the
                    global_tag_id from global_tags table and object_id
 
             USE: Call like: CreateNewPost.__process_final_tags(<set>, <int>)
@@ -294,8 +308,8 @@ class CreateNewPost(object):
             tag_obj = GlobalTagManager.get(tag_name=tag)
             if not tag_obj:
                 global_tag_data = {'tag_name' : tag}
-                tag_obj = GlobalTagManager.add(global_tag_data)     
-            
+                tag_obj = GlobalTagManager.add(global_tag_data)
+
             global_tag_id = tag_obj.id
             object_tag_data = {
                 'object_id'     : new_obj_id,
@@ -304,23 +318,23 @@ class CreateNewPost(object):
             ObjectTagManager.add(object_tag_data)
 
         for tag in post_tags:
-            
+
             # If the tag is valid
             if vh.valid_tag(tag):
 
-                tag_obj = GlobalTagManager.get(tag_name=tag)                
+                tag_obj = GlobalTagManager.get(tag_name=tag)
                 if not tag_obj:
                     global_tag_data = {'tag_name' : tag}
                     tag_obj = GlobalTagManager.add(global_tag_data)
-            
-                global_tag_id = tag_obj.id          
+
+                global_tag_id = tag_obj.id
                 object_tag_data = {
                     'object_id'     : new_obj_id,
                     'global_tag_id' : global_tag_id,
                 }
                 ObjectTagManager.add(object_tag_data)
                 final_post_tags.add(tag)  # Add tag to final set
-        
+
         return final_post_tags
 
 
@@ -349,7 +363,7 @@ class _AssemblePost(object):
             MUST be included. In other words, specifying the profile_user_id
             is not necessary unless getting the user's upvoted posts
 
-            RETURNS: a dict() of all the necessary 
+            RETURNS: a dict() of all the necessary
             data for each post to be rendered
                 On a profile, this includes:
                     -object_id (int)                -date_posted (datetime)
@@ -359,7 +373,7 @@ class _AssemblePost(object):
                     -profile_user_name (str)        -downvotes (int)
                     -posted_by_profile_owner (bool) -poster_id (int)
                     -my_profile (bool)              -object_links (list of dicts with keys: url, scheme, mime_type, is_dead)
-                    -tags (list)                    -has_voted (1 or -1)                
+                    -tags (list)                    -has_voted (1 or -1)
 
             FOR TAGS: Given an object_id
             FOR PROFILE: Given a profile_id - Keep in mind we also need the post info, not just object
@@ -374,7 +388,7 @@ class _AssemblePost(object):
             self.profile_user_id = profile_user_id
             self.object_id       = data.object_id
 
-        # Otherwise, get all posts for 
+        # Otherwise, get all posts for
         # a tag, profile, or community
         else:
             self.profile_user_id = None
@@ -394,13 +408,13 @@ class _AssemblePost(object):
 
         """
             PURPOSE: To call methods which assemble a post's final data
-        
+
             USE: Use this to actually get the final post data.
-            
+
             Call like: _AssemblePost(...).assemble_data()
-        
+
             PARAMS: None
-        
+
             RETURNS: A dictionary of the post's final data
         """
 
@@ -411,7 +425,7 @@ class _AssemblePost(object):
         # IF THE USER HAS REPORTED THIS OBJECT, WE IGNORE IT
         elif ReportedContentManager.has_reported(self.current_user_id, self.object_id):
             return None
-    
+
         # Some configurations...
         MAX_CHAR_SHOW_TEXT = GLOBAL_CONFIGURATIONS['MAX_CHAR_SHOW_TEXT']
         MAX_BR_SHOW_TEXT   = GLOBAL_CONFIGURATIONS['MAX_BR_SHOW_TEXT']
@@ -421,10 +435,10 @@ class _AssemblePost(object):
         # value of None. None cannot be used in any of
         # our methods here, so we just use an empty str
         # '' instead of None so that everything works
-        # nicely and our variable uses a consistent 
+        # nicely and our variable uses a consistent
         # data type
         object_text = self.this_object.text if self.this_object.text else ''
-        
+
         # If a post contains too many line <br>s, we can
         # assume that the post takes up too much vertical
         # space. Therefore, we need to set the _see_more
@@ -450,23 +464,23 @@ class _AssemblePost(object):
         # If we're getting upvoted items,
         # we do NOT also get any profile-info
         if not self.profile_user_id:
-            self._set_profile_info() 
-        
+            self._set_profile_info()
+
         self._set_all_tags()
         self._set_vote_data()
 
         return self.final_data
 
     def _set_object_type(self):
-        
+
         """
             PURPOSE: Set the post object's appropriate object type (link vs. file)
-        
+
             USE: *PRIVATE - only call in the self.assemble_data() method
             Call like: self._set_object_type()
-        
+
             PARAMS: None
-        
+
             RETURNS: None
         """
 
@@ -493,12 +507,12 @@ class _AssemblePost(object):
             PURPOSE: Set the post object's appropriate profile info
             This is not always called, for example, when
             querying for tag items
-        
+
             USE: *PRIVATE - only call in the self.assemble_data() method
             Call like: self._set_profile_info()
-        
+
             PARAMS: None
-        
+
             RETURNS: None
         """
 
@@ -508,7 +522,7 @@ class _AssemblePost(object):
             wall_post_ob = WallPostManager.get(self.object_id)
             self.final_data['date_posted'] = str(self.date_posted)
             self.final_data['hidden']      = wall_post_ob.hidden
-            
+
             if str(self.profile_id) == str(self.poster_id):
                 posted_by_profile_owner = True
                 self.final_data['profile_user_name'] = UserManager.get(self.profile_id).name
@@ -518,26 +532,26 @@ class _AssemblePost(object):
         self.final_data['my_profile'] = bool(str(self.current_user_id) == str(self.profile_id))
 
     def _set_all_tags(self):
-        
+
         """
             PURPOSE: Set all of a post's object tags and context tag
-        
+
             USE: *PRIVATE - only call in the self.assemble_data() method
             Call like: self._set_all_tags()
-        
+
             PARAMS: None
-        
+
             RETURNS: None
         """
 
         # Get the object tags
         tag_objs = ObjectTagManager.get_all(self.object_id)
-        
+
         # Create a list (of tags) for this value in the dict
         self.final_data['tags'] = []
 
         # This is not needed when get the
-        # upvoted items which require the 
+        # upvoted items which require the
         # self.profile_user_id
         if not self.profile_user_id:
             # If we are viewing a GlobalTag
@@ -558,7 +572,7 @@ class _AssemblePost(object):
             if assemble_on_tag:
 
                 # These only need to be set once. But all this needs to
-                # be fixed up, so I didn't put too much time into it.... 
+                # be fixed up, so I didn't put too much time into it....
                 self.final_data['context_tag_id'] = tag.id
                 self.final_data['context_tag_name'] = tag_name
 
@@ -574,19 +588,19 @@ class _AssemblePost(object):
         """
             PURPOSE: Set the vote information for a
             post (i.e., upvotes, downvotes, has_voted)
-        
+
             USE: *PRIVATE - only call in the self.assemble_data() method
             Call like: self._set_vote_data()
-        
+
             PARAMS: None
-        
+
             RETURNS: None
         """
 
         object_id = self.final_data['object_id']
         total_upvotes = ObjectVoteManager.get_like_count(object_id) # context_tag_id
         has_voted = getattr(ObjectVoteManager.has_voted(self.current_user_id, object_id), 'vote_type', False) # context_tag_id
-        
+
         self.final_data['upvotes']   = total_upvotes
         self.final_data['has_voted'] = has_voted
 
@@ -646,9 +660,9 @@ class HtmlifyComment(object):
     def __htmlify(item_data, current_user):
 
         """
-            PURPOSE: Feed a single item's data (as a dict()) from 
+            PURPOSE: Feed a single item's data (as a dict()) from
             a list (of dicts) into this method so that its final
-            HTML can be generated. This comment's HTML is then added 
+            HTML can be generated. This comment's HTML is then added
             to a list in the HtmlifyComment.get_html_output.
 
             USE: Provide a dict() of item's data, and if rendering posts on
@@ -689,7 +703,7 @@ class HtmlifyComment(object):
             from the GetItems and pass the list into
             this method to generate the final html ouput.
 
-            USE: Provide a list of items from the 
+            USE: Provide a list of items from the
             _GenerateItemList.get_items method below.
 
             PARAMS: 2 required params, 1 optional param:
@@ -713,9 +727,9 @@ class HtmlifyPost(object):
     def __htmlify(item_data, current_user, profile_user=None):
 
         """
-            PURPOSE: Feed a single item's data (as a dict()) from 
+            PURPOSE: Feed a single item's data (as a dict()) from
             a list (of dicts) into this method so that its final
-            HTML can be generated. This post's HTML is then added 
+            HTML can be generated. This post's HTML is then added
             to a list in the HtmlifyPost.get_html_output.
 
             USE: Provide a dict() of item's data, and if rendering posts on
@@ -733,14 +747,14 @@ class HtmlifyPost(object):
         from jinja2 import Environment, PackageLoader
         env = Environment(loader=PackageLoader('wondrous','templates'))
 
-        if profile_user:    
+        if profile_user:
             template = env.get_template('includes/posts/inc.posts_profile.jinja2')
             html_output = template.render(
                 profile_user=profile_user,
                 current_user=current_user,
                 render_items=[item_data],
                 get_item_owner=UserManager.get,  # unbound method
-            )   
+            )
         else:
             template = env.get_template('includes/posts/inc.posts_tag.jinja2')
             html_output = template.render(
@@ -759,7 +773,7 @@ class HtmlifyPost(object):
             from the GetItems and pass the list into
             this method to generate the final html ouput.
 
-            USE: Provide a list of items from the 
+            USE: Provide a list of items from the
             _GenerateItemList.get_items method below.
 
             PARAMS: 2 required params, 1 optional param:
@@ -781,7 +795,7 @@ class HtmlifyPost(object):
 class Pagination(object):
 
     """A class the helps with the pagination of items"""
-    
+
     def __init__(self, start=None, per_page=None):
 
         """
@@ -807,7 +821,7 @@ class Pagination(object):
                 item_list : list : REQUIRED : The list of item ids to paginate
                 display_hidden : bool : default=False : Do we show hidden items?
 
-            RETURNS: A list which is a slice of the 
+            RETURNS: A list which is a slice of the
             original, i.e., the chunk of items for a particular page
 
             NOTE: display_hidden=True when viewing posts on your own wall
@@ -820,7 +834,7 @@ class Pagination(object):
         return self._get_data_chunk(full_list)
 
     def _compensate_for_hidden_items(self, item_list):
-        
+
         """
             PURPOSE: Needs to remove hidden items from item_list
             so that when _get_data_chunk() is called,
@@ -859,7 +873,7 @@ class Pagination(object):
         if not display_hidden:
             item_list = self._compensate_for_hidden_items(item_list)
         return item_list
-    
+
     def _get_data_chunk(self, item_list):
 
         """
@@ -875,14 +889,14 @@ class Pagination(object):
             RETURNS: A (sliced) list of items to be paginated
         """
 
-        end = self.start+self.per_page if (self.start and self.per_page) is not None else None          
+        end = self.start+self.per_page if (self.start and self.per_page) is not None else None
         return item_list[self.start:end]
 
     @property
     def current_page_num(self):
 
         """
-            PURPOSE: Gets the current page number, so 
+            PURPOSE: Gets the current page number, so
             we can show the user what page of data
             he/she is currently viewing
 
@@ -926,9 +940,9 @@ class _GenerateItemList(object):
 
         """
             PURPOSE: Load a single item to viewed on the /post/.../ route.
-            
+
             USE: Call like: _GenerateItemList.single_object(<obj>)
-            
+
             PARAMS:
                 post_obj : obj : REQUIRED : A post_object of the post for which we
                                             must get the full post's data
@@ -949,9 +963,9 @@ class _GenerateItemList(object):
 
         """
             PURPOSE: Load the new Post when a user posts to a wall
-            
+
             USE: Call like: _GenerateItemList.new_wall_post(<obj>)
-            
+
             PARAMS:
                 post_obj : obj : REQUIRED : A post_object of the post for which we
                                             must get the full post's data
@@ -973,9 +987,9 @@ class _GenerateItemList(object):
 
         """
             PURPOSE: Load a profile items
-            
+
             USE: Call like: _GenerateItemList.wall_items(<int>)
-            
+
             PARAMS: 1 required parameter:
                 profile_id : int : REQUIRED : The id of the profile's user whose items we want to get
 
@@ -997,11 +1011,37 @@ class _GenerateItemList(object):
         return item_list
 
     @staticmethod
+    def majority_feed_items(current_user_id):
+        """
+            PURPOSE: Load the following feed for the current user
+
+            USE: Call like: _GenerateItemList.majority_feed_items(<int>)
+
+            PARAMS: 1 required parameter:
+                current_user_id : int : REQUIRED : The id of the current user
+
+            RETURNS: A list of dicts of a chunk of posts for the current user
+        """
+        item_list = []
+        post_objs = WallPostManager.get_all_subscribed(current_user_id)
+        for post in post_objs:
+            item_list.append({
+                'object_id'  : post.object_id,
+                'profile_id' : post.profile_id,
+                'hidden'     : post.hidden,
+            })
+
+        # NOTE: When viewing items on profile, we don't rank them
+        # hence, the lack of RankUtilities.rank_items(...)
+        return item_list
+
+
+    @staticmethod
     def tag_items(global_tag_name, current_user_id):
-        
+
         """
             PURPOSE: Generate the list of id's to be sorted
-            
+
             USE: Call like: _GenerateItemList.tag_items(<str>)
 
             PARAMS:
@@ -1009,19 +1049,19 @@ class _GenerateItemList(object):
                 current_user_id : int : REQUIRED : The id of the current logged-in user
 
             RETURNS: the list of id's, item_list
-            
+
             NOTE: If global_tag_obj parameter, the list is ranked from highest to lowest.
             Otherwise, the list is ordered by descending date (newest to oldest)
         """
 
         item_list = []
         global_tag_obj = GlobalTagManager.get(tag_name=global_tag_name)
-        
-        if global_tag_obj:  
-            
+
+        if global_tag_obj:
+
             global_tag_id = global_tag_obj.id
             tag_objs = ObjectTagManager.get_all(global_tag_id=global_tag_id)
-            
+
             for tag in tag_objs:
                 item_list.append({
                     'object_id'     : tag.object_id,
@@ -1065,9 +1105,9 @@ class _GenerateItemList(object):
 
     @staticmethod
     def get_following(profile_user_id):
-        
+
         """
-            PURPOSE: Get all the users a particular other user 
+            PURPOSE: Get all the users a particular other user
             user has followed, indicated by profile_user_id
 
             USE: Call like: _GenerateItemList.get_following(<int>)
@@ -1092,9 +1132,9 @@ class _GenerateItemList(object):
 
     @staticmethod
     def get_followers(profile_user_id):
-        
+
         """
-            PURPOSE: Get all the users a particular other user 
+            PURPOSE: Get all the users a particular other user
             user has been followed by, indicated by profile_user_id
 
             USE: Call like: _GenerateItemList.get_followers(<int>)
@@ -1104,7 +1144,7 @@ class _GenerateItemList(object):
 
             RETURNS: A list of dicts, with each dict containg an upvoted-by user's info
         """
-        
+
         upvoted_by_users = UserVote.query.filter(UserVote.voted_on_id == profile_user_id).\
                                           filter(UserVote.active == True).\
                                           filter(UserVote.vote_type == 1).all()
@@ -1143,22 +1183,37 @@ class _GenerateItemList(object):
 
 
 class GetItems(object):
-    
+    @staticmethod
+    def feed(current_user_id, feed_type=None):
+
+        # Not logged in/ public feed
+        if not current_user_id and not feed_type:
+            pass
+
+        elif current_user_id:
+            # Logged in / load majority feed AKA following feed
+            if feed_type == "majority":
+                return _GenerateItemList.majority_feed_items(current_user_id)
+
+            # Logged in / load majority
+            elif feed_type == "priority":
+                pass
+
     @staticmethod
     def profile(profile_user_id, current_user_id=None, tab=None):
-        
+
         # Get profile's following
         if tab == "following":
             item_list = _GenerateItemList.get_following(profile_user_id)
-        
+
         # Get profile's followers
         elif tab == "followers":
             item_list = _GenerateItemList.get_followers(profile_user_id)
-        
+
         # Get a user's liked items
         elif tab == "likes":
             item_list = _GenerateItemList.get_liked_posts(current_user_id, profile_user_id)
-        
+
         # Get main profile items for wall
         else:
             item_list = _GenerateItemList.get_wall_posts(current_user_id, profile_user_id)
@@ -1176,4 +1231,3 @@ class GetItems(object):
     @staticmethod
     def single_object(obj, current_user_id):
         return _GenerateItemList.single_object(obj, current_user_id)
-

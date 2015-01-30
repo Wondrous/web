@@ -78,7 +78,7 @@ def build_routes(config):
 
     config.add_route('ajax_username_check_handler',            '/ajax/username_check/')
 
-    config.add_route('ajax_async_load_item',                   '/ajax/async_load/{ajax_method}/')
+    config.add_route('ajax_async_load_item',                   '/ajax/async_load/')
     config.add_route('ajax_async_get_item_list',               '/ajax/async_get_item_list/{ajax_method}/')
 
     config.add_route('ajax_search_handler',                    '/ajax/search/')

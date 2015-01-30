@@ -19,6 +19,7 @@ from sqlalchemy.orm import relationship
 from wondrous.models import Base
 from wondrous.models import DBSession
 
+import logging
 
 class WallPost(Base):
 
@@ -43,7 +44,7 @@ class WallPostManager(object):
 
         new_post.profile_id = wall_post_data['profile_id']
         new_post.object_id  = wall_post_data['object_id']
-        
+
         DBSession.add(new_post)
         DBSession.flush()
 
@@ -60,10 +61,25 @@ class WallPostManager(object):
                                     order_by(desc(Object.date_posted)).all()
 
     @staticmethod
+    def get_all_subscribed(current_user_id):
+        from wondrous.models.obj import Object
+        from wondrous.models.vote import UserVote
+        upvoted_users = UserVote.query.filter(UserVote.user_id == current_user_id).\
+                                       filter(UserVote.active == True).\
+                                       filter(UserVote.vote_type == 1).all()
+
+        upvoted_users_id = [user_vote.voted_on_id for user_vote in upvoted_users]
+        if len(upvoted_users_id)>0:
+            return WallPost.query.join(Object).filter(WallPost.profile_id.in_(upvoted_users_id)).\
+                                    order_by(desc(Object.date_posted)).all()
+        else:
+            return []
+
+    @staticmethod
     def count():
-        
+
         """Number of posts in the system"""
-        
+
         return WallPost.query.count()
 
     @staticmethod
@@ -88,4 +104,3 @@ class WallPostManager(object):
         wall_post = WallPostManager.get(object_id)
         if wall_post and wall_post.obj.poster_id == current_user_id:
             wall_post.hidden = False if wall_post.hidden else True
-
