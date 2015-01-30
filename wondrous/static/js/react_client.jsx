@@ -31,7 +31,7 @@ function getMyInfo() {
         url: "/ajax/my_info/",
         success: function(data) {
             console.log(data);
-            $('#query').value(data.query)
+            // $('#query').value(data.query);
             if (data.show_tutorial){
                 React.render(
                     <TutorialBox />,

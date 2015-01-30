@@ -23,8 +23,8 @@ GLOBAL_CONFIGURATIONS = {
     "MAX_CHAR_SHOW_TEXT"  : 670,
     "MAX_BR_SHOW_TEXT"    : 10,
 
-    "URL_REGEX"           : u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',
-    "HASHTAG_REGEX"       : u'^[a-zA-Z0-9]+$',
+    "URL_REGEX"           : u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',  # TODO: This REGEX is not robost enough
+    "HASHTAG_REGEX"       : u'^[a-zA-Z0-9]+$',  # Excludes the first #
     "HASHTAG_REGEX_FULL"  : u'(#[a-zA-Z0-9]+)',  # TODO: This REGEX is not robost enough
 
     "EXIF_IMG_DIR_PATH"   : "~/tmp_exif_img_bucket/",  # Don't change unless you have a death wish

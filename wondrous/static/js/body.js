@@ -28,7 +28,7 @@ $(document).ready(function () {
 
                 thisPost.toggleClass('is-expanded');
                 thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-                thisPostContent.toggleClass('no-top-border')
+                thisPostContent.toggleClass('no-top-border');
 
                 // Omit this line to NOT put the post into
                 // presentation-mode when it's clicked.
