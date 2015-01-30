@@ -93,5 +93,6 @@ def build_routes(config):
     config.add_route('profile_handler',                        '/{username}/')
     config.add_route('profile_tab_handler',                    '/{username}/{tab}/')
 
+    config.add_static_view('/tmp', 'wondrous:templates')
 
     return config

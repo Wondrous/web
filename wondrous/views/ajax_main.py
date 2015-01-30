@@ -381,10 +381,47 @@ class AjaxHandler(BaseHandler):
             PURPOSE: This is the method used to handle basic info handling after login
             has occurred. This is to replace the templating system
         """
-        me = self.request.user
-        data = {
-            'id':me.id
-        }
+        # Logged-in ----------------------
+        current_user = self.request.user
+        if current_user:
+
+            start = self.request.GET.get('start', 0)  # The start-value of the items to get
+
+            items = []
+            self.set_pagination_data(items, start, PER_PAGE=10)
+
+            # Make sure we have a valid tab name
+            if self.request.matched_route.name == 'index_priority_feed_handler':
+                tab_name = 'priority_feed'
+            else:
+                tab_name = None
+
+            data = {
+                'title'            : u"{cn} | Welcome {name}!".format(cn=self.COMPANY_NAME, name=current_user.name),
+                'tab_name'         : tab_name,
+                'username'     : current_user.user.username,
+                'render_items'     : self.page_items,
+                'id'               :current_user.user.id,
+                'first_name'        :current_user.first_name,
+                'show_tutorial'     :current_user.show_tutorial,
+                'profile_picture'    :current_user.user.profile_picture,
+                # Vars which deal with pagination
+                'current_page_num' : self.page_num,
+                'has_next'         : self.has_next,
+                'next_start'       : self.next_start,
+                'back_start'       : self.back_start,
+                'start_item_num'   : self.start,
+            }
+
+        # Logged-out ----------------------
+        else:
+            data = {
+                'title' : "Welcome to {cn}".format(cn=self.COMPANY_NAME)
+            }
+
+        # *** CRITICALLY IMPORTANT: DO NOT ALTER ***
+        data['LOGGED_IN_TEMPLATE']  = "index_li.jinja2"
+        data['LOGGED_OUT_TEMPLATE'] = "index_lo.jinja2"
 
         return data
 
