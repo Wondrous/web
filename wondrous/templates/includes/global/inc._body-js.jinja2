@@ -24,6 +24,8 @@
                 });
             });
 
+            
+
             $(document).on('click', '.post-body', function () {
                 var SPEED = 0;
                 var thisPost = $(this);
@@ -42,10 +44,16 @@
 
                 thisPost.toggleClass('is-expanded');
                 thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-                thisPostContent.toggleClass('no-top-border')
+                thisPostContent.toggleClass('no-top-border');
                 
-                // Omit this line to NOT put the post into 
+                // Omit this line to NOT put the post into
                 // presentation-mode when it's clicked.
+                $('.dimmer').on('click', function () {
+                    $('.backdrop').removeClass('dimmer');
+                    $('.is-expanded').css('z-index', 4);
+                    $('.is-expanded').removeClass('is-expanded');
+                })
+
                 thisBrick.toggleClass('post-presentation');
                 
                 thisPostContent.slideToggle(SPEED);
@@ -100,7 +108,7 @@
                     // operate on elements in the dynamically
                     // added content. This is extremely annonying.
                     // *** Look for a better solution ***
-                    if( $("textarea#postTextarea").length ) {
+                    if( $("textarea#postTextarea").length) {
                         // Initialize the hashtags and autosize textarea
                         initSmartTextarea();
                     }
@@ -242,7 +250,7 @@
                 type: "POST",
                 url: "/ajax/toggle_profile_visibility/",
                 success: function() {
-                    // alert("updated");
+                    // stuff
                 }
             });
         });
