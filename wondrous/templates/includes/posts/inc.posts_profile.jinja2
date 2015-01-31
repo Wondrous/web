@@ -22,24 +22,20 @@
         <div class="masonry-brick">
             <div class="post-body round-2">
                 {% include "/includes/posts/inc.post_metadata.jinja2" %}
-
-                {# if item['subject'] #}
+                {% include "/includes/posts/inc.post_identification.jinja2" %}
+                <div class="post-cover-photo cover round-5 no-top-border" style="background-image: url({{ test_bg | random() }});">
                     <div class="post-subject-text">
-                        <div class="post-cover-photo cover round-5" style="background-image: url({{ test_bg | random() }});">
-                            {% include "/includes/posts/inc.post_identification.jinja2" %}
-                            <div class="post-subject-wrapper">
-                                <span class="post-subject-text-position">
-                                    {% if item['subject'] %}
-                                        {{ item['subject'] | safe }}
-                                    {% else %}
-                                        No title...
-                                    {% endif %}
-                                </span>
-                            </div>
+                        <div class="post-subject-wrapper">
+                            <span class="post-subject-text-position">
+                                {% if item['subject'] %}
+                                    {{ item['subject'] | safe }}
+                                {% else %}
+                                    No title...
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
-                {# endif #}
-        
+                </div>
                 <div class="post-content round-5">
                     {{ item['text'] | safe }}
                 </div>
