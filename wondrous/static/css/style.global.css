@@ -327,6 +327,12 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     cursor: pointer;
 }
 
+.ellipsis-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* === INFO ============================ */
 
     /* TODO */
@@ -1192,7 +1198,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     padding-bottom: 7px;
 }
 
-.post-as-title {
+/*.post-as-title {
     position: relative;
     margin-left: 60px;
     top: -17px;
@@ -1203,7 +1209,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space:nowrap;
-}
+}*/
 
 #post-hashtags {
     margin-top: 5px;
@@ -1442,12 +1448,11 @@ body { font-family: sans-serif; }
        -moz-box-shadow: 0 2px 5px rgb(100,100,100);
          -o-box-shadow: 0 2px 5px rgb(100,100,100);
             box-shadow: 0 2px 5px rgb(100,100,100);
-    cursor: pointer;
 }
 
 .post-content {
     display: none;
-    background-color: rgb(251,251,251);
+    background-color: rgb(255,255,255);
     padding: 20px;
 
     font-family: helvetica, arial, sans-serif;
@@ -1512,6 +1517,8 @@ body { font-family: sans-serif; }
     background-attachment: scroll;
     color: rgb(251,251,251);
     text-shadow: 0 2px 10px rgb(44,44,44);
+
+    cursor: pointer;
 }
 
 .post-thumb {
@@ -1528,16 +1535,16 @@ body { font-family: sans-serif; }
     position: relative;
     display: inline-block;
     /* left: 54px; */
-    top: -7px;
+    top: -6px;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
-    color: rgb(25,25,25);
+    color: rgb(0,0,200);
 }
 
-.blue-identifier {
+/*.blue-identifier {
     color: rgb(0,0,200) !important;
-}
+}*/
 
 .post-subject-text {
     font-size: 26px;
