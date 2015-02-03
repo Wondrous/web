@@ -9,8 +9,8 @@
 #
 
 from wondrous.models.comment import ObjectCommentManager
-from wondrous.models.obj import ObjectManager
-from wondrous.models.user import UserManager
+from wondrous.models.object import Object
+from wondrous.models.user import User
 from wondrous.models.vote import UserVote
 
 class DisableUser(object):
@@ -27,7 +27,7 @@ class DisableUser(object):
     """
 
     def __init__(self, user_id):
-        self.user_obj = UserManager.get(user_id)
+        self.user_obj = User.get(user_id)
 
     def disable(self):
 
@@ -68,10 +68,10 @@ class DisableUser(object):
         """
 
         # Step 1
-        UserManager._soft_delete(self.user_obj.id)
+        User._soft_delete(self.user_obj.id)
 
         # Step 2
-        deleted_user = UserManager.get(self.user_obj.id, is_active=False)
+        deleted_user = User.get(self.user_obj.id, is_active=False)
 
         return True if deleted_user else False
 
@@ -113,7 +113,7 @@ class DisableUser(object):
         """
 
         deleted_user_id = self.user_obj.id
-        all_user_objects = ObjectManager.get_all_objects_for_user(deleted_user_id)
+        all_user_objects = Object.get_all_objects_for_user(deleted_user_id)
         for obj in all_user_objects:
             obj.active = False
 
@@ -143,13 +143,13 @@ class EnableUser(object):
         2. Activates up and down votes on users 
         (Consequently, this adds the "upvoted by")
 
-        Call like this in ***Models.UserManager.add_user()***:
+        Call like this in ***Models.User.add_user()***:
         e = EnableUser(<user_id_required>)
         e.enable()
     """
 
     def __init__(self, user_id):
-        self.user_obj = UserManager.get(user_id, is_active=False)
+        self.user_obj = User.get(user_id, is_active=False)
 
     def enable(self):
 
@@ -186,10 +186,10 @@ class EnableUser(object):
         """
 
         # Step 1
-        UserManager._undelete(self.user_obj.id)
+        User._undelete(self.user_obj.id)
 
         # Step 2
-        activated_user = UserManager.get(self.user_obj.id)
+        activated_user = User.get(self.user_obj.id)
 
         return True if activated_user else False
 
@@ -231,7 +231,7 @@ class EnableUser(object):
         """
 
         enabled_user = self.user_obj.id
-        all_user_objects = ObjectManager.get_all_objects_for_user(enabled_user)
+        all_user_objects = Object.get_all_objects_for_user(enabled_user)
         for obj in all_user_objects:
             obj.active = True
 

@@ -15,7 +15,7 @@
                 
                 <div style="font-size: 15px;">
                     {% if item.poster.user_type == 1 %}
-                        <b>Poster:</b> <a href="/_admin/manage/users/{{item.poster_id}}/">{{ get_person(item.poster_id).name }} (id: {{ item.poster_id }})</a> | <b>{{ get_num_offenses(item.poster_id) }}-rp</b>
+                        <b>Poster:</b> <a href="/_admin/manage/users/{{item.user_id}}/">{{ get_person(item.user_id).name }} (id: {{ item.user_id }})</a> | <b>{{ get_num_offenses(item.user_id) }}-rp</b>
                     {% else %}
                     {% endif %}
                 </div>

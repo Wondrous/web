@@ -11,7 +11,7 @@
 from pyramid.security import unauthenticated_userid
 
 from wondrous.models.admin import AdminManager
-from wondrous.models.user import UserManager
+from wondrous.models.user import User
 
 class AuthHelper(object):
 
@@ -50,7 +50,7 @@ class AuthHelper(object):
         """
         
         user_id = unauthenticated_userid(request)
-        return UserManager.get(user_id) if user_id else None
+        return User.get(user_id) if user_id else None
 
     @staticmethod
     def get_admin(request):

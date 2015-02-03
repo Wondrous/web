@@ -39,7 +39,7 @@ class Page(Base):
     external_url = Column(Unicode, nullable=True)
 
     # Extremely important
-    user = relationship('User', foreign_keys='Page.id')
+    # user = relationship('User', foreign_keys='Page.id')
 
 class PageManager(object):
 
@@ -48,31 +48,31 @@ class PageManager(object):
 
         """
             PURPOSE: Get a page from the database
-        
+
             USE: Call like: PageManager._get(<int>)
-        
+
             PARAMS: 1 param: an int, the id of the page to get
-            
+
             RETURNS: If found, a Page object
                      Otherwise, None
         """
 
         return Page.query.filter(Page.id == user_id).first()
 
- 
+
     @staticmethod
     def _add(page_data):
-        
+
         """
             PURPOSE: Add a new page into the DB
-        
+
             USE: Call like: PageManager._add(<dict>)
-        
+
             PARAMS: 1 param, a dict, with each key as column name:
                 -user_id        -about
                 -title          -external_url
                 -description    -cover_picture
-        
+
             RETURNS: None
         """
 
@@ -99,8 +99,8 @@ class UserToPage(Base):
     __tablename__ = 'user_to_page'
 
     id = Column(BigInteger, primary_key=True, nullable=False)
-    user_person_id = Column(BigInteger, ForeignKey('person.id'), nullable=False)
-    user_page_id = Column(BigInteger, ForeignKey('page.id'), nullable=False)
+    # user_person_id = Column(BigInteger, ForeignKey('person.id'), nullable=False)
+    # user_page_id = Column(BigInteger, ForeignKey('page.id'), nullable=False)
     is_creator = Column(BigInteger, default=False, nullable=False)
     date_added = Column(DateTime, nullable=False, default=datetime.now)
 
@@ -114,17 +114,17 @@ class UserToPageManager(object):
 
     @staticmethod
     def get_creator(user_page_id):
-        
+
         """
             TODO: Return a Person object, not a UserToPage object
         """
-        
+
         return UserToPage.query.filter(UserToPage.user_page_id == user_page_id).\
                                 filter(UserToPage.is_creator == True).first()
 
     @staticmethod
     def add(user_to_page_data):
-        
+
         new_user_to_page = UserToPage()
 
         new_user_to_page.user_person_id = user_to_page_data['user_person_id']
@@ -138,4 +138,3 @@ class UserToPageManager(object):
         user_to_page_obj = UserToPageManager.get(user_person_id, user_page_id)
         if user_to_page_obj:
             DBSession.delete(user_to_page_obj)
-

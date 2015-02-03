@@ -8,6 +8,7 @@
 # GLOBAL_CONFIG.PY
 #
 
+
 GLOBAL_CONFIGURATIONS = {
     "POSTS_PER_PAGE"      : 5,
 
@@ -36,15 +37,3 @@ GLOBAL_CONFIGURATIONS = {
 SYS_CONTEXT_TAGS = {
     'wall' : '__wall__',
 }
-
-# TODO: Needs to be redone
-NOTIFICATION_REASON = [
-    "comment_on_my_post",    # 0
-    "involved_in_same_post", # 1
-    "liked_my_post",         # 2
-    "posted_on_my_wall",     # 3 || Can't happen anymore (no posting to other people's walls)
-    "voted_on_me",          # 4
-    "follow_request",        # 5
-    "accepted_request",      # 6
-    #"commented_on_a_post_on_my_wall", # 7
-]

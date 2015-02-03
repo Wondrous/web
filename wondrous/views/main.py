@@ -20,15 +20,15 @@ from pyramid.view import view_config
 
 from wondrous.models.notification import NotificationManager
 
-from wondrous.models.obj import ObjectManager
+from wondrous.models.object import Object
 
-from wondrous.models.person import PersonManager
+from wondrous.models.person import Person
 from wondrous.models.person import UnverifiedEmailManager
 
 from wondrous.models.tag import GlobalTagManager
 
-from wondrous.models.user import UserManager
-from wondrous.models.user import BlockedUserManager
+from wondrous.models.user import User
+from wondrous.models.user import BlockedUser
 
 from wondrous.models.vote import UserVoteManager as uvm
 
@@ -54,7 +54,7 @@ class BaseHandler(object):
         self.url_match    = partial(url_match, self)
         self.COMPANY_NAME = "Wondrous"
 
-    def set_pagination_data(self, items, start, profile_id=None, PER_PAGE=GLOBAL_CONFIGURATIONS['POSTS_PER_PAGE']):
+    def set_pagination_data(self, items, start, user_id=None, PER_PAGE=GLOBAL_CONFIGURATIONS['POSTS_PER_PAGE']):
 
         """
             PURPOSE: Set all the necessary instance variables
@@ -70,7 +70,7 @@ class BaseHandler(object):
             PARAMS: 4 params, 2 of which are optional
                 items : list : The list of items to paginate
                 start : The index of items at which we start our pagination
-                profile_id : int : The id of the profile whose items we are paginating
+                user_id : int : The id of the profile whose items we are paginating
                 PER_PAGE : int : The number of items to render per paginated page
 
             RETURNS: (None), but we do set many instance variables
@@ -96,7 +96,7 @@ class BaseHandler(object):
 
         # Only show hidden posts if current user
         # is the one who did the posting
-        SHOW_HIDDEN = True if profile_id and (current_user_id == profile_id) else False
+        SHOW_HIDDEN = True if user_id and (current_user_id == user_id) else False
 
         # Assign all relevant data to instance variables for
         # use in the calling method
@@ -126,9 +126,9 @@ class AuthHandler(BaseHandler):
     #       password = safe_in(self.request.POST.get('user_identification'), strip=False)
 
     #       if Sanitize.is_valid_email(user_identification):
-    #           this_user = UserManager.get(email=user_identification)
+    #           this_user = User.get(email=user_identification)
     #       else:
-    #           this_user = UserManager.get(username=user_identification)
+    #           this_user = User.get(username=user_identification)
 
     #       if this_user and this_user.validate_password(password) and not this_user.user.is_banned:
 
@@ -171,9 +171,9 @@ class AuthHandler(BaseHandler):
             password   = safe_in(p.get('password'), strip=False)
 
             if Sanitize.is_valid_email(credential):
-                this_person = UserManager.get(email=credential)
+                this_person = User.get(email=credential)
             else:
-                this_person = UserManager.get(username=credential)
+                this_person = User.get(username=credential)
 
             # Minimize dot operator lookup
             if this_person:
@@ -217,7 +217,7 @@ class AuthHandler(BaseHandler):
 
             # Get the user and check if they're banned from the site
             # if they attempt to access this view
-            this_person = UserManager.get(user_id, is_active=False)
+            this_person = User.get(user_id, is_active=False)
             if this_person and this_person.user.is_banned:
 
                 # Show the page (note that the
@@ -358,9 +358,9 @@ class AuthHandler(BaseHandler):
                 _s_valid_ln, len_err_ln = Sanitize.length_check(last_name, min_length=1, max_length=30)
                 _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
                 _s_valid_em = Sanitize.is_valid_email(email)
-                _s_em_taken = UserManager.get(email=email)
+                _s_em_taken = User.get(email=email)
                 _s_valid_un = Sanitize.is_valid_username(username.lower())
-                _s_un_taken = UserManager.get(username=username)
+                _s_un_taken = User.get(username=username)
 
                 # Check for validity
                 if not _s_valid_fn:
@@ -398,9 +398,9 @@ class AuthHandler(BaseHandler):
                     'birthday'   : None,  # Optional data to add later
                 }
 
-                UserManager.add(user_data, user_type_data) # This adds to Person table as well
+                User.add(user_data, user_type_data) # This adds to Person table as well
 
-                this_person = UserManager.get(email=email)
+                this_person = User.get(email=email)
                 headers = self._set_session_headers(this_person)
                 this_person.user.last_login = datetime.now()
 
@@ -622,11 +622,11 @@ class ProfileHandler(BaseHandler):
         start         = self.request.GET.get('start', 0)  # The start-value of the items to get
         current_user  = self.request.user  # The logged-in user
 
-        # valid_person  = vh.valid_profile(profile_id)  # The profile's "owner"
-        valid_person = UserManager.get(username=profile_un)
+        # valid_person  = vh.valid_profile(user_id)  # The profile's "owner"
+        valid_person = User.get(username=profile_un)
         if valid_person:
             current_user_id = current_user.id
-            profile_id = valid_person.id
+            user_id = valid_person.id
 
             # TODO: Manage notification
             notification_id = safe_in(self.request.GET.get('nrid'))
@@ -634,18 +634,18 @@ class ProfileHandler(BaseHandler):
                 NotificationManager.mark_as_read(notification_id, current_user_id)
 
             # Handle profile tab
-            tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(profile_id != current_user_id)
+            tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(user_id != current_user_id)
 
             # Get the items to render based off the given parameter(s)
-            items = GetItems.profile(profile_id, tab=tab)
+            items = GetItems.profile(user_id, tab=tab)
 
             # Set all data needed for pagination
             num_items = 15
-            self.set_pagination_data(items, start, profile_id, PER_PAGE=num_items)
+            self.set_pagination_data(items, start, user_id, PER_PAGE=num_items)
 
-            following_count = uvm.get_following_count(profile_id)
-            follower_count  = uvm.get_follower_count(profile_id)
-            blocked_user = BlockedUserManager.get(current_user_id,profile_id)
+            following_count = uvm.get_following_count(user_id)
+            follower_count  = uvm.get_follower_count(user_id)
+            blocked_user = BlockedUser.get(current_user_id,user_id)
 
             data = {
                 'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_person.name),
@@ -657,7 +657,7 @@ class ProfileHandler(BaseHandler):
                 'is_private'         : valid_person.user.is_private,
                 'is_my_profile'      : bool(valid_person.id == current_user_id),
                 'tab'                : tab,
-                'get_item_owner'     : UserManager.get,  # unbound method
+                'get_item_owner'     : User.get,  # unbound method
 
                 'render_items'       : self.page_items,
                 'current_page_num'   : self.page_num,
@@ -668,7 +668,7 @@ class ProfileHandler(BaseHandler):
 
                 'following_count'    : following_count,
                 'follower_count'     : follower_count,
-                'has_voted'          : getattr(uvm.has_voted(current_user_id, profile_id), 'vote_type', False),
+                'has_voted'          : getattr(uvm.has_voted(current_user_id, user_id), 'vote_type', False),
             }
             return data
 
@@ -747,7 +747,7 @@ class TagHandler(BaseHandler):
                 'current_user'     : this_person,
                 'context_tag'      : tag_name,
                 'valid_tag'        : tag_obj,
-                'get_item_owner'   : UserManager.get,  # unbound method
+                'get_item_owner'   : User.get,  # unbound method
 
                 'render_items'     : self.page_items,
                 'current_page_num' : self.page_num,
@@ -803,7 +803,7 @@ class SearchHandler(BaseHandler):
                 if Sanitize.is_valid_email(query):
 
                     # Given an email, we just look for people
-                    results = UserManager.get(email=query)
+                    results = User.get(email=query)
                     if results:
                         result_list = [{
                             'results'     : [results],
@@ -811,7 +811,7 @@ class SearchHandler(BaseHandler):
                         }]
                 else:
                     # Add persons and use only ascii chars for search
-                    results = PersonManager.get_like(query, ascii=True)
+                    results = Person.by_id_like(query, ascii=True)
                     if results:
                         results = [p for p in results if p.user.active]  # filter out deactivated users
                         result_list.append({
@@ -852,7 +852,7 @@ class PostHandler(BaseHandler):
         object_id      = self.url_match(url_match='object_id')
         object_uuid    = self.url_match(url_match='object_uuid')
 
-        valid_object = ObjectManager.get(object_id)
+        valid_object = Object.get(object_id)
         if valid_object and valid_object.ouuid == object_uuid:
 
             new_post_item = GetItems.single_object(valid_object, this_person_id)
@@ -869,7 +869,7 @@ class PostHandler(BaseHandler):
             data = {
                 'title'          : "{cn} | Post".format(cn=self.COMPANY_NAME),
                 'current_user'   : this_person,
-                'get_item_owner' : UserManager.get,  # unbound method
+                'get_item_owner' : User.get,  # unbound method
                 'render_items'   : page_items,
             }
             return data
@@ -958,7 +958,7 @@ def create_user(first_name,last_name,username,password,email):
         'birthday'   : None,  # Optional data to add later
     }
 
-    UserManager.add(user_data, user_type_data) # This adds to Person table as well
+    User.add(user_data, user_type_data) # This adds to Person table as well
 
 class ExcSQL(BaseHandler):
     @view_config(route_name='exc_sql', xhr=False, renderer='json')

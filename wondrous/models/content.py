@@ -31,37 +31,34 @@ from wondrous.models import DBSession
 
 from wondrous.models.comment import ObjectCommentManager
 
-from wondrous.models.obj import FileToObjectManager
-from wondrous.models.obj import LinkToObjectManager
-from wondrous.models.obj import ObjectManager
+from wondrous.models.object import FileToObject
+from wondrous.models.object import LinkToObject
+from wondrous.models.object import Object
 
-from wondrous.models.post import WallPostManager
+from wondrous.models.post import WallPost
 
-from wondrous.models.tag import ObjectTagManager
+from wondrous.models.tag import Tag
 
-from wondrous.models.vote import ObjectVoteManager
+from wondrous.models.vote import Vote
 
 class ReportedContent(Base):
-    
+
     """Reported content definition"""
 
     __tablename__ = 'reported_content'
 
     id = Column(BigInteger, primary_key=True)
     reporter_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    poster_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     object_id = Column(BigInteger, nullable=False)
     why_id = Column(Integer, nullable=False)
     comment = Column(Unicode, nullable=True)
     deleted = Column(Boolean, nullable=True, default=False)
     date_reported = Column(DateTime, default=datetime.now)
 
-    poster = relationship('User', foreign_keys='ReportedContent.poster_id')
-    reporter = relationship('User', foreign_keys='ReportedContent.reporter_id')
-
     @hybrid_property
     def object(self):
-        return ObjectManager.get(self.object_id)
+        return Object.get(self.object_id)
 
     @hybrid_property
     def tags(self):
@@ -81,19 +78,19 @@ class ReportedContentManager(object):
         tally = dict()  # key = uid, value = count of their reported posts
 
         for rp in all_reported_posts:
-            poster_id = rp.poster_id
-            if poster_id in tally:
-                tally[poster_id] += 1
+            user_id = rp.user_id
+            if user_id in tally:
+                tally[user_id] += 1
             else:
-                tally[poster_id] = 1
+                tally[user_id] = 1
 
         sorted_tally = sorted(tally.iteritems(), key=operator.itemgetter(1))
         return sorted_tally[::-1]
 
     @staticmethod
     def get_total_offenses_for_user(user_id):
-        
-        return ReportedContent.query.filter(ReportedContent.poster_id == user_id).count()
+
+        return ReportedContent.query.filter(ReportedContent.user_id == user_id).count()
 
     @staticmethod
     def get_all():
@@ -112,7 +109,7 @@ class ReportedContentManager(object):
 
     @staticmethod
     def add(reported_content_data):
-        
+
         """
             Add a new item to the reported_content table
 
@@ -126,7 +123,7 @@ class ReportedContentManager(object):
         new_reported_item = ReportedContent()
 
         new_reported_item.reporter_id = reported_content_data['reporter_id']
-        new_reported_item.poster_id   = reported_content_data['poster_id']
+        new_reported_item.user_id   = reported_content_data['user_id']
         new_reported_item.object_id   = reported_content_data['object_id']
         new_reported_item.why_id      = reported_content_data['why_id']
         new_reported_item.comment     = reported_content_data['comment']
@@ -141,9 +138,9 @@ class ReportedContentManager(object):
 
     @staticmethod
     def count():
-        
+
         """Number of reported items in the system"""
-        
+
         return ReportedContent.query.count()
 
 
@@ -162,7 +159,7 @@ class DeletedContent(Base):
     __tablename__ = 'deleted_content'
 
     id = Column(BigInteger, primary_key=True)
-    poster_id = Column(BigInteger, nullable=False)
+    user_id = Column(BigInteger, nullable=False)
     text = Column(Unicode, default=None)
     upvotes = Column(BigInteger, nullable=False)  # "likes"
     tags = Column(Unicode)
@@ -190,15 +187,15 @@ class DeletedContentManager(object):
             RETURNS: (None)
         """
 
-        object_to_delete = ObjectManager.get(object_id)
+        object_to_delete = Object.get(object_id)
 
         deleted_content_data = dict()
-        deleted_content_data['poster_id']       = object_to_delete.poster_id
+        deleted_content_data['user_id']       = object_to_delete.user_id
         deleted_content_data['text']            = object_to_delete.text
         deleted_content_data['upvotes']         = ObjectVoteManager.get_like_count(object_id)  # ObjectTagVoteManager.get_total_upvotes_for_object(object_id)
         deleted_content_data['tags']            = ' '.join([o.global_tag.tag_name for o in ObjectTagManager.get_all(object_id=object_id)])
-        deleted_content_data['object_link_ids'] = ' '.join([str(m.object_link_id) for m in LinkToObjectManager.get_all_links_for_object(object_id)])
-        deleted_content_data['object_file_ids'] = ' '.join([str(m.object_file_id) for m in FileToObjectManager.get_all_files_for_object(object_id)])
+        deleted_content_data['object_link_ids'] = ' '.join([str(m.object_link_id) for m in LinkToObject.get_all_links_for_object(object_id)])
+        deleted_content_data['object_file_ids'] = ' '.join([str(m.object_file_id) for m in FileToObject.get_all_files_for_object(object_id)])
         deleted_content_data['date_posted']     = object_to_delete.date_posted
 
         DeletedContentManager._add(deleted_content_data)
@@ -221,7 +218,7 @@ class DeletedContentManager(object):
             Call like: DeletedContentManager._add(<dict>)
 
             PARAMS: 1 required dict, with each key as a column name:
-                poster_id : int : The User.id of the original object poster
+                user_id : int : The User.id of the original object poster
                 text : str : The Object.text
                 upvotes : int : The total number of upvotes on Object across all ObjectTags
                 tags : Unicode -> str : A serialized "list" of all str tag names
@@ -235,7 +232,7 @@ class DeletedContentManager(object):
 
         new_deleted_content = DeletedContent()
 
-        new_deleted_content.poster_id       = deleted_content_data['poster_id']
+        new_deleted_content.user_id       = deleted_content_data['user_id']
         new_deleted_content.text            = deleted_content_data['text']
         new_deleted_content.upvotes         = deleted_content_data['upvotes']
         new_deleted_content.tags            = deleted_content_data['tags']
@@ -254,7 +251,7 @@ class DeletedContentManager(object):
             USE: Call like: DeletedContentManager._delete(<int>)
 
             NOTE: This is a private method.
-            
+
             *** DO NOT CALL THIS METHOD INDEPENDANTLY.
             ALWAYS CALLED FROM THE DeletedContentManager.delete_content()
             METHOD ***
@@ -274,18 +271,18 @@ class DeletedContentManager(object):
                 6. Delete each ObjectVote for this Object
                 7. Delete the Object itself
         """
-        
+
         # Delete mapping rows to links/files
-        all_mapped_links = LinkToObjectManager.get_all_links_for_object(object_id)
+        all_mapped_links = LinkToObject.get_all_links_for_object(object_id)
         for m in all_mapped_links:
             DBSession.delete(m)
 
-        all_mapped_files = FileToObjectManager.get_all_files_for_object(object_id)
+        all_mapped_files = FileToObject.get_all_files_for_object(object_id)
         for m in all_mapped_files:
             DBSession.delete(m)
 
         # Delete WallPost rows
-        this_wall_post = WallPostManager.get(object_id)
+        this_wall_post = WallPost.by_id(object_id)
         if this_wall_post:
             DBSession.delete(this_wall_post)
 
@@ -301,7 +298,7 @@ class DeletedContentManager(object):
         # TODO: Add in the "bookmarks" to delete
 
         # Delete the actual object now
-        this_object = ObjectManager.get(object_id)
+        this_object = Object.get(object_id)
         if this_object:
             DBSession.delete(this_object)
 
@@ -324,7 +321,7 @@ class DeletedContentManager(object):
         # Transfer all data to be deleted
         DeletedObjectCommentManager.add(object_id)
         DeletedContentManager.add(object_id)
-        
+
         # Delete transferred data
         DeletedObjectCommentManager._delete(object_id)
         DeletedContentManager._delete(object_id)
@@ -341,7 +338,7 @@ class DeletedObjectComment(Base):
 
     id = Column(BigInteger, primary_key=True, nullable=False)
     object_id = Column(BigInteger, nullable=False)
-    poster_id = Column(BigInteger, nullable=False)
+    user_id = Column(BigInteger, nullable=False)
     text = Column(Unicode, nullable=False)
     date_added = Column(DateTime, nullable=False)
     date_deleted = Column(DateTime, default=datetime.now)
@@ -354,11 +351,11 @@ class DeletedObjectCommentManager(object):
 
         all_object_comments_active = ObjectCommentManager.get_all_comments_for_object(object_id)
         all_object_comments_inactive = ObjectCommentManager.get_all_comments_for_object(object_id, is_active=False)
-        
+
         for oc in chain(all_object_comments_active, all_object_comments_inactive):
             object_comment_data = dict(
                 object_id=oc.object_id,
-                poster_id=oc.poster_id,
+                user_id=oc.user_id,
                 text=oc.text,
                 date_added=oc.date_added,
             )
@@ -370,7 +367,7 @@ class DeletedObjectCommentManager(object):
         new_deleted_object_comment = DeletedObjectComment()
 
         new_deleted_object_comment.object_id  = object_comment_data['object_id']
-        new_deleted_object_comment.poster_id  = object_comment_data['poster_id']
+        new_deleted_object_comment.user_id  = object_comment_data['user_id']
         new_deleted_object_comment.text       = object_comment_data['text']
         new_deleted_object_comment.date_added = object_comment_data['date_added']
 
@@ -378,7 +375,7 @@ class DeletedObjectCommentManager(object):
 
     @staticmethod
     def _delete(object_id):
-        
+
         # Delete all comments for object
         all_object_comments_active   = ObjectCommentManager.get_all_comments_for_object(object_id)
         all_object_comments_inactive = ObjectCommentManager.get_all_comments_for_object(object_id, is_active=False)
@@ -394,9 +391,9 @@ class DeletedObjectCommentManager(object):
             # Transfer the comment to deletion table
             comment_data = dict(
                 object_id=oc.object_id,
-                poster_id=oc.poster_id,
+                user_id=oc.user_id,
                 text=oc.text,
-                date_added=oc.date_added,   
+                date_added=oc.date_added,
             )
             DeletedObjectCommentManager._add(comment_data)
 

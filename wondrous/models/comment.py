@@ -35,14 +35,11 @@ class ObjectComment(Base):
 
     id = Column(BigInteger, primary_key=True, nullable=False)
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
-    poster_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     text = Column(Unicode, nullable=False)
     anonymous = Column(Boolean, nullable=False, default=True)
     active = Column(Boolean, nullable=False, default=True)
     date_added = Column(DateTime, nullable=False, default=datetime.now)
-
-    user = relationship('User', foreign_keys='ObjectComment.poster_id')
-
 
 class ObjectCommentManager(object):
 
@@ -62,7 +59,7 @@ class ObjectCommentManager(object):
         new_object_comment = ObjectComment()
 
         new_object_comment.object_id = object_comment_data['object_id']
-        new_object_comment.poster_id = object_comment_data['poster_id']
+        new_object_comment.user_id = object_comment_data['user_id']
         new_object_comment.text = object_comment_data['text']
         new_object_comment.anonymous = object_comment_data['anonymous']
 
@@ -73,10 +70,10 @@ class ObjectCommentManager(object):
 
     @staticmethod
     def get(comment_id, object_id=None, is_active=True):
-        
+
         base_query = ObjectComment.query.filter(ObjectComment.id == comment_id).\
                                    filter(ObjectComment.active == is_active)
-        
+
         if object_id:
             base_query = base_query.filter(ObjectComment.object_id == object_id)
 
@@ -113,6 +110,4 @@ class ObjectCommentManager(object):
             RETURNS:
         """
 
-        return ObjectComment.query.filter(ObjectComment.poster_id == user_id).all()
-
-
+        return ObjectComment.query.filter(ObjectComment.user_id == user_id).all()

@@ -30,17 +30,17 @@ from wondrous.models.content import ReportedContentManager
 
 from wondrous.models.notification import NotificationManager
 
-from wondrous.models.obj import ObjectManager
-from wondrous.models.obj import ObjectFileManager
+from wondrous.models.object import Object
+from wondrous.models.object import ObjectFileManager
 
-from wondrous.models.person import PersonManager
+from wondrous.models.person import Person
 
-from wondrous.models.post import WallPostManager
+from wondrous.models.post import WallPost
 
 from wondrous.models.tag import GlobalTagManager
 
-from wondrous.models.user import BlockedUserManager
-from wondrous.models.user import UserManager
+from wondrous.models.user import BlockedUser
+from wondrous.models.user import User
 
 from wondrous.models.vote import ObjectVoteManager as ovm
 from wondrous.models.vote import UserVoteManager as uvm
@@ -95,7 +95,7 @@ class AjaxHandler(BaseHandler):
         username = safe_in(self.request.POST.get('un'))
 
         valid_un_regex = Sanitize.is_valid_username(username)
-        un_is_taken    = UserManager.get(username=username)
+        un_is_taken    = User.get(username=username)
 
         if valid_un_regex and not un_is_taken:
             success = "Your username looks great!"
@@ -177,14 +177,14 @@ class AjaxHandler(BaseHandler):
         ajax_method = self.url_match(url_match='ajax_method')
         object_id = self.request.POST.get('oid')
         if object_id:
-            obj = ObjectManager.get(object_id)
+            obj = Object.get(object_id)
             if obj:
                 return to_json(obj)
 
         # if ajax_method == "community":
         #
         #   community_id = PersonToCommunityManager.get(current_user.id).community.id
-        #   obj = ObjectManager.get(object_id)
+        #   obj = Object.get(object_id)
         #
         #   if obj:
         #       community_post = GetItems.new_community_post(obj, community_id, current_user.id)
@@ -245,7 +245,7 @@ class AjaxHandler(BaseHandler):
             # Core post data
             new_post_data = {
                 'user_id'        : current_user.id,
-                'profile_id'     : current_user.id,
+                'user_id'     : current_user.id,
                 'post_tags'      : final_post_tags,
 
                 'post_subject'   : valid_post_data['post_subject'],
@@ -286,7 +286,7 @@ class AjaxHandler(BaseHandler):
         comment_error = None
         object_id     = p.get('object_id')
         comment_text  = vp.sanitize_post_text(p.get('comment_text', ''))
-        this_object   = ObjectManager.get(object_id)
+        this_object   = Object.get(object_id)
 
         if not comment_text:
             # No comment_text was present
@@ -305,12 +305,12 @@ class AjaxHandler(BaseHandler):
             comment_error = "Wow, you are a soulless. Devious actions are not welcome here."
 
         if not comment_error:
-            poster_id      = this_person.id
+            user_id      = this_person.id
             this_object_id = this_object.id
 
             object_comment_data = {
                 'object_id' : object_id,
-                'poster_id' : poster_id,
+                'user_id' : user_id,
                 'text'      : comment_text,
             }
             # ObjectCommentManager.add calls DBSession.flush(),
@@ -320,13 +320,13 @@ class AjaxHandler(BaseHandler):
 
             # Send to object_poster if someone comments on the post,
             # and that someone is not the object_poster himself
-            object_poster_id = ObjectManager.get(object_id).poster_id
-            if poster_id != object_poster_id:
-                if not ReportedContentManager.has_reported(object_poster_id, this_object_id):
+            object_user_id = Object.get(object_id).user_id
+            if user_id != object_user_id:
+                if not ReportedContentManager.has_reported(object_user_id, this_object_id):
                     # NOTIFY REASON[0]
                     _notification_data = {
-                        'from_user_id' : poster_id,
-                        'to_user_id'   : object_poster_id,
+                        'from_user_id' : user_id,
+                        'to_user_id'   : object_user_id,
                         'reason'       : NOTIFICATION_REASON[0],
                         'object_id'    : this_object_id,
                         'object_uuid'  : this_object.ouuid,
@@ -334,38 +334,38 @@ class AjaxHandler(BaseHandler):
                     NotificationManager.add(_notification_data)
 
             # Send to ALL people who have previously commented on the post,
-            # except for if a previous poster_id == object_poster_id, AND
-            # when we hit the newly entered post's c.poster_id == this_person
+            # except for if a previous user_id == object_user_id, AND
+            # when we hit the newly entered post's c.user_id == this_person
             sent_list = set()
             for c in ObjectCommentManager.get_all_comments_for_object(object_id):
-                if c.poster_id not in sent_list:
+                if c.user_id not in sent_list:
 
                     # If you're not the original poster, and you're not
                     # the one posting the content
-                    if c.poster_id != object_poster_id and c.poster_id != poster_id:
+                    if c.user_id != object_user_id and c.user_id != user_id:
 
                         # Make sure one of them has not reported the post previously
                         # If they have, we don't want to send them a notification
-                        if not ReportedContentManager.has_reported(c.poster_id, this_object_id):
+                        if not ReportedContentManager.has_reported(c.user_id, this_object_id):
 
-                            # NOTIFY REASON[1] (Send to all previous poster_ids)
+                            # NOTIFY REASON[1] (Send to all previous user_ids)
                             _notification_data = {
-                                'from_user_id' : poster_id,
-                                'to_user_id'   : c.poster_id,
+                                'from_user_id' : user_id,
+                                'to_user_id'   : c.user_id,
                                 'reason'       : NOTIFICATION_REASON[1],
                                 'object_id'    : this_object_id,
                                 'object_uuid'  : this_object.ouuid,
                             }
                             NotificationManager.add(_notification_data)
-                            sent_list.add(c.poster_id)
+                            sent_list.add(c.user_id)
 
             # TODO: Commented on a post on my wall
-            # wall_post = WallPostManager.get(this_object_id)
+            # wall_post = WallPost.by_id(this_object_id)
             # if wall_post:
-            #   # NOTIFY REASON[1] (Send to all previous poster_ids)
+            #   # NOTIFY REASON[1] (Send to all previous user_ids)
             #   _notification_data = {
-            #       from_user_id : poster_id,
-            #       to_user_id   : c.poster_id,
+            #       from_user_id : user_id,
+            #       to_user_id   : c.user_id,
             #       reason       : NOTIFICATION_REASON[1],
             #       object_id    : this_object_id,
             #       object_uuid  : this_object.ouuid,
@@ -374,7 +374,7 @@ class AjaxHandler(BaseHandler):
 
             new_comment = [{
                 'comment_id'   : comment_id,
-                'poster_id'    : poster_id,
+                'user_id'    : user_id,
                 'text'         : _linkify(comment_text),
             }]
             return HtmlifyComment.get_html_output(new_comment, this_person)
@@ -449,7 +449,7 @@ class AjaxHandler(BaseHandler):
 
         this_person_id = self.request.user.id
         object_id      = self.request.POST.get('object_id')
-        valid_object   = ObjectManager.get(object_id)
+        valid_object   = Object.get(object_id)
 
         if valid_object:
 
@@ -458,7 +458,7 @@ class AjaxHandler(BaseHandler):
             # Prepare notification
             _notification_data = {
                 'from_user_id' : this_person_id,
-                'to_user_id'   : valid_object.poster_id,
+                'to_user_id'   : valid_object.user_id,
                 'reason'       : NOTIFICATION_REASON[2],
                 'object_id'    : valid_object.id,
                 'object_uuid'  : valid_object.ouuid,
@@ -516,7 +516,7 @@ class AjaxHandler(BaseHandler):
                 - The relationship is reset to the specified (public or private) option
                 - No one is notified
             --------------------------------------
-                PROFILE_ID  |   VOTER_ID  | STATUS ||   RESULT
+                user_id  |   VOTER_ID  | STATUS ||   RESULT
                 John            Bob         2   -->     Bob has TopFriended John
                 John            Bob         1   -->     Bob is Following John
                 John            Bob         0   -->     Bob has just UnFollowed John (this row will be deleted)
@@ -528,7 +528,7 @@ class AjaxHandler(BaseHandler):
         ajax_method = self.url_match(url_match='ajax_method')
 
         current_user = self.request.user
-        profile_id = str(self.request.POST.get('profile_id'))
+        user_id = str(self.request.POST.get('user_id'))
         voter_id = str(self.request.user.id)
 
         ACTION_LIST = set([
@@ -539,12 +539,12 @@ class AjaxHandler(BaseHandler):
             'double_downvote',  # -2 (Blocked)
         ])
 
-        valid_profile = UserManager.get(profile_id)  # The profile's "owner"
-        if valid_profile and profile_id != voter_id and ajax_method in ACTION_LIST:
+        valid_profile = User.get(user_id)  # The profile's "owner"
+        if valid_profile and user_id != voter_id and ajax_method in ACTION_LIST:
 
-            profile_id = valid_profile.id
+            user_id = valid_profile.id
 
-            has_voted = uvm.has_voted(voter_id, profile_id)  # This is the vote_object, not a boolean
+            has_voted = uvm.has_voted(voter_id, user_id)  # This is the vote_object, not a boolean
 
             # Assuming we have a vote of some sort...
             # First case is that the vote exists and but a block is in place against
@@ -574,7 +574,7 @@ class AjaxHandler(BaseHandler):
             # Prepare notification
             _notification_data = {
                 'from_user_id' : current_user.id,
-                'to_user_id'   : profile_id,
+                'to_user_id'   : user_id,
                 'reason'       : None,  # *** MUST BE SET BELOW ***
                 'object_id'    : None,  # We do not need these for _NR[4]
                 'object_uuid'  : None,  # We do not need these for _NR[4]
@@ -585,7 +585,7 @@ class AjaxHandler(BaseHandler):
                 if has_voted:
                     # UnFollow the user
                     if has_voted.vote_type == 1:
-                        uvm.novote(voter_id, profile_id)
+                        uvm.novote(voter_id, user_id)
                         logging.info("unfollowed user")
 
                 elif valid_profile.user.is_private:
@@ -595,7 +595,7 @@ class AjaxHandler(BaseHandler):
                     # *A request must be sent out*
 
                     # Request to follow the user
-                    uvm.downvote(voter_id, profile_id)
+                    uvm.downvote(voter_id, user_id)
                     logging.info("you have submitted a request to follow")
 
                     # Send notification indicating a follow request
@@ -609,7 +609,7 @@ class AjaxHandler(BaseHandler):
                     # automatically follow them. No request is needed.
 
                     # Follow the user
-                    uvm.upvote(voter_id, profile_id)
+                    uvm.upvote(voter_id, user_id)
                     logging.info("you are following an user")
 
                     # Send notification indicating a new follower
@@ -620,9 +620,9 @@ class AjaxHandler(BaseHandler):
             elif ajax_method in ['upvote_accept', 'upvote_deny']:
 
                 # Pending request accepted
-                # We're seeing if the profile_id user
+                # We're seeing if the user_id user
                 # has a -1 relationship with you.
-                follow_request = uvm.has_voted(profile_id, voter_id)
+                follow_request = uvm.has_voted(user_id, voter_id)
                 if follow_request and follow_request.vote_type == -1:
                     if ajax_method == 'upvote_accept':
 
@@ -631,7 +631,7 @@ class AjaxHandler(BaseHandler):
                         # is not following the user who sent them
                         # the request. They are just changing the -1
                         # to a 1 for the requesting user.
-                        uvm.upvote(profile_id, voter_id)
+                        uvm.upvote(user_id, voter_id)
                         logging.info("you have accepted a request")
                         _notification_data['reason'] = NOTIFICATION_REASON[6]
                         NotificationManager.add(_notification_data)
@@ -640,7 +640,7 @@ class AjaxHandler(BaseHandler):
 
                         # See above for explanation for why
                         # the args are reversed here.
-                        uvm.novote(profile_id, voter_id)
+                        uvm.novote(user_id, voter_id)
                         logging.info("you have denied a request")
 
 
@@ -657,13 +657,13 @@ class AjaxHandler(BaseHandler):
                         # Remove the double upvote, and downgrade
                         # to just a single upvote, which indicates
                         # the user is now just following.
-                        uvm.upvote(voter_id, profile_id)
+                        uvm.upvote(voter_id, user_id)
                     elif has_voted.vote_type == 1:
 
                         # ADD TOP FRIEND
 
                         # Add a brand new top-friend
-                        uvm.double_upvote(voter_id, profile_id)
+                        uvm.double_upvote(voter_id, user_id)
 
 
             elif ajax_method == 'double_downvote':
@@ -672,10 +672,10 @@ class AjaxHandler(BaseHandler):
                 # (or both) is/are None.
 
                 # Voter blocked profile
-                blocked_user = BlockedUserManager.get(profile_id, voter_id)
+                blocked_user = BlockedUser.get(user_id, voter_id)
 
                 # Profile blocked voter (implying that the voter is the one being blocked)
-                is_blocked_user = BlockedUserManager.get(voter_id, profile_id)
+                is_blocked_user = BlockedUser.get(voter_id, user_id)
 
                 # If the voter had blocked the profile user...
                 if blocked_user:
@@ -683,11 +683,11 @@ class AjaxHandler(BaseHandler):
                     # UNBLOCK THE USER
 
                     # Remove row from the BlockedUser table
-                    BlockedUserManager.delete(blocked_user)
+                    blocked_user.delete()
                     logging.info("You have unblocked an user")
                     # Remove the reciporical block
-                    uvm.novote(profile_id, voter_id)
-                    uvm.novote(voter_id, profile_id)
+                    uvm.novote(user_id, voter_id)
+                    uvm.novote(voter_id, user_id)
 
                 # If no block exists either way. This is to prevent
                 # a blocked user from manually calling this ajax route
@@ -703,20 +703,20 @@ class AjaxHandler(BaseHandler):
                     # table.
                     blocked_user_data = {
                         'blocker_id'      : voter_id,  # The person doing the blocking
-                        'blocked_user_id' : profile_id,  # The person being blocked
+                        'blocked_user_id' : user_id,  # The person being blocked
                     }
-                    BlockedUserManager.add(blocked_user_data)
+                    BlockedUser.add(blocked_user_data)
                     logging.info("you have blocked an user")
                     # Add the reciporical block
-                    uvm.double_downvote(profile_id, voter_id)
-                    uvm.double_downvote(voter_id, profile_id)
+                    uvm.double_downvote(user_id, voter_id)
+                    uvm.double_downvote(voter_id, user_id)
 
 
             vote_data = {
-                'total_following'    : uvm.get_following_count(profile_id),
-                'total_follower'     : uvm.get_follower_count(profile_id),
-                # 'has_voted'        : getattr(uvm.has_voted(voter_id, profile_id), 'vote_type', False),
-                # 'upvoted_by_count' : uvm.get_upvoted_by_count(profile_id),
+                'total_following'    : uvm.get_following_count(user_id),
+                'total_follower'     : uvm.get_follower_count(user_id),
+                # 'has_voted'        : getattr(uvm.has_voted(voter_id, user_id), 'vote_type', False),
+                # 'upvoted_by_count' : uvm.get_upvoted_by_count(user_id),
             }
             return vote_data
         else:
@@ -769,7 +769,7 @@ class AjaxHandler(BaseHandler):
             error_message = "We appreciate your comment, but it has exceeded our length limit of 2,000 characters"
 
         if not error_message:
-            this_object = ObjectManager.get(_object_id)
+            this_object = Object.get(_object_id)
             if this_object:
 
                 if ReportedContentManager.has_reported(current_user_id, this_object.id):
@@ -780,7 +780,7 @@ class AjaxHandler(BaseHandler):
                 else:
                     reported_content_data = {
                         'reporter_id' : current_user_id,
-                        'poster_id'   : this_object.poster_id,
+                        'user_id'   : this_object.user_id,
                         'object_id'   : this_object.id,
                         'why_id'      : why_id,
                         'comment'     : report_comment,
@@ -809,14 +809,14 @@ class AjaxHandler(BaseHandler):
         my_post         = False
         on_my_wall      = False
         error_message   = None
-        this_object     = ObjectManager.get(_object_id)
+        this_object     = Object.get(_object_id)
 
         if this_object:
 
-            wall_post = WallPostManager.get(this_object.id)
+            wall_post = WallPost.by_id(this_object.id)
             if wall_post:
-                on_my_wall = bool(wall_post.profile_id == current_user_id)
-            my_post = bool(this_object.poster_id == current_user_id)
+                on_my_wall = bool(wall_post.user_id == current_user_id)
+            my_post = bool(this_object.user_id == current_user_id)
 
         if my_post or on_my_wall:
             DeletedContentManager.delete_content(this_object.id)
@@ -847,16 +847,16 @@ class AjaxHandler(BaseHandler):
         this_comment    = ObjectCommentManager.get(_comment_id, _object_id)
 
         if this_comment:
-            this_object = ObjectManager.get(_object_id)
+            this_object = Object.get(_object_id)
 
             # The post is on my wall, hence, I can control all
             # comments on my wall, even if not from my post.
-            wall_post = WallPostManager.get(this_object.id)
+            wall_post = WallPost.by_id(this_object.id)
             if wall_post:
-                on_my_wall = bool(wall_post.profile_id == current_user_id)
+                on_my_wall = bool(wall_post.user_id == current_user_id)
 
             # Or, my comment
-            my_comment = bool(this_comment.poster_id == current_user_id)
+            my_comment = bool(this_comment.user_id == current_user_id)
 
         if my_comment or on_my_wall:
             DeletedObjectCommentManager.delete_comment(this_comment.id)
@@ -901,7 +901,7 @@ class AjaxHandler(BaseHandler):
                 if Sanitize.is_valid_email(query):
 
                     # Given an email, we just look for people
-                    results = UserManager.get(email=query)
+                    results = User.get(email=query)
                     for result in results:
                         result_list.append({
                             'value'    : "{n}".format(n=result.name),
@@ -911,7 +911,7 @@ class AjaxHandler(BaseHandler):
                 else:
                     # Add persons
                     query = unidecode(unicode(query))
-                    results = PersonManager.get_like(query, ascii=True)
+                    results = Person.by_id_like(query, ascii=True)
                     results = [p for p in results if p.user.active]  # filter out deactivated users
                     for result in results:
                         result_list.append({
@@ -959,7 +959,7 @@ class AjaxHandler(BaseHandler):
             all_notifications_for_user = NotificationManager.get_notifications_for_user(current_user.id)
             notification_data = [{
                 'nid'        : n.id,
-                'from_name'  : UserManager.get(n.from_user_id).name,
+                'from_name'  : User.get(n.from_user_id).name,
                 'from_photo' : n.from_user.profile_picture,
                 'ntext'      : n.notification,
                 'url'        : n.url if n.url else "#",

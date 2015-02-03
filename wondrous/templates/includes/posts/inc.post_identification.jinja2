@@ -1,4 +1,4 @@
-{% set item_owner = get_item_owner(item['poster_id']) %}
+{% set item_owner = get_item_owner(item['user_id']) %}
 <img class="post-thumb round-50" src="{{item_owner.user.profile_picture}}"/>
 <span class="post-identifier ellipsis-overflow">
     <a class="blue-identifier" href="/{{item_owner.user.username}}/">{{ item_owner.name }}</a>

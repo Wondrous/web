@@ -9,7 +9,7 @@ from wondrous.models import (
     comment,
     content,
     notification,
-    obj,
+    object,
     page,
     person,
     post,

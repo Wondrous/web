@@ -24,233 +24,153 @@ from sqlalchemy.orm import relationship
 
 from wondrous.models import Base
 from wondrous.models import DBSession
+from wondrous.models.tag import Tag
 
 from wondrous.utilities.validation_utilities import ValidateLink
 
+from wondrous.models.modelmixins import BaseMixin
 
-class Object(Base):
+class Object(Base, BaseMixin):
 
     """
         This defines the Object posted
     """
-
-    __tablename__ = 'object'
-
-    id = Column(BigInteger, primary_key=True)
-    poster_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    # user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     subject = Column(Unicode, default=None, nullable=True)
     text = Column(Unicode, default=None)
     active = Column(Boolean, default=True)  # only used for disabling/re-enabling an account
     ouuid = Column(Unicode, nullable=True)
-    date_posted = Column(DateTime, default=datetime.now)
+    object_tag_links = relationship("ObjectTagLink", backref="object")
+    comments = relationship("ObjectComment")
 
+    @classmethod
+    def add(cls,subject,text,tags):
 
-class ObjectManager(object):
-
-    @staticmethod
-    def get(object_id):
-
-        """
-            PURPOSE: Get an Object from the database
-
-            USE: Call like: ObjectManager.get(<int>)
-
-            PARAMS: 1 param: an int, object_id
-
-            RETURNS: If found, an Object
-                     If not found, None
-        """
-
-        return Object.query.filter(Object.id == object_id).first()
-
-    @staticmethod
-    def get_all_objects_for_user(user_id):
-        
-        """
-            PURPOSE: Get all Objects that a specified User has posted
-
-            USE: Call like: ObjectManager.get_all_objects_for_user(<int>)
-
-            PARAMS: 1 required param, an int, user_id of the User.id
-
-            RETURNS: A list of all a User's posted objects
-        """
-
-        return Object.query.filter(Object.poster_id == user_id).all()
-
-    @staticmethod
-    def add(object_data):
-        
         """
             PURPOSE: Add a new Object into the database
 
-            USE: Call like: ObjectManager.add(<dict>)
+            USE: Call like: Object.add(<dict>)
 
             *NOTE: ALWAYS call this method from PostSequence
             Without doing so, we cannot ensure all tables
             were updated and rows were created. This is very bad.
 
-            PARAMS: 1 param, a dict with the keys as column names:
+            PARAMS:
                 - text : str : Any text present in a post
                 - subject : str : The subject (title) of a post
-                - object_type : The type of object, i.e., image, link, video, etc.
+                - tags: set : a set list of tags
 
             RETURNS: The newly created Object object
         """
 
-        new_object = Object()
-
-        new_object.text        = object_data['text']
-        new_object.subject     = object_data['subject']
-        new_object.poster_id   = object_data['poster_id']
-        new_object.ouuid       = unicode(uuid.uuid4())
-
+        new_object = cls(subject=subject, text = text)
+        new_object.ouuid = unicode(uuid.uuid4())
         DBSession.add(new_object)
         DBSession.flush()
 
+        # Add the tags
+        for t in tags:
+            tag = Tag.add(object_id=new_object.id,tag_name=t)
+
+
         return new_object
 
-    @staticmethod
-    def count(is_active=True):
-        return Object.query.filter(Object.active == is_active).count()
-
-
-class ObjectLink(Base):
+class ObjectLink(Base, BaseMixin):
 
     """
         OBJECT_TYPE: 1 --> LINK
     """
-
-    __tablename__ = 'object_link'
-
-    id = Column(BigInteger, primary_key=True)
     url = Column(Unicode, nullable=False)
     scheme = Column(Unicode, nullable=False, default=unicode("http"))
     mime_type = Column(Unicode, nullable=True)
     is_dead = Column(Boolean, nullable=False, default=False)
 
+    @classmethod
+    def get(cls,url):
+        return super(ObjectLink,cls).by_kwargs(url=url).first()
 
-class ObjectLinkManager(object):
-
-    @staticmethod
-    def get(url):
-
-        return ObjectLink.query.filter(
-            func.lower(ObjectLink.url) == func.lower(url)
-        ).first()
-
-    @staticmethod
+    @classmethod
     def add(object_link_data):
 
         """
             PURPOSE: Add a new ObjectLink into the database
-        
+
             USE: Call like: ObjectLinkManager.add(<dict>)
-        
+
             PARAMS: 1 param, a dict, witch each key as column name:
                 - url
                 - mime_type
-        
+
             RETURNS: None
         """
 
-        new_object_link = ObjectLink()
-
-        new_object_link.url  = object_link_data['url']
-        new_object_link.mime_type = object_link_data['mime_type']
-        new_object_link.scheme = ValidateLink.get_scheme(object_link_data['url'])
-
+        new_object_link = ObjectLink(**object_link_data)
         DBSession.add(new_object_link)
         DBSession.flush()
 
         return new_object_link
 
-
-class ObjectFile(Base):
+class ObjectFile(Base, BaseMixin):
 
     """
         OBJECT_TYPE: 2 --> <FILE>
     """
-
-    __tablename__ = 'object_file'
-
-    id = Column(BigInteger, primary_key=True)
     file_url  = Column(Unicode, nullable=False)
     original_file_name = Column(Unicode, nullable=False)
     file_size = Column(BigInteger, nullable=True)
     mime_type = Column(Unicode, nullable=False)
-    date_uploaded = Column(DateTime, default=datetime.now)
     mapped = Column(Boolean, default=False)
 
-
-class ObjectFileManager(object):
-
-    @staticmethod
-    def get(object_file_id, is_mapped=True):
+    @classmethod
+    def get(cls,object_file_id, is_mapped=True):
 
         """
         """
+        return super(ObjectFile,cls).by_kwargs(object_file_id=object_file_id,is_mapped=is_mapped).first()
 
-        return ObjectFile.query.filter(ObjectFile.id == object_file_id).\
-                                filter(ObjectFile.mapped == is_mapped).first()
-
-    @staticmethod
-    def add(object_file_data):
+    @classmethod
+    def add(cls,object_file_data):
 
         """
             TODO
             ==============
 
             PURPOSE: Add a new ObjectFile into the database
-        
+
             USE: Call like: ObjectFileManager.add(<dict>)
-        
+
             PARAMS: 1 param, a dict, with each key as column name:
                 - file_url
                 - file_size
                 - mime_type
-        
+
             RETURNS: None
         """
 
-        new_object_file = ObjectFile()
-
-        new_object_file.file_url  = object_file_data['file_url']
-        new_object_file.original_file_name = object_file_data['original_file_name']
-        new_object_file.file_size = object_file_data['file_size']
-        new_object_file.mime_type = object_file_data['mime_type']
-
+        new_object_file = cls(**object_file_data)
         DBSession.add(new_object_file)
         DBSession.flush()
-        
+
         return new_object_file
 
-
-class LinkToObject(Base):
-
-    __tablename__ = 'link_to_object'
-
-
-    id = Column(BigInteger, primary_key=True, nullable=False)
+class LinkToObject(Base, BaseMixin):
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
     object_link_id = Column(BigInteger, ForeignKey('object_link.id'), nullable=False)
 
-    link = relationship('ObjectLink', foreign_keys='LinkToObject.object_link_id')
 
-
-class LinkToObjectManager(object):
+class LinkToObject(object):
 
     @staticmethod
     def get_all_links_for_object(object_id):
 
         """
             PURPOSE: Get all the links mapped to an object
-        
-            USE: Call like: LinkToObjectManager.get_all_links_for_object(<int>)
-        
+
+            USE: Call like: LinkToObject.get_all_links_for_object(<int>)
+
             PARAMS: 1 param:
                 object_id : int : REQUIRED : The Object.id whose links we're getting
-        
+
             RETURNS: A list of LinkToObject objects which are mapped to a given Object
         """
 
@@ -262,7 +182,7 @@ class LinkToObjectManager(object):
         """
             PURPOSE: Map an ObjectLink to an Object
 
-            USE: Call like: LinkToObjectManager.add(<dict>)
+            USE: Call like: LinkToObject.add(<dict>)
 
             PARAMS: 1 param, a dict:
                 link_to_object_data : dict : REQUIRED
@@ -291,19 +211,19 @@ class FileToObject(Base):
     object_file = relationship('ObjectFile', foreign_keys='FileToObject.object_file_id')
 
 
-class FileToObjectManager(object):
+class FileToObject(object):
 
     @staticmethod
     def get_all_files_for_object(object_id):
 
         """
             PURPOSE: Get all the files mapped to an object
-        
-            USE: Call like: FileToObjectManager.get_all_files_for_object(<int>)
-        
+
+            USE: Call like: FileToObject.get_all_files_for_object(<int>)
+
             PARAMS: 1 param:
                 object_id : int : REQUIRED : The Object.id whose files we're getting
-        
+
             RETURNS: A list of FileToObject objects which are mapped to a given Object
         """
 
@@ -315,7 +235,7 @@ class FileToObjectManager(object):
         """
             PURPOSE: Map an ObjectFile to an Object
 
-            USE: Call like: FileToObjectManager.add(<dict>)
+            USE: Call like: FileToObject.add(<dict>)
 
             PARAMS: 1 param, a dict:
                 file_to_object_data : dict : REQUIRED

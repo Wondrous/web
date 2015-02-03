@@ -1,6 +1,6 @@
 
 {# -- If this is your own post -- #}
-{% if item['poster_id'] == current_user.id %}
+{% if item['user_id'] == current_user.id %}
 
     {# -- The ! button -- #}
     <span class="mini-vote-btn upvote-disabled nh">

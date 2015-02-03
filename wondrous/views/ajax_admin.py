@@ -13,9 +13,9 @@ from pyramid.view import view_config
 from wondrous.models.content import DeletedContentManager
 from wondrous.models.content import ReportedContentManager
 
-from wondrous.models.obj import ObjectManager
+from wondrous.models.object import Object
 
-from wondrous.models.user import UserManager
+from wondrous.models.user import User
 
 from wondrous.utilities.delete_utilities import DisableUser
 from wondrous.utilities.delete_utilities import EnableUser
@@ -33,7 +33,7 @@ class AdminAjaxHandler(AdminBaseHandler):
         
         error_message = None
 
-        this_object = ObjectManager.get(_object_id)
+        this_object = Object.get(_object_id)
         if this_object:
             
             all_rep_objs = ReportedContentManager.get_all_reports_for_object(this_object.id)
@@ -57,7 +57,7 @@ class AdminAjaxHandler(AdminBaseHandler):
         error_message = success_message = None
         enable_successful = disable_successful = None
 
-        this_user = UserManager.get(_user_id) or UserManager.get(_user_id, is_active=False)
+        this_user = User.get(_user_id) or User.get(_user_id, is_active=False)
         if this_user:
             
             if this_user.user.banned and not this_user.user.active:
