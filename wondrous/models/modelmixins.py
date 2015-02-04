@@ -5,7 +5,7 @@
 # Company: WONDROUS
 # Created by: Ziyuan Liu
 #
-# MODELS/PERSON.PY
+# MODELS/MODELMIXINS.PY
 #
 
 import uuid
