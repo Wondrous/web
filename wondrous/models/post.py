@@ -42,14 +42,14 @@ class Post(Base,BaseMixin):
     feed_post_links = relationship("FeedPostLink", backref="post")
     text = Column(Unicode)
 
-    object = relationship('Object', backref=backref("Post", uselist=False))
-    user = relationship('User', backref="Posts")
+    object = relationship('Object', backref=backref("post", uselist=False))
+    user = relationship('User', backref="posts")
 
     @classmethod
     def get_all(cls,user_id):
         from wondrous.models.object import Object
         return cls.query.join(Object).filter(cls.user_id == user_id).\
-                                    order_by(desc(Object.date_posted)).all()
+                                    order_by(desc(Object.created_at)).all()
 
 
     @classmethod

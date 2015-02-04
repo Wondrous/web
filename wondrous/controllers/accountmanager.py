@@ -40,7 +40,6 @@ class AccountManager(object):
         # First let's create the person object - point of contact for the account
         new_user = User(user_type=user_type,username=username,email=email,password=password,is_active=True)
 
-
         DBSession.add(new_user)
         DBSession.flush()
 

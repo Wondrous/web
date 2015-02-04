@@ -13,3 +13,4 @@ from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.postmanager import PostManager
 from wondrous.controllers.notificationmanager import NotificationManager
 from wondrous.controllers.feedmanager import FeedManager
+from wondrous.controllers.tagmanager import TagManager

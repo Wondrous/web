@@ -57,41 +57,6 @@ class Vote(Base,BaseMixin):
             return User.by_id(self.subject_id).first()
 
 
-
-    @classmethod
-    def get_vote(cls, user_id, subject_id, vote_type):
-        """
-            Return whether or not a user has voted on a particular object
-
-        """
-        vote = Vote.by_kwargs(user_id=user_id,subject_id=subject_id,vote_type=vote_type).first()
-        return vote if vote else None
-
-    @classmethod
-    def add(cls,**kwargs):
-        """
-            PURPOSE: Add a new vote into the DB
-
-            USE: Vote.new_vote(user_id,subject_id,vote_type,status)
-
-            PARAMS:
-                user_id: int : id of the user
-                subject_id: int : id of the subject being voted on
-                vote_type: int : type of the vote (OBJECT, USER)
-                status: int : status of the vote (UNLIKED, LIKE, BOOKMARKED, BLOCK, PENDING, UNFOLLOW, FOLLOW, TOPFRIEND)
-
-            RETURNS: the new vote
-        """
-        # create vote
-        vote = cls.get_vote(user_id=kwargs['user_id'],subject_id=kwargs['subject_id'],vote_type=kwargs['vote_type'])
-        if vote:
-            # already created / just changing
-            vote.status = kwargs["status"]
-        else:
-            vote = cls(**kwargs)
-
-        return vote
-
     @classmethod
     def delete_vote(cls,vote_object):
         """

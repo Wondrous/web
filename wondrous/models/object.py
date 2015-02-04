@@ -175,8 +175,6 @@ class FileToObject(Base):
     object_file = relationship('ObjectFile', foreign_keys='FileToObject.object_file_id')
 
 
-class FileToObject(object):
-
     @staticmethod
     def get_all_files_for_object(object_id):
 

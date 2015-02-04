@@ -87,7 +87,7 @@ class VoteManager(object):
                     return True
 
                 else:
-                    # Other ops 
+                    # Other ops
                     vote = VoteManager.vote(voter_id,user_id, Vote.USER, status)
                     return False
 
@@ -95,9 +95,15 @@ class VoteManager(object):
 
     @staticmethod
     def vote(user_id,subject_id, vote_type, status):
-        vote = Vote.add(user_id=user_id,subject_id=subject_id,vote_type=Vote.USER,status=status)
+        vote = VoteManager.get_vote(user_id=user_id,subject_id=subject_id,vote_type=vote_type)
+        if vote:
+            # already created / just changing
+            vote.status = status
+        else:
+            vote = Vote(user_id=user_id,subject_id=subject_id,vote_type=vote_type,status=status)
         DBSession.add(vote)
         return vote
+
 
     @staticmethod
     def validate_vote_args(vote_type=None,status=None):
@@ -117,7 +123,8 @@ class VoteManager(object):
             Return whether or not a user has voted on a particular object
 
         """
-        return Vote.get_vote(user_id, subject_id, vote_type)
+        vote = Vote.by_kwargs(user_id=user_id,subject_id=subject_id,vote_type=vote_type).first()
+        return vote if vote else None
 
     @classmethod
     def get_follower_count(cls,user_id):
@@ -126,6 +133,14 @@ class VoteManager(object):
     @classmethod
     def get_following_count(cls,user_id):
         return cls.get_count_by_type(user_id,Vote.USER,Vote.FOLLOW,False)
+
+    @classmethod
+    def get_like_count(cls,subject_id):
+        return cls.get_count_by_type(subject_id,Vote.OBJECT,Vote.LIKE)
+
+    @classmethod
+    def get_liked_objects_for_user(cls,user_id):
+        return Vote.by_kwargs(user_id=user_id,vote_type=Vote.OBJECT,status=Vote.LIKE)
 
     @staticmethod
     def get_count_by_type(user_id,vote_type,status, following_me=True):
@@ -156,22 +171,22 @@ class VoteManager(object):
 
     @staticmethod
     def is_following(user_id,user_to_get_id):
-        vote = Vote.get_vote(user_id, user_to_get_id,Vote.USER)
+        vote = VoteManager.get_vote(user_id, user_to_get_id,Vote.USER)
         return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOW,Vote.TOPFRIEND] else False
 
     @staticmethod
     def is_followed_by(user_id,user_to_get_id):
-        vote = Vote.get_vote(user_to_get_id,user_id,Vote.USER)
+        vote = VoteManager.get_vote(user_to_get_id,user_id,Vote.USER)
         return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOW,Vote.TOPFRIEND] else False
 
     @staticmethod
     def is_blocked_by(user_id,user_to_get_id):
-        vote = Vote.get_vote(user_to_get_id,user_id,Vote.USER)
+        vote = VoteManager.get_vote(user_to_get_id,user_id,Vote.USER)
         return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None)==Vote.BLOCK else False
 
     @staticmethod
     def is_blocking(user_id,user_to_get_id):
-        vote = Vote.get_vote(user_id, user_to_get_id,Vote.USER)
+        vote = VoteManager.get_vote(user_id, user_to_get_id,Vote.USER)
         return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None)==Vote.BLOCK else False
 
     @staticmethod
@@ -179,5 +194,5 @@ class VoteManager(object):
         return Vote.query.filter(Vote.subject_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).all()
 
     @staticmethod
-    def get_number_of_followers(user_id):
-        return Vote.query.filter(Vote.subject_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).count()
+    def get_all_following(user_id):
+        return Vote.query.filter(Vote.user_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).all()

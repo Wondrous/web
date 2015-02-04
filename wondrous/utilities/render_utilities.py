@@ -35,6 +35,8 @@ from wondrous.models.vote import Vote
 
 from wondrous.controllers import (
     FeedManager,
+    VoteManager,
+    TagManager
 )
 
 from wondrous.utilities.validation_utilities import ValidationHelper as vh
@@ -281,7 +283,7 @@ class CreateNewPost(object):
             'text'      : post_text,
             'user_id' : user_id,
         }
-        new_obj = Object.add(object_data)
+        new_obj = Object(object_data)
         return new_obj
 
     @staticmethod
@@ -370,7 +372,7 @@ class _AssemblePost(object):
             RETURNS: a dict() of all the necessary
             data for each post to be rendered
                 On a profile, this includes:
-                    -object_id (int)                -date_posted (datetime)
+                    -object_id (int)                -created_at (datetime)
                     -text (str)                     -hidden (bool)
                     -context_tag_id (int)           -context_tag_name (str)
                     -profile_user_id (int)          -upvotes (int)
@@ -403,9 +405,9 @@ class _AssemblePost(object):
 
         # These are always needed, regardless
         # of where the post is being rendered
-        self.this_object     = Object.get(self.object_id)
-        self.user_id       = self.this_object.user_id
-        self.date_posted     = self.this_object.date_posted
+        self.this_post     = Post.by_id(self.object_id)
+        self.user_id       = self.this_post.user_id
+        self.created_at     = self.this_post.created_at
         self.current_user_id = current_user_id
 
     def assemble_data(self):
@@ -423,7 +425,7 @@ class _AssemblePost(object):
         """
 
         # IF THE OBJECT IS DEACTIVATED WE IGNORE IT
-        if not self.this_object.active:
+        if not self.this_post.object.active:
             return None
 
         # IF THE USER HAS REPORTED THIS OBJECT, WE IGNORE IT
@@ -441,7 +443,7 @@ class _AssemblePost(object):
         # '' instead of None so that everything works
         # nicely and our variable uses a consistent
         # data type
-        object_text = self.this_object.text if self.this_object.text else ''
+        object_text = self.this_post.object.text if self.this_post.object.text else ''
 
         # If a post contains too many line <br>s, we can
         # assume that the post takes up too much vertical
@@ -454,9 +456,9 @@ class _AssemblePost(object):
         self.final_data['text']      = _hashtagify(_linkify(object_text))
         self.final_data['_see_more'] = True if (len(object_text) > MAX_CHAR_SHOW_TEXT or text_line_count > MAX_BR_SHOW_TEXT) else False
         self.final_data['_font_size'], self.final_data['_line_height'] = self._get_font_attrs(object_text)
-        self.final_data['subject']   = self.this_object.subject
+        self.final_data['subject']   = self.this_post.object.subject
         self.final_data['is_poster'] = bool(self.user_id == self.current_user_id)
-        self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.object_id, self.this_object.ouuid))
+        self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.object_id, self.this_post.object.ouuid))
         self.final_data['post_comments'] = [{
             'comment_id'   : c.id,
             'user_id'    : c.user_id,
@@ -524,7 +526,7 @@ class _AssemblePost(object):
         if self.user_id and self.user_id:
 
             post_ob = Post.by_id(self.object_id)
-            self.final_data['date_posted'] = str(self.date_posted)
+            self.final_data['created_at'] = str(self.created_at)
             self.final_data['hidden']      = post_ob.hidden
 
             if str(self.user_id) == str(self.user_id):
@@ -549,36 +551,15 @@ class _AssemblePost(object):
         """
 
         # Get the object tags
-        tag_objs = ObjectTagManager.get_all(self.object_id)
+        tag_objs = TagManager.by_object_id(self.object_id)
 
         # Create a list (of tags) for this value in the dict
         self.final_data['tags'] = []
 
-        # This is not needed when get the
-        # upvoted items which require the
-        # self.profile_user_id
-        if not self.profile_user_id:
-            # If we are viewing a GlobalTag
-            if self.global_tag_id:
-                global_tag_name = GlobalTagManager.get(tag_id=self.global_tag_id).tag_name
-            else:
-                global_tag_name = SYS_CONTEXT_TAGS['wall']
-
         # Add all relevant object-tags
         assemble_on_tag = False
         for tag in tag_objs:
-            tag_name = tag.global_tag.tag_name
-
-            if not self.profile_user_id:
-                assemble_on_tag = bool(tag_name.lower() == global_tag_name.lower())
-
-            # Set the context tag IF we're rendering to a tag
-            if assemble_on_tag:
-
-                # These only need to be set once. But all this needs to
-                # be fixed up, so I didn't put too much time into it....
-                self.final_data['context_tag_id'] = tag.id
-                self.final_data['context_tag_name'] = tag_name
+            tag_name = tag.tag_name
 
             # Add in all other tags
             if tag_name not in SYS_CONTEXT_TAGS.values():
@@ -602,8 +583,8 @@ class _AssemblePost(object):
         """
 
         object_id = self.final_data['object_id']
-        total_upvotes = ObjectVoteManager.get_like_count(object_id) # context_tag_id
-        has_voted = getattr(ObjectVoteManager.has_voted(self.current_user_id, object_id), 'vote_type', False) # context_tag_id
+        total_upvotes = VoteManager.get_like_count(object_id) # context_tag_id
+        has_voted = VoteManager.get_vote(self.current_user_id, object_id, Vote.LIKE) is not None
 
         self.final_data['upvotes']   = total_upvotes
         self.final_data['has_voted'] = has_voted
@@ -694,7 +675,7 @@ class HtmlifyComment(object):
         html_output = template.render(
             current_user=current_user,
             item={'post_comments' : [item_data]},
-            get_item_owner=User.get,  # unbound method
+            get_item_owner=User.by_id,  # unbound method
         )
 
         return html_output
@@ -757,14 +738,14 @@ class HtmlifyPost(object):
                 profile_user=profile_user,
                 current_user=current_user,
                 render_items=[item_data],
-                get_item_owner=User.get,  # unbound method
+                get_item_owner=User.by_id,  # unbound method
             )
         else:
             template = env.get_template('includes/posts/inc.posts_tag.jinja2')
             html_output = template.render(
                 current_user=current_user,
                 render_items=[item_data],
-                get_item_owner=User.get,  # unbound method
+                get_item_owner=User.by_id,  # unbound method
             )
 
         return html_output
@@ -1098,7 +1079,7 @@ class _GenerateItemList(object):
             RETURNS: A list of dicts, with each dict containing a full post's info
         """
 
-        object_upvotes = ObjectVoteManager.get_liked_objects_for_user(profile_user_id)
+        object_upvotes = VoteManager.get_liked_objects_for_user(profile_user_id)
         upvoted_posts_list = []
         for data in object_upvotes:
             p = _AssemblePost(data, current_user_id, profile_user_id=profile_user_id).assemble_data()
@@ -1154,11 +1135,11 @@ class GetItems(object):
 
         # Get profile's following
         if tab == "following":
-            item_list = _GenerateItemList.get_following(profile_user_id)
+            item_list = VoteManager.get_all_following(profile_user_id)
 
         # Get profile's followers
         elif tab == "followers":
-            item_list = _GenerateItemList.get_followers(profile_user_id)
+            item_list = VoteManager.get_all_followers(profile_user_id)
 
         # Get a user's liked items
         elif tab == "likes":

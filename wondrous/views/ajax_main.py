@@ -41,7 +41,8 @@ from wondrous.models.user import User
 from wondrous.controllers import (
     AccountManager,
     VoteManager,
-    NotificationManager
+    NotificationManager,
+    PostManager
 )
 
 from wondrous.utilities.general_utilities import _IMAGE_MIMES
@@ -175,7 +176,7 @@ class AjaxHandler(BaseHandler):
         ajax_method = self.url_match(url_match='ajax_method')
         object_id = self.request.POST.get('oid')
         if object_id:
-            obj = Object.get(object_id)
+            obj = Object.by_id(object_id)
             if obj:
                 return to_json(obj)
 
@@ -231,17 +232,17 @@ class AjaxHandler(BaseHandler):
             # Core post data
             new_post_data = {
                 'user_id'        : current_user.id,
-                'user_id'     : current_user.id,
-                'post_tags'      : final_post_tags,
+                'tags'      : final_post_tags,
 
-                'post_subject'   : valid_post_data['post_subject'],
-                'post_text'      : valid_post_data['post_text'],
-                'post_links'     : valid_post_data['post_links'],
-                'object_file_id' : valid_post_data['object_file_id'],
+                'subject'   : valid_post_data['post_subject'],
+                'text'      : valid_post_data['post_text'],
+                # 'post_links'     : valid_post_data['post_links'],
+                # 'object_file_id' : valid_post_data['object_file_id'],
             }
 
-            new_post_obj = CreateNewPost.for_wall(new_post_data)
-            new_post_item     = GetItems.new_post(new_post_obj, current_user.id)
+            new_wall_post = PostManager.add(**new_post_data)
+            # new_post_obj = CreateNewPost.for_wall(new_post_data)
+            new_post_item     = GetItems.new_post(new_wall_post, current_user.id)
 
             # For use in pagination, when posting to a profile
             valid_profile = current_user if ajax_method == 'profile' else None
@@ -272,7 +273,7 @@ class AjaxHandler(BaseHandler):
         comment_error = None
         object_id     = p.get('object_id')
         comment_text  = vp.sanitize_post_text(p.get('comment_text', ''))
-        this_object   = Object.get(object_id)
+        this_object   = Object.by_id(object_id)
 
         if not comment_text:
             # No comment_text was present
@@ -306,7 +307,7 @@ class AjaxHandler(BaseHandler):
 
             # Send to object_poster if someone comments on the post,
             # and that someone is not the object_poster himself
-            object_user_id = Object.get(object_id).user_id
+            object_user_id = Object.by_id(object_id).user_id
             if user_id != object_user_id:
                 if not ReportedContentManager.has_reported(object_user_id, this_object_id):
                     # NOTIFY REASON[0]
@@ -435,7 +436,7 @@ class AjaxHandler(BaseHandler):
 
         this_person_id = self.request.person.id
         object_id      = self.request.POST.get('object_id')
-        valid_object   = Object.get(object_id)
+        valid_object   = Object.by_id(object_id)
 
         if valid_object:
 

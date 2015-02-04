@@ -20,4 +20,4 @@ class FeedManager(object):
     def get_feed_posts(user_id):
         user = User.by_id(user_id)
         if user:
-            return FeedPostLink.by_kwargs(feed_id=user.feed.id).all()
+            return [feed.post for feed in FeedPostLink.by_kwargs(feed_id=user.feed.id).all()]

@@ -79,23 +79,6 @@ class ModelTest(unittest.TestCase):
             u = AccountManager.add(first_name,last_name,email,username,password)
             yield u
 
-    def vote(self,user_id,subject_id, vote_type, status, accept_request=False):
-        if status == Vote.FOLLOW and vote_type == Vote.USER:
-            subject_user = User.by_id(subject_id)
-            if subject_user.is_private and not accept_request:
-                status = Vote.PENDING
-                reason = Notification.FOLLOW_REQUEST
-            else:
-                reason = Notification.FOLLOWED
-        vote = Vote.add(user_id=user_id,subject_id=subject_id,vote_type=Vote.USER,status=status)
-
-        if vote and status in [Vote.LIKE, Vote.FOLLOW, Vote.PENDING]:
-
-            NotificationManager.add(from_user_id=user_id,to_user_id=subject_id,subject_id=user_id,reason=reason)
-            return True
-
-        return False
-
     def delete_vote(self,user_id,subject_id,vote_type,status):
         if vote_type==Vote.USER:
             # delete the vote for deny/cancel request, then set the notification to not visible
@@ -280,7 +263,7 @@ class ModelTest(unittest.TestCase):
     def testFeedFollowingPosts(self):
         """
             Scenario:
-                20 users - each will follow every one else...
+                19 users - each will follow every one else...
         """
         users = [u for u in self.create_users(range(8,28))]
         for u in users:
@@ -291,7 +274,7 @@ class ModelTest(unittest.TestCase):
         # Lets see how many followers do I have
         import random
         rand_int = random.randint(0,19)
-        self.assertEquals(VoteManager.get_number_of_followers(users[rand_int].id),20)
+        self.assertEquals(VoteManager.get_follower_count(users[rand_int].id),19)
 
         # Let's populate my feed
         u = users[rand_int]

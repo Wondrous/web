@@ -165,7 +165,7 @@ class DeletedContent(Base):
     tags = Column(Unicode)
     object_link_ids = Column(Unicode)
     object_file_ids = Column(Unicode)
-    date_posted = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, nullable=False)
     date_deleted = Column(DateTime, default=datetime.now)
 
 
@@ -187,7 +187,7 @@ class DeletedContentManager(object):
             RETURNS: (None)
         """
 
-        object_to_delete = Object.get(object_id)
+        object_to_delete = Object.by_id(object_id)
 
         deleted_content_data = dict()
         deleted_content_data['user_id']       = object_to_delete.user_id
@@ -196,7 +196,7 @@ class DeletedContentManager(object):
         deleted_content_data['tags']            = ' '.join([o.global_tag.tag_name for o in ObjectTagManager.get_all(object_id=object_id)])
         deleted_content_data['object_link_ids'] = ' '.join([str(m.object_link_id) for m in LinkToObject.get_all_links_for_object(object_id)])
         deleted_content_data['object_file_ids'] = ' '.join([str(m.object_file_id) for m in FileToObject.get_all_files_for_object(object_id)])
-        deleted_content_data['date_posted']     = object_to_delete.date_posted
+        deleted_content_data['created_at']     = object_to_delete.created_at
 
         DeletedContentManager._add(deleted_content_data)
 
@@ -224,7 +224,7 @@ class DeletedContentManager(object):
                 tags : Unicode -> str : A serialized "list" of all str tag names
                 object_links : Unicode -> int : A serialized "list" of all object_link.id's
                 object_files : Unicode -> int : A serialized "list" of all object_file.id's
-                date_posted : DateTime : The date the object was originally posted
+                created_at : DateTime : The date the object was originally posted
 
             RETURNS: (None)
 
@@ -238,7 +238,7 @@ class DeletedContentManager(object):
         new_deleted_content.tags            = deleted_content_data['tags']
         new_deleted_content.object_link_ids = deleted_content_data['object_link_ids']
         new_deleted_content.object_file_ids = deleted_content_data['object_file_ids']
-        new_deleted_content.date_posted     = deleted_content_data['date_posted']
+        new_deleted_content.created_at     = deleted_content_data['created_at']
 
         DBSession.add(new_deleted_content)
 
@@ -298,7 +298,7 @@ class DeletedContentManager(object):
         # TODO: Add in the "bookmarks" to delete
 
         # Delete the actual object now
-        this_object = Object.get(object_id)
+        this_object = Object.by_id(object_id)
         if this_object:
             DBSession.delete(this_object)
 

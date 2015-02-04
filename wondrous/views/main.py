@@ -29,6 +29,7 @@ from wondrous.models.user import BlockedUser
 from wondrous.controllers import (
     AccountManager,
     VoteManager,
+    TagManager
 )
 from wondrous.utilities.delete_utilities import DisableUser
 
@@ -703,7 +704,7 @@ class TagHandler(BaseHandler):
         start    = self.request.GET.get('start', 0) # The start-value of the items to get
 
         is_valid_tag = vh.valid_tag(tag_name)
-        tag_obj      = GlobalTagManager.get(tag_name=tag_name)
+        tag_obj      = TagManager.by_name(tag_name=tag_name)
         this_person  = self.request.person
 
         # Check credentials
@@ -827,7 +828,7 @@ class PostHandler(BaseHandler):
         object_id      = self.url_match(url_match='object_id')
         object_uuid    = self.url_match(url_match='object_uuid')
 
-        valid_object = Object.get(object_id)
+        valid_object = Object.by_id(object_id)
         if valid_object and valid_object.ouuid == object_uuid:
 
             new_post_item = GetItems.single_object(valid_object, this_person_id)
@@ -948,20 +949,20 @@ class ExcSQL(BaseHandler):
                 LEFT BLANK UNLESS ABSOLUTELY NECESSARY
             ***
         """
-        # from wondrous.models import reset_sql
-        # reset_sql()
-        #
-        # # CREATE ADMIN
-        # from wondrous.models.admin import AdminManager
-        # new_admin_data = dict(
-        #   username="root",
-        #   password="password",
-        #   super_admin=True,
-        # )
-        # AdminManager.add(new_admin_data)
-        #
-        # # Create two users
-        # create_user("first","user","user1","password","user1@wondrous.co")
-        # create_user("second","user","user2","password","user2@wondrous.co")
+        from wondrous.models import reset_sql
+        reset_sql()
+
+        # CREATE ADMIN
+        from wondrous.models.admin import AdminManager
+        new_admin_data = dict(
+          username="root",
+          password="password",
+          super_admin=True,
+        )
+        AdminManager.add(new_admin_data)
+
+        # Create two users
+        u = AccountManager.add("first","user","user1@wondrous.co","user1","password")
+        u = AccountManager.add("second","user","user2@wondrous.co","user2","password")
 
         return {}
