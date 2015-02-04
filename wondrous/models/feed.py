@@ -1,6 +1,12 @@
 #!/usr/bin/env python
-# Ziyuan Liu @ Wondrous
+# -*- coding: utf-8 -*-
 
+#
+# Company: WONDROUS
+# Created by: Ziyuan Liu
+#
+# MODELS/FEED.PY
+#
 
 from sqlalchemy import BigInteger
 from sqlalchemy import Boolean

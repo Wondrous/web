@@ -5,7 +5,7 @@
 # Company: WONDROUS
 # Created by: John Zimmerman
 #
-# MODELS/OBJ.PY
+# MODELS/OBJECT.PY
 #
 
 
