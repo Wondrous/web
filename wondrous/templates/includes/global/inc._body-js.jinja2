@@ -12,9 +12,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        {# -- MASONRY -- #}
-        $(function () {
-
+        function initMasonry() {
             var container = $('.masonry');
             container.imagesLoaded(function () {                
                 container.masonry({
@@ -23,6 +21,12 @@
                     columnWidth        : '.grid-sizer',
                 });
             });
+        }
+
+        {# -- MASONRY -- #}
+        $(function () {
+
+            initMasonry();
 
             $('.backdrop').on('mouseup', function () {
                 $('.is-expanded').css('z-index', 4);
@@ -124,6 +128,10 @@
                     if ( $('#fileuploadCoverImage').length ) {
                         // Initialize the file upload module
                         initUploadPostImage();
+                    }
+
+                    if ( $('.masonry-brick').length ) {
+                        initMasonry();
                     }
                 }
             });

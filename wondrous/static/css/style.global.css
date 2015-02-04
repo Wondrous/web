@@ -1439,15 +1439,15 @@ body { font-family: sans-serif; }
          -o-border-radius: 5px;
             border-radius: 5px;
 
+/*    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+       -moz-box-shadow: 0 2px 3px rgb(100,100,100);
+         -o-box-shadow: 0 2px 3px rgb(100,100,100);
+            box-shadow: 0 2px 3px rgb(100,100,100);*/
+} .post-body:hover {
     -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
        -moz-box-shadow: 0 2px 3px rgb(100,100,100);
          -o-box-shadow: 0 2px 3px rgb(100,100,100);
             box-shadow: 0 2px 3px rgb(100,100,100);
-} .post-body:hover {
-    -webkit-box-shadow: 0 2px 5px rgb(100,100,100);
-       -moz-box-shadow: 0 2px 5px rgb(100,100,100);
-         -o-box-shadow: 0 2px 5px rgb(100,100,100);
-            box-shadow: 0 2px 5px rgb(100,100,100);
 }
 
 .post-content {
@@ -1458,6 +1458,7 @@ body { font-family: sans-serif; }
     font-family: helvetica, arial, sans-serif;
     font-weight: normal;
     font-size: 16px;
+    line-height: 1.3em;
 
     color: rgb(51,51,51);
     cursor: default;
@@ -1547,7 +1548,7 @@ body { font-family: sans-serif; }
 }*/
 
 .post-subject-text {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: bold;
     text-align: left;
     color: rgb(251,251,251);
@@ -1565,8 +1566,7 @@ body { font-family: sans-serif; }
 
 .post-subject-text-position {
     position: relative;
-    display: block;
-    padding: 10px;
+    padding: 7px 3%;
 }
 
 .post-see-more {

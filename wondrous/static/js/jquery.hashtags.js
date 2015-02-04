@@ -38,24 +38,24 @@ function initSmartTextarea() {
     $("textarea#postTextarea").hashtags();
 }
 
-$('textarea#postTextarea').on("keyup", function() {
-    var FONT_SIZE;
-    var LINE_HEIGHT;
-    var text = $(this).val().trim();
-    if      (text.length < 100)  {FONT_SIZE = 40; LINE_HEIGHT = 45;}
-    else if (text.length < 200)  {FONT_SIZE = 38; LINE_HEIGHT = 44;}
-    else if (text.length < 300)  {FONT_SIZE = 36; LINE_HEIGHT = 43;}
-    else if (text.length < 400)  {FONT_SIZE = 34; LINE_HEIGHT = 41;}
-    else if (text.length < 500)  {FONT_SIZE = 32; LINE_HEIGHT = 39;}
-    else if (text.length < 600)  {FONT_SIZE = 30; LINE_HEIGHT = 37;}
-    else if (text.length < 700)  {FONT_SIZE = 28; LINE_HEIGHT = 35;}
-    else if (text.length < 800)  {FONT_SIZE = 26; LINE_HEIGHT = 33;}
-    else if (text.length < 900)  {FONT_SIZE = 24; LINE_HEIGHT = 31;}
-    else                         {FONT_SIZE = 24; LINE_HEIGHT = 31;}
+// $('textarea#postTextarea').on("keyup", function() {
+//     var FONT_SIZE;
+//     var LINE_HEIGHT;
+//     var text = $(this).val().trim();
+//     if      (text.length < 100)  {FONT_SIZE = 40; LINE_HEIGHT = 45;}
+//     else if (text.length < 200)  {FONT_SIZE = 38; LINE_HEIGHT = 44;}
+//     else if (text.length < 300)  {FONT_SIZE = 36; LINE_HEIGHT = 43;}
+//     else if (text.length < 400)  {FONT_SIZE = 34; LINE_HEIGHT = 41;}
+//     else if (text.length < 500)  {FONT_SIZE = 32; LINE_HEIGHT = 39;}
+//     else if (text.length < 600)  {FONT_SIZE = 30; LINE_HEIGHT = 37;}
+//     else if (text.length < 700)  {FONT_SIZE = 28; LINE_HEIGHT = 35;}
+//     else if (text.length < 800)  {FONT_SIZE = 26; LINE_HEIGHT = 33;}
+//     else if (text.length < 900)  {FONT_SIZE = 24; LINE_HEIGHT = 31;}
+//     else                         {FONT_SIZE = 24; LINE_HEIGHT = 31;}
 
-    $(this).css("font-size", FONT_SIZE);
-    $(".post-input").css("line-height", LINE_HEIGHT + "px");
+//     $(this).css("font-size", FONT_SIZE);
+//     $(".post-input").css("line-height", LINE_HEIGHT + "px");
 
-    $(".highlighter").css("font-size", FONT_SIZE);
-    $(".highlighter").css("line-height", LINE_HEIGHT + "px");
-});
+//     $(".highlighter").css("font-size", FONT_SIZE);
+//     $(".highlighter").css("line-height", LINE_HEIGHT + "px");
+// });
