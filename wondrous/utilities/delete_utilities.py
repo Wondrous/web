@@ -8,17 +8,17 @@
 # DELETE_UTILITIES.PY
 #
 
-from wondrous.models.comment import ObjectCommentManager
+from wondrous.models.comment import Comment
 from wondrous.models.object import Object
 from wondrous.models.user import User
-from wondrous.models.vote import UserVote
+from wondrous.models.vote import Vote
 
 class DisableUser(object):
 
     """
         1. Remove profile from view
         <Keep votes on objects in place to retain ranking>
-        2. "Remove" up and down votes on users 
+        2. "Remove" up and down votes on users
         (Consequently, this removes the "upvoted by")
 
         Call like this:
@@ -27,7 +27,7 @@ class DisableUser(object):
     """
 
     def __init__(self, user_id):
-        self.user_obj = User.get(user_id)
+        self.user_obj = User.by_id(user_id)
 
     def disable(self):
 
@@ -43,7 +43,7 @@ class DisableUser(object):
             self.__remove_user_votes()
             self.__remove_user_objects()
             self.__remove_user_comments()
-        
+
         return deletion_successful
 
     def __disable_user(self):
@@ -71,7 +71,7 @@ class DisableUser(object):
         User._soft_delete(self.user_obj.id)
 
         # Step 2
-        deleted_user = User.get(self.user_obj.id, is_active=False)
+        deleted_user = User.by_kwargs(user_id=self.user_obj.id, is_active=False)
 
         return True if deleted_user else False
 
@@ -79,18 +79,18 @@ class DisableUser(object):
 
         """
             PURPOSE: To remove all of a disabled user's votes
-        
+
             USE: NEVER CALL BY ITSELF. Always call within the disable() method
-        
+
             PARAMS: (None)
-        
+
             RETURNS: (None)
         """
 
         deleted_user_id = self.user_obj.id
         all_following   = UserVote.query.filter(UserVote.user_id == deleted_user_id).all()
         all_followed_by = UserVote.query.filter(UserVote.voted_on_id == deleted_user_id).all()
-        
+
         if all_following:
             for vote in all_following:
                 vote.active = False
@@ -131,7 +131,7 @@ class DisableUser(object):
         """
 
         deleted_user_id = self.user_obj.id
-        all_user_comments = ObjectCommentManager.get_all_comments_for_user(deleted_user_id)
+        all_user_comments = Comment.get_all_comments_for_user(deleted_user_id)
         for oc in all_user_comments:
             oc.active = False
 
@@ -140,7 +140,7 @@ class EnableUser(object):
 
     """
         1. Adds profile to view
-        2. Activates up and down votes on users 
+        2. Activates up and down votes on users
         (Consequently, this adds the "upvoted by")
 
         Call like this in ***Models.User.add_user()***:
@@ -149,7 +149,7 @@ class EnableUser(object):
     """
 
     def __init__(self, user_id):
-        self.user_obj = User.get(user_id, is_active=False)
+        self.user_obj = User.by_kwargs(user_id=user_id, is_active=False)
 
     def enable(self):
 
@@ -189,7 +189,7 @@ class EnableUser(object):
         User._undelete(self.user_obj.id)
 
         # Step 2
-        activated_user = User.get(self.user_obj.id)
+        activated_user = User.by_id(self.user_obj.id)
 
         return True if activated_user else False
 
@@ -197,18 +197,18 @@ class EnableUser(object):
 
         """
             PURPOSE: To add back all of a re-enabled user's votes
-        
+
             USE: NEVER CALL BY ITSELF. Always call within the enable() method
-        
+
             PARAMS: (None)
-        
+
             RETURNS: (None)
         """
 
         enabled_user    = self.user_obj.id
         all_following   = UserVote.query.filter(UserVote.user_id == enabled_user).all()
         all_followed_by = UserVote.query.filter(UserVote.voted_on_id == enabled_user).all()
-        
+
         if all_following:
             for vote in all_following:
                 vote.active = True
@@ -249,6 +249,6 @@ class EnableUser(object):
         """
 
         enabled_user = self.user_obj.id
-        all_user_comments = ObjectCommentManager.get_all_comments_for_user(enabled_user)
+        all_user_comments = Comment.get_all_comments_for_user(enabled_user)
         for oc in all_user_comments:
             oc.active = True

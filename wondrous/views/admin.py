@@ -25,12 +25,7 @@ from wondrous.models.object import Object
 
 from wondrous.models.person import Person
 
-from wondrous.models.tag import ObjectTagManager
-from wondrous.models.tag import GlobalTagManager
-
 from wondrous.models.user import User
-
-from wondrous.models.vote import ObjectVoteManager
 
 from wondrous.utilities.general_utilities import SYSTEM_ADMIN_REQUIRED
 from wondrous.utilities.general_utilities import url_match

@@ -63,155 +63,15 @@ class User(Base, PasswordManager, BaseMixin):
 
     # Make password a property using the _get_password and _set_password methods
     password = synonym('_password', descriptor=property(PasswordManager._get_password, PasswordManager._set_password))
-    comments = relationship("ObjectComment")
+    comments = relationship("Comment")
 
     feed = relationship("Feed",uselist=False,backref="user")
-
-    # TODO convert to by_kwargs to check if following/blocking
-    @hybrid_method
-    def is_following(self, user_to_get_id):
-        vote = Vote.get_vote(self.id, user_to_get_id,Vote.USER)
-        return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOW,Vote.TOPFRIEND] else False
-
-    def is_blocked_by(self,user_to_get_id):
-        vote = Vote.get_vote(user_to_get_id,self.id,Vote.USER)
-        return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None)==Vote.BLOCK else False
-
-    def is_blocking(self,user_to_get_id):
-        vote = Vote.get_vote(self.id, user_to_get_id,Vote.USER)
-        return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None)==Vote.BLOCK else False
-
-    @classmethod
-    def get_all_followers(cls,user_id):
-        return Vote.query.filter(Vote.subject_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).all()
-
-    @classmethod
-    def get_number_of_followers(cls,user_id):
-        return Vote.query.filter(Vote.subject_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).count()
-
-    @classmethod
-    def get(cls,**kwargs):
-        """
-            PURPOSE: Get the user of the action -- person vs. page
-
-            USE: Call like: User.get(user_id=None, username=None, email=None, is_active=True)
-
-            PARAMS: Provide only 1 of 3 query parameters in a dict, with
-            the last parameter optional, and defaulting to True:
-                user_id   : int  : REQUIRED : The User.id of the person/page/etc.
-                username  : str  : REQUIRED : The username of the person/page/etc.
-                email     : str  : REQUIRED : The email used to register the person/page/etc.
-                is_active : bool : OPTIONAL : If True, get only rows with Active=True
-                                              If False, get only rows with Active=False
-
-            RETURNS: If found, a person/page/etc. object
-                     If not found, None.
-        """
-        if "is_active" not in kwargs.keys():
-            kwargs.update({"is_active":True})
-
-        user_object = super(User,cls).by_kwargs(**kwargs).first()
-        return user_object.person if user_object else None
 
     @classmethod
     def get_all_banned_users(cls):
         return cls.by_kwargs(is_banned == True).all()
 
-    @classmethod
-    def add(cls,user_data, user_type_data):
 
-        """
-            PURPOSE: Add a new user (person/page/etc.) into the DB
-
-            USE: Call like: User.add(<dict>,<dict>)
-
-            PARAMS: 2 parameters, with each key as a column name:
-                --- USER DATA -------------------------------------
-                -user_type   : int : 1 => Person; 2 => Page;
-                -username    : str : Username of the user/page/etc.
-                -email       : str : Email used to register the user/page/etc.
-                -profile_picture : TODO
-
-                --- 'NODE' DATA ------------------------------------
-                If a new Person being added:
-                    -user_id *
-                    -first_name
-                    -last_name
-                    -password
-                    -gender
-                    -locale
-                    -birthday
-
-                If a new Page being added:
-                    -user_id *
-                    -title
-                    -description
-                    -external_url
-                    -cover_picture
-
-                * Dynamically added, and not necessary to provide in the
-                initial dict passed to User.add(<dict>)
-
-            RETURNS: the newly created user
-        """
-        new_user = cls(**user_data)
-        DBSession.add(new_user)
-        DBSession.flush()
-
-        # Feed yourself
-        f = Feed.add(user_id=new_user.id)
-        user_type_data['user_id'] = new_user.id
-        if user_data['user_type'] == 1:
-            Person.add(user_type_data)
-
-        # Follow yourself
-        Vote.add(user_id=new_user.id,subject_id=new_user.id,vote_type=Vote.USER,status=Vote.TOPFRIEND)
-        return new_user
-
-    @classmethod
-    def _soft_delete(cls,user_id):
-
-        """
-            PURPOSE: (Soft) delete a user from users table
-
-            USE: Call like: User._soft_delete(<int>)
-
-            PARAMS: 1 param: an int, user_id, the id of the
-            user to be deleted
-
-            NOTE: This method is private with name-mangling
-            because changing the active column on a User
-            is a critical operation.
-
-            RETURNS: None
-        """
-
-        node_obj = cls.get(user_id=user_id)
-        if node_obj:
-            node_obj.user.active = False
-
-    @classmethod
-    def _undelete(cls,user_id):
-
-        """
-            PURPOSE: Un-delete (re-enable) a previously
-            deleted user from users table
-
-            USE: Call like: User._undelete(<int>)
-
-            PARAMS: 1 param: an int, user_id, the id of the
-            user to be deleted
-
-            NOTE: This method is private with name-mangling
-            becasue changing the active column on a User
-            is a critical operation.
-
-            RETURNS: None
-        """
-
-        disabled_node_obj = cls.get(user_id=user_id, is_active=False)
-        if disabled_node_obj:
-            disabled_node_obj.user.active = True
 
 class BlockedUser(Base,BaseMixin):
 

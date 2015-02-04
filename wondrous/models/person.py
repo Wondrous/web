@@ -23,9 +23,9 @@ from sqlalchemy import Unicode
 
 from sqlalchemy.orm import column_property
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref
 
 from wondrous.models import Base
-from wondrous.models import DBSession
 from wondrous.models.modelmixins import BaseMixin
 
 from wondrous.utilities.validation_utilities import Sanitize
@@ -34,7 +34,6 @@ from wondrous.utilities.validation_utilities import Sanitize
 class Person(Base,BaseMixin):
     first_name = Column(Unicode, nullable=False)
     last_name = Column(Unicode, nullable=False)
-    ascii_name = Column(Unicode, nullable=False)
     gender = Column(Unicode, nullable=True)
     locale = Column(Unicode, nullable=True)
     birthday = Column(DateTime, nullable=True)
@@ -45,31 +44,8 @@ class Person(Base,BaseMixin):
     name = column_property(first_name + " " + last_name)
 
     user_id = Column(BigInteger, ForeignKey('user.id'))
-    user = relationship('User', uselist=False, backref="person")
+    user = relationship('User', backref=backref("person",uselist=False))
 
-
-    @classmethod
-    def add(cls,person_data):
-        """
-            PURPOSE: Add a new person into the DB
-
-            USE: Call like: Person._add(<dict>)
-
-            PARAMS: 1 param, a dict, with each key as column name:
-                -user_id
-                -first_name
-                -last_name
-                -gender
-                -locale
-                -birthday
-
-            RETURNS: None
-        """
-
-        new_person = cls(**person_data)
-        new_person.ascii_name = unidecode.unidecode("{fn} {ln}".format(fn=new_person.first_name, ln=new_person.last_name).decode('utf-8'))
-        DBSession.add(new_person)
-        DBSession.flush()
 
 
 class UnverifiedEmail(Base,BaseMixin):
@@ -187,7 +163,7 @@ class UnverifiedEmailManager(object):
         # Make sure email has not already been taken
         # and fully signed-up with
         from wondrous.models.user import User
-        taken_email = User.get(email=email)
+        taken_email = User.by_kwargs(email=email).count>0
         if taken_email:
             return None, """
                 The email you entered has already been taken. Please

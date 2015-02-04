@@ -5,6 +5,7 @@ import inspect
 from sqlalchemy import create_engine
 from webtest import TestApp
 
+import wondrous.models
 from wondrous.models import (
     DBSession,
     User,
@@ -14,11 +15,17 @@ from wondrous.models import (
     Vote,
     Notification,
     Object,
-    WallPost,
+    Post,
     Tag,
     ObjectTagLink
 )
 
+from wondrous.controllers import (
+    VoteManager,
+    AccountManager,
+    PostManager,
+    NotificationManager,
+    )
 
 from paste.deploy.loadwsgi import appconfig
 from sqlalchemy import engine_from_config
@@ -30,7 +37,8 @@ def setUpModule():
     # once for all the tests in this module:
 
     # create an engine bound to the test db
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    wondrous.models.engine = engine = engine_from_config(settings, 'sqlalchemy.')
+    print wondrous.models.engine
 
     # first use of DBSession, bind it to our engine
     DBSession.configure(bind=engine)
@@ -63,24 +71,12 @@ class ModelTest(unittest.TestCase):
     def create_users(self,ran):
         for i in ran:
             email = "email"+str(i)+"@gmail.com"
-            user_data = {
-                'user_type'       : 1,
-                'username'        : "username"+str(i),
-                'email'           : email,
-                'password'        : "password"+str(i),
-                'profile_picture' : None,  # This is default
-            }
+            username        = "username"+str(i)
+            password        = "password"+str(i)
+            first_name = "first_name"+str(i)
+            last_name  = "last_name"+str(i)
 
-                        # For the person/page (in this case person) table
-            user_type_data = {
-                'first_name' : "first_name"+str(i),
-                'last_name'  : "last_name"+str(i),
-                'gender'     : None,  # Optional data to add later
-                'locale'     : None,  # Optional data to add later
-                'birthday'   : None,  # Optional data to add later
-            }
-
-            u = User.add(user_data, user_type_data)
+            u = AccountManager.add(first_name,last_name,email,username,password)
             yield u
 
     def vote(self,user_id,subject_id, vote_type, status, accept_request=False):
@@ -95,7 +91,7 @@ class ModelTest(unittest.TestCase):
 
         if vote and status in [Vote.LIKE, Vote.FOLLOW, Vote.PENDING]:
 
-            Notification.add(from_user_id=user_id,to_user_id=subject_id,subject_id=user_id,reason=reason)
+            NotificationManager.add(from_user_id=user_id,to_user_id=subject_id,subject_id=user_id,reason=reason)
             return True
 
         return False
@@ -121,7 +117,7 @@ class ModelTest(unittest.TestCase):
             person = Person.by_kwargs(user_id=user.id).first()
             feed = Feed.by_kwargs(user_id=user.id).first()
 
-            is_following_myself = person.user.is_following(user.id)
+            is_following_myself = VoteManager.is_following(user.id,user.id)
 
             self.assertEquals(Person.by_kwargs(user_id=user.id).count(),1)
             self.assertEquals(feed.user,person.user)
@@ -129,7 +125,7 @@ class ModelTest(unittest.TestCase):
 
         self.assertEquals(5,User.count())
         self.assertEquals(5,Person.count())
-        self.log.debug("user creation passed")
+        self.log.warn("user creation passed")
 
     def testUserFollow(self):
         """
@@ -141,30 +137,28 @@ class ModelTest(unittest.TestCase):
         user1, user2 = (u for u in self.create_users(range(5,7)))
 
         # Follow
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.FOLLOW)
-        self.assertEquals(user1.is_following(user2.id),True)
-        self.assertEquals(user2.is_following(user1.id),False)
-        self.assertEquals(notified,True)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),True)
+        self.assertEquals(VoteManager.is_following(user2.id,user1.id),False)
 
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,1)
 
         # Unfollow
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.UNFOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOW)
 
-        self.assertEquals(user1.is_following(user2.id),False)
-        self.assertEquals(user2.is_following(user1.id),False)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
+        self.assertEquals(VoteManager.is_following(user2.id,user1.id),False)
 
         # FOLLOW - make sure the second follow isn't notified
-        self.vote(user1.id,user2.id,Vote.USER,Vote.UNFOLLOW)
-        self.assertEquals(notified,False)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOW)
 
         # Make sure unseen votes are merged (deleted)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,1)
-        self.log.debug("public profile follow passed")
+        self.log.warn("public profile follow passed")
 
     def testPrivateUserFollow(self):
         """
@@ -179,77 +173,71 @@ class ModelTest(unittest.TestCase):
         user2.is_private = True
 
         # Request to Follow
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.FOLLOW)
-        self.assertEquals(notified,True)
-        self.assertEquals(user1.is_following(user2.id),False)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
 
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOW_REQUEST).count()
         self.assertEquals(note_count,1)
 
         # Request Accepted
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.FOLLOW, True)
-        self.assertEquals(notified,True)
-        note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
-            subject_id=user1.id,reason=Notification.FOLLOWED).count()
+        notified = VoteManager.accept_request(user2.id,user1.id)
+        note_count = Notification.by_kwargs(from_user_id=user2.id,to_user_id=user1.id,\
+            subject_id=user2.id,reason=Notification.FOLLOW_ACCEPTED).count()
         self.assertEquals(note_count,1)
-        self.assertEquals(user1.is_following(user2.id),True)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),True)
 
         # take user 1 off from following list
         # need to delete the vote
-        self.delete_vote(user_id=user1.id,subject_id=user2.id,vote_type=Vote.USER,status=Vote.FOLLOW)
-        self.assertEquals(user1.is_following(user2.id),False)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOW)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,0)
 
         # Request to Follow
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.FOLLOW)
-        self.assertEquals(notified,True)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOW_REQUEST).count()
         self.assertEquals(note_count,1)
-        self.assertEquals(user1.is_following(user2.id),False)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
 
-        # Deny the request
+        # Delete the request
         self.delete_vote(user_id=user1.id,subject_id=user2.id,vote_type=Vote.USER,status=Vote.FOLLOW)
-        self.assertEquals(user1.is_following(user2.id),False)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,0)
 
         # Request to Follow
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.FOLLOW)
-        self.assertEquals(notified,True)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOW_REQUEST).count()
         self.assertEquals(note_count,1)
-        self.assertEquals(user1.is_following(user2.id),False)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
 
         # Turn user 2 into a public one
         user2.is_private = False
 
         # Accept Request
-        notified = self.vote(user1.id,user2.id,Vote.USER,Vote.FOLLOW, True)
-        self.assertEquals(notified,True)
-        note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
-            subject_id=user1.id,reason=Notification.FOLLOWED).count()
+        notified = VoteManager.accept_request(user2.id,user1.id)
+        note_count = Notification.by_kwargs(from_user_id=user2.id,to_user_id=user1.id,\
+            subject_id=user2.id,reason=Notification.FOLLOW_ACCEPTED).count()
         self.assertEquals(note_count,1)
-        self.assertEquals(user1.is_following(user2.id),True)
+        self.assertEquals(VoteManager.is_following(user1.id,user2.id),True)
 
         # User 2 block user 1
-        notified = self.vote(user2.id,user1.id,Vote.USER,Vote.BLOCK)
-        self.assertEquals(notified,False)
-        self.assertEquals(user2.is_following(user1.id),False)
-        self.assertEquals(user1.is_blocked_by(user2.id),True)
-        self.assertEquals(user2.is_blocking(user1.id),True)
+        notified = VoteManager.vote_on_user(user2.id,user1.id,Vote.BLOCK)
+        self.assertEquals(VoteManager.is_following(user2.id,user1.id),False)
+        self.assertEquals(VoteManager.is_blocked_by(user1.id,user2.id),True)
+        self.assertEquals(VoteManager.is_blocking(user2.id,user1.id),True)
 
-        self.log.debug("private profile follow passed")
+        self.log.warn("private profile follow passed")
 
-    def testCreateWallPosts(self):
+    def testCreatePosts(self):
         """
             Scenario:
-                One user will create wallposts
+                One user will create Posts
         """
         user1 = [u for u in self.create_users(range(7,8))]
         user1 = user1[0]
@@ -261,7 +249,7 @@ class ModelTest(unittest.TestCase):
             'text'      : 'text',
         }
 
-        post = WallPost.add(**kwargs)
+        post = PostManager.add(**kwargs)
         self.assertEquals(len(post.object.object_tag_links),6)
 
         for t in tags:
@@ -278,7 +266,7 @@ class ModelTest(unittest.TestCase):
 
         # Lets post it ten times more, each tag should now correspond to 11 different articles
         for i in range(10):
-            post = WallPost.add(**kwargs)
+            post = PostManager.add(**kwargs)
 
         for t in tags2:
             num_of_objects = len(Tag.by_kwargs(tag_name=t).first().object_tag_links)
@@ -287,7 +275,7 @@ class ModelTest(unittest.TestCase):
         tag = Tag.by_kwargs(tag_name="tag2").first()
         self.assertEquals(ObjectTagLink.by_kwargs(tag_id=tag.id).count(),11)
 
-        self.log.debug("Create Test WallPost passed")
+        self.log.warn("Create Test Post passed")
 
     def testFeedFollowingPosts(self):
         """
@@ -298,33 +286,29 @@ class ModelTest(unittest.TestCase):
         for u in users:
             for v in users:
                 if u is not v:
-                    self.vote(u.id,v.id,Vote.USER,Vote.FOLLOW)
+                    VoteManager.vote_on_user(u.id,v.id,Vote.FOLLOW)
 
         # Lets see how many followers do I have
         import random
         rand_int = random.randint(0,19)
-        self.assertEquals(User.get_number_of_followers(users[rand_int].id),20)
+        self.assertEquals(VoteManager.get_number_of_followers(users[rand_int].id),20)
 
         # Let's populate my feed
         u = users[rand_int]
         tags = set(["tag1","tag2","tag3","tag4","tag5","tag6",])
-        kwargs = {
-            'user_id'        : u.id,
-            'tags'      : tags,
-            'subject'   : "subject",
-            'text'      : 'text',
-        }
 
-        post = WallPost.add(**kwargs)
+        post = PostManager.add(user_id=u.id,tags=tags,subject="subject",text="text")
 
         rand_int = random.randint(0,19)
         u1 = users[rand_int]
         self.assertEquals(len(u1.feed.feed_post_links),1)
 
-        self.log.debug("WallPost Feed passed")
+        self.log.warn("Post Feed passed")
 
 if __name__ == '__main__':
     import sys
     logging.basicConfig(stream=sys.stdout)
-    logging.getLogger(__file__).setLevel(logging.DEBUG)
+    logging.getLogger(__file__).setLevel(logging.WARN)
+    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
     unittest.main()

@@ -29,13 +29,13 @@ from sqlalchemy.orm import relationship
 from wondrous.models import Base
 from wondrous.models import DBSession
 
-from wondrous.models.comment import ObjectCommentManager
+from wondrous.models.comment import Comment
 
 from wondrous.models.object import FileToObject
 from wondrous.models.object import LinkToObject
 from wondrous.models.object import Object
 
-from wondrous.models.post import WallPost
+from wondrous.models.post import Post
 
 from wondrous.models.tag import Tag
 
@@ -265,7 +265,7 @@ class DeletedContentManager(object):
             NOTE: It deletes the following, in this order:
                 1. Delete mapping rows in LinkToObject table
                 2. Delete mapping rows in FileToObject table
-                3. Delete from WallPost table
+                3. Delete from Post table
                 4. Delete from ObjectTag table
                 5. Delete each ObjectTag for this Object
                 6. Delete each ObjectVote for this Object
@@ -281,10 +281,10 @@ class DeletedContentManager(object):
         for m in all_mapped_files:
             DBSession.delete(m)
 
-        # Delete WallPost rows
-        this_wall_post = WallPost.by_id(object_id)
-        if this_wall_post:
-            DBSession.delete(this_wall_post)
+        # Delete Post rows
+        this_post = Post.by_id(object_id)
+        if this_post:
+            DBSession.delete(this_post)
 
         # Delete all ObjectTags for object (Tags)
         all_object_tags = ObjectTagManager.get_all(object_id)
@@ -319,15 +319,15 @@ class DeletedContentManager(object):
         """
 
         # Transfer all data to be deleted
-        DeletedObjectCommentManager.add(object_id)
+        DeletedComment.add(object_id)
         DeletedContentManager.add(object_id)
 
         # Delete transferred data
-        DeletedObjectCommentManager._delete(object_id)
+        DeletedComment._delete(object_id)
         DeletedContentManager._delete(object_id)
 
 
-class DeletedObjectComment(Base):
+class DeletedComment(Base):
 
     """
         Defines the table which holds all data pertaining
@@ -344,13 +344,13 @@ class DeletedObjectComment(Base):
     date_deleted = Column(DateTime, default=datetime.now)
 
 
-class DeletedObjectCommentManager(object):
+class DeletedComment(object):
 
     @staticmethod
     def add(object_id):
 
-        all_object_comments_active = ObjectCommentManager.get_all_comments_for_object(object_id)
-        all_object_comments_inactive = ObjectCommentManager.get_all_comments_for_object(object_id, is_active=False)
+        all_object_comments_active = Comment.get_all_comments_for_object(object_id)
+        all_object_comments_inactive = Comment.get_all_comments_for_object(object_id, is_active=False)
 
         for oc in chain(all_object_comments_active, all_object_comments_inactive):
             object_comment_data = dict(
@@ -359,12 +359,12 @@ class DeletedObjectCommentManager(object):
                 text=oc.text,
                 date_added=oc.date_added,
             )
-            DeletedObjectCommentManager._add(object_comment_data)
+            DeletedComment._add(object_comment_data)
 
     @staticmethod
     def _add(object_comment_data):
 
-        new_deleted_object_comment = DeletedObjectComment()
+        new_deleted_object_comment = DeletedComment()
 
         new_deleted_object_comment.object_id  = object_comment_data['object_id']
         new_deleted_object_comment.user_id  = object_comment_data['user_id']
@@ -377,8 +377,8 @@ class DeletedObjectCommentManager(object):
     def _delete(object_id):
 
         # Delete all comments for object
-        all_object_comments_active   = ObjectCommentManager.get_all_comments_for_object(object_id)
-        all_object_comments_inactive = ObjectCommentManager.get_all_comments_for_object(object_id, is_active=False)
+        all_object_comments_active   = Comment.get_all_comments_for_object(object_id)
+        all_object_comments_inactive = Comment.get_all_comments_for_object(object_id, is_active=False)
 
         for oc in chain(all_object_comments_active, all_object_comments_inactive):
             DBSession.delete(oc)
@@ -386,7 +386,7 @@ class DeletedObjectCommentManager(object):
     @staticmethod
     def delete_comment(comment_id):
 
-        oc = ObjectCommentManager.get(comment_id)
+        oc = Comment.get(comment_id)
         if oc:
             # Transfer the comment to deletion table
             comment_data = dict(
@@ -395,7 +395,7 @@ class DeletedObjectCommentManager(object):
                 text=oc.text,
                 date_added=oc.date_added,
             )
-            DeletedObjectCommentManager._add(comment_data)
+            DeletedComment._add(comment_data)
 
             # Delete the originla comment
             DBSession.delete(oc)

@@ -13,25 +13,29 @@ from urlparse import urlparse
 from json import dumps
 from datetime import datetime
 
-from wondrous.models.comment import ObjectCommentManager
+from wondrous.models.comment import Comment
 
 from wondrous.models.content import ReportedContentManager
 
-from wondrous.models.object import Object
-from wondrous.models.object import ObjectFileManager
-from wondrous.models.object import ObjectLinkManager
-from wondrous.models.object import FileToObject
-from wondrous.models.object import LinkToObject
+from wondrous.models.object import (
+    Object,
+    ObjectFile,
+    ObjectLink,
+    FileToObject,
+    LinkToObject,
+    )
 
-from wondrous.models.post import WallPost
+from wondrous.models.post import Post
 
-from wondrous.models.tag import GlobalTagManager
-from wondrous.models.tag import ObjectTagManager
+from wondrous.models.tag import Tag
 
 from wondrous.models.user import User
 
-from wondrous.models.vote import ObjectVoteManager
-from wondrous.models.vote import UserVote
+from wondrous.models.vote import Vote
+
+from wondrous.controllers import (
+    FeedManager,
+)
 
 from wondrous.utilities.validation_utilities import ValidationHelper as vh
 
@@ -167,18 +171,18 @@ class CreateNewPost(object):
                 -object_file_id -post_subject
 
 
-            RETURNS: A new WallPost object
+            RETURNS: A new Post object
         """
 
         SYS_TAGS = set([SYS_CONTEXT_TAGS['wall']])
 
         new_obj = CreateNewPost._global_process(new_post_data, SYS_TAGS)
 
-        wall_post_data = {
+        post_data = {
             'user_id' : new_post_data['user_id'],
             'object_id'  : new_obj.id,
         }
-        return WallPost.add(wall_post_data)
+        return Post.add(post_data)
 
     @staticmethod
     def _global_process(new_post_data, SYS_TAGS):
@@ -218,7 +222,7 @@ class CreateNewPost(object):
             for link in new_post_data['post_links']:
 
                 # Check to see if someone has already posted this link
-                existing_link = ObjectLinkManager.get(link)
+                existing_link = ObjectLink.get(link)
                 if existing_link:
                     link_id = existing_link.id
                 else:
@@ -227,7 +231,7 @@ class CreateNewPost(object):
                         'url'       : link,
                         'mime_type' : None,  # TODO
                     }
-                    new_link = ObjectLinkManager.add(object_link_data)
+                    new_link = ObjectLink.add(object_link_data)
                     link_id = new_link.id
 
                 # Map this link to the new post regardelsss
@@ -247,7 +251,7 @@ class CreateNewPost(object):
             }
             FileToObject.add(file_to_object_data)
 
-            object_file = ObjectFileManager.get(new_post_data['object_file_id'], is_mapped=False)
+            object_file = ObjectFile.get(new_post_data['object_file_id'], is_mapped=False)
             if object_file:
                 object_file.mapped = True
 
@@ -457,7 +461,7 @@ class _AssemblePost(object):
             'comment_id'   : c.id,
             'user_id'    : c.user_id,
             'text'         : _linkify(c.text),
-        } for c in ObjectCommentManager.get_all_comments_for_object(self.object_id)]
+        } for c in Comment.get_all_comments_for_object(self.object_id)]
 
         self._set_object_type()
 
@@ -519,13 +523,13 @@ class _AssemblePost(object):
         posted_by_profile_owner = False  # Initialize to False
         if self.user_id and self.user_id:
 
-            wall_post_ob = WallPost.by_id(self.object_id)
+            post_ob = Post.by_id(self.object_id)
             self.final_data['date_posted'] = str(self.date_posted)
-            self.final_data['hidden']      = wall_post_ob.hidden
+            self.final_data['hidden']      = post_ob.hidden
 
             if str(self.user_id) == str(self.user_id):
                 posted_by_profile_owner = True
-                self.final_data['profile_user_name'] = User.get(self.user_id).name
+                self.final_data['profile_user_name'] = User.by_id(self.user_id).username
                 self.final_data['profile_user_id']   = self.user_id
 
         self.final_data['posted_by_profile_owner'] = posted_by_profile_owner
@@ -959,12 +963,12 @@ class _GenerateItemList(object):
         return delegate_assemble(item_list, current_user_id)
 
     @staticmethod
-    def new_wall_post(post_obj, current_user_id):
+    def new_post(post_obj, current_user_id):
 
         """
             PURPOSE: Load the new Post when a user posts to a wall
 
-            USE: Call like: _GenerateItemList.new_wall_post(<obj>)
+            USE: Call like: _GenerateItemList.new_post(<obj>)
 
             PARAMS:
                 post_obj : obj : REQUIRED : A post_object of the post for which we
@@ -997,7 +1001,7 @@ class _GenerateItemList(object):
         """
 
         item_list = []
-        post_objs = WallPost.by_id_all(user_id)
+        post_objs = Post.by_kwargs(user_id=user_id).all()
 
         for post in post_objs:
             item_list.append({
@@ -1023,7 +1027,7 @@ class _GenerateItemList(object):
             RETURNS: A list of dicts of a chunk of posts for the current user
         """
         item_list = []
-        post_objs = WallPost.by_id_all_subscribed(current_user_id)
+        post_objs = FeedManager.get_feed_posts(current_user_id)
         for post in post_objs:
             item_list.append({
                 'object_id'  : post.object_id,
@@ -1104,61 +1108,7 @@ class _GenerateItemList(object):
         return upvoted_posts_list
 
     @staticmethod
-    def get_following(profile_user_id):
-
-        """
-            PURPOSE: Get all the users a particular other user
-            user has followed, indicated by profile_user_id
-
-            USE: Call like: _GenerateItemList.get_following(<int>)
-
-            PARAMS:
-                profile_user_id : int : The id of the user whose profile is being viewed
-
-            RETURNS: A list of dicts, with each dict containg an upvoted user's info
-        """
-
-        upvoted_users = UserVote.query.filter(UserVote.user_id == profile_user_id).\
-                                       filter(UserVote.active == True).\
-                                       filter(UserVote.vote_type == 1).all()
-
-        upvoted_users_list = []
-        for user_vote in upvoted_users:
-            user_obj = User.get(user_vote.voted_on_id)
-            if user_obj:
-                upvoted_users_list.append(user_obj)
-
-        return upvoted_users_list
-
-    @staticmethod
-    def get_followers(profile_user_id):
-
-        """
-            PURPOSE: Get all the users a particular other user
-            user has been followed by, indicated by profile_user_id
-
-            USE: Call like: _GenerateItemList.get_followers(<int>)
-
-            PARAMS:
-                profile_user_id : int : The id of the user whose profile is being viewed
-
-            RETURNS: A list of dicts, with each dict containg an upvoted-by user's info
-        """
-
-        upvoted_by_users = UserVote.query.filter(UserVote.voted_on_id == profile_user_id).\
-                                          filter(UserVote.active == True).\
-                                          filter(UserVote.vote_type == 1).all()
-
-        upvoted_by_users_list = []
-        for user_vote in upvoted_by_users:
-            user_obj = User.get(user_vote.user_id)
-            if user_obj:
-                upvoted_by_users_list.append(user_obj)
-
-        return upvoted_by_users_list
-
-    @staticmethod
-    def get_wall_posts(current_user_id, profile_user_id):
+    def get_posts(current_user_id, profile_user_id):
 
         """
             PURPOSE: Iterate through each element in the data fragment
@@ -1216,13 +1166,13 @@ class GetItems(object):
 
         # Get main profile items for wall
         else:
-            item_list = _GenerateItemList.get_wall_posts(current_user_id, profile_user_id)
+            item_list = _GenerateItemList.get_posts(current_user_id, profile_user_id)
 
         return item_list
 
     @staticmethod
-    def new_wall_post(new_post_obj, current_user_id):
-        return _GenerateItemList.new_wall_post(new_post_obj, current_user_id)
+    def new_post(new_post_obj, current_user_id):
+        return _GenerateItemList.new_post(new_post_obj, current_user_id)
 
     @staticmethod
     def global_tag(global_tag_name, current_user_id):

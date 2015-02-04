@@ -8,7 +8,6 @@
 # MODELS/OBJ.PY
 #
 
-import uuid
 
 from datetime import datetime
 
@@ -41,39 +40,7 @@ class Object(Base, BaseMixin):
     active = Column(Boolean, default=True)  # only used for disabling/re-enabling an account
     ouuid = Column(Unicode, nullable=True)
     object_tag_links = relationship("ObjectTagLink", backref="object")
-    comments = relationship("ObjectComment")
-
-    @classmethod
-    def add(cls,subject,text,tags):
-
-        """
-            PURPOSE: Add a new Object into the database
-
-            USE: Call like: Object.add(<dict>)
-
-            *NOTE: ALWAYS call this method from PostSequence
-            Without doing so, we cannot ensure all tables
-            were updated and rows were created. This is very bad.
-
-            PARAMS:
-                - text : str : Any text present in a post
-                - subject : str : The subject (title) of a post
-                - tags: set : a set list of tags
-
-            RETURNS: The newly created Object object
-        """
-
-        new_object = cls(subject=subject, text = text)
-        new_object.ouuid = unicode(uuid.uuid4())
-        DBSession.add(new_object)
-        DBSession.flush()
-
-        # Add the tags
-        for t in tags:
-            tag = Tag.add(object_id=new_object.id,tag_name=t)
-
-
-        return new_object
+    comments = relationship("Comment")
 
 class ObjectLink(Base, BaseMixin):
 
@@ -95,7 +62,7 @@ class ObjectLink(Base, BaseMixin):
         """
             PURPOSE: Add a new ObjectLink into the database
 
-            USE: Call like: ObjectLinkManager.add(<dict>)
+            USE: Call like: ObjectLink.add(<dict>)
 
             PARAMS: 1 param, a dict, witch each key as column name:
                 - url
@@ -137,7 +104,7 @@ class ObjectFile(Base, BaseMixin):
 
             PURPOSE: Add a new ObjectFile into the database
 
-            USE: Call like: ObjectFileManager.add(<dict>)
+            USE: Call like: ObjectFile.add(<dict>)
 
             PARAMS: 1 param, a dict, with each key as column name:
                 - file_url
@@ -156,9 +123,6 @@ class ObjectFile(Base, BaseMixin):
 class LinkToObject(Base, BaseMixin):
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
     object_link_id = Column(BigInteger, ForeignKey('object_link.id'), nullable=False)
-
-
-class LinkToObject(object):
 
     @staticmethod
     def get_all_links_for_object(object_id):

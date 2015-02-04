@@ -23,8 +23,8 @@ from sqlalchemy.orm import backref
 
 from wondrous.models import Base
 from wondrous.models import DBSession
-from wondrous.models.modelmixins import BaseMixin
 
+from wondrous.models.modelmixins import BaseMixin
 
 class Vote(Base,BaseMixin):
     """
@@ -37,17 +37,6 @@ class Vote(Base,BaseMixin):
         This is always a one to one (one to many abstracted)
         Vote is similar to an intermediary model
 
-        STATUS Guide for Object:
-            2 - Bookmarked
-            1 - Like
-            0 - Unliked or same
-
-        STATUS Guide for User:
-            2  - Top Friend -- TODO
-            1  - Following
-            0  - Unfollowed
-            -1 - Pending request
-            -2 - Blocked
     """
     OBJECT, USER = range(2)
     UNLIKED, LIKE, BOOKMARKED, BLOCK, PENDING, UNFOLLOW, FOLLOW, TOPFRIEND = range(8)
@@ -67,13 +56,15 @@ class Vote(Base,BaseMixin):
             # user
             return User.by_id(self.subject_id).first()
 
+
+
     @classmethod
-    def get_vote(cls, user_id, subject_id,vote_type):
+    def get_vote(cls, user_id, subject_id, vote_type):
         """
             Return whether or not a user has voted on a particular object
 
         """
-        vote = cls.by_kwargs(user_id=user_id,subject_id=subject_id,vote_type=vote_type).first()
+        vote = Vote.by_kwargs(user_id=user_id,subject_id=subject_id,vote_type=vote_type).first()
         return vote if vote else None
 
     @classmethod
@@ -98,7 +89,6 @@ class Vote(Base,BaseMixin):
             vote.status = kwargs["status"]
         else:
             vote = cls(**kwargs)
-            DBSession.add(vote)
 
         return vote
 
@@ -115,26 +105,3 @@ class Vote(Base,BaseMixin):
 
         """
         DBSession.delete(vote_object)
-
-    @classmethod
-    def get_count_by_type(cls,key,vote_type,status):
-        """
-            PURPOSE: get the number of votes based on spec
-
-            USE: Vote.get_count_by_type(<id>,<int>,<)
-
-            PARAMS: 4 params
-                key: int : the id of the user or subject
-                vote_type: int : the type of the vote it is
-                status: int or string : the status int
-
-            RETURNS: (None)
-
-        """
-
-        kw = {
-            "subject_id":key,
-            'vote_type':vote_type,
-            'status':status,
-        }
-        return super(Vote,cls).by_kwargs(**kw).count()

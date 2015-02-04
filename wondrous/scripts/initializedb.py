@@ -26,6 +26,8 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri)
     initialize_sql(settings)
     engine = Base.metadata.bind
+    Base.metadata.drop_all()
+
     Base.metadata.create_all(engine)
 
     # from alembic.config import Config
