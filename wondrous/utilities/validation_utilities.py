@@ -24,7 +24,6 @@ from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 class PasswordManager(object):
 
     def _set_password(self, password):
-
         """
             PURPOSE: Hash and set the user's password
 
