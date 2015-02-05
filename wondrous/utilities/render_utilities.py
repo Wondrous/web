@@ -23,7 +23,7 @@ from wondrous.models.object import (
     ObjectLink,
     FileToObject,
     LinkToObject,
-    )
+)
 
 from wondrous.models.post import Post
 
@@ -392,22 +392,22 @@ class _AssemblePost(object):
         # upvoted tab on a user profile
         if profile_user_id:
             self.profile_user_id = profile_user_id
-            self.post_id       = data.object_id
+            self.post_id         = data.object_id
 
         # Otherwise, get all posts for
         # a tag, profile, or community
         else:
             self.profile_user_id = None
             self.post_id       = data.get('post_id')
-            self.global_tag_id   = data.get('global_tag_id') # One...
-            self.user_id      = data.get('user_id')    # Or the other.
+            self.global_tag_id = data.get('global_tag_id') # One...
+            self.user_id       = data.get('user_id')    # Or the other.
 
 
         # These are always needed, regardless
         # of where the post is being rendered
-        self.this_post     = Post.by_id(self.post_id)
-        self.user_id       = self.this_post.user_id
-        self.created_at     = self.this_post.created_at
+        self.this_post       = Post.by_id(self.post_id).first()
+        self.user_id         = self.this_post.user_id
+        self.created_at      = self.this_post.created_at
         self.current_user_id = current_user_id
 
     def assemble_data(self):
