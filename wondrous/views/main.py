@@ -364,15 +364,15 @@ class AuthHandler(BaseHandler):
 
                 # Check for validity
                 if not _s_valid_fn:
-                    error_message = "Your first name is {err}".format(len_err_fn)
+                    error_message = "Your first name is {err}".format(err=len_err_fn)
                 elif not _s_valid_ln:
-                    error_message = "Your last name is {err}".format(len_err_ln)
+                    error_message = "Your last name is {err}".format(err=len_err_ln)
                 elif not _s_valid_em:
                     error_message = "Please enter a valid email address"
                 elif _s_em_taken:
                     error_message = "This email has already been used to sign up. Please use a different one."
                 elif not _s_valid_pw:
-                    error_message = "Your password is {err}".format(len_err_pw)
+                    error_message = "Your password is {err}".format(err=len_err_pw)
                 elif not _s_valid_un:
                     error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
                 elif _s_un_taken:
