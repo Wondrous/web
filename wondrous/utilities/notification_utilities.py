@@ -5,11 +5,11 @@ CHANNEL_NOTIFICATION = "notification"
 DEFAULT_URI = 'nats://104.236.251.250:4222'
 
 c = Connection(url=DEFAULT_URI,verbose=False)
-
+import logging
 global CONNECTED
 
 try:
-    print "connected!"
+    logging.info("Notification server connected")
     c.connect()
     CONNECTED = True
 except Exception, e:

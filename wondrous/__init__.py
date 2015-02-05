@@ -49,8 +49,7 @@ def main_app(global_config, **settings):
     config.set_authentication_policy(authn_policy)  # Needed for global user object
     config.set_authorization_policy(authz_policy)   # Needed becasue I have an Authentication policy
 
-    config.add_request_method(AuthHelper.get_user, 'user', reify=True)  # GLOBAL USER OBJECT
-
+    config.add_request_method(AuthHelper.get_person, 'person', reify=True)  # GLOBAL USER OBJECT
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('pyramid_jinja2')
     config.add_jinja2_search_path("wondrous:templates")

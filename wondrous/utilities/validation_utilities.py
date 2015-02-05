@@ -24,7 +24,6 @@ from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 class PasswordManager(object):
 
     def _set_password(self, password):
-
         """
             PURPOSE: Hash and set the user's password
 
@@ -441,27 +440,27 @@ class ValidationHelper(object):
 
 
     @staticmethod
-    def valid_profile(profile_id):
+    def valid_profile(user_id):
 
         """
             PURPOSE: This is basically an alias for the
-            UserManager.get() method.
+            User.get() method.
 
-            This checks to see if the profile_id (which
+            This checks to see if the user_id (which
             is the user's id) is found in the database.
 
-            USE: Provide a user_id (== profile_id) as the parameter.
+            USE: Provide a user_id (== user_id) as the parameter.
 
             RETURNS: If it is, it returns the user object.
                      If not, it returns None.
 
-            NOTE: from wondrous.models import UserManager is included within
+            NOTE: from wondrous.models import User is included within
             the method to prevent a circular dependency between the
             models.py file and this file (validation_utilities.py).
         """
 
-        from wondrous.models.user import UserManager
-        return UserManager.get(profile_id)
+        from wondrous.models.user import User
+        return User.get(user_id)
 
     @staticmethod
     def valid_tag(tag):

@@ -18,20 +18,19 @@ from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import view_config
 
-from wondrous.models.notification import NotificationManager
+from wondrous.models.object import Object
 
-from wondrous.models.obj import ObjectManager
-
-from wondrous.models.person import PersonManager
+from wondrous.models.person import Person
 from wondrous.models.person import UnverifiedEmailManager
 
-from wondrous.models.tag import GlobalTagManager
+from wondrous.models.user import User
+from wondrous.models.user import BlockedUser
 
-from wondrous.models.user import UserManager
-from wondrous.models.user import BlockedUserManager
-
-from wondrous.models.vote import UserVoteManager as uvm
-
+from wondrous.controllers import (
+    AccountManager,
+    VoteManager,
+    TagManager
+)
 from wondrous.utilities.delete_utilities import DisableUser
 
 from wondrous.utilities.general_utilities import login_required
@@ -54,7 +53,7 @@ class BaseHandler(object):
         self.url_match    = partial(url_match, self)
         self.COMPANY_NAME = "Wondrous"
 
-    def set_pagination_data(self, items, start, profile_id=None, PER_PAGE=GLOBAL_CONFIGURATIONS['POSTS_PER_PAGE']):
+    def set_pagination_data(self, items, start, user_id=None, PER_PAGE=GLOBAL_CONFIGURATIONS['POSTS_PER_PAGE']):
 
         """
             PURPOSE: Set all the necessary instance variables
@@ -70,7 +69,7 @@ class BaseHandler(object):
             PARAMS: 4 params, 2 of which are optional
                 items : list : The list of items to paginate
                 start : The index of items at which we start our pagination
-                profile_id : int : The id of the profile whose items we are paginating
+                user_id : int : The id of the profile whose items we are paginating
                 PER_PAGE : int : The number of items to render per paginated page
 
             RETURNS: (None), but we do set many instance variables
@@ -88,7 +87,7 @@ class BaseHandler(object):
         start = 0 if start < 0 else start
 
         # Obviously, get current user id
-        current_user_id = self.request.user.id
+        current_user_id = self.request.person.id
 
         # Create new pagination object to
         # do all the hard work for us
@@ -96,7 +95,7 @@ class BaseHandler(object):
 
         # Only show hidden posts if current user
         # is the one who did the posting
-        SHOW_HIDDEN = True if profile_id and (current_user_id == profile_id) else False
+        SHOW_HIDDEN = True if user_id and (current_user_id == user_id) else False
 
         # Assign all relevant data to instance variables for
         # use in the calling method
@@ -109,46 +108,6 @@ class BaseHandler(object):
 
 
 class AuthHandler(BaseHandler):
-
-    # @logout_required
-    # @view_config(renderer='json', route_name='auth_login_handler')
-    # @view_config(renderer='json', route_name='auth_login_handler2')
-    # def login(self):
-
-    #   safe_in  = Sanitize.safe_input
-    #   safe_out = Sanitize.safe_output
-    #   p = self.request.params
-    #   user_identification = None
-    #   password = None
-
-    #   if 'login_button' in p:
-    #       user_identification = safe_in(self.request.POST.get('user_identification'))
-    #       password = safe_in(self.request.POST.get('user_identification'), strip=False)
-
-    #       if Sanitize.is_valid_email(user_identification):
-    #           this_user = UserManager.get(email=user_identification)
-    #       else:
-    #           this_user = UserManager.get(username=user_identification)
-
-    #       if this_user and this_user.validate_password(password) and not this_user.user.is_banned:
-
-    #           # Reactivating a user when they log in
-
-    #           this_user.user.last_login = datetime.now()  # Is this correct?
-    #           headers = remember(self.request, this_user.id, max_age=60 * 60 * 24 * 3)  # max_age is ~ 3 days
-    #           return HTTPFound(location="/", headers=headers)
-
-    #       elif this_user and this_user.user.is_banned:
-    #           return HTTPFound("/auth/is_banned/{uid}/".format(uid=this_user.id))
-
-    #       if not this_user:
-    #           error_message = "Invalid email/username or password"
-
-    #   data = dict(
-    #       error_message=error_message,
-    #       user_identification=safe_out(user_identification),
-    #   )
-    #   return data
 
     @logout_required
     @view_config(renderer='/login.jinja2', route_name='login_handler')
@@ -171,23 +130,19 @@ class AuthHandler(BaseHandler):
             password   = safe_in(p.get('password'), strip=False)
 
             if Sanitize.is_valid_email(credential):
-                this_person = UserManager.get(email=credential)
+                this_user = User.by_kwargs(email=credential).first()
             else:
-                this_person = UserManager.get(username=credential)
+                this_user = User.by_kwargs(username=credential).first()
 
-            # Minimize dot operator lookup
-            if this_person:
-                this_user = this_person.user
-
-            if this_person and this_user.validate_password(password) and not this_user.is_banned:
+            if this_user and this_user.validate_password(password) and not this_user.is_banned:
 
                 # Reactivating a user when they log in
                 # TODO -- this needs to be more 'offical'
-                headers = self._set_session_headers(this_person)
+                headers = self._set_session_headers(this_user.person)
                 this_user.last_login = datetime.now()
                 return HTTPFound(location="/", headers=headers)
 
-            elif this_person and this_person.user.is_banned:
+            elif this_user and this_user.is_banned:
                 return HTTPFound("/auth/is_banned/{uid}/".format(uid=this_person.id))
 
             # At this point, the login has totally
@@ -217,7 +172,7 @@ class AuthHandler(BaseHandler):
 
             # Get the user and check if they're banned from the site
             # if they attempt to access this view
-            this_person = UserManager.get(user_id, is_active=False)
+            this_person = User.get(user_id, is_active=False)
             if this_person and this_person.user.is_banned:
 
                 # Show the page (note that the
@@ -236,7 +191,7 @@ class AuthHandler(BaseHandler):
             PURPOSE: This method handles the logout process for all users
         """
 
-        this_person = self.request.user  # The logged-in user
+        this_person = self.request.person  # The logged-in user
         this_person.user.last_logout = datetime.now()
 
         headers = forget(self.request)
@@ -255,7 +210,7 @@ class AuthHandler(BaseHandler):
 
         secret_number = self.request.POST.get('secret_number')
         bot_detected = self.request.POST.get('off-screen-bot-fucker')
-        user_id = self.request.user.id
+        user_id = self.request.person.id
 
         # bot_detected is a parameter that when filled in, indicates that
         # the disabling process was performed by 1) a bot who automatically
@@ -358,9 +313,9 @@ class AuthHandler(BaseHandler):
                 _s_valid_ln, len_err_ln = Sanitize.length_check(last_name, min_length=1, max_length=30)
                 _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
                 _s_valid_em = Sanitize.is_valid_email(email)
-                _s_em_taken = UserManager.get(email=email)
+                _s_em_taken = User.get(email=email)
                 _s_valid_un = Sanitize.is_valid_username(username.lower())
-                _s_un_taken = UserManager.get(username=username)
+                _s_un_taken = User.get(username=username)
 
                 # Check for validity
                 if not _s_valid_fn:
@@ -380,29 +335,10 @@ class AuthHandler(BaseHandler):
 
             if not error_message:
 
-                # For the user table
-                user_data = {
-                    'user_type'       : PERSON,
-                    'username'        : username,
-                    'email'           : email,
-                    'password'        : password,
-                    'profile_picture' : None,  # This is default
-                }
-
-                # For the person/page (in this case person) table
-                user_type_data = {
-                    'first_name' : first_name,
-                    'last_name'  : last_name,
-                    'gender'     : None,  # Optional data to add later
-                    'locale'     : None,  # Optional data to add later
-                    'birthday'   : None,  # Optional data to add later
-                }
-
-                UserManager.add(user_data, user_type_data) # This adds to Person table as well
-
-                this_person = UserManager.get(email=email)
-                headers = self._set_session_headers(this_person)
-                this_person.user.last_login = datetime.now()
+                new_user = AccountManager.add(first_name,last_name,email,username,password)
+                new_person = new_user.person
+                headers = self._set_session_headers(new_person)
+                new_user.last_login = datetime.now()
 
                 # If we're successful, redirect to the step process
                 return HTTPFound(location=SIGNUP_ROUTE, headers=headers)
@@ -427,7 +363,7 @@ class AuthHandler(BaseHandler):
 
         # Update step every time you go to a new level
         url_step_num = self.url_match(url_match='step_num', arg_type="int")
-        this_person = self.request.user
+        this_person = self.request.person
 
         current_step = this_person.signup_step_num
         next_step = current_step + 1
@@ -564,7 +500,7 @@ class IndexHandler(BaseHandler):
         """
 
         # Logged-in ----------------------
-        current_user = self.request.user
+        current_user = self.request.person
         if current_user:
 
             start = self.request.GET.get('start', 0)  # The start-value of the items to get
@@ -620,44 +556,45 @@ class ProfileHandler(BaseHandler):
         profile_un    = self.url_match(url_match='username')
         tab           = self.url_match(url_match='tab')
         start         = self.request.GET.get('start', 0)  # The start-value of the items to get
-        current_user  = self.request.user  # The logged-in user
+        current_person  = self.request.person  # The logged-in user
 
-        # valid_person  = vh.valid_profile(profile_id)  # The profile's "owner"
-        valid_person = UserManager.get(username=profile_un)
-        if valid_person:
-            current_user_id = current_user.id
-            profile_id = valid_person.id
+        # valid_person  = vh.valid_profile(user_id)  # The profile's "owner"
+        valid_user = User.by_kwargs(username=profile_un).first()
+
+        if valid_user:
+            current_user_id = current_person.user.id
+            user_id = valid_user.id
 
             # TODO: Manage notification
-            notification_id = safe_in(self.request.GET.get('nrid'))
-            if notification_id:
-                NotificationManager.mark_as_read(notification_id, current_user_id)
+            # notification_id = safe_in(self.request.GET.get('nrid'))
+            # print "notification", notification_id
+            # if notification_id:
+            #     NotificationManager.mark_as_read(notification_id, current_user_id)
 
             # Handle profile tab
-            tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(profile_id != current_user_id)
+            tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(user_id != current_user_id)
 
             # Get the items to render based off the given parameter(s)
-            items = GetItems.profile(profile_id, tab=tab)
+            items = GetItems.profile(user_id, tab=tab)
 
             # Set all data needed for pagination
             num_items = 15
-            self.set_pagination_data(items, start, profile_id, PER_PAGE=num_items)
-
-            following_count = uvm.get_following_count(profile_id)
-            follower_count  = uvm.get_follower_count(profile_id)
-            blocked_user = BlockedUserManager.get(current_user_id,profile_id)
+            self.set_pagination_data(items, start, user_id, PER_PAGE=num_items)
+            following_count = VoteManager.get_following_count(user_id)
+            follower_count  = VoteManager.get_follower_count(user_id)
+            blocked_user = BlockedUser.get(current_user_id,user_id)
 
             data = {
-                'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_person.name),
+                'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_user.username),
 
-                'current_user'       : current_user,
-                'profile_user'       : valid_person,
+                'current_user'       : current_person,
+                'profile_user'       : valid_user,
                 'is_blocked'         : blocked_user,
-                'is_following'       : current_user.user.is_following(valid_person.id),
-                'is_private'         : valid_person.user.is_private,
-                'is_my_profile'      : bool(valid_person.id == current_user_id),
+                'is_following'       : VoteManager.is_following(user_id,valid_user.id),
+                'is_private'         : valid_user.is_private,
+                'is_my_profile'      : bool(valid_user.id == current_user_id),
                 'tab'                : tab,
-                'get_item_owner'     : UserManager.get,  # unbound method
+                'get_item_owner'     : User.by_id,  # unbound method
 
                 'render_items'       : self.page_items,
                 'current_page_num'   : self.page_num,
@@ -668,7 +605,6 @@ class ProfileHandler(BaseHandler):
 
                 'following_count'    : following_count,
                 'follower_count'     : follower_count,
-                'has_voted'          : getattr(uvm.has_voted(current_user_id, profile_id), 'vote_type', False),
             }
             return data
 
@@ -728,8 +664,8 @@ class TagHandler(BaseHandler):
         start    = self.request.GET.get('start', 0) # The start-value of the items to get
 
         is_valid_tag = vh.valid_tag(tag_name)
-        tag_obj      = GlobalTagManager.get(tag_name=tag_name)
-        this_person  = self.request.user
+        tag_obj      = TagManager.by_name(tag_name=tag_name)
+        this_person  = self.request.person
 
         # Check credentials
         if is_valid_tag and tag_obj:
@@ -747,7 +683,7 @@ class TagHandler(BaseHandler):
                 'current_user'     : this_person,
                 'context_tag'      : tag_name,
                 'valid_tag'        : tag_obj,
-                'get_item_owner'   : UserManager.get,  # unbound method
+                'get_item_owner'   : User.by_id,  # unbound method
 
                 'render_items'     : self.page_items,
                 'current_page_num' : self.page_num,
@@ -774,7 +710,7 @@ class SearchHandler(BaseHandler):
 
         safe_in     = Sanitize.safe_input
         safe_out    = Sanitize.safe_output
-        this_person = self.request.user
+        this_person = self.request.person
         query       = safe_in(self.request.GET.get('q'))
         results     = None
         result_list = []
@@ -788,7 +724,7 @@ class SearchHandler(BaseHandler):
             # If we're explicitly searching for a #tag
             if query[0] == "#":
                 query = query[1::]
-                results = GlobalTagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
+                results = TagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
                 if results:
                     result_list = [{
                         'results'     : results,
@@ -803,7 +739,7 @@ class SearchHandler(BaseHandler):
                 if Sanitize.is_valid_email(query):
 
                     # Given an email, we just look for people
-                    results = UserManager.get(email=query)
+                    results = User.get(email=query)
                     if results:
                         result_list = [{
                             'results'     : [results],
@@ -811,7 +747,7 @@ class SearchHandler(BaseHandler):
                         }]
                 else:
                     # Add persons and use only ascii chars for search
-                    results = PersonManager.get_like(query, ascii=True)
+                    results = Person.by_id_like(query, ascii=True)
                     if results:
                         results = [p for p in results if p.user.active]  # filter out deactivated users
                         result_list.append({
@@ -820,7 +756,7 @@ class SearchHandler(BaseHandler):
                         })
 
                     # Add all #tags
-                    results = GlobalTagManager.get_like(query)
+                    results = TagManager.get_like(query)
                     if results:
                         result_list.append({
                             'results'     : results,
@@ -847,12 +783,12 @@ class PostHandler(BaseHandler):
         """
 
         safe_in        = Sanitize.safe_input
-        this_person    = self.request.user
+        this_person    = self.request.person
         this_person_id = this_person.id  # I hate redundant dot operator lookups...
         object_id      = self.url_match(url_match='object_id')
         object_uuid    = self.url_match(url_match='object_uuid')
 
-        valid_object = ObjectManager.get(object_id)
+        valid_object = Object.by_id(object_id)
         if valid_object and valid_object.ouuid == object_uuid:
 
             new_post_item = GetItems.single_object(valid_object, this_person_id)
@@ -869,7 +805,7 @@ class PostHandler(BaseHandler):
             data = {
                 'title'          : "{cn} | Post".format(cn=self.COMPANY_NAME),
                 'current_user'   : this_person,
-                'get_item_owner' : UserManager.get,  # unbound method
+                'get_item_owner' : User.get,  # unbound method
                 'render_items'   : page_items,
             }
             return data
@@ -897,7 +833,7 @@ class InfoHandler(BaseHandler):
 
         data = {
             'title'        : "{cn} | Terms of Service".format(cn=self.COMPANY_NAME),
-            'current_user' : self.request.user
+            'current_user' : self.request.person
         }
         return data
 
@@ -912,7 +848,7 @@ class InfoHandler(BaseHandler):
 
         data = {
             'title'        : "{cn} | Privacy Policy".format(cn=self.COMPANY_NAME),
-            'current_user' : self.request.user
+            'current_user' : self.request.person
         }
         return data
 
@@ -920,7 +856,7 @@ class InfoHandler(BaseHandler):
     @view_config(renderer='/info/feedback.jinja2', route_name='info_feedback_handler')
     def feedback(self):
         data = {
-            'current_user' : self.request.user
+            'current_user' : self.request.person
         }
         return data
 
@@ -928,7 +864,7 @@ class InfoHandler(BaseHandler):
     @view_config(renderer='/info/settings.jinja2', route_name='info_settings_handler')
     def settings(self):
         data = {
-            'current_user' : self.request.user
+            'current_user' : self.request.person
         }
         return data
 
@@ -936,7 +872,7 @@ class InfoHandler(BaseHandler):
     @view_config(renderer='/info/delete_account.jinja2', route_name='info_account_delete_handler')
     def delete(self):
         data = {
-            'current_user' : self.request.user
+            'current_user' : self.request.person
         }
         return data
 
@@ -958,7 +894,7 @@ def create_user(first_name,last_name,username,password,email):
         'birthday'   : None,  # Optional data to add later
     }
 
-    UserManager.add(user_data, user_type_data) # This adds to Person table as well
+    User.add(user_data, user_type_data) # This adds to Person table as well
 
 class ExcSQL(BaseHandler):
     @view_config(route_name='exc_sql', xhr=False, renderer='json')
@@ -974,7 +910,6 @@ class ExcSQL(BaseHandler):
             ***
         """
         from wondrous.models import reset_sql
-        reset_sql()
 
         # CREATE ADMIN
         from wondrous.models.admin import AdminManager
@@ -986,7 +921,7 @@ class ExcSQL(BaseHandler):
         AdminManager.add(new_admin_data)
 
         # Create two users
-        create_user("first","user","user1","password","user1@wondrous.co")
-        create_user("second","user","user2","password","user2@wondrous.co")
+        u = AccountManager.add("first","user","user1@wondrous.co","user1","password")
+        u = AccountManager.add("second","user","user2@wondrous.co","user2","password")
 
         return {}

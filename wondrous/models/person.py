@@ -23,29 +23,42 @@ from sqlalchemy import Unicode
 
 from sqlalchemy.orm import column_property
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref
 
 from wondrous.models import Base
-from wondrous.models import DBSession
+from wondrous.models.modelmixins import BaseMixin
 
 from wondrous.utilities.validation_utilities import Sanitize
 
 
-class UnverifiedEmail(Base):
+class Person(Base,BaseMixin):
+    first_name = Column(Unicode, nullable=False)
+    last_name = Column(Unicode, nullable=False)
+    gender = Column(Unicode, nullable=True)
+    locale = Column(Unicode, nullable=True)
+    birthday = Column(DateTime, nullable=True)
+    show_tutorial = Column(Boolean, default=True, nullable=True)
+    signup_step_num = Column(Integer, default=1, nullable=False)
+
+    # Extremely important
+    name = column_property(first_name + " " + last_name)
+
+    user_id = Column(BigInteger, ForeignKey('user.id'))
+    user = relationship('User', backref=backref("person",uselist=False))
+
+
+
+class UnverifiedEmail(Base,BaseMixin):
 
     """
         Defines the table which stores all emails which
         have been unverified in the signup process
     """
-
-    __tablename__ = 'unverified_email'
-
-    id = Column(BigInteger, primary_key=True, nullable=False)
     code = Column(Unicode, nullable=True)
     email = Column(Unicode, nullable=False)
     attempts = Column(Integer, nullable=False, default=1)
     active = Column(Boolean, default=True)
     most_recent_attempt = Column(DateTime, nullable=False, default=datetime.now)
-    date_submitted = Column(DateTime, nullable=False, default=datetime.now)
 
 
 class UnverifiedEmailManager(object):
@@ -149,8 +162,8 @@ class UnverifiedEmailManager(object):
         # Prevent using same email over and over
         # Make sure email has not already been taken
         # and fully signed-up with
-        from wondrous.models.user import UserManager
-        taken_email = UserManager.get(email=email)
+        from wondrous.models.user import User
+        taken_email = User.by_kwargs(email=email).count>0
         if taken_email:
             return None, """
                 The email you entered has already been taken. Please
@@ -238,81 +251,3 @@ class WaitingListManager(object):
         new_waiting_list = WaitingList()
         new_waiting_list.email = waiting_list_data['email']
         DBSession.add(new_waiting_list)
-
-
-class Person(Base):
-
-    __tablename__ = 'person'
-
-    id = Column(BigInteger, ForeignKey('user.id'), primary_key=True, nullable=False)
-    first_name = Column(Unicode, nullable=False)
-    last_name = Column(Unicode, nullable=False)
-    ascii_name = Column(Unicode, nullable=False)
-    gender = Column(Unicode, nullable=True)
-    locale = Column(Unicode, nullable=True)
-    birthday = Column(DateTime, nullable=True)
-    show_tutorial = Column(Boolean, default=True, nullable=True)
-    signup_step_num = Column(Integer, default=1, nullable=False)
-
-    # Extremely important
-    name = column_property(first_name + " " + last_name)
-    user = relationship('User', foreign_keys='Person.id')
-
-
-class PersonManager(object):
-
-    @staticmethod
-    def _get(user_id):
-
-        """
-            PURPOSE: Get a person from the database
-
-            USE: Call like: PersonManager._get(<int>)
-
-            PARAMS: 1 param: an int, the id of the User to get
-
-            RETURNS: If found, a Person object
-                     Otherwise, None
-        """
-
-        return Person.query.filter(Person.id == user_id).first()
-
-
-    @staticmethod
-    def _add(person_data):
-
-        """
-            PURPOSE: Add a new person into the DB
-
-            USE: Call like: PersonManager._add(<dict>)
-
-            PARAMS: 1 param, a dict, with each key as column name:
-                -user_id
-                -first_name
-                -last_name
-                -gender
-                -locale
-                -birthday
-
-            RETURNS: None
-        """
-
-        new_person = Person()
-
-        new_person.id           = person_data['user_id']
-        new_person.first_name   = person_data['first_name']
-        new_person.last_name    = person_data['last_name']
-        new_person.ascii_name   = unidecode.unidecode("{fn} {ln}".format(fn=new_person.first_name, ln=new_person.last_name).decode('utf-8'))
-        new_person.gender       = person_data['gender']
-        new_person.locale       = person_data['locale']
-        new_person.birthday     = person_data['birthday']
-
-        DBSession.add(new_person)
-        DBSession.flush()
-
-    @staticmethod
-    def get_like(query, num=50, ascii=False):
-        if not ascii:
-            return Person.query.filter(Person.name.ilike("%{q}%".format(q=query))).limit(num).all()
-        elif ascii:
-            return Person.query.filter(Person.ascii_name.ilike("%{q}%".format(q=query))).limit(num).all()

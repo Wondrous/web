@@ -21,16 +21,11 @@ from wondrous.models.admin import AdminManager
 
 from wondrous.models.content import ReportedContentManager
 
-from wondrous.models.obj import ObjectManager
+from wondrous.models.object import Object
 
-from wondrous.models.person import PersonManager
+from wondrous.models.person import Person
 
-from wondrous.models.tag import ObjectTagManager
-from wondrous.models.tag import GlobalTagManager
-
-from wondrous.models.user import UserManager
-
-from wondrous.models.vote import ObjectVoteManager
+from wondrous.models.user import User
 
 from wondrous.utilities.general_utilities import SYSTEM_ADMIN_REQUIRED
 from wondrous.utilities.general_utilities import url_match
@@ -63,14 +58,14 @@ class AdminAuthHandler(AdminBaseHandler):
         this_admin = None
 
         if 'admin-login-button' in p:
-            
+
             username = safe_in(p.get('username'))
             password = safe_in(p.get('password'), strip=False)
             if username and password:
-                
+
                 this_admin = AdminManager.get(username=username)
                 if this_admin and this_admin.throttle_num < 3:
-                    
+
                     valid_attr_list = all([
                         this_admin,
                         this_admin.validate_password(password),
@@ -116,10 +111,10 @@ class AdminHandler(AdminBaseHandler):
 
         admin = self.request.admin
 
-        user_count = UserManager.count()
-        object_count = ObjectManager.count()
-        global_tag_count = GlobalTagManager.count()
-        
+        user_count = User.count()
+        object_count = Object.count()
+        global_tag_count = TagManager.count()
+
         big_data = dict(
             user_count=user_count,
             object_count=object_count,
@@ -140,10 +135,10 @@ class AdminHandler(AdminBaseHandler):
 
         admin = self.request.admin
 
-        user_count = UserManager.count()
-        object_count = ObjectManager.count()
+        user_count = User.count()
+        object_count = Object.count()
         object_tag_count = ObjectTagManager.count()
-        global_tag_count = GlobalTagManager.count()
+        global_tag_count = TagManager.count()
 
         avg_posts_per_user = object_count / float(user_count)
         avg_tags_per_post = object_tag_count / float(object_count)
@@ -160,7 +155,7 @@ class AdminHandler(AdminBaseHandler):
         avg_votes_per_object = object_total_vote_count / float(object_tag_count)
 
         reported_object_count = ReportedContentManager.count()
-        disabled_user_count = UserManager.count(is_active=False)
+        disabled_user_count = User.count(is_active=False)
 
         stats_package = dict(
             # Core
@@ -234,7 +229,7 @@ class AdminHandler(AdminBaseHandler):
                     success_message = "Admin successfully added"
             else:
                 error_message = "Please enter a username and password, and select value for super-admin"
-                
+
 
         data = dict(
             current_page='manage_admin',
@@ -259,7 +254,7 @@ class AdminHandler(AdminBaseHandler):
             admin=admin,
             render_items=all_reported_posts,
             top_offenders=ReportedContentManager.get_top_offenders(),
-            get_person=PersonManager._get,  # unbound method
+            get_person=Person.by_id,  # unbound method
             get_num_offenses=ReportedContentManager.get_total_offenses_for_user,  # unbound method
             SUPER_ADMIN=self.SUPER_ADMIN,
         )
@@ -281,7 +276,7 @@ class AdminHandler(AdminBaseHandler):
                 search_user_id = None
 
             if search_user_id:
-                valid_user = UserManager.get(search_user_id) or UserManager.get(search_user_id, is_active=False)
+                valid_user = User.get(search_user_id) or User.get(search_user_id, is_active=False)
                 if valid_user:
                     return HTTPFound("/_admin/manage/users/{uid}/".format(uid=valid_user.id))
                 else:
@@ -292,8 +287,8 @@ class AdminHandler(AdminBaseHandler):
         data = dict(
             current_page='manage_users',
             admin=admin,
-            all_banned_users=UserManager.get_all_banned_users(),
-            get_person=PersonManager._get,  # unbound method
+            all_banned_users=User.get_all_banned_users(),
+            get_person=Person.by_id,  # unbound method
             get_num_offenses=ReportedContentManager.get_total_offenses_for_user,  # unbound method
             SUPER_ADMIN=self.SUPER_ADMIN,
             error_message=error_message,
@@ -307,7 +302,7 @@ class AdminHandler(AdminBaseHandler):
         user_id = self.url_match(url_match='user_id', arg_type="int")
         admin = self.request.admin
 
-        valid_user = UserManager.get(user_id) or UserManager.get(user_id, is_active=False)
+        valid_user = User.get(user_id) or User.get(user_id, is_active=False)
         if valid_user:
             data = dict(
                 current_page='manage_users',

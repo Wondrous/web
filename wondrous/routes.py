@@ -14,6 +14,7 @@
 # trying to take the username "signup" or "tag".
 # We deem these paths to be already taken.
 TAKEN_PATHS = set([
+    'api',
     'ajax',
     'auth',
     'info',
@@ -70,7 +71,7 @@ def build_routes(config):
     config.add_route('ajax_global_tag_vote_handler',           '/ajax/global_tag_vote/{ajax_method}/')
     config.add_route('ajax_object_vote_handler',               '/ajax/object_vote/{ajax_method}/')
     config.add_route('ajax_user_vote_handler',                 '/ajax/user_vote/{ajax_method}/')
-
+    config.add_route('accept_user_request',                     '/ajax/user_vote_accept/')
     config.add_route('ajax_comment_handler',                   '/ajax/comment/')
     config.add_route('ajax_post_handler',                      '/ajax/post/{ajax_method}/')
     config.add_route('ajax_toggle_profile_visibility_handler', '/ajax/toggle_profile_visibility/')

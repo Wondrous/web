@@ -27,15 +27,15 @@ _AUDIO_MIMES = [
 
     'audio/mpeg3',
     'audio/x-mpeg-3',
-    
+
     'audio/mp4',
     'audio/mpeg',
-    
+
     'audio/ogg',
-    
+
     'audio/wav',
     'audio/x-wav',
-    
+
     'audio/webm',
 ]
 
@@ -57,9 +57,9 @@ _IMAGE_MIMES_NO_GIF = [
 
 _TEXT_MIMES = [
     'text/csv',
-    
+
     'text/plain',
-    
+
     'text/rtf',
     'text/richtext',
 ]
@@ -68,9 +68,9 @@ _VIDEO_MIMES = [
     'video/mp4',
     'video/mpeg',
     'video/x-mpeg',
-    
+
     'video/ogg',
-    
+
     'video/webm',
 ]
 
@@ -83,7 +83,7 @@ _MICROSOFT_MIMES = [
 
     'application/msword', # .doc, .dot
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document', # .docx
-    
+
     'application/excel',  # xls
     'application/x-excel',  # xls
     'application/x-msexcel',  # xls
@@ -124,11 +124,11 @@ INVLAID_MIME_TYPES = set(
 )
 
 VALID_MIME_TYPES = set(
-    _APPLICATION_MIMES + 
-    _AUDIO_MIMES + 
-    _IMAGE_MIMES + 
-    _TEXT_MIMES + 
-    _VIDEO_MIMES + 
+    _APPLICATION_MIMES +
+    _AUDIO_MIMES +
+    _IMAGE_MIMES +
+    _TEXT_MIMES +
+    _VIDEO_MIMES +
     _MICROSOFT_MIMES
 )
 
@@ -137,7 +137,7 @@ def login_required(func):
     """
         PURPOSE: A decorator that ensures a view is only
         accesible when a user is logged *in*
-        
+
         USE: Decorate a handler with:
                 @login_required  <---- Decorator
                 @view_config(...)
@@ -146,15 +146,15 @@ def login_required(func):
 
         PARAMS: No params when used as a decorator
 
-        RETURNS: A bound function, which gets implicitly 
-        called via wrapper, i.e., it proceeds with the 
-        handler method as normal. Or, if user logged out, 
+        RETURNS: A bound function, which gets implicitly
+        called via wrapper, i.e., it proceeds with the
+        handler method as normal. Or, if user logged out,
         it perfroms a redirect back to index, via HTTPFound("/")
     """
 
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        return func(self,*args,**kwargs) if self.request.user else HTTPFound("/login/")
+        return func(self,*args,**kwargs) if self.request.person else HTTPFound("/login/")
     return wrapper
 
 def SYSTEM_ADMIN_REQUIRED(super_admin=False):
@@ -175,7 +175,7 @@ def logout_required(func):
     """
         PURPOSE: A decorator that ensures a view is only
         accesible when a user is logged *out*
-        
+
         USE: Decorate a handler with:
                 @logout_required  <---- Decorator
                 @view_config(...)
@@ -184,15 +184,15 @@ def logout_required(func):
 
         PARAMS: No params when used as a decorator
 
-        RETURNS: A bound function, which gets implicitly 
-        called via wrapper, i.e., it proceeds with the 
-        handler method as normal. Or, if user logged in, 
+        RETURNS: A bound function, which gets implicitly
+        called via wrapper, i.e., it proceeds with the
+        handler method as normal. Or, if user logged in,
         it perfroms a redirect back to index, via HTTPFound("/")
     """
 
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        return HTTPFound("/") if self.request.user else func(self,*args,**kwargs)
+        return HTTPFound("/") if self.request.person else func(self,*args,**kwargs)
     return wrapper
 
 def url_match(self, url_match=None, arg_type="str"):
@@ -211,12 +211,12 @@ def url_match(self, url_match=None, arg_type="str"):
 
             Call like: page = url_match(self, url_match=<name_to_match>[, arg_type="int"])
 
-        PARAMS: 3 params, 1st is 'self', and is required. 
+        PARAMS: 3 params, 1st is 'self', and is required.
         2nd is the optional url_match, which must be the
         same name as the wildcard in the particular view
         method this is being called within. 3rd is
         arg_type, which is optional and defaults to "str"
-        
+
             arg_type can be either: "str" or "int"
 
         NOTE: only necessary to provide arg type if an "int"
@@ -260,10 +260,10 @@ def send_email(to_email, verification_code):
 
     USER = ""  # TODO
     PW  = ""  # TODO
-    
+
     FROM       = 'Wondrous <hello@wondrous.com>'
     TO         = [to_email]  # must be a list
-    
+
     SUBJECT    = "Confirm Email"
     TEXT       = """
 Greetings & salutations,
@@ -279,7 +279,7 @@ http://www.mojorank.com/auth/verify/{code}/
         sub=SUBJECT,
         txt=TEXT
     )
-    
+
     try:
         server = smtplib.SMTP(SERVER, PORT)
         server.ehlo()
@@ -287,7 +287,7 @@ http://www.mojorank.com/auth/verify/{code}/
         server.login(USER, PW)
         server.sendmail(FROM, TO, MESSAGE)
         server.close()
-        
+
         error_message = None
     except:
         error_message = "The confirmation email failed to send"

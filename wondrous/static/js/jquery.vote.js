@@ -85,7 +85,7 @@ function userVoteAjax(thisButton, voteType, profileID) {
     $.ajax({
         type: "POST",
         url: "/ajax/user_vote/" + voteType + "/",
-        data: {'profile_id': profileID},
+        data: {'user_id': profileID},
         success: function(vote_data) {
             // TODO
             console.log(vote_data);

@@ -36,7 +36,7 @@ wondrous.models.notification module
     :undoc-members:
     :show-inheritance:
 
-wondrous.models.obj module
+wondrous.modelsobjectmodule
 --------------------------
 
 .. automodule:: wondrous.models.obj

@@ -1,5 +1,5 @@
 <div class="profile-header">
-    <img src="{{profile_user.user.profile_picture}}" class="profile-photo round-50">
+    <img src="{{profile_user.profile_picture}}" class="profile-photo round-50">
 
     <span class="profile-header-content">
         <span class="profile-name">{{ profile_user.name }}</span>
@@ -18,10 +18,10 @@
     </span>
 
     <span class="profile-header-nav">
-        <a class="profile-header-nav-link {% if not tab %}current-tab{% endif %}" href="/{{profile_user.user.username}}/">Posts</a>
-        <a class="profile-header-nav-link {% if tab == "followers" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/followers/">Followers</a>
-        <a class="profile-header-nav-link {% if tab == "following" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/following/">Following</a>
-        <a class="profile-header-nav-link {% if tab == "likes" %}current-tab{% endif %}" href="/{{profile_user.user.username}}/likes/">l!kes</a>
+        <a class="profile-header-nav-link {% if not tab %}current-tab{% endif %}" href="/{{profile_user.username}}/">Posts</a>
+        <a class="profile-header-nav-link {% if tab == "followers" %}current-tab{% endif %}" href="/{{profile_user.username}}/followers/">Followers</a>
+        <a class="profile-header-nav-link {% if tab == "following" %}current-tab{% endif %}" href="/{{profile_user.username}}/following/">Following</a>
+        <a class="profile-header-nav-link {% if tab == "likes" %}current-tab{% endif %}" href="/{{profile_user.username}}/likes/">l!kes</a>
     </span>
 </div>
 <div class="profile-content">

@@ -48,6 +48,7 @@ $(document).ready(function() {
                 // Add in empty containers where each post will go
                 // to preserve the order of the posts when the ajax
                 // loads them
+                console.log("majority",data);
                 var asyncPostContainer = $("#asyncPosts");
                 for (var i=0; i < data.length; i++) {
                     asyncPostContainer.append("<div class='default-loading-post' id='async_o-" + data[i].object_id + "'>" +

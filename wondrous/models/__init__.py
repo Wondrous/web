@@ -29,20 +29,24 @@ from wondrous.models.admin import (
 )
 
 from wondrous.models.comment import (
-    ObjectComment,
+    Comment,
 )
 
 from wondrous.models.content import (
     DeletedContent,
-    DeletedObjectComment,
+    DeletedComment,
     ReportedContent,
 )
 
+from wondrous.models.feed import (
+    Feed,
+    FeedPostLink
+)
 from wondrous.models.notification import (
     Notification,
 )
 
-from wondrous.models.obj import (
+from wondrous.models.object import (
     Object,
     ObjectLink,
     ObjectFile,
@@ -51,7 +55,7 @@ from wondrous.models.obj import (
 )
 
 from wondrous.models.post import (
-    WallPost,
+    Post,
 )
 
 from wondrous.models.page import (
@@ -66,8 +70,8 @@ from wondrous.models.person import (
 )
 
 from wondrous.models.tag import (
-    GlobalTag,
-    ObjectTag,
+    Tag,
+    PostTagLink,
 )
 
 from wondrous.models.user import (
@@ -76,19 +80,18 @@ from wondrous.models.user import (
 )
 
 from wondrous.models.vote import (
-    ObjectVote,
-    ObjectBookmarkVote,
-    UserVote,
+    Vote
 )
 
 
-def initialize_sql(settings):
-
+def initialize_sql(settings, testing=False):
     """ Called by the app on startup to setup bindings to the DB """
     global engine
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+    if testing:
+        Base.metadata.create_all()
 
 def reset_sql():
     # FOR TESTING ONLY!

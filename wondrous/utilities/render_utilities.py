@@ -13,25 +13,31 @@ from urlparse import urlparse
 from json import dumps
 from datetime import datetime
 
-from wondrous.models.comment import ObjectCommentManager
+from wondrous.models.comment import Comment
 
 from wondrous.models.content import ReportedContentManager
 
-from wondrous.models.obj import ObjectManager
-from wondrous.models.obj import ObjectFileManager
-from wondrous.models.obj import ObjectLinkManager
-from wondrous.models.obj import FileToObjectManager
-from wondrous.models.obj import LinkToObjectManager
+from wondrous.models.object import (
+    Object,
+    ObjectFile,
+    ObjectLink,
+    FileToObject,
+    LinkToObject,
+    )
 
-from wondrous.models.post import WallPostManager
+from wondrous.models.post import Post
 
-from wondrous.models.tag import GlobalTagManager
-from wondrous.models.tag import ObjectTagManager
+from wondrous.models.tag import Tag
 
-from wondrous.models.user import UserManager
+from wondrous.models.user import User
 
-from wondrous.models.vote import ObjectVoteManager
-from wondrous.models.vote import UserVote
+from wondrous.models.vote import Vote
+
+from wondrous.controllers import (
+    FeedManager,
+    VoteManager,
+    TagManager
+)
 
 from wondrous.utilities.validation_utilities import ValidationHelper as vh
 
@@ -163,22 +169,22 @@ class CreateNewPost(object):
             PARAMS: A dict with the following keys:
                 -user_id        -hidden_from_community
                 -post_tags      -post_text
-                -profile_id     -post_links
+                -user_id     -post_links
                 -object_file_id -post_subject
 
 
-            RETURNS: A new WallPost object
+            RETURNS: A new Post object
         """
 
         SYS_TAGS = set([SYS_CONTEXT_TAGS['wall']])
 
         new_obj = CreateNewPost._global_process(new_post_data, SYS_TAGS)
 
-        wall_post_data = {
-            'profile_id' : new_post_data['profile_id'],
+        post_data = {
+            'user_id' : new_post_data['user_id'],
             'object_id'  : new_obj.id,
         }
-        return WallPostManager.add(wall_post_data)
+        return Post.add(post_data)
 
     @staticmethod
     def _global_process(new_post_data, SYS_TAGS):
@@ -218,7 +224,7 @@ class CreateNewPost(object):
             for link in new_post_data['post_links']:
 
                 # Check to see if someone has already posted this link
-                existing_link = ObjectLinkManager.get(link)
+                existing_link = ObjectLink.get(link)
                 if existing_link:
                     link_id = existing_link.id
                 else:
@@ -227,7 +233,7 @@ class CreateNewPost(object):
                         'url'       : link,
                         'mime_type' : None,  # TODO
                     }
-                    new_link = ObjectLinkManager.add(object_link_data)
+                    new_link = ObjectLink.add(object_link_data)
                     link_id = new_link.id
 
                 # Map this link to the new post regardelsss
@@ -235,7 +241,7 @@ class CreateNewPost(object):
                     'object_id'      : new_obj_id,
                     'object_link_id' : link_id,
                 }
-                LinkToObjectManager.add(link_to_object_data)
+                LinkToObject.add(link_to_object_data)
 
         # -- Add in MappingObjectToFile row ----
         if new_post_data['object_file_id']:
@@ -245,9 +251,9 @@ class CreateNewPost(object):
                 'object_id'      : new_obj_id,
                 'object_file_id' : new_post_data['object_file_id'],
             }
-            FileToObjectManager.add(file_to_object_data)
+            FileToObject.add(file_to_object_data)
 
-            object_file = ObjectFileManager.get(new_post_data['object_file_id'], is_mapped=False)
+            object_file = ObjectFile.get(new_post_data['object_file_id'], is_mapped=False)
             if object_file:
                 object_file.mapped = True
 
@@ -275,9 +281,9 @@ class CreateNewPost(object):
         object_data = {
             'subject'   : post_subject,
             'text'      : post_text,
-            'poster_id' : user_id,
+            'user_id' : user_id,
         }
-        new_obj = ObjectManager.add(object_data)
+        new_obj = Object(object_data)
         return new_obj
 
     @staticmethod
@@ -305,10 +311,10 @@ class CreateNewPost(object):
 
         for tag in SYS_TAGS:
 
-            tag_obj = GlobalTagManager.get(tag_name=tag)
+            tag_obj = TagManager.by_name(tag_name=tag)
             if not tag_obj:
                 global_tag_data = {'tag_name' : tag}
-                tag_obj = GlobalTagManager.add(global_tag_data)
+                tag_obj = TagManager.add(global_tag_data)
 
             global_tag_id = tag_obj.id
             object_tag_data = {
@@ -322,10 +328,10 @@ class CreateNewPost(object):
             # If the tag is valid
             if vh.valid_tag(tag):
 
-                tag_obj = GlobalTagManager.get(tag_name=tag)
+                tag_obj = TagManager.by_name(tag_name=tag)
                 if not tag_obj:
                     global_tag_data = {'tag_name' : tag}
-                    tag_obj = GlobalTagManager.add(global_tag_data)
+                    tag_obj = TagManager.add(global_tag_data)
 
                 global_tag_id = tag_obj.id
                 object_tag_data = {
@@ -366,17 +372,17 @@ class _AssemblePost(object):
             RETURNS: a dict() of all the necessary
             data for each post to be rendered
                 On a profile, this includes:
-                    -object_id (int)                -date_posted (datetime)
+                    -object_id (int)                -created_at (datetime)
                     -text (str)                     -hidden (bool)
                     -context_tag_id (int)           -context_tag_name (str)
                     -profile_user_id (int)          -upvotes (int)
                     -profile_user_name (str)        -downvotes (int)
-                    -posted_by_profile_owner (bool) -poster_id (int)
+                    -posted_by_profile_owner (bool) -user_id (int)
                     -my_profile (bool)              -object_links (list of dicts with keys: url, scheme, mime_type, is_dead)
                     -tags (list)                    -has_voted (1 or -1)
 
             FOR TAGS: Given an object_id
-            FOR PROFILE: Given a profile_id - Keep in mind we also need the post info, not just object
+            FOR PROFILE: Given a user_id - Keep in mind we also need the post info, not just object
         """
 
         self.final_data = {}
@@ -386,22 +392,22 @@ class _AssemblePost(object):
         # upvoted tab on a user profile
         if profile_user_id:
             self.profile_user_id = profile_user_id
-            self.object_id       = data.object_id
+            self.post_id       = data.object_id
 
         # Otherwise, get all posts for
         # a tag, profile, or community
         else:
             self.profile_user_id = None
-            self.object_id       = data.get('object_id')
+            self.post_id       = data.get('post_id')
             self.global_tag_id   = data.get('global_tag_id') # One...
-            self.profile_id      = data.get('profile_id')    # Or the other.
+            self.user_id      = data.get('user_id')    # Or the other.
 
 
         # These are always needed, regardless
         # of where the post is being rendered
-        self.this_object     = ObjectManager.get(self.object_id)
-        self.poster_id       = self.this_object.poster_id
-        self.date_posted     = self.this_object.date_posted
+        self.this_post     = Post.by_id(self.post_id)
+        self.user_id       = self.this_post.user_id
+        self.created_at     = self.this_post.created_at
         self.current_user_id = current_user_id
 
     def assemble_data(self):
@@ -419,11 +425,11 @@ class _AssemblePost(object):
         """
 
         # IF THE OBJECT IS DEACTIVATED WE IGNORE IT
-        if not self.this_object.active:
+        if not self.this_post.object.active:
             return None
 
         # IF THE USER HAS REPORTED THIS OBJECT, WE IGNORE IT
-        elif ReportedContentManager.has_reported(self.current_user_id, self.object_id):
+        elif ReportedContentManager.has_reported(self.current_user_id, self.post_id):
             return None
 
         # Some configurations...
@@ -437,7 +443,7 @@ class _AssemblePost(object):
         # '' instead of None so that everything works
         # nicely and our variable uses a consistent
         # data type
-        object_text = self.this_object.text if self.this_object.text else ''
+        object_text = self.this_post.object.text if self.this_post.object.text else ''
 
         # If a post contains too many line <br>s, we can
         # assume that the post takes up too much vertical
@@ -445,19 +451,19 @@ class _AssemblePost(object):
         # dict value to True.
         text_line_count = len(object_text.split('<br>'))
 
-        self.final_data['object_id'] = self.object_id
-        self.final_data['poster_id'] = self.poster_id
+        self.final_data['object_id'] = self.post_id
+        self.final_data['user_id'] = self.user_id
         self.final_data['text']      = _hashtagify(_linkify(object_text))
         self.final_data['_see_more'] = True if (len(object_text) > MAX_CHAR_SHOW_TEXT or text_line_count > MAX_BR_SHOW_TEXT) else False
         self.final_data['_font_size'], self.final_data['_line_height'] = self._get_font_attrs(object_text)
-        self.final_data['subject']   = self.this_object.subject
-        self.final_data['is_poster'] = bool(self.poster_id == self.current_user_id)
-        self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.object_id, self.this_object.ouuid))
+        self.final_data['subject']   = self.this_post.object.subject
+        self.final_data['is_poster'] = bool(self.user_id == self.current_user_id)
+        self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.post_id, self.this_post.object.ouuid))
         self.final_data['post_comments'] = [{
             'comment_id'   : c.id,
-            'poster_id'    : c.poster_id,
+            'user_id'    : c.user_id,
             'text'         : _linkify(c.text),
-        } for c in ObjectCommentManager.get_all_comments_for_object(self.object_id)]
+        } for c in Comment.get_all_comments_for_object(self.post_id)]
 
         self._set_object_type()
 
@@ -484,7 +490,7 @@ class _AssemblePost(object):
             RETURNS: None
         """
 
-        links_to_object = LinkToObjectManager.get_all_links_for_object(self.object_id)
+        links_to_object = LinkToObject.get_all_links_for_object(self.post_id)
         self.final_data['object_links'] = [{
             'url'       : l.link.url,
             'scheme'    : l.link.scheme,
@@ -492,7 +498,7 @@ class _AssemblePost(object):
             'is_dead'   : l.link.is_dead
         } for l in links_to_object]
 
-        files_to_object = FileToObjectManager.get_all_files_for_object(self.object_id)
+        files_to_object = FileToObject.get_all_files_for_object(self.post_id)
         self.final_data['object_files'] = [{
             'original_file_name' : f.object_file.original_file_name,
             'mime_type'          : f.object_file.mime_type,
@@ -517,19 +523,19 @@ class _AssemblePost(object):
         """
 
         posted_by_profile_owner = False  # Initialize to False
-        if self.profile_id and self.poster_id:
+        if self.user_id and self.user_id:
 
-            wall_post_ob = WallPostManager.get(self.object_id)
-            self.final_data['date_posted'] = str(self.date_posted)
-            self.final_data['hidden']      = wall_post_ob.hidden
+            post_ob = Post.by_id(self.post_id)
+            self.final_data['created_at'] = str(self.created_at)
+            self.final_data['hidden']      = post_ob.hidden
 
-            if str(self.profile_id) == str(self.poster_id):
+            if str(self.user_id) == str(self.user_id):
                 posted_by_profile_owner = True
-                self.final_data['profile_user_name'] = UserManager.get(self.profile_id).name
-                self.final_data['profile_user_id']   = self.profile_id
+                self.final_data['profile_user_name'] = User.by_id(self.user_id).username
+                self.final_data['profile_user_id']   = self.user_id
 
         self.final_data['posted_by_profile_owner'] = posted_by_profile_owner
-        self.final_data['my_profile'] = bool(str(self.current_user_id) == str(self.profile_id))
+        self.final_data['my_profile'] = bool(str(self.current_user_id) == str(self.user_id))
 
     def _set_all_tags(self):
 
@@ -545,36 +551,15 @@ class _AssemblePost(object):
         """
 
         # Get the object tags
-        tag_objs = ObjectTagManager.get_all(self.object_id)
+        tag_objs = TagManager.by_post_id(self.post_id)
 
         # Create a list (of tags) for this value in the dict
         self.final_data['tags'] = []
 
-        # This is not needed when get the
-        # upvoted items which require the
-        # self.profile_user_id
-        if not self.profile_user_id:
-            # If we are viewing a GlobalTag
-            if self.global_tag_id:
-                global_tag_name = GlobalTagManager.get(tag_id=self.global_tag_id).tag_name
-            else:
-                global_tag_name = SYS_CONTEXT_TAGS['wall']
-
         # Add all relevant object-tags
         assemble_on_tag = False
         for tag in tag_objs:
-            tag_name = tag.global_tag.tag_name
-
-            if not self.profile_user_id:
-                assemble_on_tag = bool(tag_name.lower() == global_tag_name.lower())
-
-            # Set the context tag IF we're rendering to a tag
-            if assemble_on_tag:
-
-                # These only need to be set once. But all this needs to
-                # be fixed up, so I didn't put too much time into it....
-                self.final_data['context_tag_id'] = tag.id
-                self.final_data['context_tag_name'] = tag_name
+            tag_name = tag.tag_name
 
             # Add in all other tags
             if tag_name not in SYS_CONTEXT_TAGS.values():
@@ -598,8 +583,8 @@ class _AssemblePost(object):
         """
 
         object_id = self.final_data['object_id']
-        total_upvotes = ObjectVoteManager.get_like_count(object_id) # context_tag_id
-        has_voted = getattr(ObjectVoteManager.has_voted(self.current_user_id, object_id), 'vote_type', False) # context_tag_id
+        total_upvotes = VoteManager.get_like_count(object_id) # context_tag_id
+        has_voted = VoteManager.get_vote(self.current_user_id, object_id, Vote.LIKE) is not None
 
         self.final_data['upvotes']   = total_upvotes
         self.final_data['has_voted'] = has_voted
@@ -678,7 +663,7 @@ class HtmlifyComment(object):
 
             item_data must be a dict, which consists of the following:
                 items_data = dict(
-                    poster_id = <int>,
+                    user_id = <int>,
                     text = <str>,
                 )
         """
@@ -690,7 +675,7 @@ class HtmlifyComment(object):
         html_output = template.render(
             current_user=current_user,
             item={'post_comments' : [item_data]},
-            get_item_owner=UserManager.get,  # unbound method
+            get_item_owner=User.by_id,  # unbound method
         )
 
         return html_output
@@ -753,14 +738,14 @@ class HtmlifyPost(object):
                 profile_user=profile_user,
                 current_user=current_user,
                 render_items=[item_data],
-                get_item_owner=UserManager.get,  # unbound method
+                get_item_owner=User.by_id,  # unbound method
             )
         else:
             template = env.get_template('includes/posts/inc.posts_tag.jinja2')
             html_output = template.render(
                 current_user=current_user,
                 render_items=[item_data],
-                get_item_owner=UserManager.get,  # unbound method
+                get_item_owner=User.by_id,  # unbound method
             )
 
         return html_output
@@ -959,12 +944,12 @@ class _GenerateItemList(object):
         return delegate_assemble(item_list, current_user_id)
 
     @staticmethod
-    def new_wall_post(post_obj, current_user_id):
+    def new_post(post_obj, current_user_id):
 
         """
             PURPOSE: Load the new Post when a user posts to a wall
 
-            USE: Call like: _GenerateItemList.new_wall_post(<obj>)
+            USE: Call like: _GenerateItemList.new_post(<obj>)
 
             PARAMS:
                 post_obj : obj : REQUIRED : A post_object of the post for which we
@@ -977,13 +962,13 @@ class _GenerateItemList(object):
         # A single item
         item_list = [{
             'object_id'  : post_obj.object_id,
-            'profile_id' : post_obj.profile_id,
+            'user_id' : post_obj.user_id,
         }]
 
         return delegate_assemble(item_list, current_user_id)
 
     @staticmethod
-    def wall_items(profile_id):
+    def wall_items(user_id):
 
         """
             PURPOSE: Load a profile items
@@ -991,18 +976,18 @@ class _GenerateItemList(object):
             USE: Call like: _GenerateItemList.wall_items(<int>)
 
             PARAMS: 1 required parameter:
-                profile_id : int : REQUIRED : The id of the profile's user whose items we want to get
+                user_id : int : REQUIRED : The id of the profile's user whose items we want to get
 
             RETURNS: A list of dicts of a chunk of posts on that profile
         """
 
         item_list = []
-        post_objs = WallPostManager.get_all(profile_id)
+        post_objs = Post.by_kwargs(user_id=user_id).all()
 
         for post in post_objs:
             item_list.append({
                 'object_id'  : post.object_id,
-                'profile_id' : post.profile_id,
+                'user_id' : post.user_id,
                 'hidden'     : post.hidden,
             })
 
@@ -1023,11 +1008,11 @@ class _GenerateItemList(object):
             RETURNS: A list of dicts of a chunk of posts for the current user
         """
         item_list = []
-        post_objs = WallPostManager.get_all_subscribed(current_user_id)
+        post_objs = FeedManager.get_feed_posts(current_user_id)
         for post in post_objs:
             item_list.append({
                 'object_id'  : post.object_id,
-                'profile_id' : post.profile_id,
+                'user_id' : post.user_id,
                 'hidden'     : post.hidden,
             })
 
@@ -1055,27 +1040,11 @@ class _GenerateItemList(object):
         """
 
         item_list = []
-        global_tag_obj = GlobalTagManager.get(tag_name=global_tag_name)
+        post_ids = [{'post_id':post_id} for post_id in TagManager.get_all_objects_by_tag_name(tag_name=global_tag_name)]
 
-        if global_tag_obj:
+        if post_ids:
 
-            global_tag_id = global_tag_obj.id
-            tag_objs = ObjectTagManager.get_all(global_tag_id=global_tag_id)
-
-            for tag in tag_objs:
-                item_list.append({
-                    'object_id'     : tag.object_id,
-                    'global_tag_id' : global_tag_id,
-                })
-
-            # We are NOT currently using anything from the
-            # rank_utilities file, but this is kept so that
-            # if we want to, in the future, algorithmically rank items
-            # and them put them in the feed, we have the infrastructure to
-            # do so (within reason...)
-            # item_list = RankUtilities.rank_items(item_list)
-
-            return delegate_assemble(item_list, current_user_id)
+            return delegate_assemble(post_ids, current_user_id)
 
     @staticmethod
     def get_liked_posts(current_user_id, profile_user_id):
@@ -1094,7 +1063,7 @@ class _GenerateItemList(object):
             RETURNS: A list of dicts, with each dict containing a full post's info
         """
 
-        object_upvotes = ObjectVoteManager.get_liked_objects_for_user(profile_user_id)
+        object_upvotes = VoteManager.get_liked_objects_for_user(profile_user_id)
         upvoted_posts_list = []
         for data in object_upvotes:
             p = _AssemblePost(data, current_user_id, profile_user_id=profile_user_id).assemble_data()
@@ -1104,61 +1073,7 @@ class _GenerateItemList(object):
         return upvoted_posts_list
 
     @staticmethod
-    def get_following(profile_user_id):
-
-        """
-            PURPOSE: Get all the users a particular other user
-            user has followed, indicated by profile_user_id
-
-            USE: Call like: _GenerateItemList.get_following(<int>)
-
-            PARAMS:
-                profile_user_id : int : The id of the user whose profile is being viewed
-
-            RETURNS: A list of dicts, with each dict containg an upvoted user's info
-        """
-
-        upvoted_users = UserVote.query.filter(UserVote.user_id == profile_user_id).\
-                                       filter(UserVote.active == True).\
-                                       filter(UserVote.vote_type == 1).all()
-
-        upvoted_users_list = []
-        for user_vote in upvoted_users:
-            user_obj = UserManager.get(user_vote.voted_on_id)
-            if user_obj:
-                upvoted_users_list.append(user_obj)
-
-        return upvoted_users_list
-
-    @staticmethod
-    def get_followers(profile_user_id):
-
-        """
-            PURPOSE: Get all the users a particular other user
-            user has been followed by, indicated by profile_user_id
-
-            USE: Call like: _GenerateItemList.get_followers(<int>)
-
-            PARAMS:
-                profile_user_id : int : The id of the user whose profile is being viewed
-
-            RETURNS: A list of dicts, with each dict containg an upvoted-by user's info
-        """
-
-        upvoted_by_users = UserVote.query.filter(UserVote.voted_on_id == profile_user_id).\
-                                          filter(UserVote.active == True).\
-                                          filter(UserVote.vote_type == 1).all()
-
-        upvoted_by_users_list = []
-        for user_vote in upvoted_by_users:
-            user_obj = UserManager.get(user_vote.user_id)
-            if user_obj:
-                upvoted_by_users_list.append(user_obj)
-
-        return upvoted_by_users_list
-
-    @staticmethod
-    def get_wall_posts(current_user_id, profile_user_id):
+    def get_posts(current_user_id, profile_user_id):
 
         """
             PURPOSE: Iterate through each element in the data fragment
@@ -1204,11 +1119,11 @@ class GetItems(object):
 
         # Get profile's following
         if tab == "following":
-            item_list = _GenerateItemList.get_following(profile_user_id)
+            item_list = VoteManager.get_all_following(profile_user_id)
 
         # Get profile's followers
         elif tab == "followers":
-            item_list = _GenerateItemList.get_followers(profile_user_id)
+            item_list = VoteManager.get_all_followers(profile_user_id)
 
         # Get a user's liked items
         elif tab == "likes":
@@ -1216,13 +1131,13 @@ class GetItems(object):
 
         # Get main profile items for wall
         else:
-            item_list = _GenerateItemList.get_wall_posts(current_user_id, profile_user_id)
+            item_list = _GenerateItemList.get_posts(current_user_id, profile_user_id)
 
         return item_list
 
     @staticmethod
-    def new_wall_post(new_post_obj, current_user_id):
-        return _GenerateItemList.new_wall_post(new_post_obj, current_user_id)
+    def new_post(new_post_obj, current_user_id):
+        return _GenerateItemList.new_post(new_post_obj, current_user_id)
 
     @staticmethod
     def global_tag(global_tag_name, current_user_id):
