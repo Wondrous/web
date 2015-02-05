@@ -33,6 +33,7 @@ first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
 
 def convert_camel(name):
+
     """
         PURPOSE: Converts CamelCase or camelCase to camel_case
 
@@ -43,26 +44,31 @@ def convert_camel(name):
 
         RETURNS: return the lower case version of name with _ to delimit each word
     """
+
     s1 = first_cap_re.sub(r'\1_\2', name)
     return all_cap_re.sub(r'\1_\2', s1).lower()
 
 class BaseMixin(object):
+
     """
         BaseMixin functions as the basic mixin for most of the models in Wondrous
         All common fields and functions are gathered here.
 
         WARNING: cannot be used alone
     """
+
     id = Column(BigInteger, primary_key=True)
     created_at = Column(DateTime, default=func.now())
 
     @declared_attr
     def __tablename__(cls):
+
         """
             Dynamic table naming system through declared_attr
             we dont need to manually name every model - this perserves
             consistency
         """
+
         return convert_camel(cls.__name__)
 
     @classmethod
@@ -78,7 +84,7 @@ class BaseMixin(object):
         return cls.query.filter_by(**kwargs)
 
     @classmethod
-    def by_pagination(cls,start=0,per_page=15,**kwargs):
+    def by_pagination(cls, start=0, per_page=15, **kwargs):
         """
             Purpose: Provides very easy pagination
 

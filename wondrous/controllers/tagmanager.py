@@ -13,6 +13,8 @@ from wondrous.models import (
     PostTagLink
 )
 
+from wondrous.utilities.global_config import SYS_CONTEXT_TAGS
+
 class TagManager(object):
 
     @staticmethod
@@ -33,3 +35,8 @@ class TagManager(object):
         if tag:
             links = PostTagLink.by_kwargs(tag_id=tag.id).all()
             return [link.post_id for link in links]
+
+    @staticmethod
+    def by_name_like(name, num=50):
+           return Tag.query.filter(Tag.tag_name.ilike("{q}%".format(q=name))).\
+                            filter(~Tag.tag_name.in_(SYS_CONTEXT_TAGS)).limit(num).all()

@@ -22,6 +22,14 @@ from pyramid.view import view_config
 # from pyramid.httpexceptions import HTTPFound
 # from pyramid.httpexceptions import HTTPTemporaryRedirect
 
+from wondrous.controllers import (
+    AccountManager,
+    NotificationManager,
+    PostManager,
+    TagManager,
+    VoteManager,
+)
+
 from wondrous.models.comment import Comment
 
 from wondrous.models.content import DeletedContentManager
@@ -37,13 +45,6 @@ from wondrous.models.post import Post
 
 from wondrous.models.user import BlockedUser
 from wondrous.models.user import User
-
-from wondrous.controllers import (
-    AccountManager,
-    VoteManager,
-    NotificationManager,
-    PostManager
-)
 
 from wondrous.utilities.general_utilities import _IMAGE_MIMES
 from wondrous.utilities.general_utilities import _IMAGE_MIMES_NO_GIF
@@ -673,7 +674,7 @@ class AjaxHandler(BaseHandler):
         if query and "_" not in query:
             if query[0] == "#":
                 query = query[1::]
-                results = TagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
+                results = TagManager.by_name_like(query) if vh.valid_tag(query) else result_list.append({})
 
                 # This is to handle a case when there are
                 # no tags for a given searched hashtag
@@ -700,17 +701,17 @@ class AjaxHandler(BaseHandler):
                 else:
                     # Add persons
                     query = unidecode(unicode(query))
-                    results = Person.by_id_like(query, ascii=True)
-                    results = [p for p in results if p.user.active]  # filter out deactivated users
+                    results = Person.by_id_like(query, ascii=True).all()
+                    results = [p for p in results if p.user.is_active]  # filter out deactivated users
                     for result in results:
                         result_list.append({
-                            'value'    : "{n}".format(n=result.ascii_name),
+                            'value'    : "{n}".format(n=result.name),
                             'data'     : "/{un}".format(un=result.user.username),
                             'category' : "person",
                         })
 
                     # Add tags
-                    results = TagManager.get_like(query)
+                    results = TagManager.by_name_like(query)
                     for result in results:
                         result_list.append({
                             'value'    : "#{t}".format(t=result.tag_name),

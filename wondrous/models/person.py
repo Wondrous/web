@@ -31,7 +31,8 @@ from wondrous.models.modelmixins import BaseMixin
 from wondrous.utilities.validation_utilities import Sanitize
 
 
-class Person(Base,BaseMixin):
+class Person(Base, BaseMixin):
+    
     first_name = Column(Unicode, nullable=False)
     last_name = Column(Unicode, nullable=False)
     gender = Column(Unicode, nullable=True)
@@ -44,9 +45,19 @@ class Person(Base,BaseMixin):
     name = column_property(first_name + " " + last_name)
 
     user_id = Column(BigInteger, ForeignKey('user.id'))
-    user = relationship('User', backref=backref("person",uselist=False))
+    user = relationship('User', backref=backref("person", uselist=False))
 
+    @classmethod
+    def by_id_like(cls, key, ascii=False, num=50):
 
+        """
+            TODO: Probably should go into its own controllers/personmanager.py file
+        """
+
+        if not ascii:
+            return cls.query.filter(cls.name.ilike("%{q}%".format(q=key))).limit(num)
+        elif ascii:
+            return cls.query.filter(cls.name.ilike("%{q}%".format(q=key))).limit(num)  # ascii_name
 
 class UnverifiedEmail(Base,BaseMixin):
 

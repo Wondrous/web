@@ -313,9 +313,13 @@ class AuthHandler(BaseHandler):
                 _s_valid_ln, len_err_ln = Sanitize.length_check(last_name, min_length=1, max_length=30)
                 _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
                 _s_valid_em = Sanitize.is_valid_email(email)
-                _s_em_taken = User.get(email=email)
+                _s_em_taken = User.by_kwargs(email=email).first()
+
+                print "------------"
+                print _s_em_taken
+
                 _s_valid_un = Sanitize.is_valid_username(username.lower())
-                _s_un_taken = User.get(username=username)
+                _s_un_taken = User.by_kwargs(username=username).first()
 
                 # Check for validity
                 if not _s_valid_fn:
@@ -335,7 +339,7 @@ class AuthHandler(BaseHandler):
 
             if not error_message:
 
-                new_user = AccountManager.add(first_name,last_name,email,username,password)
+                new_user = AccountManager.add(first_name, last_name, email, username, password)
                 new_person = new_user.person
                 headers = self._set_session_headers(new_person)
                 new_user.last_login = datetime.now()
