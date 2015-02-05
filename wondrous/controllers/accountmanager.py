@@ -17,8 +17,9 @@ from wondrous.models import (
 )
 
 from wondrous.controllers.votemanager import VoteManager
+from wondrous.controllers.basemanager import BaseManager
 
-class AccountManager(object):
+class AccountManager(BaseManager):
     """
         This is controller for both person and user models!
 
@@ -52,3 +53,12 @@ class AccountManager(object):
         # Follow yourself
         VoteManager.vote(user_id=new_user.id,subject_id=new_user.id,vote_type=Vote.USER,status=Vote.TOPFRIEND)
         return new_user
+
+    @classmethod
+    def get_one_by_kwargs(cls,**kwargs):
+        return User.by_kwargs(**kwargs).first()
+
+    @classmethod
+    def get_json_by_username(cls,username):
+        u = User.by_kwargs(username=username).first()
+        return super(AccountManager,cls).model_to_json(u)

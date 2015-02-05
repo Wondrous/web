@@ -961,6 +961,7 @@ class _GenerateItemList(object):
 
         # A single item
         item_list = [{
+            'post_id':post_obj.id,
             'object_id'  : post_obj.object_id,
             'user_id' : post_obj.user_id,
         }]

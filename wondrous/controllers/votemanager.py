@@ -17,8 +17,9 @@ from wondrous.models import (
 
 from wondrous.controllers.notificationmanager import NotificationManager
 from sqlalchemy import or_
+from wondrous.controllers.basemanager import BaseManager
 
-class VoteManager(object):
+class VoteManager(BaseManager):
     @classmethod
     def _follow_user(cls,voter_id,valid_user,status):
         # If you want to follow, check if valid user is private, if so, put it as pending
@@ -126,13 +127,6 @@ class VoteManager(object):
         vote = Vote.by_kwargs(user_id=user_id,subject_id=subject_id,vote_type=vote_type).first()
         return vote if vote else None
 
-    @classmethod
-    def get_follower_count(cls,user_id):
-        return cls.get_count_by_type(user_id,Vote.USER,Vote.FOLLOW,True)
-
-    @classmethod
-    def get_following_count(cls,user_id):
-        return cls.get_count_by_type(user_id,Vote.USER,Vote.FOLLOW,False)
 
     @classmethod
     def get_like_count(cls,subject_id):
@@ -188,6 +182,14 @@ class VoteManager(object):
     def is_blocking(user_id,user_to_get_id):
         vote = VoteManager.get_vote(user_id, user_to_get_id,Vote.USER)
         return True if getattr(vote, 'vote_type', None)==Vote.USER and getattr(vote, 'status', None)==Vote.BLOCK else False
+
+    @staticmethod
+    def get_follower_count(user_id):
+        return Vote.query.filter(Vote.subject_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).count()
+
+    @staticmethod
+    def get_following_count(user_id):
+        return Vote.query.filter(Vote.user_id==user_id).filter(or_(Vote.status==Vote.FOLLOW,Vote.status==Vote.TOPFRIEND)).count()
 
     @staticmethod
     def get_all_followers(user_id):

@@ -13,11 +13,12 @@ from wondrous.models import (
     DBSession,
 )
 from wondrous.utilities.notification_utilities import send_notification
+from wondrous.controllers.basemanager import BaseManager
 
 
 import logging
 
-class NotificationManager(object):
+class NotificationManager(BaseManager):
     @classmethod
     def construct_notification(cls,reason):
         retval = ''

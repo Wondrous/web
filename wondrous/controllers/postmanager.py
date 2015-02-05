@@ -20,9 +20,11 @@ from wondrous.models import (
 )
 
 from wondrous.controllers.votemanager import VoteManager
+from wondrous.controllers.basemanager import BaseManager
+
 import uuid
 
-class PostManager(object):
+class PostManager(BaseManager):
 
     @staticmethod
     def _move_post_into_feeds(post_id,user_id):

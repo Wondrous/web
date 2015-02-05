@@ -42,15 +42,19 @@ from wondrous.controllers import (
     AccountManager,
     VoteManager,
     NotificationManager,
-    PostManager
+    PostManager,
+    FeedManager
 )
 
-from wondrous.utilities.general_utilities import _IMAGE_MIMES
-from wondrous.utilities.general_utilities import _IMAGE_MIMES_NO_GIF
-from wondrous.utilities.general_utilities import INVLAID_MIME_TYPES
-from wondrous.utilities.general_utilities import _JPEG_IMAGE_MIMES
-from wondrous.utilities.general_utilities import login_required
-from wondrous.utilities.general_utilities import VALID_MIME_TYPES
+from wondrous.utilities.general_utilities import (
+    login_required,
+    api_login_required,
+    VALID_MIME_TYPES,
+    _IMAGE_MIMES,
+    _IMAGE_MIMES_NO_GIF,
+    INVLAID_MIME_TYPES,
+    _JPEG_IMAGE_MIMES,
+    )
 
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
@@ -71,6 +75,93 @@ from wondrous.utilities.validation_utilities import ValidatePost as vp
 
 from wondrous.views.main import BaseHandler
 
+class APIViews(BaseHandler):
+
+
+    @view_config(route_name='api_user_info', renderer='json')
+    def api_user_info(self):
+        username = self.url_match(url_match='username').lower()
+        current_user = self.request.person.user
+
+        is_me = current_user.username == username
+
+        data = {}
+
+        request_user_dict = AccountManager.get_json_by_username(username)
+        follower_count = VoteManager.get_follower_count(request_user_dict['id'])
+        following_count = VoteManager.get_following_count(request_user_dict['id'])
+
+        data.update({"following_count":following_count,"follower_count":follower_count})
+
+        if is_me:
+            # you have all the access to yourself ;)
+            data.update(request_user_dict)
+        else:
+            # is the user private?
+            if request_user_dict['is_private']:
+
+                #am I following them?
+                if VoteManager.is_following(current_user.id,request_user_dict['id']):
+                    data = request_user_dict
+                else:
+                    data['private']=True
+
+        return data
+
+    @view_config(route_name='api_user_wall', renderer='json')
+    def api_user_wall(self):
+        username = self.url_match(url_match='username').lower()
+        try:
+            start = int(self.request.POST.get('start'))
+        except Exception, e:
+            start = 0
+
+        person = self.request.person
+        user = AccountManager.get_one_by_kwargs(username=username)
+
+        if person and user:
+            current_user = person.user
+            # is the wall not private or am I a follower?
+            if VoteManager.is_following(current_user.id,user.id) or not user.is_private:
+                return FeedManager.get_wall_posts_json(user_id=user.id)
+            else:
+                return []
+        elif user and not user.is_private:
+            return FeedManager.get_wall_posts_json(user_id=user.id)
+        return []
+
+    # @api_login_required
+    # @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
+    # def api_user_feed
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_new_post', renderer='json')
+    def api_new_post(self):
+        # Basic setup
+        p            = self.request.POST
+        ajax_method  = self.url_match(url_match='ajax_method')
+        person = self.request.person
+        user = person.user
+        post_error   = None
+
+        # Relevant POST data
+        text            = vp.sanitize_post_text(p.get('text', ''))
+        subject         = vp.sanitize_post_text(p.get('subject', ''))
+        # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
+        tags      = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
+
+        if not (len(text)>0 and len(subject)>0):
+            # TODO change it to a 400 or something
+            post_error = "insufficient information"
+            return {"error":post_error}
+
+        post = PostManager.add(user.id,tags,subject,text,repost_id=None)
+        object = post.object
+
+        data = PostManager.model_to_json(object)
+        data.update(PostManager.model_to_json(post))
+
+        return data
 
 class AjaxHandler(BaseHandler):
 

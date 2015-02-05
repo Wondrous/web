@@ -13,7 +13,9 @@ from wondrous.models import (
     PostTagLink
 )
 
-class TagManager(object):
+from wondrous.controllers.basemanager import BaseManager
+
+class TagManager(BaseManager):
 
     @staticmethod
     def by_post_id(post_id):

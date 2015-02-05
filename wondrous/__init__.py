@@ -57,6 +57,7 @@ def main_app(global_config, **settings):
     config.scan(ignore=[
         "wondrous.views.admin",
         "wondrous.views.ajax_admin",
+        "wondrous.views.api_views"
     ])
 
     return config.make_wsgi_app()
@@ -87,6 +88,7 @@ def admin_app(global_config, **settings):
     config.scan(ignore=[
         "wondrous.views.main",
         "wondrous.views.ajax_main",
+        "wondrous.views.api_views"
     ])
 
     return config.make_wsgi_app()

@@ -78,23 +78,6 @@ class BaseMixin(object):
         return cls.query.filter_by(**kwargs)
 
     @classmethod
-    def by_pagination(cls,start=0,per_page=15,**kwargs):
-        """
-            Purpose: Provides very easy pagination
-
-            PARAMS: 6 params:
-                start       : int   : REQUIRED  : the offset
-                per_page    : int   : REQUIRED  : number of obj/page -1 for do not user
-                kwargs      : dict  : REQUIRED  : A dictionary object with all the query fields
-
-            Returns query object
-        """
-        if per_page ==-1:
-            return cls.by_kwargs(**kwargs).offset(start)
-        return cls.by_kwargs(**kwargs).limit(per_page).offset(start)
-
-
-    @classmethod
     def count(cls):
         return cls.query.count()
 

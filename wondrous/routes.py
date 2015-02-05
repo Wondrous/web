@@ -60,6 +60,11 @@ def build_routes(config):
     config.add_route('info_delete_handler',                    '/info/delete/')
     config.add_route('info_account_delete_handler',            '/info/delete_account/')
 
+    # API
+    config.add_route('api_user_info',                          '/api/user/{username}/')
+    config.add_route('api_user_wall',                          '/api/wall/{username}/')
+    config.add_route('api_new_post',                           '/api/wall/')
+    
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')
 
@@ -71,7 +76,7 @@ def build_routes(config):
     config.add_route('ajax_global_tag_vote_handler',           '/ajax/global_tag_vote/{ajax_method}/')
     config.add_route('ajax_object_vote_handler',               '/ajax/object_vote/{ajax_method}/')
     config.add_route('ajax_user_vote_handler',                 '/ajax/user_vote/{ajax_method}/')
-    config.add_route('accept_user_request',                     '/ajax/user_vote_accept/')
+    config.add_route('accept_user_request',                    '/ajax/user_vote_accept/')
     config.add_route('ajax_comment_handler',                   '/ajax/comment/')
     config.add_route('ajax_post_handler',                      '/ajax/post/{ajax_method}/')
     config.add_route('ajax_toggle_profile_visibility_handler', '/ajax/toggle_profile_visibility/')

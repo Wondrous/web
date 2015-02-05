@@ -274,7 +274,7 @@ class ModelTest(unittest.TestCase):
         # Lets see how many followers do I have
         import random
         rand_int = random.randint(0,19)
-        self.assertEquals(VoteManager.get_follower_count(users[rand_int].id),19)
+        self.assertEquals(VoteManager.get_follower_count(users[rand_int].id),20)
 
         # Let's populate my feed
         u = users[rand_int]
