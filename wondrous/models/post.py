@@ -36,11 +36,14 @@ class Post(Base,BaseMixin):
     """This defines the post table"""
 
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    to_repost_id = Column(BigInteger, ForeignKey('post.id'))
+    repost_id = Column(BigInteger, ForeignKey('post.id'))
+
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
     hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
     feed_post_links = relationship("FeedPostLink", backref="post")
     text = Column(Unicode)
+    
+    post_tag_links = relationship("PostTagLink", backref="object")
 
     object = relationship('Object', backref=backref("post", uselist=False))
     user = relationship('User', backref="posts")

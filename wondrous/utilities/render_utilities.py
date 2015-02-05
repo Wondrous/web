@@ -311,10 +311,10 @@ class CreateNewPost(object):
 
         for tag in SYS_TAGS:
 
-            tag_obj = GlobalTagManager.get(tag_name=tag)
+            tag_obj = TagManager.by_name(tag_name=tag)
             if not tag_obj:
                 global_tag_data = {'tag_name' : tag}
-                tag_obj = GlobalTagManager.add(global_tag_data)
+                tag_obj = TagManager.add(global_tag_data)
 
             global_tag_id = tag_obj.id
             object_tag_data = {
@@ -328,10 +328,10 @@ class CreateNewPost(object):
             # If the tag is valid
             if vh.valid_tag(tag):
 
-                tag_obj = GlobalTagManager.get(tag_name=tag)
+                tag_obj = TagManager.by_name(tag_name=tag)
                 if not tag_obj:
                     global_tag_data = {'tag_name' : tag}
-                    tag_obj = GlobalTagManager.add(global_tag_data)
+                    tag_obj = TagManager.add(global_tag_data)
 
                 global_tag_id = tag_obj.id
                 object_tag_data = {
@@ -392,20 +392,20 @@ class _AssemblePost(object):
         # upvoted tab on a user profile
         if profile_user_id:
             self.profile_user_id = profile_user_id
-            self.object_id       = data.object_id
+            self.post_id       = data.object_id
 
         # Otherwise, get all posts for
         # a tag, profile, or community
         else:
             self.profile_user_id = None
-            self.object_id       = data.get('object_id')
+            self.post_id       = data.get('post_id')
             self.global_tag_id   = data.get('global_tag_id') # One...
             self.user_id      = data.get('user_id')    # Or the other.
 
 
         # These are always needed, regardless
         # of where the post is being rendered
-        self.this_post     = Post.by_id(self.object_id)
+        self.this_post     = Post.by_id(self.post_id)
         self.user_id       = self.this_post.user_id
         self.created_at     = self.this_post.created_at
         self.current_user_id = current_user_id
@@ -429,7 +429,7 @@ class _AssemblePost(object):
             return None
 
         # IF THE USER HAS REPORTED THIS OBJECT, WE IGNORE IT
-        elif ReportedContentManager.has_reported(self.current_user_id, self.object_id):
+        elif ReportedContentManager.has_reported(self.current_user_id, self.post_id):
             return None
 
         # Some configurations...
@@ -451,19 +451,19 @@ class _AssemblePost(object):
         # dict value to True.
         text_line_count = len(object_text.split('<br>'))
 
-        self.final_data['object_id'] = self.object_id
+        self.final_data['object_id'] = self.post_id
         self.final_data['user_id'] = self.user_id
         self.final_data['text']      = _hashtagify(_linkify(object_text))
         self.final_data['_see_more'] = True if (len(object_text) > MAX_CHAR_SHOW_TEXT or text_line_count > MAX_BR_SHOW_TEXT) else False
         self.final_data['_font_size'], self.final_data['_line_height'] = self._get_font_attrs(object_text)
         self.final_data['subject']   = self.this_post.object.subject
         self.final_data['is_poster'] = bool(self.user_id == self.current_user_id)
-        self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.object_id, self.this_post.object.ouuid))
+        self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.post_id, self.this_post.object.ouuid))
         self.final_data['post_comments'] = [{
             'comment_id'   : c.id,
             'user_id'    : c.user_id,
             'text'         : _linkify(c.text),
-        } for c in Comment.get_all_comments_for_object(self.object_id)]
+        } for c in Comment.get_all_comments_for_object(self.post_id)]
 
         self._set_object_type()
 
@@ -490,7 +490,7 @@ class _AssemblePost(object):
             RETURNS: None
         """
 
-        links_to_object = LinkToObject.get_all_links_for_object(self.object_id)
+        links_to_object = LinkToObject.get_all_links_for_object(self.post_id)
         self.final_data['object_links'] = [{
             'url'       : l.link.url,
             'scheme'    : l.link.scheme,
@@ -498,7 +498,7 @@ class _AssemblePost(object):
             'is_dead'   : l.link.is_dead
         } for l in links_to_object]
 
-        files_to_object = FileToObject.get_all_files_for_object(self.object_id)
+        files_to_object = FileToObject.get_all_files_for_object(self.post_id)
         self.final_data['object_files'] = [{
             'original_file_name' : f.object_file.original_file_name,
             'mime_type'          : f.object_file.mime_type,
@@ -525,7 +525,7 @@ class _AssemblePost(object):
         posted_by_profile_owner = False  # Initialize to False
         if self.user_id and self.user_id:
 
-            post_ob = Post.by_id(self.object_id)
+            post_ob = Post.by_id(self.post_id)
             self.final_data['created_at'] = str(self.created_at)
             self.final_data['hidden']      = post_ob.hidden
 
@@ -551,7 +551,7 @@ class _AssemblePost(object):
         """
 
         # Get the object tags
-        tag_objs = TagManager.by_object_id(self.object_id)
+        tag_objs = TagManager.by_post_id(self.post_id)
 
         # Create a list (of tags) for this value in the dict
         self.final_data['tags'] = []
@@ -1040,27 +1040,11 @@ class _GenerateItemList(object):
         """
 
         item_list = []
-        global_tag_obj = GlobalTagManager.get(tag_name=global_tag_name)
+        post_ids = [{'post_id':post_id} for post_id in TagManager.get_all_objects_by_tag_name(tag_name=global_tag_name)]
 
-        if global_tag_obj:
+        if post_ids:
 
-            global_tag_id = global_tag_obj.id
-            tag_objs = ObjectTagManager.get_all(global_tag_id=global_tag_id)
-
-            for tag in tag_objs:
-                item_list.append({
-                    'object_id'     : tag.object_id,
-                    'global_tag_id' : global_tag_id,
-                })
-
-            # We are NOT currently using anything from the
-            # rank_utilities file, but this is kept so that
-            # if we want to, in the future, algorithmically rank items
-            # and them put them in the feed, we have the infrastructure to
-            # do so (within reason...)
-            # item_list = RankUtilities.rank_items(item_list)
-
-            return delegate_assemble(item_list, current_user_id)
+            return delegate_assemble(post_ids, current_user_id)
 
     @staticmethod
     def get_liked_posts(current_user_id, profile_user_id):

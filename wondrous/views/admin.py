@@ -113,7 +113,7 @@ class AdminHandler(AdminBaseHandler):
 
         user_count = User.count()
         object_count = Object.count()
-        global_tag_count = GlobalTagManager.count()
+        global_tag_count = TagManager.count()
 
         big_data = dict(
             user_count=user_count,
@@ -138,7 +138,7 @@ class AdminHandler(AdminBaseHandler):
         user_count = User.count()
         object_count = Object.count()
         object_tag_count = ObjectTagManager.count()
-        global_tag_count = GlobalTagManager.count()
+        global_tag_count = TagManager.count()
 
         avg_posts_per_user = object_count / float(user_count)
         avg_tags_per_post = object_tag_count / float(object_count)

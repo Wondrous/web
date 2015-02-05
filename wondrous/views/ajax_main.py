@@ -673,7 +673,7 @@ class AjaxHandler(BaseHandler):
         if query and "_" not in query:
             if query[0] == "#":
                 query = query[1::]
-                results = GlobalTagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
+                results = TagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
 
                 # This is to handle a case when there are
                 # no tags for a given searched hashtag
@@ -710,7 +710,7 @@ class AjaxHandler(BaseHandler):
                         })
 
                     # Add tags
-                    results = GlobalTagManager.get_like(query)
+                    results = TagManager.get_like(query)
                     for result in results:
                         result_list.append({
                             'value'    : "#{t}".format(t=result.tag_name),

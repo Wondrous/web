@@ -62,7 +62,7 @@ class ReportedContent(Base):
 
     @hybrid_property
     def tags(self):
-        return ObjectTagManager.get_all(self.object_id)
+        return TagManager.by_post_id(self.post_id)
 
 class ReportedContentManager(object):
 
@@ -193,7 +193,7 @@ class DeletedContentManager(object):
         deleted_content_data['user_id']       = object_to_delete.user_id
         deleted_content_data['text']            = object_to_delete.text
         deleted_content_data['upvotes']         = ObjectVoteManager.get_like_count(object_id)  # ObjectTagVoteManager.get_total_upvotes_for_object(object_id)
-        deleted_content_data['tags']            = ' '.join([o.global_tag.tag_name for o in ObjectTagManager.get_all(object_id=object_id)])
+        deleted_content_data['tags']            = ' '.join([o.global_tag.tag_name for o in TagManager.by_object_id(object_id=object_id)])
         deleted_content_data['object_link_ids'] = ' '.join([str(m.object_link_id) for m in LinkToObject.get_all_links_for_object(object_id)])
         deleted_content_data['object_file_ids'] = ' '.join([str(m.object_file_id) for m in FileToObject.get_all_files_for_object(object_id)])
         deleted_content_data['created_at']     = object_to_delete.created_at
@@ -287,7 +287,7 @@ class DeletedContentManager(object):
             DBSession.delete(this_post)
 
         # Delete all ObjectTags for object (Tags)
-        all_object_tags = ObjectTagManager.get_all(object_id)
+        all_object_tags = TagManager.by_object_id(object_id)
         for ot in all_object_tags:
             DBSession.delete(ot)
 

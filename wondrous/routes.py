@@ -14,6 +14,7 @@
 # trying to take the username "signup" or "tag".
 # We deem these paths to be already taken.
 TAKEN_PATHS = set([
+    'api',
     'ajax',
     'auth',
     'info',

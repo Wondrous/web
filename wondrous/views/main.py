@@ -109,46 +109,6 @@ class BaseHandler(object):
 
 class AuthHandler(BaseHandler):
 
-    # @logout_required
-    # @view_config(renderer='json', route_name='auth_login_handler')
-    # @view_config(renderer='json', route_name='auth_login_handler2')
-    # def login(self):
-
-    #   safe_in  = Sanitize.safe_input
-    #   safe_out = Sanitize.safe_output
-    #   p = self.request.params
-    #   user_identification = None
-    #   password = None
-
-    #   if 'login_button' in p:
-    #       user_identification = safe_in(self.request.POST.get('user_identification'))
-    #       password = safe_in(self.request.POST.get('user_identification'), strip=False)
-
-    #       if Sanitize.is_valid_email(user_identification):
-    #           this_user = User.get(email=user_identification)
-    #       else:
-    #           this_user = User.get(username=user_identification)
-
-    #       if this_user and this_user.validate_password(password) and not this_user.user.is_banned:
-
-    #           # Reactivating a user when they log in
-
-    #           this_user.user.last_login = datetime.now()  # Is this correct?
-    #           headers = remember(self.request, this_user.id, max_age=60 * 60 * 24 * 3)  # max_age is ~ 3 days
-    #           return HTTPFound(location="/", headers=headers)
-
-    #       elif this_user and this_user.user.is_banned:
-    #           return HTTPFound("/auth/is_banned/{uid}/".format(uid=this_user.id))
-
-    #       if not this_user:
-    #           error_message = "Invalid email/username or password"
-
-    #   data = dict(
-    #       error_message=error_message,
-    #       user_identification=safe_out(user_identification),
-    #   )
-    #   return data
-
     @logout_required
     @view_config(renderer='/login.jinja2', route_name='login_handler')
     def login(self):
@@ -723,7 +683,7 @@ class TagHandler(BaseHandler):
                 'current_user'     : this_person,
                 'context_tag'      : tag_name,
                 'valid_tag'        : tag_obj,
-                'get_item_owner'   : User.get,  # unbound method
+                'get_item_owner'   : User.by_id,  # unbound method
 
                 'render_items'     : self.page_items,
                 'current_page_num' : self.page_num,
@@ -764,7 +724,7 @@ class SearchHandler(BaseHandler):
             # If we're explicitly searching for a #tag
             if query[0] == "#":
                 query = query[1::]
-                results = GlobalTagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
+                results = TagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
                 if results:
                     result_list = [{
                         'results'     : results,
@@ -796,7 +756,7 @@ class SearchHandler(BaseHandler):
                         })
 
                     # Add all #tags
-                    results = GlobalTagManager.get_like(query)
+                    results = TagManager.get_like(query)
                     if results:
                         result_list.append({
                             'results'     : results,
@@ -950,7 +910,6 @@ class ExcSQL(BaseHandler):
             ***
         """
         from wondrous.models import reset_sql
-        reset_sql()
 
         # CREATE ADMIN
         from wondrous.models.admin import AdminManager

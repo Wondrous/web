@@ -15,7 +15,7 @@ from wondrous.models import (
     Object,
     Tag,
     Vote,
-    ObjectTagLink,
+    PostTagLink,
     FeedPostLink
 )
 
@@ -35,15 +35,15 @@ class PostManager(object):
             DBSession.add(link)
 
     @staticmethod
-    def _process_tags(tags,object_id):
+    def _process_tags(tags,post_id):
         # Add the tags
         for t in tags:
             new_tag, created = Tag.get_one_or_create(tag_name=t)
-            link = ObjectTagLink(object_id=object_id,tag_id=new_tag.id)
+            link = PostTagLink(post_id=post_id,tag_id=new_tag.id)
             DBSession.add(link)
 
     @classmethod
-    def add(cls,user_id,tags,subject,text,to_repost_id=None):
+    def add(cls,user_id,tags,subject,text,repost_id=None):
         """
             PURPOSE: the purpose of the this method is to allow users to post and
             repost objects
@@ -53,13 +53,13 @@ class PostManager(object):
                 tags    : set : set list of tags
                 subject   : str : subject text of the item
                 text      : str : text of the post
-                to_repost_id : int : optional -- the object id to be reposted
+                repost_id : int : optional -- the object id to be reposted
 
             RETURN: the newly created Post
         """
-        if to_repost_id:
+        if repost_id:
             # TODO, this is a repost operation
-            new_post = Post(user_id=user_id, to_repost_id=to_repost_id)
+            new_post = Post(user_id=user_id, repost_id=repost_id)
         else:
             # take it apart
             # First create the post container, then the object
@@ -75,9 +75,8 @@ class PostManager(object):
 
 
         DBSession.add(new_post)
-
-        cls._process_tags(tags,new_object.id)
         DBSession.flush()
+        cls._process_tags(tags,new_post.id)
 
         cls._move_post_into_feeds(new_post.id,user_id)
         DBSession.flush()

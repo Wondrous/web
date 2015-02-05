@@ -17,7 +17,7 @@ from wondrous.models import (
     Object,
     Post,
     Tag,
-    ObjectTagLink
+    PostTagLink
 )
 
 from wondrous.controllers import (
@@ -233,10 +233,10 @@ class ModelTest(unittest.TestCase):
         }
 
         post = PostManager.add(**kwargs)
-        self.assertEquals(len(post.object.object_tag_links),6)
+        self.assertEquals(len(post.post_tag_links),6)
 
         for t in tags:
-            num_of_objects = len(Tag.by_kwargs(tag_name=t).first().object_tag_links)
+            num_of_objects = len(Tag.by_kwargs(tag_name=t).first().post_tag_links)
             self.assertEquals(num_of_objects,1)
 
         tags2 = set(["tag2","tag3","tag4","tag5","tag6",])
@@ -252,11 +252,11 @@ class ModelTest(unittest.TestCase):
             post = PostManager.add(**kwargs)
 
         for t in tags2:
-            num_of_objects = len(Tag.by_kwargs(tag_name=t).first().object_tag_links)
+            num_of_objects = len(Tag.by_kwargs(tag_name=t).first().post_tag_links)
             self.assertEquals(num_of_objects,11)
 
         tag = Tag.by_kwargs(tag_name="tag2").first()
-        self.assertEquals(ObjectTagLink.by_kwargs(tag_id=tag.id).count(),11)
+        self.assertEquals(PostTagLink.by_kwargs(tag_id=tag.id).count(),11)
 
         self.log.warn("Create Test Post passed")
 

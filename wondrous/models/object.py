@@ -39,7 +39,6 @@ class Object(Base, BaseMixin):
     text = Column(Unicode, default=None)
     active = Column(Boolean, default=True)  # only used for disabling/re-enabling an account
     ouuid = Column(Unicode, nullable=True)
-    object_tag_links = relationship("ObjectTagLink", backref="object")
     comments = relationship("Comment")
 
 class ObjectLink(Base, BaseMixin):

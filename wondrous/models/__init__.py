@@ -71,7 +71,7 @@ from wondrous.models.person import (
 
 from wondrous.models.tag import (
     Tag,
-    ObjectTagLink,
+    PostTagLink,
 )
 
 from wondrous.models.user import (
