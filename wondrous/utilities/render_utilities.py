@@ -986,7 +986,7 @@ class _GenerateItemList(object):
 
         for post in post_objs:
             item_list.append({
-                'object_id'  : post.object_id,
+                'post_id'  : post.id,
                 'user_id' : post.user_id,
                 'hidden'     : post.hidden,
             })
@@ -1092,7 +1092,6 @@ class _GenerateItemList(object):
 
         # Generate the item list for a profile's wall posts
         item_list = _GenerateItemList.wall_items(profile_user_id)
-
         # For each post data in list, get the full posts data
         return delegate_assemble(item_list, current_user_id)
 
