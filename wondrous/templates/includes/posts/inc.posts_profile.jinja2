@@ -1,9 +1,3 @@
-{#
-
-    -- NEEDS A TON OF WORK --
-
-#}
-
 {% set test_bg = [
     "http://upload.wikimedia.org/wikipedia/commons/6/66/Rochefort-beers.jpg",
     "https://tctechcrunch2011.files.wordpress.com/2013/01/college.jpg",
@@ -26,13 +20,13 @@
                 <div class="post-cover-photo cover round-5 no-top-border" style="background-image: url({{ test_bg | random() }});">
                     <div class="post-subject-text">
                         <div class="post-subject-wrapper">
-                            <span class="post-subject-text-position">
+                            <div class="post-subject-text-position">
                                 {% if item['subject'] %}
                                     {{ item['subject'] | safe }}
                                 {% else %}
                                     No title...
                                 {% endif %}
-                            </span>
+                            </div>
                         </div>
                     </div>
                 </div>

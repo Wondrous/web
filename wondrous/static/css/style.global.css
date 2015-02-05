@@ -327,6 +327,12 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     cursor: pointer;
 }
 
+.ellipsis-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* === INFO ============================ */
 
     /* TODO */
@@ -1192,7 +1198,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     padding-bottom: 7px;
 }
 
-.post-as-title {
+/*.post-as-title {
     position: relative;
     margin-left: 60px;
     top: -17px;
@@ -1203,7 +1209,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space:nowrap;
-}
+}*/
 
 #post-hashtags {
     margin-top: 5px;
@@ -1433,26 +1439,26 @@ body { font-family: sans-serif; }
          -o-border-radius: 5px;
             border-radius: 5px;
 
+/*    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+       -moz-box-shadow: 0 2px 3px rgb(100,100,100);
+         -o-box-shadow: 0 2px 3px rgb(100,100,100);
+            box-shadow: 0 2px 3px rgb(100,100,100);*/
+} .post-body:hover {
     -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
        -moz-box-shadow: 0 2px 3px rgb(100,100,100);
          -o-box-shadow: 0 2px 3px rgb(100,100,100);
             box-shadow: 0 2px 3px rgb(100,100,100);
-} .post-body:hover {
-    -webkit-box-shadow: 0 2px 5px rgb(100,100,100);
-       -moz-box-shadow: 0 2px 5px rgb(100,100,100);
-         -o-box-shadow: 0 2px 5px rgb(100,100,100);
-            box-shadow: 0 2px 5px rgb(100,100,100);
-    cursor: pointer;
 }
 
 .post-content {
     display: none;
-    background-color: rgb(251,251,251);
+    background-color: rgb(255,255,255);
     padding: 20px;
 
     font-family: helvetica, arial, sans-serif;
     font-weight: normal;
     font-size: 16px;
+    line-height: 1.3em;
 
     color: rgb(51,51,51);
     cursor: default;
@@ -1512,6 +1518,8 @@ body { font-family: sans-serif; }
     background-attachment: scroll;
     color: rgb(251,251,251);
     text-shadow: 0 2px 10px rgb(44,44,44);
+
+    cursor: pointer;
 }
 
 .post-thumb {
@@ -1528,19 +1536,19 @@ body { font-family: sans-serif; }
     position: relative;
     display: inline-block;
     /* left: 54px; */
-    top: -7px;
+    top: -6px;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
-    color: rgb(25,25,25);
+    color: rgb(0,0,200);
 }
 
-.blue-identifier {
+/*.blue-identifier {
     color: rgb(0,0,200) !important;
-}
+}*/
 
 .post-subject-text {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: bold;
     text-align: left;
     color: rgb(251,251,251);
@@ -1558,8 +1566,7 @@ body { font-family: sans-serif; }
 
 .post-subject-text-position {
     position: relative;
-    display: block;
-    padding: 10px;
+    padding: 7px 3%;
 }
 
 .post-see-more {
