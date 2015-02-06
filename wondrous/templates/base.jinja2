@@ -8,11 +8,7 @@
     
     <body>
         {% include 'includes/global/inc.sidemenu.jinja2' %}
-        
-        {# 
-            -- This is the bell that pops up in 
-            lower left corner when the user gets a new notification -- 
-        #}
+
         <div class="notification-big-alarm notification-alert round-5">
             <img class="notification-bell" src="/static/pictures/p.bell-icon.png">
             <div>New notification</div>
@@ -30,16 +26,6 @@
                 </div>
             </div>
         {% endif %}
-
-        {# -- Not in use anymore, but I keep (for now) for reference -- 
-        <div class="notification-dropdown">
-            <div style="font-size: 17px; padding: 10px 20px; background-color: rgb(51,51,51); color: rgb(241,241,241); font-weight: 100; border-bottom: 1px solid rgb(71,71,71);">Notifications</div>
-            <div class="notificationUnreadBucket">
-                <div class="notification-none">You have no notifications</div>
-            </div>
-            <input type="hidden" id="getBatch" value="1">
-        </div>
-        #}
 
         <div id="body-mask"></div>
         
