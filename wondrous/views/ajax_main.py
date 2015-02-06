@@ -24,63 +24,81 @@ from pyramid.view import view_config
 
 from wondrous.models.comment import Comment
 
-from wondrous.models.content import DeletedContentManager
-from wondrous.models.content import DeletedComment
-from wondrous.models.content import ReportedContentManager
+from wondrous.models.content import (
+    DeletedContentManager,
+    DeletedComment,
+    ReportedContentManager,
+)
 
-from wondrous.models.object import Object
-from wondrous.models.object import ObjectFile
+from wondrous.models.object import (
+    Object,
+    ObjectFile,
+)
 
 from wondrous.models.person import Person
 
 from wondrous.models.post import Post
 
-from wondrous.models.user import BlockedUser
-from wondrous.models.user import User
-from wondrous.models import Vote
+from wondrous.models.user import (
+    # BlockedUser,
+    User,
+)
+
+# from wondrous.models import Vote
 
 from wondrous.controllers import (
     AccountManager,
-    VoteManager,
+    FeedManager,
     NotificationManager,
     PostManager,
-    FeedManager
+    VoteManager,
 )
 
 from wondrous.utilities.general_utilities import (
-    login_required,
-    api_login_required,
-    VALID_MIME_TYPES,
     _IMAGE_MIMES,
     _IMAGE_MIMES_NO_GIF,
-    INVLAID_MIME_TYPES,
     _JPEG_IMAGE_MIMES,
-    )
+    api_login_required,
+    login_required,
+    VALID_MIME_TYPES,
+    INVLAID_MIME_TYPES,
+)
 
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
 from wondrous.utilities.pyexif import ExifEditor
 
-from wondrous.utilities.render_utilities import _linkify
-from wondrous.utilities.render_utilities import CreateNewPost
-from wondrous.utilities.render_utilities import GetItems
-from wondrous.utilities.render_utilities import Pagination
-from wondrous.utilities.render_utilities import HtmlifyComment
-from wondrous.utilities.render_utilities import HtmlifyPost
-from wondrous.utilities.render_utilities import to_json
+from wondrous.utilities.render_utilities import (
+    _linkify,
+    # CreateNewPost,
+    GetItems,
+    HtmlifyComment,
+    HtmlifyPost,
+    Pagination,
+    to_json,
+)
 
-from wondrous.utilities.validation_utilities import Sanitize
-from wondrous.utilities.validation_utilities import ValidationHelper as vh
-from wondrous.utilities.validation_utilities import ValidateLink as vl
-from wondrous.utilities.validation_utilities import ValidatePost as vp
+from wondrous.utilities.validation_utilities import (
+    Sanitize,
+    ValidationHelper as vh,
+    ValidateLink as vl,
+    ValidatePost as vp,
+)
 
 from wondrous.views.main import BaseHandler
 
 class APIViews(BaseHandler):
-    # TODO ADD FUCKING XHR
+    
+    """
+        # TODO ADD FUCKING XHR
+    """
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
+
+        """
+        """
+
         username = current_user = None
         try:
             username = self.url_match(url_match='username').lower()
@@ -89,16 +107,17 @@ class APIViews(BaseHandler):
             logging.warn(e)
 
         is_me = current_user and current_user.username == username
-
         data = {}
-
 
         request_user_dict = AccountManager.get_json_by_username(username)
         if request_user_dict:
-            follower_count = VoteManager.get_follower_count(request_user_dict['id'])
+            follower_count  = VoteManager.get_follower_count(request_user_dict['id'])
             following_count = VoteManager.get_following_count(request_user_dict['id'])
 
-            data.update({"following_count":following_count,"follower_count":follower_count})
+            data.update({
+                "following_count" : following_count,
+                "follower_count"  : follower_count,
+            })
 
             if is_me:
                 # you have all the access to yourself ;)
@@ -106,17 +125,21 @@ class APIViews(BaseHandler):
             else:
                 # is the user private?
                 if request_user_dict['is_private']:
-                    #am I following them?
+                    # am I following them?
                     if VoteManager.is_following(current_user.id,request_user_dict['id']):
                         data = request_user_dict
                     else:
-                        data['is_private']=True
+                        data['is_private'] = True
                 else:
                     data.update(request_user_dict)
         return data
 
     @view_config(request_method="POST",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
+
+        """
+        """
+
         username = self.url_match(url_match='username').lower()
         try:
             start = int(self.request.POST.get('start'))
@@ -140,6 +163,10 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
+
+        """
+        """
+
         person = self.request.person
         try:
             start = int(self.request.POST.get('start'))
@@ -156,23 +183,29 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="POST",route_name='api_new_post', renderer='json')
     def api_new_post(self):
+
+        """
+        """
+
         # Basic setup
         p            = self.request.POST
-        ajax_method  = self.url_match(url_match='ajax_method')
-        person = self.request.person
-        user = person.user
+        # ajax_method  = self.url_match(url_match='ajax_method')
+        person       = self.request.person
+        user         = person.user
         post_error   = None
 
         # Relevant POST data
         text            = vp.sanitize_post_text(p.get('text', ''))
         subject         = vp.sanitize_post_text(p.get('subject', ''))
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
-        tags      = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
+        tags            = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
 
-        if not (len(text)>0 and len(subject)>0):
+        if not (len(text) > 0 and len(subject) > 0):
             # TODO change it to a 400 or something
-            post_error = "insufficient information"
-            return {"error":post_error}
+            post_error = "Insufficient information"
+            return {
+                "error" : post_error,
+            }
 
         post = PostManager.add(user.id,tags,subject,text,repost_id=None)
         object = post.object
@@ -183,7 +216,7 @@ class APIViews(BaseHandler):
         return data
 
     @api_login_required
-    @view_config(request_method='POST', xhr=True, route_name = 'api_user_vote', renderer = 'json')
+    @view_config(request_method='POST', xhr=True, route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
         user_id = action = None
 
@@ -199,11 +232,12 @@ class APIViews(BaseHandler):
             VoteManager.vote_by_action(action,voter_id,user_id)
 
             vote_data = {
-                'total_following'    : VoteManager.get_following_count(user_id),
-                'total_follower'     : VoteManager.get_follower_count(user_id),
+                'total_following' : VoteManager.get_following_count(user_id),
+                'total_follower'  : VoteManager.get_follower_count(user_id),
             }
             return vote_data
         return {}
+
 
 class AjaxHandler(BaseHandler):
 
@@ -283,7 +317,7 @@ class AjaxHandler(BaseHandler):
 
         retval = []
         if ajax_method == "majority":
-            retval = GetItems.feed(current_user.id,'majority')
+            retval = GetItems.feed(current_user.id, 'majority')
 
         elif ajax_method == "priority":
             pass
@@ -306,8 +340,8 @@ class AjaxHandler(BaseHandler):
         """
 
         current_user = self.request.person
-        ajax_method = self.url_match(url_match='ajax_method')
-        object_id = self.request.POST.get('oid')
+        ajax_method  = self.url_match(url_match='ajax_method')
+        object_id    = self.request.POST.get('oid')
         if object_id:
             obj = Object.by_id(object_id)
             if obj:
@@ -834,7 +868,7 @@ class AjaxHandler(BaseHandler):
                     # Add persons
                     query = unidecode(unicode(query))
                     results = Person.by_id_like(query, ascii=True)
-                    results = [p for p in results if p.user.active]  # filter out deactivated users
+                    results = [p for p in results if p.user.is_active]  # filter out deactivated users
                     for result in results:
                         result_list.append({
                             'value'    : "{n}".format(n=result.ascii_name),

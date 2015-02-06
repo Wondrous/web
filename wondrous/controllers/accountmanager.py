@@ -35,10 +35,10 @@ class AccountManager(BaseManager):
 
     @staticmethod
     def is_username_taken(username):
-        return True if User.by_kwargs(username=username).count()>0 else False
+        return True if User.by_kwargs(username=username).count() > 0 else False
 
     @staticmethod
-    def add(first_name,last_name,email,username,password,user_type=1):
+    def add(first_name, last_name, email, username, password, user_type=1):
 
         # First let's create the person object - point of contact for the account
         new_user = User(user_type=user_type, username=username, email=email, password=password, is_active=True)
@@ -48,6 +48,7 @@ class AccountManager(BaseManager):
 
         new_person = Person(first_name=first_name, last_name=last_name, user_id=new_user.id)
         new_feed = Feed(user_id=new_user.id)
+        
         DBSession.add(new_person)
         DBSession.add(new_feed)
         DBSession.flush()

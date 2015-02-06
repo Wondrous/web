@@ -314,10 +314,6 @@ class AuthHandler(BaseHandler):
                 _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
                 _s_valid_em = Sanitize.is_valid_email(email)
                 _s_em_taken = User.by_kwargs(email=email).first()
-
-                print "------------"
-                print _s_em_taken
-
                 _s_valid_un = Sanitize.is_valid_username(username.lower())
                 _s_un_taken = User.by_kwargs(username=username).first()
 
@@ -339,7 +335,13 @@ class AuthHandler(BaseHandler):
 
             if not error_message:
 
-                new_user = AccountManager.add(first_name, last_name, email, username, password)
+                new_user = AccountManager.add(
+                                first_name,
+                                last_name,
+                                email,
+                                username,
+                                password
+                            )
                 new_person = new_user.person
                 headers = self._set_session_headers(new_person)
                 new_user.last_login = datetime.now()
@@ -753,7 +755,7 @@ class SearchHandler(BaseHandler):
                     # Add persons and use only ascii chars for search
                     results = Person.by_id_like(query, ascii=True)
                     if results:
-                        results = [p for p in results if p.user.active]  # filter out deactivated users
+                        results = [p for p in results if p.user.is_active]  # filter out deactivated users
                         result_list.append({
                             'results'     : results,
                             'result_type' : 'person'

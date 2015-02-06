@@ -8,21 +8,21 @@
 # MODELS/OBJECT.PY
 #
 
-
-from datetime import datetime
-
-from sqlalchemy import BigInteger
-from sqlalchemy import Boolean
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import ForeignKey
-from sqlalchemy import func
-from sqlalchemy import Unicode
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    Column,
+    ForeignKey,
+    Unicode,
+)
 
 from sqlalchemy.orm import relationship
 
-from wondrous.models import Base
-from wondrous.models import DBSession
+from wondrous.models import (
+    Base,
+    DBSession,
+)
+
 from wondrous.models.tag import Tag
 
 from wondrous.utilities.validation_utilities import ValidateLink

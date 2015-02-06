@@ -8,17 +8,19 @@
 # MODELS/FEED.PY
 #
 
-from sqlalchemy import BigInteger
-from sqlalchemy import Boolean
-from sqlalchemy import Column
-from sqlalchemy import desc
-from sqlalchemy import ForeignKey
-from sqlalchemy import BigInteger
+from sqlalchemy import (
+    BigInteger,
+    Column,
+    ForeignKey,
+)
 
 from sqlalchemy.orm import relationship
 
-from wondrous.models import Base
-from wondrous.models import DBSession
+from wondrous.models import (
+    Base,
+    DBSession,
+)
+
 from wondrous.models.modelmixins import BaseMixin
 
 class FeedPostLink(Base,BaseMixin):

@@ -8,14 +8,12 @@
 # MODELS/TAG.PY
 #
 
-from datetime import datetime
-
-from sqlalchemy import BigInteger
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import ForeignKey
-from sqlalchemy import func
-from sqlalchemy import Unicode
+from sqlalchemy import (
+	BigInteger,
+	Column,
+	ForeignKey,
+	Unicode,
+)
 
 from sqlalchemy.orm import relationship
 

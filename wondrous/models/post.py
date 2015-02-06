@@ -8,28 +8,29 @@
 # MODELS/POST.PY
 #
 
-from sqlalchemy import BigInteger
-from sqlalchemy import Boolean
-from sqlalchemy import Column
-from sqlalchemy import desc
-from sqlalchemy import ForeignKey
-from sqlalchemy import Unicode
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    Column,
+    desc,
+    ForeignKey,
+    Unicode,
+)
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import backref
 
-from wondrous.models import engine
 from wondrous.models import Base
-from wondrous.models import DBSession
-from wondrous.models import engine
-import wondrous.models
 
-from wondrous.models.feed import Feed
-from wondrous.models.object import Object
-from wondrous.models.user import User
+import wondrous.models
+from wondrous.models.feed import (
+    Feed,
+    # FeedPostLink,
+)
+
 from wondrous.models.modelmixins import BaseMixin
-from wondrous.models.feed import FeedPostLink
-import logging
+# from wondrous.models.object import Object
+# from wondrous.models.user import User
 
 class Post(Base,BaseMixin):
 

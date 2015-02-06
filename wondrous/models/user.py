@@ -9,25 +9,25 @@
 
 from datetime import datetime
 
-from sqlalchemy import BigInteger
-from sqlalchemy import Boolean
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import desc
-from sqlalchemy import func
-from sqlalchemy import Integer
-from sqlalchemy import Unicode
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    Column,
+    DateTime,
+    Integer,
+    Unicode,
+)
 
-from sqlalchemy.ext.hybrid import hybrid_method
-from sqlalchemy.orm import synonym
-from sqlalchemy.orm import relationship
-from sqlalchemy import or_
+from sqlalchemy.orm import (
+    synonym,
+    relationship,
+)
 
-from wondrous.models import Base
-from wondrous.models import DBSession
-from wondrous.models.vote import Vote
-from wondrous.models.feed import Feed
-from wondrous.models.person import Person
+from wondrous.models import (
+    Base,
+    DBSession,
+)
+
 from wondrous.models.modelmixins import BaseMixin
 
 from wondrous.utilities.validation_utilities import PasswordManager
