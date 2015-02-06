@@ -42,7 +42,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "/ajax/async_get_item_list/majority/",
+            url: "/api/feed/",
             data: {"start": itemNum},
             success: function(data) {
                 // Add in empty containers where each post will go
@@ -51,6 +51,7 @@ $(document).ready(function() {
                 console.log("majority",data);
                 var asyncPostContainer = $("#asyncPosts");
                 for (var i=0; i < data.length; i++) {
+                    console.log(data[i]);
                     asyncPostContainer.append("<div class='default-loading-post' id='async_o-" + data[i].object_id + "'>" +
                             "<svg class='svgLoader' width='250' height='250' viewbox='0 0 250 250'>" +
                                 "<path class='svg-border' transform='translate(125, 125)'/>" +

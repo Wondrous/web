@@ -29,7 +29,7 @@ from wondrous.controllers import (
 
 from paste.deploy.loadwsgi import appconfig
 from sqlalchemy import engine_from_config
-import logging
+# import logging
 
 settings = appconfig('config:'+'test.ini',relative_to='.')
 
@@ -38,7 +38,6 @@ def setUpModule():
 
     # create an engine bound to the test db
     wondrous.models.engine = engine = engine_from_config(settings, 'sqlalchemy.')
-    print wondrous.models.engine
 
     # first use of DBSession, bind it to our engine
     DBSession.configure(bind=engine)
@@ -55,7 +54,7 @@ def tearDownModule():
 
 class ModelTest(unittest.TestCase):
     def setUp(self):
-        self.log= logging.getLogger(__file__)
+        # self.log= logging.getLogger(__file__)
         # wait a minute this is the first time we've seen transaction isn't it?
         # yes. a transaction sits between the db and the session, if we didn't
         # have this everything we added to the session would be available for
@@ -108,7 +107,6 @@ class ModelTest(unittest.TestCase):
 
         self.assertEquals(5,User.count())
         self.assertEquals(5,Person.count())
-        self.log.warn("user creation passed")
 
     def testUserFollow(self):
         """
@@ -141,7 +139,6 @@ class ModelTest(unittest.TestCase):
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,1)
-        self.log.warn("public profile follow passed")
 
     def testPrivateUserFollow(self):
         """
@@ -215,8 +212,6 @@ class ModelTest(unittest.TestCase):
         self.assertEquals(VoteManager.is_blocked_by(user1.id,user2.id),True)
         self.assertEquals(VoteManager.is_blocking(user2.id,user1.id),True)
 
-        self.log.warn("private profile follow passed")
-
     def testCreatePosts(self):
         """
             Scenario:
@@ -258,8 +253,6 @@ class ModelTest(unittest.TestCase):
         tag = Tag.by_kwargs(tag_name="tag2").first()
         self.assertEquals(PostTagLink.by_kwargs(tag_id=tag.id).count(),11)
 
-        self.log.warn("Create Test Post passed")
-
     def testFeedFollowingPosts(self):
         """
             Scenario:
@@ -286,12 +279,12 @@ class ModelTest(unittest.TestCase):
         u1 = users[rand_int]
         self.assertEquals(len(u1.feed.feed_post_links),1)
 
-        self.log.warn("Post Feed passed")
+
 
 if __name__ == '__main__':
     import sys
-    logging.basicConfig(stream=sys.stdout)
-    logging.getLogger(__file__).setLevel(logging.WARN)
-    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+    # logging.basicConfig(stream=sys.stdout)
+    # logging.getLogger(__file__).setLevel(logging.WARN)
+    # # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     unittest.main()

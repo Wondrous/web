@@ -88,7 +88,7 @@ from wondrous.utilities.validation_utilities import (
 from wondrous.views.main import BaseHandler
 
 class APIViews(BaseHandler):
-    
+
     """
         # TODO ADD FUCKING XHR
     """
@@ -161,7 +161,7 @@ class APIViews(BaseHandler):
         return []
 
     @api_login_required
-    @view_config(request_method="POST",route_name='api_user_feed', renderer='json')
+    @view_config(request_method="POST",xhr=True,route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
 
         """
@@ -189,7 +189,6 @@ class APIViews(BaseHandler):
 
         # Basic setup
         p            = self.request.POST
-        # ajax_method  = self.url_match(url_match='ajax_method')
         person       = self.request.person
         user         = person.user
         post_error   = None
@@ -197,8 +196,8 @@ class APIViews(BaseHandler):
         # Relevant POST data
         text            = vp.sanitize_post_text(p.get('text', ''))
         subject         = vp.sanitize_post_text(p.get('subject', ''))
-        # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
         tags            = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
+        # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
 
         if not (len(text) > 0 and len(subject) > 0):
             # TODO change it to a 400 or something
@@ -214,6 +213,28 @@ class APIViews(BaseHandler):
         data.update(PostManager.model_to_json(post))
 
         return data
+
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_repost', renderer='json')
+    def api_repost(self):
+
+        # Basic setup
+        p            = self.request.POST
+        person       = self.request.person
+        user         = person.user
+
+        # Relevant POST data
+        text            = vp.sanitize_post_text(p.get('text', ''))
+        subject         = vp.sanitize_post_text(p.get('subject', ''))
+        tags            = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
+
+        try:
+            post_id      = int(self.request.POST.get('post_id'))
+            post = PostManager.add(user.id,tags,subject,text,repost_id=post_id)
+            return PostManager.model_to_json(post)
+        except Exception, e:
+            return {}
 
     @api_login_required
     @view_config(request_method='POST', xhr=True, route_name='api_user_vote', renderer='json')

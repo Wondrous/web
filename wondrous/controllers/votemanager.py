@@ -25,13 +25,13 @@ class VoteAction:
     UNLIKED, LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(9)
 
 class VoteManager(BaseManager):
-    
+
     @classmethod
     def _follow_user(cls, voter_id, valid_user, status):
 
         """
         """
-        
+
         # If you want to follow, check if valid user is private, if so, put it as pending
         if status in [Vote.FOLLOW,Vote.TOPFRIEND]:
             if valid_user.is_private:
@@ -68,11 +68,11 @@ class VoteManager(BaseManager):
 
     @classmethod
     def vote_by_action(cls, action, voter_id, user_id):
-        
+
         """
             Takes a frontend action enum and converts it to the proper action
         """
-        
+
         status = None
         if action==VoteAction.FOLLOW:
             # NOT already following
@@ -88,7 +88,7 @@ class VoteManager(BaseManager):
             status = Vote.TOPFRIEND
         elif action == Vote.ACCEPT:
             return cls.accept_request(voter_id,user_id)
-        
+
         # TODO: Remove print statement
         print action, status, voter_id, user_id
 
@@ -161,13 +161,13 @@ class VoteManager(BaseManager):
 
         if status:
             retval = retval and status in \
-                [Vote.UNLIKED, Vote.LIKE, Vote.BOOKMARKED, Vote.BLOCK, \
+                [Vote.UNLIKED, Vote.LIKED, Vote.BOOKMARKED, Vote.BLOCK, \
                 Vote.PENDING, Vote.UNFOLLOW, Vote.FOLLOW, Vote.TOPFRIEND]
         return retval
 
     @staticmethod
     def get_vote(user_id, subject_id, vote_type):
-        
+
         """
             Return whether or not a user has voted on a particular object
         """
@@ -182,7 +182,7 @@ class VoteManager(BaseManager):
         """
         """
 
-        return cls.get_count_by_type(subject_id,Vote.OBJECT,Vote.LIKE)
+        return cls.get_count_by_type(subject_id,Vote.OBJECT,Vote.LIKED)
 
     @classmethod
     def get_liked_objects_for_user(cls, user_id):
@@ -190,7 +190,7 @@ class VoteManager(BaseManager):
         """
         """
 
-        return Vote.by_kwargs(user_id=user_id, vote_type=Vote.OBJECT, status=Vote.LIKE)
+        return Vote.by_kwargs(user_id=user_id, vote_type=Vote.OBJECT, status=Vote.LIKED)
 
     @staticmethod
     def get_count_by_type(user_id, vote_type, status, following_me=True):

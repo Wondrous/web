@@ -60,8 +60,14 @@ class PostManager(BaseManager):
             RETURN: the newly created Post
         """
         if repost_id:
-            # TODO, this is a repost operation
+            old_post = Post.by_id(repost_id)
             new_post = Post(user_id=user_id, repost_id=repost_id)
+
+            if old_post.repost_id:
+                # this is a repost of there must exists an original
+                new_post.original_id = old_post.original_id
+            else:
+                new_post.original_id = repost_id
         else:
             # take it apart
             # First create the post container, then the object
@@ -74,12 +80,12 @@ class PostManager(BaseManager):
 
             new_post.object_id = new_object.id
 
-
-
         DBSession.add(new_post)
         DBSession.flush()
-        cls._process_tags(tags,new_post.id)
 
+        if tags and len(tags)>0:
+            cls._process_tags(tags,new_post.id)
+            
         cls._move_post_into_feeds(new_post.id,user_id)
         DBSession.flush()
 
