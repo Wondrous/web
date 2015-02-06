@@ -61,27 +61,24 @@ LOGIN REQUIRED
         }
     });
 ```
- #### Get User Information
+
+#### Get User Information
+
 ```
  GET -> '/api/user/{username}/'
 ```
 
- #### Get User Wall
+#### Get User Wall
 ```
  GET -> '/api/wall/{username}/'
  ```
- #### Create New Post
+#### Create New Post
 ```
  POST -> '/api/wall/'
  ```
- #### Get Majority Feed
+
+#### Get Majority Feed
 ```
  LOGIN REQUIRED
  GET ->  '/api/feed/'
  ```
-
-
-
-
-
- 
