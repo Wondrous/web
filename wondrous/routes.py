@@ -61,10 +61,12 @@ def build_routes(config):
     config.add_route('info_account_delete_handler',            '/info/delete_account/')
 
     # API
+    config.add_route('api_user_vote',                          '/api/user/vote/') #POST
     config.add_route('api_user_info',                          '/api/user/{username}/')
-    config.add_route('api_user_wall',                          '/api/wall/{username}/')
-    config.add_route('api_new_post',                           '/api/wall/')
-    
+    config.add_route('api_user_wall',                          '/api/wall/{username}/') #GET
+    config.add_route('api_new_post',                           '/api/wall/')            #POST
+    config.add_route('api_user_feed',                          '/api/feed/')
+
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')
 

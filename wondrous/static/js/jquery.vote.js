@@ -33,11 +33,25 @@ function objectVoteAjax(thisPost, objectID) {
 }
 
 /* ============= USER VOTE ============== */
+VoteType = {
+    OBJECT:0,
+    USER:1
+}
+
+VoteAction = {
+    CANCEL:0,
+    FOLLOW:1,
+    ACCEPT:2,
+    BLOCK:3,
+    DENY:4,
+    TOPFRIEND:5
+}
+
 // Favorite the user (2)
 $(document).on('click', '#doubleUpvoteUserButton', function() {
     var thisButton = this;
     var profileID = $('#profileID').val();
-    var voteType = 'double_upvote';
+    var voteType = VoteAction.TOPFRIEND;
 
     userVoteAjax(thisButton, voteType, profileID);
 });
@@ -49,8 +63,7 @@ $(document).on('click', '#doubleUpvoteUserButton', function() {
 $(document).on('click', '#upvoteUserButton', function() {
     var thisButton = this;
     var profileID = $('#profileID').val();
-    var voteType = 'upvote';
-
+    var voteType = VoteAction.FOLLOW;
     userVoteAjax(thisButton, voteType, profileID);
 });
 
@@ -58,7 +71,7 @@ $(document).on('click', '#upvoteUserButton', function() {
 $(document).on('click', '#acceptFollowRequestButton', function() {
     var thisButton = this;
     var profileID = $('#profileID').val();
-    var voteType = 'upvote_accept';
+    var voteType = VoteAction.ACCEPT;
 
     userVoteAjax(thisButton, voteType, profileID);
 });
@@ -67,7 +80,7 @@ $(document).on('click', '#acceptFollowRequestButton', function() {
 $(document).on('click', '#denyFollowRequestButton', function() {
     var thisButton = this;
     var profileID = $('#profileID').val();
-    var voteType = 'upvote_deny';
+    var voteType = VoteAction.DENY;
 
     userVoteAjax(thisButton, voteType, profileID);
 });
@@ -76,16 +89,19 @@ $(document).on('click', '#denyFollowRequestButton', function() {
 $(document).on('click', '#doubleDownvoteUserButton', function() {
     var thisButton = this;
     var profileID = $('#profileID').val();
-    var voteType = 'double_downvote';
+    var voteType = VoteAction.BLOCK;
 
     userVoteAjax(thisButton, voteType, profileID);
 });
 
-function userVoteAjax(thisButton, voteType, profileID) {
+function userVoteAjax(thisButton, action, profileID) {
     $.ajax({
         type: "POST",
-        url: "/ajax/user_vote/" + voteType + "/",
-        data: {'user_id': profileID},
+        url: '/api/user/vote/',
+        data: {
+            'user_id': profileID,
+            'action':action
+            },
         success: function(vote_data) {
             // TODO
             console.log(vote_data);

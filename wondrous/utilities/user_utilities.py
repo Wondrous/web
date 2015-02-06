@@ -12,6 +12,10 @@ from pyramid.security import unauthenticated_userid
 
 from wondrous.models.admin import AdminManager
 from wondrous.models.person import Person
+from wondrous.models.feed import Feed
+from wondrous.models.user import User
+
+from sqlalchemy.orm import joinedload
 
 class AuthHelper(object):
 
@@ -50,7 +54,7 @@ class AuthHelper(object):
         """
 
         person_id = unauthenticated_userid(request)
-        return Person.by_kwargs(id=person_id).first() if person_id else None
+        return Person.query.options(joinedload(Person.user).joinedload(User.feed)).filter_by(id=person_id).first() if person_id else None
 
     @staticmethod
     def get_admin(request):

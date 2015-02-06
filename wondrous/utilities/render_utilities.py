@@ -405,7 +405,7 @@ class _AssemblePost(object):
 
         # These are always needed, regardless
         # of where the post is being rendered
-        self.this_post       = Post.by_id(self.post_id).first()
+        self.this_post       = Post.by_id(self.post_id)
         self.user_id         = self.this_post.user_id
         self.created_at      = self.this_post.created_at
         self.current_user_id = current_user_id

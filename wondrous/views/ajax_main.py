@@ -37,6 +37,7 @@ from wondrous.models.post import Post
 
 from wondrous.models.user import BlockedUser
 from wondrous.models.user import User
+from wondrous.models import Vote
 
 from wondrous.controllers import (
     AccountManager,
@@ -76,9 +77,8 @@ from wondrous.utilities.validation_utilities import ValidatePost as vp
 from wondrous.views.main import BaseHandler
 
 class APIViews(BaseHandler):
-
-
-    @view_config(route_name='api_user_info', renderer='json')
+    # TODO ADD FUCKING XHR
+    @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
         username = self.url_match(url_match='username').lower()
         current_user = self.request.person.user
@@ -108,7 +108,7 @@ class APIViews(BaseHandler):
 
         return data
 
-    @view_config(route_name='api_user_wall', renderer='json')
+    @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         username = self.url_match(url_match='username').lower()
         try:
@@ -130,9 +130,17 @@ class APIViews(BaseHandler):
             return FeedManager.get_wall_posts_json(user_id=user.id)
         return []
 
-    # @api_login_required
-    # @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
-    # def api_user_feed
+    @api_login_required
+    @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
+    def api_user_feed(self):
+        person = self.request.person
+
+        try:
+            feed_id = person.user.feed.id
+            return FeedManager.get_majority_posts_json(feed_id)
+        except Exception, e:
+            logging.warn(e)
+            return []
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_new_post', renderer='json')
@@ -162,6 +170,29 @@ class APIViews(BaseHandler):
         data.update(PostManager.model_to_json(post))
 
         return data
+
+    @api_login_required
+    @view_config(request_method='POST', xhr=True, route_name = 'api_user_vote', renderer = 'json')
+    def api_user_vote(self):
+        user_id = action = None
+
+        try:
+            action  = int(self.request.POST.get('action'))
+            user_id = int(self.request.POST.get('user_id'))
+        except Exception, e:
+            logging.warn(e)
+
+        if user_id and action:
+            current_user = self.request.person.user
+            voter_id = current_user.id
+            VoteManager.vote_by_action(action,voter_id,user_id)
+
+            vote_data = {
+                'total_following'    : VoteManager.get_following_count(user_id),
+                'total_follower'     : VoteManager.get_follower_count(user_id),
+            }
+            return vote_data
+        return {}
 
 class AjaxHandler(BaseHandler):
 

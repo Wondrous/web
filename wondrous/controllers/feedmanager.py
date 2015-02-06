@@ -30,8 +30,25 @@ class FeedManager(BaseManager):
             return [feed.post for feed in FeedPostLink.by_kwargs(feed_id=feed.id).all()]
 
     @classmethod
+    def get_majority_posts(cls,feed_id,start=0,per_page=15):
+        links = FeedPostLink.query.options(joinedload(FeedPostLink.post).joinedload(Post.object)).\
+            order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).limit(per_page).offset(start).all()
+        return links
+
+    @classmethod
+    def get_majority_posts_json(cls,feed_id,start=0,per_page=15):
+        links = cls.get_majority_posts(feed_id,start,per_page)
+        data = []
+        for link in links:
+            post = link.post
+            post_dict = super(FeedManager,cls).model_to_json(post)
+            post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+            data.append(post_dict)
+        return data
+
+    @classmethod
     def get_wall_posts(cls,start=0,per_page=15,**kwargs):
-        posts = Post.query.options(joinedload('object')).order_by(desc(Post.created_at)).\
+        posts = Post.query.options(joinedload(Post.object)).order_by(desc(Post.created_at)).\
             filter_by(**kwargs).limit(per_page).offset(start).all()
 
         return posts
@@ -41,7 +58,6 @@ class FeedManager(BaseManager):
         posts = cls.get_wall_posts(start=start, per_page=per_page, **kwargs)
         data = []
         for post in posts:
-            post.object = post.object
             post_dict = super(FeedManager,cls).model_to_json(post)
             post_dict.update(super(FeedManager,cls).model_to_json(post.object))
             data.append(post_dict)

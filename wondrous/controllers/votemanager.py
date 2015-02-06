@@ -15,9 +15,14 @@ from wondrous.models import (
     DBSession,
 )
 
+import logging
+
 from wondrous.controllers.notificationmanager import NotificationManager
 from sqlalchemy import or_
 from wondrous.controllers.basemanager import BaseManager
+
+class VoteAction:
+    CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(6)
 
 class VoteManager(BaseManager):
     @classmethod
@@ -53,6 +58,29 @@ class VoteManager(BaseManager):
         return False
 
     @classmethod
+    def vote_by_action(cls,action,voter_id,user_id):
+        """
+            Takes a frontend action enum and converts it to the proper action
+        """
+        status = None
+        if action==VoteAction.FOLLOW:
+            # NOT already following
+            if cls.is_following(voter_id,user_id):
+                status = Vote.UNFOLLOW
+            else:
+                status = Vote.FOLLOW
+        elif action==VoteAction.CANCEL or action==VoteAction.DENY:
+            status = Vote.UNFOLLOW
+        elif action==VoteAction.BLOCK:
+            status = Vote.BLOCK
+        elif action==VoteAction.TOPFRIEND:
+            status = Vote.TOPFRIEND
+        elif action==Vote.ACCEPT:
+            return cls.accept_request(voter_id,user_id)
+        print action, status, voter_id, user_id
+        return VoteManager.vote_on_user(voter_id,user_id,status)
+
+    @classmethod
     def vote_on_user(cls,voter_id,user_id,status):
         if VoteManager.is_blocked_by(voter_id,user_id):
             # You've been blocked
@@ -77,8 +105,10 @@ class VoteManager(BaseManager):
                     # DELETE Notification
                     NotificationManager.delete(from_user_id = voter_id, to_user_id = user_id, \
                         reason = Notification.FOLLOW_REQUEST, subject_id = voter_id)
+                    logging.info("you took back your request")
 
                 elif cls._follow_user(voter_id,valid_user,status):
+                    logging.info("you followed another user")
                     return True
 
                 existing_vote.status = status

@@ -594,7 +594,7 @@ class ProfileHandler(BaseHandler):
                 'current_user'       : current_person,
                 'profile_user'       : valid_user,
                 'is_blocked'         : blocked_user,
-                'is_following'       : VoteManager.is_following(user_id,valid_user.id),
+                'is_following'       : VoteManager.is_following(current_user_id,valid_user.id),
                 'is_private'         : valid_user.is_private,
                 'is_my_profile'      : bool(valid_user.id == current_user_id),
                 'tab'                : tab,
