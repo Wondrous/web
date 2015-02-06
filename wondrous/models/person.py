@@ -32,7 +32,7 @@ from wondrous.utilities.validation_utilities import Sanitize
 
 
 class Person(Base, BaseMixin):
-    
+
     first_name = Column(Unicode, nullable=False)
     last_name = Column(Unicode, nullable=False)
     gender = Column(Unicode, nullable=True)
@@ -43,9 +43,13 @@ class Person(Base, BaseMixin):
 
     # Extremely important
     name = column_property(first_name + " " + last_name)
-
+    ascii_name = Column(Unicode, nullable=False)
     user_id = Column(BigInteger, ForeignKey('user.id'))
     user = relationship('User', backref=backref("person", uselist=False))
+
+    def __init__(self,*args,**kwargs):
+        super(Person,self).__init__(*args,**kwargs)
+        self.ascii_name = unidecode.unidecode("{fn} {ln}".format(fn=self.first_name, ln=self.last_name).decode('utf-8'))
 
     @classmethod
     def by_id_like(cls, key, ascii=False, num=50):
