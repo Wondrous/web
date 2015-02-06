@@ -25,7 +25,7 @@ sphinx-apidoc wondrous -o docs
 sudo make clean && sudo make html
 ```
 
-The result html should be compiled to ./_build/html/index.html
+The result html should be compiled to ```./_build/html/index.html```
 Click on Module Index to see a list of modules
 
 ### API Documentation
@@ -79,3 +79,9 @@ LOGIN REQUIRED
  LOGIN REQUIRED
  GET ->  '/api/feed/'
  ```
+
+
+
+
+
+ 
