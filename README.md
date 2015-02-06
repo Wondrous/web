@@ -4,36 +4,59 @@ This is the core web platform for Wondrous.
 ### API Documentation
 
 #### Change User Relationships
-```
-LOGIN REQUIRED
- POST -> '/api/user/vote/'
- ```
- This API is used to change the relationship between the user logged in and the user requested. The following take displays the universal VoteAction table. The first three items: UNLIKED, LIKED, and BOOKMARKED are reserved for posts **ONLY**. Also note that the FOLLOW action acts as a toggle between followed and unfollowed.  
- ```javascript
- VoteAction = {
-    UNLIKED:0,
-    LIKED:1,
-    BOOKMARKED:2,
-    CANCEL:3,
-    FOLLOW:4,
-    ACCEPT:5,
-    BLOCK:6,
-    DENY:7,
-    TOPFRIEND:8
-};
 
- $.ajax({
-        type: "POST",
-        url: '/api/user/vote/',
-        data: {
-            'user_id': profileID,
-            'action':VoteAction.FOLLOW //let's issue an follow
-            },
-        success: function(vote_data) {
+##### Three Levels: api/user, api/wall, api/feed
 
-        }
-    });
-```
+## Action IDs:
+Unliked (0)
+Liked (1)
+Bookmarked (2)
+Cancel (3)
+Follow (4)
+Accept (5)
+Block (6)
+Deny (7)
+Topfriend (8) *follow required*
+
+
+#### USER level
+
+endpoint: api/user?user_id={user_id}
+method: GET
+description: Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
+
+
+endpoint: api/user/vote
+method: POST
+parameter fields
+    UserID (int) - valid User ID
+    Action (int) - action ID to perform 
+description: Perform an action on a user (see Action ID table). Returns JSON status code.
+
+#### WALL level
+
+endpoint: api/wall&page={}
+
+endpoint: api/wall?user_id={user_id}&page={page}
+method: GET
+description: Get 
+
+endpoint: api/wall/repost
+method: POST
+parameter fields
+    post_id (int) - valid Post ID
+description: repost a post, will always post on the user (who invokes the call) wall.
+    
+
+#### FEED Level
+
+endpoint: api/feed?feed_type={feed_type}&page={page}
+method: GET
+description: for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and and X is the amount in the set.
+
+
+## Examples
+
 
 #### Get User Information
 
@@ -51,26 +74,6 @@ $.ajax({
        }
    });
 
-```
-
-#### Get User Wall
-```
- Post -> '/api/wall/{username}/'
- ```
-
- This will load all the posts by {username}. Since this is not a constant time DB operation, pagination will be used. **start** will dictate the offset in the query. By default, results will be returned from the newest to the oldest by creation date.
-
-```javascript
-$.ajax({
-       type: "POST",
-       url: '/api/wall/dude123/',
-       data: {
-           'start':0
-       },
-       success: function(user_post_data) {
-
-       }
-   });
 ```
 
 #### Create New Post
@@ -94,23 +97,6 @@ $.ajax({
    });
 ```
 
-#### Get Majority Feed
-```
- LOGIN REQUIRED
- POST ->  '/api/feed/'
- ```
- This will generate the majority feed based on the logged in user. Paginated by 15. It returns an array of post objects.
-```javascript
-$.ajax({
-       type: "POST",
-       url: '/api/feed/',
-       data: {
-           'start':0
-       },
-       success: function(feed_posts) {
-
-       }
-   });
 ```
 ### Installation
 ```
