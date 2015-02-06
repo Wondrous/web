@@ -60,8 +60,7 @@ LOGIN REQUIRED
 
         }
     });
-
- ```
+```
  #### Get User Information
 ```
  GET -> '/api/user/{username}/'
@@ -80,9 +79,3 @@ LOGIN REQUIRED
  LOGIN REQUIRED
  GET ->  '/api/feed/'
  ```
-
-
-
-
-
- 
