@@ -40,22 +40,78 @@ LOGIN REQUIRED
 ```
  GET -> '/api/user/{username}/'
 ```
+This will load a single JSON object that represents the user profile information.
+
+```javascript
+$.ajax({
+       type: "GET",
+       url: '/api/user/dude123/',
+       success: function(user_data) {
+
+       }
+   });
+
+```
 
 #### Get User Wall
 ```
- GET -> '/api/wall/{username}/'
+ Post -> '/api/wall/{username}/'
  ```
+
+ This will load all the posts by {username}. Since this is not a constant time DB operation, pagination will be used. **start** will dictate the offset in the query. By default, results will be returned from the newest to the oldest by creation date.
+
+```javascript
+$.ajax({
+       type: "POST",
+       url: '/api/wall/dude123/',
+       data: {
+           'start':0
+       },
+       success: function(user_post_data) {
+
+       }
+   });
+```
+
 #### Create New Post
 ```
  POST -> '/api/wall/'
  ```
 
+ This will create a new post to the server, will return the newly created post json object.
+```javascript
+$.ajax({
+       type: "POST",
+       url: '/api/wall/',
+       data: {
+           'subject': 'something intellectual',
+           'text':'elaborate on something intellectual',
+           'tags':['such','smart','wow','much','knowledge']
+       },
+       success: function(wall_posts) {
+
+       }
+   });
+```
+
 #### Get Majority Feed
 ```
  LOGIN REQUIRED
- GET ->  '/api/feed/'
+ POST ->  '/api/feed/'
  ```
+ This will generate the majority feed based on the logged in user. Paginated by 15. It returns an array of post objects.
+```javascript
+$.ajax({
+       type: "POST",
+       url: '/api/feed/',
+       data: {
+           'start':0
+       },
+       success: function(feed_posts) {
 
+       }
+   });
+```
 ### Installation
 ```
 brew install pkg-config libffi;

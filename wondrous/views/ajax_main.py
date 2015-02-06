@@ -115,7 +115,7 @@ class APIViews(BaseHandler):
                     data.update(request_user_dict)
         return data
 
-    @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
+    @view_config(request_method="POST",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         username = self.url_match(url_match='username').lower()
         try:
@@ -138,13 +138,17 @@ class APIViews(BaseHandler):
         return []
 
     @api_login_required
-    @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
+    @view_config(request_method="POST",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
         person = self.request.person
+        try:
+            start = int(self.request.POST.get('start'))
+        except Exception, e:
+            start = 0
 
         try:
             feed_id = person.user.feed.id
-            return FeedManager.get_majority_posts_json(feed_id)
+            return FeedManager.get_majority_posts_json(feed_id, start=start)
         except Exception, e:
             logging.warn(e)
             return []
