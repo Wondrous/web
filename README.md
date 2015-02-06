@@ -35,17 +35,15 @@ description: Perform an action on a user (see Action ID table). Returns JSON sta
 
 #### WALL level
 
-endpoint: api/wall&page={}
+**endpoint:** `api/wall?user_id={user_id}&page={page}`
+**method:** `GET`
+**description:** `Get a user's wall posts` 
 
-endpoint: api/wall?user_id={user_id}&page={page}
-method: GET
-description: Get 
-
-endpoint: api/wall/repost
-method: POST
-parameter fields
-    post_id (int) - valid Post ID
-description: repost a post, will always post on the user (who invokes the call) wall.
+**endpoint:** `api/wall/repost`
+**method:** `POST`
+**parameter fields**
+    `post_id (int) - valid Post ID`
+**description:** `Repost a post, will always post on the user (who invokes the call) wall.`
     
 
 #### FEED Level
