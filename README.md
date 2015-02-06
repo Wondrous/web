@@ -16,7 +16,7 @@ $VENV/bin/initialize_wondrous_db development.ini
 $VENV/bin/pserve development.ini
 ```
 
-### Documentation
+### Backend Documentation
 Sphinx Documentation is used to lessen the madness of a growing codebase. The documented ReST documents are located in ./docs.
 
 To rebuild the autodocs
@@ -26,4 +26,6 @@ sudo make clean && sudo make html
 ```
 
 The result html should be compiled to ./_build/html/index.html
-Click on Module Index to see a list of modules 
+Click on Module Index to see a list of modules
+
+### API Documentation

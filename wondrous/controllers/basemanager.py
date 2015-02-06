@@ -2,7 +2,7 @@ from sqlalchemy.orm import class_mapper
 import datetime
 
 class BaseManager(object):
-    SENSITIVE_KW = ['_password','password','is_banned','ouuid']
+    SENSITIVE_KW = ['_password','password','is_banned','ouuid', 'email','last_login']
 
     @classmethod
     def model_to_json(cls,model):

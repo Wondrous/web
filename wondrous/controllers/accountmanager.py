@@ -63,4 +63,6 @@ class AccountManager(BaseManager):
     @classmethod
     def get_json_by_username(cls,username):
         u = User.by_kwargs(username=username).first()
-        return super(AccountManager,cls).model_to_json(u)
+        if u:
+            return super(AccountManager,cls).model_to_json(u)
+        return None

@@ -22,7 +22,7 @@ from sqlalchemy import or_
 from wondrous.controllers.basemanager import BaseManager
 
 class VoteAction:
-    CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(6)
+    UNLIKED, LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(9)
 
 class VoteManager(BaseManager):
     @classmethod

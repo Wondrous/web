@@ -78,34 +78,41 @@ from wondrous.views.main import BaseHandler
 
 class APIViews(BaseHandler):
     # TODO ADD FUCKING XHR
+
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
-        username = self.url_match(url_match='username').lower()
-        current_user = self.request.person.user
+        username = current_user = None
+        try:
+            username = self.url_match(url_match='username').lower()
+            current_user = self.request.person.user
+        except Exception, e:
+            logging.warn(e)
 
-        is_me = current_user.username == username
+        is_me = current_user and current_user.username == username
 
         data = {}
 
+
         request_user_dict = AccountManager.get_json_by_username(username)
-        follower_count = VoteManager.get_follower_count(request_user_dict['id'])
-        following_count = VoteManager.get_following_count(request_user_dict['id'])
+        if request_user_dict:
+            follower_count = VoteManager.get_follower_count(request_user_dict['id'])
+            following_count = VoteManager.get_following_count(request_user_dict['id'])
 
-        data.update({"following_count":following_count,"follower_count":follower_count})
+            data.update({"following_count":following_count,"follower_count":follower_count})
 
-        if is_me:
-            # you have all the access to yourself ;)
-            data.update(request_user_dict)
-        else:
-            # is the user private?
-            if request_user_dict['is_private']:
-
-                #am I following them?
-                if VoteManager.is_following(current_user.id,request_user_dict['id']):
-                    data = request_user_dict
+            if is_me:
+                # you have all the access to yourself ;)
+                data.update(request_user_dict)
+            else:
+                # is the user private?
+                if request_user_dict['is_private']:
+                    #am I following them?
+                    if VoteManager.is_following(current_user.id,request_user_dict['id']):
+                        data = request_user_dict
+                    else:
+                        data['is_private']=True
                 else:
-                    data['private']=True
-
+                    data.update(request_user_dict)
         return data
 
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')

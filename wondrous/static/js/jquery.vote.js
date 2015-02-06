@@ -33,19 +33,18 @@ function objectVoteAjax(thisPost, objectID) {
 }
 
 /* ============= USER VOTE ============== */
-VoteType = {
-    OBJECT:0,
-    USER:1
-}
 
 VoteAction = {
-    CANCEL:0,
-    FOLLOW:1,
-    ACCEPT:2,
-    BLOCK:3,
-    DENY:4,
-    TOPFRIEND:5
-}
+    UNLIKED:0,
+    LIKED:1,
+    BOOKMARKED:2,
+    CANCEL:3,
+    FOLLOW:4,
+    ACCEPT:5,
+    BLOCK:6,
+    DENY:7,
+    TOPFRIEND:8
+};
 
 // Favorite the user (2)
 $(document).on('click', '#doubleUpvoteUserButton', function() {
