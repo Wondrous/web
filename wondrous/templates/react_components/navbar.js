@@ -12,6 +12,15 @@ var SearchBox = React.createClass({
 	}
 });
 
+var NotificationBox = React.createClass({
+	render: function () {
+		return (
+			<span id="right-menu" className="notification-count nc-general round-2">
+        <span className="notification-count-text">0</span>
+    	</span>);
+	}
+})
+
 var SettingsGear = React.createClass({
 	render: function () {
 		return (
@@ -44,7 +53,8 @@ var Navbar = React.createClass({
 				<SettingsGear />
 				{/* This name is static and must change to fetch username or ID !!*/}
 				<ProfileLink name="dsiah" /> 
-					</div>);
+				<NotificationBox />
+			</div>);
 	}
 });
 
