@@ -94,6 +94,7 @@ $(document).on('click', '#doubleDownvoteUserButton', function() {
 });
 
 function userVoteAjax(thisButton, action, profileID) {
+    console.log("voting with",action);
     $.ajax({
         type: "POST",
         url: '/api/user/vote/',

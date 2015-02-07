@@ -72,7 +72,6 @@ class User(Base, PasswordManager, BaseMixin):
         return cls.by_kwargs(is_banned == True).all()
 
 
-
 class BlockedUser(Base,BaseMixin):
 
     """

@@ -48,7 +48,7 @@ class AccountManager(BaseManager):
 
         new_person = Person(first_name=first_name, last_name=last_name, user_id=new_user.id)
         new_feed = Feed(user_id=new_user.id)
-        
+
         DBSession.add(new_person)
         DBSession.add(new_feed)
         DBSession.flush()
@@ -62,8 +62,39 @@ class AccountManager(BaseManager):
         return User.by_kwargs(**kwargs).first()
 
     @classmethod
-    def get_json_by_username(cls,username):
-        u = User.by_kwargs(username=username).first()
-        if u:
-            return super(AccountManager,cls).model_to_json(u)
+    def _get_relationship_stats(cls,user_id):
+        follower_count  = VoteManager.get_follower_count(user_id)
+        following_count = VoteManager.get_following_count(user_id)
+
+        data = {
+            "following_count" : following_count,
+            "follower_count"  : follower_count,
+        }
+
+        return data
+
+    @classmethod
+    def get_json_by_username(cls,person,user_id):
+        if not user_id:
+            return {}
+
+        # am i querying for myself?
+        if person and person.user.id == user_id:
+            retval = cls._get_relationship_stats(user_id)
+            retval.update(super(AccountManager,cls).model_to_json(person.user,1))
+            return retval
+
+        u = User.by_id(user_id).first()
+        if not u:
+            return {}
+
+        # if the user is public or I am following
+        if (not u.is_private and not u.is_banned and u.is_active) or\
+            (person and not u.is_banned and u.is_active and VoteManager.is_following(person.user.id,user_id)):
+            retval = cls._get_relationship_stats(user_id)
+            retval.update(super(AccountManager,cls).model_to_json(u))
+            return retval
+        elif u.is_private and not u.is_banned and u.is_active:
+            return {'is_private':True}
+
         return None

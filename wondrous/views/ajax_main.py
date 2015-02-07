@@ -87,132 +87,65 @@ from wondrous.utilities.validation_utilities import (
 
 from wondrous.views.main import BaseHandler
 
+from collections import defaultdict
+
 class APIViews(BaseHandler):
 
     """
         # TODO ADD FUCKING XHR
     """
 
+    @property
+    def query_kwargs(self):
+        kwargs = defaultdict(lambda: None)
+        kwargs.update(self.request.params)
+        return kwargs
+
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
 
         """
         """
-
-        username = current_user = None
-        try:
-            username = self.url_match(url_match='username').lower()
-            current_user = self.request.person.user
-        except Exception, e:
-            logging.warn(e)
-
-        is_me = current_user and current_user.username == username
-        data = {}
-
-        request_user_dict = AccountManager.get_json_by_username(username)
-        if request_user_dict:
-            follower_count  = VoteManager.get_follower_count(request_user_dict['id'])
-            following_count = VoteManager.get_following_count(request_user_dict['id'])
-
-            data.update({
-                "following_count" : following_count,
-                "follower_count"  : follower_count,
-            })
-
-            if is_me:
-                # you have all the access to yourself ;)
-                data.update(request_user_dict)
-            else:
-                # is the user private?
-                if request_user_dict['is_private']:
-                    # am I following them?
-                    if VoteManager.is_following(current_user.id,request_user_dict['id']):
-                        data = request_user_dict
-                    else:
-                        data['is_private'] = True
-                else:
-                    data.update(request_user_dict)
-        return data
-
-    @view_config(request_method="POST",route_name='api_user_wall', renderer='json')
-    def api_user_wall(self):
-
-        """
-        """
-
-        username = self.url_match(url_match='username').lower()
-        try:
-            start = int(self.request.POST.get('start'))
-        except Exception, e:
-            start = 0
-
         person = self.request.person
-        user = AccountManager.get_one_by_kwargs(username=username)
+        return AccountManager.get_json_by_username(person,**self.query_kwargs)
 
-        if person and user:
-            current_user = person.user
-            # is the wall not private or am I a follower?
-            if VoteManager.is_following(current_user.id,user.id) or not user.is_private:
-                return FeedManager.get_wall_posts_json(user_id=user.id)
-            else:
-                return []
-        elif user and not user.is_private:
-            return FeedManager.get_wall_posts_json(user_id=user.id)
-        return []
+    @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
+    def api_user_wall(self):
+        """
+        """
+
+        self.query_kwargs['']
+        person = self.request.person
+        posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
+        return posts
+
 
     @api_login_required
-    @view_config(request_method="POST",xhr=True,route_name='api_user_feed', renderer='json')
+    @view_config(request_method="GET",xhr=True,route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
 
         """
         """
 
         person = self.request.person
-        try:
-            start = int(self.request.POST.get('start'))
-        except Exception, e:
-            start = 0
+        return FeedManager.get_majority_posts_json(person,**self.query_kwargs)
 
-        try:
-            feed_id = person.user.feed.id
-            return FeedManager.get_majority_posts_json(feed_id, start=start)
-        except Exception, e:
-            logging.warn(e)
-            return []
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_new_post', renderer='json')
     def api_new_post(self):
-
         """
         """
-
         # Basic setup
         p            = self.request.POST
         person       = self.request.person
-        user         = person.user
-        post_error   = None
-
-        # Relevant POST data
-        text            = vp.sanitize_post_text(p.get('text', ''))
-        subject         = vp.sanitize_post_text(p.get('subject', ''))
-        tags            = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
+        tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
+        query_kwargs = self.query_kwargs
+        del query_kwargs['tags[]']
+        query_kwargs.update({'tags':tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
 
-        if not (len(text) > 0 and len(subject) > 0):
-            # TODO change it to a 400 or something
-            post_error = "Insufficient information"
-            return {
-                "error" : post_error,
-            }
-
-        post = PostManager.add(user.id,tags,subject,text,repost_id=None)
-        object = post.object
-
-        data = PostManager.model_to_json(object)
-        data.update(PostManager.model_to_json(post))
-
-        return data
+        return PostManager.post_json(person,**query_kwargs)
 
 
     @api_login_required
@@ -222,42 +155,22 @@ class APIViews(BaseHandler):
         # Basic setup
         p            = self.request.POST
         person       = self.request.person
-        user         = person.user
-
-        # Relevant POST data
-        text            = vp.sanitize_post_text(p.get('text', ''))
-        subject         = vp.sanitize_post_text(p.get('subject', ''))
-        tags            = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
-
-        try:
-            post_id      = int(self.request.POST.get('post_id'))
-            post = PostManager.add(user.id,tags,subject,text,repost_id=post_id)
-            return PostManager.model_to_json(post)
-        except Exception, e:
-            return {}
+        tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
+        query_kwargs = self.query_kwargs
+        query_kwargs.update({'tags':tags})
+        return PostManager.repost_json(person,**query_kwargs)
 
     @api_login_required
     @view_config(request_method='POST', xhr=True, route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
-        user_id = action = None
+        person = self.request.person
+        return VoteManager.vote_json(person, **self.query_kwargs)
 
-        try:
-            action  = int(self.request.POST.get('action'))
-            user_id = int(self.request.POST.get('user_id'))
-        except Exception, e:
-            logging.warn(e)
-
-        if user_id and action:
-            current_user = self.request.person.user
-            voter_id = current_user.id
-            VoteManager.vote_by_action(action,voter_id,user_id)
-
-            vote_data = {
-                'total_following' : VoteManager.get_following_count(user_id),
-                'total_follower'  : VoteManager.get_follower_count(user_id),
-            }
-            return vote_data
-        return {}
+    @api_login_required
+    @view_config(request_method='GET', xhr=True,route_name='api_user_notification', renderer='json')
+    def api_user_notification(self):
+        person = self.request.person
+        return NotificationManager.notification_json(person,**self.query_kwargs)
 
 
 class AjaxHandler(BaseHandler):
@@ -388,7 +301,7 @@ class AjaxHandler(BaseHandler):
         post_text            = vp.sanitize_post_text(p.get('post_text', ''))
         post_subject         = vp.sanitize_post_text(p.get('post_subject', ''))
         sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
-        final_post_tags      = set(t for t in p.getall('post_tags[]') if vh.valid_tag(t))
+        final_tags      = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         object_file_id       = p.get('object_file_id')
 
         # If nothing is present...
@@ -407,7 +320,7 @@ class AjaxHandler(BaseHandler):
             """
 
         # Do we have too many tags?
-        elif len(final_post_tags) > GLOBAL_CONFIGURATIONS['MAX_TAG_NUM']:
+        elif len(final_tags) > GLOBAL_CONFIGURATIONS['MAX_TAG_NUM']:
             # Too many tags!
             post_error = """
                 It'd be appreciated greatly if you'd limit
@@ -420,7 +333,7 @@ class AjaxHandler(BaseHandler):
             # Core post data
             new_post_data = {
                 'user_id'        : current_user.id,
-                'tags'      : final_post_tags,
+                'tags'      : final_tags,
 
                 'subject'   : valid_post_data['post_subject'],
                 'text'      : valid_post_data['post_text'],
@@ -878,7 +791,7 @@ class AjaxHandler(BaseHandler):
                 if Sanitize.is_valid_email(query):
 
                     # Given an email, we just look for people
-                    results = User.get(email=query)
+                    results = User.by_kwargs(email=query).all()
                     for result in results:
                         result_list.append({
                             'value'    : "{n}".format(n=result.name),
@@ -936,7 +849,7 @@ class AjaxHandler(BaseHandler):
             all_notifications_for_user = NotificationManager.get_notifications_for_user(current_user.id)
             notification_data = [{
                 'nid'        : n.id,
-                'from_name'  : User.get(n.from_user_id).name,
+                'from_name'  : User.by_id(n.from_user_id).username,
                 'from_photo' : n.from_user.profile_picture,
                 'ntext'      : n.notification,
                 'url'        : n.url if n.url else "#",

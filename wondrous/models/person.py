@@ -45,7 +45,7 @@ class Person(Base, BaseMixin):
     name = column_property(first_name + " " + last_name)
     ascii_name = Column(Unicode, nullable=False)
     user_id = Column(BigInteger, ForeignKey('user.id'))
-    user = relationship('User', backref=backref("person", uselist=False))
+    user = relationship('User', lazy='joined', backref=backref("person", uselist=False))
 
     def __init__(self,*args,**kwargs):
         super(Person,self).__init__(*args,**kwargs)

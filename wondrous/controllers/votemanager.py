@@ -33,7 +33,7 @@ class VoteManager(BaseManager):
         """
 
         # If you want to follow, check if valid user is private, if so, put it as pending
-        if status in [Vote.FOLLOW,Vote.TOPFRIEND]:
+        if status in [Vote.FOLLOWED,Vote.TOPFRIEND]:
             if valid_user.is_private:
                 vote = VoteManager.vote(voter_id,valid_user.id,Vote.USER,Vote.PENDING)
                 reason = Notification.FOLLOW_REQUEST
@@ -50,6 +50,20 @@ class VoteManager(BaseManager):
         return None
 
     @classmethod
+    def vote_json(cls,person,user_id,action):
+        if not user_id or not action:
+            return {}
+
+        current_user = person
+        voter_id = current_user.id
+        changed = cls.vote_by_action(action,voter_id,user_id)
+        vote_data = {
+            'total_following' : VoteManager.get_following_count(user_id),
+            'total_follower'  : VoteManager.get_follower_count(user_id),
+        }
+        return vote_data
+
+    @classmethod
     def accept_request(cls, user_id, voter_id):
 
         """
@@ -57,7 +71,7 @@ class VoteManager(BaseManager):
 
         existing_vote = Vote.by_kwargs(subject_id=user_id, user_id=voter_id, vote_type=Vote.USER, status=Vote.PENDING).first()
         if existing_vote:
-            existing_vote.status = Vote.FOLLOW
+            existing_vote.status = Vote.FOLLOWED
             reason = Notification.FOLLOW_ACCEPTED
             new_notification = NotificationManager.add(from_user_id=user_id, to_user_id=voter_id, subject_id=user_id, reason=reason)
             if new_notification:
@@ -72,25 +86,23 @@ class VoteManager(BaseManager):
         """
             Takes a frontend action enum and converts it to the proper action
         """
-
         status = None
-        if action==VoteAction.FOLLOW:
+        action = int(action)
+        print "aciton",action
+        if action == VoteAction.FOLLOW:
             # NOT already following
             if cls.is_following(voter_id,user_id):
-                status = Vote.UNFOLLOW
+                status = Vote.UNFOLLOWED
             else:
-                status = Vote.FOLLOW
+                status = Vote.FOLLOWED
         elif action == VoteAction.CANCEL or action == VoteAction.DENY:
-            status = Vote.UNFOLLOW
+            status = Vote.UNFOLLOWED
         elif action == VoteAction.BLOCK:
-            status = Vote.BLOCK
+            status = Vote.BLOCKED
         elif action == VoteAction.TOPFRIEND:
             status = Vote.TOPFRIEND
-        elif action == Vote.ACCEPT:
+        elif action == VoteAction.ACCEPT:
             return cls.accept_request(voter_id,user_id)
-
-        # TODO: Remove print statement
-        print action, status, voter_id, user_id
 
         return VoteManager.vote_on_user(voter_id,user_id,status)
 
@@ -103,7 +115,7 @@ class VoteManager(BaseManager):
         if VoteManager.is_blocked_by(voter_id,user_id):
             # You've been blocked
             logging.info("you have been blocked")
-            return False
+            return Vote.BLOCKED
 
         valid_user = User.by_id(user_id)
         if valid_user and user_id != voter_id and status:
@@ -111,35 +123,38 @@ class VoteManager(BaseManager):
 
             if existing_vote:
 
-                if existing_vote.status == Vote.BLOCK and status != Vote.BLOCK:
+                if existing_vote.status == Vote.BLOCKED and status != Vote.BLOCKED:
                     # You blocked the other user, but now you want to unblock!
                     logging.info("you unblocked someone and performed another action")
 
                     vote = VoteManager.vote(voter_id,user_id, Vote.USER, status)
-                    return False
+                    return vote.status
 
-                elif existing_vote.status==Vote.PENDING and status in [Vote.UNFOLLOW, Vote.BLOCK]:
+                elif existing_vote.status==Vote.PENDING and status in [Vote.UNFOLLOWED, Vote.BLOCKED]:
                     # Take back your request, you can either cancel or block
                     # DELETE Notification
                     NotificationManager.delete(from_user_id=voter_id, to_user_id=user_id, \
                                                reason=Notification.FOLLOW_REQUEST, subject_id=voter_id)
                     logging.info("you took back your request")
+                    return Vote.UNFOLLOWED
 
                 elif cls._follow_user(voter_id,valid_user,status):
                     logging.info("you followed another user")
-                    return True
+                    return Vote.FOLLOWED
 
                 existing_vote.status = status
+                return status
             else:
                 # If you want to follow, check if valid user is private, if so, put it as pending
-                if cls._follow_user(voter_id,valid_user,status):
-                    return True
+                vote = cls._follow_user(voter_id,valid_user,status)
+                if vote:
+                    return vote.status
                 else:
                     # Other ops
                     vote = VoteManager.vote(voter_id,user_id, Vote.USER, status)
-                    return False
+                    return vote.status
 
-        return False
+        return -1
 
     @staticmethod
     def vote(user_id,subject_id, vote_type, status):
@@ -161,8 +176,8 @@ class VoteManager(BaseManager):
 
         if status:
             retval = retval and status in \
-                [Vote.UNLIKED, Vote.LIKED, Vote.BOOKMARKED, Vote.BLOCK, \
-                Vote.PENDING, Vote.UNFOLLOW, Vote.FOLLOW, Vote.TOPFRIEND]
+                [Vote.UNLIKED, Vote.LIKED, Vote.BOOKMARKED, Vote.BLOCKED, \
+                Vote.PENDING, Vote.UNFOLLOWED, Vote.FOLLOWED,Vote.TOPFRIEND]
         return retval
 
     @staticmethod
@@ -209,7 +224,7 @@ class VoteManager(BaseManager):
         """
 
         field = "subject_id"
-        if vote_type == Vote.USER and (status==Vote.FOLLOW or status==Vote.TOPFRIEND):
+        if vote_type == Vote.USER and (status==Vote.FOLLOWED or status==Vote.TOPFRIEND):
             if not following_me:
                 field = "user_id"
 
@@ -223,35 +238,35 @@ class VoteManager(BaseManager):
     @staticmethod
     def is_following(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_id, user_to_get_id, Vote.USER)
-        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOW, Vote.TOPFRIEND] else False
+        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOWED,Vote.TOPFRIEND] else False
 
     @staticmethod
     def is_followed_by(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_to_get_id,user_id, Vote.USER)
-        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOW, Vote.TOPFRIEND] else False
+        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOWED,Vote.TOPFRIEND] else False
 
     @staticmethod
     def is_blocked_by(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_to_get_id,user_id, Vote.USER)
-        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) == Vote.BLOCK else False
+        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) == Vote.BLOCKED else False
 
     @staticmethod
     def is_blocking(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_id, user_to_get_id, Vote.USER)
-        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) == Vote.BLOCK else False
+        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) == Vote.BLOCKED else False
 
     @staticmethod
     def get_follower_count(user_id):
-        return Vote.query.filter(Vote.subject_id == user_id).filter(or_(Vote.status == Vote.FOLLOW, Vote.status == Vote.TOPFRIEND)).count()
+        return Vote.query.filter(Vote.subject_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
 
     @staticmethod
     def get_following_count(user_id):
-        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOW, Vote.status == Vote.TOPFRIEND)).count()
+        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
 
     @staticmethod
     def get_all_followers(user_id):
-        return Vote.query.filter(Vote.subject_id == user_id).filter(or_(Vote.status == Vote.FOLLOW, Vote.status == Vote.TOPFRIEND)).all()
+        return Vote.query.filter(Vote.subject_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).all()
 
     @staticmethod
     def get_all_following(user_id):
-        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOW, Vote.status == Vote.TOPFRIEND)).all()
+        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).all()

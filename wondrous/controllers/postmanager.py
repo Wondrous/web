@@ -85,8 +85,29 @@ class PostManager(BaseManager):
 
         if tags and len(tags)>0:
             cls._process_tags(tags,new_post.id)
-            
+
         cls._move_post_into_feeds(new_post.id,user_id)
         DBSession.flush()
 
         return new_post
+
+    @classmethod
+    def repost_json(cls,person,post_id,tags=None,text=None):
+        if not person:
+            return {'error':'insufficient data'}
+
+        post = PostManager.add(person.user.id,tags,text,repost_id=post_id)
+        data = PostManager.model_to_json(post)
+        return data
+
+    @classmethod
+    def post_json(cls,person,subject,text,tags=None):
+        if not person or not subject or not text:
+            return {'error':'insufficient data'}
+
+        post = PostManager.add(person.user.id,tags,subject,text,repost_id=None)
+        object = post.object
+
+        data = PostManager.model_to_json(object)
+        data.update(PostManager.model_to_json(post))
+        return data

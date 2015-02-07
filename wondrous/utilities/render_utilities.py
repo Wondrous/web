@@ -168,7 +168,7 @@ class CreateNewPost(object):
 
             PARAMS: A dict with the following keys:
                 -user_id        -hidden_from_community
-                -post_tags      -post_text
+                -tags      -post_text
                 -user_id     -post_links
                 -object_file_id -post_subject
 
@@ -203,7 +203,7 @@ class CreateNewPost(object):
 
                 -A dict with the following keys:
                     -user_id                -post_text
-                    -post_tags              -post_links
+                    -tags              -post_links
                     -object_file_id         -post_subject
                     -hidden_from_community
                 -A set (the system context tags)
@@ -258,7 +258,7 @@ class CreateNewPost(object):
                 object_file.mapped = True
 
         # -- Add in final tags ----
-        CreateNewPost.__process_final_tags(SYS_TAGS, new_post_data['post_tags'], new_obj_id)
+        CreateNewPost.__process_final_tags(SYS_TAGS, new_post_data['tags'], new_obj_id)
 
         return new_obj
 
@@ -287,7 +287,7 @@ class CreateNewPost(object):
         return new_obj
 
     @staticmethod
-    def __process_final_tags(SYS_TAGS, post_tags, new_obj_id):
+    def __process_final_tags(SYS_TAGS, tags, new_obj_id):
 
         """
             PURPOSE:
@@ -301,13 +301,13 @@ class CreateNewPost(object):
             USE: Call like: CreateNewPost.__process_final_tags(<set>, <int>)
 
             PARAMS: 2 params:
-                post_tags  : set : REQUIRED : A set of the final tags of a new post
+                tags  : set : REQUIRED : A set of the final tags of a new post
                 new_obj_id : int : REQUIRED : The primary id of the new Object
 
             RETURNS: A set of the final post tags
         """
 
-        final_post_tags = set()
+        final_tags = set()
 
         for tag in SYS_TAGS:
 
@@ -323,7 +323,7 @@ class CreateNewPost(object):
             }
             ObjectTagManager.add(object_tag_data)
 
-        for tag in post_tags:
+        for tag in tags:
 
             # If the tag is valid
             if vh.valid_tag(tag):
@@ -339,9 +339,9 @@ class CreateNewPost(object):
                     'global_tag_id' : global_tag_id,
                 }
                 ObjectTagManager.add(object_tag_data)
-                final_post_tags.add(tag)  # Add tag to final set
+                final_tags.add(tag)  # Add tag to final set
 
-        return final_post_tags
+        return final_tags
 
 
 class _AssemblePost(object):

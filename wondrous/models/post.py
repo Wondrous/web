@@ -46,7 +46,7 @@ class Post(Base,BaseMixin):
 
     post_tag_links = relationship("PostTagLink", backref="object")
 
-    object = relationship('Object', backref=backref("post", uselist=False))
+    object = relationship('Object', lazy='joined', backref=backref("post", uselist=False))
     user = relationship('User', backref="posts")
 
     @classmethod

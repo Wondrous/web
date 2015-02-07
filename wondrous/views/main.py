@@ -588,14 +588,14 @@ class ProfileHandler(BaseHandler):
             self.set_pagination_data(items, start, user_id, PER_PAGE=num_items)
             following_count = VoteManager.get_following_count(user_id)
             follower_count  = VoteManager.get_follower_count(user_id)
-            blocked_user = BlockedUser.get(current_user_id,user_id)
+            is_blocked = VoteManager.is_blocking(valid_user.id, current_person.user.id)
 
             data = {
                 'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_user.username),
 
                 'current_user'       : current_person,
                 'profile_user'       : valid_user,
-                'is_blocked'         : blocked_user,
+                'is_blocked'         : is_blocked,
                 'is_following'       : VoteManager.is_following(current_user_id,valid_user.id),
                 'is_private'         : valid_user.is_private,
                 'is_my_profile'      : bool(valid_user.id == current_user_id),

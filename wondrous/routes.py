@@ -62,13 +62,12 @@ def build_routes(config):
 
     # API
     config.add_route('api_user_vote',                          '/api/user/vote/') #POST
-    config.add_route('api_user_info',                          '/api/user/{username}/')
-    config.add_route('api_user_wall',                          '/api/wall/{username}/') #POST
-    config.add_route('api_new_post',                           '/api/wall/')            #POST
-    config.add_route('api_repost',                             '/api/wall/repost/')     #POST
-
+    config.add_route('api_user_info',                          '/api/user')
+    config.add_route('api_new_post',                           '/api/wall')            #POST
+    config.add_route('api_user_wall',                          '/api/wall')             #GET
+    config.add_route('api_repost',                             '/api/wall/repost')     #POST
     config.add_route('api_user_feed',                          '/api/feed/')            #POST
-
+    config.add_route('api_user_notification',                  '/api/notification')
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')
 

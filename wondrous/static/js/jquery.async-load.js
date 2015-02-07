@@ -41,9 +41,8 @@ $(document).ready(function() {
         // --------------------------------
 
         $.ajax({
-            type: "POST",
-            url: "/api/feed/",
-            data: {"start": itemNum},
+            type: "GET",
+            url: "/api/feed?feed_type=0&page="+String(0),
             success: function(data) {
                 // Add in empty containers where each post will go
                 // to preserve the order of the posts when the ajax

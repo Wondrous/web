@@ -9,29 +9,55 @@ This is the core web platform for Wondrous.
 
 ## Action IDs:
 Unliked (0)
+
+
 Liked (1)
+
+
 Bookmarked (2)
+
+
 Cancel (3)
+
+
 Follow (4)
+
+
 Accept (5)
+
+
 Block (6)
+
+
 Deny (7)
+
+
 Topfriend (8) *follow required*
 
 
 #### USER level
 
-endpoint: api/user?user_id={user_id}
+endpoint: `api/user?user_id={user_id}``
 method: GET
 description: Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
 
 
-endpoint: api/user/vote
-method: POST
-parameter fields
+**endpoint:** `api/user/vote`
+
+
+**method**: POST
+
+
+**parameter** fields
+
+
     UserID (int) - valid User ID
-    Action (int) - action ID to perform 
-description: Perform an action on a user (see Action ID table). Returns JSON status code.
+
+
+    Action (int) - action ID to perform
+
+
+**description**: Perform an action on a user (see Action ID table). Returns JSON status code.
 
 #### WALL level
 
@@ -39,24 +65,32 @@ description: Perform an action on a user (see Action ID table). Returns JSON sta
 
 **method:** `GET`
 
-**description:** `Get a user's wall posts` 
+**description:** `Get a user's wall posts`
 
 
 **endpoint:** `api/wall/repost`
 
 **method:** `POST`
 
-**parameter fields:** `post_id (int) - valid Post ID`
+**parameter fields:** `post_id (int) - valid Post ID, tags (list of text tags), text`
 
 **description:** `Repost a post, will always post on the user (who invokes the call) wall.`
-    
+
 
 #### FEED Level
 
-endpoint: api/feed?feed_type={feed_type}&page={page}
-method: GET
-description: for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and and X is the amount in the set.
+**endpoint:** `api/feed?feed_type={feed_type}&page={page}`
 
+`
+**method:** GET
+
+
+**description:** for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and X is the amount in the set.
+
+
+#### NOTIFICATION level
+
+**endpoint:** `api/notification?page={page}`
 
 ## Examples
 
