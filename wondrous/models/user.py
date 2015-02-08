@@ -63,14 +63,14 @@ class User(Base, PasswordManager, BaseMixin):
 
     # Make password a property using the _get_password and _set_password methods
     password = synonym('_password', descriptor=property(PasswordManager._get_password, PasswordManager._set_password))
-    comments = relationship("Comment")
+    comments = relationship("Comment",cascade="delete")
 
-    feed = relationship("Feed", uselist=False, backref="user")
+    feed = relationship("Feed",uselist=False,backref="user",cascade="delete")
+    set_to_delete = Column(DateTime)
 
     @classmethod
     def get_all_banned_users(cls):
         return cls.by_kwargs(is_banned == True).all()
-
 
 
 class BlockedUser(Base,BaseMixin):

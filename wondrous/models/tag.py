@@ -33,4 +33,4 @@ class Tag(Base,BaseMixin):
 
     """Tags used on Objects"""
     tag_name = Column(Unicode, nullable=False, unique=True)
-    post_tag_links = relationship("PostTagLink", backref="tag")
+    post_tag_links = relationship("PostTagLink", backref="tag", cascade="delete")

@@ -86,7 +86,7 @@ class ModelTest(unittest.TestCase):
 
             if status == Vote.PENDING:
                 reason = Notification.FOLLOW_REQUEST
-            elif status == Vote.FOLLOW:
+            elif status == Vote.FOLLOWED:
                 reason = Notification.FOLLOWED
 
             if reason:
@@ -118,7 +118,7 @@ class ModelTest(unittest.TestCase):
         user1, user2 = (u for u in self.create_users(range(5,7)))
 
         # Follow
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOWED)
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),True)
         self.assertEquals(VoteManager.is_following(user2.id,user1.id),False)
 
@@ -127,13 +127,13 @@ class ModelTest(unittest.TestCase):
         self.assertEquals(note_count,1)
 
         # Unfollow
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOWED)
 
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
         self.assertEquals(VoteManager.is_following(user2.id,user1.id),False)
 
         # FOLLOW - make sure the second follow isn't notified
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOWED)
 
         # Make sure unseen votes are merged (deleted)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
@@ -153,7 +153,7 @@ class ModelTest(unittest.TestCase):
         user2.is_private = True
 
         # Request to Follow
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOWED)
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
 
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
@@ -169,28 +169,28 @@ class ModelTest(unittest.TestCase):
 
         # take user 1 off from following list
         # need to delete the vote
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.UNFOLLOWED)
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,0)
 
         # Request to Follow
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOWED)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOW_REQUEST).count()
         self.assertEquals(note_count,1)
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
 
         # Delete the request
-        self.delete_vote(user_id=user1.id,subject_id=user2.id,vote_type=Vote.USER,status=Vote.FOLLOW)
+        self.delete_vote(user_id=user1.id,subject_id=user2.id,vote_type=Vote.USER,status=Vote.FOLLOWED)
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),False)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOWED).count()
         self.assertEquals(note_count,0)
 
         # Request to Follow
-        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOW)
+        notified = VoteManager.vote_on_user(user1.id,user2.id,Vote.FOLLOWED)
         note_count = Notification.by_kwargs(from_user_id=user1.id,to_user_id=user2.id,\
             subject_id=user1.id,reason=Notification.FOLLOW_REQUEST).count()
         self.assertEquals(note_count,1)
@@ -207,7 +207,7 @@ class ModelTest(unittest.TestCase):
         self.assertEquals(VoteManager.is_following(user1.id,user2.id),True)
 
         # User 2 block user 1
-        notified = VoteManager.vote_on_user(user2.id,user1.id,Vote.BLOCK)
+        notified = VoteManager.vote_on_user(user2.id,user1.id,Vote.BLOCKED)
         self.assertEquals(VoteManager.is_following(user2.id,user1.id),False)
         self.assertEquals(VoteManager.is_blocked_by(user1.id,user2.id),True)
         self.assertEquals(VoteManager.is_blocking(user2.id,user1.id),True)
@@ -262,7 +262,7 @@ class ModelTest(unittest.TestCase):
         for u in users:
             for v in users:
                 if u is not v:
-                    VoteManager.vote_on_user(u.id,v.id,Vote.FOLLOW)
+                    VoteManager.vote_on_user(u.id,v.id,Vote.FOLLOWED)
 
         # Lets see how many followers do I have
         import random

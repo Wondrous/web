@@ -29,32 +29,42 @@ from wondrous.models.feed import (
 )
 
 from wondrous.models.modelmixins import BaseMixin
+from sqlalchemy.orm import column_property
+
 # from wondrous.models.object import Object
 # from wondrous.models.user import User
 
 class Post(Base,BaseMixin):
 
     """This defines the post table"""
-
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    repost_id = Column(BigInteger, ForeignKey('post.id'))
-    original_id = Column(BigInteger, ForeignKey('post.id'))
+    user = relationship('User', foreign_keys=user_id, backref="posts")
+
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
-    hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
-    feed_post_links = relationship("FeedPostLink", backref="post")
+    object = relationship('Object', lazy='joined', backref=backref("post", uselist=False), cascade="delete")
+
+    is_hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
+    feed_post_links = relationship("FeedPostLink", backref="post", cascade="delete")
     text = Column(Unicode)
 
-    post_tag_links = relationship("PostTagLink", backref="object")
+    post_tag_links = relationship("PostTagLink", backref="object", cascade="delete")
 
-    object = relationship('Object', backref=backref("post", uselist=False))
-    user = relationship('User', backref="posts")
+
+    # repost section
+    repost_id = Column(BigInteger, ForeignKey('post.id'))
+    repost = relationship('Post',foreign_keys=repost_id, remote_side="Post.id", backref="reposts")
+
+    original_id = Column(BigInteger, ForeignKey('post.id'))
+    original = relationship('Post', foreign_keys=original_id, remote_side="Post.id", backref="all_reposts")
+
+    owner_id = Column(BigInteger, ForeignKey('user.id'))
+    owner = relationship('User', foreign_keys=owner_id)
 
     @classmethod
     def get_all(cls,user_id):
         from wondrous.models.object import Object
         return cls.query.join(Object).filter(cls.user_id == user_id).\
                                     order_by(desc(Object.created_at)).all()
-
 
     @classmethod
     def toggle_post_visibility(cls,object_id, current_user_id):
@@ -77,4 +87,4 @@ class Post(Base,BaseMixin):
 
         post = super(Post,cls).by_id(object_id)
         if post and post.obj.user_id == current_user_id:
-            post.hidden = False if post.hidden else True
+            post.is_hidden = False if post.is_hidden else True

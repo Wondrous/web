@@ -37,8 +37,13 @@ class Notification(Base, BaseMixin):
     COMMENTED, UPDATED, LIKED, FOLLOWED, FOLLOW_REQUEST, FOLLOW_ACCEPTED = range(6)
 
     subject_id = Column(BigInteger)
-    from_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=True)  # nul=True -> System notification
+
+    from_user_id = Column(BigInteger, ForeignKey('user.id'))  # nul=True -> System notification
+    from_user = relationship("User", foreign_keys=from_user_id,cascade="delete")
+
     to_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    to_user = relationship("User", foreign_keys=to_user_id,cascade="delete")
+
     notification = Column(Unicode, nullable=False)
     reason = Column(Integer, nullable=False)
     is_read = Column(Boolean, nullable=False, default=False)

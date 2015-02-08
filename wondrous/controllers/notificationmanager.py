@@ -14,13 +14,15 @@ from wondrous.models import (
 )
 from wondrous.utilities.notification_utilities import send_notification
 from wondrous.controllers.basemanager import BaseManager
+from sqlalchemy import desc
 
 
 import logging
 
 class NotificationManager(BaseManager):
     @classmethod
-    def construct_notification(cls,reason):
+    def construct_notification(cls,reason,from_user_id,to_user_id):
+        #TODO construct with correct naming
         retval = ''
         if reason == Notification.COMMENTED:
             retval = "commented on your post"
@@ -68,7 +70,7 @@ class NotificationManager(BaseManager):
             reason=reason)
 
         # Add the new notification after the overlap handling
-        notification = cls.construct_notification(reason)
+        notification = cls.construct_notification(reason,from_user_id,to_user_id)
         new_notification = Notification(from_user_id=from_user_id, to_user_id=to_user_id,\
             reason=reason, subject_id=subject_id, notification=notification)
         # Send to realtime push
@@ -78,6 +80,16 @@ class NotificationManager(BaseManager):
                 'notification':notification}))
 
         return new_notification
+
+    @classmethod
+    def notification_json(cls,person,page=0):
+        per_page = 15
+        notes = Notification.query.order_by(desc(Notification.created_at)).filter_by(to_user_id=person.user.id).limit(per_page).offset(page*per_page).all()
+        data = []
+        for note in notes:
+            note_dict = super(NotificationManager,cls).model_to_json(note)
+            data.append(note_dict)
+        return data
 
     @classmethod
     def _merge_unseen_votes(cls,**kwargs):

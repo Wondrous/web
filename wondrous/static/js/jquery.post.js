@@ -110,15 +110,15 @@ $(document).ready(function() {
         if (contextIdentifier !== null && ajaxRoute !== null) {
             $.ajax({
                 type: "POST",
-                url: "/ajax/post/"+ ajaxRoute +"/",
+                url: "/api/wall",
                 data: {
-                    'post_subject'       : postSubject,
-                    'post_text'          : postText,
-                    'post_tags'          : postTagsUnique,
-                    'post_links'         : postLinks,
-                    'object_file_id'     : object_file_id,
-                    'context_identifier' : contextIdentifier,
-                    'post_as_checkbox'   : postedAnon,
+                    'subject'       : postSubject,
+                    'text'          : postText,
+                    'tags'          : postTagsUnique,
+                    // 'links'         : postLinks,
+                    // 'object_file_id'     : object_file_id,
+                    // 'context_identifier' : contextIdentifier,
+                    // 'post_as_checkbox'   : postedAnon,
                 },
                 success: function(post_data) {
                     if (post_data['post_error']) {
@@ -129,6 +129,9 @@ $(document).ready(function() {
                         $('#new-post-launch').slideDown(200);
                         destroyPostForm();
                     }
+                },
+                error: function(err){
+                    // console.log(err);
                 }
             });
         }
@@ -141,16 +144,16 @@ $(document).ready(function() {
         // Clear the post textarea and the hashtag highlighter
         $(".highlighter").empty();
         $("#postTextarea").val('');
-        
+
         // Reset any post error messages
         $(".post-error").empty();
         $('.post-error-wrapper').hide();
-        
+
         // Remove anything that pertains to file uploads
         $('.objectFileID').empty();
         $('#uploadedImagePreviewWrapper').empty();
         $('#filename').empty();
-        
+
         $('.post-dialogue-progress').hide();
         $('#postUploadBtn').show();
 
@@ -272,7 +275,7 @@ function initUploadPostImage() {
             var r = data.result;
 
             if (r['error_message'] !== null) {
-                
+
                 $("#filename").hide();
                 $('.post-error-wrapper').show().slideDown(220);
                 $('.post-error').text(r['error_message']);
@@ -282,7 +285,7 @@ function initUploadPostImage() {
             } else {
                 $('.post-error-wrapper').hide();
                 $('.post-error').empty();
-                
+
                 if (r['file_url'] !== null && r['is_img'] === true) {
                     $("#uploadedImagePreviewWrapper").html("<img class='imagePreview round-5' src='" + r['file_url'] + "'>");
                 }
@@ -291,4 +294,3 @@ function initUploadPostImage() {
         }
     });
 }
-

@@ -41,7 +41,7 @@ class Vote(Base, BaseMixin):
     """
     
     OBJECT, USER = range(2)
-    UNLIKED, LIKED, BOOKMARKED, BLOCK, PENDING, UNFOLLOW, FOLLOW, TOPFRIEND = range(8)
+    UNLIKED, LIKED, BOOKMARKED, BLOCKED, PENDING, UNFOLLOWED, FOLLOWED, TOPFRIEND = range(8)
 
     vote_type = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)

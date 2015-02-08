@@ -4,7 +4,7 @@ $(document).ready(function() {
         url: "/ajax/notification/count/",
         data: {}, /* No data needed */
         success: function(r) {
-            updateNotificationData(1);
+            updateNotificationData(0);
             updateNotificationCount(r);
         }
     });
@@ -28,7 +28,7 @@ $(document).ready(function() {
          $.ajax({ url: "/ajax/notification/count/", success: function(r) {
             current_notificationCount = $(".notification-count-text").text();
             if (current_notificationCount < r['notification_count']) {
-                updateNotificationData(1);
+                updateNotificationData(0);
                 updateNotificationCount(r);
             }
         }});
@@ -82,11 +82,11 @@ $(document).ready(function() {
     function updateNotificationData(batchNum) {
         $('.notification-row').remove();
         $.ajax({
-            type: "POST",
-            url: "/ajax/notification/get/?batch=" + batchNum,
-            data: {}, /* No data needed */
+            type: "GET",
+            url: "/api/notification?page=" + batchNum,
             success: function(r) {
-                var un = r['notification_data'];
+                console.log("notifications",r);
+                var un = r;
                 if (un !== null && un.length > 0) {
                     $('.notification-none').remove();
                     // Render all notifications
