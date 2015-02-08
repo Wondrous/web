@@ -62,6 +62,9 @@ def build_routes(config):
 
     # API
     config.add_route('api_user_vote',                          '/api/user/vote/') #POST
+    config.add_route('api_user_profile',                       '/api/user/profile') #POST
+    config.add_route('api_user_deactivate',                    '/api/user/deactivate') #POST
+    config.add_route('api_user_password',                      '/api/user/password') #POST
     config.add_route('api_user_info',                          '/api/user')
     config.add_route('api_new_post',                           '/api/wall')            #POST
     config.add_route('api_user_wall',                          '/api/wall')             #GET

@@ -38,7 +38,7 @@ class Post(Base,BaseMixin):
 
     """This defines the post table"""
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    user = relationship('User', backref="posts")
+    user = relationship('User', foreign_keys=user_id, backref="posts")
 
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
     object = relationship('Object', lazy='joined', backref=backref("post", uselist=False), cascade="delete")
@@ -52,13 +52,13 @@ class Post(Base,BaseMixin):
 
     # repost section
     repost_id = Column(BigInteger, ForeignKey('post.id'))
-    repost = relationship('Post', remote_side="Post.repost_id", backref="reposts")
+    repost = relationship('Post',foreign_keys=repost_id, remote_side="Post.id", backref="reposts")
 
     original_id = Column(BigInteger, ForeignKey('post.id'))
-    original = relationship('Post', remote_side="Post.original_id", backref="children")
+    original = relationship('Post', foreign_keys=original_id, remote_side="Post.id", backref="all_reposts")
 
     owner_id = Column(BigInteger, ForeignKey('user.id'))
-    owner = Column('User')
+    owner = relationship('User', foreign_keys=owner_id)
 
     @classmethod
     def get_all(cls,user_id):

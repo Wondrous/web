@@ -19,6 +19,8 @@ from wondrous.models import (
 from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
 
+from datetime import datetime
+
 class AccountManager(BaseManager):
     """
         This is controller for both person and user models!
@@ -42,7 +44,7 @@ class AccountManager(BaseManager):
         u = User.by_id(user_id)
         if u:
             return not u.is_active
-        return False # safe than sorry 
+        return False # safe than sorry
 
     @staticmethod
     def add(first_name, last_name, email, username, password, user_type=1):
@@ -107,9 +109,34 @@ class AccountManager(BaseManager):
         return None
 
     @classmethod
-    def deactivate_json(cls,user_id):
-        pass
+    def deactivate_json(cls,person,password):
+        user = person.user
+        if user and user.validate_password(password):
+            user.is_active = False
+            return {'status','deactivated'}
+        return {'error':'deactivation failed'}
 
     @classmethod
-    def delete_json(cls):
-        pass
+    def delete_json(cls,person,password):
+        user = person.user
+        if user and user.validate_password(password):
+            user.set_to_delete = datetime.now()
+            return {'status','set to delete in x days'}
+        return {'error':'deletion failed'}
+
+    @classmethod
+    def change_password_json(cls,person,old_password,new_password):
+        user = person.user
+        if user and user.validate_password(old_password):
+            user.password = password
+        return {"error":"password change failed"}
+
+    @classmethod
+    def change_profile_json(cls,person,field,new_value):
+        user = person.user
+        exists = getattr(user, field, None)
+        if exists:
+            setattr(user,field,new_value)
+            return {field:new_value}
+
+        return {"error":field+" not found"}

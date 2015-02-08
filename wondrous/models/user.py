@@ -67,6 +67,8 @@ class User(Base, PasswordManager, BaseMixin):
 
     feed = relationship("Feed",uselist=False,backref="user",cascade="delete")
 
+    set_to_delete = Column(DateTime)
+
     @classmethod
     def get_all_banned_users(cls):
         return cls.by_kwargs(is_banned == True).all()

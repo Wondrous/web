@@ -113,12 +113,30 @@ class APIViews(BaseHandler):
     def api_user_wall(self):
         """
         """
-
-        self.query_kwargs['']
         person = self.request.person
         posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
         return posts
 
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_user_deactivate', renderer='json')
+    def api_user_deactivate(self):
+        # NEED a password conformation
+        person = self.request.person
+        return AccountManager.deactivate_json(person,**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_user_profile', renderer='json')
+    def api_user_profile(self):
+        # Deal with shit like username, first_name, last_name
+        person = self.request.person
+        return AccountManager.change_profile_json(person,**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_user_password', renderer='json')
+    def api_user_password(self):
+        # requires a password to change,
+        person = self.request.person
+        return AccountManager.change_password_json(person,**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="GET",xhr=True,route_name='api_user_feed', renderer='json')
@@ -126,7 +144,6 @@ class APIViews(BaseHandler):
 
         """
         """
-
         person = self.request.person
         return FeedManager.get_majority_posts_json(person,**self.query_kwargs)
 

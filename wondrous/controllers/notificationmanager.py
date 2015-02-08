@@ -21,7 +21,8 @@ import logging
 
 class NotificationManager(BaseManager):
     @classmethod
-    def construct_notification(cls,reason):
+    def construct_notification(cls,reason,from_user_id,to_user_id):
+        #TODO construct with correct naming
         retval = ''
         if reason == Notification.COMMENTED:
             retval = "commented on your post"
