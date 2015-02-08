@@ -527,7 +527,7 @@ class _AssemblePost(object):
 
             post_ob = Post.by_id(self.post_id)
             self.final_data['created_at'] = str(self.created_at)
-            self.final_data['hidden']      = post_ob.hidden
+            self.final_data['hidden']      = post_ob.is_hidden
 
             if str(self.user_id) == str(self.user_id):
                 posted_by_profile_owner = True
@@ -988,8 +988,8 @@ class _GenerateItemList(object):
         for post in post_objs:
             item_list.append({
                 'post_id'  : post.id,
-                'user_id' : post.user_id,
-                'hidden'     : post.hidden,
+                'user_id'  : post.user_id,
+                'hidden'   : post.is_hidden,
             })
 
         # NOTE: When viewing items on profile, we don't rank them
