@@ -65,7 +65,7 @@ class User(Base, PasswordManager, BaseMixin):
     password = synonym('_password', descriptor=property(PasswordManager._get_password, PasswordManager._set_password))
     comments = relationship("Comment")
 
-    feed = relationship("Feed",uselist=False,backref="user")
+    feed = relationship("Feed", uselist=False, backref="user")
 
     @classmethod
     def get_all_banned_users(cls):

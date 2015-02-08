@@ -5,7 +5,7 @@ $.fn.hashtags = function() {
 
     var _this = $(this);
     _this.on("keyup", function() {
-        $('#post-hashtags').html($(".hashtag").append(" ").text());
+        // $('#post-hashtags').html($(".hashtag").append(" ").text());
 
         var str = escapeHtml($(this).val());
         $(this).parent().parent().find(".highlighter").css("width", $(this).css("width"));

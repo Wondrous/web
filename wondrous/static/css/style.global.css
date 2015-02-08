@@ -1150,14 +1150,13 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 
 .new-post-subject {
-    background-color: transparent;
-    border: 0;
-    width: 95%;
-    margin-left: 10px;
+    background-color: rgb(251,251,251);
+    width: 100%;
+    height: auto;
     outline: none;
     resize: none;
     font-weight: bold;
-    padding: 9px 0 3px 0;
+    padding: 9px 10px 6px 10px;
 }
 
 .new-post-text {
@@ -1233,7 +1232,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     font-size: 15px;
     color: rgb(248,248,248);
 
-    width: 270px;
+    width: 140px;
     padding: 7px 0px;
 
     text-align: center;
@@ -1255,32 +1254,26 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 }
 
 .typehead {
-    border: 1px solid rgb(23,190,190);
     padding: 2px 6px;
+}
+
+.new-post-subject,
+.typehead {
+    border: 1px solid rgb(210,210,210);
 }
 
 .new-post-element .highlighter {
     position: absolute;
-
     padding-left: 8px;
     padding-top: 4px;
-
-/*  font-family: courier, 'lucida grande', arial, helvetica, sans-serif;
-    font-size: 15px;
-    line-height: 20px;*/
-
     font-family: helvetica, arial, sans-serif;
-    font-size: 40px;
+    font-size: 25px;
     font-weight: 100;
     line-height: 45px;
-
     color: transparent;
-
-
     white-space: pre-wrap;
     overflow-wrap: break-word;
     overflow: hidden;
-
     z-index: 2;
 }
 

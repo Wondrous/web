@@ -93,10 +93,17 @@ class APIViews(BaseHandler):
         # TODO ADD FUCKING XHR
     """
 
-    @view_config(request_method="GET",route_name='api_user_info', renderer='json')
+    @view_config(request_method="GET", route_name='api_user_info', renderer='json')
     def api_user_info(self):
 
         """
+            PURPOSE:
+
+            USE:
+
+            PARAMS: (None)
+
+            RETURNS:
         """
 
         username = current_user = None

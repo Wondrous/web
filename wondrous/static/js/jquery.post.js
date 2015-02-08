@@ -25,23 +25,25 @@ $(document).ready(function() {
         }
     });
 
-    $(".new-post-subject").keyup(function (e) {
-        autoheight(this);
-    });
+    // *** This was used when we had a WYSIWYG interface ***
+    // *** Not currently in use ***
+    // $(".new-post-subject").keyup(function (e) {
+    //     autoheight(this);
+    // });
 
-    function autoheight(a) {
-        if (!$(a).prop('scrollTop')) {
-            do {
-                var b = $(a).prop('scrollHeight');
-                var h = $(a).height();
-                $(a).height(h - 5);
-            }
-            while (b && (b != $(a).prop('scrollHeight')));
-        };
-        $(a).height($(a).prop('scrollHeight') - 12);
-    }
+    // function autoheight(a) {
+    //     if (!$(a).prop('scrollTop')) {
+    //         do {
+    //             var b = $(a).prop('scrollHeight');
+    //             var h = $(a).height();
+    //             $(a).height(h - 5);
+    //         }
+    //         while (b && (b != $(a).prop('scrollHeight')));
+    //     };
+    //     $(a).height($(a).prop('scrollHeight') - 12);
+    // }
 
-    autoheight($(".new-post-subject"));
+    // autoheight($(".new-post-subject"));
 
     // Live URL
     $('#postTextarea').liveUrl({

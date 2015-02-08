@@ -26,7 +26,8 @@ from wondrous.models import DBSession
 
 from wondrous.models.modelmixins import BaseMixin
 
-class Vote(Base,BaseMixin):
+class Vote(Base, BaseMixin):
+
     """
         Vote keeps track of relationship status and data
         ALWAYS between an user and user/object
@@ -38,6 +39,7 @@ class Vote(Base,BaseMixin):
         Vote is similar to an intermediary model
 
     """
+    
     OBJECT, USER = range(2)
     UNLIKED, LIKED, BOOKMARKED, BLOCK, PENDING, UNFOLLOW, FOLLOW, TOPFRIEND = range(8)
 
