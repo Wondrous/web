@@ -95,9 +95,6 @@ class APIViews(BaseHandler):
         # TODO ADD FUCKING XHR
     """
 
-<<<<<<< HEAD
-    @view_config(request_method="GET", route_name='api_user_info', renderer='json')
-=======
     @property
     def query_kwargs(self):
         kwargs = defaultdict(lambda: None)
@@ -105,7 +102,6 @@ class APIViews(BaseHandler):
         return kwargs
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
->>>>>>> 35476e9bcc565ffda51f35d422d3db90c8d6bb97
     def api_user_info(self):
 
         """
