@@ -61,26 +61,17 @@ def build_routes(config):
     config.add_route('info_account_delete_handler',            '/info/delete_account/')
 
     # API
-    config.add_route('api_user_vote',                          '/api/user/vote/') #POST
-<<<<<<< HEAD
-    config.add_route('api_user_info',                          '/api/user/{username}/')
-    config.add_route('api_user_wall',                          '/api/wall/{username}/') # GET
-    config.add_route('api_new_post',                           '/api/wall/')            # POST
-    config.add_route('api_repost',                             '/api/wall/repost/')     # POST
+    config.add_route('api_user_vote',                          '/api/user/vote/')      # POST
+    config.add_route('api_user_profile',                       '/api/user/profile')    # POST
+    config.add_route('api_user_deactivate',                    '/api/user/deactivate') # POST
+    config.add_route('api_user_password',                      '/api/user/password')   # POST
+    config.add_route('api_user_info',                          '/api/user')            # GET
+    config.add_route('api_new_post',                           '/api/wall')            # POST
+    config.add_route('api_user_wall',                          '/api/wall')            # GET
+    config.add_route('api_repost',                             '/api/wall/repost')     # POST
+    config.add_route('api_user_feed',                          '/api/feed/')           # POST
+    config.add_route('api_user_notification',                  '/api/notification')    # ?
 
-    config.add_route('api_user_feed',                          '/api/feed/')            # POST
-
-=======
-    config.add_route('api_user_profile',                       '/api/user/profile') #POST
-    config.add_route('api_user_deactivate',                    '/api/user/deactivate') #POST
-    config.add_route('api_user_password',                      '/api/user/password') #POST
-    config.add_route('api_user_info',                          '/api/user')
-    config.add_route('api_new_post',                           '/api/wall')            #POST
-    config.add_route('api_user_wall',                          '/api/wall')             #GET
-    config.add_route('api_repost',                             '/api/wall/repost')     #POST
-    config.add_route('api_user_feed',                          '/api/feed/')            #POST
-    config.add_route('api_user_notification',                  '/api/notification')
->>>>>>> 35476e9bcc565ffda51f35d422d3db90c8d6bb97
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')
 
