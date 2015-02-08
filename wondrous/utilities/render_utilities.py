@@ -527,7 +527,7 @@ class _AssemblePost(object):
 
             post_ob = Post.by_id(self.post_id)
             self.final_data['created_at'] = str(self.created_at)
-            self.final_data['hidden']      = post_ob.is_hidden
+            self.final_data['hidden']     = post_ob.is_hidden
 
             if str(self.user_id) == str(self.user_id):
                 posted_by_profile_owner = True
