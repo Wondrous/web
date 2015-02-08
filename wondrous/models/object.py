@@ -39,7 +39,7 @@ class Object(Base, BaseMixin):
     text = Column(Unicode, default=None)
     active = Column(Boolean, default=True)  # only used for disabling/re-enabling an account
     ouuid = Column(Unicode, nullable=True)
-    comments = relationship("Comment")
+    comments = relationship("Comment",cascade="delete")
 
 class ObjectLink(Base, BaseMixin):
 

@@ -38,6 +38,13 @@ class AccountManager(BaseManager):
         return True if User.by_kwargs(username=username).count() > 0 else False
 
     @staticmethod
+    def is_active(user_id):
+        u = User.by_id(user_id)
+        if u:
+            return not u.is_active
+        return False # safe than sorry 
+
+    @staticmethod
     def add(first_name, last_name, email, username, password, user_type=1):
 
         # First let's create the person object - point of contact for the account
@@ -98,3 +105,11 @@ class AccountManager(BaseManager):
             return {'is_private':True}
 
         return None
+
+    @classmethod
+    def deactivate_json(cls,user_id):
+        pass
+
+    @classmethod
+    def delete_json(cls):
+        pass

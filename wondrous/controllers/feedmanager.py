@@ -32,7 +32,7 @@ class FeedManager(BaseManager):
     @classmethod
     def get_majority_posts(cls,feed_id,page=0,per_page=15):
         links = FeedPostLink.query.options(joinedload(FeedPostLink.post).joinedload(Post.object)).\
-            order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).limit(per_page).offset(page).all()
+            order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).filter_by(is_hidden=False).limit(per_page).offset(page).all()
         return links
 
     @classmethod

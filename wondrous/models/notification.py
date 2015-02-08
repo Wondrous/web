@@ -38,7 +38,10 @@ class Notification(Base, BaseMixin):
 
     subject_id = Column(BigInteger)
     from_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=True)  # nul=True -> System notification
+    from_user = relationship("User",cascade="delete")
+
     to_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    to_user = relationship("User",cascade="delete")
     notification = Column(Unicode, nullable=False)
     reason = Column(Integer, nullable=False)
     is_read = Column(Boolean, nullable=False, default=False)
