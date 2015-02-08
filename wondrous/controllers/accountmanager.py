@@ -34,6 +34,7 @@ class AccountManager(BaseManager):
         'last_name'  : "last_name"+str(i),
 
     """
+    DYNAMIC_FIELDS = ['username','first_name','last_name']
 
     @staticmethod
     def is_username_taken(username):
@@ -133,10 +134,20 @@ class AccountManager(BaseManager):
 
     @classmethod
     def change_profile_json(cls,person,field,new_value):
+        if field not in cls.DYNAMIC_FIELDS:
+            return {"error":field+" not found"}
+
         user = person.user
+
+        # check both user and person
         exists = getattr(user, field, None)
         if exists:
             setattr(user,field,new_value)
+            return {field:new_value}
+
+        exists = getattr(person, field, None)
+        if exists:
+            setattr(person,field,new_value)
             return {field:new_value}
 
         return {"error":field+" not found"}
