@@ -5,7 +5,7 @@ This is the core web platform for Wondrous.
 
 #### Change User Relationships
 
-##### Three Levels: api/user, api/wall, api/feed
+##### Levels: api/user, api/wall, api/feed, api/notification
 
 ## Action IDs:
 Unliked (0)
@@ -37,9 +37,19 @@ Topfriend (8) *follow required*
 
 #### USER level
 
-endpoint: `api/user?user_id={user_id}``
-method: GET
-description: Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
+**endpoint:** `api/user?user_id={user_id}`
+
+
+**method:** GET
+
+
+**parameter** fields
+
+
+    UserID (int) - valid User ID
+
+**description:** Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
+
 
 
 **endpoint:** `api/user/vote`
@@ -57,7 +67,58 @@ description: Returns JSON object containing user information including Username,
     Action (int) - action ID to perform
 
 
-**description**: Perform an action on a user (see Action ID table). Returns JSON status code.
+**description:** Returns a JSON object with the 'total_following' and 'total_follower'
+
+
+**endpoint:** `api/user/profile`
+
+
+**method**: POST
+
+
+**parameter** fields
+
+
+    field (str) - The field you want to change (username, first_name, last_name)
+
+
+    new_value (str) - the new value to replace
+
+
+**description:** Returns a JSON object with the field and new value
+
+
+**endpoint:** `api/user/deactivate`
+
+
+**method**: POST
+
+
+**parameter** fields
+
+
+    password (int) - valid password
+
+
+**description:** Returns a JSON object with the success message or an error message
+
+
+**endpoint:** `api/user/password`
+
+
+**method**: POST
+
+
+**parameter** fields
+
+
+    old_password (int) - valid User ID
+
+
+    new_password (int) - action ID to perform
+
+
+**description:** Returns a JSON object with the success message or an error message
 
 #### WALL level
 
