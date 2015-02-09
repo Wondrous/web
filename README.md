@@ -37,28 +37,28 @@ Topfriend (8) *follow required*
 
 ## USER level
 
-**endpoint:** `api/user?user_id={user_id}`
+- **endpoint:** `api/user?user_id={user_id}`
 
 
-**method:** GET
+- **method:** GET
 
 
-**parameter fields**:
+- **parameter fields**:
 
 
     UserID (int) - valid User ID
 
-**description:** Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
+- **description:** Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
 
 ------------------------------
 
-**endpoint:** `api/user/vote`
+- **endpoint:** `api/user/vote`
 
 
-**method**: POST
+- **method**: POST
 
 
-**parameter fields**:
+- **parameter fields**:
 
 
     UserID (int) - valid User ID
@@ -67,17 +67,17 @@ Topfriend (8) *follow required*
     Action (int) - action ID to perform
 
 
-**description:** Returns a JSON object with the 'total_following' and 'total_follower'
+- **description:** Returns a JSON object with the 'total_following' and 'total_follower'
 
 ------------------------------
 
-**endpoint:** `api/user/profile`
+- **endpoint:** `api/user/profile`
 
 
-**method**: POST
+- **method**: POST
 
 
-**parameter fields**:
+- **parameter fields**:
 
 
     field (str) - The field you want to change (username, first_name, last_name)
@@ -86,33 +86,33 @@ Topfriend (8) *follow required*
     new_value (str) - the new value to replace
 
 
-**description:** Returns a JSON object with the field and new value
+- **description:** Returns a JSON object with the field and new value
 
 ------------------------------
 
-**endpoint:** `api/user/deactivate`
+- **endpoint:** `api/user/deactivate`
 
 
-**method**: POST
+- **method**: POST
 
 
-**parameter fields**:
+- **parameter fields**:
 
 
     password (int) - valid password
 
 
-**description:** Returns a JSON object with the success message or an error message
+- **description:** Returns a JSON object with the success message or an error message
 
 ------------------------------
 
-**endpoint:** `api/user/password`
+- **endpoint:** `api/user/password`
 
 
-**method**: POST
+- **method**: POST
 
 
-**parameter fields**:
+- **parameter fields**:
 
 
     old_password (int) - valid User ID
@@ -121,44 +121,42 @@ Topfriend (8) *follow required*
     new_password (int) - action ID to perform
 
 
-**description:** Returns a JSON object with the success message or an error message
+- **description:** Returns a JSON object with the success message or an error message
 
 ------------------------------
 
 ## WALL level
 
-**endpoint:** `api/wall?user_id={user_id}&page={page}`
+- **endpoint:** `api/wall?user_id={user_id}&page={page}`
 
-**method:** `GET`
+- **method:** `GET`
 
-**description:** `Get a user's wall posts`
+- **description:** `Get a user's wall posts`
 
 ------------------------------
 
-**endpoint:** `api/wall/repost`
+- **endpoint:** `api/wall/repost`
 
-**method:** `POST`
+- **method:** `POST`
 
-**parameter fields:** `post_id (int) - valid Post ID, tags (list of text tags), text`
+- **parameter fields:** `post_id (int) - valid Post ID, tags (list of text tags), text`
 
-**description:** `Repost a post, will always post on the user (who invokes the call) wall.`
+- **description:** `Repost a post, will always post on the user (who invokes the call) wall.`
 
 ------------------------------
 
 ## FEED Level
 
-**endpoint:** `api/feed?feed_type={feed_type}&page={page}`
+- **endpoint:** `api/feed?feed_type={feed_type}&page={page}`
 
-`
-**method:** GET
+- **method:** GET
 
-
-**description:** for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and X is the amount in the set.
+- **description:** for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and X is the amount in the set.
 
 ------------------------------
 ## NOTIFICATION level
 
-**endpoint:** `api/notification?page={page}`
+- **endpoint:** `api/notification?page={page}`
 
 ------------------------------
 ## Examples
