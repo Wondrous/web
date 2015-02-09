@@ -8,6 +8,8 @@
 # GLOBAL_CONFIG.PY
 #
 
+from wondrous.utilities._url_regex_pattern import PATTERN
+
 
 GLOBAL_CONFIGURATIONS = {
     "POSTS_PER_PAGE"      : 5,
@@ -24,7 +26,7 @@ GLOBAL_CONFIGURATIONS = {
     "MAX_CHAR_SHOW_TEXT"  : 670,
     "MAX_BR_SHOW_TEXT"    : 10,
 
-    "URL_REGEX"           : u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',  # TODO: This REGEX is not robost enough
+    "URL_REGEX"           : PATTERN, #u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',  # TODO: This REGEX is not robost enough
     "HASHTAG_REGEX"       : u'^[a-zA-Z0-9]+$',  # Excludes the first #
     "HASHTAG_REGEX_FULL"  : u'(#[a-zA-Z0-9]+)',  # TODO: This REGEX is not robost enough
 
