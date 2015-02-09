@@ -141,9 +141,9 @@ Topfriend (8) *follow required*
 
 - **description:** `Repost a post, will always post on the user (who invokes the call) wall.`
 
-==============================
 
 #### FEED Level
+------------------------------
 
 - **endpoint:** `api/feed?feed_type={feed_type}&page={page}`
 
@@ -152,7 +152,6 @@ Topfriend (8) *follow required*
 - **description:** for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and X is the amount in the set.
 
 
-==============================
 #### NOTIFICATION level
 ------------------------------
 
