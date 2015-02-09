@@ -19,7 +19,7 @@ var NotificationBox = React.createClass({
         <span className="notification-count-text">0</span>
     	</span>);
 	}
-})
+});
 
 var SettingsGear = React.createClass({
 	render: function () {
@@ -58,4 +58,24 @@ var Navbar = React.createClass({
 	}
 });
 
-React.render(<Navbar />, document.body);
+var Buffer = React.createClass({
+	render: function () {
+		return (<div style={{"height": 45}}></div>);
+	}
+});
+
+var Compound = React.createClass({
+	render: function () {
+		return (
+			<div>
+				<Navbar />
+				<Buffer />
+				<Postcard />
+				<Postcard />
+				<Postcard />
+				<Postcard />
+			</div>);
+	}
+});
+
+React.render(<Compound />, document.body);
