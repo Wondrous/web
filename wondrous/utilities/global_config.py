@@ -10,23 +10,22 @@
 
 from wondrous.utilities._url_regex_pattern import PATTERN
 
-
 GLOBAL_CONFIGURATIONS = {
     "POSTS_PER_PAGE"      : 5,
 
-    "POST_TEXT_LENGTH"    : 6000,
-    "POST_SUBJECT_LENGTH" : 50,
-    "MAX_COMMENT_LENGTH"  : 1100,
+    "POST_TEXT_LENGTH"    : 6000,  # Chars
+    "POST_SUBJECT_LENGTH" : 50,    # Chars
+    "MAX_COMMENT_LENGTH"  : 1100,  # Chars
 
     "MAX_TAG_NUM"         : 15,
-    "TAG_LENGTH"          : 50,
+    "TAG_LENGTH"          : 50,    # Chars
 
     "NOTIFICATION_BATCH"  : 10,
 
     "MAX_CHAR_SHOW_TEXT"  : 670,
     "MAX_BR_SHOW_TEXT"    : 10,
 
-    "URL_REGEX"           : PATTERN, #u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',  # TODO: This REGEX is not robost enough
+    "URL_REGEX"           : PATTERN,
     "HASHTAG_REGEX"       : u'^[a-zA-Z0-9]+$',  # Excludes the first #
     "HASHTAG_REGEX_FULL"  : u'(#[a-zA-Z0-9]+)',  # TODO: This REGEX is not robost enough
 
