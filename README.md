@@ -8,31 +8,31 @@ This is the core web platform for Wondrous.
 ##### Levels: api/user, api/wall, api/feed, api/notification
 
 ## Action IDs:
-Unliked (0)
+- **Unliked** (`0`)
 
 
-Liked (1)
+- **Liked** (`1`)
 
 
-Bookmarked (2)
+- **Bookmarked** (`2`) [deffered]
 
 
-Cancel (3)
+- **Cancel** (`3`)
 
 
-Follow (4)
+- **Follow** (`4`)
 
 
-Accept (5)
+- **Accept** (`5`)
 
 
-Block (6)
+- **Block** (`6`)
 
 
-Deny (7)
+- **Deny** (`7`) [imlicit]
 
 
-Topfriend (8) *follow required*
+- **Topfriend** (`8`) [follow required]
 
 
 #### USER level
