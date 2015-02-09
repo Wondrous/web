@@ -4,13 +4,13 @@ var PostInputs = React.createClass({
 		var contentPrompt = this.props.contentPrompt;
 		return (
 			<div>
-				<div class="new-post-element">
+				<div className="new-post-element">
 					<div style={{"position": "relative", "margin": "0 auto", "margin-bottom": "-1px;"}}>
-						<input id="postSubject" class="new-post-subject" maxlength="45" placeholder={titlePrompt} spellcheck="False" />
+						<input id="postSubject" className="new-post-subject" maxLength="45" placeholder={titlePrompt} spellCheck="False" />
 					</div>
 				</div>
 
-				<div class="new-post-element" style={{"background-color": "rgb(255,255,255);"}}>
+				<div className="new-post-element" style={{"background-color": "rgb(255,255,255);"}}>
 					<textarea id="postTextarea" maxlength="5000" placeholder={contentPrompt} ></textarea>
 				</div>
 			</div>);
