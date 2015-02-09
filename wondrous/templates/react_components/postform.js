@@ -26,7 +26,8 @@ var PostForm = React.createClass({
 	},
 
 	componentDidMount: function () {
-		// Example of how to write the actions that will occur after React renders the item.
-		AutoSize(window.jQuery || window.Zepto);
+		// Example of how to write the actions that 
+		// will occur after React renders the item.
+		initSmartTextarea();
 	}
 });
