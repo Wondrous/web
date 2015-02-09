@@ -238,8 +238,9 @@ class APIViews(BaseHandler):
         person       = self.request.person
         tags         = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
-        del query_kwargs['tags[]']
-        query_kwargs.update({'tags':tags})
+        if 'tags[]' in query_kwargs.keys():
+            del query_kwargs['tags[]']
+            query_kwargs.update({'tags':tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
 
         return PostManager.post_json(person,**query_kwargs)
