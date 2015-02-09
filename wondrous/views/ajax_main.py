@@ -229,7 +229,7 @@ class APIViews(BaseHandler):
 
         p            = self.request.POST
         person       = self.request.person
-        tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
+        tags         = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
         del query_kwargs['tags[]']
         query_kwargs.update({'tags':tags})
