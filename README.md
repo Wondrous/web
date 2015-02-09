@@ -36,6 +36,7 @@ Topfriend (8) *follow required*
 
 
 ## USER level
+---------------------------
 
 - **endpoint:** `api/user?user_id={user_id}`
 
@@ -50,7 +51,7 @@ Topfriend (8) *follow required*
 
 - **description:** Returns JSON object containing user information including Username, UserId, & Profile Picture URL.
 
-------------------------------
+==============================
 
 - **endpoint:** `api/user/vote`
 
@@ -69,7 +70,7 @@ Topfriend (8) *follow required*
 
 - **description:** Returns a JSON object with the 'total_following' and 'total_follower'
 
-------------------------------
+==============================
 
 - **endpoint:** `api/user/profile`
 
@@ -88,7 +89,7 @@ Topfriend (8) *follow required*
 
 - **description:** Returns a JSON object with the field and new value
 
-------------------------------
+==============================
 
 - **endpoint:** `api/user/deactivate`
 
@@ -104,7 +105,7 @@ Topfriend (8) *follow required*
 
 - **description:** Returns a JSON object with the success message or an error message
 
-------------------------------
+==============================
 
 - **endpoint:** `api/user/password`
 
@@ -123,9 +124,9 @@ Topfriend (8) *follow required*
 
 - **description:** Returns a JSON object with the success message or an error message
 
-------------------------------
 
 ## WALL level
+-----------------------------
 
 - **endpoint:** `api/wall?user_id={user_id}&page={page}`
 
@@ -133,7 +134,7 @@ Topfriend (8) *follow required*
 
 - **description:** `Get a user's wall posts`
 
-------------------------------
+==============================
 
 - **endpoint:** `api/wall/repost`
 
@@ -143,7 +144,7 @@ Topfriend (8) *follow required*
 
 - **description:** `Repost a post, will always post on the user (who invokes the call) wall.`
 
-------------------------------
+==============================
 
 ## FEED Level
 
@@ -153,12 +154,12 @@ Topfriend (8) *follow required*
 
 - **description:** for paginating through feed Posts, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and X is the amount in the set.
 
-------------------------------
+==============================
 ## NOTIFICATION level
 
 - **endpoint:** `api/notification?page={page}`
 
-------------------------------
+==============================
 ## Examples
 
 #### Get User Information
