@@ -1150,7 +1150,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 
 .new-post-subject {
-    background-color: rgb(251,251,251);
+    background-color: rgb(255,255,255);
     width: 100%;
     height: auto;
     outline: none;
@@ -1198,28 +1198,6 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     padding-bottom: 7px;
 }
 
-/*.post-as-title {
-    position: relative;
-    margin-left: 60px;
-    top: -17px;
-
-    display: block;
-    width: 80%;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space:nowrap;
-}*/
-
-#post-hashtags {
-    margin-top: 5px;
-    font-family: courier, arial, helvetica, sans-serif;
-    font-size: 15px;
-    color: rgb(100,100,100);
-    font-weight: normal;
-    word-break: break-word;
-}
-
 .upload-button {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
@@ -1248,7 +1226,6 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 .upload-input {
     width: 120px !important;
     height: 30px !important; 
-
     display: block !important;
     opacity: 0 !important;
     overflow: hidden !important;
@@ -1266,11 +1243,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 .new-post-element .highlighter {
     position: absolute;
     padding-left: 8px;
-    padding-top: 4px;
-    font-family: helvetica, arial, sans-serif;
-    font-size: 20px;
-    font-weight: 100;
-    line-height: 1.1em;
+    padding-top: 8px;
     color: transparent;
     white-space: pre-wrap;
     overflow-wrap: break-word;
@@ -1290,10 +1263,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     font-size: 15px;
     line-height: 20px;*/
 
-    font-family: helvetica, arial, sans-serif;
-    font-size: 20px;
-    font-weight: 100;
-    line-height: 1.1em;
+    
     resize: none !important;
     border: 0;
     outline: none;
@@ -1303,6 +1273,13 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 } .post-input:focus {
     /*border: 1px solid rgb(117,169,231);*/
+}
+
+.highlighter, .post-input {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 20px;
+    font-weight: 100;
+    line-height: 1.1em;
 }
 
 .new-post-element .hashtag {
