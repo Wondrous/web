@@ -14,7 +14,7 @@ This is the core web platform for Wondrous.
 - **Liked** (`1`)
 
 
-- **Bookmarked** (`2`) [deffered]
+- **Bookmarked** (`2`) [defered for now]
 
 
 - **Cancel** (`3`)
