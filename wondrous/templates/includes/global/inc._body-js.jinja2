@@ -13,20 +13,60 @@
     $(document).ready(function () {
 
         function initMasonry() {
-            var container = $('.masonry');
-            container.imagesLoaded(function () {                
-                container.masonry({
+            // var container = $('.masonry');
+            // container.imagesLoaded(function () {                
+            //     container.masonry({
+            //         transitionDuration : 0,
+            //         itemSelector       : ".masonry-brick",
+            //         columnWidth        : ".grid-sizer",
+            //     });
+            // });
+              var container = document.querySelector('.masonry');
+              var msnry = new Masonry(container, {
                     transitionDuration : 0,
                     itemSelector       : ".masonry-brick",
-                    columnWidth        : '.grid-sizer',
-                });
-            });
+                    columnWidth        : ".grid-sizer",
+              });
+
+              return msnry
         }
 
         {# -- MASONRY -- #}
         $(function () {
 
-            initMasonry();
+                var msnry = initMasonry()
+
+                $(document).on('click', '.post-cover-photo', function( event ) {
+                    var SPEED = 0;
+                    var thisPost = $(this).parent('.post-body');
+                    var thisBrick = thisPost.parent('.masonry-brick');
+                    var thisPostContent = thisPost.find('.post-content');
+                    var thisCoverPhoto = thisPost.find('.post-cover-photo');
+
+                    $('.backdrop').toggleClass('dimmer');
+                    thisPost.css('z-index', 9);
+
+                    $('.post-body').not(thisPost).removeClass('is-expanded');
+                    $('.post-content').not(thisPostContent).slideUp(SPEED);
+                    $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
+                    $('.post-content').not(thisPostContent).removeClass('no-top-border');
+                    $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
+
+                    thisPost.toggleClass('is-expanded');
+                    thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
+                    thisPostContent.toggleClass('no-top-border');
+
+                    // Omit this line to NOT put the post into
+                    // presentation-mode when it's clicked.
+                    thisBrick.toggleClass('post-presentation');
+                    thisPostContent.slideToggle(SPEED);
+
+                    // Trigger Masonry Layout
+                    msnry.layout();
+                });
+
+            //initMasonry();
+            $('.post-content').hide();
 
             $('.backdrop').on('mouseup', function () {
                 $('.is-expanded').css('z-index', 4);
@@ -41,37 +81,38 @@
                 thisPostContent.toggleClass('no-top-border');
                 thisPostContent.slideToggle(0);
                 
-                container.masonry();
+                // Trigger Masonry Layout
+                msnry.layout();
             });
         
-            $(document).on('click', '.post-cover-photo', function () {
-                var SPEED = 0;
-                var thisPost = $(this).parent('.post-body');
-                var thisBrick = thisPost.parent('.masonry-brick');
-                var thisPostContent = thisPost.find('.post-content');
-                var thisCoverPhoto = thisPost.find('.post-cover-photo');
+            // $(document).on('click', '.post-cover-photo', function () {
+            //     var SPEED = 0;
+            //     var thisPost = $(this).parent('.post-body');
+            //     var thisBrick = thisPost.parent('.masonry-brick');
+            //     var thisPostContent = thisPost.find('.post-content');
+            //     var thisCoverPhoto = thisPost.find('.post-cover-photo');
 
-                $('.backdrop').toggleClass('dimmer');
-                thisPost.css('z-index', 9);
+            //     $('.backdrop').toggleClass('dimmer');
+            //     thisPost.css('z-index', 9);
 
-                $('.post-body').not(thisPost).removeClass('is-expanded');
-                $('.post-content').not(thisPostContent).slideUp(SPEED);
-                $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
-                $('.post-content').not(thisPostContent).removeClass('no-top-border');
-                $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
+            //     $('.post-body').not(thisPost).removeClass('is-expanded');
+            //     $('.post-content').not(thisPostContent).slideUp(SPEED);
+            //     $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
+            //     $('.post-content').not(thisPostContent).removeClass('no-top-border');
+            //     $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
 
-                thisPost.toggleClass('is-expanded');
-                thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-                thisPostContent.toggleClass('no-top-border');
+            //     thisPost.toggleClass('is-expanded');
+            //     thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
+            //     thisPostContent.toggleClass('no-top-border');
                 
-                // Omit this line to NOT put the post into
-                // presentation-mode when it's clicked.
-                thisBrick.toggleClass('post-presentation');
+            //     // Omit this line to NOT put the post into
+            //     // presentation-mode when it's clicked.
+            //     thisBrick.toggleClass('post-presentation');
                 
-                thisPostContent.slideToggle(SPEED);
+            //     thisPostContent.slideToggle(SPEED);
 
-                container.masonry();
-            });
+            //     masonry.layout();
+            // });
           
         });
 

@@ -9,6 +9,7 @@
 %}
 
 <div class="backdrop"></div>
+<div class="grid-sizer" style="display: none;"></div>
 {% if render_items %}
     {% for item in render_items %}
 
@@ -32,6 +33,14 @@
                 </div>
                 <div class="post-content">
                     {{ item['text'] | safe }}
+                    <hr style="width: 60%;">
+                    <div>
+                        <span class="post-footer-btn post-like-btn round-2">Like!</span>
+                        <span class="post-footer-btn post-repost-btn round-2">Repost</span>
+                    </div>
+<!--                     <div>
+                        <input type="text" placeholder="What're your thoughts?">
+                    </div> -->
                 </div>
             </div>
         </div>
