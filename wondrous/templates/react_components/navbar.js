@@ -70,6 +70,7 @@ var Compound = React.createClass({
 			<div>
 				<Navbar />
 				<Buffer />
+				<PostForm />
 				<Postcard />
 				<Postcard />
 				<Postcard />
