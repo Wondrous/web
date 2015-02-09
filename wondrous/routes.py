@@ -70,7 +70,7 @@ def build_routes(config):
     config.add_route('api_user_wall',                          '/api/wall')            # GET
     config.add_route('api_repost',                             '/api/wall/repost')     # POST
     config.add_route('api_user_feed',                          '/api/feed/')           # POST
-    config.add_route('api_notification',                       '/api/notification')    # GET
+    config.add_route('api_user_notification',                  '/api/notification')    # GET
 
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')

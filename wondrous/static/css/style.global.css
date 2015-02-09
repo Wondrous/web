@@ -1427,10 +1427,12 @@ body { font-family: sans-serif; }
 
     background-color: rgb(255,255,255);
 
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-         -o-border-radius: 5px;
-            border-radius: 5px;
+    -webkit-border-radius: 1px;
+       -moz-border-radius: 1px;
+         -o-border-radius: 1px;
+            border-radius: 1px;
+
+    /*border: 1px solid rgb(221,221,221);*/
 
 /*    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
        -moz-box-shadow: 0 2px 3px rgb(100,100,100);
