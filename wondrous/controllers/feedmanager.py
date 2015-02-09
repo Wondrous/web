@@ -22,6 +22,7 @@ from wondrous.controllers.basemanager import BaseManager
 from sqlalchemy.orm import joinedload
 
 class FeedManager(BaseManager):
+    MAJORITY, PRIORITY = range(2)
 
     @staticmethod
     def get_feed_posts(user_id):
@@ -36,7 +37,7 @@ class FeedManager(BaseManager):
         return links
 
     @classmethod
-    def get_majority_posts_json(cls,person,page=0,feed_type=0):
+    def get_majority_posts_json(cls,person,page=0):
         feed_id = person.user.feed.id
         links = cls.get_majority_posts(feed_id,page)
         data = []
@@ -48,12 +49,23 @@ class FeedManager(BaseManager):
         return data
 
     @classmethod
+    def get_priority_posts_json(cls,person,page=0):
+        pass
+
+    @classmethod
+    def get_feed_posts_json(cls,person,feed_type,page=0):
+        if feed_type == cls.MAJORITY:
+            return cls.get_majority_posts_json(person,page)
+        elif feed_type == cls.PRIORITY:
+            return cls.get_priority_posts_json(person,page)
+
+    @classmethod
     def get_wall_posts(cls,page=0,per_page=15,**kwargs):
         posts = Post.query.order_by(desc(Post.created_at)).filter_by(**kwargs).limit(per_page).offset(page*per_page).all()
         return posts
 
     @classmethod
-    def get_wall_posts_json(cls,person,user_id,page=0,per_page=15):
+    def get_wall_posts_json(cls,person,user_id,page=0):
         user = User.by_id(user_id)
         if not user:
             return []
@@ -66,7 +78,7 @@ class FeedManager(BaseManager):
             (user.is_private and not user.is_banned and user.is_active and person \
             and VoteManager.is_following(person.user.id,user_id)):
 
-            posts = cls.get_wall_posts(page=page, per_page=per_page, user_id = user_id)
+            posts = cls.get_wall_posts(page=page, user_id = user_id)
 
         data = []
         for post in posts:

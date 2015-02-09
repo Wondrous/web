@@ -103,15 +103,16 @@ class APIViews(BaseHandler):
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
-
         """
-            PURPOSE:
+            PURPOSE: Retrieves the user information based on relationship and login
+                status
 
-            USE:
+            USE: self.query_kwargs to provide all the required inputs.
+                person, user_id
 
             PARAMS: (None)
 
-            RETURNS:
+            RETURNS: The JSON of the person+user model if valid else {}
         """
         person = self.request.person
         return AccountManager.get_json_by_username(person,**self.query_kwargs)
@@ -119,6 +120,15 @@ class APIViews(BaseHandler):
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         """
+            PURPOSE: Retrieves the user profile posts -- all the posts that
+                were created by the respective user
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,user_id,page=0 -- last param is optional
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the wallpost objects
         """
         person = self.request.person
         posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
@@ -127,40 +137,96 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_deactivate', renderer='json')
     def api_user_deactivate(self):
-        # NEED a password conformation
+        """
+            PURPOSE: Deactivates an account
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,password
+
+            PARAMS: (None)
+
+            RETURNS: The JSON containing either an error or successful status
+        """
         person = self.request.person
         return AccountManager.deactivate_json(person,**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_profile', renderer='json')
     def api_user_profile(self):
-        # Deal with shit like username, first_name, last_name
+        """
+            PURPOSE: changes account information
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,field,new_value
+
+                ex. if I want to change the username
+                    field = username
+                    new_value = new_username
+
+                can only alter username, first_name, last_name,
+            PARAMS: (None)
+
+            RETURNS: The JSON containing either an error or successful status
+        """
         person = self.request.person
         return AccountManager.change_profile_json(person,**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_password', renderer='json')
     def api_user_password(self):
-        # requires a password to change,
+        """
+            PURPOSE: changes account information
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,field,new_value
+
+                ex. if I want to change the username
+                    field = username
+                    new_value = new_username
+
+                can only alter username, first_name, last_name,
+            PARAMS: (None)
+
+            RETURNS: The JSON containing either an error or successful status
+        """
+
         person = self.request.person
         return AccountManager.change_password_json(person,**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="GET",xhr=True,route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
+        """
+            PURPOSE: get different feed posts by the type
 
+            USE: self.query_kwargs to provide all the required inputs.
+                person,page=0,feed_type=0
+
+                can only obtain the feed of the logged in user
+
+            PARAMS: (None)
+
+            RETURNS: The JSON containing the feed posts
         """
-        """
+
         person = self.request.person
-        return FeedManager.get_majority_posts_json(person,**self.query_kwargs)
+        return FeedManager.get_feed_posts_json(person,**self.query_kwargs)
 
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_new_post', renderer='json')
     def api_new_post(self):
         """
+            PURPOSE: post a new post
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,subject,text,tags=None
+
+            PARAMS: (None)
+
+            RETURNS: The JSON containing the new post else containing JSON with error
         """
-        # Basic setup
+
         p            = self.request.POST
         person       = self.request.person
         tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
@@ -175,7 +241,16 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="POST",route_name='api_repost', renderer='json')
     def api_repost(self):
+        """
+            PURPOSE: issue a repost
 
+            USE: self.query_kwargs to provide all the required inputs.
+                person,post_id,tags=None,text=None
+
+            PARAMS: (None)
+
+            RETURNS: The JSON containing the new repost else containing JSON with error
+        """
         # Basic setup
         p            = self.request.POST
         person       = self.request.person
@@ -187,12 +262,34 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method='POST', xhr=True, route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
+        """
+            PURPOSE: issue a repost
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,post_id,tags=None,text=None
+
+            PARAMS: (None)
+
+            RETURNS: The JSON containing the new repost else containing JSON with error
+        """
+
         person = self.request.person
         return VoteManager.vote_json(person, **self.query_kwargs)
 
     @api_login_required
     @view_config(request_method='GET', xhr=True,route_name='api_user_notification', renderer='json')
     def api_user_notification(self):
+        """
+            PURPOSE: get a list of notifications for current user
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,page=0
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array containing the notifications 
+        """
+
         person = self.request.person
         return NotificationManager.notification_json(person,**self.query_kwargs)
 
