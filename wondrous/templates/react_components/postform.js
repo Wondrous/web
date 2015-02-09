@@ -27,10 +27,6 @@ var PostForm = React.createClass({
 
 	componentDidMount: function () {
 		// Example of how to write the actions that will occur after React renders the item.
-		function stuff () {
-			$('#new-post-dialogue').text("Hello Guvna");
-		}
-
-		setTimeout(stuff, 5000);
+		AutoSize(window.jQuery || window.Zepto);
 	}
 });
