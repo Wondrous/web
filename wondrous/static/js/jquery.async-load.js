@@ -50,20 +50,26 @@ $(document).ready(function() {
                 console.log("majority",data);
                 var asyncPostContainer = $("#asyncPosts");
                 for (var i=0; i < data.length; i++) {
-                    console.log(data[i]);
-                    asyncPostContainer.append("<div class='default-loading-post' id='async_o-" + data[i].object_id + "'>" +
-                            "<svg class='svgLoader' width='250' height='250' viewbox='0 0 250 250'>" +
-                                "<path class='svg-border' transform='translate(125, 125)'/>" +
-                                "<path class='svg-loader' transform='translate(125, 125) scale(.84)'/>" +
-                            "</svg>" +
-                        "</div>");
+
+                    asyncPostContainer.append("<div><p>"+data[i].created_at+"</p>"+
+                    "<p>"+data[i].subject+"</p>"+
+                    "<p>"+data[i].text+"</p>"+
+                    "<p>"+data[i].user_id+"</p>"+
+                    "</div>");
+                    // asyncPostContainer.append("<div class='default-loading-post' id='async_o-" + data[i].object_id + "'>" +
+                    //         "<svg class='svgLoader' width='250' height='250' viewbox='0 0 250 250'>" +
+                    //             "<path class='svg-border' transform='translate(125, 125)'/>" +
+                    //             "<path class='svg-loader' transform='translate(125, 125) scale(.84)'/>" +
+                    //         "</svg>" +
+                    //     "</div>");
                 }
 
                 // Populate each post box with its SVG loading animation
-                _showSVGLoader();
-                for (var j=0; j < data.length; j++) {
-                    _addPost(data, j);
-                }
+                // _showSVGLoader();
+                // not needed, loading object along with post,
+                // for (var j=0; j < data.length; j++) {
+                //     _addPost(data, j);
+                // }
 
                 itemNum = parseInt(itemNum, 10) + 10;
                 $("#startItemNum").val(itemNum);

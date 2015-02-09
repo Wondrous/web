@@ -99,6 +99,13 @@ class APIViews(BaseHandler):
     def query_kwargs(self):
         kwargs = defaultdict(lambda: None)
         kwargs.update(self.request.params)
+
+        #sanitize everything
+
+        for key in kwargs.keys():
+            val = kwargs[key]
+            if isinstance(val,str):
+                kwargs[key] = Sanitize.safe_input(val)
         return kwargs
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
@@ -287,7 +294,7 @@ class APIViews(BaseHandler):
 
             PARAMS: (None)
 
-            RETURNS: The JSON array containing the notifications 
+            RETURNS: The JSON array containing the notifications
         """
 
         person = self.request.person

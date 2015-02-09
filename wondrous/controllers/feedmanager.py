@@ -33,7 +33,7 @@ class FeedManager(BaseManager):
     @classmethod
     def get_majority_posts(cls,feed_id,page=0,per_page=15):
         links = FeedPostLink.query.options(joinedload(FeedPostLink.post).joinedload(Post.object)).\
-            order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).filter_by(is_hidden=False).limit(per_page).offset(page).all()
+            order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).limit(per_page).offset(page).all()
         return links
 
     @classmethod
@@ -43,9 +43,10 @@ class FeedManager(BaseManager):
         data = []
         for link in links:
             post = link.post
-            post_dict = super(FeedManager,cls).model_to_json(post)
-            post_dict.update(super(FeedManager,cls).model_to_json(post.object))
-            data.append(post_dict)
+            if not post.is_hidden:
+                post_dict = super(FeedManager,cls).model_to_json(post)
+                post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+                data.append(post_dict)
         return data
 
     @classmethod
@@ -54,6 +55,7 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_feed_posts_json(cls,person,feed_type,page=0):
+        feed_type = int(feed_type)
         if feed_type == cls.MAJORITY:
             return cls.get_majority_posts_json(person,page)
         elif feed_type == cls.PRIORITY:
