@@ -52,6 +52,7 @@ from wondrous.controllers import (
     NotificationManager,
     PostManager,
     VoteManager,
+    TagManager, 
 )
 
 from wondrous.utilities.general_utilities import (
@@ -182,16 +183,12 @@ class APIViews(BaseHandler):
     @view_config(request_method="POST",route_name='api_user_password', renderer='json')
     def api_user_password(self):
         """
-            PURPOSE: changes account information
+            PURPOSE: changes password
 
             USE: self.query_kwargs to provide all the required inputs.
-                person,field,new_value
+                person,old_password,new_password
 
-                ex. if I want to change the username
-                    field = username
-                    new_value = new_username
 
-                can only alter username, first_name, last_name,
             PARAMS: (None)
 
             RETURNS: The JSON containing either an error or successful status
