@@ -14,7 +14,7 @@
         <span class="banner-options-icon">C</span>
     </span>
     
-    <a id="linkToProfile" href="/{{ current_user.user.username }}" class="general-text banner-user-name">
+    <a id="linkToProfile" href="/{{ current_user.user.username }}/" class="general-text banner-user-name">
         <img class="banner-user-img round-3" src="{{ current_user.user.profile_picture }}"/>
         {{ current_user.first_name | safe }}
     </a>
