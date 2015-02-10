@@ -64,12 +64,15 @@
                     // Trigger Masonry Layout
                     var msnry = initMasonry()
                     msnry.layout();
+
+                    // Hmmmmm.... Let's try this out
+                    $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
                 });
 
             //initMasonry();
             $('.post-content').hide();
 
-            $('.backdrop').on('mouseup', function () {
+            $(document).on('click', '.backdrop', function () {
                 $('.is-expanded').css('z-index', 4);
                 $('.post-presentation').removeClass('post-presentation');
                 $('.backdrop').toggleClass('dimmer');
@@ -81,10 +84,12 @@
                 thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
                 thisPostContent.toggleClass('no-top-border');
                 thisPostContent.slideToggle(0);
-                
-                // Trigger Masonry Layout
 
+                // Trigger Masonry Layout
                 msnry.layout();
+
+                // Hmmmmm.... Let's try this out
+                $('html, body').animate({ scrollTop: thisPost.offset().top-60 }, 300);
             });
         
             // $(document).on('click', '.post-cover-photo', function () {
