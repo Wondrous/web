@@ -26,6 +26,7 @@ GLOBAL_CONFIGURATIONS = {
     "MAX_BR_SHOW_TEXT"    : 10,
 
     # "URL_REGEX"           : PATTERN,
+    'URL_REGEX': u'((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)',
     "HASHTAG_REGEX"       : u'^[a-zA-Z0-9]+$',  # Excludes the first #
     "HASHTAG_REGEX_FULL"  : u'(#[a-zA-Z0-9]+)',  # TODO: This REGEX is not robost enough
 
