@@ -142,3 +142,8 @@ class TestModel:
         # is user1 blocked?
         is_blocked = VoteManager.is_blocked_by(user1.id, user2.id)
         assert is_blocked == False
+
+        # user1 is going to be persistent and request again!
+        json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
+        assert json['total_following']==1
+        assert json['total_follower']==1
