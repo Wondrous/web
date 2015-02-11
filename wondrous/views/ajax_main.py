@@ -52,7 +52,7 @@ from wondrous.controllers import (
     NotificationManager,
     PostManager,
     VoteManager,
-    TagManager, 
+    TagManager,
 )
 
 from wondrous.utilities.general_utilities import (
@@ -268,17 +268,18 @@ class APIViews(BaseHandler):
     @view_config(request_method='POST', xhr=True, route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
         """
-            PURPOSE: issue a repost
+            PURPOSE: uses an action to vote on someone else
 
             USE: self.query_kwargs to provide all the required inputs.
-                person,post_id,tags=None,text=None
+                person,user_id,action
 
             PARAMS: (None)
 
-            RETURNS: The JSON containing the new repost else containing JSON with error
+            RETURNS: The JSON containing the following/follower stats
         """
 
         person = self.request.person
+        self.query_kwargs['vote_type' = 1]
         return VoteManager.vote_json(person, **self.query_kwargs)
 
     @api_login_required

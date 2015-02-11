@@ -35,15 +35,14 @@ function objectVoteAjax(thisPost, objectID) {
 /* ============= USER VOTE ============== */
 
 VoteAction = {
-    UNLIKED:0,
-    LIKED:1,
-    BOOKMARKED:2,
-    CANCEL:3,
-    FOLLOW:4,
-    ACCEPT:5,
-    BLOCK:6,
-    DENY:7,
-    TOPFRIEND:8
+    LIKED:0,
+    BOOKMARKED:1,
+    CANCEL:2,
+    FOLLOW:3,
+    ACCEPT:4,
+    BLOCK:5,
+    DENY:6,
+    TOPFRIEND:7
 };
 
 // Favorite the user (2)

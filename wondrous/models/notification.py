@@ -39,10 +39,10 @@ class Notification(Base, BaseMixin):
     subject_id = Column(BigInteger)
 
     from_user_id = Column(BigInteger, ForeignKey('user.id'))  # nul=True -> System notification
-    from_user = relationship("User", foreign_keys=from_user_id,cascade="delete")
+    from_user = relationship("User", foreign_keys=from_user_id)
 
     to_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    to_user = relationship("User", foreign_keys=to_user_id,cascade="delete")
+    to_user = relationship("User", foreign_keys=to_user_id)
 
     notification = Column(Unicode, nullable=False)
     reason = Column(Integer, nullable=False)

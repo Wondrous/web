@@ -43,6 +43,7 @@ class NotificationManager(BaseManager):
         note = Notification.by_kwargs(**kwargs).first()
         if note:
             Notification.delete(note)
+        DBSession.flush()
 
     @classmethod
     def add(cls,from_user_id, to_user_id, reason, subject_id):
@@ -79,6 +80,8 @@ class NotificationManager(BaseManager):
                 'to_user_id':to_user_id, 'reason':reason, 'subject_id':subject_id, \
                 'notification':notification}))
 
+        if new_notification:
+            DBSession.add(new_notification)
         return new_notification
 
     @classmethod

@@ -16,7 +16,6 @@ from wondrous.models import (
     Feed,
 )
 
-from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
 
 from datetime import datetime
@@ -48,7 +47,15 @@ class AccountManager(BaseManager):
         return False # safe than sorry
 
     @staticmethod
-    def add(first_name, last_name, email, username, password, user_type=1):
+    def is_private(user_id):
+        u = User.by_id(user_id)
+        if u:
+            return u.is_private
+        return True
+
+    @classmethod
+    def add(cls,first_name, last_name, email, username, password, user_type=1):
+        from wondrous.controllers.votemanager import VoteManager
 
         # First let's create the person object - point of contact for the account
         new_user = User(user_type=user_type, username=username, email=email, password=password, is_active=True)
@@ -61,10 +68,12 @@ class AccountManager(BaseManager):
 
         DBSession.add(new_person)
         DBSession.add(new_feed)
-        DBSession.flush()
 
         # Follow yourself
-        VoteManager.vote(user_id=new_user.id, subject_id=new_user.id, vote_type=Vote.USER, status=Vote.TOPFRIEND)
+        vote = Vote(user_id=new_user.id, subject_id=new_user.id, vote_type=Vote.USER, status=Vote.TOPFRIEND)
+        DBSession.add(vote)
+        DBSession.flush()
+
         return new_user
 
     @classmethod

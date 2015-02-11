@@ -10,7 +10,7 @@
 
 from wondrous.utilities._url_regex_pattern import PATTERN
 
-print PATTERN
+# print PATTERN
 
 GLOBAL_CONFIGURATIONS = {
     "POSTS_PER_PAGE"      : 5,

@@ -39,13 +39,13 @@ class Vote(Base, BaseMixin):
         Vote is similar to an intermediary model
 
     """
-    
+
     OBJECT, USER = range(2)
     UNLIKED, LIKED, BOOKMARKED, BLOCKED, PENDING, UNFOLLOWED, FOLLOWED, TOPFRIEND = range(8)
 
     vote_type = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
-    user_id = Column(BigInteger,ForeignKey('user.id'),nullable=False)
+    user_id = Column(BigInteger,ForeignKey('user.id'), nullable=False)
     user = relationship("User", backref=backref("votes"))
     subject_id = Column(BigInteger)
 

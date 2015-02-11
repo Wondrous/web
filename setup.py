@@ -18,6 +18,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'WebTest',
+    'nose'
 ]
 
 setup(name='wondrous',
