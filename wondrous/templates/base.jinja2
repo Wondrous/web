@@ -29,15 +29,14 @@
 
         <div id="body-mask"></div>
         
+        {% include 'includes/global/inc._noscript.jinja2' %}
+
         <div class="main-content">
             {% block content %} 
             {% endblock %}
         </div>
 
-        {% include 'includes/global/inc._noscript.jinja2' %}
-
         {# -- This file contains all JS present in body -- #}
         {% include 'includes/global/inc._body-js.jinja2' %}
-
     </body>
 </html>
