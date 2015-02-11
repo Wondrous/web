@@ -120,10 +120,11 @@ class AccountManager(BaseManager):
 
     @classmethod
     def deactivate_json(cls,person,password):
+        from wondrous.controllers.postmanager import PostManager
         user = person.user
         if user and user.validate_password(password):
             user.is_active = False
-            DBSession.flush()
+            PostManager.deactivate_by_userid(user.id)
             return {'status','deactivated'}
         return {'error':'deactivation failed'}
 
@@ -140,7 +141,7 @@ class AccountManager(BaseManager):
     def change_password_json(cls,person,old_password,new_password):
         user = person.user
         if user and user.validate_password(old_password):
-            user.password = password
+            user.password = new_password
             DBSession.flush()
             return {"status":"new password set"}
         return {"error":"password change failed"}

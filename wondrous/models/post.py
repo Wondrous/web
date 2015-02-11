@@ -43,6 +43,7 @@ class Post(Base,BaseMixin):
     object_id = Column(BigInteger, ForeignKey('object.id'))
     object = relationship('Object', lazy='joined', backref=backref("post", uselist=False), cascade="delete")
 
+    is_active = Column(Boolean, default=True)  # If you want to hide something from your wall
     is_hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
     feed_post_links = relationship("FeedPostLink", backref="post", cascade="delete")
     text = Column(Unicode)

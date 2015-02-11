@@ -252,6 +252,7 @@ class VoteManager(BaseManager):
             field       : user_id,
             'vote_type' : vote_type,
             'status'    : status,
+            'is_active':True
         }
         return Vote.by_kwargs(**kw).count()
 

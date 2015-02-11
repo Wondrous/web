@@ -43,9 +43,10 @@ class FeedManager(BaseManager):
         data = []
         for link in links:
             post = link.post
-            if not post.is_hidden:
+            if not post.is_hidden and post.is_active:
                 post_dict = super(FeedManager,cls).model_to_json(post)
-                post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+                if post.object:
+                    post_dict.update(super(FeedManager,cls).model_to_json(post.object))
                 data.append(post_dict)
         return data
 

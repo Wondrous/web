@@ -83,6 +83,24 @@ class TestModel:
         DBSession.refresh(user1)
         assert current_password!=user1.password
 
+        current_password = user1.password
+
+        # change back
+        AccountManager.change_password_json(person1,"new_password","password")
+        DBSession.refresh(user1)
+        assert current_password!=user1.password
+
+        #change to new name
+        first_name, last_name, username = person1.first_name, person1.last_name, user1.username
+        AccountManager.change_profile_json(person1,'first_name',"new_value")
+        AccountManager.change_profile_json(person1,'last_name',"new_value")
+        AccountManager.change_profile_json(person1,'username',"new_value")
+        DBSession.refresh(user1)
+
+        assert first_name!=person1.first_name
+        assert last_name!=person1.last_name
+        assert username!=user1.username
+
         # user2 is private, user1 will issue a follow request
         json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
 
@@ -198,6 +216,7 @@ class TestModel:
 
         # user2 will post something
         post_json = PostManager.post_json(person2,"subject","text",tags=None)
+
         wall_json = FeedManager.get_wall_posts_json(person2,person2.user.id,page=0)
         assert len(wall_json)==2
 
@@ -220,8 +239,29 @@ class TestModel:
         tags  = [tag.tag_name for tag in tags]
         assert 'tag6' in tags
 
+        # user2 will post something
+        post_json = PostManager.post_json(person2,"subject","text",tags=None)
+        feed_json = FeedManager.get_feed_posts_json(person1,FeedManager.MAJORITY,page=0)
+        assert len(feed_json)==3
+
         # user2 is not following user1, thus no feed from user 1
         feed_json = FeedManager.get_feed_posts_json(person2,FeedManager.MAJORITY,page=0)
         for post_json in feed_json:
             assert post_json['user_id']!=person1.user.id
-        assert len(feed_json)==2
+        assert len(feed_json)==3
+
+        # User2 will deactive itself
+        json = AccountManager.deactivate_json(person2,"password")
+        feed_json = FeedManager.get_feed_posts_json(person1,FeedManager.MAJORITY,page=0)
+        assert len(feed_json)==1
+
+        PostManager.reactivate_by_userid(person2.user.id)
+        feed_json = FeedManager.get_feed_posts_json(person1,FeedManager.MAJORITY,page=0)
+        assert len(feed_json)==3
+
+        # user2 will delete itself
+        json = AccountManager.delete_json(person2,"password")
+        feed_json = FeedManager.get_feed_posts_json(person1,FeedManager.MAJORITY,page=0)
+        assert len(feed_json)==1
+        DBSession.refresh(user2)
+        assert user2.set_to_delete != None

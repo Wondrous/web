@@ -19,6 +19,8 @@ from wondrous.models import (
     FeedPostLink
 )
 
+from sqlalchemy import or_
+
 from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
 
@@ -70,7 +72,7 @@ class PostManager(BaseManager):
                 new_post.original_id = repost_id
             if text:
                 new_post.text = text
-                
+
         else:
             # take it apart
             # First create the post container, then the object
@@ -113,3 +115,13 @@ class PostManager(BaseManager):
         data = PostManager.model_to_json(object)
         data.update(PostManager.model_to_json(post))
         return data
+
+    @classmethod
+    def deactivate_by_userid(cls,user_id):
+        Post.query.filter(or_(Post.user_id==user_id,Post.owner_id==user_id)).update({'is_active':False})
+        DBSession.flush()
+
+    @classmethod
+    def reactivate_by_userid(cls,user_id):
+        Post.query.filter(or_(Post.user_id==user_id,Post.owner_id==user_id)).update({'is_active':True})
+        DBSession.flush()
