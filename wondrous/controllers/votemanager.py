@@ -84,9 +84,9 @@ class VoteManager(BaseManager):
         """
             PURPOSE: This is a toggle method, follow -> unfollow, vice versa
         """
-
         # if profile is private, request, else follow
-        if AccountManager.is_private(to_user_id):
+        is_private = AccountManager.is_private(to_user_id)
+        if is_private:
             # we need to re-request
             status = Vote.PENDING
             reason = Notification.FOLLOW_REQUEST
@@ -101,7 +101,7 @@ class VoteManager(BaseManager):
         # change the current one if it exists
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER).first()
         if vote:
-            if not cls.is_blocked_by(from_user_id,to_user_id) and vote.status != Vote.PENDING:
+            if not cls.is_blocked_by(from_user_id,to_user_id) and (vote.status != Vote.PENDING or not is_private):
                 vote.status = status
         else:
             vote = Vote(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER, status=status)
@@ -182,6 +182,7 @@ class VoteManager(BaseManager):
             PURPOSE: Check if the user is already blocking another, this is a toggle
         """
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=user_id, vote_type=Vote.USER).first()
+        reverse_vote = Vote.by_kwargs(user_id=user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
 
         if vote:
             if vote.status == Vote.BLOCKED:
@@ -191,6 +192,11 @@ class VoteManager(BaseManager):
 
         else:
             vote = Vote(user_id=from_user_id, subject_id=user_id, vote_type=Vote.USER, status=Vote.BLOCKED)
+
+        if reverse_vote:
+            reverse_vote.status = Vote.UNFOLLOWED
+        else:
+            reverse_vote = Vote(user_id=user_id, subject_id=from_user_id, vote_type=Vote.USER, status=Vote.UNFOLLOWED)
 
         return vote
 

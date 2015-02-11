@@ -8,31 +8,29 @@ This is the core web platform for Wondrous.
 ##### Levels: api/user, api/wall, api/feed, api/notification
 
 ## Action IDs:
-- **Unliked** (`0`)
+
+- **Liked** (`0`) - toggle (unlike)
 
 
-- **Liked** (`1`)
+- **Bookmarked** (`1`) [defered for now]
 
 
-- **Bookmarked** (`2`) [defered for now]
+- **Cancel** (`2`)
 
 
-- **Cancel** (`3`)
+- **Follow** (`3`) - toggle (unfollow)
 
 
-- **Follow** (`4`)
+- **Accept** (`4`)
 
 
-- **Accept** (`5`)
+- **Block** (`5`)
 
 
-- **Block** (`6`)
+- **Deny** (`6`) -> will change request status to unfollowed
 
 
-- **Deny** (`7`) [imlicit]
-
-
-- **Topfriend** (`8`) [follow required]
+- **Topfriend** (`7`) [follow required]
 
 
 #### USER level
@@ -133,11 +131,11 @@ This is the core web platform for Wondrous.
 
 - **method:** `POST`
 
-- **parameter fields**: 
+- **parameter fields**:
 
 
     post_id (int) - valid Post ID, tags (list of text tags), text
-    
+
 
 - **description:** `Repost a post, will always post on the user (who invokes the call) wall.`
 

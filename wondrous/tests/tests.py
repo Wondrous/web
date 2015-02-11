@@ -145,5 +145,76 @@ class TestModel:
 
         # user1 is going to be persistent and request again!
         json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
+        is_following = VoteManager.is_following(user1.id,user2.id)
+        assert is_following==False
         assert json['total_following']==1
         assert json['total_follower']==1
+
+        # user2 decides to turn profile into a public one
+        user2.is_private = False
+        DBSession.flush()
+
+        # user1 is going to be persistent and request again!
+        json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
+        is_following = VoteManager.is_following(user1.id,user2.id)
+        assert is_following==True
+
+    def test_feed(self):
+        user1 = AccountManager.add('first', 'user', 'user1@wondrous.co', 'user1', 'password')
+        user2 = AccountManager.add('second', 'user', 'user2@wondrous.co', 'user2', 'password')
+        person1 = user1.person
+        person2 = user2.person
+
+        # user1 is going to follow user2
+        json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
+        is_following = VoteManager.is_following(user1.id,user2.id)
+        assert is_following==True
+
+        # First post by user2
+        post_json = PostManager.post_json(person2,"subject","text",tags=set(['tag1','tag2','tag3','tag4']))
+        assert len(post_json)>0
+
+        feed_json = FeedManager.get_feed_posts_json(person1,FeedManager.MAJORITY,page=0)
+        assert len(feed_json)==1
+
+        wall_json = FeedManager.get_wall_posts_json(person2,person2.user.id,page=0)
+        assert len(wall_json)==1
+
+        # user2 is annoyed, going to block user1
+        json = VoteManager.vote_json(person2,user1.id,1,VoteAction.BLOCK)
+        assert json['total_following']==1
+        assert json['total_follower']==1
+
+        # is user1 blocked?
+        is_blocked = VoteManager.is_blocked_by(user1.id, user2.id)
+        assert is_blocked == True
+
+        # user2 will post something
+        post_json = PostManager.post_json(person2,"subject","text",tags=None)
+        wall_json = FeedManager.get_wall_posts_json(person2,person2.user.id,page=0)
+        assert len(wall_json)==2
+
+        feed_json = FeedManager.get_feed_posts_json(person1,FeedManager.MAJORITY,page=0)
+        assert len(feed_json)==1
+
+        # user2 is unblocks user1
+        json = VoteManager.vote_json(person2,user1.id,1,VoteAction.BLOCK)
+        assert json['total_following']==1
+        assert json['total_follower']==1
+
+        # user1 is going to follow user2
+        json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
+        is_following = VoteManager.is_following(user1.id,user2.id)
+        assert is_following==True
+
+        # repost by user1
+        repost_json = PostManager.repost_json(person1,1,tags=set(["tag6"]),text='LOL')
+        tags = TagManager.by_post_id(repost_json['id'])
+        tags  = [tag.tag_name for tag in tags]
+        assert 'tag6' in tags
+
+        # user2 is not following user1, thus no feed from user 1
+        feed_json = FeedManager.get_feed_posts_json(person2,FeedManager.MAJORITY,page=0)
+        for post_json in feed_json:
+            assert post_json['user_id']!=person1.user.id
+        assert len(feed_json)==2

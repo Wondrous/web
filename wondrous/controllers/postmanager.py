@@ -68,6 +68,9 @@ class PostManager(BaseManager):
                 new_post.original_id = old_post.original_id
             else:
                 new_post.original_id = repost_id
+            if text:
+                new_post.text = text
+                
         else:
             # take it apart
             # First create the post container, then the object
@@ -95,8 +98,7 @@ class PostManager(BaseManager):
     def repost_json(cls,person,post_id,tags=None,text=None):
         if not person:
             return {'error':'insufficient data'}
-
-        post = PostManager.add(person.user.id,tags,text,repost_id=post_id)
+        post = PostManager.add(person.user.id,tags,None,text,repost_id=post_id)
         data = PostManager.model_to_json(post)
         return data
 

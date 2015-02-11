@@ -38,6 +38,6 @@ class TagManager(BaseManager):
             return [link.post_id for link in links]
 
     @staticmethod
-    def by_name_like(name, num=50):
+    def by_name_like(name,page=0, per_page=50):
            return Tag.query.filter(Tag.tag_name.ilike("{q}%".format(q=name))).\
-                            filter(~Tag.tag_name.in_(SYS_CONTEXT_TAGS)).limit(num).all()
+                            filter(~Tag.tag_name.in_(SYS_CONTEXT_TAGS)).limit(per_page).offest(page*per_page).all()
