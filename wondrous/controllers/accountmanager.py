@@ -123,6 +123,7 @@ class AccountManager(BaseManager):
         user = person.user
         if user and user.validate_password(password):
             user.is_active = False
+            DBSession.flush()
             return {'status','deactivated'}
         return {'error':'deactivation failed'}
 
@@ -131,6 +132,7 @@ class AccountManager(BaseManager):
         user = person.user
         if user and user.validate_password(password):
             user.set_to_delete = datetime.now()
+            cls.deactivate_json(person,password)
             return {'status','set to delete in x days'}
         return {'error':'deletion failed'}
 
@@ -139,6 +141,8 @@ class AccountManager(BaseManager):
         user = person.user
         if user and user.validate_password(old_password):
             user.password = password
+            DBSession.flush()
+            return {"status":"new password set"}
         return {"error":"password change failed"}
 
     @classmethod
@@ -152,11 +156,13 @@ class AccountManager(BaseManager):
         exists = getattr(user, field, None)
         if exists:
             setattr(user,field,new_value)
+            DBSession.flush()
             return {field:new_value}
 
         exists = getattr(person, field, None)
         if exists:
             setattr(person,field,new_value)
+            DBSession.flush()
             return {field:new_value}
 
         return {"error":field+" not found"}

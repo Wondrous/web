@@ -49,7 +49,6 @@ class Post(Base,BaseMixin):
 
     post_tag_links = relationship("PostTagLink", backref="object", cascade="delete")
 
-
     # repost section
     repost_id = Column(BigInteger, ForeignKey('post.id'))
     repost = relationship('Post',foreign_keys=repost_id, remote_side="Post.id", backref="reposts")

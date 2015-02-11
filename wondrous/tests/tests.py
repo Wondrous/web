@@ -76,6 +76,13 @@ class TestModel:
         person1 = user1.person
         person2 = user2.person
 
+        #change first_name, last_name, password
+        current_password = user1.password
+
+        AccountManager.change_password_json(person1,"password","new_password")
+        DBSession.refresh(user1)
+        assert current_password!=user1.password
+
         # user2 is private, user1 will issue a follow request
         json = VoteManager.vote_json(person1,user2.id,1,VoteAction.FOLLOW)
 
