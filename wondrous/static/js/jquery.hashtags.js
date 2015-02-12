@@ -29,14 +29,14 @@ $.fn.hashtags = function() {
     });
 };
 
+function initSmartTextarea() {
+    $("textarea#postTextarea").hashtags();
+}
+
 $(document).ready(function() {
     // Initialize the hashtags and autosize textarea
     initSmartTextarea();
 });
-
-function initSmartTextarea() {
-    $("textarea#postTextarea").hashtags();
-}
 
 // $('textarea#postTextarea').on("keyup", function() {
 //     var FONT_SIZE;

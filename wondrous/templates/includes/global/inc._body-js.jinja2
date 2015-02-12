@@ -33,11 +33,10 @@
 
         {# -- MASONRY -- #}
         $(function () {
-
             //var msnry = initMasonry()
             $('.post-content').hide();
 
-            $(document).on('click', '.post-cover-photo', function () {
+            $('body').on('click', '.post-cover-photo', function () {
                 var SPEED = 0;
                 var thisPost = $(this).parent('.post-body');
                 var thisBrick = thisPost.parent('.masonry-brick');
@@ -70,7 +69,7 @@
                 $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
             });
 
-            $(document).on('click', '.backdrop', function () {
+            $('body').on('click', '.backdrop', function () {
                 $('.is-expanded').css('z-index', 4);
                 $('.post-presentation').removeClass('post-presentation');
                 $('.backdrop').toggleClass('dimmer');
@@ -90,36 +89,6 @@
                 // Hmmmmm.... Let's try this out
                 $('html, body').animate({ scrollTop: thisPost.offset().top-60 }, 300);
             });
-        
-            // $(document).on('click', '.post-cover-photo', function () {
-            //     var SPEED = 0;
-            //     var thisPost = $(this).parent('.post-body');
-            //     var thisBrick = thisPost.parent('.masonry-brick');
-            //     var thisPostContent = thisPost.find('.post-content');
-            //     var thisCoverPhoto = thisPost.find('.post-cover-photo');
-
-            //     $('.backdrop').toggleClass('dimmer');
-            //     thisPost.css('z-index', 9);
-
-            //     $('.post-body').not(thisPost).removeClass('is-expanded');
-            //     $('.post-content').not(thisPostContent).slideUp(SPEED);
-            //     $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
-            //     $('.post-content').not(thisPostContent).removeClass('no-top-border');
-            //     $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
-
-            //     thisPost.toggleClass('is-expanded');
-            //     thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-            //     thisPostContent.toggleClass('no-top-border');
-                
-            //     // Omit this line to NOT put the post into
-            //     // presentation-mode when it's clicked.
-            //     thisBrick.toggleClass('post-presentation');
-                
-            //     thisPostContent.slideToggle(SPEED);
-
-            //     masonry.layout();
-            // });
-          
         });
 
         {# -- SEE MORE BUTTON -- #}
@@ -152,51 +121,6 @@
                 }
             });
         });
-
-        {# -- HTML5 PUSHSTATE -- #}
-        function change_url(url) {
-            history.pushState({path: url}, "", url);
-            // $('.main-content').load(url + ' .main-content');
-            $.ajax({
-                url: url,
-                success: function(htmlResponse) {
-                    var content = $('<div>').html(htmlResponse).find('.main-content');
-                    $('.main-content').html(content);
-
-                    // We need to reinitialize any plugins which
-                    // operate on elements in the dynamically
-                    // added content. This is extremely annonying.
-                    // *** Look for a better solution ***
-                    if( $("textarea#postTextarea").length) {
-                        // Initialize the hashtags and autosize textarea
-                        initSmartTextarea();
-                    }
-
-                    if ( $('#fileuploadCoverImage').length ) {
-                        // Initialize the file upload module
-                        initUploadPostImage();
-                    }
-
-                    if ( $('.masonry-brick').length ) {
-                        var msnry = initMasonry();
-                    }
-                }
-            });
-        }
-        
-        $('body').on('click', 'a:not(.__noPush)', function(e) {
-            change_url($(this).attr('href')); // 
-            return e.preventDefault();
-        });
-
-        $(window).bind('popstate', function(event) {
-            var state = event.originalEvent.state;
-            if (state) {
-                change_url(state.path);
-            }
-        });
-
-        history.replaceState({ path: window.location.href }, '');
 
         {# -- AUTOCOMPLETE SEARCH -- #}
         var options, a;
@@ -317,6 +241,51 @@
                 }
             });
         });
+
+        {# -- HTML5 PUSHSTATE -- #}
+        function change_url(url) {
+            history.pushState({path: url}, "", url);
+            $.ajax({
+                url: url,
+                success: function(htmlResponse) {
+                    var content = $('<div>').html(htmlResponse).find('.main-content');
+                    console.log(content);
+                    $('.autosizejs').remove();
+                    $('.main-content').empty().html(content);
+
+                    // We need to reinitialize any plugins which
+                    // operate on elements in the dynamically
+                    // added content. This is extremely annonying.
+                    // *** Look for a better solution ***
+                    if( $("textarea#postTextarea").length) {
+                        // Initialize the hashtags and autosize textarea
+                        initSmartTextarea();
+                    }
+
+                    if ( $('#fileuploadCoverImage').length ) {
+                        // Initialize the file upload module
+                        initUploadPostImage();
+                    }
+
+                    // if ( $('.masonry-brick').length ) {
+                    //     var msnry = initMasonry();
+                    // }
+                }
+            });
+        }
+        
+        $('body').on('click', 'a:not(.__noPush)', function(e) {
+            change_url($(this).attr('href')); // 
+            return e.preventDefault();
+        });
+
+        $(window).bind('popstate', function(event) {
+            var state = event.originalEvent.state;
+            if (state) {
+                change_url(state.path);
+            }
+        });
+        history.replaceState({ path: window.location.href }, '');
     });
 </script>
 

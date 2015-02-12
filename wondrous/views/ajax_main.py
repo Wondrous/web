@@ -279,7 +279,7 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        self.query_kwargs['vote_type' = 1]
+        self.query_kwargs['vote_type'] = 1  # Zi, is this is what you meant? -- @john
         return VoteManager.vote_json(person, **self.query_kwargs)
 
     @api_login_required
