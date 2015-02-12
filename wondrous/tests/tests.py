@@ -44,7 +44,7 @@ from wondrous.controllers import (
 from paste.deploy.loadwsgi import appconfig
 from sqlalchemy import engine_from_config
 
-settings = appconfig('config:'+'test.ini', relative_to='./wondrous/tests')  # #os.getcwd()+'/../wondrous/wondrous/tests/'
+settings = appconfig('config:'+'test.ini', relative_to='./wondrous/tests')  # os.getcwd()+'/../wondrous/wondrous/tests/'
 
 def setup_module(module):
     # once for all the tests in this module:
