@@ -1,8 +1,10 @@
 ## Wondrous Testing Suite
 ---------------------------
 
-**usage**: `nosetests -s test.py`
+**usage**: `nosetests wondrous`
 
+
+it should recursively test everything in the package 
 
 ### Coverage
 ---------------------------
