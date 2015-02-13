@@ -10,6 +10,7 @@
 import transaction
 import inspect
 import unittest
+import os
 
 
 from sqlalchemy import create_engine
@@ -45,7 +46,7 @@ from sqlalchemy import engine_from_config
 import os
 print os.getcwd()
 
-settings = appconfig('config:'+'test.ini',relative_to='./wondrous/tests')
+settings = appconfig('config:'+'test.ini', relative_to='./wondrous/tests')  # os.getcwd()+'/../wondrous/wondrous/tests/'
 
 def setup_module(module):
     # once for all the tests in this module:
