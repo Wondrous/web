@@ -32,14 +32,17 @@ from wondrous.models.modelmixins import BaseMixin
 class Object(Base, BaseMixin):
 
     """
-        This defines the Object posted
+        This defines the Object posted,
+        objects should not be directly accessible by users
+        objects are simply the goods carried by posts (the containing structure)
     """
     # user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     subject = Column(Unicode, default=None, nullable=True)
     text = Column(Unicode, default=None)
-    active = Column(Boolean, default=True)  # only used for disabling/re-enabling an account
+    mime_type = Column(Unicode, nullable=True)
     ouuid = Column(Unicode, nullable=True)
-    comments = relationship("Comment",cascade="delete")
+    # comments = relationship("Comment",cascade="delete")
+
 
 class ObjectLink(Base, BaseMixin):
 

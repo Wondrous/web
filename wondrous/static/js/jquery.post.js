@@ -1,6 +1,8 @@
 // Launch new-post-dialogue
 $(document).ready(function() {
 
+    var fileToUpload = 'undefined';
+
     // Hide the comment radio buttons
     $('.comment-radio-main-wrapper').hide();
 
@@ -53,12 +55,22 @@ $(document).ready(function() {
     });
 
     // Initialize the file upload module
-    initUploadPostImage();
+    // initUploadPostImage();
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
+            reader.onload = function (e) {
+                $('#uploadPreview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
     // When this div changes, we add the new post image to the HTML post form
     $(document).on('change', '#fileuploadPostImage', function() {
-        var fileName = $(this).val();
-        $("#filename").show().html(fileName);
+        fileToUpload = $(this)[0].files[0];
+        readURL($('#fileuploadPostImage')[0]);
     });
 
     // When you click the new post button
@@ -107,20 +119,66 @@ $(document).ready(function() {
             if($.inArray(obj, postTagsUnique) === -1) postTagsUnique.push(obj);
         });
 
+        uploadData = {
+            'subject'       : postSubject,
+            'text'          : postText,
+            'tags'          : postTagsUnique};
+
+        if (typeof fileToUpload !== 'undefined'){
+
+            uploadData.file_type = fileToUpload.type;
+            console.log("upload type",uploadData);
+        }
         if (contextIdentifier !== null && ajaxRoute !== null) {
+
             $.ajax({
                 type: "POST",
                 url: "/api/wall",
-                data: {
-                    'subject'       : postSubject,
-                    'text'          : postText,
-                    'tags'          : postTagsUnique,
-                    // 'links'         : postLinks,
-                    // 'object_file_id'     : object_file_id,
-                    // 'context_identifier' : contextIdentifier,
-                    // 'post_as_checkbox'   : postedAnon,
-                },
+                data: uploadData,
                 success: function(post_data) {
+
+                    console.log(post_data);
+                    if (post_data.hasOwnProperty('signed_request')){
+                        console.log("uploading right away");
+                        var url = post_data['signed_request'];
+
+                        var xhr = new XMLHttpRequest();
+                        if (xhr.withCredentials != null) {
+                            xhr.open('PUT', url, true);
+                        } else if (typeof XDomainRequest !== "undefined") {
+                            xhr = new XDomainRequest();
+                            xhr.open('PUT', url);
+                        } else {
+                            xhr = null;
+                        }
+
+                        if (!xhr) {
+                            this.onError('CORS not supported');
+                        } else {
+                            xhr.onload = function() {
+                              if (xhr.status === 200) {
+                                  console.log("upload complete!");
+                                  fileToUpload = 'undefined';
+                                } else {
+                                    console.log("upload incomplete!");
+                                }
+                            };
+                            xhr.onerror = function() {
+                                console.log("errror!!!! CORS");
+                            };
+                            xhr.upload.onprogress = function(e) {
+                              if (e.lengthComputable) {
+                                var progress = Math.round((e.loaded / e.total) * 100);
+                                $('#progress .progress-bar').css('width', progress + '%');
+
+                              }
+                            };
+                          }
+                          xhr.setRequestHeader('Content-Type', fileToUpload.type);
+                          xhr.setRequestHeader('x-amz-acl', 'public-read');
+                          xhr.send(fileToUpload);
+
+                    }
                     if (post_data['post_error']) {
                         $('.post-error-wrapper').show().slideDown(220);
                         $('.post-error').text(post_data['post_error']);

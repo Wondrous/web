@@ -24,7 +24,9 @@ from sqlalchemy import or_
 from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
 
-import uuid
+import time, os, json, base64, hmac, urllib, uuid
+from hashlib import sha1
+
 
 class PostManager(BaseManager):
 
@@ -47,7 +49,7 @@ class PostManager(BaseManager):
             DBSession.add(link)
 
     @classmethod
-    def add(cls,user_id,tags,subject,text,repost_id=None):
+    def add(cls,user_id,tags,subject,text,repost_id=None,file_type=None):
         """
             PURPOSE: the purpose of the this method is to allow users to post and
             repost objects
@@ -77,11 +79,13 @@ class PostManager(BaseManager):
             # take it apart
             # First create the post container, then the object
             new_post = Post(user_id=user_id)
-
             new_object = Object(subject=subject,text=text)
-            new_object.ouuid = unicode(uuid.uuid4())
             DBSession.add(new_object)
             DBSession.flush()
+
+            if file_type:
+                new_object.ouuid = str(new_object.id)+'-'+unicode(uuid.uuid4()).lower()
+                new_object.mime_type = file_type
 
             new_post.object_id = new_object.id
 
@@ -105,14 +109,42 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def post_json(cls,person,subject,text,tags=None):
+    def _sign_upload_request(cls,ouuid,mime_type):
+        AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
+        AWS_SECRET_KEY = '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'
+        AWS_S3_BUCKET = 'mojorankdev'
+
+        # Generate the timeframe for uploading
+        expires = int(time.time()+10)
+        amz_headers = 'x-amz-acl:public-read'
+
+        # Generate the PUT request that the js will use
+        put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, ouuid)
+
+        # Generate the signature with which the request can be signed:
+        signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+        # Remove surrounding whitespace and quote special characters:
+        signature = urllib.quote_plus(signature.strip())
+
+        # Build the URL of the file in anticipation of its imminent upload:
+        url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, ouuid)
+
+        return {'signed_request':'%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
+                'url':url}
+
+    @classmethod
+    def post_json(cls,person,subject,text,tags=None,file_type=None):
         if not person or not subject or not text:
             return {'error':'insufficient data'}
 
-        post = PostManager.add(person.user.id,tags,subject,text,repost_id=None)
+        post = PostManager.add(person.user.id,tags,subject,text,repost_id=None,file_type=file_type)
         object = post.object
 
         data = PostManager.model_to_json(object)
+        if file_type:
+            data.update(cls._sign_upload_request(object.ouuid,object.mime_type))
+
+
         data.update(PostManager.model_to_json(post))
         return data
 

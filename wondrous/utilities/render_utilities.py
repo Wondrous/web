@@ -424,12 +424,8 @@ class _AssemblePost(object):
             RETURNS: A dictionary of the post's final data
         """
 
-        # IF THE OBJECT IS DEACTIVATED WE IGNORE IT
-        if not self.this_post.object.active:
-            return None
-
         # IF THE USER HAS REPORTED THIS OBJECT, WE IGNORE IT
-        elif ReportedContentManager.has_reported(self.current_user_id, self.post_id):
+        if ReportedContentManager.has_reported(self.current_user_id, self.post_id):
             return None
 
         # Some configurations...
@@ -458,6 +454,9 @@ class _AssemblePost(object):
         self.final_data['_font_size'], self.final_data['_line_height'] = self._get_font_attrs(object_text)
         self.final_data['subject']   = self.this_post.object.subject
         self.final_data['is_poster'] = bool(self.user_id == self.current_user_id)
+        if self.this_post.object.ouuid:
+            AWS_S3_BUCKET = 'mojorankdev'
+            self.final_data['picture_url'] = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, self.this_post.object.ouuid)
         self.final_data['url']       = "www.wondrous.co{p}".format(p=get_object_url(self.post_id, self.this_post.object.ouuid))
         self.final_data['post_comments'] = [{
             'comment_id'   : c.id,

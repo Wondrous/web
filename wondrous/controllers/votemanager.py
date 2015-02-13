@@ -251,8 +251,7 @@ class VoteManager(BaseManager):
         kw = {
             field       : user_id,
             'vote_type' : vote_type,
-            'status'    : status,
-            'is_active':True
+            'status'    : status
         }
         return Vote.by_kwargs(**kw).count()
 

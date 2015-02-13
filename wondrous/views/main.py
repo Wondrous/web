@@ -99,6 +99,7 @@ class BaseHandler(object):
 
         # Assign all relevant data to instance variables for
         # use in the calling method
+        
         self.page_items  = p.load(items, display_hidden=SHOW_HIDDEN)
         self.page_num    = p.current_page_num
         self.has_next    = p.has_next(items)

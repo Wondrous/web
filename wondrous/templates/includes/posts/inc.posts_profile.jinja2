@@ -18,7 +18,13 @@
             <div class="post-body">
                 {% include "/includes/posts/inc.post_metadata.jinja2" %}
                 {% include "/includes/posts/inc.post_identification.jinja2" %}
+                {% if 'picture_url' in item %}
+                <div class="post-cover-photo cover no-top-border" style="background-image: url({{ item['picture_url'] }});">
+
+                {% else %}
                 <div class="post-cover-photo cover no-top-border" style="background-image: url({{ test_bg | random() }});">
+
+                {% endif %}
                     <div class="post-subject-text">
                         <div class="post-subject-wrapper">
                             <div class="post-subject-text-position">

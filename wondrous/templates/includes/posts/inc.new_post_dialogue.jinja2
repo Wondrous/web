@@ -15,9 +15,9 @@
     <div class="new-post-element" style="background-color: rgb(255,255,255);">
         <textarea id="postTextarea" maxlength="5000" placeholder="Write something. Post a link. Add #hashtags."></textarea>
     </div>
-    
-    <div id="post-hashtags"></div>
 
+    <div id="post-hashtags"></div>
+    <img id="uploadPreview" alt="your image" />
     <div id="postUploadBtn" class="upload-button round-2 fileinput-button">
         Upload a photo
         <input id="fileuploadPostImage" type="file" name="files[]"/>
@@ -30,11 +30,11 @@
     <div id="filename"></div>
     <div id="uploadedImagePreviewWrapper"></div>
     <input id="objectFileID" type="hidden" value="{# inject file_object_id if file uploaded #}">
-    
+
     <div id="post-upload-file" class="files" style="postion: relative; margin-left: 5px; font-size: 14px;"></div>
 
     <!-- <hr> -->
-    
+
     <div class="post-error-wrapper">
         <span class="post-error"></span>
     </div>

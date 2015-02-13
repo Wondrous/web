@@ -21,6 +21,11 @@ from urlparse import urlparse
 from wondrous.routes import TAKEN_PATHS
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
+class UploadManager:
+    @staticmethod
+    def sign_upload():
+        pass
+
 class PasswordManager(object):
 
     def _set_password(self, password):
@@ -609,9 +614,7 @@ class ValidatePost(object):
         else:
             return None, "Please post some text, add a link, or upload a delicious file of your choosing!"
 
-
 class ValidateLink(object):
-
     @staticmethod
     def sanitize_post_link(post_link):
 
