@@ -1131,6 +1131,22 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 /* ==== NEW POST================ */
 
+#new-post-launch {
+    position: relative;
+    display: block;
+    width: 300px;
+    margin: 20px auto 10px auto;
+    padding: 10px;
+    
+    color: rgb(251,251,251);
+    font-weight: 100;
+    text-align: center;
+    background-color: rgb(0,120,220);
+    cursor: pointer;
+} #new-post-launch:hover {
+    background-color: rgb(0,120,240);
+}
+
 .new-post {
     position: relative;
     width: 100%;
@@ -1169,8 +1185,9 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 }
 
 .new-post-wrapper {
+    /*
     position: relative;
-    /*display: none;*/
+    display: none;
     margin: 0 auto;
     margin-top: 20px;
     width: 100%;
@@ -1179,8 +1196,23 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     background-color: rgb(234,234,234);
     padding: 15px;
 
-    /*box-shadow: 0 0 10px 3px rgb(100,100,100);*/
+    box-shadow: 0 0 10px 3px rgb(100,100,100);
     z-index: 3;
+    */
+
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 50%;
+    margin-left: -265px;
+    margin-top: 20px;
+    width: 100%;
+    min-width: 250px;
+    box-shadow: 0 1px 3px rgb(100,100,100);
+
+    background-color: rgb(234,234,234);
+    padding: 15px;
+    z-index: 100;
 }
 
 .new-post-element {

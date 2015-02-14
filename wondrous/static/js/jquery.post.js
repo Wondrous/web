@@ -10,12 +10,14 @@ $(document).ready(function() {
     // Launch the new post dialogue
     $('body').on('click', '#new-post-launch', function() {
         $('#new-post-dialogue').slideDown(200);
-        $('#new-post-launch').slideUp(200);
+        $('#body-mask').show();
+        // $('#new-post-launch').slideUp(200);
     });
 
     // Destroy the post form when you click the cancel button
     $('body').on('click', '.cancel-post-button', function() {
-        $('#new-post-launch').slideDown(200);
+        // $('#new-post-launch').slideDown(200);
+        $('#body-mask').hide();
         destroyPostForm();
     });
 
@@ -262,10 +264,6 @@ $(document).ready(function() {
         // Remove hashtags and the hashtag preview
         $('.hashtag').val('');
         $('#post-hashtags').empty();
-
-        // Clear radio button
-        $("input[name='post-as-radio']").prop('checked', false);
-        $("input[name='hidden-from-community']").prop('checked', false);
     }
 
     /* ----- Comment Feature ------ */

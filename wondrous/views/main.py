@@ -128,7 +128,7 @@ class AuthHandler(BaseHandler):
         password      = None
 
         if 'login_button' in p:
-            credential = safe_in(p.get('user_identification'))
+            credential = safe_in(p.get('user_identification')).lower()
             password   = safe_in(p.get('password'), strip=False)
 
             if Sanitize.is_valid_email(credential):
