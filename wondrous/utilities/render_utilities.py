@@ -93,7 +93,7 @@ def _linkify(text):
     """
 
     pattern = GLOBAL_CONFIGURATIONS['URL_REGEX']
-    return re.sub(pattern, (lambda m: r'<a class="post-link" target="_newtab" href="{m_scheme}">{m}</a>'.format(m=m.group(1), m_scheme=_schemify(m.group(1)))), text)
+    return re.sub('(?i)'+pattern, (lambda m: r'<a class="post-link" target="_newtab" href="{m_scheme}">{m}</a>'.format(m=m.group(1), m_scheme=_schemify(m.group(1)))), text)
 
 def _schemify(url):
 
