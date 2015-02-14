@@ -16,8 +16,8 @@ var NotificationBox = React.createClass({
 	render: function () {
 		return (
 			<span id="right-menu" className="notification-count nc-general round-2">
-        <span className="notification-count-text">0</span>
-    	</span>);
+        		<span className="notification-count-text">0</span>
+    		</span>);
 	}
 });
 

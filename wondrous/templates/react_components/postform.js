@@ -13,6 +13,7 @@ var PostInputs = React.createClass({
 				<div className="new-post-element" style={{"background-color": "rgb(255,255,255);"}}>
 					<textarea id="postTextarea" maxlength="5000" placeholder={contentPrompt} ></textarea>
 				</div>
+				<button>Submit</button>
 			</div>);
 	}
 });
