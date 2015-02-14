@@ -40,29 +40,30 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def vote_json(cls, person, subject_id, vote_type, action):
+    def vote_json(cls, person, user_id, vote_type, action):
         from_user_id = person.user.id
-        subject_id = long(subject_id)
+        user_id = long(user_id)
         vote_type = int(vote_type)
+        action = int(action)
         # translate action
         vote = None
 
         if vote_type == Vote.OBJECT:
             if action == VoteAction.LIKED:
-                vote = cls.like(from_user_id,subject_id)
+                vote = cls.like(from_user_id,user_id)
             elif action == VoteAction.BOOKMARKED:
                 pass
         elif vote_type == Vote.USER:
             if action == VoteAction.FOLLOW:
-                vote = cls.follow(from_user_id,subject_id)
+                vote = cls.follow(from_user_id,user_id)
             elif action == VoteAction.ACCEPT:
-                vote = cls.accept(from_user_id,subject_id)
+                vote = cls.accept(from_user_id,user_id)
             elif action == VoteAction.CANCEL:
-                vote = cls.cancel(from_user_id,subject_id)
+                vote = cls.cancel(from_user_id,user_id)
             elif action == VoteAction.BLOCK:
-                vote = cls.block(from_user_id,subject_id)
+                vote = cls.block(from_user_id,user_id)
             elif action == VoteAction.DENY:
-                vote = cls.deny(from_user_id,subject_id)
+                vote = cls.deny(from_user_id,user_id)
             elif action == VoteAction.TOPFRIEND:
                 pass
 
@@ -71,8 +72,8 @@ class VoteManager(BaseManager):
             DBSession.flush()
             if vote_type == Vote.USER:
                 return {
-                    "total_following" : cls.get_following_count(subject_id),
-                    "total_follower"  : cls.get_follower_count(subject_id),
+                    "total_following" : cls.get_following_count(user_id),
+                    "total_follower"  : cls.get_follower_count(user_id),
                 }
             elif vote_type == Vote.OBJECT:
                 return super(VoteManager,cls).model_to_json(vote)
@@ -85,6 +86,7 @@ class VoteManager(BaseManager):
             PURPOSE: This is a toggle method, follow -> unfollow, vice versa
         """
         # if profile is private, request, else follow
+
         is_private = AccountManager.is_private(to_user_id)
         if is_private:
             # we need to re-request

@@ -99,7 +99,8 @@ function userVoteAjax(thisButton, action, profileID) {
         url: '/api/user/vote/',
         data: {
             'user_id': profileID,
-            'action':action
+            'action':action,
+            'vote_type':1
             },
         success: function(vote_data) {
             // TODO
