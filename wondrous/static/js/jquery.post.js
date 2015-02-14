@@ -56,21 +56,54 @@ $(document).ready(function() {
 
     // Initialize the file upload module
     // initUploadPostImage();
-    function readURL(input) {
-        if (input.files && input.files[0]) {
+    function readURL(file) {
+        if (file) {
             var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#uploadPreview').attr('src', e.target.result);
-            }
+            // reader.onload = function (e) {
+            //     $('#uploadPreview').attr('src', e.target.result);
+            // }
+            reader.onloadend = function() {
+                var tempImg = new Image();
+                tempImg.src = reader.result;
+                tempImg.onload = function() {
 
-            reader.readAsDataURL(input.files[0]);
+                    var MAX_WIDTH = 500;
+                    var MAX_HEIGHT = 400;
+                    var tempW = tempImg.width;
+                    var tempH = tempImg.height;
+                    if (tempW > tempH) {
+                        if (tempW > MAX_WIDTH) {
+                           tempH *= MAX_WIDTH / tempW;
+                           tempW = MAX_WIDTH;
+                        }
+                    } else {
+                        if (tempH > MAX_HEIGHT) {
+                           tempW *= MAX_HEIGHT / tempH;
+                           tempH = MAX_HEIGHT;
+                        }
+                    }
+
+                    var canvas = document.createElement('canvas');
+                    canvas.width = tempW;
+                    canvas.height = tempH;
+                    var ctx = canvas.getContext("2d");
+                    ctx.drawImage(this, 0, 0, tempW, tempH);
+                    var dataURL = canvas.toDataURL("image/png", 0.75);
+
+                    var data = dataURL;
+                    console.log("data",data,file.type);
+                    $('#uploadPreview').attr('src', data);
+                  }
+
+               }
+            reader.readAsDataURL(file);
         }
     }
     // When this div changes, we add the new post image to the HTML post form
     $(document).on('change', '#fileuploadPostImage', function() {
         fileToUpload = $(this)[0].files[0];
-        readURL($('#fileuploadPostImage')[0]);
+        readURL($('#fileuploadPostImage')[0].files[0]);
     });
 
     // When you click the new post button
@@ -140,6 +173,7 @@ $(document).ready(function() {
                     console.log(post_data);
                     if (post_data.hasOwnProperty('signed_request')){
                         console.log("uploading right away");
+                        $('.post-dialogue-progress').show();
                         var url = post_data['signed_request'];
 
                         var xhr = new XMLHttpRequest();
