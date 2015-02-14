@@ -28,6 +28,8 @@ from wondrous.models.feed import (
     # FeedPostLink,
 )
 
+from sqlalchemy import DateTime
+
 from wondrous.models.modelmixins import BaseMixin
 from sqlalchemy.orm import column_property
 
@@ -45,20 +47,24 @@ class Post(Base,BaseMixin):
 
     is_active = Column(Boolean, default=True)  # If you want to hide something from your wall
     is_hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
+
     feed_post_links = relationship("FeedPostLink", backref="post", cascade="delete")
     text = Column(Unicode)
 
     post_tag_links = relationship("PostTagLink", backref="object", cascade="delete")
 
     # repost section
-    repost_id = Column(BigInteger, ForeignKey('post.id'))
+    repost_id = Column(BigInteger, ForeignKey('post.id'), nullable=True)
     repost = relationship('Post',foreign_keys=repost_id, remote_side="Post.id", backref="reposts")
 
-    original_id = Column(BigInteger, ForeignKey('post.id'))
+    original_id = Column(BigInteger, ForeignKey('post.id'), nullable=True)
     original = relationship('Post', foreign_keys=original_id, remote_side="Post.id", backref="all_reposts")
 
-    owner_id = Column(BigInteger, ForeignKey('user.id'))
+    owner_id = Column(BigInteger, ForeignKey('user.id'), nullable=True)
     owner = relationship('User', foreign_keys=owner_id)
+
+    # set to delete
+    set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod
     def get_all(cls,user_id):

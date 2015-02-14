@@ -299,6 +299,21 @@ class APIViews(BaseHandler):
         person = self.request.person
         return NotificationManager.notification_json(person,**self.query_kwargs)
 
+    @api_login_required
+    @view_config(request_method='DELETE', route_name='api_post_delete', renderer='json')
+    def api_post_delete(self):
+        """
+            PURPOSE: deletes the given post by post_id
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,post_id
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array containing the status of the delete
+        """
+        person = self.request.person
+        return PostManager.delete_post_json(person,**self.query_kwargs)
 
 class AjaxHandler(BaseHandler):
 

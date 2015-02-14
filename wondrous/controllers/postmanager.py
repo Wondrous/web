@@ -27,6 +27,7 @@ from wondrous.controllers.basemanager import BaseManager
 import time, os, json, base64, hmac, urllib, uuid
 from hashlib import sha1
 
+from datetime import datetime
 
 class PostManager(BaseManager):
 
@@ -110,6 +111,10 @@ class PostManager(BaseManager):
 
     @classmethod
     def _sign_upload_request(cls,ouuid,mime_type):
+        """
+            Signs the upload request with our AWS credientials,
+            returns the signed request url and the url of the content
+        """
         AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
         AWS_SECRET_KEY = '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'
         AWS_S3_BUCKET = 'mojorankdev'
@@ -147,6 +152,17 @@ class PostManager(BaseManager):
 
         data.update(PostManager.model_to_json(post))
         return data
+
+    @classmethod
+    def delete_post_json(cls,person,post_id):
+        user_id = person.user.id
+        post = Post.by_id(post_id)
+        if post and post.user_id == user_id:
+            post.set_to_delete = datetime.now()
+            post.is_active = False
+            return {"status":"set to delete"}
+        else:
+            return {"error":"insufficient data"}
 
     @classmethod
     def deactivate_by_userid(cls,user_id):

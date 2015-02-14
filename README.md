@@ -5,7 +5,7 @@ This is the core web platform for Wondrous.
 
 #### Change User Relationships
 
-##### Levels: api/user, api/wall, api/feed, api/notification
+##### Levels: api/user, api/wall, api/feed, api/notification, api/post
 
 ## Action IDs:
 
@@ -154,6 +154,23 @@ This is the core web platform for Wondrous.
 ------------------------------
 
 - **endpoint:** `api/notification?page={page}`
+
+- **method:** GET
+
+- **description:** for paginating through notifications, no start will load X most recent and start acts as multiplier to load range between X*page and X + X*page where page is the set of X and X is the amount in the set.
+
+
+
+#### POST level
+---------------
+
+
+- **endpoint:** `/api/post`
+
+- **method:** DELETE
+
+- **description:** This is a soft deletion operation that marks posts as to be deleted and inactive. 
+
 
 ==============================
 ## Examples

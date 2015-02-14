@@ -66,7 +66,7 @@ class User(Base, PasswordManager, BaseMixin):
     comments = relationship("Comment",cascade="delete")
 
     feed = relationship("Feed",uselist=False,backref="user",cascade="delete")
-    set_to_delete = Column(DateTime)
+    set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod
     def get_all_banned_users(cls):

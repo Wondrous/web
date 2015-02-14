@@ -45,6 +45,7 @@ from wondrous.utilities.render_utilities import Pagination
 from wondrous.utilities.validation_utilities import Sanitize
 from wondrous.utilities.validation_utilities import ValidationHelper as vh
 
+import logging
 
 class BaseHandler(object):
 
@@ -99,7 +100,7 @@ class BaseHandler(object):
 
         # Assign all relevant data to instance variables for
         # use in the calling method
-        
+
         self.page_items  = p.load(items, display_hidden=SHOW_HIDDEN)
         self.page_num    = p.current_page_num
         self.has_next    = p.has_next(items)
@@ -494,7 +495,6 @@ class AuthHandler(BaseHandler):
                 )
         return headers
 
-
 class IndexHandler(BaseHandler):
 
     @view_config(renderer='/index_fork.jinja2', route_name='index_handler')
@@ -505,7 +505,6 @@ class IndexHandler(BaseHandler):
             PURPOSE: This method handles the index page for users who are
             logged in AND logged out.
         """
-
         # Logged-in ----------------------
         current_user = self.request.person
         if current_user:
