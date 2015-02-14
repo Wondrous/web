@@ -2,6 +2,7 @@
 $(document).ready(function() {
 
     var fileToUpload = 'undefined';
+    var dataURL = 'undefined';
 
     // Hide the comment radio buttons
     $('.comment-radio-main-wrapper').hide();
@@ -26,6 +27,8 @@ $(document).ready(function() {
             return false;
         }
     });
+
+
 
     // *** This was used when we had a WYSIWYG interface ***
     // *** Not currently in use ***
@@ -60,43 +63,49 @@ $(document).ready(function() {
         if (file) {
             var reader = new FileReader();
 
-            // reader.onload = function (e) {
-            //     $('#uploadPreview').attr('src', e.target.result);
-            // }
-            reader.onloadend = function() {
-                var tempImg = new Image();
-                tempImg.src = reader.result;
-                tempImg.onload = function() {
-
-                    var MAX_WIDTH = 500;
-                    var MAX_HEIGHT = 400;
-                    var tempW = tempImg.width;
-                    var tempH = tempImg.height;
-                    if (tempW > tempH) {
-                        if (tempW > MAX_WIDTH) {
-                           tempH *= MAX_WIDTH / tempW;
-                           tempW = MAX_WIDTH;
-                        }
-                    } else {
-                        if (tempH > MAX_HEIGHT) {
-                           tempW *= MAX_HEIGHT / tempH;
-                           tempH = MAX_HEIGHT;
-                        }
-                    }
-
-                    var canvas = document.createElement('canvas');
-                    canvas.width = tempW;
-                    canvas.height = tempH;
-                    var ctx = canvas.getContext("2d");
-                    ctx.drawImage(this, 0, 0, tempW, tempH);
-                    var dataURL = canvas.toDataURL("image/png", 0.75);
-
-                    var data = dataURL;
-                    console.log("data",data,file.type);
-                    $('#uploadPreview').attr('src', data);
-                  }
-
-               }
+            reader.onload = function (e) {
+                $('#cropBox').attr('src', e.target.result);
+                $('#cropBox').cropbox({
+                    width:500,
+                    height:500
+                }).on('cropbox',function(e,results,img){
+                    dataURL = img.getBlob();
+                });
+            }
+            // reader.onloadend = function() {
+            //     var tempImg = new Image();
+            //     tempImg.src = reader.result;
+            //     tempImg.onload = function() {
+            //
+            //         var MAX_WIDTH = 500;
+            //         var MAX_HEIGHT = 400;
+            //         var tempW = tempImg.width;
+            //         var tempH = tempImg.height;
+            //         if (tempW > tempH) {
+            //             if (tempW > MAX_WIDTH) {
+            //                tempH *= MAX_WIDTH / tempW;
+            //                tempW = MAX_WIDTH;
+            //             }
+            //         } else {
+            //             if (tempH > MAX_HEIGHT) {
+            //                tempW *= MAX_HEIGHT / tempH;
+            //                tempH = MAX_HEIGHT;
+            //             }
+            //         }
+            //
+            //         var canvas = document.createElement('canvas');
+            //         canvas.width = tempW;
+            //         canvas.height = tempH;
+            //         var ctx = canvas.getContext("2d");
+            //         ctx.drawImage(this, 0, 0, tempW, tempH);
+            //         var dataURL = canvas.toDataURL("image/png", 0.75);
+            //
+            //         var data = dataURL;
+            //         console.log("data",data,file.type);
+            //         $('#uploadPreview').attr('src', data);
+            //       }
+            //
+            //    }
             reader.readAsDataURL(file);
         }
     }
@@ -157,7 +166,7 @@ $(document).ready(function() {
             'text'          : postText,
             'tags'          : postTagsUnique};
 
-        if (typeof fileToUpload !== 'undefined'){
+        if (typeof fileToUpload !== 'undefined' && typeof dataURL !== 'undefined'){
 
             uploadData.file_type = fileToUpload.type;
             console.log("upload type",uploadData);
@@ -193,6 +202,7 @@ $(document).ready(function() {
                               if (xhr.status === 200) {
                                   console.log("upload complete!");
                                   fileToUpload = 'undefined';
+                                  dataURL = 'undefined';
                                 } else {
                                     console.log("upload incomplete!");
                                 }
@@ -210,7 +220,7 @@ $(document).ready(function() {
                           }
                           xhr.setRequestHeader('Content-Type', fileToUpload.type);
                           xhr.setRequestHeader('x-amz-acl', 'public-read');
-                          xhr.send(fileToUpload);
+                          xhr.send(dataURL);
 
                     }
                     if (post_data['post_error']) {
