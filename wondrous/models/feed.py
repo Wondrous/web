@@ -37,4 +37,4 @@ class Feed(Base, BaseMixin):
         the primary feed
     """
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    feed_post_links = relationship("FeedPostLink", backref="feed", cascade="delete")
+    feed_post_links = relationship("FeedPostLink", backref="feed")

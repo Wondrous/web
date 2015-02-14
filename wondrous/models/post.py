@@ -43,15 +43,15 @@ class Post(Base,BaseMixin):
     user = relationship('User', foreign_keys=user_id, backref="posts")
 
     object_id = Column(BigInteger, ForeignKey('object.id'))
-    object = relationship('Object', lazy='joined', backref=backref("post", uselist=False), cascade="delete")
+    object = relationship('Object', lazy='joined', backref=backref("post", uselist=False))
 
     is_active = Column(Boolean, default=True)  # If you want to hide something from your wall
     is_hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
 
-    feed_post_links = relationship("FeedPostLink", backref="post", cascade="delete")
+    feed_post_links = relationship("FeedPostLink", backref="post")
     text = Column(Unicode)
 
-    post_tag_links = relationship("PostTagLink", backref="object", cascade="delete")
+    post_tag_links = relationship("PostTagLink", backref="object")
 
     # repost section
     repost_id = Column(BigInteger, ForeignKey('post.id'), nullable=True)
