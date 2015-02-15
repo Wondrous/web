@@ -1,139 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-
-    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
-
-    <title>Wondrous</title>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="Wondrous is a new tech startup launching in Spring 2015. We empower you to share your life and experiences with your friends like never before!" >
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <meta name="msapplication-tap-highlight" content="no" />
-
-    <meta name="msapplication-TileColor" content="#00E2AE">
-    <meta name="msapplication-TileImage" content="http://www.wondrous.co/static/images/apple_icon.png?v=1">
-    <meta name="apple-mobile-web-app-title" content="Wondrous">
-
-    <!-- Twitter -->
-    <meta name="twitter:title" content="Coming Soon in Spring 2015! | Wondrous" >
-    <meta name="twitter:description" content="Wondrous is a new tech startup launching in Spring 2015!" >
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@WondrousCo">
-    <meta name="twitter:domain" content="wondrous.co">
-    <meta name="twitter:image" content="http://www.wondrous.co/static/images/Icon.png?v=1">
-
-     <!-- Facebook Open Graph  -->
-    <meta property="og:title" content="Coming Soon in Spring 2015! | Wondrous" >
-    <meta property="og:description" content="Wondrous is a new tech startup launching in Spring 2015!" >
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Wondrous">
-    <meta property="og:url" content="http://www.wondrous.co/">
-    <meta property="og:image" content="http://www.wondrous.co/static/images/WebsiteImage_center.jpg?v=1">
-
-     <!-- Miscellaneous Link Tags  -->
-    <link rel="canonical" href="http://www.wondrous.co/">
-    <link rel="apple-touch-icon" href="http://www.wondrous.co/static/images/apple_icon.png?v=1">
-    <link rel="shortcut icon" sizes="16x16" href="http://www.wondrous.co/static/images/favicon.png?v=1">
-
-    <!-- css -->
-    <link rel="stylesheet" type="text/css" href="/static/css/style.normalize.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/style.global.css">
-
-    <!-- JAVASCRIPT -->
-    <!-- core js -->
-    <script src="http://fb.me/react-0.12.2.js"></script>
-    <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
-
+    <script src="react_html/react/react_build/react.js"></script>
+    <script src="react_html/react/react_build/JSXTransformer.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-git.min.js"></script>
-    <script type="text/javascript" src="/static/js/pushstream.js"></script>
-    <!-- In house scripts -->
-    <script type="text/javascript" src="/static/js/jquery.autocomplete.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.notify.js"></script>
-    <script type="text/jsx" src="/static/js/react_client.jsx"></script>
+    <title>No Templates</title>
+    <link rel="stylesheet" href="/static/css/style.global.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/style.normalize.css">
 
-    <!-- Masonry -->
-    <script type="text/javascript" src="/static/js/masonry/masonry.pkgd.min.js"></script>
-    <script type="text/javascript" src="/static/js/masonry/imagesloaded.pkgd.min.js"></script>
+    <script src="/static/js/jquery.async-load.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.autosize.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.hashtags_test.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.liveurl.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.manage-content.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.post.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.vote.js" type="text/javascript"></script>
+    <script src="/static/js/file-upload/jquery.ui.widget.js" type="text/javascript"></script>
+    <script src="/static/js/file-upload/jquery.iframe-transport.js" type="text/javascript"></script>
+    <script type="text/jsx" src="/static/js/masonry.js"></script>
+    <script type="text/jsx" src="/static/js/post.js"></script>
+
+    <script type="text/jsx" src="/static/js/navbar.js"></script>
+    <script type="text/jsx" src="/static/js/homepage.js"></script>
 
 </head>
-
-    <body>
-        <div class="sidemenu">
-            <div class="sidemenuOptions">
-                <div class="sidemenuDefaultOptions">
-                    <a href="/info/about/" class="dropdown-a __noPush">
-                        <div class="dropdown-element">About us</div>
-                    </a>
-                    <a href="/info/tos/" class="dropdown-a __noPush">
-                        <div class="dropdown-element">Terms of Service</div>
-                    </a>
-                    <a href="/info/privacy/" class="dropdown-a __noPush">
-                        <div class="dropdown-element">Privacy</div>
-                    </a>
-                    <a href="/info/settings/" class="dropdown-a">
-                        <div class="dropdown-element">Account settings</div>
-                    </a>
-                    <a href="/info/feedback/" class="dropdown-a">
-                        <div class="dropdown-element">Feedback</div>
-                    </a>
-
-                    <hr class="dropdown-hr">
-
-                    <a href="/auth/logout/" class="dropdown-element __noPush" style="text-decoration: none; display: block;">Log out</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notification Bell -->
-        <div class="notification-big-alarm notification-alert round-5">
-            <img class="notification-bell" src="/static/pictures/p.bell-icon.png">
-            <div>New notification</div>
-        </div>
-
-
-        <!-- top banner -->
-        <div id="topBanner" class="top-banner">
-            <a href="/" style="color: rgb(235,235,235);">
-                <img src="/static/pictures/p.icon_50x50.png" class="banner-logo">
-            </a>
-
-
-            <form method="GET" action="/search/" style="display: inline-block;">
-                <div class="container">
-                    <input type="text" id="query" class="banner-input" placeholder="Search for people and #tags" name="q"  data-provide="typeahead" autocomplete="off">
-                </div>
-            </form>
-
-            <span class="banner-more-options">
-                <span class="banner-options-icon">C</span>
-            </span>
-
-            <span id="profileIcon">
-
-            </span>
-
-
-            <span id="right-menu" class="notification-count nc-general round-2"> <!--notification-alert-->
-                <span class="notification-count-text">0</span>
-            </span>
-        </div>
-        <div id='tutorial-wrapper'></div>
-        <div id="body-mask"></div>
-        <div class="main-content">
-            {% block content %}
-            {% endblock %}
-        </div>
-
-        <noscript>
-            <span class="noscript">
-                To give you the best experience, you really need to enable your Javascript!!!
-            </span>
-        </noscript>
-
-        <!-- BODY JS -->
-        <script type="text/javascript" src="/static/js/body.js"></script>
-    </body>
-    </html>
+<body>
+    <div class="post-card"></div>
+</body>
+</html>

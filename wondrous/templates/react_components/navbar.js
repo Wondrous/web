@@ -4,8 +4,8 @@ var SearchBox = React.createClass({
 		return (
 			<form method="GET" action="/search/" style={{"display": "inline-block"}}>
         <div className="container">
-          <input type="text" id="query" className="banner-input" 
-          	placeholder="Search for people and #tags" name="q" 
+          <input type="text" id="query" className="banner-input"
+          	placeholder="Search for people and #tags" name="q"
           	data-provide="typeahead" autoComplete="off" />
         </div>
     	</form>);
@@ -33,9 +33,9 @@ var SettingsGear = React.createClass({
 var ProfileLink = React.createClass({
 	render: function () {
 		return (
-			<a id="linkToProfile" href={"/" + this.props.name} 
+			<a id="linkToProfile" href={"/" + this.props.name}
 			className="general-text banner-user-name">
-        <img className="banner-user-img round-3" 
+        <img className="banner-user-img round-3"
         src="/static/pictures/defaults/p.default-profile-picture.jpg" />
         {this.props.name}
     	</a>)
@@ -52,7 +52,7 @@ var Navbar = React.createClass({
 				<SearchBox />
 				<SettingsGear />
 				{/* This name is static and must change to fetch username or ID !!*/}
-				<ProfileLink name="dsiah" /> 
+				<ProfileLink name="dsiah" />
 				<NotificationBox />
 			</div>);
 	}

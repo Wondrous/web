@@ -47,15 +47,14 @@ $(document).ready(function() {
                 // Add in empty containers where each post will go
                 // to preserve the order of the posts when the ajax
                 // loads them
-                console.log("majority",data);
                 var asyncPostContainer = $("#asyncPosts");
                 for (var i=0; i < data.length; i++) {
 
-                    asyncPostContainer.append("<div><p>"+data[i].created_at+"</p>"+
-                    "<p>"+data[i].subject+"</p>"+
-                    "<p>"+data[i].text+"</p>"+
-                    "<p>"+data[i].user_id+"</p>"+
-                    "</div>");
+                    // asyncPostContainer.append("<div><p>"+data[i].created_at+"</p>"+
+                    // "<p>"+data[i].subject+"</p>"+
+                    // "<p>"+data[i].text+"</p>"+
+                    // "<p>"+data[i].user_id+"</p>"+
+                    // "</div>");
                     // asyncPostContainer.append("<div class='default-loading-post' id='async_o-" + data[i].object_id + "'>" +
                     //         "<svg class='svgLoader' width='250' height='250' viewbox='0 0 250 250'>" +
                     //             "<path class='svg-border' transform='translate(125, 125)'/>" +

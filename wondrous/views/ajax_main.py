@@ -125,6 +125,12 @@ class APIViews(BaseHandler):
         person = self.request.person
         return AccountManager.get_json_by_username(person,**self.query_kwargs)
 
+    @api_login_required
+    @view_config(request_method="GET",route_name='api_user_me', renderer='json')
+    def api_user_me(self):
+        person = self.request.person
+        return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
+
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         """

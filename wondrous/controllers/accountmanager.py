@@ -82,6 +82,8 @@ class AccountManager(BaseManager):
 
     @classmethod
     def _get_relationship_stats(cls,user_id):
+        from wondrous.controllers.votemanager import VoteManager
+
         follower_count  = VoteManager.get_follower_count(user_id)
         following_count = VoteManager.get_following_count(user_id)
 
@@ -101,6 +103,7 @@ class AccountManager(BaseManager):
         if person and person.user.id == user_id:
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager,cls).model_to_json(person.user,1))
+            retval.update({"name":person.ascii_name})
             return retval
 
         u = User.by_id(user_id).first()
@@ -112,6 +115,7 @@ class AccountManager(BaseManager):
             (person and not u.is_banned and u.is_active and VoteManager.is_following(person.user.id,user_id)):
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager,cls).model_to_json(u))
+            retval.update({"name":person.ascii_name})
             return retval
         elif u.is_private and not u.is_banned and u.is_active:
             return {'is_private':True}

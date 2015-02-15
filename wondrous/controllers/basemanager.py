@@ -3,8 +3,8 @@ import datetime
 
 class BaseManager(object):
     SENSITIVE_KW = [
-        ['_password','password','is_banned','ouuid', 'email','last_login'],
-        ['_password','password','is_banned','ouuid']
+        ['_password','password','is_banned', 'email','last_login'],
+        ['_password','password','is_banned']
     ]
 
     @classmethod
