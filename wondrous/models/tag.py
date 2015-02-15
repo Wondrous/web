@@ -32,5 +32,15 @@ class PostTagLink(Base,BaseMixin):
 class Tag(Base,BaseMixin):
 
     """Tags used on Objects"""
+
     tag_name = Column(Unicode, nullable=False, unique=True)
     post_tag_links = relationship("PostTagLink", backref="tag")
+
+    @classmethod
+    def by_name_like(cls, key, num=50):
+
+        """
+            TODO: Probably should go into its own controllers/personmanager.py file
+        """
+
+        return cls.query.filter(cls.tag_name.ilike("%{q}%".format(q=key))).limit(num)

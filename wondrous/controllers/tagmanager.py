@@ -5,15 +5,16 @@
 # Company: WONDROUS
 # Created by: Ziyuan Liu
 #
-# controllers/tagmanager.PY
+# CONTROLLERS/TAGMANAGER.PY
 #
 
+from wondrous.controllers.basemanager import BaseManager
+
 from wondrous.models import (
+    PostTagLink,
     Tag,
-    PostTagLink
 )
 
-from wondrous.controllers.basemanager import BaseManager
 from wondrous.utilities.global_config import SYS_CONTEXT_TAGS
 
 class TagManager(BaseManager):
@@ -38,6 +39,6 @@ class TagManager(BaseManager):
             return [link.post_id for link in links]
 
     @staticmethod
-    def by_name_like(name,page=0, per_page=50):
+    def by_name_like(name, page=0, per_page=50):
            return Tag.query.filter(Tag.tag_name.ilike("{q}%".format(q=name))).\
-                            filter(~Tag.tag_name.in_(SYS_CONTEXT_TAGS)).limit(per_page).offest(page*per_page).all()
+                            filter(~Tag.tag_name.in_(SYS_CONTEXT_TAGS)).limit(per_page).offset(page*per_page).all()

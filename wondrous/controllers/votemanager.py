@@ -5,49 +5,55 @@
 # Company: WONDROUS
 # Created by: Ziyuan Liu
 #
-# controllers/votemanager.PY
+# CONTROLLERS/VOTEMANAGER.PY
 #
 
+import logging
+
 from wondrous.models import (
-    Vote,
-    User,
-    Notification,
     DBSession,
-    Post
+    Notification,
+    Vote,
 )
 
-import logging
-from wondrous.controllers.accountmanager import AccountManager
-from wondrous.controllers.notificationmanager import NotificationManager
 from sqlalchemy import or_
+
+from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
+from wondrous.controllers.notificationmanager import NotificationManager
 
 class VoteAction:
     LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(8)
 
 
 class VoteManager(BaseManager):
+
     @staticmethod
-    def validate_vote_args(vote_type=None,status=None):
+    def validate_vote_args(vote_type=None, status=None):
         retval = vote_type or status
         if vote_type:
             retval = retval and vote_type in [Vote.USER, Vote.OBJECT]
 
         if status:
-            retval = retval and status in \
-                [Vote.UNLIKED, Vote.LIKED, Vote.BOOKMARKED, Vote.BLOCKED, \
-                Vote.PENDING, Vote.UNFOLLOWED, Vote.FOLLOWED,Vote.TOPFRIEND]
+            retval = retval and status in [
+                                    Vote.UNLIKED,
+                                    Vote.LIKED,
+                                    Vote.BOOKMARKED,
+                                    Vote.BLOCKED,
+                                    Vote.PENDING,
+                                    Vote.UNFOLLOWED,
+                                    Vote.FOLLOWED,
+                                    Vote.TOPFRIEND]
         return retval
 
     @classmethod
     def vote_json(cls, person, user_id, vote_type, action):
         from_user_id = person.user.id
-        user_id = long(user_id)
-        vote_type = int(vote_type)
-        action = int(action)
-        # translate action
+        user_id      = long(user_id)
+        vote_type    = int(vote_type)
+        action       = int(action)
+        # Translate action
         vote = None
-
         if vote_type == Vote.OBJECT:
             if action == VoteAction.LIKED:
                 vote = cls.like(from_user_id,user_id)
@@ -65,7 +71,7 @@ class VoteManager(BaseManager):
             elif action == VoteAction.DENY:
                 vote = cls.deny(from_user_id,user_id)
             elif action == VoteAction.TOPFRIEND:
-                pass
+                pass  # TODO
 
         if vote:
             DBSession.add(vote)
@@ -76,17 +82,16 @@ class VoteManager(BaseManager):
                     "total_follower"  : cls.get_follower_count(user_id),
                 }
             elif vote_type == Vote.OBJECT:
-                return super(VoteManager,cls).model_to_json(vote)
+                return super(VoteManager, cls).model_to_json(vote)
         else:
-            return {'error':'invalid inputs'}
+            return {'error': 'invalid inputs'}
 
     @classmethod
-    def follow(cls,from_user_id,to_user_id):
+    def follow(cls, from_user_id, to_user_id):
         """
             PURPOSE: This is a toggle method, follow -> unfollow, vice versa
         """
-        # if profile is private, request, else follow
-
+        # If profile is private, request, else follow
         is_private = AccountManager.is_private(to_user_id)
         if is_private:
             # we need to re-request
@@ -96,11 +101,14 @@ class VoteManager(BaseManager):
             status = Vote.FOLLOWED
             reason = Notification.FOLLOWED
 
-        # notify if needed
-        new_notification = NotificationManager.add(from_user_id=from_user_id, to_user_id=to_user_id, \
-            subject_id=from_user_id, reason=reason)
+        # Notify if needed
+        new_notification = NotificationManager.add(
+                            from_user_id=from_user_id,
+                            to_user_id=to_user_id,
+                            subject_id=from_user_id,
+                            reason=reason)
 
-        # change the current one if it exists
+        # Change the current one if it exists
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER).first()
         if vote:
             if not cls.is_blocked_by(from_user_id,to_user_id) and (vote.status != Vote.PENDING or not is_private):
@@ -111,39 +119,48 @@ class VoteManager(BaseManager):
         return vote
 
     @classmethod
-    def topfriend(cls,from_user_id,to_user_id):
+    def topfriend(cls, from_user_id, to_user_id):
+        
         """
             PURPOSE: TOPFRIEND only if public or already following
         """
 
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER).first()
         if vote:
-            if vote.status==Vote.TOPFRIEND:
+            if vote.status == Vote.TOPFRIEND:
                 vote.status = Vote.FOLLOWED
-            elif vote.status==Vote.FOLLOWED:
+            elif vote.status == Vote.FOLLOWED:
                 vote.status = Vote.TOPFRIEND
             return vote
         return None
 
     @classmethod
-    def cancel(cls,from_user_id,to_user_id):
+    def cancel(cls, from_user_id, to_user_id):
+        
         """
             PURPOSE: This is the method used to cancel requests, if there are any
         """
+
         vote = Vote.by_kwargs(user_id=to_user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
         if vote.status == Vote.PENDING:
-            NotificationManager.delete(from_user_id=from_user_id, to_user_id=to_user_id, \
-                                       reason=Notification.FOLLOW_REQUEST, subject_id=from_user_id)
+            NotificationManager.delete(
+                from_user_id=from_user_id,
+                to_user_id=to_user_id,
+                reason=Notification.FOLLOW_REQUEST,
+                subject_id=from_user_id)
+
             vote.status = Vote.UNFOLLOWED
             return vote
         return None
 
 
     @classmethod
-    def accept(cls,from_user_id,to_user_id):
+    def accept(cls, from_user_id, to_user_id):
+        
         """
             PURPOSE: In order to accept a request, there must be one
         """
+
         vote = Vote.by_kwargs(user_id=to_user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
         if vote.status == Vote.PENDING:
             vote.status = Vote.FOLLOWED
@@ -151,10 +168,12 @@ class VoteManager(BaseManager):
         return None
 
     @classmethod
-    def like(cls,from_user_id,object_id):
+    def like(cls, from_user_id, object_id):
+        
         """
             PURPOSE: Checks if there exists a relationship between a person and an object, this is a toggle
         """
+
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=object_id, vote_type=Vote.OBJECT).first()
 
         if vote:
@@ -168,10 +187,12 @@ class VoteManager(BaseManager):
         return vote
 
     @classmethod
-    def deny(cls,from_user_id,to_user_id):
+    def deny(cls, from_user_id, to_user_id):
+        
         """
             PURPOSE: In order to deny a request, there must be one
         """
+
         vote = Vote.by_kwargs(user_id=to_user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
         if vote and vote.status == Vote.PENDING:
             vote.status = Vote.UNFOLLOWED
@@ -179,10 +200,12 @@ class VoteManager(BaseManager):
         return None
 
     @classmethod
-    def block(cls,from_user_id,user_id):
+    def block(cls, from_user_id, user_id):
+        
         """
             PURPOSE: Check if the user is already blocking another, this is a toggle
         """
+
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=user_id, vote_type=Vote.USER).first()
         reverse_vote = Vote.by_kwargs(user_id=user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
 
@@ -246,7 +269,7 @@ class VoteManager(BaseManager):
         """
 
         field = "subject_id"
-        if vote_type == Vote.USER and (status==Vote.FOLLOWED or status==Vote.TOPFRIEND):
+        if vote_type == Vote.USER and (status == Vote.FOLLOWED or status == Vote.TOPFRIEND):
             if not following_me:
                 field = "user_id"
 

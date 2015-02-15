@@ -188,7 +188,7 @@ $(document).ready(function() {
                         var url = post_data['signed_request'];
 
                         var xhr = new XMLHttpRequest();
-                        if (xhr.withCredentials != null) {
+                        if (xhr.withCredentials !== null) {
                             xhr.open('PUT', url, true);
                         } else if (typeof XDomainRequest !== "undefined") {
                             xhr = new XDomainRequest();
