@@ -1,15 +1,18 @@
 
 $(document).ready(function() {
+    var pathArray = window.location.pathname.split( '/' );
+    var username = pathArray[1];
+
     var Feed = React.createClass({
-        user_id:$('#userID').val(),
         page:0,
         loadFeedFromServer: function(){
-            console.log("/api/wall?user_id="+this.user_id+"&page="+String(this.page));
+            console.log("/api/wall?username="+username+"&page="+String(this.page));
             $.ajax({
                 type: "GET",
                 dataType: 'json',
-                url: "/api/wall?user_id="+this.user_id+"&page="+String(this.page),
+                url: "/api/wall?username="+username+"&page="+String(this.page),
                 success: function(data) {
+                    console.log("wall",data);
                     this.setState({data: data});
                 }.bind(this),
                 error: function(xhr,status,err){
@@ -38,7 +41,6 @@ $(document).ready(function() {
     });
 
     var UserBar = React.createClass({
-        user_id:$('#userID').val(),
         getInitialState: function() {
             return {data: []};
         },
@@ -49,7 +51,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "GET",
                 dataType: 'json',
-                url: "/api/user?user_id="+String(this.user_id),
+                url: "/api/user?username="+username,
                 success: function(data) {
                     console.log("profile view",data);
                     this.setState({data: data});
@@ -157,9 +159,7 @@ $(document).ready(function() {
 
 
     React.render(<Compound />, document.body);
-    // var pathArray = window.location.pathname.split( '/' );
-    //
-    // var secondLevelLocation = pathArray[0];
+
     // console.log("lol",pathArray);
 
 });

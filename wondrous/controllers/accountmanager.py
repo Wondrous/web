@@ -94,10 +94,16 @@ class AccountManager(BaseManager):
         return data
 
     @classmethod
-    def get_json_by_username(cls, person, user_id):
+    def get_json_by_username(cls, person, user_id = None, username = None):
         from wondrous.controllers.votemanager import VoteManager
-        if not user_id:
+        if not user_id and not username:
             return {}
+
+        if username:
+            user = User.by_kwargs(username=username).first()
+            if not user:
+                return {}
+            user_id = user.id 
 
         # am i querying for myself?
         if person and person.user.id == user_id:

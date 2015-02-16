@@ -496,9 +496,9 @@ class AuthHandler(BaseHandler):
         return headers
 
 class IndexHandler(BaseHandler):
-    
-    @view_config(renderer='/index_fork.jinja2', route_name='index_handler')
-    @view_config(renderer='/index_fork.jinja2', route_name='index_priority_feed_handler')
+
+    @view_config(renderer='/index-html.jinja2', route_name='index_handler')
+    @view_config(renderer='/index-html.jinja2', route_name='index_priority_feed_handler')
     def index(self):
 
         """
@@ -550,8 +550,8 @@ class IndexHandler(BaseHandler):
 class ProfileHandler(BaseHandler):
 
     @login_required
-    @view_config(renderer='/profile.jinja2', route_name='profile_handler')
-    @view_config(renderer='/profile.jinja2', route_name='profile_tab_handler')
+    @view_config(renderer='/profile-html.jinja2', route_name='profile_handler')
+    @view_config(renderer='/profile-html.jinja2', route_name='profile_tab_handler')
     def profile(self):
 
         """

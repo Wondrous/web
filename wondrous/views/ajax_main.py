@@ -116,7 +116,7 @@ class APIViews(BaseHandler):
                 status
 
             USE: self.query_kwargs to provide all the required inputs.
-                person, user_id
+                person, user_id or username
 
             PARAMS: (None)
 
@@ -138,7 +138,7 @@ class APIViews(BaseHandler):
                 were created by the respective user
 
             USE: self.query_kwargs to provide all the required inputs.
-                person,user_id,page=0 -- last param is optional
+                person,user_id or username,page=0 -- last param is optional
 
             PARAMS: (None)
 

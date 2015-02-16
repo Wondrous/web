@@ -21,6 +21,8 @@ from wondrous.models import (
     User,
 )
 
+import logging
+
 class FeedManager(BaseManager):
     MAJORITY, PRIORITY = range(2)
 
@@ -71,8 +73,15 @@ class FeedManager(BaseManager):
         return posts
 
     @classmethod
-    def get_wall_posts_json(cls, person, user_id, page=0):
-        user = User.by_id(user_id)
+    def get_wall_posts_json(cls, person, user_id=None, username=None, page=0):
+        if not user_id and not username:
+            return []
+        if user_id:
+            user = User.by_id(user_id)
+        elif username:
+            user = User.by_kwargs(username=username).first()
+
+
         if not user:
             return []
 
@@ -82,9 +91,9 @@ class FeedManager(BaseManager):
         # If we are logged in and the user happens to be private, we have to check for relationship
         if (not user.is_private and not user.is_banned and user.is_active) or \
             (user.is_private and not user.is_banned and user.is_active and person \
-            and VoteManager.is_following(person.user.id,user_id)):
+            and VoteManager.is_following(person.user.id,user.id)):
 
-            posts = cls.get_wall_posts(page=page, user_id=user_id)
+            posts = cls.get_wall_posts(page=page, user_id=user.id)
 
         data = []
         for post in posts:
