@@ -1,8 +1,6 @@
 
 var UserTitle = React.createClass({
     render: function () {
-        console.log("photo",this.props.data);
-
         return (<div>
                 <img className="post-thumb round-50" src="/static/pictures/defaults/p.default-profile-picture.jpg"/>
                 <span className="post-identifier ellipsis-overflow">
@@ -15,7 +13,7 @@ var Photo = React.createClass({
     render: function () {
         return (
             <div className="post-cover-photo cover no-top-border"
-            style={{"background-image": "url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")"}}>
+            style={{"backgroundImage": "url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")"}}>
                 <div className="post-subject-text">
                     <div className="post-subject-wrapper">
                         <div className="post-subject-text-position">

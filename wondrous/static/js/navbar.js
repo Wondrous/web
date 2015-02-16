@@ -43,6 +43,25 @@ var ProfileLink = React.createClass({
 });
 
 var Navbar = React.createClass({
+    loadUserFromServer: function(){
+            $.ajax({
+            type: "GET",
+            dataType: 'json',
+            url: "/api/me",
+            success: function(data) {
+                this.setState({data: data});
+            }.bind(this),
+            error: function(xhr,status,err){
+                this.setState({data: {}});
+            }.bind(this)
+        });
+    },
+    getInitialState: function() {
+        return {data: []};
+    },
+    componentDidMount: function() {
+        this.loadUserFromServer();
+    },
     render: function () {
         return (
             <div id="topBanner" className="top-banner">
@@ -52,7 +71,7 @@ var Navbar = React.createClass({
                 <SearchBox />
                 <SettingsGear />
                 {/* This name is static and must change to fetch username or ID !!*/}
-                <ProfileLink user={this.props.user} />
+                <ProfileLink user={this.state.data} />
                 <NotificationBox />
             </div>);
     }

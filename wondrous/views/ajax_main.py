@@ -144,6 +144,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array of the wallpost objects
         """
+        logging.warn("wtf")
         person = self.request.person
         posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
         return posts

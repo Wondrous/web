@@ -46,7 +46,7 @@ class FeedManager(BaseManager):
             if not post.is_hidden and post.is_active:
                 post_dict = super(FeedManager,cls).model_to_json(post)
                 post_dict.update({"name":post.user.person.ascii_name})
-                post_dict.update({"username":post.user.username}) 
+                post_dict.update({"username":post.user.username})
                 if post.object:
                     post_dict.update(super(FeedManager,cls).model_to_json(post.object))
                 data.append(post_dict)
@@ -89,5 +89,7 @@ class FeedManager(BaseManager):
         for post in posts:
             post_dict = super(FeedManager,cls).model_to_json(post)
             post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+            post_dict.update({"name":post.user.person.ascii_name})
+            post_dict.update({"username":post.user.username}) 
             data.append(post_dict)
         return data

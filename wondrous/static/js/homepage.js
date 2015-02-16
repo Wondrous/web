@@ -10,7 +10,6 @@ $(document).ready(function() {
                 url: "/api/feed?feed_type=0&page="+String(this.page),
                 success: function(data) {
                     this.setState({data: data});
-                    console.log("to print",this.state.data);
                 }.bind(this),
                 error: function(xhr,status,err){
                     console.error("get feed err",status,err.toString());
@@ -63,7 +62,7 @@ $(document).ready(function() {
         render: function () {
             return (
                 <div>
-                    <Navbar user={this.props.data}/>
+                    <Navbar />
                     <Buffer />
                     <MainContent />
                 </div>);
@@ -71,31 +70,5 @@ $(document).ready(function() {
     });
 
 
-    React.render(<Compound data={unloadedUser} />, document.body);
-
-    function getMyInfo() {
-        $.ajax({
-            type: "GET",
-            url: "/api/me",
-            success: function(data) {
-                console.log("me",data);
-                React.render(<Compound data={data} />, document.body);
-                // $('#query').value(data.query);
-                // if (data.show_tutorial){
-                //     React.render(
-                //         <TutorialBox />,
-                //         document.getElementById('tutorial-wrapper')
-                //     );
-                // }
-                // React.render(
-                //     <ProfileIcon data={data}/>,
-                //     document.getElementById('profileIcon')
-                // );
-            }
-        });
-    }
-
-    getMyInfo();
-
-
+    React.render(<Compound />, document.body);
 });

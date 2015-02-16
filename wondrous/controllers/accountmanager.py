@@ -106,7 +106,7 @@ class AccountManager(BaseManager):
             retval.update({"name":person.ascii_name})
             return retval
 
-        u = User.by_id(user_id).first()
+        u = User.by_id(user_id)
         if not u:
             return {}
 
