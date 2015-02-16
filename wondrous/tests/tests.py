@@ -4,31 +4,29 @@
 # Company: WONDROUS
 # Created by: Ziyuan Liu
 #
-# Tests/tests.PY
+# TESTS/TESTS.PY
 #
 
-import transaction
-import inspect
-import unittest
 import os
-
+import inspect
+import transaction
+import unittest
 
 from sqlalchemy import create_engine
-import unittest
 
 import wondrous.models
 from wondrous.models import (
-    DBSession,
-    User,
-    Person,
     Base,
+    DBSession,
     Feed,
-    Vote,
     Notification,
     Object,
+    Person,
     Post,
+    # PostTagLink,
     Tag,
-    PostTagLink
+    User,
+    Vote,
 )
 
 from wondrous.controllers import (
@@ -43,15 +41,17 @@ from wondrous.controllers import (
 
 from paste.deploy.loadwsgi import appconfig
 from sqlalchemy import engine_from_config
-import os
+
 print os.getcwd()
 
 
-#John, your setting breaks my build :/ im just going to leave yours as a comment, i think
-# disparity lies within our virtualenv file structure 
-settings = appconfig('config:'+'test.ini', relative_to=os.getcwd()+'/wondrous/tests/')  # os.getcwd()+'/../wondrous/wondrous/tests/'
-
-# settings = appconfig('config:'+'test.ini', relative_to=os.getcwd()+'/../wondrous/wondrous/tests/')  # os.getcwd()+'/../wondrous/wondrous/tests/'
+# John, your setting breaks my build :/ im just going to leave yours as a comment, i think
+# disparity lies within our virtualenv file structure
+# @Zi, agreed. This try/except should do the trick for now
+try:
+    settings = appconfig('config:'+'test.ini', relative_to=os.getcwd()+'/wondrous/tests/')
+except IOError:
+    settings = appconfig('config:'+'test.ini', relative_to=os.getcwd()+'/../wondrous/wondrous/tests/')
 
 def setup_module(module):
     # once for all the tests in this module:
