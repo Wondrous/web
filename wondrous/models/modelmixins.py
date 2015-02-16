@@ -8,9 +8,9 @@
 # MODELS/MODELMIXINS.PY
 #
 
+import re
 import uuid
 import unidecode
-import re
 
 from datetime import datetime
 from sqlalchemy import BigInteger
@@ -76,11 +76,11 @@ class BaseMixin(object):
         return cls(**kwargs)
 
     @classmethod
-    def by_id(cls,key):
+    def by_id(cls, key):
         return cls.query.get(key)
 
     @classmethod
-    def by_kwargs(cls,**kwargs):
+    def by_kwargs(cls, **kwargs):
         return cls.query.filter_by(**kwargs)
 
     @classmethod
