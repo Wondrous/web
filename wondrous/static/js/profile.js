@@ -153,6 +153,8 @@ $(document).ready(function() {
                     <div className="cover profile-content">
                         <Feed />
                     </div>
+                    <script src="/static/js/masonry/masonry.pkgd.min.js"></script>
+                    <script type="text/jsx" src="/static/js/masonry.js"></script>
                 </div>);
         }
     });

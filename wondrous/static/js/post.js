@@ -1,4 +1,3 @@
-
 var UserTitle = React.createClass({
     render: function () {
         return (<div>
@@ -18,7 +17,6 @@ var Photo = React.createClass({
                     <div className="post-subject-wrapper">
                         <div className="post-subject-text-position">
                             {this.props.data.subject}
-
                         </div>
                     </div>
                 </div>
