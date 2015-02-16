@@ -46,7 +46,12 @@ from sqlalchemy import engine_from_config
 import os
 print os.getcwd()
 
-settings = appconfig('config:'+'test.ini', relative_to='./wondrous/tests/')  # os.getcwd()+'/../wondrous/wondrous/tests/'
+
+#John, your setting breaks my build :/ im just going to leave yours as a comment, i think
+# disparity lies within our virtualenv file structure 
+settings = appconfig('config:'+'test.ini', relative_to=os.getcwd()+'/wondrous/tests/')  # os.getcwd()+'/../wondrous/wondrous/tests/'
+
+# settings = appconfig('config:'+'test.ini', relative_to=os.getcwd()+'/../wondrous/wondrous/tests/')  # os.getcwd()+'/../wondrous/wondrous/tests/'
 
 def setup_module(module):
     # once for all the tests in this module:

@@ -25,8 +25,8 @@ var SettingsGear = React.createClass({
     render: function () {
         return (
             <span className="banner-more-options">
-        <span className="banner-options-icon">C</span>
-        </span>);
+            <span className="banner-options-icon">C</span>
+            </span>);
     }
 });
 
@@ -34,10 +34,10 @@ var ProfileLink = React.createClass({
     render: function () {
         return (
             <a id="linkToProfile" href={"/" + this.props.user.username}
-            className="general-text banner-user-name">
-            <img className="banner-user-img round-3"
-            src="/static/pictures/defaults/p.default-profile-picture.jpg" />
-            {this.props.user.name}
+                className="general-text banner-user-name">
+                <img className="banner-user-img round-3"
+                    src="/static/pictures/defaults/p.default-profile-picture.jpg" />
+                {this.props.user.first_name}
             </a>);
     }
 });

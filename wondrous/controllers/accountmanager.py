@@ -5,35 +5,36 @@
 # Company: WONDROUS
 # Created by: Ziyuan Liu
 #
-# controllers/accountmanager.PY
+# CONTROLLERS/ACCOUNTMANAGER.PY
 #
+
+from datetime import datetime
 
 from wondrous.models import (
     DBSession,
+    Feed,
+    Person,
     User,
     Vote,
-    Person,
-    Feed,
 )
 
 from wondrous.controllers.basemanager import BaseManager
 
-from datetime import datetime
-
 class AccountManager(BaseManager):
+
     """
         This is controller for both person and user models!
 
-        'user_type'       : 1,
-        'username'        : "username"+str(i),
-        'email'           : email,
-        'password'        : "password"+str(i),
+        'user_type'  : 1,
+        'username'   : "username"+str(i),
+        'email'      : email,
+        'password'   : "password"+str(i),
 
         'first_name' : "first_name"+str(i),
         'last_name'  : "last_name"+str(i),
-
     """
-    DYNAMIC_FIELDS = ['username','first_name','last_name']
+
+    DYNAMIC_FIELDS = ['username', 'first_name', 'last_name']
 
     @staticmethod
     def is_username_taken(username):
@@ -55,8 +56,6 @@ class AccountManager(BaseManager):
 
     @classmethod
     def add(cls,first_name, last_name, email, username, password, user_type=1):
-        from wondrous.controllers.votemanager import VoteManager
-
         # First let's create the person object - point of contact for the account
         new_user = User(user_type=user_type, username=username, email=email, password=password, is_active=True)
 
@@ -77,11 +76,11 @@ class AccountManager(BaseManager):
         return new_user
 
     @classmethod
-    def get_one_by_kwargs(cls,**kwargs):
+    def get_one_by_kwargs(cls, **kwargs):
         return User.by_kwargs(**kwargs).first()
 
     @classmethod
-    def _get_relationship_stats(cls,user_id):
+    def _get_relationship_stats(cls, user_id):
         from wondrous.controllers.votemanager import VoteManager
 
         follower_count  = VoteManager.get_follower_count(user_id)
@@ -95,15 +94,16 @@ class AccountManager(BaseManager):
         return data
 
     @classmethod
-    def get_json_by_username(cls,person,user_id):
+    def get_json_by_username(cls, person, user_id):
+        from wondrous.controllers.votemanager import VoteManager
         if not user_id:
             return {}
 
         # am i querying for myself?
         if person and person.user.id == user_id:
             retval = cls._get_relationship_stats(user_id)
-            retval.update(super(AccountManager,cls).model_to_json(person.user,1))
-            retval.update({"name":person.ascii_name})
+            retval.update(super(AccountManager, cls).model_to_json(person.user, 1))
+            retval.update({"name": person.ascii_name})
             return retval
 
         u = User.by_id(user_id)
@@ -111,63 +111,63 @@ class AccountManager(BaseManager):
             return {}
 
         # if the user is public or I am following
-        if (not u.is_private and not u.is_banned and u.is_active) or\
+        if (not u.is_private and not u.is_banned and u.is_active) or \
             (person and not u.is_banned and u.is_active and VoteManager.is_following(person.user.id,user_id)):
             retval = cls._get_relationship_stats(user_id)
-            retval.update(super(AccountManager,cls).model_to_json(u))
-            retval.update({"name":person.ascii_name})
+            retval.update(super(AccountManager, cls).model_to_json(u))
+            retval.update({"name": person.ascii_name})
             return retval
         elif u.is_private and not u.is_banned and u.is_active:
-            return {'is_private':True}
+            return {'is_private': True}
 
         return None
 
     @classmethod
-    def deactivate_json(cls,person,password):
+    def deactivate_json(cls, person, password):
         from wondrous.controllers.postmanager import PostManager
         user = person.user
         if user and user.validate_password(password):
             user.is_active = False
             PostManager.deactivate_by_userid(user.id)
-            return {'status','deactivated'}
-        return {'error':'deactivation failed'}
+            return {'status': 'deactivated'}
+        return {'error': 'deactivation failed'}
 
     @classmethod
-    def delete_json(cls,person,password):
+    def delete_json(cls, person, password):
         user = person.user
         if user and user.validate_password(password):
             user.set_to_delete = datetime.now()
             cls.deactivate_json(person,password)
-            return {'status','set to delete in x days'}
-        return {'error':'deletion failed'}
+            return {'status': 'set to delete in x days'}
+        return {'error': 'deletion failed'}
 
     @classmethod
-    def change_password_json(cls,person,old_password,new_password):
+    def change_password_json(cls, person, old_password, new_password):
         user = person.user
         if user and user.validate_password(old_password):
             user.password = new_password
             DBSession.flush()
-            return {"status":"new password set"}
-        return {"error":"password change failed"}
+            return {"status": "new password set"}
+        return {"error": "password change failed"}
 
     @classmethod
-    def change_profile_json(cls,person,field,new_value):
+    def change_profile_json(cls, person, field, new_value):
         if field not in cls.DYNAMIC_FIELDS:
-            return {"error":field+" not found"}
+            return {"error": field + " not found"}
 
         user = person.user
 
         # check both user and person
         exists = getattr(user, field, None)
         if exists:
-            setattr(user,field,new_value)
+            setattr(user, field, new_value)
             DBSession.flush()
-            return {field:new_value}
+            return {field : new_value}
 
         exists = getattr(person, field, None)
         if exists:
-            setattr(person,field,new_value)
+            setattr(person, field, new_value)
             DBSession.flush()
-            return {field:new_value}
+            return {field : new_value}
 
-        return {"error":field+" not found"}
+        return {"error": field + " not found"}

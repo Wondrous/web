@@ -139,17 +139,6 @@ $(document).ready(function() {
         // var tagName     = $('#thisGlobalTagName').text();
         // var communityID = $('#communityID').text();
 
-        if (profileID.length > 0) {
-            contextIdentifier = profileID;
-            ajaxRoute = "profile";
-        }
-        // else if (tagName.length > 0) {
-        //     contextIdentifier = tagName;
-        //     ajaxRoute = "tag";
-        // } else if (communityID.length > 0) {
-        //     contextIdentifier = communityID;
-        //     ajaxRoute = "community";
-        // }
 
         // Make array of raw tag data
         $('.hashtag').each(function() {postTagsRaw.push($(this).text());});
@@ -173,72 +162,71 @@ $(document).ready(function() {
             uploadData.file_type = fileToUpload.type;
             console.log("upload type",uploadData);
         }
-        if (contextIdentifier !== null && ajaxRoute !== null) {
 
-            $.ajax({
-                type: "POST",
-                url: "/api/wall",
-                data: uploadData,
-                success: function(post_data) {
+        $.ajax({
+            type: "POST",
+            url: "/api/wall/new",
+            data: uploadData,
+            success: function(post_data) {
 
-                    console.log(post_data);
-                    if (post_data.hasOwnProperty('signed_request')){
-                        console.log("uploading right away");
-                        $('.post-dialogue-progress').show();
-                        var url = post_data['signed_request'];
+                console.log("success",post_data);
+                if (post_data.hasOwnProperty('signed_request')){
+                    console.log("uploading right away");
+                    $('.post-dialogue-progress').show();
+                    var url = post_data['signed_request'];
 
-                        var xhr = new XMLHttpRequest();
-                        if (xhr.withCredentials != null) {
-                            xhr.open('PUT', url, true);
-                        } else if (typeof XDomainRequest !== "undefined") {
-                            xhr = new XDomainRequest();
-                            xhr.open('PUT', url);
-                        } else {
-                            xhr = null;
-                        }
-
-                        if (!xhr) {
-                            this.onError('CORS not supported');
-                        } else {
-                            xhr.onload = function() {
-                              if (xhr.status === 200) {
-                                  console.log("upload complete!");
-                                  fileToUpload = 'undefined';
-                                  dataURL = 'undefined';
-                                } else {
-                                    console.log("upload incomplete!");
-                                }
-                            };
-                            xhr.onerror = function() {
-                                console.log("errror!!!! CORS");
-                            };
-                            xhr.upload.onprogress = function(e) {
-                              if (e.lengthComputable) {
-                                var progress = Math.round((e.loaded / e.total) * 100);
-                                $('#progress .progress-bar').css('width', progress + '%');
-
-                              }
-                            };
-                          }
-                          xhr.setRequestHeader('Content-Type', fileToUpload.type);
-                          xhr.setRequestHeader('x-amz-acl', 'public-read');
-                          xhr.send(dataURL);
-
-                    }
-                    if (post_data['post_error']) {
-                        $('.post-error-wrapper').show().slideDown(220);
-                        $('.post-error').text(post_data['post_error']);
+                    var xhr = new XMLHttpRequest();
+                    if (xhr.withCredentials !== null) {
+                        xhr.open('PUT', url, true);
+                    } else if (typeof XDomainRequest !== "undefined") {
+                        xhr = new XDomainRequest();
+                        xhr.open('PUT', url);
                     } else {
-                        $('#addPost').prepend(post_data);
-                        $('#new-post-launch').slideDown(200);
-                        destroyPostForm();
+                        xhr = null;
                     }
-                },
-                error: function(err){
-                    // console.log(err);
+
+                    if (!xhr) {
+                        this.onError('CORS not supported');
+                    } else {
+                        xhr.onload = function() {
+                          if (xhr.status === 200) {
+                              console.log("upload complete!");
+                              fileToUpload = 'undefined';
+                              dataURL = 'undefined';
+                            } else {
+                                console.log("upload incomplete!");
+                            }
+                        };
+                        xhr.onerror = function() {
+                            console.log("errror!!!! CORS");
+                        };
+                        xhr.upload.onprogress = function(e) {
+                          if (e.lengthComputable) {
+                            var progress = Math.round((e.loaded / e.total) * 100);
+                            $('#progress .progress-bar').css('width', progress + '%');
+
+                          }
+                        };
+                      }
+                      xhr.setRequestHeader('Content-Type', fileToUpload.type);
+                      xhr.setRequestHeader('x-amz-acl', 'public-read');
+                      xhr.send(dataURL);
+
                 }
-            });
-        }
+                if (post_data['post_error']) {
+                    $('.post-error-wrapper').show().slideDown(220);
+                    $('.post-error').text(post_data['post_error']);
+                } else {
+                    $('#addPost').prepend(post_data);
+                    $('#new-post-launch').slideDown(200);
+                    destroyPostForm();
+                }
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+
     });
 
     function destroyPostForm() {

@@ -131,7 +131,7 @@ class APIViews(BaseHandler):
         person = self.request.person
         return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
 
-    @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
+    @view_config(request_method="GET",xhr=True,route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         """
             PURPOSE: Retrieves the user profile posts -- all the posts that
@@ -144,7 +144,6 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array of the wallpost objects
         """
-        logging.warn("wtf")
         person = self.request.person
         posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
         return posts
@@ -225,7 +224,7 @@ class APIViews(BaseHandler):
 
 
     @api_login_required
-    @view_config(request_method="POST",route_name='api_new_post', renderer='json')
+    @view_config(request_method="POST",route_name='api_new_post', xhr=True,renderer='json')
     def api_new_post(self):
         """
             PURPOSE: post a new post
@@ -237,7 +236,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing the new post else containing JSON with error
         """
-
+        logging.warn("posting")
         p            = self.request.POST
         person       = self.request.person
         tags         = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
@@ -923,7 +922,7 @@ class AjaxHandler(BaseHandler):
         if query and "_" not in query:
             if query[0] == "#":
                 query = query[1::]
-                results = TagManager.get_like(query) if vh.valid_tag(query) else result_list.append({})
+                results = TagManager.by_name_like(query) if vh.valid_tag(query) else result_list.append({})
 
                 # This is to handle a case when there are
                 # no tags for a given searched hashtag
@@ -960,7 +959,7 @@ class AjaxHandler(BaseHandler):
                         })
 
                     # Add tags
-                    results = TagManager.get_like(query)
+                    results = TagManager.by_name_like(query)
                     for result in results:
                         result_list.append({
                             'value'    : "#{t}".format(t=result.tag_name),

@@ -5,21 +5,21 @@
 # Company: WONDROUS
 # Created by: Ziyuan Liu
 #
-# controllers/feedmanager.PY
+# CONTROLLERS/FEEDMANAGER.PY
 #
 
 from sqlalchemy import desc
+from sqlalchemy.orm import joinedload
+
+from wondrous.controllers.basemanager import BaseManager
+from wondrous.controllers.votemanager import VoteManager
 
 from wondrous.models import (
     Feed,
     FeedPostLink,
-    User,
     Post,
-    Object
+    User,
 )
-
-from wondrous.controllers.basemanager import BaseManager
-from sqlalchemy.orm import joinedload
 
 class FeedManager(BaseManager):
     MAJORITY, PRIORITY = range(2)
@@ -31,33 +31,34 @@ class FeedManager(BaseManager):
             return [feed.post for feed in FeedPostLink.by_kwargs(feed_id=feed.id).all()]
 
     @classmethod
-    def get_majority_posts(cls,feed_id,page=0,per_page=15):
+    def get_majority_posts(cls, feed_id, page=0, per_page=15):
         links = FeedPostLink.query.options(joinedload(FeedPostLink.post).joinedload(Post.object)).\
             order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).limit(per_page).offset(page).all()
         return links
 
     @classmethod
-    def get_majority_posts_json(cls,person,page=0):
+    def get_majority_posts_json(cls, person, page=0):
         feed_id = person.user.feed.id
         links = cls.get_majority_posts(feed_id,page)
         data = []
         for link in links:
             post = link.post
             if not post.is_hidden and post.is_active:
-                post_dict = super(FeedManager,cls).model_to_json(post)
-                post_dict.update({"name":post.user.person.ascii_name})
-                post_dict.update({"username":post.user.username})
+                post_dict = super(FeedManager, cls).model_to_json(post)
+                post_dict.update({"name": post.user.person.ascii_name})
+                post_dict.update({"username": post.user.username})
+
                 if post.object:
-                    post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+                    post_dict.update(super(FeedManager, cls).model_to_json(post.object))
                 data.append(post_dict)
         return data
 
     @classmethod
-    def get_priority_posts_json(cls,person,page=0):
+    def get_priority_posts_json(cls, person, page=0):
         pass
 
     @classmethod
-    def get_feed_posts_json(cls,person,feed_type,page=0):
+    def get_feed_posts_json(cls, person, feed_type, page=0):
         feed_type = int(feed_type)
         if feed_type == cls.MAJORITY:
             return cls.get_majority_posts_json(person,page)
@@ -65,12 +66,12 @@ class FeedManager(BaseManager):
             return cls.get_priority_posts_json(person,page)
 
     @classmethod
-    def get_wall_posts(cls,page=0,per_page=15,**kwargs):
+    def get_wall_posts(cls, page=0, per_page=15, **kwargs):
         posts = Post.query.order_by(desc(Post.created_at)).filter_by(**kwargs).limit(per_page).offset(page*per_page).all()
         return posts
 
     @classmethod
-    def get_wall_posts_json(cls,person,user_id,page=0):
+    def get_wall_posts_json(cls, person, user_id, page=0):
         user = User.by_id(user_id)
         if not user:
             return []
@@ -79,17 +80,17 @@ class FeedManager(BaseManager):
 
         # If the user is public, we dont need to check for relationship, else do
         # If we are logged in and the user happens to be private, we have to check for relationship
-        if (not user.is_private and not user.is_banned and user.is_active) or\
+        if (not user.is_private and not user.is_banned and user.is_active) or \
             (user.is_private and not user.is_banned and user.is_active and person \
             and VoteManager.is_following(person.user.id,user_id)):
 
-            posts = cls.get_wall_posts(page=page, user_id = user_id)
+            posts = cls.get_wall_posts(page=page, user_id=user_id)
 
         data = []
         for post in posts:
             post_dict = super(FeedManager,cls).model_to_json(post)
             post_dict.update(super(FeedManager,cls).model_to_json(post.object))
             post_dict.update({"name":post.user.person.ascii_name})
-            post_dict.update({"username":post.user.username}) 
+            post_dict.update({"username":post.user.username})
             data.append(post_dict)
         return data
