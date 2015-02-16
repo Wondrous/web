@@ -44,7 +44,7 @@ var ProfileLink = React.createClass({
 
 var Navbar = React.createClass({
     loadUserFromServer: function(){
-            $.ajax({
+        $.ajax({
             type: "GET",
             dataType: 'json',
             url: "/api/me",
@@ -70,7 +70,6 @@ var Navbar = React.createClass({
                 </a>
                 <SearchBox />
                 <SettingsGear />
-                {/* This name is static and must change to fetch username or ID !!*/}
                 <ProfileLink user={this.state.data} />
                 <NotificationBox />
             </div>);

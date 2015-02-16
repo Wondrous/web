@@ -104,6 +104,7 @@ class AccountManager(BaseManager):
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager, cls).model_to_json(person.user, 1))
             retval.update({"name": person.ascii_name})
+            retval.update({"first_name": person.first_name})
             return retval
 
         u = User.by_id(user_id)
@@ -116,6 +117,8 @@ class AccountManager(BaseManager):
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager, cls).model_to_json(u))
             retval.update({"name": person.ascii_name})
+            retval.update({"first_name": person.first_name})
+
             return retval
         elif u.is_private and not u.is_banned and u.is_active:
             return {'is_private': True}
