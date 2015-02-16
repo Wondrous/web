@@ -58,6 +58,7 @@ class PostManager(BaseManager):
 
     @classmethod
     def add(cls, user_id, tags, subject, text, repost_id=None, file_type=None):
+        
         """
             PURPOSE: the purpose of the this method is to allow users to post and
             repost objects
@@ -71,6 +72,7 @@ class PostManager(BaseManager):
 
             RETURN: the newly created Post
         """
+        
         if repost_id:
             old_post = Post.by_id(repost_id)
             new_post = Post(user_id=user_id, repost_id=repost_id)
@@ -118,10 +120,12 @@ class PostManager(BaseManager):
 
     @classmethod
     def _sign_upload_request(cls, ouuid, mime_type):
+        
         """
             Signs the upload request with our AWS credientials,
             returns the signed request url and the url of the content
         """
+
         AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
         AWS_SECRET_KEY = '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'
         AWS_S3_BUCKET  = 'mojorankdev'
@@ -149,7 +153,7 @@ class PostManager(BaseManager):
         if not person or not subject or not text:
             return {'error': 'insufficient data'}
 
-        post = PostManager.add(person.user.id,tags,subject,text,repost_id=None, file_type=file_type)
+        post = PostManager.add(person.user.id, tags, subject, text, repost_id=None, file_type=file_type)
         object = post.object
 
         data = PostManager.model_to_json(object)

@@ -36,6 +36,7 @@ DEFAULT_PROFILE_PICTURE_PATH = "/static/pictures/defaults/p.default-profile-pict
 
 
 class User(Base, PasswordManager, BaseMixin):
+    
     """
         Defines a core user object:
             Person : A Person on the site
@@ -48,6 +49,7 @@ class User(Base, PasswordManager, BaseMixin):
             Comment,
             etc.
     """
+
     user_type = Column(Integer, nullable=False) # 1 = Person, 2 = Page
 
     username = Column(Unicode, nullable=True, unique=True)  # nullable=True for FBAuth users
@@ -65,19 +67,20 @@ class User(Base, PasswordManager, BaseMixin):
     password = synonym('_password', descriptor=property(PasswordManager._get_password, PasswordManager._set_password))
     comments = relationship("Comment")
 
-    feed = relationship("Feed",uselist=False,backref="user")
+    feed = relationship("Feed", uselist=False, backref="user")
     set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod
     def get_all_banned_users(cls):
-        return cls.by_kwargs(is_banned == True).all()
+        return cls.by_kwargs(cls.is_banned == True).all()
 
 
-class BlockedUser(Base,BaseMixin):
+class BlockedUser(Base, BaseMixin):
 
     """
         Keeps track of who did the blocking
     """
+
     blocked_user_id = Column(BigInteger, nullable=False) # The user who got blocked
     blocker_id = Column(BigInteger, nullable=False)  # The user you did the blocking
 
@@ -95,7 +98,8 @@ class BlockedUser(Base,BaseMixin):
 
             RETURNS: A BlockedUser object if found, otherwise None.
         """
-        return super(BlockedUser,cls).by_kwargs(blocked_user_id=blocked_user_id,blocker_id=blocker_id).first()
+
+        return super(BlockedUser, cls).by_kwargs(blocked_user_id=blocked_user_id, blocker_id=blocker_id).first()
 
     @classmethod
     def add(cls,blocked_user_data):
@@ -111,6 +115,7 @@ class BlockedUser(Base,BaseMixin):
 
             RETURNS: None
         """
+
         new_user = cls(**blocked_user_data)
         DBSession.add(new_blocked_user)
         DBSession.flush()

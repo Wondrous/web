@@ -36,9 +36,12 @@ from sqlalchemy.orm import column_property
 # from wondrous.models.object import Object
 # from wondrous.models.user import User
 
-class Post(Base,BaseMixin):
+class Post(Base, BaseMixin):
 
-    """This defines the post table"""
+    """
+        This defines the post table
+    """
+
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     user = relationship('User', foreign_keys=user_id, backref="posts")
 

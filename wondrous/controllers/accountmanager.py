@@ -34,7 +34,7 @@ class AccountManager(BaseManager):
         'last_name'  : "last_name"+str(i),
     """
 
-    DYNAMIC_FIELDS = ['username', 'first_name', 'last_name']
+    DYNAMIC_FIELDS = ['username', 'first_name', 'last_name']  # TODO Should this be a set?
 
     @staticmethod
     def is_username_taken(username):
@@ -55,7 +55,7 @@ class AccountManager(BaseManager):
         return True
 
     @classmethod
-    def add(cls,first_name, last_name, email, username, password, user_type=1):
+    def add(cls, first_name, last_name, email, username, password, user_type=1):
         # First let's create the person object - point of contact for the account
         new_user = User(user_type=user_type, username=username, email=email, password=password, is_active=True)
 
@@ -105,7 +105,7 @@ class AccountManager(BaseManager):
                 return {}
             user_id = user.id 
 
-        # am i querying for myself?
+        # Am i querying for myself?
         if person and person.user.id == user_id:
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager, cls).model_to_json(person.user, 1))
@@ -171,12 +171,12 @@ class AccountManager(BaseManager):
         if exists:
             setattr(user, field, new_value)
             DBSession.flush()
-            return {field : new_value}
+            return {field: new_value}
 
         exists = getattr(person, field, None)
         if exists:
             setattr(person, field, new_value)
             DBSession.flush()
-            return {field : new_value}
+            return {field: new_value}
 
         return {"error": field + " not found"}
