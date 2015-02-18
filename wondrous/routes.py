@@ -105,7 +105,7 @@ def build_routes(config):
     config.add_route('ajax_upload_file_handler',               '/ajax/upload/{ajax_method}/')
 
     # INDEX
-    config.add_route('stuff_handler',                          '/{stuff}/{stuff1}')
+    config.add_route('stuff_handler',                          '/{stuff}')
     config.add_route('index_handler',                          '/')
 
     config.add_route('index_priority_feed_handler',            '/priority-feed/')

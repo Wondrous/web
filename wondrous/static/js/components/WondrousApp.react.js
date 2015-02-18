@@ -62,9 +62,9 @@ var WondrousApp = React.createClass({
 
 var Routes = (
   <Route handler={WondrousApp} path="/">
-    <Route name="feed" handler={Feed}/>
-    <Route name="login" handler={Login}/>
-    <Route name="signup" handler={Signup}/>
+    <Route name="feed" path="/feed" handler={Feed}/>
+    <Route name="login" path="/login" handler={Login}/>
+    <Route name="signup" path="/signup" handler={Signup}/>
     {ProfileRoute}
     <DefaultRoute handler={LoggedOut}/>
   </Route>

@@ -140,7 +140,7 @@ var Profile = React.createClass({
 });
 
 var ProfileRoute = (
-    <Route name="user" path="/user/:username" handler={Profile}>
+    <Route name="user" path="/:username" handler={Profile}>
       <DefaultRoute handler={Wall}/>
     </Route>
 );

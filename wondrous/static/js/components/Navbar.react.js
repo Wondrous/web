@@ -39,7 +39,7 @@ var SettingsGear = React.createClass({
 var ProfileLink = React.createClass({
     render: function () {
         return (
-            <a id="linkToProfile" href={"/user/" + this.props.user.username}
+            <a id="linkToProfile" href={"/" + this.props.user.username}
                 className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
                     src="/static/pictures/defaults/p.default-profile-picture.jpg" />
