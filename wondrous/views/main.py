@@ -54,6 +54,32 @@ class BaseHandler(object):
         self.url_match    = partial(url_match, self)
         self.COMPANY_NAME = "Wondrous"
 
+    def _set_session_headers(self, this_person, MAX_AGE=60 * 60 * 24 * 3):
+
+        """
+            PURPOSE: Sets the headers for a user logging in to the site
+
+            USE: Call like: self._set_session_headers(<User object>)
+
+            PARAMS: 2 params, one of which is optional:
+                this_person : <Person> : REQUIRED : a Person object to set headers for
+                MAX_AGE     : int : default = 60 * 60 * 24 * 3 (3 days) : The max age of the headers before they auto-expire
+
+            NOTE: We use the Primary Key "id" as our identifier once someone has
+            authenticated rather than the username.  You can change what is
+            returned as the userid by altering what is passed to remember.
+
+            RETURNS: The a header object to be
+            used in the HTTPFound(<location>, <headers>)
+        """
+
+        headers = remember(
+                    self.request,
+                    this_person.id,
+                    max_age=MAX_AGE,
+                )
+        return headers
+
     def set_pagination_data(self, items, start, user_id=None, PER_PAGE=GLOBAL_CONFIGURATIONS['POSTS_PER_PAGE']):
 
         """
@@ -496,6 +522,9 @@ class AuthHandler(BaseHandler):
         return headers
 
 class IndexHandler(BaseHandler):
+    @view_config(renderer='/index-html.jinja2', route_name='stuff_handler')
+    def stuff_handler(self):
+        return {}
 
     @view_config(renderer='/index-html.jinja2', route_name='index_handler')
     @view_config(renderer='/index-html.jinja2', route_name='index_priority_feed_handler')
@@ -549,74 +578,74 @@ class IndexHandler(BaseHandler):
 
 class ProfileHandler(BaseHandler):
 
-    @login_required
-    @view_config(renderer='/profile-html.jinja2', route_name='profile_handler')
-    @view_config(renderer='/profile-html.jinja2', route_name='profile_tab_handler')
-    def profile(self):
-
-        """
-            PURPOSE: This method handles the profile view for any given user
-        """
-
-        safe_in       = Sanitize.safe_input
-        profile_un    = self.url_match(url_match='username')
-        tab           = self.url_match(url_match='tab')
-        start         = self.request.GET.get('start', 0)  # The start-value of the items to get
-        current_person  = self.request.person  # The logged-in user
-
-        # valid_person  = vh.valid_profile(user_id)  # The profile's "owner"
-        valid_user = User.by_kwargs(username=profile_un).first()
-
-        if valid_user:
-            current_user_id = current_person.user.id
-            user_id = valid_user.id
-
-            # TODO: Manage notification
-            # notification_id = safe_in(self.request.GET.get('nrid'))
-            # print "notification", notification_id
-            # if notification_id:
-            #     NotificationManager.mark_as_read(notification_id, current_user_id)
-
-            # Handle profile tab
-            tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(user_id != current_user_id)
-
-            # Get the items to render based off the given parameter(s)
-            items = GetItems.profile(user_id, tab=tab)
-
-            # Set all data needed for pagination
-            num_items = 15
-            self.set_pagination_data(items, start, user_id, PER_PAGE=num_items)
-            following_count = VoteManager.get_following_count(user_id)
-            follower_count  = VoteManager.get_follower_count(user_id)
-            is_blocked = VoteManager.is_blocking(valid_user.id, current_person.user.id)
-
-            data = {
-                'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_user.username),
-
-                'current_user'       : current_person,
-                'profile_user'       : valid_user,
-                'is_blocked'         : is_blocked,
-                'is_following'       : VoteManager.is_following(current_user_id,valid_user.id),
-                'is_private'         : valid_user.is_private,
-                'is_my_profile'      : bool(valid_user.id == current_user_id),
-                'tab'                : tab,
-                'get_item_owner'     : User.by_id,  # unbound method
-
-                'render_items'       : self.page_items,
-                'current_page_num'   : self.page_num,
-                'has_next'           : self.has_next,
-                'next_start'         : self.next_start,
-                'back_start'         : self.back_start,
-                'start_item_num'     : self.start,
-
-                'following_count'    : following_count,
-                'follower_count'     : follower_count,
-            }
-            return data
-
-        # If not a valid username...
-        else:
-            return HTTPFound("/")
+    # @login_required
+    # @view_config(renderer='/profile-html.jinja2', route_name='profile_handler')
+    # @view_config(renderer='/profile-html.jinja2', route_name='profile_tab_handler')
+    # def profile(self):
+    #
+    #     """
+    #         PURPOSE: This method handles the profile view for any given user
+    #     """
+    #
+    #     safe_in       = Sanitize.safe_input
+    #     profile_un    = self.url_match(url_match='username')
+    #     tab           = self.url_match(url_match='tab')
+    #     start         = self.request.GET.get('start', 0)  # The start-value of the items to get
+    #     current_person  = self.request.person  # The logged-in user
+    #
+    #     # valid_person  = vh.valid_profile(user_id)  # The profile's "owner"
+    #     valid_user = User.by_kwargs(username=profile_un).first()
+    #
+    #     if valid_user:
+    #         current_user_id = current_person.user.id
+    #         user_id = valid_user.id
+    #
+    #         # TODO: Manage notification
+    #         # notification_id = safe_in(self.request.GET.get('nrid'))
+    #         # print "notification", notification_id
+    #         # if notification_id:
+    #         #     NotificationManager.mark_as_read(notification_id, current_user_id)
+    #
+    #         # Handle profile tab
+    #         tab = self._get_profile_tab(tab) # PUT ON HOLD FOR NOW: arg[1] = bool(user_id != current_user_id)
+    #
+    #         # Get the items to render based off the given parameter(s)
+    #         items = GetItems.profile(user_id, tab=tab)
+    #
+    #         # Set all data needed for pagination
+    #         num_items = 15
+    #         self.set_pagination_data(items, start, user_id, PER_PAGE=num_items)
+    #         following_count = VoteManager.get_following_count(user_id)
+    #         follower_count  = VoteManager.get_follower_count(user_id)
+    #         is_blocked = VoteManager.is_blocking(valid_user.id, current_person.user.id)
+    #
+    #         data = {
+    #             'title'              : u"{cn} | {name}".format(cn=self.COMPANY_NAME, name=valid_user.username),
+    #
+    #             'current_user'       : current_person,
+    #             'profile_user'       : valid_user,
+    #             'is_blocked'         : is_blocked,
+    #             'is_following'       : VoteManager.is_following(current_user_id,valid_user.id),
+    #             'is_private'         : valid_user.is_private,
+    #             'is_my_profile'      : bool(valid_user.id == current_user_id),
+    #             'tab'                : tab,
+    #             'get_item_owner'     : User.by_id,  # unbound method
+    #
+    #             'render_items'       : self.page_items,
+    #             'current_page_num'   : self.page_num,
+    #             'has_next'           : self.has_next,
+    #             'next_start'         : self.next_start,
+    #             'back_start'         : self.back_start,
+    #             'start_item_num'     : self.start,
+    #
+    #             'following_count'    : following_count,
+    #             'follower_count'     : follower_count,
+    #         }
+    #         return data
+    #
+    #     # If not a valid username...
+    #     else:
+    #         return HTTPFound("/")
 
     def _get_profile_tab(self, tab):  # Arg[1] = is_not_my_profile
 

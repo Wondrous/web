@@ -61,6 +61,8 @@ def build_routes(config):
     config.add_route('info_account_delete_handler',            '/info/delete_account/')
 
     # API
+    config.add_route('api_user_login',                         '/api/user/login')      # POST
+    config.add_route('api_user_signup',                        '/api/user/signup')     # POST
     config.add_route('api_user_vote',                          '/api/user/vote/')      # POST
     config.add_route('api_user_profile',                       '/api/user/profile')    # POST
     config.add_route('api_user_deactivate',                    '/api/user/deactivate') # POST
@@ -71,7 +73,7 @@ def build_routes(config):
     config.add_route('api_user_wall',                          '/api/wall')            # GET
     config.add_route('api_new_post',                           '/api/wall/new')            # POST
     config.add_route('api_repost',                             '/api/wall/repost')     # POST
-    config.add_route('api_user_feed',                          '/api/feed/')           # POST
+    config.add_route('api_user_feed',                          '/api/feed')           # GET
     config.add_route('api_user_notification',                  '/api/notification')    # GET
     config.add_route('api_post_delete',                        '/api/post')            # DELETE
 
@@ -103,12 +105,14 @@ def build_routes(config):
     config.add_route('ajax_upload_file_handler',               '/ajax/upload/{ajax_method}/')
 
     # INDEX
+    config.add_route('stuff_handler',                          '/{stuff}/{stuff1}')
     config.add_route('index_handler',                          '/')
+
     config.add_route('index_priority_feed_handler',            '/priority-feed/')
 
     # PROFILE -- MUST BE AT BOTTOM --
-    config.add_route('profile_handler',                        '/{username}/')
-    config.add_route('profile_tab_handler',                    '/{username}/{tab}/')
+    # config.add_route('profile_handler',                        '/{username}/')
+    # config.add_route('profile_tab_handler',                    '/{username}/{tab}/')
 
     config.add_static_view('/tmp', 'wondrous:templates')
 

@@ -132,6 +132,8 @@ VALID_MIME_TYPES = set(
     _MICROSOFT_MIMES
 )
 
+import json
+
 def api_login_required(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
@@ -139,8 +141,7 @@ def api_login_required(func):
             return func(self,*args,**kwargs)
         else:
             resp = self.request.response
-            resp.status = 401
-            resp.body = str({'error':'not logged in'})
+            resp.body = json.dumps({'error':'not logged in'})
             resp.content_type = 'application/json'
             return resp
     return wrapper

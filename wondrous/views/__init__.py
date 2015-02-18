@@ -15,7 +15,7 @@ from pyramid.response import Response
 from pyramid.view import notfound_view_config
 from pyramid.view import view_config
 
-@notfound_view_config(append_slash=True)
+@notfound_view_config(append_slash=False)
 def page_not_found(request):
     return Response("""
             <b>WONDROUS: 404 Error</b><br><br>

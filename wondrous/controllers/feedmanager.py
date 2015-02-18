@@ -40,6 +40,9 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_majority_posts_json(cls, person, page=0):
+        # TODO public view
+        if not person:
+            return []
         feed_id = person.user.feed.id
         links = cls.get_majority_posts(feed_id,page)
         data = []
@@ -74,7 +77,7 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_wall_posts_json(cls, person, user_id=None, username=None, page=0):
-        if not user_id and not username:
+        if (not user_id and not username) or person==None:
             return []
         if user_id:
             user = User.by_id(user_id)

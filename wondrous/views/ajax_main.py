@@ -9,7 +9,6 @@
 #
 
 import logging
-import magic
 import os
 import time
 import uuid
@@ -89,6 +88,7 @@ from wondrous.utilities.validation_utilities import (
 from wondrous.views.main import BaseHandler
 
 from collections import defaultdict
+from datetime import datetime
 
 class APIViews(BaseHandler):
 
@@ -108,6 +108,139 @@ class APIViews(BaseHandler):
             if isinstance(val,str):
                 kwargs[key] = Sanitize.safe_input(val)
         return kwargs
+
+    @view_config(request_method="POST",route_name='api_user_signup', renderer='json')
+    def api_user_signup(self):
+        """
+            PURPOSE: Retrieves the user information based on relationship and login
+                status
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person, user_id or username
+
+            PARAMS: (None)
+
+            RETURNS: The JSON of the person+user model if valid else {}
+        """
+        safe_in  = Sanitize.safe_input
+        p = self.request.params
+
+        # Some helpful constants
+        PERSON = 1
+        SIGNUP_ROUTE = "/signup/step/1/"
+
+        # The data we need to validate
+        error_message = None
+        first_name = safe_in(p.get('firstname'))
+        last_name  = safe_in(p.get('lastname'))
+        email      = safe_in(p.get('email'))
+        password   = safe_in(p.get('password'), strip=False)
+        username   = safe_in(Sanitize.strip_ampersand(p.get('username')))
+
+        # Check for presence
+        if not first_name:
+            error_message = "Please enter your first name."
+        elif not last_name:
+            error_message = "Please enter your last name."
+        elif not email:
+            error_message = "Please enter your email."
+        elif not password:
+            error_message = "Please enter a password."
+        elif not username:
+            error_message = "Please enter a username."
+
+        if not error_message:
+
+            _s_valid_fn, len_err_fn = Sanitize.length_check(first_name, min_length=1, max_length=30)
+            _s_valid_ln, len_err_ln = Sanitize.length_check(last_name, min_length=1, max_length=30)
+            _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
+            _s_valid_em = Sanitize.is_valid_email(email)
+            _s_em_taken = User.by_kwargs(email=email).first()
+            _s_valid_un = Sanitize.is_valid_username(username.lower())
+            _s_un_taken = User.by_kwargs(username=username).first()
+
+            # Check for validity
+            if not _s_valid_fn:
+                error_message = "Your first name is {err}".format(err=len_err_fn)
+            elif not _s_valid_ln:
+                error_message = "Your last name is {err}".format(err=len_err_ln)
+            elif not _s_valid_em:
+                error_message = "Please enter a valid email address"
+            elif _s_em_taken:
+                error_message = "This email has already been used to sign up. Please use a different one."
+            elif not _s_valid_pw:
+                error_message = "Your password is {err}".format(err=len_err_pw)
+            elif not _s_valid_un:
+                error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
+            elif _s_un_taken:
+                error_message = "This username has already been taken. Please use a different one."
+
+        if not error_message:
+
+            new_user = AccountManager.add(
+                            first_name,
+                            last_name,
+                            email,
+                            username,
+                            password
+                        )
+            new_person = new_user.person
+            headers = self._set_session_headers(new_person)
+            new_user.last_login = datetime.now()
+
+            person = self.request.person
+            return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
+        else:
+            data = {
+                'error' : error_message,
+            }
+
+
+        return data
+
+    @view_config(request_method="POST",route_name='api_user_login', renderer='json')
+    def api_user_login(self):
+        """
+            PURPOSE: API for user
+
+            USE: self.query_kwargs to provide all the required inputs.
+                identification, password
+
+            PARAMS: (None)
+
+            RETURNS: The JSON of the person+user model if valid else {}
+        """
+        safe_in  = Sanitize.safe_input
+        safe_out = Sanitize.safe_output
+        p        = self.query_kwargs
+        error_message = None
+        credential    = None
+        password      = None
+
+        credential = safe_in(p.get('identifier')).lower()
+        password   = safe_in(p.get('password'), strip=False)
+
+        if Sanitize.is_valid_email(credential):
+            this_user = User.by_kwargs(email=credential).first()
+        else:
+            this_user = User.by_kwargs(username=credential).first()
+
+        if this_user and this_user.validate_password(password) and not this_user.is_banned:
+
+            headers = self._set_session_headers(this_user.person)
+            this_user.last_login = datetime.now()
+
+            return AccountManager.get_json_by_username(this_user.person,**{'user_id':this_user.id})
+
+        elif this_user and this_user.is_banned:
+            return {}
+
+        person = self.request.person
+        if not person:
+            return {'error':"Invalid email/username or password"}
+
+
+
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
@@ -131,7 +264,7 @@ class APIViews(BaseHandler):
         person = self.request.person
         return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
 
-    @view_config(request_method="GET",xhr=True,route_name='api_user_wall', renderer='json')
+    @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         """
             PURPOSE: Retrieves the user profile posts -- all the posts that
@@ -144,6 +277,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array of the wallpost objects
         """
+
         person = self.request.person
         posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
         return posts
@@ -203,8 +337,7 @@ class APIViews(BaseHandler):
         person = self.request.person
         return AccountManager.change_password_json(person,**self.query_kwargs)
 
-    @api_login_required
-    @view_config(request_method="GET",xhr=True,route_name='api_user_feed', renderer='json')
+    @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
         """
             PURPOSE: get different feed posts by the type
@@ -1016,239 +1149,3 @@ class AjaxHandler(BaseHandler):
 
         else:
             return {}
-
-
-class AjaxFileUpload(BaseHandler):
-
-    @login_required
-    @view_config(route_name='ajax_upload_file_handler', xhr=True, renderer='json')
-    def ajax_upload_file_handler(self):
-
-        """
-            PURPOSE: This method handles the uploading of files for files
-            attached to a post body, and the profile photo for users
-
-            NOTE: Traditionally, we had allowed numerous different MIME types;
-            however, we're streamlining it down to just the major file
-            types: PDFs, JPGs, PNGs for uploads attached to a post, and just
-            PNGs and JPGs for profile photos.
-
-            Also, very important to note, this only handles 1 file upload at
-            a time. If we want to ever allow a user to upload numerous items
-            at once, we need to adjust this, and its associated Javascript.
-        """
-
-        safe_in = Sanitize.safe_input
-        ajax_method = safe_in(self.url_match(url_match='ajax_method'))
-
-        # for name, fieldStorage in self.request.POST.items():
-        #   cgi_file_obj = fieldStorage
-        #   break
-        cgi_file_obj   = self.request.POST['files[]']
-        object_file_id = None
-
-        if ajax_method == "file":
-            file_url, original_file_name, file_size, mime_type, error_message = self._process_file(cgi_file_obj)
-            if not error_message:
-
-                object_file_data = {
-                    'file_url'           : file_url,
-                    'original_file_name' : original_file_name,
-                    'file_size'          : file_size,
-                    'mime_type'          : mime_type,
-                }
-                new_object_file = ObjectFile.add(object_file_data)
-                object_file_id = new_object_file.id
-
-        elif ajax_method == "profile":
-            file_url, original_file_name, file_size, mime_type, error_message = self._process_file(cgi_file_obj, image_only=True)
-            if not error_message:
-                # Make ImageThumbnail
-                object_file_data = {
-                    'file_url'           : file_url,
-                    'original_file_name' : original_file_name,
-                    'file_size'          : file_size,
-                    'mime_type'          : mime_type,
-                }
-
-                # Add to ProfilePictureHistory table
-                #new_object_file = CoverPhotoManager.add(object_file_data)
-                object_file_id = new_object_file.id
-
-        return {
-            'object_file_id' : object_file_id,
-            'file_url'       : file_url,
-            'is_img'         : bool(mime_type in _IMAGE_MIMES),
-            'error_message'  : error_message,
-        }
-
-    def _process_file(self, cgi_file_obj, image_only=False):
-
-        """
-            PURPOSE: This handles the actual uploading of the file and saving
-            it to the AWS S3 bucket.
-
-            USE: Call like: self._process_file(...)
-
-            PARAMS:
-                cgi_file_obj : <Fieldstorage> : REQUIRED : The byte stream of the file to upload (it's a File object)
-                image_only   : bool : default=False : Do we allow non-images to be uploaded (e.g., PDFs)?
-
-            RETURNS: 5 variables:
-                file_url : str : The static Amazon S3 url of the uploaded file
-                original_fname : str : The file's original name
-                file_size : int : The number of kilobytes of the file
-                mime_type : str : The MIME type of the uploaded file
-                error_message : str : Any associated error involved with the file upload, otherwise None
-
-            NOTE: To optimize this, we can split some of the image processing
-            off into a seperate thread/processes. For example, getting the size of the file is
-            an independent computation that can take as long as we need up until we
-            add the file into the database. The rest of the image EXIF manipulation
-            can be done independently of the file size, and likewwise, can be delegated
-            to a seperate thread/process as well. This is primarily useful in the case we have multiple
-            uploads per single post wherein we don't want to sequentially process each upload,
-            but rather, tackle them all at once.
-        """
-
-        file_url       = None
-        mime_type      = None
-        error_message  = None
-        original_fname = cgi_file_obj.filename
-        file_size      = self._get_file_size(cgi_file_obj.file)
-
-        if file_size < GLOBAL_CONFIGURATIONS['MAX_FILE_SIZE']:  # 35 MB => 35 000 000 B
-
-            mime_list = magic.from_buffer(cgi_file_obj.file.read(), mime=True),
-            mime_type = mime_list[0] if mime_list else None
-
-            # Determine which set of MIMES we accept
-            if image_only:
-                ACCEPT_MIMES = _IMAGE_MIMES_NO_GIF
-            else:
-                ACCEPT_MIMES = VALID_MIME_TYPES
-
-            # Let's be hyper secure about the type of file we're about to process...
-            if mime_type in ACCEPT_MIMES and mime_type not in INVLAID_MIME_TYPES:
-
-                if mime_type in _JPEG_IMAGE_MIMES:
-                    file_object, is_error = self._exif_reset_orientation(cgi_file_obj)
-                    if not is_error:
-                        cgi_file_obj.file = file_object
-
-                try:
-                    file_name = self.request.storage.save(cgi_file_obj, randomize=True, replace=False)
-                    file_url  = self.request.storage.url(file_name)
-                except:
-                    error_message = "Sorry, your file could not be uploaded. Hint: You may need to add its file extension if it doesn't have one! Or, your file may not be one of our allowed types :("
-            else:
-                error_message = "Sorry, you cannot upload files that are \"{mt}\"".format(mt=mime_type)
-        else:
-            error_message = "This file is too big. Your file must be less than 35MB"
-
-        return file_url, original_fname, file_size, mime_type, error_message
-
-    def _get_file_size(self, file_object):
-
-        """
-            PURPOSE: Get the size of a given file in BYTES
-
-            USE: Call like: self._get_file_size(...)
-
-            PARAMS: 1 required param
-                file_object : <cgi_file_obj.file> : REQUIRED : The CGI File Object file
-
-            RETURNS: This returns the number of BYTES of a file
-        """
-
-        file_object.seek(0,2)  # move file cursor to end of file
-        size = file_object.tell()
-        file_object.seek(0)  # move file cursor back to start
-        return size
-
-    def _exif_reset_orientation(self, cgi_file_obj):
-
-        """
-            PURPOSE: Rotate the image according to the exif
-            tag if it exists and then delete or modify this
-            tag to '1'
-
-            USE: Call like: self._exif_reset_orientation(<Fieldstorage>)
-
-            PARAMS: 1 param...
-                cgi_file_obj : <FieldStorage> : REQUIRED : A FieldStorage object with a .file that
-                                                           contains the JPEG image bytes
-
-            RETURNS: 2 params:
-                file_object : <Fieldstorage> : The fully updated Fieldstorage object
-                is_error : bool : A boolean value indicating if an error occurred
-        """
-
-        is_error = False
-        file_object = cgi_file_obj.file
-        tmp_file_name = str(uuid.uuid4()) + str(uuid.uuid4())
-        file_object.seek(0)
-
-        # Write file to disk for exiftool
-        temp_fn = os.path.basename(tmp_file_name)
-        IMG_DISK_LOCATION = os.path.expanduser(GLOBAL_CONFIGURATIONS['EXIF_IMG_DIR_PATH']) + temp_fn
-        with open(IMG_DISK_LOCATION, 'wb') as f:
-            f.write(cgi_file_obj.file.read())
-
-            # This is gross, but necessry. Set a timeout for a
-            # worst-case-scenario write to disk.
-            # If the file still hasn't been written to disk after X seconds,
-            # quit the process and return None, True
-            secs = 0
-            while not os.path.isfile(IMG_DISK_LOCATION):
-                time.sleep(0.5)
-                if secs >= 20.0:
-                    return None, True
-                secs += 0.5
-
-            try:
-                # Get the orientation if it exists
-                e = ExifEditor(IMG_DISK_LOCATION)
-                orientation = e.getOrientation()
-                if orientation != 1:
-                    e.setOrientation(1)
-                else:
-                    # If the orientation == 1, we
-                    # don't need to do anything to it.
-                    # Delete the file from the tmp dir
-
-                    os.remove(IMG_DISK_LOCATION)
-                    return None, True
-
-                f.seek(0)  # Set file cursor back to beginning
-
-                # Now rotate the image using PIL
-                img = Image.open(IMG_DISK_LOCATION)
-
-                if orientation == 6:
-                    img = img.transpose(Image.ROTATE_270)
-                elif orientation == 8:
-                    img = img.transpose(Image.ROTATE_90)
-                elif orientation == 3:
-                    img = img.transpose(Image.ROTATE_180)
-                elif orientation == 2:
-                    img = img.transpose(Image.FLIP_LEFT_RIGHT)
-                elif orientation == 5:
-                    img = img.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_90)
-                elif orientation == 7:
-                    img = img.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
-                elif orientation == 4:
-                    img = img.transpose(Image.FLIP_TOP_BOTTOM)
-
-                # Write new img to FieldStorage.file
-                file_object = cgi_file_obj.make_file()
-                img.save(file_object, "JPEG")
-
-            except TypeError as e:
-                is_error = True
-
-            # Delete the file from the tmp dir
-            os.remove(IMG_DISK_LOCATION)
-
-            # Return full Fieldstorage CGI file object
-            return file_object, is_error
