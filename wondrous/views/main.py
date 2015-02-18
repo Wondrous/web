@@ -522,6 +522,7 @@ class AuthHandler(BaseHandler):
         return headers
 
 class IndexHandler(BaseHandler):
+    @view_config(renderer='/index-html.jinja2', route_name='stuff1_handler')
     @view_config(renderer='/index-html.jinja2', route_name='stuff_handler')
     def stuff_handler(self):
         return {}

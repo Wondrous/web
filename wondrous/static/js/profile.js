@@ -75,7 +75,7 @@ $(document).ready(function() {
                     </span>
 
                     <span className="profile-header-nav">
-                        <a className="profile-header-nav-link current-tab" href="/user1/">Posts</a>
+                        <a className="profile-header-nav-link current-tab" href={"/"+this.state.data.username}>Posts</a>
                         <a className="profile-header-nav-link " href="/user1/followers/">Followers</a>
                         <a className="profile-header-nav-link " href="/user1/following/">Following</a>
                         <a className="profile-header-nav-link " href="/user1/likes/">l!kes</a>

@@ -14,6 +14,7 @@ from wondrous.models import (
     DBSession,
     Notification,
     Vote,
+    User
 )
 
 from sqlalchemy import or_
@@ -21,6 +22,8 @@ from sqlalchemy import or_
 from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
+
+import logging
 
 class VoteAction:
     LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(8)
@@ -120,7 +123,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def topfriend(cls, from_user_id, to_user_id):
-        
+
         """
             PURPOSE: TOPFRIEND only if public or already following
         """
@@ -136,7 +139,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def cancel(cls, from_user_id, to_user_id):
-        
+
         """
             PURPOSE: This is the method used to cancel requests, if there are any
         """
@@ -156,7 +159,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def accept(cls, from_user_id, to_user_id):
-        
+
         """
             PURPOSE: In order to accept a request, there must be one
         """
@@ -169,7 +172,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def like(cls, from_user_id, object_id):
-        
+
         """
             PURPOSE: Checks if there exists a relationship between a person and an object, this is a toggle
         """
@@ -188,7 +191,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def deny(cls, from_user_id, to_user_id):
-        
+
         """
             PURPOSE: In order to deny a request, there must be one
         """
@@ -201,7 +204,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def block(cls, from_user_id, user_id):
-        
+
         """
             PURPOSE: Check if the user is already blocking another, this is a toggle
         """
@@ -307,6 +310,32 @@ class VoteManager(BaseManager):
     @staticmethod
     def get_following_count(user_id):
         return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
+
+    @classmethod
+    def get_followers_json(cls, person, username = None, user_id = None, page = 0):
+        user_id = person.user.id
+        users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.subject_id==user_id).\
+            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
+
+        retval = []
+        for user in users:
+            model_dict = super(VoteManager,cls).model_to_json(user)
+            model_dict.update(super(VoteManager,cls).model_to_json(user.person))
+            retval.append(model_dict)
+        return retval
+
+    @classmethod
+    def get_following_json(cls, person, username = None, user_id = None, page = 0):
+        user_id = person.user.id
+        users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
+            filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
+
+        retval = []
+        for user in users:
+            model_dict = super(VoteManager,cls).model_to_json(user)
+            model_dict.update(super(VoteManager,cls).model_to_json(user.person))
+            retval.append(model_dict)
+        return retval
 
     @staticmethod
     def get_all_followers(user_id):

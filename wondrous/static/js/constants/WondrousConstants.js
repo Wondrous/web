@@ -16,4 +16,6 @@ module.exports = keyMirror({
     TOGGLE_SIDEBAR: null,       // SideBar toggle
     NEW_POST: null,             // New Post
     POST_COMPLETED: null,       // New Post uploaded completely
+    FOLLOWER_LOAD: null,        // Follower just loaded 
+    FOLLOWING_LOAD: null,       // Following just loaded
 });

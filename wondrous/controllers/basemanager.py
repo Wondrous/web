@@ -20,7 +20,7 @@ class BaseManager(object):
 
     @classmethod
     def model_to_json(cls, model, level=0):
-        
+
         """
             PURPOSE: Transforms a model into a dictionary which can be dumped to JSON.
 
@@ -31,7 +31,7 @@ class BaseManager(object):
                 model : <ClassObject> : REQUIRED : The Class Object of the model that we're converting to JSON
                 level : int : default=0 : The index of items in SENSITIVE_KW (see above)
 
-            RETURNS: A dict (which is the equivalent JSON) 
+            RETURNS: A dict (which is the equivalent JSON)
             of a given model's attributes.
         """
 
@@ -42,8 +42,11 @@ class BaseManager(object):
         for c in columns:
             if c in cls.SENSITIVE_KW[level]:
                 continue
-            val = getattr(model, c)
-            if isinstance(val, datetime.datetime):
-                val = val.isoformat()
-            data[c] = val
+            try:
+                val = getattr(model, c)
+                if isinstance(val, datetime.datetime):
+                    val = val.isoformat()
+                data[c] = val
+            except Exception, e:
+                pass
         return data

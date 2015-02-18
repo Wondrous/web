@@ -76,6 +76,36 @@ module.exports = {
         request.get(url).end(_callback(callback));
     },
 
+    // Load their user info
+    // options are:
+    // username
+    // page = 0
+    // callback(err,json_res)
+    getFollowers: function(options){
+        var callback = options.callback;
+        var username = options.username;
+        var page = options.page;
+        var url = '/api/user/followers?username='+username+'&page='+String(page);
+
+        // Make the get request
+        request.get(url).end(_callback(callback));
+    },
+
+    // Load their user info
+    // options are:
+    // username
+    // page = 0
+    // callback(err,json_res)
+    getFollowing: function(options){
+        var callback = options.callback;
+        var username = options.username;
+        var page = options.page;
+        var url = '/api/user/following?username='+username+'&page='+String(page);
+
+        // Make the get request
+        request.get(url).end(_callback(callback));
+    },
+
     // Post new post
     // options is:
     // callback(err,json_res)

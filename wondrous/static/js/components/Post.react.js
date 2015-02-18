@@ -10,9 +10,14 @@ var UserTitle = React.createClass({
 
 var Photo = React.createClass({
     render: function () {
+
+        photoStyle = {
+            backgroundImage: this.props.data.ouuid?"url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")" :"/static/pictures/500x500.gif"
+        };
+
         return (
             <div className="post-cover-photo cover no-top-border"
-            style={{"backgroundImage": "url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")"}}>
+            style={photoStyle}>
                 <div className="post-subject-text">
                     <div className="post-subject-wrapper">
                         <div className="post-subject-text-position">

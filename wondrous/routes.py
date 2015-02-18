@@ -69,6 +69,8 @@ def build_routes(config):
     config.add_route('api_user_password',                      '/api/user/password')   # POST
     config.add_route('api_user_me',                            '/api/me')              # GET
     config.add_route('api_user_info',                          '/api/user')            # GET
+    config.add_route('api_user_followers',                     '/api/user/followers')  # GET
+    config.add_route('api_user_following',                     '/api/user/following')  # GET
 
     config.add_route('api_user_wall',                          '/api/wall')            # GET
     config.add_route('api_new_post',                           '/api/wall/new')            # POST
@@ -105,7 +107,8 @@ def build_routes(config):
     config.add_route('ajax_upload_file_handler',               '/ajax/upload/{ajax_method}/')
 
     # INDEX
-    config.add_route('stuff_handler',                          '/{stuff}')
+    config.add_route('stuff1_handler',                          '/{stuff}')
+    config.add_route('stuff_handler',                          '/{stuff}/{stuff1}')
     config.add_route('index_handler',                          '/')
 
     config.add_route('index_priority_feed_handler',            '/priority-feed/')

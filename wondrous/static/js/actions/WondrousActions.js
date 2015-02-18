@@ -36,6 +36,22 @@ var WondrousActions = {
         });
     },
 
+    // An user's followers are loaded
+    loadProfileFollower: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.FOLLOWER_LOAD,
+            data: data
+        });
+    },
+
+    // An user's following are loaded
+    loadProfileFollowing: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.FOLLOWING_LOAD,
+            data: data
+        });
+    },
+
     // An user wall loaded
     loadWallPosts: function(data){
         AppDispatcher.handleAction({

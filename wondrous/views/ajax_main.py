@@ -111,138 +111,41 @@ class APIViews(BaseHandler):
                 kwargs[key] = Sanitize.safe_input(val)
         return kwargs
 
-    @view_config(request_method="POST",route_name='api_user_signup', renderer='json')
-    def api_user_signup(self):
+
+    @view_config(request_method="GET",route_name='api_user_followers', renderer='json')
+    def api_user_followers(self):
         """
-            PURPOSE: Retrieves the user information based on relationship and login
-                status
+            PURPOSE: Retrieves the user profile posts -- all the posts that
+                were created by the respective user
 
             USE: self.query_kwargs to provide all the required inputs.
-                person, user_id or username
+                person,user_id or username,page=0 -- last param is optional
 
             PARAMS: (None)
 
-            RETURNS: The JSON of the person+user model if valid else {}
+            RETURNS: The JSON array of the wallpost objects
         """
-        safe_in  = Sanitize.safe_input
-        p = self.request.params
+        person = self.request.person
+        posts = VoteManager.get_followers_json(person,**self.query_kwargs)
+        return posts
 
-        # Some helpful constants
-        PERSON = 1
-        SIGNUP_ROUTE = "/signup/step/1/"
-
-        # The data we need to validate
-        error_message = None
-        first_name = safe_in(p.get('firstname'))
-        last_name  = safe_in(p.get('lastname'))
-        email      = safe_in(p.get('email'))
-        password   = safe_in(p.get('password'), strip=False)
-        username   = safe_in(Sanitize.strip_ampersand(p.get('username')))
-
-        # Check for presence
-        if not first_name:
-            error_message = "Please enter your first name."
-        elif not last_name:
-            error_message = "Please enter your last name."
-        elif not email:
-            error_message = "Please enter your email."
-        elif not password:
-            error_message = "Please enter a password."
-        elif not username:
-            error_message = "Please enter a username."
-
-        if not error_message:
-
-            _s_valid_fn, len_err_fn = Sanitize.length_check(first_name, min_length=1, max_length=30)
-            _s_valid_ln, len_err_ln = Sanitize.length_check(last_name, min_length=1, max_length=30)
-            _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
-            _s_valid_em = Sanitize.is_valid_email(email)
-            _s_em_taken = User.by_kwargs(email=email).first()
-            _s_valid_un = Sanitize.is_valid_username(username.lower())
-            _s_un_taken = User.by_kwargs(username=username).first()
-
-            # Check for validity
-            if not _s_valid_fn:
-                error_message = "Your first name is {err}".format(err=len_err_fn)
-            elif not _s_valid_ln:
-                error_message = "Your last name is {err}".format(err=len_err_ln)
-            elif not _s_valid_em:
-                error_message = "Please enter a valid email address"
-            elif _s_em_taken:
-                error_message = "This email has already been used to sign up. Please use a different one."
-            elif not _s_valid_pw:
-                error_message = "Your password is {err}".format(err=len_err_pw)
-            elif not _s_valid_un:
-                error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
-            elif _s_un_taken:
-                error_message = "This username has already been taken. Please use a different one."
-
-        if not error_message:
-
-            new_user = AccountManager.add(
-                            first_name,
-                            last_name,
-                            email,
-                            username,
-                            password
-                        )
-            new_person = new_user.person
-            headers = self._set_session_headers(new_person)
-            new_user.last_login = datetime.now()
-
-            person = self.request.person
-            return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
-        else:
-            data = {
-                'error' : error_message,
-            }
-
-
-        return data
-
-    @view_config(request_method="POST",route_name='api_user_login', renderer='json')
-    def api_user_login(self):
+    @view_config(request_method="GET",route_name='api_user_following', renderer='json')
+    def api_user_following(self):
         """
-            PURPOSE: API for user
+            PURPOSE: Retrieves the user profile posts -- all the posts that
+                were created by the respective user
 
             USE: self.query_kwargs to provide all the required inputs.
-                identification, password
+                person,user_id or username,page=0 -- last param is optional
 
             PARAMS: (None)
 
-            RETURNS: The JSON of the person+user model if valid else {}
+            RETURNS: The JSON array of the wallpost objects
         """
-        safe_in  = Sanitize.safe_input
-        safe_out = Sanitize.safe_output
-        p        = self.query_kwargs
-        error_message = None
-        credential    = None
-        password      = None
-
-        credential = safe_in(p.get('identifier')).lower()
-        password   = safe_in(p.get('password'), strip=False)
-
-        if Sanitize.is_valid_email(credential):
-            this_user = User.by_kwargs(email=credential).first()
-        else:
-            this_user = User.by_kwargs(username=credential).first()
-
-        if this_user and this_user.validate_password(password) and not this_user.is_banned:
-
-            headers = self._set_session_headers(this_user.person)
-            this_user.last_login = datetime.now()
-
-            return AccountManager.get_json_by_username(this_user.person,**{'user_id':this_user.id})
-
-        elif this_user and this_user.is_banned:
-            return {}
 
         person = self.request.person
-        if not person:
-            return {'error':"Invalid email/username or password"}
-
-
-
+        posts = VoteManager.get_following_json(person,**self.query_kwargs)
+        return posts
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
