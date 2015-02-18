@@ -34,7 +34,7 @@ from wondrous.models import (
 
 from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
-
+import logging
 
 class PostManager(BaseManager):
 
@@ -58,7 +58,7 @@ class PostManager(BaseManager):
 
     @classmethod
     def add(cls, user_id, tags, subject, text, repost_id=None, file_type=None):
-        
+
         """
             PURPOSE: the purpose of the this method is to allow users to post and
             repost objects
@@ -72,7 +72,7 @@ class PostManager(BaseManager):
 
             RETURN: the newly created Post
         """
-        
+
         if repost_id:
             old_post = Post.by_id(repost_id)
             new_post = Post(user_id=user_id, repost_id=repost_id)
@@ -82,8 +82,6 @@ class PostManager(BaseManager):
                 new_post.original_id = old_post.original_id
             else:
                 new_post.original_id = repost_id
-            if text:
-                new_post.text = text
 
         else:
             # take it apart
@@ -120,7 +118,7 @@ class PostManager(BaseManager):
 
     @classmethod
     def _sign_upload_request(cls, ouuid, mime_type):
-        
+
         """
             Signs the upload request with our AWS credientials,
             returns the signed request url and the url of the content
@@ -156,11 +154,13 @@ class PostManager(BaseManager):
         post = PostManager.add(person.user.id, tags, subject, text, repost_id=None, file_type=file_type)
         object = post.object
 
-        data = PostManager.model_to_json(object)
+        data = {}
+
         if file_type:
             data.update(cls._sign_upload_request(object.ouuid, object.mime_type))
 
         data.update(PostManager.model_to_json(post))
+        data.update(PostManager.model_to_json(object))
         return data
 
     @classmethod

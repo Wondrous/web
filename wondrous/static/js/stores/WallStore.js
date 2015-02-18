@@ -14,6 +14,10 @@ function loadWallData(data){
     }
 }
 
+function addNewPost(post){
+    _posts.unshift(post);
+}
+
 
 // Extend WallStore with EventEmitter and underscore
 var WallStore = _.extend({},EventEmitter.prototype,{
@@ -44,9 +48,9 @@ AppDispatcher.register(function(payload){
     var action = payload.action;
 
     switch(action.actionType){
-        // Respond to POST_RECEIVE
-        case WondrousConstants.POST_RECEIVE:
-            loadFeedData(action.data);
+        // Respond to NEW_POST
+        case WondrousConstants.NEW_POST:
+            addNewPost(action.data);
             break;
 
         // Respond to WALL_LOAD

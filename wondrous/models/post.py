@@ -52,7 +52,6 @@ class Post(Base, BaseMixin):
     is_hidden = Column(Boolean, default=False)  # If you want to hide something from your wall
 
     feed_post_links = relationship("FeedPostLink", backref="post")
-    text = Column(Unicode)
 
     post_tag_links = relationship("PostTagLink", backref="object")
 

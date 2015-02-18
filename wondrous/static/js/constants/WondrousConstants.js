@@ -14,4 +14,6 @@ module.exports = keyMirror({
     USER_UNLOAD: null,          // User unload
     PROFILE_LOAD: null,         // Profile Load
     TOGGLE_SIDEBAR: null,       // SideBar toggle
+    NEW_POST: null,             // New Post
+    POST_COMPLETED: null,       // New Post uploaded completely
 });

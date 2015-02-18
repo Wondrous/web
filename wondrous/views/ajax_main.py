@@ -89,12 +89,9 @@ from wondrous.views.main import BaseHandler
 
 from collections import defaultdict
 from datetime import datetime
+import json
 
 class APIViews(BaseHandler):
-
-    """
-        # TODO ADD FUCKING XHR
-    """
 
     @property
     def query_kwargs(self):
@@ -102,6 +99,11 @@ class APIViews(BaseHandler):
         kwargs.update(self.request.params)
 
         #sanitize everything
+        try:
+            if self.request.body:
+                kwargs.update(json.loads(self.request.body))
+        except Exception, e:
+            pass
 
         for key in kwargs.keys():
             val = kwargs[key]
@@ -357,7 +359,7 @@ class APIViews(BaseHandler):
 
 
     @api_login_required
-    @view_config(request_method="POST",route_name='api_new_post', xhr=True,renderer='json')
+    @view_config(request_method="POST",route_name='api_new_post', renderer='json')
     def api_new_post(self):
         """
             PURPOSE: post a new post
@@ -369,17 +371,18 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing the new post else containing JSON with error
         """
-        logging.warn("posting")
+
         p            = self.request.POST
         person       = self.request.person
         tags         = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
         if 'tags[]' in query_kwargs.keys():
             del query_kwargs['tags[]']
-            query_kwargs.update({'tags':tags})
+            if len(tags)>0:
+                query_kwargs.update({'tags':tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
-
-        return PostManager.post_json(person,**query_kwargs)
+        retval = PostManager.post_json(person,**query_kwargs)
+        return retval
 
 
     @api_login_required

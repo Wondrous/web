@@ -5,7 +5,7 @@ function _callback(cb){
     return function(err,res){
         console.log("res",res);
         if(res){
-            if(res.body.hasOwnProperty('error')){
+            if(typeof res.body !== 'undefined' && res.body && res.body.hasOwnProperty('error')){
                 err = res.body;
             }
         }
@@ -74,5 +74,83 @@ module.exports = {
 
         // Make the get request
         request.get(url).end(_callback(callback));
+    },
+
+    // Post new post
+    // options is:
+    // callback(err,json_res)
+    // uploadData: object comprised of the the follow:
+    //      subject
+    //      text
+    //      tags -- optional
+    //      file_type -- optional
+    newPost: function(options){
+        var uploadData = options.uploadData;
+        var callback = options.callback;
+        if (!uploadData.hasOwnProperty('subject')||!uploadData.hasOwnProperty('text')) callback({error:"not sufficient"},null);
+
+        var url = '/api/wall/new';
+        request.post(url)
+        .send(uploadData).end(_callback(callback));
+    },
+
+
+    // Upload file to s3
+    // options:
+    // callback(err,json_res)
+    // blob
+    // file_type
+    // post_data // the returned json object data from newPost
+    // onProgress(int) //optional
+    uploadFile: function(options){
+        if(!options.hasOwnProperty('blob')||!options.hasOwnProperty('post_data')||!options.hasOwnProperty('file_type')){
+            if (callback) callback({error:"not enough"},null);
+        }
+
+        var callback = options.callback;
+        var post_data = options.post_data;
+        var blob = options.blob;
+        var onProgress = options.onProgress;
+        var file_type = options.file_type;
+
+        if (post_data.hasOwnProperty('signed_request')){
+            var xhr = new XMLHttpRequest();
+            var url = post_data['signed_request'];
+
+            if (xhr.withCredentials !== null) {
+                xhr.open('PUT', url, true);
+            } else if (typeof XDomainRequest !== "undefined") {
+                xhr = new XDomainRequest();
+                xhr.open('PUT', url);
+            } else {
+                xhr = null;
+            }
+
+            if (!xhr) {
+                this.onError('CORS not supported');
+            } else {
+                xhr.onload = function() {
+                if (xhr.status === 200) {
+                    if(callback) callback(null,xhr);
+                } else {
+                    console.error("upload incomplete!");
+                }
+                };
+                xhr.onerror = function() {
+                    console.log("errror!!!! CORS");
+                };
+                xhr.upload.onprogress = function(e) {
+                  if (e.lengthComputable) {
+                    var progress = Math.round((e.loaded / e.total) * 100);
+                    if (onProgress) onProgress(progress);
+                  }
+                };
+              }
+              xhr.setRequestHeader('Content-Type', file_type);
+              xhr.setRequestHeader('x-amz-acl', 'public-read');
+              xhr.send(blob);
+        }else{
+            if (callback) callback(null,{error:"no signed_request"});
+        }
     }
 }

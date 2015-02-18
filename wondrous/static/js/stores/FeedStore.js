@@ -14,6 +14,10 @@ function loadFeedData(data){
     }
 }
 
+function addNewPost(post){
+    _posts.unshift(post);
+}
+
 // Extend FeedStore with EventEmitter and underscore
 var FeedStore = _.extend({},EventEmitter.prototype,{
 
@@ -46,6 +50,11 @@ AppDispatcher.register(function(payload){
         // Respond to POST_RECEIVE
         case WondrousConstants.POST_RECEIVE:
             loadFeedData(action.data);
+            break;
+
+        // Respond to NEW_POST
+        case WondrousConstants.NEW_POST:
+            addNewPost(action.data);
             break;
 
         // Respond to FEED_LOAD

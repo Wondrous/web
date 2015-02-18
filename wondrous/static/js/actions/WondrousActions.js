@@ -58,7 +58,16 @@ var WondrousActions = {
             actionType: WondrousConstants.TOGGLE_SIDEBAR,
             data: data
         });
-    }
+    },
+
+    // new posts
+    addNewPost: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.NEW_POST,
+            data: data
+        });
+    },
+
 }
 
 module.exports = WondrousActions
