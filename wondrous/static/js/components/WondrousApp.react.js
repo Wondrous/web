@@ -18,7 +18,8 @@ var ProfileRoute = require('./Profile.react');
 var LoggedOut = require('../components/Authenticate.react').LoggedOut;
 var Signup = require('../components/Authenticate.react').Signup;
 var Login = require('../components/Authenticate.react').Login;
-var SideMenu = require('../components/SideMenu.react')
+var SideMenu = require('../components/SideMenu.react');
+var Settings = require('../components/Settings.react');
 
 var WondrousApp = React.createClass({
 
@@ -65,6 +66,7 @@ var Routes = (
     <Route name="feed" path="/feed" handler={Feed}/>
     <Route name="login" path="/login" handler={Login}/>
     <Route name="signup" path="/signup" handler={Signup}/>
+    <Route name="settings" path="/settings" handler={Settings}/>
     {ProfileRoute}
     <DefaultRoute handler={LoggedOut}/>
   </Route>

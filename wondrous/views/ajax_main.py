@@ -169,6 +169,23 @@ class APIViews(BaseHandler):
         person = self.request.person
         return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
 
+    @login_required
+    @view_config(request_method="POST", route_name='api_user_visibility_toggle', renderer='json')
+    def api_user_visibility_toggle(self):
+
+        """
+            PURPOSE: This method enables users make their profiles
+            either publically accessible, or private.
+
+            If it is publically accessible, they do not need to
+            approve followers. If it is private, they must manually
+            approve all pending follow requests
+        """
+
+        current_user = self.request.person.user
+        current_user.is_private = not current_user.is_private
+        return {'is_private':current_user.is_private}
+
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
         """

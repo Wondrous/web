@@ -30,6 +30,32 @@ VoteAction = {
 };
 
 module.exports = {
+    // toggle privacy
+    // options are:
+    // callback
+    toggleVisibility: function(options){
+        var callback = options.callback;
+        var url = '/api/user/visibility';
+
+        request.post(url).end(_callback(callback));
+    },
+
+    // accepts the request from the user
+    // options are:
+    // user_id
+    // callback
+    acceptRequest: function(options){
+        var callback = options.callback;
+        data = {
+            user_id:options.user_id,
+            action:VoteAction.ACCEPT,
+            vote_type:1
+        }
+
+        var url = '/api/user/vote';
+        request.post(url).send(data).end(_callback(callback));
+    },
+
     // toggle follow/unfollow
     // options are:
     // user_id

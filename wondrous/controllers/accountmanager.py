@@ -106,9 +106,9 @@ class AccountManager(BaseManager):
             user = User.by_id(user_id)
 
         if not user:
-            return {}
+            return {'error':'no users found!'}
         user_id = user.id
-        am_follow = VoteManager.is_following(person.user.id,user_id)
+        am_following = VoteManager.is_following(person.user.id,user_id)
 
         # Am i querying for myself?
         if person and person.user.id == user_id:
@@ -116,7 +116,8 @@ class AccountManager(BaseManager):
             retval.update(super(AccountManager, cls).model_to_json(person.user, 1))
             retval.update({"name": person.ascii_name})
             retval.update({"first_name": person.first_name})
-            retval.update({"following":am_follow})
+            retval.update({"last_name": person.last_name})
+            retval.update({"following":am_following})
             retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
             return retval
 
@@ -127,15 +128,18 @@ class AccountManager(BaseManager):
             retval.update(super(AccountManager, cls).model_to_json(user))
             retval.update({"name": user.person.ascii_name})
             retval.update({"first_name": user.person.first_name})
-            retval.update({"following":am_follow})
+            retval.update({"following":am_following})
             return retval
 
-        elif u.is_private and not u.is_banned and u.is_active:
+        elif user.is_private and not user.is_banned and user.is_active:
             retval = {}
             retval.update({"name": user.person.ascii_name})
-            return {'is_private': True}
+            retval.update({"following":am_following})
+            retval.update({'is_private': True})
+            retval.update({'id':user.id})
+            return retval
 
-        return None
+        return {'error':'no users found!'}
 
     @classmethod
     def deactivate_json(cls, person, password):

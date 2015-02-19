@@ -294,15 +294,51 @@ var UserBar = React.createClass({
     }
 });
 
-var Profile = React.createClass({
-    mixins: [ Router.State ],
+var PrivateProfile = React.createClass({
+    handleData: function(err,data){
+        if(err==null){
+            $(this.refs.requestBtn.getDOMNode()).html('request sent!');
+            $(this.refs.requestBtn.getDOMNode()).prop("disabled",true);
+        }else{
+            console.error("error",err);
+        }
+    },
+    handleClick :function(){
+        user_id = this.props.user.id;
+        console.log("sending",this.props.user);
 
+        if(!user_id && typeof user_id === 'undefined') return;
+        WondrousAPI.toggleFollow({
+            user_id:user_id,
+            callback:this.handleData
+        })
+    },
+    render:function(){
+        return (
+            <div>
+                <h1 className="profile-landing-name">{ this.props.user.name }</h1>
+                <img className="profile-landing-profile-picture round-50" src={typeof this.props.user.ouuid!=='undefined' ? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"}/>
+
+                <div>
+                    <button onClick={this.handleClick} ref="requestBtn" className="btn follow-btn round-3 animate-e-i-o">Request to Follow</button>
+                </div>
+            </div>
+        );
+    }
+});
+
+var Profile = React.createClass({
+    mixins: [Router.Navigation, Router.State],
+    getInitialState:function(){
+        return getProfileState();
+    },
     handleProfileData:function(err, data){
         if(err==null){
             console.log("profile",data);
             WondrousActions.loadProfileInfo(data);
         }else{
-            // WondrousActions.unloadUserInfo(err);
+            this.replaceWith('/')
+            console.error("error",err);
         }
     },
     handleWallData:function(err, data){
@@ -325,24 +361,36 @@ var Profile = React.createClass({
             callback: this.handleWallData
         });
     },
-    componentDidMount:function(){
+    componentDidMount: function() {
+        ProfileStore.addChangeListener(this._onChange);
         this.loadProfileFromServer();
         this.loadWallFromServer();
+    },
+
+    componentWillUnmount: function(){
+        ProfileStore.removeChangeListener(this._onChange);
     },
     render: function () {
         var username = this.getParams().username;
 
         var am_following = getProfileState().data.following;
         var is_private = getProfileState().data.is_private;
-        var is_visible = am_following||is_private;
-        is_visible = is_visible==true;
+        var is_visible = (typeof am_following !=='undefined' && am_following==true)||(typeof is_private !=='undefined' && !is_private==true);
+
         return (
             <div className="main-content">
-                <UserBar username={username}/>
-                <div className="cover profile-content">
-                    <RouteHandler />
-                </div>
+                {!is_visible?<PrivateProfile user={getProfileState().data}/> :
+                    <div>
+                        <UserBar username={username}/>
+                        <div className="cover profile-content">
+                            <RouteHandler />
+                        </div>
+                    </div>
+                }
             </div>);
+    },
+    _onChange: function(){
+        this.setState(getProfileState());
     }
 });
 

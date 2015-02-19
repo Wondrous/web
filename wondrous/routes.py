@@ -71,6 +71,7 @@ def build_routes(config):
     config.add_route('api_user_info',                          '/api/user')            # GET
     config.add_route('api_user_followers',                     '/api/user/followers')  # GET
     config.add_route('api_user_following',                     '/api/user/following')  # GET
+    config.add_route('api_user_visibility_toggle',             '/api/user/visibility') # POST
 
     config.add_route('api_user_wall',                          '/api/wall')            # GET
     config.add_route('api_new_post',                           '/api/wall/new')            # POST

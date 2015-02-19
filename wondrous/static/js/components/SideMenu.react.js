@@ -21,7 +21,7 @@ var SettingsBar = React.createClass({
                     <div className="dropdown-element">Privacy</div>
                 </Link>
 
-                <Link to="/info/settings/" className="dropdown-a">
+                <Link to="/settings" className="dropdown-a">
                     <div className="dropdown-element">Account settings</div>
                 </Link>
 
@@ -50,7 +50,6 @@ var Notification = React.createClass({
 
     handleProfileData:function(err, data){
         if(err==null){
-            console.log("profile",data);
             WondrousActions.loadProfileInfo(data);
         }else{
             // WondrousActions.unloadUserInfo(err);
@@ -76,9 +75,18 @@ var Notification = React.createClass({
             callback: this.handleWallData
         });
     },
+    handleAcceptData:function(err,res){
+        if(err==null){
+            console.log("accepted! ",res);
+        }else{
 
+        }
+    },
     handleAccept:function(){
-        console.log("request accepted");
+        WondrousAPI.acceptRequest({
+            user_id: this.props.data.from_user_id,
+            callback:this.handleAcceptData
+        });
     },
     handleClick: function(){
         note = this.props.data;
@@ -98,6 +106,7 @@ var Notification = React.createClass({
         }
         return content;
     },
+
     render: function(){
         note = this.props.data;
         var actionNeeded = false;
@@ -112,13 +121,10 @@ var Notification = React.createClass({
                 <div className={"dropdown-element"} style={{'display':displayType}}>
                     <img/>
                     <span>{content}</span>
-                    {actionNeeded?<Button>"Accept"</Button>:''}
+                    {actionNeeded?<button onClick={this.handleAccept}>"Accept"</button>:''}
                 </div>
             </div>
         );
-
-
-
     }
 })
 

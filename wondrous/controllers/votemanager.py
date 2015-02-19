@@ -23,7 +23,6 @@ from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
 
-import logging
 
 class VoteAction:
     LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(8)
@@ -57,6 +56,7 @@ class VoteManager(BaseManager):
         action       = int(action)
         # Translate action
         vote = None
+
         if vote_type == Vote.OBJECT:
             if action == VoteAction.LIKED:
                 vote = cls.like(from_user_id,user_id)
@@ -80,7 +80,6 @@ class VoteManager(BaseManager):
             DBSession.add(vote)
             DBSession.flush()
             if vote_type == Vote.USER:
-                logging.warn(vote.status)
                 return {
                     "following" : vote.status == Vote.FOLLOWED or vote.status == Vote.TOPFRIEND,
                     "total_following" : cls.get_following_count(user_id),
@@ -116,10 +115,11 @@ class VoteManager(BaseManager):
 
         # Change the current one if it exists
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER).first()
-        if vote:
-            status = Vote.UNFOLLOWED if vote.status==Vote.FOLLOWED else status
-            if not cls.is_blocked_by(from_user_id,to_user_id) and (vote.status != Vote.PENDING or not is_private):
+        if vote and vote.status!=Vote.PENDING and not cls.is_blocked_by(from_user_id,to_user_id):
+            if status == Vote.PENDING and vote.status!=Vote.FOLLOWED:
                 vote.status = status
+            elif (vote.status != Vote.PENDING or not is_private):
+                vote.status = Vote.UNFOLLOWED if vote.status==Vote.FOLLOWED else status
         else:
             vote = Vote(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER, status=status)
 
@@ -316,7 +316,7 @@ class VoteManager(BaseManager):
         return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
 
     @classmethod
-    def get_following_json(cls, person, username = None, user_id = None, page = 0):
+    def get_followers_json(cls, person, username = None, user_id = None, page = 0):
         user_id = person.user.id
         users = User.query.join(Vote, User.id==Vote.user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
@@ -329,7 +329,7 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def get_followers_json(cls, person, username = None, user_id = None, page = 0):
+    def get_following_json(cls, person, username = None, user_id = None, page = 0):
         user_id = person.user.id
         users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
             filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()

@@ -82,7 +82,7 @@ class NotificationManager(BaseManager):
                                         notification=notification)
 
         # Send to realtime push
-        if need_to_alert or reason == Notification.FOLLOW_ACCEPTED:
+        if need_to_alert or reason == Notification.FOLLOW_ACCEPTED or reason == Notification.FOLLOW_REQUEST:
             send_notification(to_user_id, str({
                 'from_user_id' : from_user_id,
                 'to_user_id'   : to_user_id,
@@ -91,6 +91,8 @@ class NotificationManager(BaseManager):
                 'notification' : notification,
             }))
 
+        logging.warn("need to alert?"+str(need_to_alert))
+        logging.warn("new notification?"+str(new_notification.reason))
         if new_notification:
             DBSession.add(new_notification)
         return new_notification
