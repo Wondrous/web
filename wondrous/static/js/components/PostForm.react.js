@@ -68,6 +68,7 @@ var PostForm = React.createClass({
         if(this.file){
             $('#cropBox').data('cropbox').remove();
             this.file = null;
+            $('#cropBox').attr('src',"/static/pictures/500x500.gif");
         }
 
         // Clear the post textarea and the hashtag highlighter
@@ -165,11 +166,15 @@ var PostForm = React.createClass({
 
     },
     render: function(){
+
         return (
             <div>
                 <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div>
                 <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
-                    <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/500x500.gif"/>
+                    <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/500x500.gif"
+                        style={{"MozBorderRadius": "30px",
+                                "KhtmlBorderRadius": "30px",
+                                "WebkitBorderRadius": "30px"}}/>
 
                     <div className="new-post-element">
                         <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
