@@ -316,9 +316,9 @@ class VoteManager(BaseManager):
         return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
 
     @classmethod
-    def get_followers_json(cls, person, username = None, user_id = None, page = 0):
+    def get_following_json(cls, person, username = None, user_id = None, page = 0):
         user_id = person.user.id
-        users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.subject_id==user_id).\
+        users = User.query.join(Vote, User.id==Vote.user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
 
         retval = []
@@ -329,7 +329,7 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def get_following_json(cls, person, username = None, user_id = None, page = 0):
+    def get_followers_json(cls, person, username = None, user_id = None, page = 0):
         user_id = person.user.id
         users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
             filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()

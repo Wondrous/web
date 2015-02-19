@@ -94,8 +94,8 @@ var Follower = React.createClass({
     render: function(){
         this.am_following = getProfileState().data.following;
         this.is_private = getProfileState().data.is_private;
-        var is_visible = am_following||is_private;
-        is_visible = is_visible==true;
+        var is_visible = this.am_following||this.is_private;
+
         var followers = this.state.data.map(function(user,index){
             return (
                 <a href={"/" + user.username}>
@@ -157,7 +157,6 @@ var Following = React.createClass({
         this.am_following = getProfileState().data.following;
         this.is_private = getProfileState().data.is_private;
         var is_visible = this.am_following||this.is_private;
-        is_visible = is_visible==true;
 
         var following = this.state.data.map(function(user,index){
             return (
@@ -206,7 +205,7 @@ var UserBar = React.createClass({
         if(err==null){
             var currentState = this.state.data;
             currentState.following = data.following == true;
-            
+
             this.setState({data:currentState});
         }else{
             console.error("error",err);
@@ -228,8 +227,6 @@ var UserBar = React.createClass({
         this.is_private = getProfileState().data.is_private;
         this.am_following = getProfileState().data.following==true;
 
-        var is_visible = this.am_following||this.is_private;
-        is_visible = is_visible==true;
         return (
             <div className="profile-header">
                 <img src="/static/pictures/defaults/p.default-profile-picture.jpg" className="profile-photo round-50"/>
