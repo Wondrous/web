@@ -16,9 +16,12 @@ var SearchBox = React.createClass({
 });
 
 var NotificationBox = React.createClass({
+    toggleSideBar:function(e){
+        WondrousActions.toggleSideBar();
+    },
     render: function () {
         return (
-            <span id="right-menu" className="notification-count nc-general round-2">
+            <span onClick={this.toggleSideBar} id="right-menu" className="notification-count nc-general round-2">
                 <span className="notification-count-text">0</span>
             </span>);
     }
@@ -31,7 +34,7 @@ var SettingsGear = React.createClass({
     render: function () {
         return (
             <span className="banner-more-options">
-            <span onClick={this.toggleSideBar} className="banner-options-icon">C</span>
+                <span onClick={this.toggleSideBar} className="banner-options-icon">C</span>
             </span>);
     }
 });
@@ -89,10 +92,10 @@ var Navbar = React.createClass({
                 <a href="/" style={{"color": "rgb(235, 235, 235)"}}>
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </a>
-                { this.state.loggedin ? <SearchBox />:null}
-                { this.state.loggedin ? <SettingsGear />:null}
-                { this.state.loggedin ? <ProfileLink user={this.state} />:null}
-                { this.state.loggedin ? <NotificationBox /> :null}
+                { this.state.loggedin ? <SearchBox /> : null}
+                { this.state.loggedin ? <SettingsGear /> : null}
+                { this.state.loggedin ? <ProfileLink user={this.state} /> : null}
+                { this.state.loggedin ? <NotificationBox /> : null}
             </div>
             );
     },
