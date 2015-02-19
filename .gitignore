@@ -60,3 +60,5 @@ target/
 
 #Frontend stuff
 *node_modules*
+*bundle.js
+*bundle.min.js
