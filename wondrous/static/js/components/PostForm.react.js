@@ -161,6 +161,9 @@ var PostForm = React.createClass({
         });
     },
 
+    postTextChange: function(){
+
+    },
     render: function(){
         return (
             <div>
@@ -178,7 +181,7 @@ var PostForm = React.createClass({
                         <div className="post-input-wrapper">
                             <div className="highlighter"></div>
                             <div className="typehead">
-                                <textarea id="postTextarea" ref="postTextarea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
+                                <textarea id="postTextarea" onChange={this.postTextChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
                                 style={{"overflow": "hidden", "wordWrap": "break-word", "resize": "none", "height": "48px"}}></textarea>
                             </div>
                         </div>
@@ -213,7 +216,6 @@ var PostForm = React.createClass({
     componentDidMount: function () {
         // Example of how to write the actions that
         // will occur after React renders the item.
-        // initSmartTextarea();
     }
 });
 

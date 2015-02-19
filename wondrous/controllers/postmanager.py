@@ -161,6 +161,8 @@ class PostManager(BaseManager):
 
         data.update(PostManager.model_to_json(post))
         data.update(PostManager.model_to_json(object))
+        data.update({"name": post.user.person.ascii_name})
+        data.update({"username": post.user.username})
         return data
 
     @classmethod

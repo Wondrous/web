@@ -1410,7 +1410,7 @@ body { font-family: sans-serif; }
 .masonry-brick,
 .post-body,
 .grid-sizer {
-    width: 33.333%;
+    width: 25%;
 }
 
 .masonry-brick {

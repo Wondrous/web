@@ -379,6 +379,7 @@ var Profile = React.createClass({
 
         return (
             <div className="main-content">
+
                 {!is_visible?<PrivateProfile user={getProfileState().data}/> :
                     <div>
                         <UserBar username={username}/>

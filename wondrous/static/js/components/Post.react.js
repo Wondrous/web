@@ -46,8 +46,6 @@ var Post = React.createClass({
                             <span className="post-footer-btn post-repost-btn round-2">Repost</span>
                         </div>
                     </div>
-
-
                 </div>
             </div>)
     }
