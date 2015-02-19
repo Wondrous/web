@@ -185,6 +185,7 @@ function getProfileState(){
 }
 
 var UserBar = React.createClass({
+    mixins: [ Router.Navigation ],
     am_following:getProfileState().data.following,
     is_private:getProfileState().data.is_private,
 
@@ -240,10 +241,10 @@ var UserBar = React.createClass({
                 </span>
 
                 <span className="profile-header-nav">
-                    <a className="profile-header-nav-link " ref="wall" href={"/"+this.state.data.username}>Posts</a>
-                    <a className="profile-header-nav-link " ref="followers" href={"/" + this.state.data.username + "/followers"}>Followers</a>
-                    <a className="profile-header-nav-link " ref="following" href={"/" + this.state.data.username + "/following"}>Following</a>
-                    <a className="profile-header-nav-link " ref="likes" href={"/" + this.state.data.username + "/likes"}>l!kes</a>
+                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username)} ref="wall">Posts</a>
+                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username + '/followers')} ref="followers" >Followers</a>
+                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username + '/following')} ref="following" >Following</a>
+                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username + '/likes')} ref="likes" >l!kes</a>
                 </span>
             </div>
         );
