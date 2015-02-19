@@ -18,7 +18,33 @@ function _callback(cb){
     }
 }
 
+VoteAction = {
+    LIKED:0,
+    BOOKMARKED:1,
+    CANCEL:2,
+    FOLLOW:3,
+    ACCEPT:4,
+    BLOCK:5,
+    DENY:6,
+    TOPFRIEND:7
+};
+
 module.exports = {
+    // toggle follow/unfollow
+    // options are:
+    // user_id
+    // callback
+    toggleFollow: function(options){
+        var callback = options.callback;
+        data = {
+            user_id:options.user_id,
+            action:VoteAction.FOLLOW,
+            vote_type:1
+        }
+
+        var url = '/api/user/vote';
+        request.post(url).send(data).end(_callback(callback));
+    },
 
     // Load wall posts for profile username or id
     // options are:

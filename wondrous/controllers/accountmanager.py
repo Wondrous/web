@@ -101,9 +101,13 @@ class AccountManager(BaseManager):
 
         if username:
             user = User.by_kwargs(username=username).first()
-            if not user:
-                return {}
-            user_id = user.id 
+        else:
+            user = User.by_id(user_id)
+
+        if not user:
+            return {}
+        user_id = user.id
+        am_follow = VoteManager.is_following(person.user.id,user_id)
 
         # Am i querying for myself?
         if person and person.user.id == user_id:
@@ -111,22 +115,22 @@ class AccountManager(BaseManager):
             retval.update(super(AccountManager, cls).model_to_json(person.user, 1))
             retval.update({"name": person.ascii_name})
             retval.update({"first_name": person.first_name})
+            retval.update({"following":am_follow})
             return retval
-
-        u = User.by_id(user_id)
-        if not u:
-            return {}
 
         # if the user is public or I am following
-        if (not u.is_private and not u.is_banned and u.is_active) or \
-            (person and not u.is_banned and u.is_active and VoteManager.is_following(person.user.id,user_id)):
+        if (not user.is_private and not user.is_banned and user.is_active) or \
+            (person and not user.is_banned and user.is_active and am_following):
             retval = cls._get_relationship_stats(user_id)
-            retval.update(super(AccountManager, cls).model_to_json(u))
-            retval.update({"name": person.ascii_name})
-            retval.update({"first_name": person.first_name})
-
+            retval.update(super(AccountManager, cls).model_to_json(user))
+            retval.update({"name": user.person.ascii_name})
+            retval.update({"first_name": user.person.first_name})
+            retval.update({"following":am_follow})
             return retval
+
         elif u.is_private and not u.is_banned and u.is_active:
+            retval = {}
+            retval.update({"name": user.person.ascii_name})
             return {'is_private': True}
 
         return None
