@@ -11,23 +11,23 @@ var SideMenu = React.createClass({
     componentWillUnmount: function(){
         UserStore.removeChangeListener(this._onChange);
     },
-    render:function(){
+    render: function(){
         var displayStyle = {
-            display: this.state.data?"block":"none"
+            display: this.state.data ? "block" : "none"
         };
 
         return(
             <div className="sidemenu" style={displayStyle}>
                 <div className="sidemenuOptions _open_bmo">
-                    <a href="/info/about/" className="dropdown-a __noPush">
+                    <a href="/info/about/" className="dropdown-a">
                         <div className="dropdown-element">About us</div>
                     </a>
 
-                    <a href="/info/tos/" className="dropdown-a __noPush">
+                    <a href="/info/tos/" className="dropdown-a">
                         <div className="dropdown-element">Terms of Service</div>
                     </a>
 
-                    <a href="/info/privacy/" className="dropdown-a __noPush">
+                    <a href="/info/privacy/" className="dropdown-a">
                         <div className="dropdown-element">Privacy</div>
                     </a>
 
@@ -40,13 +40,13 @@ var SideMenu = React.createClass({
                     </a>
 
                     <hr className="dropdown-hr"/>
-                    <a href="/auth/logout/" className="dropdown-element __noPush" style={{"textDecoration": "none","display": "block"}}>Log out</a>
+                    <a href="/auth/logout/" className="dropdown-element" style={{"textDecoration": "none","display": "block"}}>Log out</a>
                 </div>
             </div>
         );
     },
 
-    _onChange:function(){
+    _onChange: function(){
         this.setState({data:UserStore.isShowingSideBar()});
     }
 })

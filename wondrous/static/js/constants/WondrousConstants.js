@@ -2,6 +2,7 @@ var keyMirror = require('react/lib/keyMirror');
 
 // Key Mirror creates an object with key==value
 // present tense please
+// See more: https://www.npmjs.com/package/keymirror
 module.exports = keyMirror({
     POST_LIKE: null,            // like a post
     POST_BOOKMARK: null,        // bookmark a post

@@ -20,7 +20,7 @@ function setUserLogout(data){
 
 // Toggle sidebar
 function toggleSideBar(){
-    _show_sidebar=!_show_sidebar;
+    _show_sidebar = !_show_sidebar;
 }
 
 // Extend UserStore with EventEmitter and underscore
