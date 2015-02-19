@@ -17,25 +17,28 @@ var SearchBox = React.createClass({
 });
 
 var NotificationBox = React.createClass({
-    toggleSideBar:function(e){
-        WondrousActions.toggleSideBar();
+    toggleNotifications:function(e){
+        WondrousActions.toggleNotifications();
     },
     render: function () {
+        var notes = UserStore.getUserData().unseen_notifications||0;
+
+        var cn = (notes > 0) ? "notification-count nc-general round-2 notification-alert":"notification-count nc-general round-2";
         return (
-            <span onClick={this.toggleSideBar} id="right-menu" className="notification-count nc-general round-2">
-                <span className="notification-count-text">0</span>
+            <span onClick={this.toggleNotifications} id="right-menu" className={cn}>
+                <span className="notification-count-text">{notes}</span>
             </span>);
     }
 });
 
 var SettingsGear = React.createClass({
-    toggleSideBar:function(e){
-        WondrousActions.toggleSideBar();
+    toggleSettings:function(e){
+        WondrousActions.toggleSettings();
     },
     render: function () {
         return (
             <span className="banner-more-options">
-                <span onClick={this.toggleSideBar} className="banner-options-icon">C</span>
+                <span onClick={this.toggleSettings} className="banner-options-icon">C</span>
             </span>);
     }
 });

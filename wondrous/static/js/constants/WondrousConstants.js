@@ -14,9 +14,12 @@ module.exports = keyMirror({
     USER_LOAD: null,            // User login
     USER_UNLOAD: null,          // User unload
     PROFILE_LOAD: null,         // Profile Load
-    TOGGLE_SIDEBAR: null,       // SideBar toggle
+    SHOW_SETTINGS: null,        // SideBar Settings
+    SHOW_NOTIFICATIONS: null,   // Show sidebar notifications
     NEW_POST: null,             // New Post
     POST_COMPLETED: null,       // New Post uploaded completely
-    FOLLOWER_LOAD: null,        // Follower just loaded 
+    FOLLOWER_LOAD: null,        // Follower just loaded
     FOLLOWING_LOAD: null,       // Following just loaded
+    NOTIFICATION_LOAD: null,    // Notifications just loaded
+    NOTIFICATION_RECEIVE: null, // A new notification just loaded 
 });

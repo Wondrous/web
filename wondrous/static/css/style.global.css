@@ -56,7 +56,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
        -moz-background-size: cover !important;
          -o-background-size: cover !important;
             background-size: cover !important;
-    
+
     background-attachment: scroll;
 }
 
@@ -514,7 +514,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     padding: 9px 0 7px 5px;
     border: none;
     background-color: rgb(248,248,248);
-    
+
     font-family: helvetica, arial, sans-serif;
     font-size: 15px;
 } .banner-input:focus {
@@ -695,7 +695,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     top: 0;
     right: 0;
     margin-top: 38px;
-    width: 400px;
+    width: 250px;
     background-color: rgb(251,251,251);
 
     -webkit-box-shadow: -5px 0 9px -2px rgb(190,190,190);
@@ -741,7 +741,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     padding: 2px 5px;
     white-space: nowrap;
     overflow: hidden;
-} 
+}
 
 .autocomplete-suggestions strong {
     font-weight: normal;
@@ -1112,7 +1112,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     font-family: courier, helvetica, arial, sans-serif;
     font-size: 12px;
     font-weight: normal;
-    width: 200px; 
+    width: 200px;
     line-height: 0;
     word-break: break-word;
 }
@@ -1137,7 +1137,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     width: 300px;
     margin: 20px auto 10px auto;
     padding: 10px;
-    
+
     color: rgb(251,251,251);
     font-weight: 100;
     text-align: center;
@@ -1154,7 +1154,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     padding: 15px;
     margin: 0 auto;
     margin-top: 20px;
-    
+
     background-color: rgb(100,100,200);
     background: -webkit-linear-gradient(left, rgb(100,100,200), rgb(100,220,100));
     background:   -moz-linear-gradient(right, rgb(100,100,200), rgb(100,220,100));
@@ -1240,7 +1240,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
     position: relative;
     margin-top: 10px;
-    
+
     font-family: arial, helvetica, sans-serif;
     font-size: 15px;
     color: rgb(248,248,248);
@@ -1259,7 +1259,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
 
 .upload-input {
     width: 120px !important;
-    height: 30px !important; 
+    height: 30px !important;
     display: block !important;
     opacity: 0 !important;
     overflow: hidden !important;
@@ -1290,12 +1290,12 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     z-index: 2;
 }
 
-.new-post-element .post-input { 
+.new-post-element .post-input {
     position: relative;
     display: block;
     width: 100%;
     margin: 0 auto;
-    min-height: 48px !important;    
+    min-height: 48px !important;
     resize: none !important;
     border: 0;
     outline: none;
@@ -1325,7 +1325,7 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
         -ms-border-radius: 2px;
          -o-border-radius: 2px;
             border-radius: 2px;
-    
+
     -webkit-box-shadow: 0 0 0 1px rgb(163,188,234);
        -moz-box-shadow: 0 0 0 1px rgb(163,188,234);
          -o-box-shadow: 0 0 0 1px rgb(163,188,234);
@@ -1616,17 +1616,17 @@ body { font-family: sans-serif; }
 
 .post-text {
     position: relative;
-    
+
     font-family: helvetica, arial, sans-serif;
     font-size: 40px;
     font-weight: 100;
 
     color: rgb(44,44,44);
-    
+
     text-align: left;
     margin: 15px auto;
     padding: 0 5px;
-    
+
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
 
@@ -1668,10 +1668,10 @@ body { font-family: sans-serif; }
 .right-post-image {
     position: fixed;
     display: none;
-    
+
     top: 10%;
     margin-left: 26%;
-    
+
     height: auto;
     width: auto;
     max-height: 80%;
@@ -1987,7 +1987,7 @@ svg {
 
 .dropdown-element {
     width: auto;
-    
+
     padding: 10px 0;
     padding-left: 10px;
     padding-right: 30px;
@@ -2097,7 +2097,7 @@ svg {
 
     color: rgb(51,51,51);
     font-weight: bold;
-    
+
     background-color: rgb(255,255,255);
     background-color: rgba(255,255,255,0.9);
 
@@ -2228,7 +2228,7 @@ svg {
     border-left: solid 2px #eaeaea;
     border-bottom: solid 2px #777;
     border-right: solid 2px #777;
-    padding: 5px 5px;           
+    padding: 5px 5px;
 }
 
 .privacy-toggle.down {
@@ -2243,7 +2243,7 @@ svg {
 .dimmer {
     background: rgb(0,0,0);
     opacity: 0.65;
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

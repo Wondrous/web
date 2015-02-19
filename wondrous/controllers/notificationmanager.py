@@ -75,7 +75,7 @@ class NotificationManager(BaseManager):
 
         # Add the new notification after the overlap handling
         notification = cls.construct_notification(reason,from_user_id,to_user_id)
-        new_notification = Notification(from_user_id=from_user_id, 
+        new_notification = Notification(from_user_id=from_user_id,
                                         to_user_id=to_user_id,
                                         reason=reason,
                                         subject_id=subject_id,
@@ -102,6 +102,14 @@ class NotificationManager(BaseManager):
         data = []
         for note in notes:
             note_dict = super(NotificationManager, cls).model_to_json(note)
+            from_user = note.from_user
+            to_user = note.to_user
+
+            note_dict.update({"to_user_username":to_user.username});
+            note_dict.update({"to_user_firstname":to_user.person.first_name})
+
+            note_dict.update({"from_user_username":from_user.username});
+            note_dict.update({"from_user_firstname":from_user.person.first_name})
             data.append(note_dict)
         return data
 
@@ -139,10 +147,17 @@ class NotificationManager(BaseManager):
 
     @classmethod
     def set_all_seen(cls, user_id):
+        # TODO OPTIMIZE
         for note in Notification.by_kwargs(is_seen=True).all():
             note.is_seen = True
 
     @classmethod
     def set_all_read(cls, user_id):
+        # TODO OPTIMIZE
         for note in Notification.by_kwargs(is_read=True).all():
             note.is_read = True
+
+    @classmethod
+    def get_all_unseen_count(cls,user_id):
+        count = Notification.by_kwargs(is_seen=False,to_user_id=user_id).count()
+        return count if count else 0

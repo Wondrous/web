@@ -28,6 +28,14 @@ var WondrousActions = {
         });
     },
 
+    // Load Notifications
+    loadUserNotification: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.NOTIFICATION_LOAD,
+            data:data
+        });
+    },
+
     // An user profile loaded
     loadProfileInfo: function(data){
         AppDispatcher.handleAction({
@@ -68,10 +76,18 @@ var WondrousActions = {
         });
     },
 
-    // toggles the sidebar
-    toggleSideBar: function(data){
+    // toggles the settings sidebar
+    toggleSettings: function(data){
         AppDispatcher.handleAction({
-            actionType: WondrousConstants.TOGGLE_SIDEBAR,
+            actionType: WondrousConstants.SHOW_SETTINGS,
+            data: data
+        });
+    },
+
+    // toggles the notifications sidebar
+    toggleNotifications: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.SHOW_NOTIFICATIONS,
             data: data
         });
     },

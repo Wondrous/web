@@ -46,6 +46,21 @@ module.exports = {
         request.post(url).send(data).end(_callback(callback));
     },
 
+    // Load Notifications for this profile
+    // options are
+    // page: 0
+    // callback
+    getNotifications: function(options){
+        var callback = options.callback;
+        var page = options.page;
+        if(typeof(options.page)==='undefined') page = 0;
+
+        var url = '/api/notification?page='+String(page);
+
+        //Make the get request
+        request.get(url).end(_callback(callback));
+    },
+
     // Load wall posts for profile username or id
     // options are:
     // username

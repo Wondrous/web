@@ -324,11 +324,11 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        self.query_kwargs['vote_type'] = 1 
+        self.query_kwargs['vote_type'] = 1
         return VoteManager.vote_json(person, **self.query_kwargs)
 
     @api_login_required
-    @view_config(request_method='GET', xhr=True,route_name='api_user_notification', renderer='json')
+    @view_config(request_method='GET',route_name='api_user_notification', renderer='json')
     def api_user_notification(self):
         """
             PURPOSE: get a list of notifications for current user
@@ -367,7 +367,7 @@ class AjaxHandler(BaseHandler):
         for the main platform
     """
 
-    @view_config(route_name='ajax_username_check_handler', xhr=True, renderer='json')
+    @view_config(route_name='ajax_username_check_handler', renderer='json')
     def ajax_login_check_handler(self):
 
         """

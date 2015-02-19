@@ -19,6 +19,7 @@ from wondrous.models import (
 )
 
 from wondrous.controllers.basemanager import BaseManager
+from wondrous.controllers.notificationmanager import NotificationManager
 
 class AccountManager(BaseManager):
 
@@ -116,6 +117,7 @@ class AccountManager(BaseManager):
             retval.update({"name": person.ascii_name})
             retval.update({"first_name": person.first_name})
             retval.update({"following":am_follow})
+            retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
             return retval
 
         # if the user is public or I am following

@@ -4,7 +4,7 @@ var WondrousConstants = require('../constants/WondrousConstants');
 var _ = require('underscore');
 
 // Define initial user setting
-var _user = {}, _logged_in = false, _show_sidebar = false;
+var _user = {}, _logged_in = false, _show_sidebar = false, _showing = null;
 
 // Method to load user info from API
 function loadUserData(data){
@@ -21,10 +21,28 @@ function setUserLogout(data){
 // Toggle sidebar
 function toggleSideBar(){
     _show_sidebar = !_show_sidebar;
+    if(!_show_sidebar){
+        _showing = null;
+    }
+}
+
+function showSettings(){
+    _showing = WondrousConstants.SHOW_SETTINGS;
+    toggleSideBar();
+}
+
+function showNotifications(){
+    _showing = WondrousConstants.SHOW_NOTIFICATIONS;
+    toggleSideBar();
 }
 
 // Extend UserStore with EventEmitter and underscore
 var UserStore = _.extend({},EventEmitter.prototype,{
+
+    // Return the sidebar that is showing
+    barOnDisplay: function(){
+        return _showing;
+    },
 
     // Return whether sidebar is open or not
     isShowingSideBar:function(){
@@ -73,8 +91,12 @@ AppDispatcher.register(function(payload){
             setUserLogout(action.data);
             break;
 
-        case WondrousConstants.TOGGLE_SIDEBAR:
-            toggleSideBar();
+        case WondrousConstants.SHOW_SETTINGS:
+            showSettings();
+            break;
+
+        case WondrousConstants.SHOW_NOTIFICATIONS:
+            showNotifications();
             break;
 
         default:
