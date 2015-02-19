@@ -7,7 +7,7 @@ var ProfileStore = require('../stores/ProfileStore');
 var RouteHandler = require('react-router').RouteHandler;
 var DefaultRoute = require('react-router').DefaultRoute;
 var Route = require('react-router').Route;
-
+var Link = Router.Link;
 // Components
 var PostForm = require('./PostForm.react');
 
@@ -60,8 +60,55 @@ function getFollower(){
     return {data:ProfileStore.getProfileFollower()};
 }
 
+var UserIcon = React.createClass({
+    mixins: [ Router.Navigation ],
+    handleProfileData:function(err, data){
+        if(err==null){
+            console.log("profile",data);
+            WondrousActions.loadProfileInfo(data);
+        }else{
+            // WondrousActions.unloadUserInfo(err);
+        }
+    },
+    handleWallData:function(err, data){
+        if(err==null){
+            WondrousActions.loadWallPosts(data);
+        }else{
+
+        }
+    },
+    loadProfileFromServer: function(){
+        WondrousAPI.getUserInfo({
+            username: this.props.user.username,
+            callback: this.handleProfileData
+        });
+    },
+    loadWallFromServer: function(){
+        WondrousAPI.getWallPosts({
+            username: this.props.user.username,
+            page:0,
+            callback: this.handleWallData
+        });
+    },
+    handleClick: function(){
+        this.transitionTo('/'+this.props.user.username);
+        this.loadProfileFromServer();
+        this.loadWallFromServer();
+    },
+    render: function(){
+        return (
+            <a onClick={this.handleClick}>
+                <div>
+                <img src={typeof this.props.user.ouuid!=='undefined' ? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
+                    <span className="profile-name-row">{ this.props.user.name }</span>
+                </div>
+            </a>
+        );
+    }
+});
+
 var Follower = React.createClass({
-    mixins: [ Router.State ],
+    mixins: [ Router.State, Router.Navigation ],
     am_following:getProfileState().data.following,
     is_private:getProfileState().data.is_private,
 
@@ -91,22 +138,19 @@ var Follower = React.createClass({
     componentWillUnmount: function(){
         ProfileStore.removeChangeListener(this._onChange);
     },
+    handleClick: function(username){
+        return this.transitionTo('/'+username)
+    },
     render: function(){
         this.am_following = getProfileState().data.following;
         this.is_private = getProfileState().data.is_private;
         var is_visible = this.am_following||this.is_private;
-
+        var handle = this.handleClick;
         var followers = this.state.data.map(function(user,index){
             return (
-                <a href={"/" + user.username}>
-                    <div>
-                    <img src={typeof user.ouuid!=='undefined' ? "http://mojorankdev.s3.amazonaws.com/"+user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
-                        <span className="profile-name-row">{ user.name }</span>
-                    </div>
-                </a>
-            )
-        });
-
+                <UserIcon user={user}/>
+            );
+        })
         return (
             <div>
                 {followers}
@@ -123,7 +167,7 @@ function getFollowing(){
 }
 
 var Following = React.createClass({
-    mixins: [ Router.State ],
+    mixins: [ Router.State, Router.Navigation ],
     am_following:getProfileState().data.following,
     is_private:getProfileState().data.is_private,
 
@@ -160,15 +204,9 @@ var Following = React.createClass({
 
         var following = this.state.data.map(function(user,index){
             return (
-                <a key={user.id} href={"/" + user.username}>
-                    <div>
-                        <img src={typeof user.ouuid!=='undefined' ? "http://mojorankdev.s3.amazonaws.com/"+user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
-                        <span className="profile-name-row">{ user.name }</span>
-                    </div>
-                </a>
-            )
-        });
-
+                <UserIcon user={user}/>
+            );
+        })
         return (
             <div>
                 {following}
@@ -186,6 +224,7 @@ function getProfileState(){
 
 var UserBar = React.createClass({
     mixins: [ Router.Navigation ],
+
     am_following:getProfileState().data.following,
     is_private:getProfileState().data.is_private,
 
@@ -241,10 +280,10 @@ var UserBar = React.createClass({
                 </span>
 
                 <span className="profile-header-nav">
-                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username)} ref="wall">Posts</a>
-                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username + '/followers')} ref="followers" >Followers</a>
-                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username + '/following')} ref="following" >Following</a>
-                    <a className="profile-header-nav-link " onClick={() => this.transitionTo('/'+ this.state.data.username + '/likes')} ref="likes" >l!kes</a>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>Wall</Link>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="follower" params={{username: username}}>Follower</Link>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>Following</Link>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>Likes</Link>
                 </span>
             </div>
         );

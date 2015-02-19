@@ -1,6 +1,7 @@
 var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
+var Link = Router.Link;
 
 var SearchBox = React.createClass({
     render: function () {
@@ -40,9 +41,15 @@ var SettingsGear = React.createClass({
 });
 
 var ProfileLink = React.createClass({
+    mixins: [ Router.Navigation ],
+    handleClick:function(){
+        if (typeof this.props.user.username != 'undefined'){
+            this.transitionTo('/'+this.props.user.username);
+        }
+    },
     render: function () {
         return (
-            <a id="linkToProfile" href={"/" + this.props.user.username}
+            <a id="linkToProfile" onClick={this.handleClick}
                 className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
                     src="/static/pictures/defaults/p.default-profile-picture.jpg" />
@@ -89,9 +96,9 @@ var Navbar = React.createClass({
     render: function () {
         return (
             <div id="topBanner" className={this.state.loggedin?"top-banner":"top-banner banner-lo"}>
-                <a href="/" style={{"color": "rgb(235, 235, 235)"}}>
+                <Link to="/" style={{"color": "rgb(235, 235, 235)"}}>
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
-                </a>
+                </Link>
                 { this.state.loggedin ? <SearchBox /> : null}
                 { this.state.loggedin ? <SettingsGear /> : null}
                 { this.state.loggedin ? <ProfileLink user={this.state} /> : null}

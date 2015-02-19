@@ -7,6 +7,7 @@ var LoggedOut = React.createClass({
     mixins: [ Router.Navigation ],
     componentDidMount: function(){
         UserStore.addChangeListener(this._onChange);
+        this._onChange();
     },
     // Remove change listeners from stores
     componentWillUnmount: function(){

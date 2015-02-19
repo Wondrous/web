@@ -55,6 +55,7 @@ AppDispatcher.register(function(payload){
 
         // Respond to WALL_LOAD
         case WondrousConstants.WALL_LOAD:
+            _posts = [];
             loadWallData(action.data);
             break;
 
