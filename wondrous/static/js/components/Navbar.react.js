@@ -5,7 +5,7 @@ var UserStore = require('../stores/UserStore');
 var SearchBox = React.createClass({
     render: function () {
         return (
-            <form method="GET" action="/search/" style={{"display": "inline-block"}}>
+        <form method="GET" action="/search/" style={{"display": "inline-block"}}>
             <div className="container">
               <input type="text" id="query" className="banner-input"
                   placeholder="Search for people and #tags" name="q"
