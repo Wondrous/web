@@ -30,6 +30,10 @@ var Wall = React.createClass({
         WallStore.removeChangeListener(this._onChange);
     },
     render: function() {
+        var am_following = getProfileState().data.following;
+        var is_private = getProfileState().data.is_private;
+        var is_visible = am_following||is_private;
+        is_visible = is_visible==true;
         var posts = this.state.data.map(function(post,index){
             return(
                 <Post key={post.id} data={post}/>
@@ -58,6 +62,8 @@ function getFollower(){
 
 var Follower = React.createClass({
     mixins: [ Router.State ],
+    am_following:getProfileState().data.following,
+    is_private:getProfileState().data.is_private,
 
     handleData: function(err,data){
         if(err==null){
@@ -86,6 +92,10 @@ var Follower = React.createClass({
         ProfileStore.removeChangeListener(this._onChange);
     },
     render: function(){
+        this.am_following = getProfileState().data.following;
+        this.is_private = getProfileState().data.is_private;
+        var is_visible = am_following||is_private;
+        is_visible = is_visible==true;
         var followers = this.state.data.map(function(user,index){
             return (
                 <a href={"/" + user.username}>
@@ -114,6 +124,8 @@ function getFollowing(){
 
 var Following = React.createClass({
     mixins: [ Router.State ],
+    am_following:getProfileState().data.following,
+    is_private:getProfileState().data.is_private,
 
     handleData: function(err,data){
         if(err==null){
@@ -142,6 +154,11 @@ var Following = React.createClass({
         ProfileStore.removeChangeListener(this._onChange);
     },
     render: function(){
+        this.am_following = getProfileState().data.following;
+        this.is_private = getProfileState().data.is_private;
+        var is_visible = this.am_following||this.is_private;
+        is_visible = is_visible==true;
+
         var following = this.state.data.map(function(user,index){
             return (
                 <a key={user.id} href={"/" + user.username}>
@@ -169,6 +186,9 @@ function getProfileState(){
 }
 
 var UserBar = React.createClass({
+    am_following:getProfileState().data.following,
+    is_private:getProfileState().data.is_private,
+
     getInitialState: function() {
         return getProfileState();
     },
@@ -182,8 +202,34 @@ var UserBar = React.createClass({
     getInitialState: function() {
         return getProfileState();
     },
+    handleData: function(err,data){
+        if(err==null){
+            var currentState = this.state.data;
+            currentState.following = data.following == true;
+            
+            this.setState({data:currentState});
+        }else{
+            console.error("error",err);
+        }
+    },
+    handleFollow: function(){
+        user_id = getProfileState().data.id;
+        if(!user_id && typeof user_id === 'undefined') return;
 
+        WondrousAPI.toggleFollow({
+            user_id:user_id,
+            callback:this.handleData
+        })
+    },
     render: function(){
+        var username = this.props.username;
+        var is_me = username === UserStore.getUserData().username;
+
+        this.is_private = getProfileState().data.is_private;
+        this.am_following = getProfileState().data.following==true;
+
+        var is_visible = this.am_following||this.is_private;
+        is_visible = is_visible==true;
         return (
             <div className="profile-header">
                 <img src="/static/pictures/defaults/p.default-profile-picture.jpg" className="profile-photo round-50"/>
@@ -193,7 +239,7 @@ var UserBar = React.createClass({
                     <span className="profile-wscore">
                         <span className="profile-wscore-text round-5">1</span>
                     </span>
-
+                    {!is_me ? <button onClick={this.handleFollow}> {this.am_following? 'UNFOLLOW':'FOLLOW'}</button> : null}
                 </span>
 
                 <span className="profile-header-nav">
@@ -207,7 +253,7 @@ var UserBar = React.createClass({
     },
     _onChange:function(){
         var state = getProfileState();
-        if (JSON.stringify(this.state.data) !== JSON.stringify(state.data)) this.setState(state);
+        this.setState(state);
     }
 });
 
@@ -216,6 +262,7 @@ var Profile = React.createClass({
 
     handleProfileData:function(err, data){
         if(err==null){
+            console.log("profile",data);
             WondrousActions.loadProfileInfo(data);
         }else{
             // WondrousActions.unloadUserInfo(err);
@@ -247,9 +294,14 @@ var Profile = React.createClass({
     },
     render: function () {
         var username = this.getParams().username;
+
+        var am_following = getProfileState().data.following;
+        var is_private = getProfileState().data.is_private;
+        var is_visible = am_following||is_private;
+        is_visible = is_visible==true;
         return (
             <div className="main-content">
-                <UserBar/>
+                <UserBar username={username}/>
                 <div className="cover profile-content">
                     <RouteHandler />
                 </div>

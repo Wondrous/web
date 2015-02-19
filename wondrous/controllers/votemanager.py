@@ -80,7 +80,9 @@ class VoteManager(BaseManager):
             DBSession.add(vote)
             DBSession.flush()
             if vote_type == Vote.USER:
+                logging.warn(vote.status)
                 return {
+                    "following" : vote.status == Vote.FOLLOWED or vote.status == Vote.TOPFRIEND,
                     "total_following" : cls.get_following_count(user_id),
                     "total_follower"  : cls.get_follower_count(user_id),
                 }
@@ -96,6 +98,7 @@ class VoteManager(BaseManager):
         """
         # If profile is private, request, else follow
         is_private = AccountManager.is_private(to_user_id)
+
         if is_private:
             # we need to re-request
             status = Vote.PENDING
@@ -114,6 +117,7 @@ class VoteManager(BaseManager):
         # Change the current one if it exists
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER).first()
         if vote:
+            status = Vote.UNFOLLOWED if vote.status==Vote.FOLLOWED else status
             if not cls.is_blocked_by(from_user_id,to_user_id) and (vote.status != Vote.PENDING or not is_private):
                 vote.status = status
         else:

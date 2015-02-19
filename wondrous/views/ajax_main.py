@@ -310,7 +310,7 @@ class APIViews(BaseHandler):
         return PostManager.repost_json(person,**query_kwargs)
 
     @api_login_required
-    @view_config(request_method='POST', xhr=True, route_name='api_user_vote', renderer='json')
+    @view_config(request_method='POST', route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
         """
             PURPOSE: uses an action to vote on someone else
@@ -324,7 +324,7 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        self.query_kwargs['vote_type'] = 1  # Zi, is this is what you meant? -- @john
+        self.query_kwargs['vote_type'] = 1 
         return VoteManager.vote_json(person, **self.query_kwargs)
 
     @api_login_required
