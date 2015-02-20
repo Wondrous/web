@@ -91,7 +91,7 @@ var UserIcon = React.createClass({
         });
     },
     handleClick: function(){
-        this.transitionTo('/'+this.props.user.username);
+        this.transitionTo('/'+this.props.user);
         this.loadProfileFromServer();
         this.loadWallFromServer();
     },
@@ -100,7 +100,7 @@ var UserIcon = React.createClass({
             <a onClick={this.handleClick}>
                 <div>
                 <img src={typeof this.props.user.ouuid!=='undefined' ? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
-                    <span className="profile-name-row">{ this.props.user.name }</span>
+                    <span className="profile-name-row">{ this.props.user.first_name+" "+this.props.user.last_name }</span>
                 </div>
             </a>
         );
