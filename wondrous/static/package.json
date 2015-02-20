@@ -39,8 +39,9 @@
   },
   "scripts": {
     "start": "watchify -o js/bundle.js -v -d .",
-    "build": "browserify . | uglifyjs -cm > js/bundle.min.js",
-    "watch": "browser-sync start --proxy localhost:6543 --files \"js/bundle.js\""
+    "scss": "node-sass -w --output css css/style.scss style.css",
+    "build": "browserify . | uglifyjs -cm > js/bundle.min.js && node-sass --output_style compressed --output css css/style.scss style.css",
+    "watch": "browser-sync start --proxy localhost:6543 --files \"js/bundle.js, css/style.css\""
   },
   "author": "Ziyuan Liu",
   "browserify": {

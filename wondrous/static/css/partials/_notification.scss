@@ -1,0 +1,120 @@
+// Notification
+.notification-count {
+    position: relative;
+    float: right;
+    top: 9px;
+    height: 30px;
+    padding: 0 10px;
+    margin-right: 2%;
+    background-color: rgb(221,221,221);
+    color: rgb(120,120,120);
+    cursor: pointer;
+    :active {background-color: rgb(210,210,210);}
+}
+
+.notification-count-text {
+    position: relative;
+    display: inline-block; /* For the overflow to work */
+    top: 7px;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    max-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+/* --- Used in notifications. *DO NOT ALTER THE NAMES* --- */
+.notification-text-upvote {color: rgb(50,170,50);}
+.notification-text-downvote {color: rgb(200,100,90);}
+/* --------- */
+
+.notification-alert {
+    background-color: rgb(220,100,90) !important;
+    color: rgb(251,251,251) !important;
+    :active {background-color: rgb(200,100,90) !important;}
+}
+
+.notification-dropdown {
+    position: relative;
+    display: none;
+    top: 40px;
+    border-bottom: 2px solid rgb(234,234,234);
+    margin: 0 auto;
+    max-height: 500px;
+    width: 100%;
+    background-color: rgb(38,38,38);
+    color: rgb(230,230,230);
+    font-size: 14px;
+    overflow-y: scroll;
+}
+
+.notification-anchor{
+    :link {
+        color: rgb(221,221,221);
+        text-decoration: none;
+    }
+    :visited {
+       color: rgb(221,221,221);
+    }
+}
+
+.notification-row {
+    padding: 10px 6px;
+    border-bottom: 1px dotted rgb(51,51,51);
+    :hover {
+        background-color: rgb(51,51,51);
+    }
+    :active {
+        background-color: rgb(51,51,51);
+        -moz-box-shadow: inset 0 0 8px rgb(90,90,90);
+        -webkit-box-shadow: inset 0 0 8px rgb(90,90,90);
+        box-shadow: inset 0 0 8px rgb(90,90,90);
+    }
+}
+
+.notification-unread {
+    background-color: rgb(56,56,55);
+    border-bottom: 1px solid rgb(71,71,71);
+}
+
+.notification-image {
+    height: 50px;
+    width: 50px;
+    margin-left: 20px;
+}
+
+.notification-text {
+    position: relative;
+    top: -30px;
+    left: 10px;
+}
+
+.notification-big-alarm {
+    position: fixed;
+    display: none;
+    bottom: 0;
+    left: 0;
+    margin: 30px;
+    font-size: 13px;
+    padding: 10px;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.notification-bell {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    height: 80px;
+    width: auto;
+}
+
+.notification-none {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 16px;
+    color: rgb(234,234,234);
+    font-weight: bold;
+    padding: 20px;
+}

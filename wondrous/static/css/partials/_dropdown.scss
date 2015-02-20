@@ -1,0 +1,47 @@
+
+/* ==== DROPDOWN =================*/
+
+.dropdown-box {
+    position: absolute;
+    display: none;
+    top: 38px;
+    right: 0px;
+    width: 140px;
+    font-family: arial, helvetica, 'sans-serif';
+    font-size: 13px;
+    color: rgb(68,68,68);
+    background-color: rgb(251,251,251);
+    border: 1px solid rgb(170,170,170);
+    padding: 6px 0;
+    cursor: default;
+    z-index: 3;
+}
+
+.dropdown-element {
+    width: auto;
+
+    padding: 10px 0;
+    padding-left: 10px;
+    padding-right: 30px;
+
+    color: rgb(68,68,68) !important;
+    text-decoration: none !important;
+    cursor: pointer;
+} .dropdown-element:hover {color: rgb(251,251,251); background-color: rgb(158,158,158);}
+  .dropdown-element:active {background-color: rgb(100,100,100);}
+
+.dropdown-a:link {
+    text-decoration: none;
+}
+
+.dropdown-hr {
+    position: relative;
+
+    height: 1px;
+    width: 90%;
+
+    margin: 4px 4px;
+
+    background-color: rgb(191,191,191);
+    border: 0;
+}

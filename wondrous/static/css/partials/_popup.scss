@@ -1,0 +1,116 @@
+/* === POPUP BOX ============== */
+.popup-box {
+    position: fixed;
+    left: 50%;
+    margin-left: -200px;
+    top: 30%;
+    /*height: 100px;*/
+    width: 400px;
+    text-align: center;
+    background-color: rgb(234,234,234);
+    border-radius: 3px;
+    padding: 7px;
+    z-index: 10;
+}
+
+.popup-box-header {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 7px;
+    border-bottom: 1px solid rgb(201,201,201);
+}
+
+.report-header {
+    background-color: rgb(200,100,100);
+    color: rgb(251,251,251);
+}
+
+.popup-btn {
+    position: relative;
+    display: inline-block;
+    margin: 20px 6px;
+    cursor: pointer;
+
+}
+
+.popup-yes {
+    padding: 5px 15px;
+}
+
+.popup-no:hover {
+    text-decoration: underline;
+}
+
+.report-radio-option {
+    font-size: 15px;
+    margin: 7px;
+}
+
+.report-textarea {
+    resize: none;
+    font-size: 15px;
+    width: 96%;
+    height: 150px;
+}
+
+#report-error-message {
+    font-size: 15px;
+    color: rgb(200,100,100);
+}
+
+.get-link-popup {
+    position: fixed;
+    left: 50%;
+    margin-left: -250px;
+    top: 30%;
+    width: 500px;
+    text-align: center;
+    background-color: rgb(234,234,234);
+    padding-right: 70px;
+    z-index: 10;
+}
+
+.get-link-input {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    padding: 7px 5px;
+    font-size: 30px;
+    width: 100%;
+
+    color: rgb(51,51,51);
+    font-weight: bold;
+
+    background-color: rgb(255,255,255);
+    background-color: rgba(255,255,255,0.9);
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+/*  -webkit-box-shadow: 0 0 10px 5px rgb(110,110,110);
+    -moz-box-shadow: 0 0 10px 5px rgb(110,110,110);
+    box-shadow: 0 0 10px 5px rgb(110,110,110);*/
+
+    outline: none;
+    border: none;
+} .get-link-input:focus {
+    -webkit-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+    -moz-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+    box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+}
+
+.get-link-x {
+    font-family: heydings_iconsregular;
+    font-size: 50px;
+    color: rgb(35,35,35);
+    text-align: center;
+
+    float: right;
+    right: 1px;
+    position: absolute;
+    top: -4px;
+    z-index: 11;
+    cursor: pointer;
+} .get-link-x:hover {color: rgb(55,55,55);}
+  .get-link-x:active {color: rgb(45,45,45);}

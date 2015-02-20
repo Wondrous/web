@@ -1,0 +1,46 @@
+// buttons, links - anything clickable
+
+a:link {text-decoration: none;}
+a:visited {color: inherit;}
+a:hover {text-decoration: underline;}
+
+.link-blue:link {
+    color: blue;
+} .link-blue:visited {
+    color: blue;
+}
+
+.login-accept-terms {
+    font-size: 13px;
+    font-style: italic;
+    color: rgb(100,100,100);
+}
+
+.animate-e-i-o {
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
+} .animate-e-i-o:active {
+    -webkit-transition: all 0.0s ease-in-out;
+       -moz-transition: all 0.0s ease-in-out;
+        -ms-transition: all 0.0s ease-in-out;
+         -o-transition: all 0.0s ease-in-out;
+}
+
+.signup-big-link {
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
+
+    background-color: rgb(0,226,174);
+    color: rgb(251,251,251) !important;
+    border: 3px solid;
+
+    :link { text-decoration: none; }
+    :visited { color: rgb(251,251,251); }
+    :hover {
+        border: 3px solid rgb(0,200,140);
+    }
+}

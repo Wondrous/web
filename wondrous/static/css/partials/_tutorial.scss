@@ -1,0 +1,46 @@
+/* ===== NEW USER TUTORIAL =============== */
+
+.tutorial {
+    position: relative;
+    width: 100%;
+    top: 41px;
+    color: rgb(41,41,41);
+    background-color: rgb(249,249,249);
+}
+
+
+.tutorial-content-wrapper {
+    padding: 20px;
+}
+
+.tutorial-header {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 25px;
+    font-weight: normal;
+}
+
+.tutorial-content {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 19px;
+    font-weight: normal;
+}
+
+.tutorial-ul {
+    list-style: none;
+    li { padding: 7px; }
+    }
+
+.tutorial-finish-btn {
+    position: relative;
+
+    color: rgb(251,251,251);
+    background-color: rgb(100,100,200);
+    padding: 7px 10px;
+    width: 130px;
+    text-align: center;
+    cursor: pointer;
+    :hover { background-color: rgb(100,100,255); }
+    :active { background-color: rgb(100,100,190); }
+}
+
+/* ================================ */

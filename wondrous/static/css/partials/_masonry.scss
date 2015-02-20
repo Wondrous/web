@@ -1,0 +1,32 @@
+// masonry
+
+/* ============================= */
+/* MASONRY --------------------- */
+/* ============================= */
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body { font-family: sans-serif; }
+
+.masonry {
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* masonry-brick is invisible, but used for layout */
+.masonry-brick,
+.post-body,
+.grid-sizer {
+    width: 25%;
+}
+
+.masonry-brick {
+    float: left;
+    border: none;
+    background: transparent;
+    padding: 10px;
+}

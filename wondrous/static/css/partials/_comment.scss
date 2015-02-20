@@ -1,0 +1,115 @@
+// Anything to do with comment
+/* === COMMENT ============================ */
+
+.comment-input {
+    outline: none;
+    border: 1px solid rgb(200,200,200);
+    margin: 5px;
+    width: 80%;
+    padding: 5px 7px;
+    font-family: courier, helvetica, arial, sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+} .comment-input:focus {border: 1px solid rgb(117,169,200);}
+
+.comment-thumb {
+    height: 25px;
+    width: 25px;
+}
+
+.comment-radio-main-wrapper {
+    margin-left: 7px;
+    display: none;
+}
+
+.comment-radio-wrapper {
+    position: relative;
+    display: inline-block;
+    height: 25px;
+    border: 1px solid rgb(201,201,201);
+    padding: 3px 3px;
+    padding-right: 30px;
+    margin-bottom: 5px;
+    cursor: pointer;
+} .comment-radio-wrapper:hover {
+    background-color: rgb(211,211,211);
+}
+
+.comment-radio {
+    position: relative;
+    top: -7px;
+    left: 10px;
+    cursor: pointer;
+}
+
+.comment-post-btn {
+    position: relative;
+    display: inline-block;
+    top: -7px;
+    padding: 3px 14px;
+    font-family: helvetica, arial, sans-serif;
+    color: rgb(234,234,234);
+    font-weight: 100;
+    background-color: rgb(40,119,204);
+    cursor: pointer;
+    :hover {background-color: rgb(0,110,240);}
+    :active {background-color: rgb(0,100,200);}
+}
+
+.comment-error-message {
+    display: none;
+    font-size: 13px;
+    color: rgb(200,100,100);
+    padding-bottom: 5px;
+}
+
+.comment-wrapper {
+    background-color: rgb(240,240,240);
+    position: relative;
+    min-height: 30px;
+    padding: 6px;
+    padding-right: 25px;
+
+    border-bottom: 1px solid rgb(249,249,249);
+}
+
+.comment-poster-img {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+}
+
+.comment-text-wrapper {
+    position: relative;
+    padding-left: 35px;
+    line-height: 1;
+}
+
+.comment-poster-name {
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 3px;
+}
+
+.comment-text {
+    position: relative;
+    font-family: courier, helvetica, arial, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    width: 200px;
+    line-height: 0;
+    word-break: break-word;
+}
+
+.comment-delete {
+    position: absolute;
+    display: none;
+    top: 5px;
+    right: 5px;
+    font-family: 'heydings_iconsregular', helvetica, sans-serif;
+    font-size: 16px;
+    color: rgb(160,160,160);
+    font-weight: normal;
+    cursor: pointer;
+    :hover {color: rgb(120,120,120);}
+}

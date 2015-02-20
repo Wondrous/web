@@ -1,0 +1,159 @@
+// Anything to do with profiles
+
+.profile-content,
+.profile-header,
+.info-content {
+    padding: 0 5% 0 5%;
+}
+
+/* ===== PROFILE LANDING ================= */
+.profile-landing {
+    position: fixed;
+    background-color: rgb(255,255,255);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    text-align: center;
+}
+
+.profile-landing-name {
+    margin-top: 10%;
+    margin-bottom: 0;
+    font-family: helvetica, arial, sans-serif;
+    font-weight: 100;
+    font-size: 35px;
+    color: rgb(71,71,71);
+    /*text-shadow: 1px 1px 5px rgb(100,100,100);*/
+}
+
+.profile-landing-profile-picture {
+    height: 100px;
+    width: 100px;
+    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+       -moz-box-shadow: 0 2px 3px rgb(100,100,100);
+         -o-box-shadow: 0 2px 3px rgb(100,100,100);
+            box-shadow: 0 2px 3px rgb(100,100,100);
+
+    margin: 15px 0;
+}
+
+.follow-btn {
+    padding: 7px 10px;
+    color: rgb(251,251,251);
+    font-weight: 100;
+    background-color: rgb(100,130,200);
+    border: 3px solid rgb(100,130,200);
+    cursor: pointer;
+
+    :hover {
+        border: 3px solid rgb(100,100,240);
+        background-color: rgb(120,145,204);
+    }
+
+    :active {
+        border: 3px solid rgb(100,100,240);
+        background-color: rgb(100,130,200);
+    }
+}
+
+.private-message-btn {
+    padding: 10px 15px;
+    color: rgb(91,91,91);
+    background-color: rgb(234,234,234);
+    border: 3px solid rgb(190,190,190);
+    cursor: pointer;
+
+    :hover {
+        border: 3px solid rgb(140,140,140);
+        background-color: rgb(241,241,248);
+    }
+    :active {
+        border: 3px solid rgb(110,110,110);
+        background-color: rgb(234,234,234);
+    }
+}
+
+
+/* ===== PROFILE FULL ================= */
+
+.profile-header {
+    background-color: rgb(255,255,255);
+}
+
+.profile-header-content {
+    position: absolute;
+    top: 0;
+    margin-top: 40px;
+    padding: 0 10px;
+    font-size: 30px;
+    font-weight: 100;
+    color: rgb(71,71,71);
+}
+
+.profile-header-nav {
+    position: relative;
+    bottom: 30px;
+}
+
+.profile-header-nav-link {
+    padding: 6px;
+    color: rgb(71,71,71);
+    font-weight: 100;
+    :link {
+        text-decoration: none;
+    }
+
+    :visited {
+        color: rgb(71,71,71);
+    }
+
+    :hover {
+        border-bottom: 1px solid rgb(170,170,170);
+    }
+}
+
+.current-tab {
+    border-bottom: 4px solid rgb(170,170,170) !important;
+}
+
+.profile-name {
+    padding-right: 10px;
+}
+
+.profile-name-row {
+    position: relative;
+    top: -22px;
+    margin-left: 7px;
+}
+
+.profile-wscore {
+    position: relative;
+    top: -2px;
+    border-left: 1px solid rgb(221,221,221);
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+.profile-wscore-text {
+    font-size: 18px;
+    color: rgb(251,251,251);
+    background-color: rgb(0,216,165);
+    padding: 2px 7px;
+}
+
+.profile-photo {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    margin: 20px 20px 20px 0;
+
+    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+       -moz-box-shadow: 0 2px 3px rgb(100,100,100);
+         -o-box-shadow: 0 2px 3px rgb(100,100,100);
+            box-shadow: 0 2px 3px rgb(100,100,100);
+}
+
+.profile-photo-med {
+    height: 60px;
+    width: 60px;
+}
