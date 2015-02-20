@@ -20,6 +20,7 @@ from wondrous.models import (
 
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
+import logging
 
 class AccountManager(BaseManager):
 
@@ -108,7 +109,7 @@ class AccountManager(BaseManager):
         if not user:
             return {'error':'no users found!'}
         user_id = user.id
-        am_following = VoteManager.is_following(person.user.id,user_id)
+        am_following = VoteManager.is_following(person.user.id,user_id) if person else False
 
         # Am i querying for myself?
         if person and person.user.id == user_id:
@@ -120,10 +121,13 @@ class AccountManager(BaseManager):
             retval.update({"following":am_following})
             retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
             return retval
-
+        logging.warn(user.is_private)
+        logging.warn(user.is_banned)
+        logging.warn(user.is_active)
         # if the user is public or I am following
         if (not user.is_private and not user.is_banned and user.is_active) or \
             (person and not user.is_banned and user.is_active and am_following):
+
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager, cls).model_to_json(user))
             retval.update({"name": user.person.ascii_name})
