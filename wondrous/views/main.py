@@ -305,7 +305,7 @@ class AuthHandler(BaseHandler):
         """
             PURPOSE: This method handles the signup process for all new users
         """
-
+        
         safe_in  = Sanitize.safe_input
         p = self.request.params
 

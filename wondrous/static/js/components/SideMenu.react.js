@@ -30,7 +30,7 @@ var SettingsBar = React.createClass({
                 </Link>
 
                 <hr className="dropdown-hr"/>
-                <Link to="/auth/logout/" className="dropdown-element" style={{"textDecoration": "none","display": "block"}}>Log out</Link>
+                <a href="/auth/logout/" className="dropdown-element" style={{"textDecoration": "none","display": "block"}}>Log out</a>
             </div>
         );
     }
