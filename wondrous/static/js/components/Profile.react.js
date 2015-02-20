@@ -320,7 +320,7 @@ var PrivateProfile = React.createClass({
                 <img className="profile-landing-profile-picture round-50" src={typeof this.props.user.ouuid!=='undefined' ? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"}/>
 
                 <div>
-                    <button onClick={this.handleClick} ref="requestBtn" className="btn follow-btn round-3 animate-e-i-o">Request to Follow</button>
+                    <button onClick={this.handleClick} ref="requestBtn" >Request to Follow</button>
                 </div>
             </div>
         );
