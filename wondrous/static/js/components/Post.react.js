@@ -1,9 +1,48 @@
+var WondrousAPI = require('../utils/WondrousAPI');
+var WondrousActions = require('../actions/WondrousActions');
+
 var UserTitle = React.createClass({
+    mixins: [Router.Navigation],
+    handleProfileData:function(err, data){
+        if(err==null){
+            console.log("profile",data);
+            WondrousActions.loadProfileInfo(data);
+        }else{
+            // WondrousActions.unloadUserInfo(err);
+        }
+    },
+    handleWallData:function(err, data){
+        if(err==null){
+            WondrousActions.loadWallPosts(data);
+        }else{
+
+        }
+    },
+    loadProfileFromServer: function(){
+        WondrousAPI.getUserInfo({
+            username: this.props.data.username,
+            callback: this.handleProfileData
+        });
+    },
+    loadWallFromServer: function(){
+        WondrousAPI.getWallPosts({
+            username: this.props.data.username,
+            page:0,
+            callback: this.handleWallData
+        });
+    },
+    handleClick:function(){
+        if (typeof this.props.data.username != 'undefined'){
+            this.transitionTo('/'+this.props.data.username);
+            this.loadProfileFromServer();
+            this.loadWallFromServer();
+        }
+    },
     render: function () {
         return (<div>
                 <img className="post-thumb round-50" src="/static/pictures/defaults/p.default-profile-picture.jpg"/>
                 <span className="post-identifier ellipsis-overflow">
-                    <a href={"/"+this.props.data.username}>{this.props.data.name}</a>
+                    <a onClick={this.handleClick}>{this.props.data.name}</a>
                 </span></div>);
     }
 });
@@ -71,10 +110,12 @@ var Post = React.createClass({
     render: function () {
         return (
             <div ref="brick" className="masonry-brick">
-                <div ref="post" onClick={this.handleClick} className="post-body">
+                <div ref="post"  className="post-body">
                     <input className="objectID" type="hidden" value={this.props.data.id} />
                     <UserTitle data={this.props.data} />
+                    <div onClick={this.handleClick.bind(this)}>
                     <Photo ref="photo" data={this.props.data}/>
+                    </div>
 
                     <div className="post-content" style={{"display":"none"}}>
                     {this.props.data.text}

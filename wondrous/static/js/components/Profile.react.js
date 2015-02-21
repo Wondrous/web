@@ -378,9 +378,16 @@ var Profile = React.createClass({
         var am_following = getProfileState().data.following;
         var is_private = getProfileState().data.is_private;
         var is_visible = (typeof am_following !=='undefined' && am_following==true)||(typeof is_private !=='undefined' && !is_private==true);
+        var loaded = (typeof this.state.data.is_private!=='undefined');
+        var style = {display:'none'};
+
+        // we don't load until we are loaded :)
+        if (loaded){
+            style.display = 'block';
+        }
 
         return (
-            <div className="main-content">
+            <div className="main-content" style={style}>
 
                 {!is_visible?<PrivateProfile user={getProfileState().data}/> :
                     <div>

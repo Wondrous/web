@@ -45,9 +45,39 @@ var SettingsGear = React.createClass({
 
 var ProfileLink = React.createClass({
     mixins: [ Router.Navigation ],
+    handleProfileData:function(err, data){
+        if(err==null){
+            console.log("profile",data);
+            WondrousActions.loadProfileInfo(data);
+        }else{
+            // WondrousActions.unloadUserInfo(err);
+        }
+    },
+    handleWallData:function(err, data){
+        if(err==null){
+            WondrousActions.loadWallPosts(data);
+        }else{
+
+        }
+    },
+    loadProfileFromServer: function(){
+        WondrousAPI.getUserInfo({
+            username: this.props.user.username,
+            callback: this.handleProfileData
+        });
+    },
+    loadWallFromServer: function(){
+        WondrousAPI.getWallPosts({
+            username: this.props.user.username,
+            page:0,
+            callback: this.handleWallData
+        });
+    },
     handleClick:function(){
         if (typeof this.props.user.username != 'undefined'){
             this.transitionTo('/'+this.props.user.username);
+            this.loadProfileFromServer();
+            this.loadWallFromServer();
         }
     },
     render: function () {

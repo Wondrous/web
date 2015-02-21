@@ -91,8 +91,8 @@ class NotificationManager(BaseManager):
                 'notification' : notification,
             }))
 
-        logging.warn("need to alert?"+str(need_to_alert))
-        logging.warn("new notification?"+str(new_notification.reason))
+        logging.debug("need to alert?"+str(need_to_alert))
+        logging.debug("new notification?"+str(new_notification.reason))
         if new_notification:
             DBSession.add(new_notification)
         return new_notification

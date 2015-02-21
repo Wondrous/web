@@ -121,9 +121,9 @@ class AccountManager(BaseManager):
             retval.update({"following":am_following})
             retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
             return retval
-        logging.warn(user.is_private)
-        logging.warn(user.is_banned)
-        logging.warn(user.is_active)
+        logging.debug(user.is_private)
+        logging.debug(user.is_banned)
+        logging.debug(user.is_active)
         # if the user is public or I am following
         if (not user.is_private and not user.is_banned and user.is_active) or \
             (person and not user.is_banned and user.is_active and am_following):
