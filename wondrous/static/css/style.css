@@ -925,6 +925,11 @@ a:hover {
   transition: width 0.4s, height 0.4s;
   background-color: white;
   overflow: hidden;
+
+  -webkit-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+     -moz-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+       -o-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+          box-shadow: 0 1px 2px 0 rgb(159,159,159);
 }
 
 .post-body:hover {
