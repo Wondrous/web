@@ -50,7 +50,7 @@ var Feed = React.createClass({
                 <div className="backdrop"></div>
                 <div className="grid-sizer" style={{"display": "none"}}></div>
 
-                <h1>feed</h1>
+                <h1 className="tmp-feed-h1">Main Feed</h1>
                 {posts}
             </div>
         );
