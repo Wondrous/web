@@ -93,7 +93,7 @@ var UserIcon = React.createClass({
         });
     },
     handleClick: function() {
-        this.transitionTo('/' + this.props.user);
+        this.transitionTo('/' + this.props.user.username);
         this.loadProfileFromServer();
         this.loadWallFromServer();
     },
