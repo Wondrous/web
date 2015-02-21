@@ -46,6 +46,8 @@ var Wall = React.createClass({
             <div>
                 {is_me?<PostForm />:null}
                 <div className="masonry" id="asyncPosts">
+                <div className="backdrop"></div>
+                <div className="grid-sizer" style={{"display": "none"}}></div>
                     {posts}
                 </div>
             </div>

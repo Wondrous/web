@@ -10,3 +10,5 @@ python-magic
 unidecode
 sphinx
 redis
+service_identity
+raven==5.0.0

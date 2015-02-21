@@ -48,6 +48,9 @@ var Feed = React.createClass({
 
         return (
           <div className="masonry" id="asyncPosts">
+          <div className="backdrop"></div>
+          <div className="grid-sizer" style={{"display": "none"}}></div>
+
             <h1>feed</h1>
             {posts}
           </div>

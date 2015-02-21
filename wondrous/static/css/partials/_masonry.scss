@@ -12,16 +12,18 @@
 
 body { font-family: sans-serif; }
 
+$masonry-width: 100%;
+
 .masonry {
     margin: 0 auto;
-    width: 100%;
+    width: $masonry-width;
 }
 
 /* masonry-brick is invisible, but used for layout */
 .masonry-brick,
 .post-body,
 .grid-sizer {
-    width: 25%;
+    width: $masonry-width / 4;
 }
 
 .masonry-brick {
