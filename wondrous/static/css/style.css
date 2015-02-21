@@ -1523,6 +1523,7 @@ a:hover {
 .new-post-element .typehead {
   position: relative;
   top: 0;
+  width: 100%;
   z-index: 2; }
 
 .highlighter, .post-input {

@@ -1,6 +1,6 @@
 window.React = require('react');
 window.Router = require('react-router');
-window.$ = require('jQuery');
+window.$ = window.jQuery = require('jQuery');
 window.imagesloaded = require('imagesloaded');
 window.Masonry = require('masonry-layout');
 

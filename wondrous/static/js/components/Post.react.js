@@ -113,7 +113,7 @@ var Post = React.createClass({
                 <div ref="post"  className="post-body">
                     <input className="objectID" type="hidden" value={this.props.data.id} />
                     <UserTitle data={this.props.data} />
-                    <div onClick={this.handleClick.bind(this)}>
+                    <div onClick={this.handleClick}>
                     <Photo ref="photo" data={this.props.data}/>
                     </div>
 

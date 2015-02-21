@@ -2,6 +2,7 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var MouseWheel = require('kd-shim-jquery-mousewheel');
 var CropBox = require('jquery-cropbox');
 var WondrousActions = require('../actions/WondrousActions');
+var hashtags = require('jquery-hashtags');
 
 var PostForm = React.createClass({
     file:null,
@@ -165,6 +166,7 @@ var PostForm = React.createClass({
     postTextChange: function(){
 
     },
+
     render: function(){
 
         return (
@@ -221,6 +223,8 @@ var PostForm = React.createClass({
     componentDidMount: function () {
         // Example of how to write the actions that
         // will occur after React renders the item.
+        // $(this.refs.postTextArea.getDOMNode()).hashtags();
+        $("textarea#postTextarea").hashtags();
     }
 });
 
