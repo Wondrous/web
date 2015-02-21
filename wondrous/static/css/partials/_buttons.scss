@@ -4,10 +4,9 @@ a:link {text-decoration: none;}
 a:visited {color: inherit;}
 a:hover {text-decoration: underline;}
 
-.link-blue:link {
-    color: blue;
-} .link-blue:visited {
-    color: blue;
+.link-blue {
+    &:link { color: blue; }
+    &:visited { color: blue; }   
 }
 
 .login-accept-terms {
@@ -38,9 +37,7 @@ a:hover {text-decoration: underline;}
     color: rgb(251,251,251) !important;
     border: 3px solid;
 
-    :link { text-decoration: none; }
-    :visited { color: rgb(251,251,251); }
-    :hover {
-        border: 3px solid rgb(0,200,140);
-    }
+    &:link { text-decoration: none; }
+    &:visited { color: rgb(251,251,251); }
+    &:hover { border: 3px solid rgb(0,200,140); }
 }

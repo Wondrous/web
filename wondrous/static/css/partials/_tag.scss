@@ -7,18 +7,19 @@
     margin-bottom: 0;
     padding: 5px 25px;
     background-color: rgb(201,201,201);
-
     font-family: arial, helvetica, sans-serif;
     font-size: 15px;
     font-weight: normal;
     color: rgb(44,44,44);
 
-} .upvoted-tab:link {color: rgb(44,44,44); text-decoration: none}
-  .upvoted-tab:visited {color: rgb(44,44,44);}
-  .upvoted-tab:hover {
-    color: rgb(251,251,251);
-    background-color: rgb(100,100,200);
-  }
+    &:link { color: rgb(44,44,44); text-decoration: none; }
+    &:visited { color: rgb(44,44,44); }
+    &:hover {
+        color: rgb(251,251,251);
+        background-color: rgb(100,100,200);
+    }
+}
+
 .upvoted-tab-active {
     color: rgb(251,251,251) !important;
     font-weight: bold;
@@ -32,16 +33,17 @@
     margin: 15px auto;
     text-align: left;
     background-color: rgb(255,255,255);
-
     font-family: 'code_boldregular';
     font-size: 26px;
     color: rgb(44,44,44);
 
-} .upvoted-tag-body:link {text-decoration: none; color: rgb(44,44,44);}
-  .upvoted-tag-body:hover {
-    text-decoration: underline;
-    background-color: rgb(245,245,245);
-  }
+    &:link {text-decoration: none; color: rgb(44,44,44);}
+    &:hover {
+        text-decoration: underline;
+        background-color: rgb(245,245,245);
+    }
+}
+ 
 
 .js-title {
     position: absolute;

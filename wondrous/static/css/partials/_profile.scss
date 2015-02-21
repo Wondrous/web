@@ -1,8 +1,9 @@
 // Anything to do with profiles
 
+.grid-padding,
+.info-content,
 .profile-content,
-.profile-header,
-.info-content {
+.profile-header {
     padding: 0 5% 0 5%;
 }
 
@@ -23,18 +24,17 @@
     font-weight: 100;
     font-size: 35px;
     color: rgb(71,71,71);
-    /*text-shadow: 1px 1px 5px rgb(100,100,100);*/
 }
 
 .profile-landing-profile-picture {
     height: 100px;
     width: 100px;
+    margin: 15px 0;
+
     -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
        -moz-box-shadow: 0 2px 3px rgb(100,100,100);
          -o-box-shadow: 0 2px 3px rgb(100,100,100);
             box-shadow: 0 2px 3px rgb(100,100,100);
-
-    margin: 15px 0;
 }
 
 .follow-btn {
@@ -45,12 +45,12 @@
     border: 3px solid rgb(100,130,200);
     cursor: pointer;
 
-    :hover {
+    &:hover {
         border: 3px solid rgb(100,100,240);
         background-color: rgb(120,145,204);
     }
 
-    :active {
+    &:active {
         border: 3px solid rgb(100,100,240);
         background-color: rgb(100,130,200);
     }
@@ -63,11 +63,11 @@
     border: 3px solid rgb(190,190,190);
     cursor: pointer;
 
-    :hover {
+    &:hover {
         border: 3px solid rgb(140,140,140);
         background-color: rgb(241,241,248);
     }
-    :active {
+    &:active {
         border: 3px solid rgb(110,110,110);
         background-color: rgb(234,234,234);
     }
@@ -99,17 +99,10 @@
     padding: 6px;
     color: rgb(71,71,71);
     font-weight: 100;
-    :link {
-        text-decoration: none;
-    }
 
-    :visited {
-        color: rgb(71,71,71);
-    }
-
-    :hover {
-        border-bottom: 1px solid rgb(170,170,170);
-    }
+    &:link { text-decoration: none; }
+    &:visited { color: rgb(71,71,71); }
+    &:hover { border-bottom: 1px solid rgb(170,170,170); }
 }
 
 .current-tab {

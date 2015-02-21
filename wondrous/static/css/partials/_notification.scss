@@ -9,7 +9,8 @@
     background-color: rgb(221,221,221);
     color: rgb(120,120,120);
     cursor: pointer;
-    :active {background-color: rgb(210,210,210);}
+    
+    &:active {background-color: rgb(210,210,210);}
 }
 
 .notification-count-text {
@@ -33,7 +34,8 @@
 .notification-alert {
     background-color: rgb(220,100,90) !important;
     color: rgb(251,251,251) !important;
-    :active {background-color: rgb(200,100,90) !important;}
+    
+    &:active {background-color: rgb(200,100,90) !important;}
 }
 
 .notification-dropdown {
@@ -50,12 +52,12 @@
     overflow-y: scroll;
 }
 
-.notification-anchor{
-    :link {
+.notification-anchor {
+    &:link {
         color: rgb(221,221,221);
         text-decoration: none;
     }
-    :visited {
+    &:visited {
        color: rgb(221,221,221);
     }
 }
@@ -63,14 +65,16 @@
 .notification-row {
     padding: 10px 6px;
     border-bottom: 1px dotted rgb(51,51,51);
-    :hover {
+    
+    &:hover {
         background-color: rgb(51,51,51);
     }
-    :active {
+    &:active {
         background-color: rgb(51,51,51);
-        -moz-box-shadow: inset 0 0 8px rgb(90,90,90);
         -webkit-box-shadow: inset 0 0 8px rgb(90,90,90);
-        box-shadow: inset 0 0 8px rgb(90,90,90);
+           -moz-box-shadow: inset 0 0 8px rgb(90,90,90);
+             -o-box-shadow: inset 0 0 8px rgb(90,90,90);
+                box-shadow: inset 0 0 8px rgb(90,90,90);
     }
 }
 
