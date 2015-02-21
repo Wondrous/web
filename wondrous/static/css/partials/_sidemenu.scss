@@ -7,15 +7,14 @@
     margin-top: 38px;
     width: 250px;
     background-color: rgb(251,251,251);
+    overflow-y: scroll;
+    color: rgb(44,44,44);
+    z-index: 9;
 
     -webkit-box-shadow: -5px 0 9px -2px rgb(190,190,190);
        -moz-box-shadow: -5px 0 9px -2px rgb(190,190,190);
          -o-box-shadow: -5px 0 9px -2px rgb(190,190,190);
             box-shadow: -5px 0 9px -2px rgb(190,190,190);
-
-    overflow-y: scroll;
-    color: rgb(44,44,44);
-    z-index: 9;
 }
 
 .sidemenuOptions {

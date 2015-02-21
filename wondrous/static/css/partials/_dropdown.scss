@@ -19,16 +19,17 @@
 
 .dropdown-element {
     width: auto;
-
     padding: 10px 0;
     padding-left: 10px;
     padding-right: 30px;
-
     color: rgb(68,68,68) !important;
     text-decoration: none !important;
     cursor: pointer;
-} .dropdown-element:hover {color: rgb(251,251,251); background-color: rgb(158,158,158);}
-  .dropdown-element:active {background-color: rgb(100,100,100);}
+
+    &:hover { color: rgb(251,251,251); background-color: rgb(158,158,158); }
+    &:active { background-color: rgb(100,100,100); }
+}
+ 
 
 .dropdown-a:link {
     text-decoration: none;
@@ -36,12 +37,9 @@
 
 .dropdown-hr {
     position: relative;
-
     height: 1px;
     width: 90%;
-
     margin: 4px 4px;
-
     background-color: rgb(191,191,191);
     border: 0;
 }

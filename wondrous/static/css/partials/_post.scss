@@ -9,64 +9,68 @@
             transition: width 0.4s, height 0.4s;
 
     background-color: rgb(255,255,255);
+    overflow: hidden;
 
-    -webkit-border-radius: 1px;
-       -moz-border-radius: 1px;
-         -o-border-radius: 1px;
-            border-radius: 1px;
+    -webkit-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+       -moz-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+         -o-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+            box-shadow: 0 1px 2px 0 rgb(159,159,159);
 
-} .post-body:hover {
-    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
-       -moz-box-shadow: 0 2px 3px rgb(100,100,100);
-         -o-box-shadow: 0 2px 3px rgb(100,100,100);
-            box-shadow: 0 2px 3px rgb(100,100,100);
+    &:hover {
+        -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+           -moz-box-shadow: 0 2px 3px rgb(100,100,100);
+             -o-box-shadow: 0 2px 3px rgb(100,100,100);
+                box-shadow: 0 2px 3px rgb(100,100,100);
+    }
 }
 
 .post-content {
     display: none;
     background-color: rgb(255,255,255);
     padding: 20px;
-
     font-family: helvetica, arial, sans-serif;
     font-weight: normal;
     font-size: 16px;
-    line-height: 1.3em;
-
     color: rgb(51,51,51);
+    line-height: 1.3em;
 }
 
 .post-footer-btn {
     font-size: 15px;
     font-weight: normal;
     color: rgb(61,61,61);
+    background-color: rgb(241,241,241);
     padding: 5px 10px;
+    margin: 0 3px;
     cursor: pointer;
 
-    background-color: rgb(241,241,241);
-} .post-footer-btn:hover {
-    background-color: rgb(230,230,230);
+    &:hover { background-color: rgb(230,230,230); }
 }
 
 .post-like-btn {
     padding: 5px 14px;
     color: rgb(251,251,251);
     background-color: rgb(3,216,165);
-} .post-like-btn:hover {
-    background-color: rgb(3,200,165);
-    background: -webkit-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-    background:   -moz-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-    background:     -o-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-    background:        linear-gradient(rgb(3,200,165), rgb(3,216,165));
+
+    &:hover {
+        background-color: rgb(3,200,165);
+        background: -webkit-linear-gradient(rgb(3,200,165), rgb(3,216,165));
+        background:   -moz-linear-gradient(rgb(3,200,165), rgb(3,216,165));
+        background:     -o-linear-gradient(rgb(3,200,165), rgb(3,216,165));
+        background:        linear-gradient(rgb(3,200,165), rgb(3,216,165));
+    }
 }
 
 .post-repost-btn {
     /* No overrides */
-} .post-repost-btn:hover {
-    background-color: rgb(241,241,241);
-    background: -webkit-linear-gradient(rgb(230,230,230), rgb(241,241,241));
-    background:   -moz-linear-gradient(rgb(230,230,230), rgb(241,241,241));
-    background:     -o-linear-gradient(rgb(230,230,230), rgb(241,241,241));
-    background:        linear-gradient(rgb(230,230,230), rgb(241,241,241));
+
+    &:hover {
+        background-color: rgb(241,241,241);
+        background: -webkit-linear-gradient(rgb(230,230,230), rgb(241,241,241));
+        background:   -moz-linear-gradient(rgb(230,230,230), rgb(241,241,241));
+        background:     -o-linear-gradient(rgb(230,230,230), rgb(241,241,241));
+        background:        linear-gradient(rgb(230,230,230), rgb(241,241,241));
+    }
 }
 
 .no-top-border {
@@ -106,31 +110,20 @@
     background: #F90;
 }
 
-.post-presentation {
-    width: 66.666%;
-    z-index: 5;
-    position: relative;
-}
-
 .post-cover-photo {
     position: relative;
     height: 390px;
-
-    /*margin-top: 10px;*/
-
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: scroll;
     color: rgb(251,251,251);
     text-shadow: 0 2px 10px rgb(44,44,44);
-
     cursor: pointer;
 }
 
 .post-thumb {
     position: relative;
     display: inline-block;
-    /* top: 5px; */
     left: 0;
     height: 23px;
     width: 23px;
@@ -140,20 +133,15 @@
 .post-identifier {
     position: relative;
     display: inline-block;
-    /* left: 54px; */
     top: -6px;
-
     font-size: 12px;
     font-weight: bold;
     color: rgb(0,0,200);
+    cursor: pointer;
 }
 
-/*.blue-identifier {
-    color: rgb(0,0,200) !important;
-}*/
-
 .post-subject-text {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     text-align: left;
     color: rgb(251,251,251);
@@ -182,16 +170,19 @@
     color: rgb(20,0,200);
     font-size: 16px;
     cursor: pointer;
-} .post-see-more:hover {
-    color: rgb(0,0,150);
-    background-color: rgb(249,249,249);
+
+    &:hover {
+        color: rgb(0,0,150);
+        background-color: rgb(249,249,249);
+    }
 }
 
 .post-see-more-effects {
     height: 300px !important;
     -webkit-box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
-    -moz-box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
-    box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
+       -moz-box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
+         -o-box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
+            box-shadow: inset 0 -7px 9px -10px rgb(101,101,101);
 }
 
 .post-text {
@@ -208,28 +199,32 @@
     padding: 0 5px;
 
     -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
+       -moz-border-radius: 2px;
+         -o-border-radius: 2px;
+            border-radius: 2px;
 
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.post-link:link {
-    font-family: helvetica, arial, sans-serif;
-    color: rgb(255,255,255);
-    background-color: rgb(68,68,68);
-} .post-link:visited {color: rgb(255,255,255);}
+.post-link {
+    &:link {
+        font-family: helvetica, arial, sans-serif;
+        color: rgb(255,255,255);
+        background-color: rgb(68,68,68);
+    }
+    &:visited { color: rgb(255,255,255); }
+}
 
-.post-hashtag:link {
-    font-family: helvetica, arial, sans-serif;
-    color: rgb(0,0,255);
-} .post-hashtag:visited {color: rgb(0,0,255);}
+.post-hashtag {
+    &:link {
+        font-family: helvetica, arial, sans-serif;
+        color: rgb(0,0,255);
+    }   
+    &:visited {color: rgb(0,0,255);}
+}
 
 .post-image {
-/*  position: relative;
-    max-width: 90%;
-    left: -5px;*/
-
     left: 0;
     text-align: left;
     margin: 0;
@@ -239,19 +234,20 @@
     display: block;
     margin: 10px 0 10px 5px;
     cursor: pointer;
-} .post-image:hover {
-    -webkit-box-shadow: 0 1px 6px rgb(41,41,41);
-    -moz-box-shadow: 0 1px 6px rgb(41,41,41);
-    box-shadow: 0 1px 6px rgb(41,41,41);
+
+    &:hover {
+        -webkit-box-shadow: 0 1px 6px rgb(41,41,41);
+           -moz-box-shadow: 0 1px 6px rgb(41,41,41);
+             -o-box-shadow: 0 1px 6px rgb(41,41,41);
+                box-shadow: 0 1px 6px rgb(41,41,41);
+    }
 }
 
 .right-post-image {
     position: fixed;
     display: none;
-
     top: 10%;
     margin-left: 26%;
-
     height: auto;
     width: auto;
     max-height: 80%;
@@ -263,7 +259,6 @@
     position: relative;
     margin: 10px auto;
     height: 120px;
-    /*width: 80%;*/
 }
 
 .post-file-body {
@@ -302,9 +297,13 @@
     text-align: center;
     cursor: pointer;
     z-index: 2;
-} .post-file-download-link:visited {color: rgb(251,251,251);}
-  .post-file-download-link:hover {background-color: rgb(11,91,245); text-decoration: none;}
-  .post-file-download-link:active {background-color: rgb(11,91,185);}
+
+    &:visited {color: rgb(251,251,251);}
+    &:hover {background-color: rgb(11,91,245); text-decoration: none;}
+    &:active {background-color: rgb(11,91,185);}
+}
+ 
+ 
 
 .post-file-img {
     margin-top: 10px;
@@ -336,13 +335,13 @@
 
 .post-more-options {
     position: absolute;
-    /*right: 0;*/
     right: 15px;
     height: 29px;
+    background-color: rgb(201,201,201);
     padding: 0 8px 0 5px;
     cursor: pointer !important;
 
-} .post-more-options {background-color: rgb(201,201,201);}
+}
 
 .post-dialogue-progress {
     position: relative;
@@ -371,15 +370,18 @@
 .tag {
     position: relative;
     top: -3px;
-
     font-family: arial, sans-serif;
     font-size: 15px;
     font-weight: normal;
     color: rgb(51,51,251);
     margin: 0 3px;
-} .tag:link {text-decoration: none;}
-  .tag:visited {color: rgb(21,21,231);}
-  .tag:hover {text-decoration: underline;}
+
+    &:link { text-decoration: none; }
+    &:visited { color: rgb(21,21,231); }
+    &:hover { text-decoration: underline; }
+}
+ 
+ 
 
 
 .mini-vote-btn {
@@ -399,19 +401,20 @@
     top: 0px;
     margin: 4px;
     margin-right: 2px;
-
     font-family: 'heydings_iconsregular';
     font-size: 20px;
     color: rgb(101,101,101);
     font-weight: normal;
     cursor: pointer;
-} .mini-hand-icon:hover {color: rgb(151,151,151);}
-  .mini-hand-icon:active {color: rgb(121,121,121);}
+
+    &:hover { color: rgb(151,151,151); }
+    &:active { color: rgb(121,121,121); }
+}
+ 
 
 .mini-vote-count {
     position: relative;
     top: -2px;
-
     font-family: arial, sans-serif;
     font-size: 15px;
     font-weight: normal;
@@ -419,16 +422,14 @@
 }
 
 .default-loading-post {
-    /*height: 300px;*/
-    /*background-color: rgba(110,192,56,0.2);*/
     background-color: rgb(241,241,241);
     margin: 10px 0;
     padding: 20px;
 
     -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    border-radius: 3px;
+       -moz-border-radius: 3px;
+         -o-border-radius: 3px;
+            border-radius: 3px;
 }
 
 .general-text {
@@ -441,26 +442,32 @@
 .upvote-disabled { background-color: rgb(181,181,181); cursor: default !important; }
 .upvote {
     background-color: rgb(116,210,110);
-    :hover { background-color: rgb(116,225,110); }
-    :active { background-color: rgb(116,205,110); }
+    
+    &:hover { background-color: rgb(116,225,110); }
+    &:active { background-color: rgb(116,205,110); }
 }
 
 
 .upvoted {
     -webkit-box-shadow: inset 0 0 9px 2px rgb(0,60,0);
-    box-shadow: inset 0 0 9px 2px rgb(0,60,0);
+       -moz-box-shadow: inset 0 0 9px 2px rgb(0,60,0);
+         -o-box-shadow: inset 0 0 9px 2px rgb(0,60,0);
+            box-shadow: inset 0 0 9px 2px rgb(0,60,0);
 }
 
 .downvoted {
     -webkit-box-shadow: inset 0 0 9px 2px rgb(60,0,0);
-    box-shadow: inset 0 0 9px 2px rgb(60,0,0);
+       -moz-box-shadow: inset 0 0 9px 2px rgb(60,0,0);
+         -o-box-shadow: inset 0 0 9px 2px rgb(60,0,0);
+            box-shadow: inset 0 0 9px 2px rgb(60,0,0);
 }
 
 .downvote-disabled { background-color: rgb(151,151,151); cursor: default !important; }
 .downvote {
     background-color: rgb(210,100,100);
-    :hover { background-color: rgb(230,100,100); }
-    :active { background-color: rgb(205,100,100); }
+    
+    &:hover { background-color: rgb(230,100,100); }
+    &:active { background-color: rgb(205,100,100); }
 }
 
 .btn {
@@ -468,11 +475,9 @@
     padding: 8px 13px;
     margin: 5px;
     background-color: rgb(190,190,190);
-
     font-family: helvetica, arial, sans-serif;
     font-size: 15px;
     font-weight: 300;
-
     cursor: pointer;
 }
 

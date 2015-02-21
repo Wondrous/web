@@ -98,7 +98,7 @@ var UserIcon = React.createClass({
         });
     },
     handleClick: function() {
-        this.transitionTo('/' + this.props.user);
+        this.transitionTo('/' + this.props.user.username);
         this.loadProfileFromServer();
         this.loadWallFromServer();
     },
@@ -292,7 +292,7 @@ var UserBar = React.createClass({
         }
     },
     handleCrop: function (e) {
-        console.log("witdh",$('#cropBox').width());
+
         $('#cropBox').attr('src', e.target.result);
         $('#cropBox').cropbox({
             width: $('#cropBox').width(),
@@ -324,8 +324,7 @@ var UserBar = React.createClass({
 
         return (
             <div className="profile-header">
-                <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/defaults/p.default-profile-picture.jpg" className="profile-photo"/>
-
+                <img className="profile-photo" onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/defaults/p.default-profile-picture.jpg" />
                 <span className="profile-header-content">
                     <span className="profile-name">{this.state.data.name}</span>
                     <span className="profile-wscore">

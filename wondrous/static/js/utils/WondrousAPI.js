@@ -204,7 +204,8 @@ module.exports = {
         var url = '/api/me/picture';
         request.post(url)
         .send(uploadData).end(_callback(callback));
-    }
+    },
+    
     // Upload file to s3
     // options:
     // callback(err,json_res)

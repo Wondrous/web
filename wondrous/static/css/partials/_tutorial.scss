@@ -28,19 +28,17 @@
 .tutorial-ul {
     list-style: none;
     li { padding: 7px; }
-    }
+}
 
 .tutorial-finish-btn {
     position: relative;
-
     color: rgb(251,251,251);
     background-color: rgb(100,100,200);
     padding: 7px 10px;
     width: 130px;
     text-align: center;
     cursor: pointer;
-    :hover { background-color: rgb(100,100,255); }
-    :active { background-color: rgb(100,100,190); }
-}
 
-/* ================================ */
+    &:hover { background-color: rgb(100,100,255); }
+    &:active { background-color: rgb(100,100,190); }
+}

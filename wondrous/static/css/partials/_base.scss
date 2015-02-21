@@ -50,17 +50,15 @@ h1, h2, h3, h4, h5 {
     margin: 3px;
     border: 3px solid rgb(230,230,230);
     outline: none;
-} .input-basic:focus {
-    /*border: 3px solid rgb(23,190,190);*/
-    /*border: 3px solid rgb(98,186,132);*/
-    border: 3px solid;
+
+    &:focus { border: 3px solid; }
 }
 
 hr {
     display: block;
     height: 1px;
     border: 0;
-    border-top: 1px solid rgb(201,201,201);
+    border-top: 1px solid rgb(231,231,231);
     margin: 1em 0;
     padding: 0;
 }
@@ -83,12 +81,12 @@ hr {
 }
 
 .nh {
-    -webkit-touch-callout:  none;
-    -webkit-user-select:    none;
-    -khtml-user-select:     none;
-    -moz-user-select:       none;
-    -ms-user-select:        none;
-    user-select:            none;
+    -webkit-touch-callout: none;
+    -webkit-user-select:   none;
+     -khtml-user-select:   none;
+       -moz-user-select:   none;
+        -ms-user-select:   none;
+            user-select:   none;
 }
 
 .round-50 {
@@ -133,9 +131,6 @@ hr {
             border-radius: 2px;
 }
 
-
-
-
 .loader-lo {
     position: absolute;
     top: 77px;
@@ -148,15 +143,16 @@ hr {
 .style-neutral {
     background-color: rgb(20,90,220);
     color: rgb(251,251,251);
-    :hover { background-color: rgb(30,100,240); }
-    :active { background-color: rgb(20,90,210); }
+    
+    &:hover { background-color: rgb(30,100,240); }
+    &:active { background-color: rgb(20,90,210); }
 }
 
 .style-warn {
     background-color: rgb(220,90,90);
     color: rgb(251,251,251);
-    :hover { background-color: rgb(230,95,95); }
-    :active { background-color: rgb(210,90,90); }
+    &:hover { background-color: rgb(230,95,95); }
+    &:active { background-color: rgb(210,90,90); }
 }
 
 
@@ -194,8 +190,6 @@ hr {
     z-index: 4;
 }
 
-
-
 .pagination-text {
     font-family: code_lightregular, arial, helvetica, sans-serif;
     font-size: 20px;
@@ -208,4 +202,11 @@ hr {
     background-color: rgb(71,71,71);
     color: rgb(251,251,251);
     padding: 2px;
+}
+
+.tmp-feed-h1 {
+    color: rgb(51,51,51);
+    font-weight: bold;
+    font-size: 18px;
+    padding: 20px 0 0 5%;
 }

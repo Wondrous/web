@@ -4,7 +4,6 @@
     left: 50%;
     margin-left: -200px;
     top: 30%;
-    /*height: 100px;*/
     width: 400px;
     text-align: center;
     background-color: rgb(234,234,234);
@@ -31,7 +30,6 @@
     display: inline-block;
     margin: 20px 6px;
     cursor: pointer;
-
 }
 
 .popup-yes {
@@ -78,26 +76,21 @@
     padding: 7px 5px;
     font-size: 30px;
     width: 100%;
-
     color: rgb(51,51,51);
     font-weight: bold;
-
     background-color: rgb(255,255,255);
     background-color: rgba(255,255,255,0.9);
-
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-
-/*  -webkit-box-shadow: 0 0 10px 5px rgb(110,110,110);
-    -moz-box-shadow: 0 0 10px 5px rgb(110,110,110);
-    box-shadow: 0 0 10px 5px rgb(110,110,110);*/
-
     outline: none;
     border: none;
-} .get-link-input:focus {
-    -webkit-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
-    -moz-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
-    box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+
+    &:focus {
+        -webkit-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+           -moz-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+             -o-box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+                box-shadow: inset 0 0 5px 1px rgb(100,150,150);
+    }
 }
 
 .get-link-x {
@@ -105,12 +98,13 @@
     font-size: 50px;
     color: rgb(35,35,35);
     text-align: center;
-
     float: right;
     right: 1px;
     position: absolute;
     top: -4px;
     z-index: 11;
     cursor: pointer;
-} .get-link-x:hover {color: rgb(55,55,55);}
-  .get-link-x:active {color: rgb(45,45,45);}
+
+    &:hover { color: rgb(55,55,55); }
+    &:active { color: rgb(45,45,45); }
+}
