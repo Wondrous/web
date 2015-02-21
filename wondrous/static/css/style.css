@@ -924,10 +924,7 @@ a:hover {
   -o-transition: width 0.4s, height 0.4s;
   transition: width 0.4s, height 0.4s;
   background-color: white;
-  -webkit-border-radius: 1px;
-  -moz-border-radius: 1px;
-  -o-border-radius: 1px;
-  border-radius: 1px; 
+  overflow: hidden;
 }
 
 .post-body:hover {
@@ -1065,6 +1062,7 @@ a:hover {
   font-size: 12px;
   font-weight: bold;
   color: #0000c8; 
+  cursor: pointer;
 }
 
 /*.blue-identifier {
@@ -1072,7 +1070,7 @@ a:hover {
 
 }*/
 .post-subject-text {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
   text-align: left;
   color: #fbfbfb;

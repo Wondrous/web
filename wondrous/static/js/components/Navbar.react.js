@@ -4,7 +4,7 @@ var UserStore = require('../stores/UserStore');
 var Link = Router.Link;
 
 var SearchBox = React.createClass({
-    render: function () {
+    render: function() {
         return (
         <form method="GET" action="/search/" style={{"display": "inline-block"}}>
             <div className="container">
@@ -17,12 +17,11 @@ var SearchBox = React.createClass({
 });
 
 var NotificationBox = React.createClass({
-    toggleNotifications:function(e){
+    toggleNotifications: function(e) {
         WondrousActions.toggleNotifications();
     },
     render: function () {
-        var notes = UserStore.getUserData().unseen_notifications||0;
-
+        var notes = UserStore.getUserData().unseen_notifications || 0;
         var cn = (notes > 0) ? "notification-count nc-general round-2 notification-alert":"notification-count nc-general round-2";
         return (
             <span onClick={this.toggleNotifications} id="right-menu" className={cn}>
@@ -32,50 +31,50 @@ var NotificationBox = React.createClass({
 });
 
 var SettingsGear = React.createClass({
-    toggleSettings:function(e){
+    toggleSettings: function(e) {
         WondrousActions.toggleSettings();
     },
-    render: function () {
+    render: function() {
         return (
-            <span className="banner-more-options">
-                <span onClick={this.toggleSettings} className="banner-options-icon">C</span>
+            <span onClick={this.toggleSettings} className="banner-more-options">
+                <span className="banner-options-icon">C</span>
             </span>);
     }
 });
 
 var ProfileLink = React.createClass({
     mixins: [ Router.Navigation ],
-    handleProfileData:function(err, data){
-        if(err==null){
-            console.log("profile",data);
+    handleProfileData:function(err, data) {
+        if (err == null) {
+            console.log("profile", data);
             WondrousActions.loadProfileInfo(data);
         }else{
             // WondrousActions.unloadUserInfo(err);
         }
     },
-    handleWallData:function(err, data){
-        if(err==null){
+    handleWallData:function(err, data) {
+        if (err == null) {
             WondrousActions.loadWallPosts(data);
         }else{
 
         }
     },
-    loadProfileFromServer: function(){
+    loadProfileFromServer: function() {
         WondrousAPI.getUserInfo({
             username: this.props.user.username,
             callback: this.handleProfileData
         });
     },
-    loadWallFromServer: function(){
+    loadWallFromServer: function() {
         WondrousAPI.getWallPosts({
             username: this.props.user.username,
-            page:0,
+            page: 0,
             callback: this.handleWallData
         });
     },
-    handleClick:function(){
-        if (typeof this.props.user.username != 'undefined'){
-            this.transitionTo('/'+this.props.user.username);
+    handleClick:function() {
+        if (typeof this.props.user.username != 'undefined') {
+            this.transitionTo('/' + this.props.user.username);
             this.loadProfileFromServer();
             this.loadWallFromServer();
         }
@@ -92,22 +91,22 @@ var ProfileLink = React.createClass({
 });
 
 // Method to retrieve state from stores
-function getUserState(){
+function getUserState() {
     var data = UserStore.getUserData();
     data.loggedin = UserStore.isUserLoggedIn();
     return data;
 }
 
 var Navbar = React.createClass({
-    handleData:function(err, data){
-        if(err==null){
+    handleData:function(err, data) {
+        if (err == null) {
             WondrousActions.loadUserInfo(data);
-        }else{
+        } else {
             WondrousActions.unloadUserInfo(err);
         }
     },
 
-    loadUserFromServer: function(){
+    loadUserFromServer: function() {
         WondrousAPI.getMyInfo({
             callback:this.handleData
         });
@@ -123,12 +122,12 @@ var Navbar = React.createClass({
         UserStore.addChangeListener(this._onChange);
     },
 
-    componentWillUnmount: function(){
+    componentWillUnmount: function() {
         UserStore.removeChangeListener(this._onChange);
     },
     render: function () {
         return (
-            <div id="topBanner" className={this.state.loggedin?"top-banner":"top-banner banner-lo"}>
+            <div id="topBanner" className={this.state.loggedin ? "top-banner" : "top-banner banner-lo"}>
                 <Link to="/" style={{"color": "rgb(235, 235, 235)"}}>
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </Link>
@@ -141,7 +140,7 @@ var Navbar = React.createClass({
     },
 
     // Method to setState based upon Store changes
-    _onChange: function(){
+    _onChange: function() {
         this.setState(getUserState());
     }
 });

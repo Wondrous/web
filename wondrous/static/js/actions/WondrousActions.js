@@ -99,7 +99,6 @@ var WondrousActions = {
             data: data
         });
     },
-
 }
 
 module.exports = WondrousActions

@@ -8,7 +8,7 @@ var Link = Router.Link;
 var SettingsBar = React.createClass({
     render: function(){
         return (
-            <div >
+            <div>
                 <Link to="/info/about/" className="dropdown-a">
                     <div className="dropdown-element">About us</div>
                 </Link>
@@ -29,20 +29,20 @@ var SettingsBar = React.createClass({
                     <div className="dropdown-element">Feedback</div>
                 </Link>
 
-                <hr className="dropdown-hr"/>
-                <a href="/auth/logout/" className="dropdown-element" style={{"textDecoration": "none","display": "block"}}>Log out</a>
+                <hr className="dropdown-hr" />
+                <a href="/auth/logout/" className="dropdown-element" style={{"textDecoration": "none", "display": "block"}}>Log out</a>
             </div>
         );
     }
 });
 
 NotificationReasons = {
-    COMMENTED:0,
-    UPDATED:1,
-    LIKED:2,
-    FOLLOWED:3,
-    FOLLOW_REQUEST:4,
-    FOLLOW_ACCEPTED:5
+    COMMENTED: 0,
+    UPDATED: 1,
+    LIKED: 2,
+    FOLLOWED: 3,
+    FOLLOW_REQUEST: 4,
+    FOLLOW_ACCEPTED: 5
 };
 
 var Notification = React.createClass({
@@ -99,9 +99,9 @@ var Notification = React.createClass({
         var content = '';
         if (reason==NotificationReasons.FOLLOW_REQUEST){
             content = note.from_user_firstname + " requested to follow you";
-        }else if(reason==NotificationReasons.FOLLOWED){
+        } else if (reason==NotificationReasons.FOLLOWED){
             content = note.from_user_firstname + " followed you";
-        }else if(reason==NotificationReasons.FOLLOW_ACCEPTED){
+        } else if (reason==NotificationReasons.FOLLOW_ACCEPTED){
             content = note.from_user_firstname + " accepted your follow request";
         }
         return content;
@@ -121,7 +121,7 @@ var Notification = React.createClass({
                 <div className={"dropdown-element"} style={{'display':displayType}}>
                     <img/>
                     <span>{content}</span>
-                    {actionNeeded?<button onClick={this.handleAccept}>"Accept"</button>:''}
+                    {actionNeeded ? <button onClick={this.handleAccept}>"Accept"</button> : ''}
                 </div>
             </div>
         );
@@ -138,7 +138,7 @@ var NotificationsBar = React.createClass({
     },
     loadFromServer: function(){
         WondrousAPI.getNotifications({
-            page:0,
+            page: 0,
             callback:this.handleData
         });
     },

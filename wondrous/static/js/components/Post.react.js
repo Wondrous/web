@@ -112,7 +112,7 @@ var Post = React.createClass({
     render: function() {
         return (
             <div ref="brick" className="masonry-brick">
-                <div ref="post"  className="post-body">
+                <div ref="post"  className="post-body round-5">
                     <input className="objectID" type="hidden" value={this.props.data.id} />
                     <UserTitle data={this.props.data} />
                     <div onClick={this.handleClick}>
