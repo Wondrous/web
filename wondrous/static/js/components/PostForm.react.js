@@ -10,8 +10,8 @@ var PostForm = React.createClass({
     handleCrop: function (e) {
         $('#cropBox').attr('src', e.target.result);
         $('#cropBox').cropbox({
-            width:500,
-            height:500
+            width: 500,
+            height: 500
         }).on('cropbox',function(e,results,img){
 
         });
@@ -27,8 +27,7 @@ var PostForm = React.createClass({
     },
 
     showNewPost: function(e){
-        var form = this.refs.postform.getDOMNode();
-        $(form).slideDown();
+        $('#new-post-dialogue').slideDown(200);
     },
 
     handleDrop: function(e){
