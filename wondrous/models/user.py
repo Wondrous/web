@@ -16,11 +16,13 @@ from sqlalchemy import (
     DateTime,
     Integer,
     Unicode,
+    ForeignKey,
 )
 
 from sqlalchemy.orm import (
     synonym,
     relationship,
+    backref
 )
 
 from wondrous.models import (
@@ -36,7 +38,7 @@ DEFAULT_PROFILE_PICTURE_PATH = "/static/pictures/defaults/p.default-profile-pict
 
 
 class User(Base, PasswordManager, BaseMixin):
-    
+
     """
         Defines a core user object:
             Person : A Person on the site
@@ -55,7 +57,10 @@ class User(Base, PasswordManager, BaseMixin):
     username = Column(Unicode, nullable=True, unique=True)  # nullable=True for FBAuth users
     email = Column(Unicode, nullable=False)
     _password = Column('password', Unicode(255), nullable=False)
-    profile_picture = Column(Unicode, nullable=True, default=unicode(DEFAULT_PROFILE_PICTURE_PATH))  # nullable=True for FBAuth users
+    # profile_picture = Column(Unicode, nullable=True, default=unicode(DEFAULT_PROFILE_PICTURE_PATH))  # nullable=True for FBAuth users
+
+    picture_object_id = Column(BigInteger,ForeignKey('object.id'), nullable=True)
+    picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
 
     is_active = Column(Boolean, nullable=False, default=True)  # Used to deactivate a user
     is_banned = Column(Boolean, nullable=True, default=False)  # Is this user banned from the enire system?

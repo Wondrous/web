@@ -191,7 +191,20 @@ module.exports = {
         .send(uploadData).end(_callback(callback));
     },
 
+    // Change profile picture
+    // options is:
+    // callback(err,json_res)
+    // uploadData: object comprised of the the follow:
+    //      file_type
+    //      callback
+    changePicture: function(options){
+        var file_type = options.file_type;
+        var callback = options.callback;
 
+        var url = '/api/me/picture';
+        request.post(url)
+        .send(uploadData).end(_callback(callback));
+    }
     // Upload file to s3
     // options:
     // callback(err,json_res)

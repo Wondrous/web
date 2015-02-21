@@ -9,6 +9,7 @@
 #
 
 from datetime import datetime
+import uuid
 
 from wondrous.models import (
     DBSession,
@@ -76,6 +77,20 @@ class AccountManager(BaseManager):
         DBSession.flush()
 
         return new_user
+
+    @classmethod
+    def upload_picture_json(cls,person,file_type):
+        picture_object = person.user.picture_object
+        if not picture_object:
+            picture_object = Object(subject=subject, text=text)
+            DBSession.add(picture_object)
+            DBSession.flush()
+
+        # TODO DELETE OLD PHOTO -- picture_object.ouuid
+        picture_object.ouuid = str(picture_object.id)+'-'+unicode(uuid.uuid4()).lower()
+        picture_object.mime_type = file_type
+        data.update(UploadManager.sign_upload_request(picture_object.ouuid, picture_object.mime_type))
+        return data
 
     @classmethod
     def get_one_by_kwargs(cls, **kwargs):

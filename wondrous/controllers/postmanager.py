@@ -8,8 +8,7 @@
 # CONTROLLERS/POSTMANAGER.PY
 #
 
-import base64
-import hmac
+
 # import json
 # import os
 import time
@@ -17,7 +16,6 @@ import urllib
 import uuid
 
 from datetime import datetime
-from hashlib import sha1
 
 from sqlalchemy import or_
 
@@ -34,6 +32,7 @@ from wondrous.models import (
 
 from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
+from wondrous.utilities.validation_utilities import UploadManager
 import logging
 
 class PostManager(BaseManager):
@@ -116,35 +115,7 @@ class PostManager(BaseManager):
         data = PostManager.model_to_json(post)
         return data
 
-    @classmethod
-    def _sign_upload_request(cls, ouuid, mime_type):
 
-        """
-            Signs the upload request with our AWS credientials,
-            returns the signed request url and the url of the content
-        """
-
-        AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
-        AWS_SECRET_KEY = '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'
-        AWS_S3_BUCKET  = 'mojorankdev'
-
-        # Generate the timeframe for uploading
-        expires = int(time.time()+10)
-        amz_headers = 'x-amz-acl:public-read'
-
-        # Generate the PUT request that the js will use
-        put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, ouuid)
-
-        # Generate the signature with which the request can be signed:
-        signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-        # Remove surrounding whitespace and quote special characters:
-        signature = urllib.quote_plus(signature.strip())
-
-        # Build the URL of the file in anticipation of its imminent upload:
-        url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, ouuid)
-
-        return {'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
-                'url': url}
 
     @classmethod
     def post_json(cls, person, subject, text, tags=None, file_type=None):
@@ -157,7 +128,7 @@ class PostManager(BaseManager):
         data = {}
 
         if file_type:
-            data.update(cls._sign_upload_request(object.ouuid, object.mime_type))
+            data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
 
         data.update(PostManager.model_to_json(post))
         data.update(PostManager.model_to_json(object))

@@ -155,8 +155,35 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="GET",route_name='api_user_me', renderer='json')
     def api_user_me(self):
+        """
+            PURPOSE: Retrieves my user information based on relationship and login
+                status
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person, user_id
+
+            PARAMS: (None)
+
+            RETURNS: The JSON of the person+user model if valid else {}
+        """
         person = self.request.person
         return AccountManager.get_json_by_username(person, **{'user_id': person.user.id})
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_user_picture', renderer='json')
+    def api_user_picture(self):
+        """
+            PURPOSE: Changes profile picture
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person, file_type
+
+            PARAMS: (None)
+
+            RETURNS: The JSON of the person+user model if valid else {}
+        """
+        person = self.request.person
+        return AccountManager.upload_picture_json(person, **self.query_kwargs)
 
     @login_required
     @view_config(request_method="POST", route_name='api_user_visibility_toggle', renderer='json')

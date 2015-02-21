@@ -8,6 +8,11 @@ var RouteHandler = require('react-router').RouteHandler;
 var DefaultRoute = require('react-router').DefaultRoute;
 var Route = require('react-router').Route;
 var Link = Router.Link;
+
+var WondrousAPI = require('../utils/WondrousAPI');
+var MouseWheel = require('kd-shim-jquery-mousewheel');
+var CropBox = require('jquery-cropbox');
+
 // Components
 var PostForm = require('./PostForm.react');
 
@@ -226,7 +231,7 @@ function getProfileState() {
 
 var UserBar = React.createClass({
     mixins: [ Router.Navigation ],
-
+    file: null,
     am_following:getProfileState().data.following,
     is_private:getProfileState().data.is_private,
 
@@ -262,6 +267,54 @@ var UserBar = React.createClass({
             callback:this.handleData
         })
     },
+    handleDrop: function(e){
+        e.preventDefault();
+        this.setState({
+          isDragActive: false
+        });
+
+        var files;
+        if (e.dataTransfer) {
+            files = e.dataTransfer.files;
+        } else if (e.target) {
+            files = e.target.files;
+        }
+
+        this.file = files[0];
+        this.readURL();
+    },
+
+    readURL:function () {
+        if (this.file) {
+            var reader = new FileReader();
+            reader.onload = this.handleCrop
+            reader.readAsDataURL(this.file);
+        }
+    },
+    handleCrop: function (e) {
+        console.log("witdh",$('#cropBox').width());
+        $('#cropBox').attr('src', e.target.result);
+        $('#cropBox').cropbox({
+            width: $('#cropBox').width(),
+            height: $('#cropBox').height()
+        }).on('cropbox',function(e,results,img){
+
+        });
+    },
+    onDragLeave: function(e) {
+        this.setState({
+          isDragActive: false
+        });
+    },
+
+    onDragOver: function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "copy";
+
+        this.setState({
+          isDragActive: true
+        });
+    },
     render: function() {
         var username = this.props.username;
         var is_me = username === UserStore.getUserData().username;
@@ -271,7 +324,7 @@ var UserBar = React.createClass({
 
         return (
             <div className="profile-header">
-                <img src="/static/pictures/defaults/p.default-profile-picture.jpg" className="profile-photo round-50"/>
+                <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/defaults/p.default-profile-picture.jpg" className="profile-photo"/>
 
                 <span className="profile-header-content">
                     <span className="profile-name">{this.state.data.name}</span>
@@ -347,7 +400,7 @@ var Profile = React.createClass({
         if (err == null) {
             WondrousActions.loadWallPosts(data);
         } else {
-            // Nothing much happening here... 
+            // Nothing much happening here...
         }
     },
     loadProfileFromServer: function() {

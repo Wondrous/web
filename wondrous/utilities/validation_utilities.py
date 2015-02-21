@@ -21,10 +21,40 @@ from urlparse import urlparse
 from wondrous.routes import TAKEN_PATHS
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
+import base64
+import hmac
+from hashlib import sha1
+
 class UploadManager:
     @staticmethod
-    def sign_upload():
-        pass
+    def sign_upload_request(ouuid, mime_type):
+
+        """
+            Signs the upload request with our AWS credientials,
+            returns the signed request url and the url of the content
+        """
+
+        AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
+        AWS_SECRET_KEY = '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'
+        AWS_S3_BUCKET  = 'mojorankdev'
+
+        # Generate the timeframe for uploading
+        expires = int(time.time()+10)
+        amz_headers = 'x-amz-acl:public-read'
+
+        # Generate the PUT request that the js will use
+        put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, ouuid)
+
+        # Generate the signature with which the request can be signed:
+        signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+        # Remove surrounding whitespace and quote special characters:
+        signature = urllib.quote_plus(signature.strip())
+
+        # Build the URL of the file in anticipation of its imminent upload:
+        url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, ouuid)
+
+        return {'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
+                'url': url}
 
 class PasswordManager(object):
 

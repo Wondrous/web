@@ -65,9 +65,11 @@ def build_routes(config):
     config.add_route('api_user_signup',                        '/api/user/signup')     # POST
     config.add_route('api_user_vote',                          '/api/user/vote')      # POST
     config.add_route('api_user_profile',                       '/api/user/profile')    # POST
-    config.add_route('api_user_deactivate',                    '/api/user/deactivate') # POST
-    config.add_route('api_user_password',                      '/api/user/password')   # POST
+    config.add_route('api_user_deactivate',                    '/api/me/deactivate') # POST
+    config.add_route('api_user_password',                      '/api/me/password')   # POST
+    config.add_route('api_user_picture',                       '/api/me/picture')     # POST
     config.add_route('api_user_me',                            '/api/me')              # GET
+
     config.add_route('api_user_info',                          '/api/user')            # GET
     config.add_route('api_user_followers',                     '/api/user/followers')  # GET
     config.add_route('api_user_following',                     '/api/user/following')  # GET
