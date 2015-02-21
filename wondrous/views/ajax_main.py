@@ -8,18 +8,12 @@
 # VIEWS/AJAX_MAIN.PY
 #
 
-import logging
-import os
-import time
-import uuid
+import json
 
-from PIL import Image
+from collections import defaultdict
 from unidecode import unidecode
 
 from pyramid.view import view_config
-
-# from pyramid.httpexceptions import HTTPFound
-# from pyramid.httpexceptions import HTTPTemporaryRedirect
 
 from wondrous.models.comment import Comment
 
@@ -43,8 +37,6 @@ from wondrous.models.user import (
     User,
 )
 
-# from wondrous.models import Vote
-
 from wondrous.controllers import (
     AccountManager,
     FeedManager,
@@ -55,18 +47,13 @@ from wondrous.controllers import (
 )
 
 from wondrous.utilities.general_utilities import (
-    _IMAGE_MIMES,
-    _IMAGE_MIMES_NO_GIF,
-    _JPEG_IMAGE_MIMES,
     api_login_required,
     login_required,
-    VALID_MIME_TYPES,
-    INVLAID_MIME_TYPES,
 )
 
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
-from wondrous.utilities.pyexif import ExifEditor
+# from wondrous.utilities.pyexif import ExifEditor
 
 from wondrous.utilities.render_utilities import (
     _linkify,
@@ -87,9 +74,6 @@ from wondrous.utilities.validation_utilities import (
 
 from wondrous.views.main import BaseHandler
 
-from collections import defaultdict
-from datetime import datetime
-import json
 
 class APIViews(BaseHandler):
 
@@ -114,6 +98,7 @@ class APIViews(BaseHandler):
 
     @view_config(request_method="GET",route_name='api_user_followers', renderer='json')
     def api_user_followers(self):
+
         """
             PURPOSE: Retrieves the user profile posts -- all the posts that
                 were created by the respective user
@@ -125,12 +110,14 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array of the wallpost objects
         """
+
         person = self.request.person
-        posts = VoteManager.get_followers_json(person,**self.query_kwargs)
+        posts  = VoteManager.get_followers_json(person, **self.query_kwargs)
         return posts
 
     @view_config(request_method="GET",route_name='api_user_following', renderer='json')
     def api_user_following(self):
+
         """
             PURPOSE: Retrieves the user profile posts -- all the posts that
                 were created by the respective user
@@ -144,11 +131,12 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        posts = VoteManager.get_following_json(person,**self.query_kwargs)
+        posts  = VoteManager.get_following_json(person, **self.query_kwargs)
         return posts
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
+
         """
             PURPOSE: Retrieves the user information based on relationship and login
                 status
@@ -160,14 +148,15 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON of the person+user model if valid else {}
         """
+
         person = self.request.person
-        return AccountManager.get_json_by_username(person,**self.query_kwargs)
+        return AccountManager.get_json_by_username(person, **self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="GET",route_name='api_user_me', renderer='json')
     def api_user_me(self):
         person = self.request.person
-        return AccountManager.get_json_by_username(person,**{'user_id':person.user.id})
+        return AccountManager.get_json_by_username(person, **{'user_id': person.user.id})
 
     @login_required
     @view_config(request_method="POST", route_name='api_user_visibility_toggle', renderer='json')
@@ -184,10 +173,11 @@ class APIViews(BaseHandler):
 
         current_user = self.request.person.user
         current_user.is_private = not current_user.is_private
-        return {'is_private':current_user.is_private}
+        return {'is_private': current_user.is_private}
 
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
+
         """
             PURPOSE: Retrieves the user profile posts -- all the posts that
                 were created by the respective user
@@ -201,12 +191,13 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        posts = FeedManager.get_wall_posts_json(person,**self.query_kwargs)
+        posts  = FeedManager.get_wall_posts_json(person, **self.query_kwargs)
         return posts
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_deactivate', renderer='json')
     def api_user_deactivate(self):
+
         """
             PURPOSE: Deactivates an account
 
@@ -217,12 +208,14 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing either an error or successful status
         """
+
         person = self.request.person
-        return AccountManager.deactivate_json(person,**self.query_kwargs)
+        return AccountManager.deactivate_json(person, **self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_profile', renderer='json')
     def api_user_profile(self):
+
         """
             PURPOSE: changes account information
 
@@ -238,12 +231,14 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing either an error or successful status
         """
+
         person = self.request.person
-        return AccountManager.change_profile_json(person,**self.query_kwargs)
+        return AccountManager.change_profile_json(person, **self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_password', renderer='json')
     def api_user_password(self):
+
         """
             PURPOSE: changes password
 
@@ -257,10 +252,11 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        return AccountManager.change_password_json(person,**self.query_kwargs)
+        return AccountManager.change_password_json(person, **self.query_kwargs)
 
     @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
+
         """
             PURPOSE: get different feed posts by the type
 
@@ -275,12 +271,13 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        return FeedManager.get_feed_posts_json(person,**self.query_kwargs)
+        return FeedManager.get_feed_posts_json(person, **self.query_kwargs)
 
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_new_post', renderer='json')
     def api_new_post(self):
+
         """
             PURPOSE: post a new post
 
@@ -298,10 +295,10 @@ class APIViews(BaseHandler):
         query_kwargs = self.query_kwargs
         if 'tags[]' in query_kwargs.keys():
             del query_kwargs['tags[]']
-            if len(tags)>0:
-                query_kwargs.update({'tags':tags})
+            if len(tags) > 0:
+                query_kwargs.update({'tags': tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
-        retval = PostManager.post_json(person,**query_kwargs)
+        retval = PostManager.post_json(person, **query_kwargs)
         return retval
 
 
