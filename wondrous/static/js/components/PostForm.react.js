@@ -76,6 +76,7 @@ var PostForm = React.createClass({
         // Clear the post textarea and the hashtag highlighter
         $(".highlighter").empty();
         $("#postTextarea").val('');
+        $("#postSubject").val('');
 
         // Reset any post error messages
         $(".post-error").empty();
@@ -94,29 +95,29 @@ var PostForm = React.createClass({
         $('#post-hashtags').empty();
     },
 
-    onProgress:function(percentage){
+    onProgress: function(percentage) {
         console.log("upload percentage", percentage);
     },
 
-    onFileUploadComplete: function(err,res){
-        if(err==null){
-            console.log("file uploaded!",res);
-        }else{
-            console.error("upload file error",err);
+    onFileUploadComplete: function(err, res) {
+        if (err == null) {
+            console.log("file uploaded!", res);
+        } else {
+            console.error("upload file error", err);
         }
         this.handleCancel(null);
-        setTimeout(this.addToFeeds,500);
+        setTimeout(this.addToFeeds, 500);
     },
 
-    addToFeeds:function(){
-        if(this.post_to_add){
+    addToFeeds: function() {
+        if (this.post_to_add) {
             WondrousActions.addNewPost(this.post_to_add);
             this.post_to_add = null;
         }
     },
-    onPostSubmitted: function(err,res){
+    onPostSubmitted: function(err,res) {
         var dataURL = $('#cropBox').data('cropbox').getBlob();
-        if(!err){
+        if(!err) {
             this.post_to_add = res;
             WondrousAPI.uploadFile({
                 blob:dataURL,
@@ -126,17 +127,17 @@ var PostForm = React.createClass({
                 onProgress:this.onProgress
             });
 
-        }else{
+        } else {
             console.error(err);
         }
     },
 
     handleSubmit:function(e){
-        var postSubject       = $('#postSubject').val();
-        var postText          = $('#postTextarea').val();
-        var object_file_id    = $('#objectFileID').val(); // See if we have a object File value
-        var postTagsRaw       = [];
-        var postTagsUnique    = [];
+        var postSubject     = $('#postSubject').val();
+        var postText        = $('#postTextarea').val();
+        var object_file_id  = $('#objectFileID').val(); // See if we have a object File value
+        var postTagsRaw     = [];
+        var postTagsUnique  = [];
 
         // Make array of raw tag data
         $('.hashtag').each(function() {postTagsRaw.push($(this).text());});
@@ -148,15 +149,15 @@ var PostForm = React.createClass({
         });
 
         uploadData = {
-            'subject'       : postSubject,
-            'text'          : postText,
-            'tags'          : postTagsUnique
+            'subject' : postSubject,
+            'text'    : postText,
+            'tags'    : postTagsUnique
         };
 
         if (typeof(this.file) !== 'undefined' && this.file){
             uploadData.file_type = this.file.type;
         }
-        console.log("posting",uploadData);
+        console.log("posting", uploadData);
 
         WondrousAPI.newPost({
             uploadData:uploadData,
@@ -175,9 +176,9 @@ var PostForm = React.createClass({
                 <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div>
                 <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
                     <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/500x500.gif"
-                        style={{"MozBorderRadius": "30px",
-                                "KhtmlBorderRadius": "30px",
-                                "WebkitBorderRadius": "30px"}}/>
+                        style={{"MozBorderRadius": "20px",
+                                "KhtmlBorderRadius": "20px",
+                                "WebkitBorderRadius": "20px"}}/>
 
                     <div className="new-post-element">
                         <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
