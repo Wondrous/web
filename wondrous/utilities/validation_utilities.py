@@ -8,24 +8,24 @@
 # VALIDATION_UTILITIES.PY
 #
 
+import base64
 import bcrypt
 import cgi
+import hmac
 import re
+import time
 import urllib
 import urllib2
 import unicodedata
 
-import time
 from datetime import date
 from datetime import timedelta
+from hashlib import sha1
 from urlparse import urlparse
 
 from wondrous.routes import TAKEN_PATHS
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
-import base64
-import hmac
-from hashlib import sha1
 
 class UploadManager:
     @staticmethod
@@ -61,6 +61,7 @@ class UploadManager:
 class PasswordManager(object):
 
     def _set_password(self, password):
+
         """
             PURPOSE: Hash and set the user's password
 
@@ -474,8 +475,6 @@ class ValidationHelper(object):
         else:
             return False
 
-
-
     @staticmethod
     def valid_profile(user_id):
 
@@ -555,7 +554,7 @@ class ValidatePost(object):
 
             NOTE: This works with None
 
-            QUIRK: The <br> tags must have a preceeding
+            NOTE: The <br> tags must have a preceeding
             space or else the _linkify method will treat
             them as part of the url
         """
@@ -647,6 +646,7 @@ class ValidatePost(object):
             return None, "Please post some text, add a link, or upload a delicious file of your choosing!"
 
 class ValidateLink(object):
+    
     @staticmethod
     def sanitize_post_link(post_link):
 
