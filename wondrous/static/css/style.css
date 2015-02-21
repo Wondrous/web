@@ -878,7 +878,8 @@ a:hover {
   background: #F90; }
 
 .post-presentation {
-  width: 66.666%;
+  width: 50.0%;  /* 4-column grid */
+  /*width: 66.666%;*/ /* 3-column grid */
   z-index: 5;
   position: relative; }
 
