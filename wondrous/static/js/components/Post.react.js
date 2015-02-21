@@ -3,42 +3,42 @@ var WondrousActions = require('../actions/WondrousActions');
 
 var UserTitle = React.createClass({
     mixins: [Router.Navigation],
-    handleProfileData:function(err, data){
-        if(err==null){
-            console.log("profile",data);
+    handleProfileData: function(err, data) {
+        if (err == null) {
+            console.log("profile", data);
             WondrousActions.loadProfileInfo(data);
-        }else{
+        } else {
             // WondrousActions.unloadUserInfo(err);
         }
     },
-    handleWallData:function(err, data){
-        if(err==null){
+    handleWallData: function(err, data) {
+        if (err == null) {
             WondrousActions.loadWallPosts(data);
-        }else{
+        } else {
 
         }
     },
-    loadProfileFromServer: function(){
+    loadProfileFromServer: function() {
         WondrousAPI.getUserInfo({
             username: this.props.data.username,
             callback: this.handleProfileData
         });
     },
-    loadWallFromServer: function(){
+    loadWallFromServer: function() {
         WondrousAPI.getWallPosts({
             username: this.props.data.username,
-            page:0,
+            page: 0,
             callback: this.handleWallData
         });
     },
-    handleClick:function(){
-        if (typeof this.props.data.username != 'undefined'){
-            this.transitionTo('/'+this.props.data.username);
+    handleClick: function() {
+        if (typeof this.props.data.username != 'undefined') {
+            this.transitionTo('/' + this.props.data.username);
             this.loadProfileFromServer();
             this.loadWallFromServer();
         }
     },
-    render: function () {
+    render: function() {
         return (<div>
                 <img className="post-thumb round-50" src="/static/pictures/defaults/p.default-profile-picture.jpg"/>
                 <span className="post-identifier ellipsis-overflow">
@@ -49,12 +49,10 @@ var UserTitle = React.createClass({
 
 var Photo = React.createClass({
 
-    render: function () {
-
+    render: function() {
         photoStyle = {
             backgroundImage: this.props.data.ouuid?"url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")" :"/static/pictures/500x500.gif"
         };
-
         return (
             <div ref="container" className="post-cover-photo cover no-top-border"
             style={photoStyle}>
@@ -68,13 +66,13 @@ var Photo = React.createClass({
                     </div>
             </div>);
     },
-    componentDidMount:function(){
-
+    componentDidMount: function() {
+        // Nothing much happening here...
     }
 });
 
 var Post = React.createClass({
-    handleClick:function(){
+    handleClick: function() {
         var SPEED = 0;
         var thisPost = $(this.refs.post.getDOMNode());
         var thisBrick = $(this.refs.brick.getDOMNode());
@@ -96,8 +94,8 @@ var Post = React.createClass({
 
         thisBrick.toggleClass('post-presentation');
         thisPostContent.slideToggle(SPEED);
-        //
-        // // Trigger Masonry Layout
+        
+        // Trigger Masonry Layout
         var container = document.querySelector('.masonry');
         var msnry = new Masonry(container, {
               transitionDuration : 0,
@@ -111,18 +109,17 @@ var Post = React.createClass({
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
     },
-    render: function () {
+    render: function() {
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body">
                     <input className="objectID" type="hidden" value={this.props.data.id} />
                     <UserTitle data={this.props.data} />
                     <div onClick={this.handleClick}>
-                    <Photo ref="photo" data={this.props.data}/>
+                        <Photo ref="photo" data={this.props.data}/>
                     </div>
-
                     <div className="post-content" style={{"display":"none"}}>
-                    {this.props.data.text}
+                        {this.props.data.text}
                         <hr style={{"width": "60%"}}/>
                         <div>
                             <span className="post-footer-btn post-like-btn round-2">Like!</span>

@@ -1,64 +1,63 @@
-var WondrousAPI = require('../utils/WondrousAPI');
 var Post = require('./Post.react');
 var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
+var WondrousAPI = require('../utils/WondrousAPI');
 
 // Method to retrieve state from stores
-function getFeedState(){
+function getFeedState() {
     var data = FeedStore.getFeed();
     return data;
 }
 
 var Feed = React.createClass({
-    handleData: function(err,data){
-        if(err==null){
+    handleData: function(err, data) {
+        if (err == null) {
             WondrousActions.loadToFeed(data);
-        }else{
-            console.error("error",err);
+        } else {
+            console.error("error", err);
         }
     },
-    loadFeedFromServer: function(){
+    loadFeedFromServer: function() {
         WondrousAPI.getMajorityPosts({
-            page:0,
-            callback:this.handleData
+            page: 0,
+            callback: this.handleData
         });
     },
     getInitialState: function() {
         this.loadFeedFromServer();
-        return {'data':getFeedState()};
+        return {'data': getFeedState()};
     },
     // Add change listener to stores
-    componentDidMount: function(){
+    componentDidMount: function() {
         FeedStore.addChangeListener(this._onChange);
         UserStore.addChangeListener(this._onChange);
     },
-
     // Remove change listeners from stores
-    componentWillUnmount: function(){
+    componentWillUnmount: function() {
         FeedStore.removeChangeListener(this._onChange);
         UserStore.removeChangeListener(this._onChange);
     },
     render: function() {
-        var posts = this.state.data.map(function(post,index){
-            return(
-                <Post key={post.id} data={post}/>
+        var posts = this.state.data.map(function(post, index) {
+            return (
+                <Post key={post.id} data={post} />
             );
         });
 
         return (
-          <div className="masonry" id="asyncPosts">
-          <div className="backdrop"></div>
-          <div className="grid-sizer" style={{"display": "none"}}></div>
+            <div className="masonry" id="asyncPosts">
+                <div className="backdrop"></div>
+                <div className="grid-sizer" style={{"display": "none"}}></div>
 
-            <h1>feed</h1>
-            {posts}
-          </div>
+                <h1>feed</h1>
+                {posts}
+            </div>
         );
     },
 
     // Method to setState based upon Store changes
-    _onChange: function(){
+    _onChange: function() {
         var data = getFeedState();
         this.setState({data:data});
     }

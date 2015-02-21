@@ -1,76 +1,74 @@
+var DefaultRoute = require('react-router').DefaultRoute;
+var Link = require('react-router').Link;
 var React = require('react');
 var Route = require('react-router').Route;
 var RouteHandler = require('react-router').RouteHandler;
-var Link = require('react-router').Link;
-var DefaultRoute = require('react-router').DefaultRoute;
 
 // Stores
 var FeedStore = require('../stores/FeedStore');
-var WallStore = require('../stores/WallStore');
-var UserStore = require('../stores/UserStore');
 var ProfileStore = require('../stores/ProfileStore');
+var UserStore = require('../stores/UserStore');
+var WallStore = require('../stores/WallStore');
 
 // Other components -- stitch them together
-var Navbar = require('./Navbar.react');
 var Buffer = require('./Buffer.react');
 var Feed = require('./Feed.react');
-var ProfileRoute = require('./Profile.react');
-var LoggedOut = require('../components/Authenticate.react').LoggedOut;
-var Signup = require('../components/Authenticate.react').Signup;
 var Login = require('../components/Authenticate.react').Login;
-var SideMenu = require('../components/SideMenu.react');
+var LoggedOut = require('../components/Authenticate.react').LoggedOut;
+var Navbar = require('./Navbar.react');
+var ProfileRoute = require('./Profile.react');
 var Settings = require('../components/Settings.react');
+var SideMenu = require('../components/SideMenu.react');
+var Signup = require('../components/Authenticate.react').Signup;
 
 var WondrousApp = React.createClass({
 
     // Get the initial state
-    getInitialState: function(){
+    getInitialState: function() {
         return {};
     },
 
     // Add change listener to stores
-    componentDidMount: function(){
+    componentDidMount: function() {
         FeedStore.addChangeListener(this._onChange);
         WallStore.addChangeListener(this._onChange);
         UserStore.addChangeListener(this._onChange);
     },
 
     // Remove change listeners from stores
-    componentWillUnmount: function(){
+    componentWillUnmount: function() {
         FeedStore.removeChangeListener(this._onChange);
         WallStore.removeChangeListener(this._onChange);
         UserStore.removeChangeListener(this._onChange);
     },
 
     // Render our child components
-    render: function(){
+    render: function() {
         return (
             <div>
                 <Navbar />
-                <Buffer />
                 <SideMenu />
-                <RouteHandler/>
+                <div className="main-content">
+                    <RouteHandler />
+                </div>
             </div>
         );
     },
 
-    _onChange:function(){
+    _onChange:function() {
         console.log("something changed!");
     }
-
 });
 
-
 var Routes = (
-  <Route handler={WondrousApp} path="/">
-    <Route name="feed" path="/feed" handler={Feed}/>
-    <Route name="login" path="/login" handler={Login}/>
-    <Route name="signup" path="/signup" handler={Signup}/>
-    <Route name="settings" path="/settings" handler={Settings}/>
-    {ProfileRoute}
-    <DefaultRoute handler={LoggedOut}/>
-  </Route>
+    <Route handler={WondrousApp} path="/">
+        <Route name="feed" path="/feed" handler={Feed}/>
+        <Route name="login" path="/login" handler={Login}/>
+        <Route name="signup" path="/signup" handler={Signup}/>
+        <Route name="settings" path="/settings" handler={Settings}/>
+        {ProfileRoute}
+        <DefaultRoute handler={LoggedOut}/>
+    </Route>
 );
-
 
 module.exports = Routes;
