@@ -8,8 +8,8 @@ var PostForm = React.createClass({
     file: null,
     post_to_add: null,
     handleCrop: function (e) {
-        $('#cropBox').attr('src', e.target.result);
-        $('#cropBox').cropbox({
+        $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
+        $(this.refs.cropBox.getDOMNode()).cropbox({
             width: 500,
             height: 500
         }).on('cropbox',function(e,results,img){
@@ -67,9 +67,9 @@ var PostForm = React.createClass({
         $(form).slideDown().slideUp(200);
 
         if(this.file){
-            $('#cropBox').data('cropbox').remove();
+            $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
             this.file = null;
-            $('#cropBox').attr('src',"/static/pictures/500x500.gif");
+            $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
 
         // Clear the post textarea and the hashtag highlighter
@@ -115,7 +115,7 @@ var PostForm = React.createClass({
         }
     },
     onPostSubmitted: function(err,res) {
-        var dataURL = $('#cropBox').data('cropbox').getBlob();
+        var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
         if(!err) {
             this.post_to_add = res;
             WondrousAPI.uploadFile({
@@ -174,7 +174,7 @@ var PostForm = React.createClass({
             <div>
                 <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div>
                 <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
-                    <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/500x500.gif"
+                    <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
                         style={{"MozBorderRadius": "20px",
                                 "KhtmlBorderRadius": "20px",
                                 "WebkitBorderRadius": "20px"}}/>
