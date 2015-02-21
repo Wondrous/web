@@ -5,8 +5,8 @@ var WondrousActions = require('../actions/WondrousActions');
 var hashtags = require('jquery-hashtags');
 
 var PostForm = React.createClass({
-    file:null,
-    post_to_add:null,
+    file: null,
+    post_to_add: null,
     handleCrop: function (e) {
         $('#cropBox').attr('src', e.target.result);
         $('#cropBox').cropbox({
@@ -19,6 +19,7 @@ var PostForm = React.createClass({
 
     readURL:function () {
         if (this.file) {
+            $('#postUploadBtn').hide();
             var reader = new FileReader();
             reader.onload = this.handleCrop
             reader.readAsDataURL(this.file);
@@ -61,7 +62,7 @@ var PostForm = React.createClass({
         });
     },
 
-    handleCancel:function(e){
+    handleCancel: function(e){
         // Fade out the post form
         var form = this.refs.postform.getDOMNode();
         $(form).slideDown().slideUp(200);
@@ -94,7 +95,7 @@ var PostForm = React.createClass({
     },
 
     onProgress:function(percentage){
-        console.log("upload percentage",percentage);
+        console.log("upload percentage", percentage);
     },
 
     onFileUploadComplete: function(err,res){
@@ -195,8 +196,11 @@ var PostForm = React.createClass({
                     </div>
 
                     <div id="post-hashtags"></div>
-                    <div id="postUploadBtn" className="upload-button round-2 fileinput-button">
+                    <div id="postUploadBtn" className="upload-button fileinput-button">
                         Upload a photo
+                        <div className="upload-photo-icon">
+                            I
+                        </div>
                         <input id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>
                     </div>
 
