@@ -7,17 +7,17 @@ var hashtags = require('jquery-hashtags');
 var PostForm = React.createClass({
     file: null,
     post_to_add: null,
-    handleCrop: function (e) {
+    handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
         $(this.refs.cropBox.getDOMNode()).cropbox({
-            width: 500,
+            width:  500,
             height: 500
         }).on('cropbox',function(e,results,img){
 
         });
     },
 
-    readURL:function () {
+    readURL: function() {
         if (this.file) {
             $('#postUploadBtn').hide();
             var reader = new FileReader();
@@ -26,8 +26,9 @@ var PostForm = React.createClass({
         }
     },
 
-    showNewPost: function(e){
-        $('#new-post-dialogue').slideDown(200);
+    showNewPost: function(e) {
+        var form = this.refs.postform.getDOMNode();
+        $(form).slideDown(200);
     },
 
     handleDrop: function(e){
