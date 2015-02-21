@@ -2013,7 +2013,12 @@ a:hover {
   height: 45px;
   width: 100%;
   background-color: #ebebeb;
-  z-index: 10; 
+  z-index: 10;
+
+  -webkit-box-shadow: 0 0 3px 0 rgb(199,199,199);
+     -moz-box-shadow: 0 0 3px 0 rgb(199,199,199);
+       -o-box-shadow: 0 0 3px 0 rgb(199,199,199);
+          box-shadow: 0 0 3px 0 rgb(199,199,199);
 }
 
 .banner-logo {
