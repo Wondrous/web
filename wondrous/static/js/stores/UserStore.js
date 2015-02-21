@@ -1,21 +1,54 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var WondrousConstants = require('../constants/WondrousConstants');
+var ps = require('PushStream');
 var _ = require('underscore');
+
 
 // Define initial user setting
 var _user = {}, _logged_in = false, _show_sidebar = false, _showing = null;
+
+var pushstream = new PushStream({
+    host:"104.236.251.250",
+    port:"80",
+    modes: 'websocket',
+    useJSONP:true
+});
+
+// pushstream.onmessage=messageReceived;
+pushstream.onmessage = function(text,id,channel) {
+    console.log(text,id,channel);
+};
+
+
+pushstream.onstatuschange = function(status){
+    if (status==PushStream.OPEN){
+    }else if (status==PushStream.CLOSED){
+    }
+};
+pushstream.onerror = function(error){
+    console.log("error",error);
+};
 
 // Method to load user info from API
 function loadUserData(data){
     _user = data;
     _logged_in = true;
+
+    try {
+        pushstream.addChannel(''+data.id);
+        pushstream.connect();
+        console.log("ws connected to ",data.id);
+    } catch(e) {
+        alert(e)
+    };
 }
 
 // Method to clear user info
 function setUserLogout(data){
     _logged_in = false;
     _user = {};
+    pushstream.disconnect();
 }
 
 // Toggle sidebar

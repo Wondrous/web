@@ -1,7 +1,7 @@
 window.React = require('react');
 window.Router = require('react-router');
 window.$ = window.jQuery = require('jQuery');
-window.imagesloaded = require('imagesloaded');
+window.imagesLoaded = require('imagesloaded');
 window.Masonry = require('masonry-layout');
 
 var Routes = require('./components/WondrousApp.react')

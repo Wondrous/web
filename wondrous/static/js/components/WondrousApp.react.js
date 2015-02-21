@@ -3,7 +3,6 @@ var Route = require('react-router').Route;
 var RouteHandler = require('react-router').RouteHandler;
 var Link = require('react-router').Link;
 var DefaultRoute = require('react-router').DefaultRoute;
-var pushstream = require('pushstream');
 
 // Stores
 var FeedStore = require('../stores/FeedStore');

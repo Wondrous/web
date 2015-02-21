@@ -56,8 +56,9 @@ var Photo = React.createClass({
         };
 
         return (
-            <div  className="post-cover-photo cover no-top-border"
+            <div ref="container" className="post-cover-photo cover no-top-border"
             style={photoStyle}>
+            <img src=
                 <div className="post-subject-text">
                     <div className="post-subject-wrapper">
                         <div className="post-subject-text-position">
@@ -66,6 +67,9 @@ var Photo = React.createClass({
                     </div>
                 </div>
             </div>);
+    },
+    componentDidMount:function(){
+
     }
 });
 
