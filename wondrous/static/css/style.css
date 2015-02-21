@@ -519,7 +519,7 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #c9c9c9;
+  border-top: 1px solid rgb(231,231,231);
   margin: 1em 0;
   padding: 0; 
 }
@@ -2013,7 +2013,7 @@ a:hover {
   height: 45px;
   width: 100%;
   background-color: #ebebeb;
-  z-index: 10;
+  z-index: 101; /* New post dialogue is 100... */
 
   -webkit-box-shadow: 0 0 3px 0 rgb(199,199,199);
      -moz-box-shadow: 0 0 3px 0 rgb(199,199,199);
