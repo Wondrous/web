@@ -137,9 +137,20 @@ var PostForm = React.createClass({
         }
     },
     onPostSubmitted: function(err,res) {
-        var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
         if(!err) {
             this.data_to_update = res;
+            if(this.file==null){
+                this.handleCancel(null);
+                var isPostModalPicture = UserStore.isPostModalPicture();
+
+                if(isPostModalPicture){
+                    setTimeout(this.updateProfile, 500);
+                }else{
+                    setTimeout(this.addToFeeds, 500);
+                }
+                return;
+            }
+            var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
 
             WondrousAPI.uploadFile({
                 blob:dataURL,
