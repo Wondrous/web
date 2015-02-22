@@ -74,8 +74,7 @@ var Photo = React.createClass({
             </div>);
     },
     componentDidMount: function() {
-        // Nothing much happening here...
-
+        // Nothing much happening here!!!
     }
 });
 
