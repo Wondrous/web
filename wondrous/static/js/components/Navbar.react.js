@@ -80,11 +80,12 @@ var ProfileLink = React.createClass({
         }
     },
     render: function () {
+        var img_src = (typeof this.props.user.ouuid !== 'undefined')? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
         return (
             <a id="linkToProfile" onClick={this.handleClick}
                 className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
-                    src="/static/pictures/defaults/p.default-profile-picture.jpg" />
+                    src={img_src}/>
                 {this.props.user.first_name}
             </a>);
     }
@@ -132,7 +133,7 @@ var Navbar = React.createClass({
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </Link>
                 { this.state.loggedin ? <SearchBox /> : null}
-                { this.state.loggedin ? <SettingsGear /> : null}
+                { this.state.loggedin ? <SettingsGear user={this.state.data}/> : null}
                 { this.state.loggedin ? <ProfileLink user={this.state} /> : null}
                 { this.state.loggedin ? <NotificationBox /> : null}
             </div>
