@@ -3,6 +3,7 @@ var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
+var imagesLoaded = require('imagesLoaded');
 
 // Method to retrieve state from stores
 function getFeedState() {
@@ -32,6 +33,19 @@ var Feed = React.createClass({
     componentDidMount: function() {
         FeedStore.addChangeListener(this._onChange);
         UserStore.addChangeListener(this._onChange);
+
+        var container = document.querySelector('.masonry');
+
+        var msnry = new Masonry(container, {
+              transitionDuration : 0,
+              itemSelector       : ".masonry-brick",
+              columnWidth        : ".grid-sizer",
+        });
+
+        imagesLoaded(container, function(){
+            // Trigger Masonry Layout
+            msnry.layout();
+        });
     },
     // Remove change listeners from stores
     componentWillUnmount: function() {

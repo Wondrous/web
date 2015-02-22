@@ -116,9 +116,11 @@
     background: #F90;
 }
 
+$post-cover-photo-height: 390px;
+
 .post-cover-photo {
     position: relative;
-    height: 390px;
+    height: $post-cover-photo-height;
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: scroll;
@@ -515,4 +517,19 @@
     font-size: 14px;
     color: rgb(50,50,50);
     font-weight: normal;
+}
+
+.pseudo-bg-img {
+    display: block;
+    position: relative;
+    min-height: $post-cover-photo-height;
+}
+
+.pseudo-bg-img-closed {
+    right: 38%;
+    height: $post-cover-photo-height;
+}
+
+.pseudo-bg-img-expanded {
+    width: 100%;
 }

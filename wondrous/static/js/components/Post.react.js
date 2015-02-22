@@ -55,9 +55,14 @@ var Photo = React.createClass({
         photoStyle = {
             backgroundImage: this.props.data.ouuid?"url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")" :"/static/pictures/500x500.gif"
         };
+        ps = {
+            overflow: 'hidden',
+        };
+        var imgStyle = this.props.data.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/500x500.gif";
         return (
             <div ref="container" className="post-cover-photo cover no-top-border"
-            style={photoStyle}>
+            style={ps}>
+                <img ref="photo" className="pseudo-bg-img pseudo-bg-img-closed" src={imgStyle}/>
                     <div className="post-subject-text">
                         <div className="post-subject-wrapper">
                             <div className="post-subject-text-position">
@@ -69,6 +74,7 @@ var Photo = React.createClass({
     },
     componentDidMount: function() {
         // Nothing much happening here...
+
     }
 });
 
@@ -90,6 +96,7 @@ var Post = React.createClass({
         $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
 
         thisPost.toggleClass('is-expanded');
+        thisPost.find('.pseudo-bg-img').toggleClass('pseudo-bg-img-closed').toggleClass('pseudo-bg-img-expanded');
         thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
         thisPostContent.toggleClass('no-top-border');
 
