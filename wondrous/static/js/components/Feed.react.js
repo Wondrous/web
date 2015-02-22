@@ -39,7 +39,7 @@ var Feed = React.createClass({
         var msnry = new Masonry(container, {
               transitionDuration : 0,
               itemSelector       : ".masonry-brick",
-              columnWidth        : ".grid-sizer",
+              columnWidth        : "288",
         });
 
         imagesLoaded(container, function(){

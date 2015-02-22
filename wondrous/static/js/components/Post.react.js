@@ -104,16 +104,18 @@ var Post = React.createClass({
         thisPostContent.slideToggle(SPEED);
 
         // Trigger Masonry Layout
+        debugger;
+        console.log('hello');
+        
         var container = document.querySelector('.masonry');
         var msnry = new Masonry(container, {
               transitionDuration : 0,
               itemSelector       : ".masonry-brick",
-              columnWidth        : ".grid-sizer",
+              columnWidth        : 288,
         });
         msnry.layout();
 
         // Hmmmmm.... Let's try this out
-        console.log(thisBrick);
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
     },
