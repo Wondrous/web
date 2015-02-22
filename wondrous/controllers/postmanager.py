@@ -131,24 +131,25 @@ class PostManager(BaseManager):
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
 
-        data.update(PostManager.model_to_json(post))
         data.update(PostManager.model_to_json(object))
+        data.update(PostManager.model_to_json(post))
         data.update({"name": post.user.person.ascii_name})
         data.update({"username": post.user.username})
         picture_object = post.user.picture_object
         if picture_object:
             data.update({"user_ouuid": picture_object.ouuid})
-            
+
         return data
 
     @classmethod
     def delete_post_json(cls, person, post_id):
         user_id = person.user.id
         post = Post.by_id(post_id)
+
         if post and post.user_id == user_id:
             post.set_to_delete = datetime.now()
             post.is_active = False
-            return {"status": "set to delete"}
+            return {"id": post.id}
         else:
             return {"error": "insufficient data"}
 

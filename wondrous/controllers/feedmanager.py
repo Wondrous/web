@@ -34,9 +34,13 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_majority_posts(cls, feed_id, page=0, per_page=15):
-        links = FeedPostLink.query.options(joinedload(FeedPostLink.post).joinedload(Post.object)).\
-            order_by(desc(FeedPostLink.created_at)).filter_by(feed_id=feed_id).limit(per_page).offset(page).all()
-        return links
+        posts = Post.query.join(FeedPostLink, Post.id==FeedPostLink.post_id).filter(FeedPostLink.feed_id==feed_id).\
+            order_by(desc(FeedPostLink.created_at)).filter(Post.is_active==True).limit(per_page).offset(page).all()
+        return posts
+
+            # users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
+            #     filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
+
 
     @classmethod
     def get_majority_posts_json(cls, person, page=0):
@@ -44,20 +48,22 @@ class FeedManager(BaseManager):
         if not person:
             return []
         feed_id = person.user.feed.id
-        links = cls.get_majority_posts(feed_id,page)
+        posts = cls.get_majority_posts(feed_id,page)
         data = []
-        for link in links:
-            post = link.post
-            if not post.is_hidden and post.is_active:
-                post_dict = super(FeedManager, cls).model_to_json(post)
+        for post in posts:
+            if not post.is_hidden and post.is_active and not post.set_to_delete:
+                post_dict = {}
+                if post.object:
+                    post_dict.update(super(FeedManager, cls).model_to_json(post.object))
+
+                post_dict.update(super(FeedManager, cls).model_to_json(post))
                 post_dict.update({"name": post.user.person.ascii_name})
                 post_dict.update({"username": post.user.username})
                 picture_object = post.user.picture_object
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
 
-                if post.object:
-                    post_dict.update(super(FeedManager, cls).model_to_json(post.object))
+
                 data.append(post_dict)
         return data
 
@@ -103,12 +109,14 @@ class FeedManager(BaseManager):
 
         data = []
         for post in posts:
-            post_dict = super(FeedManager,cls).model_to_json(post)
-            post_dict.update(super(FeedManager,cls).model_to_json(post.object))
-            post_dict.update({"name":post.user.person.ascii_name})
-            post_dict.update({"username":post.user.username})
-            picture_object = post.user.picture_object
-            if picture_object:
-                post_dict.update({"user_ouuid": picture_object.ouuid})
-            data.append(post_dict)
+            if not post.is_hidden and post.is_active and not post.set_to_delete:
+                post_dict = {}
+                post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+                post_dict.update(super(FeedManager,cls).model_to_json(post))
+                post_dict.update({"name":post.user.person.ascii_name})
+                post_dict.update({"username":post.user.username})
+                picture_object = post.user.picture_object
+                if picture_object:
+                    post_dict.update({"user_ouuid": picture_object.ouuid})
+                data.append(post_dict)
         return data

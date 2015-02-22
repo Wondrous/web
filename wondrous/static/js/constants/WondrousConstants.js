@@ -24,5 +24,7 @@ module.exports = keyMirror({
     NOTIFICATION_RECEIVE: null, // A new notification just loaded
     SHOW_PICTURE_CHANGE: null,  // Showing new profile picture upload
     SHOW_NEW_POST: null,        // Showing new post upload
-    NEW_PROFILE_PICTURE: null
+    NEW_PROFILE_PICTURE: null,  // new profile picture
+    POST_DELETED: null          // a post is deleted -- alert feed + wall 
+
 });

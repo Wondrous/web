@@ -1,5 +1,6 @@
 var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
+var UserStore = require('../stores/UserStore');
 
 var UserTitle = React.createClass({
     mixins: [Router.Navigation],
@@ -117,11 +118,24 @@ var Post = React.createClass({
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
     },
+    handleData: function(err,res){
+        if(err==null){
+            console.log("delete",res);
+            this.handleClick();
+            WondrousActions.postDelete(res.id);
+        }else{
+
+        }
+    },
     deletePost: function () {
-        //WondrousAPI.deletePost({person:1, post_id:2});
-        console.log(this.props.data);
+        console.log("deleting post",this.props.data.id);
+        WondrousAPI.deletePost({
+            post_id:this.props.data.id,
+            callback:this.handleData
+            });
     },
     render: function() {
+        var is_it_mine = this.props.data.username === UserStore.getUserData().username;
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-5">
@@ -136,7 +150,7 @@ var Post = React.createClass({
                         <div>
                             <span className="post-footer-btn post-like-btn round-2">Like!</span>
                             <span className="post-footer-btn post-repost-btn round-2">Repost</span>
-                            <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>
+                            {is_it_mine?<span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>:null}
                         </div>
                     </div>
                 </div>

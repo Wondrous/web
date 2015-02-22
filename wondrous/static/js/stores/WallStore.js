@@ -18,6 +18,19 @@ function addNewPost(post){
     _posts.unshift(post);
 }
 
+function deletePost(post_id){
+    var to_delete = -1;
+    for(var i = 0; i < _posts.length; i++){
+        if(_posts[i].id==post_id){
+            to_delete = i;
+            break;
+        }
+    }
+
+    if (to_delete>-1){
+        delete _posts[to_delete];
+    }
+}
 
 // Extend WallStore with EventEmitter and underscore
 var WallStore = _.extend({},EventEmitter.prototype,{
@@ -57,6 +70,11 @@ AppDispatcher.register(function(payload){
         case WondrousConstants.WALL_LOAD:
             _posts = [];
             loadWallData(action.data);
+            break;
+
+        // respond to post_deleted
+        case WondrousConstants.POST_DELETED:
+            deletePost(action.data);
             break;
 
         default:

@@ -122,7 +122,15 @@ var WondrousActions = {
             actionType: WondrousConstants.SHOW_NEW_POST,
             data: data
         });
+    },
+
+    postDelete: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.POST_DELETED,
+            data: data
+        });
     }
+
 }
 
 module.exports = WondrousActions
