@@ -52,6 +52,9 @@ class FeedManager(BaseManager):
                 post_dict = super(FeedManager, cls).model_to_json(post)
                 post_dict.update({"name": post.user.person.ascii_name})
                 post_dict.update({"username": post.user.username})
+                picture_object = post.user.picture_object
+                if picture_object:
+                    post_dict.update({"user_ouuid": picture_object.ouuid})
 
                 if post.object:
                     post_dict.update(super(FeedManager, cls).model_to_json(post.object))
@@ -104,5 +107,8 @@ class FeedManager(BaseManager):
             post_dict.update(super(FeedManager,cls).model_to_json(post.object))
             post_dict.update({"name":post.user.person.ascii_name})
             post_dict.update({"username":post.user.username})
+            picture_object = post.user.picture_object
+            if picture_object:
+                post_dict.update({"user_ouuid": picture_object.ouuid})
             data.append(post_dict)
         return data

@@ -21,5 +21,8 @@ module.exports = keyMirror({
     FOLLOWER_LOAD: null,        // Follower just loaded
     FOLLOWING_LOAD: null,       // Following just loaded
     NOTIFICATION_LOAD: null,    // Notifications just loaded
-    NOTIFICATION_RECEIVE: null, // A new notification just loaded 
+    NOTIFICATION_RECEIVE: null, // A new notification just loaded
+    SHOW_PICTURE_CHANGE: null,  // Showing new profile picture upload
+    SHOW_NEW_POST: null,        // Showing new post upload
+    NEW_PROFILE_PICTURE: null
 });

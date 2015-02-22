@@ -325,6 +325,9 @@ class VoteManager(BaseManager):
         for user in users:
             model_dict = super(VoteManager,cls).model_to_json(user)
             model_dict.update(super(VoteManager,cls).model_to_json(user.person))
+            picture_object = user.picture_object
+            if picture_object:
+                model_dict.update({"ouuid": picture_object.ouuid})
             retval.append(model_dict)
         return retval
 
@@ -338,6 +341,9 @@ class VoteManager(BaseManager):
         for user in users:
             model_dict = super(VoteManager,cls).model_to_json(user)
             model_dict.update(super(VoteManager,cls).model_to_json(user.person))
+            picture_object = user.picture_object
+            if picture_object:
+                model_dict.update({"ouuid": picture_object.ouuid})
             retval.append(model_dict)
         return retval
 

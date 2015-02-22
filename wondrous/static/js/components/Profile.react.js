@@ -103,10 +103,12 @@ var UserIcon = React.createClass({
         this.loadWallFromServer();
     },
     render: function() {
+        console.log("sss",this.props.user);
+
         return (
             <a onClick={this.handleClick}>
                 <div>
-                    <img src={typeof this.props.user.ouuid !== 'undefined' ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
+                    <img src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
                     <span className="profile-name-row">{ this.props.user.first_name + " " + this.props.user.last_name }</span>
                 </div>
             </a>
@@ -231,7 +233,7 @@ function getProfileState() {
 
 var UserBar = React.createClass({
     mixins: [ Router.Navigation ],
-    file: null,
+
     am_following:getProfileState().data.following,
     is_private:getProfileState().data.is_private,
 
@@ -240,10 +242,16 @@ var UserBar = React.createClass({
     },
     componentDidMount: function() {
         ProfileStore.addChangeListener(this._onChange);
+        if(UserStore.getUserData().username===this.props.username){
+            UserStore.addChangeListener(this._onChange);
+        }
     },
 
     componentWillUnmount: function() {
         ProfileStore.removeChangeListener(this._onChange);
+        if(UserStore.getUserData().username===this.props.username){
+            UserStore.removeChangeListener(this._onChange);
+        }
     },
     getInitialState: function() {
         return getProfileState();
@@ -267,64 +275,24 @@ var UserBar = React.createClass({
             callback:this.handleData
         })
     },
-    handleDrop: function(e){
-        e.preventDefault();
-        this.setState({
-          isDragActive: false
-        });
 
-        var files;
-        if (e.dataTransfer) {
-            files = e.dataTransfer.files;
-        } else if (e.target) {
-            files = e.target.files;
-        }
-
-        this.file = files[0];
-        this.readURL();
+    handleClick: function(){
+        WondrousActions.togglePictureUpload();
     },
 
-    readURL:function () {
-        if (this.file) {
-            var reader = new FileReader();
-            reader.onload = this.handleCrop
-            reader.readAsDataURL(this.file);
-        }
-    },
-    handleCrop: function (e) {
-
-        $('#cropBox').attr('src', e.target.result);
-        $('#cropBox').cropbox({
-            width: $('#cropBox').width(),
-            height: $('#cropBox').height()
-        }).on('cropbox',function(e,results,img){
-
-        });
-    },
-    onDragLeave: function(e) {
-        this.setState({
-          isDragActive: false
-        });
-    },
-
-    onDragOver: function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "copy";
-
-        this.setState({
-          isDragActive: true
-        });
-    },
     render: function() {
         var username = this.props.username;
         var is_me = username === UserStore.getUserData().username;
 
         this.is_private = getProfileState().data.is_private;
         this.am_following = getProfileState().data.following==true;
+        var is_me = username === UserStore.getUserData().username;
 
+        var ouuid = (typeof UserStore.getUserData().ouuid !== 'undefined')?UserStore.getUserData().ouuid:false;
+        console.log("Ouuid",ouuid);
         return (
             <div className="profile-header">
-                <img className="profile-photo" onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" src="/static/pictures/defaults/p.default-profile-picture.jpg" />
+            {is_me ? <img className="profile-photo" onClick={this.handleClick} src={ouuid?"http://mojorankdev.s3.amazonaws.com/"+ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} /> : <img className="profile-photo" src="/static/pictures/defaults/p.default-profile-picture.jpg" />}
                 <span className="profile-header-content">
                     <span className="profile-name">{this.state.data.name}</span>
                     <span className="profile-wscore">
@@ -343,8 +311,7 @@ var UserBar = React.createClass({
         );
     },
     _onChange: function() {
-        var state = getProfileState();
-        this.setState(state);
+        this.forceUpdate();
     }
 });
 
@@ -417,12 +384,14 @@ var Profile = React.createClass({
     },
     componentDidMount: function() {
         ProfileStore.addChangeListener(this._onChange);
+
         this.loadProfileFromServer();
         this.loadWallFromServer();
     },
 
     componentWillUnmount: function() {
         ProfileStore.removeChangeListener(this._onChange);
+
     },
     render: function () {
         var username = this.getParams().username;

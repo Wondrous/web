@@ -99,6 +99,30 @@ var WondrousActions = {
             data: data
         });
     },
+
+    // new profile pic
+    addNewProfilePicture: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.NEW_PROFILE_PICTURE,
+            data: data
+        });
+    },
+
+    // show picture upload modal
+    togglePictureUpload: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.SHOW_PICTURE_CHANGE,
+            data: data
+        });
+    },
+
+    // show post upload modal
+    toggleNewPostModal: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.SHOW_NEW_POST,
+            data: data
+        });
+    }
 }
 
 module.exports = WondrousActions

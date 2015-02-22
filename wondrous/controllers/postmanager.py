@@ -113,9 +113,10 @@ class PostManager(BaseManager):
             return {'error': 'insufficient data'}
         post = PostManager.add(person.user.id, tags, None, text, repost_id=post_id)
         data = PostManager.model_to_json(post)
+        picture_object = post.user.picture_object
+        if picture_object:
+            data.update({"user_ouuid": picture_object.ouuid})
         return data
-
-
 
     @classmethod
     def post_json(cls, person, subject, text, tags=None, file_type=None):
@@ -134,6 +135,10 @@ class PostManager(BaseManager):
         data.update(PostManager.model_to_json(object))
         data.update({"name": post.user.person.ascii_name})
         data.update({"username": post.user.username})
+        picture_object = post.user.picture_object
+        if picture_object:
+            data.update({"user_ouuid": picture_object.ouuid})
+            
         return data
 
     @classmethod

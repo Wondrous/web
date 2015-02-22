@@ -39,8 +39,10 @@ var UserTitle = React.createClass({
         }
     },
     render: function() {
-        return (<div>
-                <img className="post-thumb round-50" src="/static/pictures/defaults/p.default-profile-picture.jpg"/>
+        var img_src = (typeof this.props.data.user_ouuid !== 'undefined')?"http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"
+        return (
+            <div>
+                <img className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow">
                     <a onClick={this.handleClick}>{this.props.data.name}</a>
                 </span></div>);
@@ -94,7 +96,7 @@ var Post = React.createClass({
 
         thisBrick.toggleClass('post-presentation');
         thisPostContent.slideToggle(SPEED);
-        
+
         // Trigger Masonry Layout
         var container = document.querySelector('.masonry');
         var msnry = new Masonry(container, {

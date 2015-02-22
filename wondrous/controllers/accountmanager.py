@@ -17,10 +17,12 @@ from wondrous.models import (
     Person,
     User,
     Vote,
+    Object
 )
 
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
+from wondrous.utilities.validation_utilities import UploadManager
 import logging
 
 class AccountManager(BaseManager):
@@ -82,14 +84,16 @@ class AccountManager(BaseManager):
     def upload_picture_json(cls,person,file_type):
         picture_object = person.user.picture_object
         if not picture_object:
-            picture_object = Object(subject=subject, text=text)
+            picture_object = Object(subject=str(person.user.id), text="profile_picture")
             DBSession.add(picture_object)
             DBSession.flush()
+            person.user.picture_object_id = picture_object.id
 
         # TODO DELETE OLD PHOTO -- picture_object.ouuid
         picture_object.ouuid = str(picture_object.id)+'-'+unicode(uuid.uuid4()).lower()
         picture_object.mime_type = file_type
-        data.update(UploadManager.sign_upload_request(picture_object.ouuid, picture_object.mime_type))
+        data = UploadManager.sign_upload_request(picture_object.ouuid, picture_object.mime_type)
+        data.update({"ouuid":picture_object.ouuid})
         return data
 
     @classmethod
@@ -135,7 +139,13 @@ class AccountManager(BaseManager):
             retval.update({"last_name": person.last_name})
             retval.update({"following":am_following})
             retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
+            picture_object = user.picture_object
+
+            if picture_object:
+                retval.update({"ouuid": picture_object.ouuid})
+
             return retval
+
         logging.debug(user.is_private)
         logging.debug(user.is_banned)
         logging.debug(user.is_active)
@@ -148,6 +158,9 @@ class AccountManager(BaseManager):
             retval.update({"name": user.person.ascii_name})
             retval.update({"first_name": user.person.first_name})
             retval.update({"following":am_following})
+            picture_object = user.picture_object
+            if picture_object:
+                retval.update({"ouuid": picture_object.ouuid})
             return retval
 
         elif user.is_private and not user.is_banned and user.is_active:

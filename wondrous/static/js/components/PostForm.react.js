@@ -3,10 +3,12 @@ var MouseWheel = require('kd-shim-jquery-mousewheel');
 var CropBox = require('jquery-cropbox');
 var WondrousActions = require('../actions/WondrousActions');
 var hashtags = require('jquery-hashtags');
+var UserStore = require('../stores/UserStore');
 
 var PostForm = React.createClass({
     file: null,
-    post_to_add: null,
+    data_to_update: null,
+
     handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
         $(this.refs.cropBox.getDOMNode()).cropbox({
@@ -27,8 +29,7 @@ var PostForm = React.createClass({
     },
 
     showNewPost: function(e) {
-        var form = this.refs.postform.getDOMNode();
-        $(form).slideDown(200);
+        WondrousActions.toggleNewPostModal();
     },
 
     handleDrop: function(e){
@@ -63,6 +64,14 @@ var PostForm = React.createClass({
     },
 
     handleCancel: function(e){
+        var isPostModalPicture = UserStore.isPostModalPicture();
+
+        if(!isPostModalPicture){
+            WondrousActions.toggleNewPostModal();
+        }else{
+            WondrousActions.togglePictureUpload();
+        }
+
         // Fade out the post form
         var form = this.refs.postform.getDOMNode();
         $(form).slideDown().slideUp(200);
@@ -84,8 +93,6 @@ var PostForm = React.createClass({
 
         // Remove anything that pertains to file uploads
         $('.objectFileID').empty();
-        $('#uploadedImagePreviewWrapper').empty();
-        $('#filename').empty();
 
         $('.post-dialogue-progress').hide();
         $('#postUploadBtn').show();
@@ -106,19 +113,34 @@ var PostForm = React.createClass({
             console.error("upload file error", err);
         }
         this.handleCancel(null);
-        setTimeout(this.addToFeeds, 500);
+        var isPostModalPicture = UserStore.isPostModalPicture();
+
+        if(isPostModalPicture){
+            setTimeout(this.updateProfile, 500);
+        }else{
+            setTimeout(this.addToFeeds, 500);
+        }
+
+    },
+    updateProfile:function(){
+        if (this.data_to_update) {
+            // console.log("data to ",this.data_to_update);
+            WondrousActions.addNewProfilePicture(this.data_to_update.ouuid);
+            this.data_to_update = null;
+        }
     },
 
     addToFeeds: function() {
-        if (this.post_to_add) {
-            WondrousActions.addNewPost(this.post_to_add);
-            this.post_to_add = null;
+        if (this.data_to_update) {
+            WondrousActions.addNewPost(this.data_to_update);
+            this.data_to_update = null;
         }
     },
     onPostSubmitted: function(err,res) {
         var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
         if(!err) {
-            this.post_to_add = res;
+            this.data_to_update = res;
+
             WondrousAPI.uploadFile({
                 blob:dataURL,
                 post_data:res,
@@ -133,36 +155,47 @@ var PostForm = React.createClass({
     },
 
     handleSubmit:function(e){
-        var postSubject     = $('#postSubject').val();
-        var postText        = $('#postTextarea').val();
-        var object_file_id  = $('#objectFileID').val(); // See if we have a object File value
-        var postTagsRaw     = [];
-        var postTagsUnique  = [];
+        var isPostModalPicture = UserStore.isPostModalPicture();
 
-        // Make array of raw tag data
-        $('.hashtag').each(function() {postTagsRaw.push($(this).text());});
+        if (isPostModalPicture){
+            if(typeof this.file.type !=='undefined' && this.file.type!=null){
+                WondrousAPI.changePicture({
+                    file_type:this.file.type,
+                    callback:this.onPostSubmitted
+                });
+            }
+        }else{
+            var postSubject     = $('#postSubject').val();
+            var postText        = $('#postTextarea').val();
+            var object_file_id  = $('#objectFileID').val(); // See if we have a object File value
+            var postTagsRaw     = [];
+            var postTagsUnique  = [];
 
-        // Create array of only unique tags (remove duplicates present in postTagsRaw)
-        $.each(postTagsRaw, function(i, obj) {
-            obj = obj.substring(1); // Remove first character (the hashtag #)
-            if($.inArray(obj, postTagsUnique) === -1) postTagsUnique.push(obj);
-        });
+            // Make array of raw tag data
+            $('.hashtag').each(function() {postTagsRaw.push($(this).text());});
 
-        uploadData = {
-            'subject' : postSubject,
-            'text'    : postText,
-            'tags'    : postTagsUnique
-        };
+            // Create array of only unique tags (remove duplicates present in postTagsRaw)
+            $.each(postTagsRaw, function(i, obj) {
+                obj = obj.substring(1); // Remove first character (the hashtag #)
+                if($.inArray(obj, postTagsUnique) === -1) postTagsUnique.push(obj);
+            });
 
-        if (typeof(this.file) !== 'undefined' && this.file){
-            uploadData.file_type = this.file.type;
+            uploadData = {
+                'subject' : postSubject,
+                'text'    : postText,
+                'tags'    : postTagsUnique
+            };
+
+            if (typeof(this.file) !== 'undefined' && this.file){
+                uploadData.file_type = this.file.type;
+            }
+            console.log("posting", uploadData);
+
+            WondrousAPI.newPost({
+                uploadData:uploadData,
+                callback:this.onPostSubmitted
+            });
         }
-        console.log("posting", uploadData);
-
-        WondrousAPI.newPost({
-            uploadData:uploadData,
-            callback:this.onPostSubmitted
-        });
     },
 
     postTextChange: function(){
@@ -170,6 +203,12 @@ var PostForm = React.createClass({
     },
 
     render: function(){
+        var isPostModalPicture = UserStore.isPostModalPicture();
+
+        var divStyle = {
+            display: isPostModalPicture?"none":"block",
+            backgroundColor:"rgb(255,255,255)"
+        };
 
         return (
             <div>
@@ -180,13 +219,13 @@ var PostForm = React.createClass({
                                 "KhtmlBorderRadius": "20px",
                                 "WebkitBorderRadius": "20px"}}/>
 
-                    <div className="new-post-element">
+                    <div className="new-post-element" style = {divStyle}>
                         <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
                             <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
                         </div>
                     </div>
 
-                    <div className="new-post-element" style={{"backgroundColor": "rgb(255,255,255)"}}>
+                    <div className="new-post-element" style = {divStyle}>
                         <div className="post-input-wrapper">
                             <div className="highlighter"></div>
                             <div className="typehead">
@@ -209,16 +248,13 @@ var PostForm = React.createClass({
                         <div className="progress-bar progress-bar-success" style={{"textAlign": "center"}}></div>
                     </div>
 
-                    <div id="filename"></div>
-                    <div id="uploadedImagePreviewWrapper"></div>
-
                     <div id="post-upload-file"  className="files" style={{"postion": "relative","marginLeft": "5px","fontSize":"14px"}}></div>
 
                     <div className="post-error-wrapper">
                         <span className="post-error"></span>
                     </div>
 
-                    <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
+                    <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">{isPostModalPicture?"Upload":"Share"}</div>
                     <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
                 </div>
             </div>
@@ -226,10 +262,22 @@ var PostForm = React.createClass({
     },
 
     componentDidMount: function () {
-        // Example of how to write the actions that
-        // will occur after React renders the item.
-        // $(this.refs.postTextArea.getDOMNode()).hashtags();
-        $("textarea#postTextarea").hashtags();
+        UserStore.addChangeListener(this._onChange);
+        var isPostModalPicture = UserStore.isPostModalPicture();
+        if(!isPostModalPicture){
+            $("textarea#postTextarea").hashtags();
+        }
+    },
+
+    componentWillUnmount: function(){
+        UserStore.removeChangeListener(this._onChange);
+    },
+    _onChange:function(){
+        this.forceUpdate();
+        if (UserStore.isPostModalOpen()){
+            var form = this.refs.postform.getDOMNode();
+            $(form).slideDown(200);
+        }
     }
 });
 

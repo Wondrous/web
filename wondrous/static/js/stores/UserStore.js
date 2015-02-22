@@ -6,7 +6,7 @@ var _ = require('underscore');
 
 
 // Define initial user setting
-var _user = {}, _logged_in = false, _show_sidebar = false, _showing = null;
+var _user = {}, _logged_in = false, _show_sidebar = false, _showing = null, _clickOnProfilePicture, _modalOpen =false;
 
 var pushstream = new PushStream({
     host:"104.236.251.250",
@@ -69,8 +69,24 @@ function showNotifications(){
     toggleSideBar();
 }
 
+function togglePictureUpload(val){
+    _clickOnProfilePicture = val;
+}
+
+function togglePostModal(){
+    _modalOpen = !_modalOpen;
+}
 // Extend UserStore with EventEmitter and underscore
 var UserStore = _.extend({},EventEmitter.prototype,{
+    // is Postmodal open?
+    isPostModalOpen: function(){
+        return _modalOpen;
+    },
+
+    // Return with we're uploading just a picture
+    isPostModalPicture: function(){
+        return _clickOnProfilePicture;
+    },
 
     // Return the sidebar that is showing
     barOnDisplay: function(){
@@ -130,6 +146,20 @@ AppDispatcher.register(function(payload){
 
         case WondrousConstants.SHOW_NOTIFICATIONS:
             showNotifications();
+            break;
+
+        case WondrousConstants.SHOW_PICTURE_CHANGE:
+            togglePostModal();
+            togglePictureUpload(true);
+            break;
+
+        case WondrousConstants.SHOW_NEW_POST:
+            togglePostModal();
+            togglePictureUpload(false);
+            break;
+
+        case WondrousConstants.NEW_PROFILE_PICTURE:
+            _user.ouuid = action.data;
             break;
 
         default:
