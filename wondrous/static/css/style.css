@@ -1244,7 +1244,8 @@ a:hover {
 
 .pseudo-bg-img {
   display: block;
-  position: relative; }
+  position: relative;
+  min-height: 390px; }
 
 .pseudo-bg-img-closed {
   right: 38%;
