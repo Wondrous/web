@@ -112,7 +112,11 @@ var Post = React.createClass({
               itemSelector       : ".masonry-brick",
               columnWidth        : 288,
         });
-        msnry.layout();
+
+        imagesLoaded(container, function(){
+            // Trigger Masonry Layout
+            msnry.layout();
+        });
 
         // Hmmmmm.... Let's try this out
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
