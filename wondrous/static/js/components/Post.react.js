@@ -100,12 +100,16 @@ var Post = React.createClass({
 
         // Trigger Masonry Layout
         var container = document.querySelector('.masonry');
+        console.log($('.masonry-brick'));
+        console.log($('.grid-sizer').css('width'));
+        debugger;
+
         var msnry = new Masonry(container, {
               transitionDuration : 0,
               itemSelector       : ".masonry-brick",
               columnWidth        : ".grid-sizer", //.grid-sizer
         });
-        debugger;
+        
         msnry.layout();
         //console.log(thisBrick);
         $('html, body').animate({ scrollTop: thisBrick.offset().top - 60 }, 300);
