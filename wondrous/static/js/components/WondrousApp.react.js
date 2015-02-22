@@ -20,6 +20,7 @@ var ProfileRoute = require('./Profile.react');
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Signup = require('../components/Authenticate.react').Signup;
+var PostForm = require('./PostForm.react');
 
 var WondrousApp = React.createClass({
 
@@ -46,6 +47,7 @@ var WondrousApp = React.createClass({
     render: function() {
         return (
             <div>
+                <PostForm />
                 <Navbar />
                 <SideMenu />
                 <div className="main-content">

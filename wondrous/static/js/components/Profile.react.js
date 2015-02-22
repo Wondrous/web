@@ -14,7 +14,6 @@ var MouseWheel = require('kd-shim-jquery-mousewheel');
 var CropBox = require('jquery-cropbox');
 
 // Components
-var PostForm = require('./PostForm.react');
 
 function getWallPosts() {
     return {data:WallStore.getWallData()};
@@ -34,6 +33,9 @@ var Wall = React.createClass({
     componentWillUnmount: function(){
         WallStore.removeChangeListener(this._onChange);
     },
+    showNewPost: function(e) {
+        WondrousActions.toggleNewPostModal();
+    },
     render: function() {
         var am_following = getProfileState().data.following;
         var is_private = getProfileState().data.is_private;
@@ -49,7 +51,7 @@ var Wall = React.createClass({
         var is_me = username === UserStore.getUserData().username;
         return (
             <div>
-                {is_me ? <PostForm /> : null}
+                {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
                 <div className="masonry" id="asyncPosts">
                 <div className="backdrop"></div>
                 <div className="grid-sizer" style={{"display": "none"}}></div>

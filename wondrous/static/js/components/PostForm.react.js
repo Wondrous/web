@@ -28,10 +28,6 @@ var PostForm = React.createClass({
         }
     },
 
-    showNewPost: function(e) {
-        WondrousActions.toggleNewPostModal();
-    },
-
     handleDrop: function(e){
         e.preventDefault();
         this.setState({
@@ -223,7 +219,6 @@ var PostForm = React.createClass({
 
         return (
             <div>
-                <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div>
                 <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
                     <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
                         style={{"MozBorderRadius": "20px",
@@ -284,6 +279,8 @@ var PostForm = React.createClass({
         UserStore.removeChangeListener(this._onChange);
     },
     _onChange:function(){
+        console.log("toggle",UserStore.isPostModalOpen());
+
         this.forceUpdate();
         if (UserStore.isPostModalOpen()){
             var form = this.refs.postform.getDOMNode();
