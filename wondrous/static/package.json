@@ -41,6 +41,7 @@
     "start": "watchify -o js/bundle.js -v -d .",
     "scss": "node-sass -w --output css css/style.scss style.css",
     "build": "browserify . | uglifyjs -cm > js/bundle.min.js && node-sass --output_style compressed --output css css/style.scss style.css",
+    "combo": "npm start; npm scss",
     "watch": "browser-sync start --proxy localhost:6543 --files \"js/bundle.js, css/style.css\""
   },
   "author": "Ziyuan Liu",

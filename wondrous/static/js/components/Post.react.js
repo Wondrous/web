@@ -7,16 +7,11 @@ var UserTitle = React.createClass({
         if (err == null) {
             console.log("profile", data);
             WondrousActions.loadProfileInfo(data);
-        } else {
-            // WondrousActions.unloadUserInfo(err);
-        }
+        } 
     },
     handleWallData: function(err, data) {
-        if (err == null) {
+        if (err == null) 
             WondrousActions.loadWallPosts(data);
-        } else {
-
-        }
     },
     loadProfileFromServer: function() {
         WondrousAPI.getUserInfo({
@@ -108,13 +103,12 @@ var Post = React.createClass({
         var msnry = new Masonry(container, {
               transitionDuration : 0,
               itemSelector       : ".masonry-brick",
-              columnWidth        : ".grid-sizer",
+              columnWidth        : ".grid-sizer", //.grid-sizer
         });
+        debugger;
         msnry.layout();
-
-        // Hmmmmm.... Let's try this out
-        console.log(thisBrick);
-        $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
+        //console.log(thisBrick);
+        $('html, body').animate({ scrollTop: thisBrick.offset().top - 60 }, 300);
 
     },
     deletePost: function () {

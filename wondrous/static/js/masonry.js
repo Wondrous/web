@@ -2,29 +2,21 @@
 $(document).ready(function () {
 
     function initMasonry() {
-        // var container = $('.masonry');
-        // container.imagesLoaded(function () {
-        //     container.masonry({
-        //         transitionDuration : 0,
-        //         itemSelector       : ".masonry-brick",
-        //         columnWidth        : ".grid-sizer",
-        //     });
-        // });
           var container = document.querySelector('.masonry');
           var msnry = new Masonry(container, {
                 transitionDuration : 0,
                 itemSelector       : ".masonry-brick",
-                columnWidth        : ".grid-sizer",
+                columnWidth        : "25%",
           });
 
-          return msnry
+          return msnry;
     }
 
     $(function () {
-        //var msnry = initMasonry()
         $('.post-content').hide();
 
         $('body').on('click', '.post-cover-photo', function () {
+        	debugger;
             var SPEED = 0;
             var thisPost = $(this).parent('.post-body');
             var thisBrick = thisPost.parent('.masonry-brick');
