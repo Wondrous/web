@@ -111,6 +111,10 @@ var Post = React.createClass({
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
     },
+    deletePost: function () {
+        //WondrousAPI.deletePost({person:1, post_id:2});
+        console.log(this.props.data);
+    },
     render: function() {
         return (
             <div ref="brick" className="masonry-brick">
@@ -126,6 +130,7 @@ var Post = React.createClass({
                         <div>
                             <span className="post-footer-btn post-like-btn round-2">Like!</span>
                             <span className="post-footer-btn post-repost-btn round-2">Repost</span>
+                            <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>
                         </div>
                     </div>
                 </div>

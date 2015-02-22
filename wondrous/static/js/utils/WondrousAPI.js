@@ -206,6 +206,18 @@ module.exports = {
         .send({file_type:file_type}).end(_callback(callback));
     },
 
+    deletePost: function(options) {
+        var person = options.person,
+            post_id = options.post_id,
+            url = '/api/post';
+            console.log(options);
+            request.del(url)
+            .send({person: person, post_id: post_id})
+            .end(_callback(function () {
+                console.log('deletePost invoked');
+            }));
+    },
+
     // Upload file to s3
     // options:
     // callback(err,json_res)

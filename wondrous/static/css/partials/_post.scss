@@ -61,6 +61,12 @@
     }
 }
 
+.post-delete-btn {
+    padding: 5px 14px;
+    color: rgb(251,251,251);
+    background-color: rgb(220,100,90);
+}
+
 .post-repost-btn {
     /* No overrides */
 
@@ -381,8 +387,6 @@
     &:hover { text-decoration: underline; }
 }
  
- 
-
 
 .mini-vote-btn {
     position: relative;
