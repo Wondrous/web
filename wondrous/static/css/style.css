@@ -1242,6 +1242,17 @@ a:hover {
   color: #323232;
   font-weight: normal; }
 
+.pseudo-bg-img {
+  display: block;
+  position: relative; }
+
+.pseudo-bg-img-closed {
+  right: 38%;
+  height: 390px; }
+
+.pseudo-bg-img-expanded {
+  width: 100%; }
+
 /* ==== NEW POST================ */
 .autocomplete-selected {
   position: relative;
