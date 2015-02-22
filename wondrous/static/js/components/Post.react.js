@@ -105,7 +105,6 @@ var Post = React.createClass({
 
         // Trigger Masonry Layout
         debugger;
-        console.log('hello');
         
         var container = document.querySelector('.masonry');
         var msnry = new Masonry(container, {
