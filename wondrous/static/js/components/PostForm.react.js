@@ -60,9 +60,9 @@ var PostForm = React.createClass({
     },
 
     handleCancel: function(e){
-        var isPostModalPicture = UserStore.isPostModalPicture();
+        var isPictureModal = UserStore.isPictureModal();
 
-        if(!isPostModalPicture){
+        if(!isPictureModal){
             WondrousActions.toggleNewPostModal();
         }else{
             WondrousActions.togglePictureUpload();
@@ -109,9 +109,9 @@ var PostForm = React.createClass({
             console.error("upload file error", err);
         }
         this.handleCancel(null);
-        var isPostModalPicture = UserStore.isPostModalPicture();
+        var isPictureModal = UserStore.isPictureModal();
 
-        if(isPostModalPicture){
+        if(isPictureModal){
             setTimeout(this.updateProfile, 500);
         }else{
             setTimeout(this.addToFeeds, 500);
@@ -137,9 +137,9 @@ var PostForm = React.createClass({
             this.data_to_update = res;
             if(this.file==null){
                 this.handleCancel(null);
-                var isPostModalPicture = UserStore.isPostModalPicture();
+                var isPictureModal = UserStore.isPictureModal();
 
-                if(isPostModalPicture){
+                if(isPictureModal){
                     setTimeout(this.updateProfile, 500);
                 }else{
                     setTimeout(this.addToFeeds, 500);
@@ -162,9 +162,9 @@ var PostForm = React.createClass({
     },
 
     handleSubmit:function(e){
-        var isPostModalPicture = UserStore.isPostModalPicture();
+        var isPictureModal = UserStore.isPictureModal();
 
-        if (isPostModalPicture){
+        if (isPictureModal){
             if(typeof this.file.type !=='undefined' && this.file.type!=null){
                 WondrousAPI.changePicture({
                     file_type:this.file.type,
@@ -210,10 +210,10 @@ var PostForm = React.createClass({
     },
 
     render: function(){
-        var isPostModalPicture = UserStore.isPostModalPicture();
+        var isPictureModal = UserStore.isPictureModal();
 
         var divStyle = {
-            display: isPostModalPicture?"none":"block",
+            display: isPictureModal?"none":"block",
             backgroundColor:"rgb(255,255,255)"
         };
 
@@ -260,7 +260,7 @@ var PostForm = React.createClass({
                         <span className="post-error"></span>
                     </div>
 
-                    <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">{isPostModalPicture?"Upload":"Share"}</div>
+                    <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">{isPictureModal?"Upload":"Share"}</div>
                     <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
                 </div>
             </div>
@@ -269,8 +269,8 @@ var PostForm = React.createClass({
 
     componentDidMount: function () {
         UserStore.addChangeListener(this._onChange);
-        var isPostModalPicture = UserStore.isPostModalPicture();
-        if(!isPostModalPicture){
+        var isPictureModal = UserStore.isPictureModal();
+        if(!isPictureModal){
             $("textarea#postTextarea").hashtags();
         }
     },

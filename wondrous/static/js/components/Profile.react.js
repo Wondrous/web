@@ -312,7 +312,7 @@ var UserBar = React.createClass({
         );
     },
     _onChange: function() {
-        this.forceUpdate();
+        this.setState({data:getProfileState().data});
     }
 });
 

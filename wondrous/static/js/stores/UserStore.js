@@ -6,7 +6,8 @@ var _ = require('underscore');
 
 
 // Define initial user setting
-var _user = {}, _logged_in = false, _show_sidebar = false, _showing = null, _clickOnProfilePicture, _modalOpen =false;
+var _user = {}, _logged_in = false, _show_sidebar = false,
+_showing = null, _clickOnProfilePicture, _modalOpen =false, _modalType=-1;
 
 var pushstream = new PushStream({
     host:"104.236.251.250",
@@ -69,10 +70,6 @@ function showNotifications(){
     toggleSideBar();
 }
 
-function togglePictureUpload(val){
-    _clickOnProfilePicture = val;
-}
-
 function togglePostModal(){
     _modalOpen = !_modalOpen;
 }
@@ -84,8 +81,13 @@ var UserStore = _.extend({},EventEmitter.prototype,{
     },
 
     // Return with we're uploading just a picture
-    isPostModalPicture: function(){
-        return _clickOnProfilePicture;
+    isPictureModal: function(){
+        return _modalType==WondrousConstants.MODALTYPE_PICTURE;
+    },
+
+    // Return with we're reposting
+    isRepostModal: function(){
+        return _modalType==WondrousConstants.MODALTYPE_REPOST;
     },
 
     // Return the sidebar that is showing
@@ -150,12 +152,17 @@ AppDispatcher.register(function(payload){
 
         case WondrousConstants.SHOW_PICTURE_CHANGE:
             togglePostModal();
-            togglePictureUpload(true);
+            _modalType = WondrousConstants.MODALTYPE_PICTURE;
             break;
 
         case WondrousConstants.SHOW_NEW_POST:
             togglePostModal();
-            togglePictureUpload(false);
+            _modalType = WondrousConstants.MODALTYPE_POST;
+            break;
+
+        case WondrousConstants.SHOW_NEW_REPOST:
+            togglePostModal();
+            _modalType = WondrousConstants.MODALTYPE_REPOST;
             break;
 
         case WondrousConstants.NEW_PROFILE_PICTURE:
