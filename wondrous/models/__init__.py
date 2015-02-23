@@ -65,8 +65,8 @@ from wondrous.models.page import (
 
 from wondrous.models.person import (
     Person,
-    UnverifiedEmail,
-    WaitingList,
+    # UnverifiedEmail,
+    # WaitingList,
 )
 
 from wondrous.models.tag import (
@@ -83,6 +83,9 @@ from wondrous.models.vote import (
     Vote
 )
 
+from wondrous.models.refer import (
+    Referrer
+)
 
 def initialize_sql(settings, testing=False):
     """ Called by the app on startup to setup bindings to the DB """

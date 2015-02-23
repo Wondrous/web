@@ -63,27 +63,29 @@ def build_routes(config):
     # API
     config.add_route('api_user_login',                         '/api/user/login')      # POST
     config.add_route('api_user_signup',                        '/api/user/signup')     # POST
-    config.add_route('api_user_vote',                          '/api/user/vote')      # POST
-    config.add_route('api_user_name',                           '/api/me/name')    # POST
-    config.add_route('api_user_username',                       '/api/me/username')    # POST
+    config.add_route('api_user_vote',                          '/api/user/vote')       # POST
+    config.add_route('api_user_name',                          '/api/me/name')         # POST
+    config.add_route('api_user_username',                      '/api/me/username')     # POST
 
-    config.add_route('api_user_deactivate',                    '/api/me/deactivate') # POST
-    config.add_route('api_user_password',                      '/api/me/password')   # POST
-    config.add_route('api_user_picture',                       '/api/me/picture')     # POST
-    config.add_route('api_user_me',                            '/api/me')              # GET
+    config.add_route('api_user_deactivate',                    '/api/me/deactivate')    # POST
+    config.add_route('api_user_password',                      '/api/me/password')      # POST
+    config.add_route('api_user_picture',                       '/api/me/picture')       # POST
+    config.add_route('api_user_me',                            '/api/me')               # GET
 
     config.add_route('api_user_info',                          '/api/user')            # GET
     config.add_route('api_user_followers',                     '/api/user/followers')  # GET
     config.add_route('api_user_following',                     '/api/user/following')  # GET
     config.add_route('api_user_visibility_toggle',             '/api/user/visibility') # POST
 
-    config.add_route('api_user_wall',                          '/api/wall')            # GET
-    config.add_route('api_new_post',                           '/api/wall/new')            # POST
-    config.add_route('api_repost',                             '/api/wall/repost')     # POST
-    config.add_route('api_user_feed',                          '/api/feed')           # GET
-    config.add_route('api_user_notification',                  '/api/notification')    # GET
-    config.add_route('api_post_delete',                        '/api/post/delete')            # DELETE
+    config.add_route('api_user_wall',                          '/api/wall')             # GET
+    config.add_route('api_new_post',                           '/api/wall/new')         # POST
+    config.add_route('api_repost',                             '/api/wall/repost')      # POST
+    config.add_route('api_user_feed',                          '/api/feed')             # GET
+    config.add_route('api_user_notification',                  '/api/notification')     # GET
+    config.add_route('api_post_delete',                        '/api/post/delete')      # DELETE
 
+    # referral stuff
+    config.add_route('api_refer_register',                     '/api/refer')
 
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')

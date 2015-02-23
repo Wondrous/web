@@ -74,6 +74,7 @@ from wondrous.utilities.validation_utilities import (
 
 from wondrous.views.main import BaseHandler
 
+from wondrous.models.refer import ReferrerManager
 
 class APIViews(BaseHandler):
 
@@ -95,6 +96,19 @@ class APIViews(BaseHandler):
                 kwargs[key] = Sanitize.safe_input(val)
         return kwargs
 
+    @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
+    def api_refer_register(self):
+        """
+            PURPOSE: Retrieves/sign up the referrer
+
+            USE: self.query_kwargs to provide all the required inputs.
+                email, uuid
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the referrer json 
+        """
+        return ReferrerManager.register(**self.query_kwargs)
 
     @view_config(request_method="GET",route_name='api_user_followers', renderer='json')
     def api_user_followers(self):

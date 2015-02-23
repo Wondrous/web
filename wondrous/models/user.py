@@ -58,7 +58,7 @@ class User(Base, PasswordManager, BaseMixin):
     email = Column(Unicode, nullable=False)
     _password = Column('password', Unicode(255), nullable=False)
     # profile_picture = Column(Unicode, nullable=True, default=unicode(DEFAULT_PROFILE_PICTURE_PATH))  # nullable=True for FBAuth users
-
+    verified = Column(Boolean, default=False)
     picture_object_id = Column(BigInteger,ForeignKey('object.id'), nullable=True)
     picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
 

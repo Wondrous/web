@@ -237,32 +237,3 @@ class UnverifiedEmailManager(object):
 
         # Insert NEW code
         email_obj.code = unicode(uuid.uuid4())
-
-
-class WaitingList(Base):
-
-    """
-        Defines all emails which have been submitted but
-        are not allowed into Wondrous yet
-    """
-
-    __tablename__ = 'waiting_list'
-
-    id = Column(BigInteger, primary_key=True, nullable=False)
-    email = Column(Unicode, nullable=False)
-    date_submitted = Column(DateTime, nullable=True, default=datetime.now)
-
-
-class WaitingListManager(object):
-
-    @staticmethod
-    def get(email):
-        return WaitingList.query.filter(
-            func.lower(WaitingList.email) == func.lower(email)
-        ).first()
-
-    @staticmethod
-    def add(waiting_list_data):
-        new_waiting_list = WaitingList()
-        new_waiting_list.email = waiting_list_data['email']
-        DBSession.add(new_waiting_list)

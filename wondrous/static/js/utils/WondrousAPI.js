@@ -282,6 +282,26 @@ module.exports = {
         .end(_callback(callback));
     },
 
+    // Register/retrieve referrer by email
+    // options is:
+    // callback(err,json_res)
+    // email
+    // ref_uuid
+    registerReferrer: function(options) {
+        var email = options.email,
+            ref_uuid=options.ref_uuid,
+            callback=options.callback,
+            url = '/api/refer';
+
+        if (typeof ref_uuid === 'undefined'){
+            ref_uuid = null;
+        }
+
+        request.post(url)
+        .send({email:email, ref_uuid:ref_uuid})
+        .end(_callback(callback));
+    },
+
     // Upload file to s3
     // options:
     // callback(err,json_res)

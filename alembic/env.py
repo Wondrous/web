@@ -12,6 +12,7 @@ from wondrous.models import (
     object,
     page,
     person,
+    refer,
     post,
     tag,
     user,

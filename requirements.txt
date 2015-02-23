@@ -12,3 +12,4 @@ sphinx
 redis
 service_identity
 raven==5.0.0
+shortuuid
