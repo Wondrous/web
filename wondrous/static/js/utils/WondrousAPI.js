@@ -226,7 +226,7 @@ module.exports = {
     // options is:
     // callback(err,json_res)
     // password
-    changePassword: function(options){
+    deactivateAccount: function(options){
         var password = options.password;
         var callback = options.callback;
 
@@ -236,19 +236,33 @@ module.exports = {
         .end(_callback(callback));
     },
 
-    // Change various fields
+    // Change username
     // options is:
     // callback(err,json_res)
-    // field
     // new_value
-    changePassword: function(options){
-        var field = options.field;
-        var new_value = options.new_value;
+    changeUsername: function(options){
+        var username = options.username;
         var callback = options.callback;
 
-        var url = '/api/me/profile'
+        var url = '/api/me/username'
         request.post(url)
-        .send({field:field, new_value:new_value})
+        .send({username:username})
+        .end(_callback(callback));
+    },
+
+    // Change name
+    // options is:
+    // callback(err,json_res)
+    // first_name, last_name
+    changeName: function(options){
+        var first_name = options.first_name;
+        var last_name = options.last_name;
+
+        var callback = options.callback;
+
+        var url = '/api/me/name'
+        request.post(url)
+        .send({first_name:first_name, last_name:last_name})
         .end(_callback(callback));
     },
 

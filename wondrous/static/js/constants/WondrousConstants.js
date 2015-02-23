@@ -25,6 +25,6 @@ module.exports = keyMirror({
     SHOW_PICTURE_CHANGE: null,  // Showing new profile picture upload
     SHOW_NEW_POST: null,        // Showing new post upload
     NEW_PROFILE_PICTURE: null,  // new profile picture
-    POST_DELETED: null          // a post is deleted -- alert feed + wall 
+    POST_DELETED: null         // a post is deleted -- alert feed + wall
 
 });

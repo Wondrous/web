@@ -290,10 +290,10 @@ var UserBar = React.createClass({
 
         var ouuid = (typeof getProfileState().data.ouuid !== 'undefined')?getProfileState().data.ouuid:false;
         var img_src = ouuid?"http://mojorankdev.s3.amazonaws.com/"+ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
-        console.log("profile",username,img_src);
+
         return (
             <div className="profile-header">
-            {ouuid ? <img className="profile-photo" onClick={this.handleClick} src={img_src} /> : <img className="profile-photo" src="/static/pictures/defaults/p.default-profile-picture.jpg" />}
+            <img className="profile-photo" onClick={this.handleClick} src={img_src} />
                 <span className="profile-header-content">
                     <span className="profile-name">{this.state.data.name}</span>
                     <span className="profile-wscore">

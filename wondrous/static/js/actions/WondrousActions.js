@@ -124,13 +124,13 @@ var WondrousActions = {
         });
     },
 
+    // post deleted
     postDelete: function(data){
         AppDispatcher.handleAction({
             actionType: WondrousConstants.POST_DELETED,
             data: data
         });
     }
-
 }
 
 module.exports = WondrousActions

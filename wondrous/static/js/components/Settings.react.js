@@ -2,8 +2,20 @@ var UserStore = require('../stores/UserStore');
 var WondrousAPI = require('../utils/WondrousAPI');
 
 var NameChange = React.createClass({
-    handleSubmit: function(){
+    handleData: function(err, res){
+        if(err==null){
+            console.log("name change",res);
+        }else{
 
+        }
+    },
+
+    handleSubmit: function(){
+        WondrousAPI.changeName({
+            callback: this.handleData,
+            first_name: this.refs.first_name.getDOMNode().value,
+            last_name: this.refs.last_name.getDOMNode().value
+        });
     },
     render:function(){
         var firstName = this.props.user.first_name;
@@ -19,8 +31,8 @@ var NameChange = React.createClass({
                         Note: You can only change your name a very limited number of times.
                     </div>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" ref="firstName" className="basic-input" placeholder="First name" value={firstName}/>
-                        <input type="text" ref="lastName" className="basic-input" placeholder="Last name" value={lastName}/>
+                        <input type="text" ref="first_name" className="basic-input" placeholder={firstName}/>
+                        <input type="text" ref="last_name" className="basic-input" placeholder={lastName}/>
                         <input type="submit" value="Save changes"/>
                     </form>
                 </div>
@@ -30,8 +42,21 @@ var NameChange = React.createClass({
 });
 
 var UsernameChange = React.createClass({
-    handleSubmit: function(){
+    handleData: function(err, res){
+        if(err==null){
+            console.log("username change",res);
+        }else{
 
+        }
+    },
+    checkUsername: function(){
+        console.log("should check if username is good:",this.refs.username.getDOMNode().value);
+    },
+    handleSubmit: function(){
+        WondrousAPI.changeUsername({
+            callback: this.handleData,
+            username: this.refs.username.getDOMNode().value
+        });
     },
     render:function(){
         var username = this.props.user.username;
@@ -42,7 +67,7 @@ var UsernameChange = React.createClass({
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        @<input type="text" className="basic-input" placeholder="Username" value={username}/>
+                        @<input type="text" ref="username" className="basic-input" onChange={this.checkUsername} placeholder="Username"/>
                         <input type="submit" value="Save changes"/>
                     </form>
                 </div>
@@ -52,8 +77,22 @@ var UsernameChange = React.createClass({
 });
 
 var PasswordChange = React.createClass({
-    handleSubmit: function(){
+    handleData: function(err, res){
+        if(err==null){
+            console.log("password change",res);
+        }else{
 
+        }
+    },
+    handleSubmit: function(){
+        if (this.refs.old1.getDOMNode().value!==this.refs.old2.getDOMNode().value){
+            return;
+        }
+        WondrousAPI.changePassword({
+            callback: this.handleData,
+            old_password: this.refs.old2.getDOMNode().value,
+            new_password: this.refs.new_password.getDOMNode().value
+        });
     },
     render:function(){
         return (
@@ -63,9 +102,9 @@ var PasswordChange = React.createClass({
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        <div><input type="password" className="basic-input" placeholder="Current password"/></div>
-                        <div><input type="password" className="basic-input" placeholder="New password"/></div>
-                        <div><input type="password" className="basic-input" placeholder="Confirm new password"/></div>
+                        <div><input type="password" ref="old1" className="basic-input" placeholder="Current password"/></div>
+                        <div><input type="password" ref="old2" className="basic-input" placeholder="New password"/></div>
+                        <div><input type="password" ref="new_password" className="basic-input" placeholder="Confirm new password"/></div>
                         <div><input type="submit" value="Save changes"/></div>
                     </form>
                 </div>

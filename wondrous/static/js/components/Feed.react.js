@@ -36,16 +36,16 @@ var Feed = React.createClass({
 
         var container = document.querySelector('.masonry');
 
-        var msnry = new Masonry(container, {
-              transitionDuration : 0,
-              itemSelector       : ".masonry-brick",
-              columnWidth        : "200",
-        });
-
-        imagesLoaded(container, function(){
-            // Trigger Masonry Layout
-            msnry.layout();
-        });
+        // var msnry = new Masonry(container, {
+        //       transitionDuration : 0,
+        //       itemSelector       : ".masonry-brick",
+        //       columnWidth        : "200",
+        // });
+        //
+        // imagesLoaded(container, function(){
+        //     // Trigger Masonry Layout
+        //     msnry.layout();
+        // });
     },
     // Remove change listeners from stores
     componentWillUnmount: function() {

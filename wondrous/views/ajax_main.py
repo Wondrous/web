@@ -240,27 +240,39 @@ class APIViews(BaseHandler):
         return AccountManager.deactivate_json(person, **self.query_kwargs)
 
     @api_login_required
-    @view_config(request_method="POST",route_name='api_user_profile', renderer='json')
-    def api_user_profile(self):
+    @view_config(request_method="POST",route_name='api_user_name', renderer='json')
+    def api_user_name(self):
 
         """
             PURPOSE: changes account information
 
             USE: self.query_kwargs to provide all the required inputs.
-                person,field,new_value
+                person,first_name,last_name
 
-                ex. if I want to change the username
-                    field = username
-                    new_value = new_username
-
-                can only alter username, first_name, last_name,
-            PARAMS: (None)
 
             RETURNS: The JSON containing either an error or successful status
         """
 
         person = self.request.person
-        return AccountManager.change_profile_json(person, **self.query_kwargs)
+        return AccountManager.change_name_json(person, **self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_user_username', renderer='json')
+    def api_user_username(self):
+
+        """
+            PURPOSE: changes account information
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,username
+
+
+
+            RETURNS: The JSON containing either an error or successful status
+        """
+
+        person = self.request.person
+        return AccountManager.change_username_json(person, **self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_password', renderer='json')

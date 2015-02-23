@@ -39,7 +39,7 @@ class AccountManager(BaseManager):
         'last_name'  : "last_name"+str(i),
     """
 
-    DYNAMIC_FIELDS = ['username', 'first_name', 'last_name']  # TODO Should this be a set?
+    DYNAMIC_FIELDS = ['username', 'first_name', 'last_name', 'ascii_name']  # TODO Should this be a set?
 
     @staticmethod
     def is_username_taken(username):
@@ -146,9 +146,6 @@ class AccountManager(BaseManager):
 
             return retval
 
-        logging.debug(user.is_private)
-        logging.debug(user.is_banned)
-        logging.debug(user.is_active)
         # if the user is public or I am following
         if (not user.is_private and not user.is_banned and user.is_active) or \
             (person and not user.is_banned and user.is_active and am_following):
@@ -195,11 +192,23 @@ class AccountManager(BaseManager):
     @classmethod
     def change_password_json(cls, person, old_password, new_password):
         user = person.user
-        if user and user.validate_password(old_password):
+        if user and user.validate_password(old_password.encode('utf-8')):
             user.password = new_password
             DBSession.flush()
             return {"status": "new password set"}
         return {"error": "password change failed"}
+
+    @classmethod
+    def change_name_json(cls, person, first_name, last_name):
+        data = cls.change_profile_json(person,'first_name',first_name)
+        data.update(cls.change_profile_json(person,'last_name',last_name))
+        data.update(cls.change_profile_json(person,'ascii_name',unicode(first_name+" "+last_name)))
+        return data
+
+    @classmethod
+    def change_username_json(cls, person, username):
+        data = cls.change_profile_json(person,'username',username)
+        return data
 
     @classmethod
     def change_profile_json(cls, person, field, new_value):
@@ -212,13 +221,19 @@ class AccountManager(BaseManager):
         exists = getattr(user, field, None)
         if exists:
             setattr(user, field, new_value)
-            DBSession.flush()
+            try:
+                DBSession.flush()
+            except Exception, e:
+                return {'error':str(e)}
             return {field: new_value}
 
         exists = getattr(person, field, None)
         if exists:
             setattr(person, field, new_value)
-            DBSession.flush()
+            try:
+                DBSession.flush()
+            except Exception, e:
+                return {'error':str(e)}
             return {field: new_value}
 
         return {"error": field + " not found"}
