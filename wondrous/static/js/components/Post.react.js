@@ -80,46 +80,46 @@ var Photo = React.createClass({
 
 var Post = React.createClass({
     handleClick: function() {
-        // var SPEED = 0;
-        // var thisPost = $(this.refs.post.getDOMNode());
-        // var thisBrick = $(this.refs.brick.getDOMNode());
-        // var thisPostContent = thisPost.find('.post-content');
-        // var thisCoverPhoto = thisPost.find('.post-cover-photo');
-        //
-        // $('.backdrop').toggleClass('dimmer');
-        // thisPost.css('z-index', 9);
-        //
-        // $('.post-body').not(thisPost).removeClass('is-expanded');
-        // $('.post-content').not(thisPostContent).slideUp(SPEED);
-        // $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
-        // $('.post-content').not(thisPostContent).removeClass('no-top-border');
-        // $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
-        //
-        // thisPost.toggleClass('is-expanded');
-        // thisPost.find('.pseudo-bg-img').toggleClass('pseudo-bg-img-closed').toggleClass('pseudo-bg-img-expanded');
-        // thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-        // thisPostContent.toggleClass('no-top-border');
-        //
-        // thisBrick.toggleClass('post-presentation');
-        // thisPostContent.slideToggle(SPEED);
-        //
-        // // Trigger Masonry Layout
-        // // debugger;
-        //
-        // var container = document.querySelector('.masonry');
-        // var msnry = new Masonry(container, {
-        //       transitionDuration : 0,
-        //       itemSelector       : ".masonry-brick",
-        //       columnWidth        : 288,
-        // });
-        //
-        // imagesLoaded(container, function(){
-        //     // Trigger Masonry Layout
-        //     msnry.layout();
-        // });
-        //
-        // // Hmmmmm.... Let's try this out
-        // $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
+        var SPEED = 0;
+        var thisPost = $(this.refs.post.getDOMNode());
+        var thisBrick = $(this.refs.brick.getDOMNode());
+        var thisPostContent = thisPost.find('.post-content');
+        var thisCoverPhoto = thisPost.find('.post-cover-photo');
+
+        $('.backdrop').toggleClass('dimmer');
+        thisPost.css('z-index', 9);
+
+        $('.post-body').not(thisPost).removeClass('is-expanded');
+        $('.post-content').not(thisPostContent).slideUp(SPEED);
+        $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
+        $('.post-content').not(thisPostContent).removeClass('no-top-border');
+        $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
+
+        thisPost.toggleClass('is-expanded');
+        thisPost.find('.pseudo-bg-img').toggleClass('pseudo-bg-img-closed').toggleClass('pseudo-bg-img-expanded');
+        thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
+        thisPostContent.toggleClass('no-top-border');
+
+        thisBrick.toggleClass('post-presentation');
+        thisPostContent.slideToggle(SPEED);
+
+        // Trigger Masonry Layout
+        // debugger;
+
+        var container = document.querySelector('.masonry');
+        var msnry = new Masonry(container, {
+              transitionDuration : 0,
+              itemSelector       : ".masonry-brick",
+              columnWidth        : 288,
+        });
+
+        imagesLoaded(container, function(){
+            // Trigger Masonry Layout
+            msnry.layout();
+        });
+
+        // Hmmmmm.... Let's try this out
+        $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
     },
     handleData: function(err,res){
