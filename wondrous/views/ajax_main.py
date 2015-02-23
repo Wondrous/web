@@ -106,9 +106,24 @@ class APIViews(BaseHandler):
 
             PARAMS: (None)
 
-            RETURNS: The JSON array of the referrer json 
+            RETURNS: The JSON array of the referrer json
         """
         return ReferrerManager.register(**self.query_kwargs)
+
+    @view_config(request_method="GET",route_name='api_refer_progress',renderer='json')
+    def api_refer_progress(self):
+        """
+            PURPOSE: Retrieves the referrer
+
+            USE: self.query_kwargs to provide all the required inputs.
+                uuid
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the referrer json
+        """
+        return ReferrerManager.by_uuid(**self.query_kwargs)
+
 
     @view_config(request_method="GET",route_name='api_user_followers', renderer='json')
     def api_user_followers(self):

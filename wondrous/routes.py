@@ -85,7 +85,8 @@ def build_routes(config):
     config.add_route('api_post_delete',                        '/api/post/delete')      # DELETE
 
     # referral stuff
-    config.add_route('api_refer_register',                     '/api/refer')
+    config.add_route('api_refer_register',                     '/api/refer')            # POST
+    config.add_route('api_refer_progress',                     '/api/refer/progress')   # GET
 
     # AJAX
     config.add_route('ajax_notification',                      '/ajax/notification/{ajax_method}/')

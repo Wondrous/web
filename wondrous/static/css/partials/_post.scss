@@ -2,6 +2,7 @@
 
 /* post-body is visible, and transitions size */
 .post-body {
+    height: 410px;
     width: 100%;
     -webkit-transition: width 0.4s, height 0.4s;
        -moz-transition: width 0.4s, height 0.4s;
@@ -22,17 +23,34 @@
              -o-box-shadow: 0 2px 3px rgb(100,100,100);
                 box-shadow: 0 2px 3px rgb(100,100,100);
     }
+
+    & #slidePhoto{
+        transition: 1s;
+    }
+
+    &:hover #slidePhoto{
+        transition: 1s;
+        margin-top:-330px;
+    }
 }
 
 .post-content {
-    display: none;
-    background-color: rgb(255,255,255);
-    padding: 20px;
+    height: 340px;
     font-family: helvetica, arial, sans-serif;
     font-weight: normal;
     font-size: 16px;
+    background-color: rgb(255,255,255);
+    padding: 20px;
     color: rgb(51,51,51);
     line-height: 1.3em;
+}
+
+.post-content-text{
+    height:220px;
+    overflow-y: auto;
+    font-family: helvetica, arial, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
 }
 
 .post-footer-btn {
@@ -130,6 +148,7 @@ $post-cover-photo-height: 390px;
 }
 
 .post-thumb {
+    z-index: 10;
     position: relative;
     display: inline-block;
     left: 0;
@@ -139,6 +158,7 @@ $post-cover-photo-height: 390px;
 }
 
 .post-identifier {
+    z-index: 10;
     position: relative;
     display: inline-block;
     top: -6px;
@@ -163,11 +183,13 @@ $post-cover-photo-height: 390px;
     bottom: 15px;
     width: 100%;
     padding: 10px 0;
+    height:50px;
 }
 
 .post-subject-text-position {
     position: relative;
     padding: 7px 3%;
+    overflow: hidden;
 }
 
 .post-see-more {
@@ -228,7 +250,7 @@ $post-cover-photo-height: 390px;
     &:link {
         font-family: helvetica, arial, sans-serif;
         color: rgb(0,0,255);
-    }   
+    }
     &:visited {color: rgb(0,0,255);}
 }
 
@@ -310,8 +332,8 @@ $post-cover-photo-height: 390px;
     &:hover {background-color: rgb(11,91,245); text-decoration: none;}
     &:active {background-color: rgb(11,91,185);}
 }
- 
- 
+
+
 
 .post-file-img {
     margin-top: 10px;
@@ -388,7 +410,7 @@ $post-cover-photo-height: 390px;
     &:visited { color: rgb(21,21,231); }
     &:hover { text-decoration: underline; }
 }
- 
+
 
 .mini-vote-btn {
     position: relative;
@@ -416,7 +438,7 @@ $post-cover-photo-height: 390px;
     &:hover { color: rgb(151,151,151); }
     &:active { color: rgb(121,121,121); }
 }
- 
+
 
 .mini-vote-count {
     position: relative;
@@ -448,7 +470,7 @@ $post-cover-photo-height: 390px;
 .upvote-disabled { background-color: rgb(181,181,181); cursor: default !important; }
 .upvote {
     background-color: rgb(116,210,110);
-    
+
     &:hover { background-color: rgb(116,225,110); }
     &:active { background-color: rgb(116,205,110); }
 }
@@ -471,7 +493,7 @@ $post-cover-photo-height: 390px;
 .downvote-disabled { background-color: rgb(151,151,151); cursor: default !important; }
 .downvote {
     background-color: rgb(210,100,100);
-    
+
     &:hover { background-color: rgb(230,100,100); }
     &:active { background-color: rgb(205,100,100); }
 }
