@@ -206,6 +206,52 @@ module.exports = {
         .send({file_type:file_type}).end(_callback(callback));
     },
 
+    // Change profile picture
+    // options is:
+    // callback(err,json_res)
+    // old_password
+    // new_password
+    changePassword: function(options){
+        var old_password = options.old_password;
+        var new_password = options.new_password;
+        var callback = options.callback;
+
+        var url = '/api/me/password'
+        request.post(url)
+        .send({old_password:old_password, new_password:new_password})
+        .end(_callback(callback));
+    },
+
+    // Deactivate your accound
+    // options is:
+    // callback(err,json_res)
+    // password
+    changePassword: function(options){
+        var password = options.password;
+        var callback = options.callback;
+
+        var url = '/api/me/deactivate'
+        request.post(url)
+        .send({password:password})
+        .end(_callback(callback));
+    },
+
+    // Change various fields
+    // options is:
+    // callback(err,json_res)
+    // field
+    // new_value
+    changePassword: function(options){
+        var field = options.field;
+        var new_value = options.new_value;
+        var callback = options.callback;
+
+        var url = '/api/me/profile'
+        request.post(url)
+        .send({field:field, new_value:new_value})
+        .end(_callback(callback));
+    },
+
     // Requests the server to delete the post
     // options is:
     // callback(err,json_res)

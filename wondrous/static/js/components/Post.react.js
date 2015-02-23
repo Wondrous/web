@@ -105,8 +105,8 @@ var Post = React.createClass({
         thisPostContent.slideToggle(SPEED);
 
         // Trigger Masonry Layout
-        debugger;
-        
+        // debugger;
+
         var container = document.querySelector('.masonry');
         var msnry = new Masonry(container, {
               transitionDuration : 0,

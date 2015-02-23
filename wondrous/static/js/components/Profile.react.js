@@ -284,17 +284,16 @@ var UserBar = React.createClass({
 
     render: function() {
         var username = this.props.username;
-        var is_me = username === UserStore.getUserData().username;
-
         this.is_private = getProfileState().data.is_private;
         this.am_following = getProfileState().data.following==true;
         var is_me = username === UserStore.getUserData().username;
 
-        var ouuid = (typeof UserStore.getUserData().ouuid !== 'undefined')?UserStore.getUserData().ouuid:false;
-        console.log("Ouuid",ouuid);
+        var ouuid = (typeof getProfileState().data.ouuid !== 'undefined')?getProfileState().data.ouuid:false;
+        var img_src = ouuid?"http://mojorankdev.s3.amazonaws.com/"+ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        console.log("profile",username,img_src);
         return (
             <div className="profile-header">
-            {is_me ? <img className="profile-photo" onClick={this.handleClick} src={ouuid?"http://mojorankdev.s3.amazonaws.com/"+ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} /> : <img className="profile-photo" src="/static/pictures/defaults/p.default-profile-picture.jpg" />}
+            {ouuid ? <img className="profile-photo" onClick={this.handleClick} src={img_src} /> : <img className="profile-photo" src="/static/pictures/defaults/p.default-profile-picture.jpg" />}
                 <span className="profile-header-content">
                     <span className="profile-name">{this.state.data.name}</span>
                     <span className="profile-wscore">
