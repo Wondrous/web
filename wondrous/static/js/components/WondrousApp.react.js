@@ -66,7 +66,7 @@ var WondrousApp = React.createClass({
 var Routes = (
     <Route handler={WondrousApp} path="/">
         <Route name="landingBare" path="/landing" handler={LandingApp}/>
-        <Route name="landing" path="/landing/:ref_uuid" handler={LandingApp}/>
+        <Route name="landing" path="/ref/:ref_uuid" handler={LandingApp}/>
         <Route name="feed" path="/feed" handler={Feed}/>
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
