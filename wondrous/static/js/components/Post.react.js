@@ -75,8 +75,7 @@ var Photo = React.createClass({
             </div>);
     },
     componentDidMount: function() {
-        // Nothing much happening here...
-
+        // Nothing much happening here!!!
     }
 });
 
@@ -106,16 +105,21 @@ var Post = React.createClass({
         thisPostContent.slideToggle(SPEED);
 
         // Trigger Masonry Layout
+        debugger;
+        
         var container = document.querySelector('.masonry');
         var msnry = new Masonry(container, {
               transitionDuration : 0,
               itemSelector       : ".masonry-brick",
-              columnWidth        : ".grid-sizer",
+              columnWidth        : 288,
         });
-        msnry.layout();
+
+        imagesLoaded(container, function(){
+            // Trigger Masonry Layout
+            msnry.layout();
+        });
 
         // Hmmmmm.... Let's try this out
-        console.log(thisBrick);
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
     },
