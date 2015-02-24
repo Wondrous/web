@@ -233,6 +233,22 @@ module.exports = {
         .send(uploadData).end(_callback(callback));
     },
 
+    // repost post
+    // options is:
+    // callback(err,json_res)
+    // uploadData: object comprised of the the follow:
+    //      post_id
+
+    repost: function(options){
+        var uploadData = options.uploadData;
+        var callback = options.callback;
+        if (!uploadData.hasOwnProperty('post_id')) callback({error:"not sufficient"},null);
+
+        var url = '/api/wall/repost';
+        request.post(url)
+        .send(uploadData).end(_callback(callback));
+    },
+
     // Change profile picture
     // options is:
     // callback(err,json_res)

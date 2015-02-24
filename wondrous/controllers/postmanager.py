@@ -118,10 +118,13 @@ class PostManager(BaseManager):
         picture_object = post.user.picture_object
         if picture_object:
             data.update({"user_ouuid": picture_object.ouuid})
-
+        data.update({"name":post.user.person.ascii_name})
+        data.update({"username":post.user.username})
         if post.original:
             original_post = PostManager.model_to_json(post.original)
             original_post.update(PostManager.model_to_json(post.original.object))
+            original_post.update({"name": post.original.user.person.ascii_name})
+            original_post.update({"username": post.original.user.username})
             data.update({"repost":original_post})
         return data
 

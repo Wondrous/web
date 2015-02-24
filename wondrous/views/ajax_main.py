@@ -390,7 +390,7 @@ class APIViews(BaseHandler):
         person       = self.request.person
         tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
-        query_kwargs.update({'tags':tags})
+        # query_kwargs.update({'tags':tags})
         return PostManager.repost_json(person,**query_kwargs)
 
     @api_login_required

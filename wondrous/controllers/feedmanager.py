@@ -64,6 +64,14 @@ class FeedManager(BaseManager):
                     post_dict.update({"user_ouuid": picture_object.ouuid})
 
                 post_dict.update({'liked':VoteManager.is_liking(person.user.id,post.id)})
+
+                if post.original:
+                    original_post = cls.model_to_json(post.original)
+                    original_post.update(cls.model_to_json(post.original.object))
+                    original_post.update({"name": post.original.user.person.ascii_name})
+                    original_post.update({"username": post.original.user.username})
+                    post_dict.update({"repost":original_post})
+
                 data.append(post_dict)
         return data
 
@@ -111,7 +119,8 @@ class FeedManager(BaseManager):
         for post in posts:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = {}
-                post_dict.update(super(FeedManager,cls).model_to_json(post.object))
+                if post.object:
+                    post_dict.update(super(FeedManager,cls).model_to_json(post.object))
                 post_dict.update(super(FeedManager,cls).model_to_json(post))
                 post_dict.update({"name":post.user.person.ascii_name})
                 post_dict.update({"username":post.user.username})
@@ -119,5 +128,12 @@ class FeedManager(BaseManager):
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
                 post_dict.update({'liked':VoteManager.is_liking(person.user.id,post.id)})
+
+                if post.original:
+                    original_post = cls.model_to_json(post.original)
+                    original_post.update(cls.model_to_json(post.original.object))
+                    original_post.update({"name": post.original.user.person.ascii_name})
+                    original_post.update({"username": post.original.user.username})
+                    post_dict.update({"repost":original_post})
                 data.append(post_dict)
         return data

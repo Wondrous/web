@@ -48,11 +48,11 @@ var WondrousApp = React.createClass({
     render: function() {
         return (
             <div>
-                <PostForm />
                 <Navbar />
                 <SideMenu />
                 <div className="main-content">
                     <RouteHandler />
+                    <PostForm />
                 </div>
             </div>
         );

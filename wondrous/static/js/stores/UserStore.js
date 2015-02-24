@@ -8,6 +8,7 @@ var _ = require('underscore');
 // Define initial user setting
 var _user = {}, _logged_in = false, _show_sidebar = false,
 _showing = null, _clickOnProfilePicture, _modalOpen =false, _modalType=-1;
+_to_repost = {};
 
 var pushstream = new PushStream({
     host:"104.236.251.250",
@@ -75,6 +76,11 @@ function togglePostModal(){
 }
 // Extend UserStore with EventEmitter and underscore
 var UserStore = _.extend({},EventEmitter.prototype,{
+    // get repost post data
+    getRepost: function(){
+        return _to_repost; 
+    },
+
     // is Postmodal open?
     isPostModalOpen: function(){
         return _modalOpen;
@@ -163,6 +169,7 @@ AppDispatcher.register(function(payload){
         case WondrousConstants.SHOW_NEW_REPOST:
             togglePostModal();
             _modalType = WondrousConstants.MODALTYPE_REPOST;
+            _to_repost = action.data;
             break;
 
         case WondrousConstants.NEW_PROFILE_PICTURE:

@@ -44,6 +44,7 @@ var PostForm = React.createClass({
         this.file = files[0];
         this.readURL();
     },
+
     onDragLeave: function(e) {
         this.setState({
           isDragActive: false
@@ -132,6 +133,7 @@ var PostForm = React.createClass({
             this.data_to_update = null;
         }
     },
+
     onPostSubmitted: function(err,res) {
         if(!err) {
             this.data_to_update = res;
@@ -211,6 +213,7 @@ var PostForm = React.createClass({
 
     render: function(){
         var isPictureModal = UserStore.isPictureModal();
+        var isRepostModal = UserStore.isRepostModal();
 
         var divStyle = {
             display: isPictureModal?"none":"block",

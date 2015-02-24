@@ -124,6 +124,14 @@ var WondrousActions = {
         });
     },
 
+    // show post upload modal
+    toggleNewRepostModal: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.SHOW_NEW_REPOST,
+            data: data
+        });
+    },
+
     // post deleted
     postDelete: function(data){
         AppDispatcher.handleAction({

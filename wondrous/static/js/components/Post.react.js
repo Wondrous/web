@@ -4,10 +4,12 @@ var UserStore = require('../stores/UserStore');
 
 
 var UserTitle = React.createClass({
+    repost:null,
     mixins: [Router.Navigation],
     handleProfileData: function(err, data) {
         if (err == null) {
-            console.log("profile", data);
+            console.log("profile from post", data);
+
             WondrousActions.loadProfileInfo(data);
         } else {
             // WondrousActions.unloadUserInfo(err);
@@ -40,13 +42,27 @@ var UserTitle = React.createClass({
             this.loadWallFromServer();
         }
     },
+    handleClickOnOwner: function(){
+        if (typeof this.repost.username != 'undefined') {
+            this.transitionTo('/' + this.repost.username);
+            this.loadProfileFromServer();
+            this.loadWallFromServer();
+        }
+    },
     render: function() {
+        var name = this.props.data.name;
+        if (this.props.data.hasOwnProperty('repost')){
+            this.repost = this.props.data.repost;
+        }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined')?"http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow">
-                    <a onClick={this.handleClick}>{this.props.data.name}</a>
+                    <a onClick={this.handleClick}>{name}</a>
+                    {this.repost?" reposted from ":null}
+                    {this.repost?<a onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
+
                 </span>
             </div>
             );
@@ -56,6 +72,9 @@ var UserTitle = React.createClass({
 var Photo = React.createClass({
 
     render: function() {
+        if (this.props.data.hasOwnProperty('repost')){
+            this.props.data = this.props.data.repost;
+        }
         photoStyle = {
             backgroundImage: this.props.data.ouuid?"url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")" :"/static/pictures/500x500.gif",
         };
@@ -153,8 +172,34 @@ var Post = React.createClass({
             callback:this.handlePostLike
         });
     },
+    onRepost:function(err,res){
+        if (err==null){
+            console.log("repost results",res);
+            WondrousActions.addNewPost(res);
+        }else{
+            console.error("repost err",err);
+        }
+    },
+    clickRepost:function(){
+        uploadData = {
+            'post_id' : this.props.data.id
+        };
+
+        console.log("reposting", uploadData);
+
+        WondrousAPI.repost({
+            uploadData:uploadData,
+            callback:this.onRepost
+        });
+    },
     render: function() {
+        var repost = null;
         var is_it_mine = this.props.data.username === UserStore.getUserData().username;
+        if (this.props.data.hasOwnProperty('repost')){
+            repost = this.props.data.repost;
+            this.props.data.text = repost.text;
+        }
+
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-5" >
@@ -171,7 +216,7 @@ var Post = React.createClass({
                         <hr style={{"width": "60%"}}/>
                         <div>
                             <span onClick={this.likePost} className="post-footer-btn post-like-btn round-2">{this.props.data.liked?"Unlike":"Like!"}</span>
-                            <span className="post-footer-btn post-repost-btn round-2">Repost</span>
+                            <span onClick={this.clickRepost} className="post-footer-btn post-repost-btn round-2">Repost</span>
                             {is_it_mine?<span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>:null}
                         </div>
                     </div>
