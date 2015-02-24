@@ -8,6 +8,8 @@ var _profile = {}, _followers = {}, _following = {};
 
 // Method to load profile info from API
 function loadProfileData(data){
+    _followers = {};
+    _following = {};
     _profile = data;
 }
 
@@ -15,7 +17,10 @@ function loadProfileData(data){
 function loadFollowers(data){
     for (var i = 0; i < data.length; i++){
         var key = String(data[i].id);
-        _followers[key] = data[i];
+        if (_profile.id!=key){
+            _followers[key] = data[i];
+        }
+
     }
 }
 
@@ -23,7 +28,9 @@ function loadFollowers(data){
 function loadFollowing(data){
     for (var i = 0; i < data.length; i++){
         var key = String(data[i].id);
-        _following[key] = data[i];
+        if (_profile.id!=key){
+            _following[key] = data[i];
+        }
     }
 }
 

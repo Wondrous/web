@@ -79,8 +79,10 @@ class PostManager(BaseManager):
             if old_post.repost_id:
                 # this is a repost of there must exists an original
                 new_post.original_id = old_post.original_id
+                new_post.owner_id = old_post.owner_id
             else:
                 new_post.original_id = repost_id
+                new_post.owner_id = old_post.owner_id
 
         else:
             # take it apart
@@ -116,6 +118,11 @@ class PostManager(BaseManager):
         picture_object = post.user.picture_object
         if picture_object:
             data.update({"user_ouuid": picture_object.ouuid})
+
+        if post.original:
+            original_post = PostManager.model_to_json(post.original)
+            original_post.update(PostManager.model_to_json(post.original.object))
+            data.update({"repost":original_post})
         return data
 
     @classmethod

@@ -178,6 +178,11 @@ class VoteManager(BaseManager):
         vote = Vote.by_kwargs(user_id=to_user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
         if vote.status == Vote.PENDING:
             vote.status = Vote.FOLLOWED
+            NotificationManager.delete(
+                from_user_id=to_user_id,
+                to_user_id=from_user_id,
+                reason=Notification.FOLLOW_ACCEPTED,
+                subject_id=to_user_id)
             return vote
         return None
 
@@ -209,6 +214,7 @@ class VoteManager(BaseManager):
                                 to_user_id=post.user_id,
                                 subject_id=post_id,
                                 reason=Notification.LIKED)
+
         DBSession.flush()
         return vote
 
@@ -344,8 +350,13 @@ class VoteManager(BaseManager):
 
     @classmethod
     def get_followers_json(cls, person, username = None, user_id = None, page = 0):
-        user_id = person.user.id
-        users = User.query.join(Vote, User.id==Vote.user_id).\
+        u = User.by_kwargs(username=username).first()
+        if u:
+            user_id = u.id
+        if not user_id:
+            return {'error':'bad user info'}
+
+        users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
 
         retval = []
@@ -360,8 +371,13 @@ class VoteManager(BaseManager):
 
     @classmethod
     def get_following_json(cls, person, username = None, user_id = None, page = 0):
-        user_id = person.user.id
-        users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
+        u = User.by_kwargs(username=username).first()
+        if u:
+            user_id = u.id
+        if not user_id:
+            return {'error':'bad user info'}
+
+        users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
             filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
 
         retval = []

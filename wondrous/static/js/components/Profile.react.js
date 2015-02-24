@@ -105,7 +105,6 @@ var UserIcon = React.createClass({
         this.loadWallFromServer();
     },
     render: function() {
-        console.log("sss",this.props.user);
 
         return (
             <a onClick={this.handleClick}>
@@ -132,6 +131,7 @@ var Follower = React.createClass({
     },
     loadFollowersFromServer: function() {
         var username = this.getParams().username;
+        console.log("getting followers for",username);
         WondrousAPI.getFollowers({
             page: 0,
             username: username,
