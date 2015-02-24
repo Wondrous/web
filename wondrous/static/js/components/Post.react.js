@@ -9,7 +9,6 @@ var UserTitle = React.createClass({
     handleProfileData: function(err, data) {
         if (err == null) {
             console.log("profile from post", data);
-
             WondrousActions.loadProfileInfo(data);
         } else {
             // WondrousActions.unloadUserInfo(err);
@@ -18,19 +17,23 @@ var UserTitle = React.createClass({
     handleWallData: function(err, data) {
         if (err == null) {
             WondrousActions.loadWallPosts(data);
+            console.log("wall from post", data);
+
         } else {
 
         }
     },
-    loadProfileFromServer: function() {
+    loadProfileFromServer: function(username) {
+        if (typeof username ==='undefined') username=this.props.data.username;
         WondrousAPI.getUserInfo({
-            username: this.props.data.username,
+            username: username,
             callback: this.handleProfileData
         });
     },
-    loadWallFromServer: function() {
+    loadWallFromServer: function(username) {
+        if (typeof username ==='undefined') username=this.props.data.username;
         WondrousAPI.getWallPosts({
-            username: this.props.data.username,
+            username: username,
             page: 0,
             callback: this.handleWallData
         });
@@ -45,8 +48,8 @@ var UserTitle = React.createClass({
     handleClickOnOwner: function(){
         if (typeof this.repost.username != 'undefined') {
             this.transitionTo('/' + this.repost.username);
-            this.loadProfileFromServer();
-            this.loadWallFromServer();
+            this.loadProfileFromServer(this.repost.username);
+            this.loadWallFromServer(this.repost.username);
         }
     },
     render: function() {
