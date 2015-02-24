@@ -30,7 +30,7 @@ var SignedUp = React.createClass({
                 <h3>Thank you, {this.props.data.email}</h3>
                 <p>You have referred {this.props.data.referred} people!</p>
                 <p>Your reference: </p>
-                <input type="text" value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
+                <input type="text" style={{"width":"200px"}} value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
             </div>
         );
     }
@@ -42,6 +42,7 @@ var LandingApp = React.createClass({
     mixins: [Router.State],
     handleData:function(err,res){
         if(err==null){
+            console.log("asd",res);
             this.registered = true;
             this.referrer_info = res;
             this.forceUpdate();
@@ -59,10 +60,21 @@ var LandingApp = React.createClass({
             callback:this.handleData,
             email:this.refs.email.getDOMNode().value,
             ref_uuid:ref_uuid
-        })
+        });
+    },
+    getProgress:function(){
+        WondrousAPI.getReferrerProgress({
+            callback:this.handleData,
+            uuid:this.getParams().uuid
+        });
+    },
+    componentDidMount:function(){
+        var is_progress = this.getRoutes()[1].name==="progress";
+        if (is_progress){
+            this.getProgress();
+        }
     },
     render: function(){
-
         return (
             <div>
                 <section>

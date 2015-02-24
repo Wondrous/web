@@ -136,7 +136,22 @@ var Post = React.createClass({
         WondrousAPI.deletePost({
             post_id:this.props.data.id,
             callback:this.handleData
-            });
+        });
+    },
+    handlePostLike:function(err,res){
+        if(err==null){
+            console.log("liked",res);
+        }else{
+
+        }
+    }
+    ,
+    likePost:function(){
+        console.log("liking post");
+        WondrousAPI.toggleLike({
+            post_id:this.props.data.id,
+            callback:this.handlePostLike
+        });
     },
     render: function() {
         var is_it_mine = this.props.data.username === UserStore.getUserData().username;
@@ -155,7 +170,7 @@ var Post = React.createClass({
                         </div>
                         <hr style={{"width": "60%"}}/>
                         <div>
-                            <span className="post-footer-btn post-like-btn round-2">Like!</span>
+                            <span onClick={this.likePost} className="post-footer-btn post-like-btn round-2">{this.props.data.liked?"Unlike":"Like!"}</span>
                             <span className="post-footer-btn post-repost-btn round-2">Repost</span>
                             {is_it_mine?<span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>:null}
                         </div>

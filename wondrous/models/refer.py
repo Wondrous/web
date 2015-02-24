@@ -25,6 +25,7 @@ from wondrous.models.modelmixins import BaseMixin
 import shortuuid
 import base64
 import re
+import logging
 
 def get_a_uuid(ref_id):
     return shortuuid.uuid().lower()
@@ -60,8 +61,9 @@ class ReferrerManager():
     @staticmethod
     def by_uuid(uuid):
         r = Referrer.by_kwargs(uuid=uuid).first()
+        logging.warn(r)
         if r:
-            ctn = Referrer.by_kwargs(ref_uuid=ref.uuid).count()
+            ctn = Referrer.by_kwargs(ref_uuid=r.uuid).count()
             return {'email':r.email, 'uuid':r.uuid, 'referred':ctn}
         else:
             return {'error':'invalid uuid'}

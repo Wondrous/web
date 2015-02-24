@@ -36,38 +36,60 @@ var LoggedOut = React.createClass({
 });
 
 var Signup = React.createClass({
-    handleUsernameChange: function(){
+    err:null,
+    good:false,
+    handleCheck:function(err,res){
+        if(err!=null){
+            this.err = err;
+            this.good = false;
+        }else{
+            this.err = null;
+            this.good = true;
+        }
+        this.forceUpdate();
+    },
+    changeHandler: function(){
         var username = this.refs.username.getDOMNode().value.trim();
-        console.log("username is now",username);
+        WondrousAPI.registerCheck({
+            callback:this.handleCheck,
+            first_name:this.refs.first_name.getDOMNode().value.trim(),
+            last_name:this.refs.last_name.getDOMNode().value.trim(),
+            username:this.refs.username.getDOMNode().value.trim(),
+            email:this.refs.email.getDOMNode().value.trim(),
+            password:this.refs.password.getDOMNode().value.trim()
+        });
     },
 
     render: function(){
+
         return (
             <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
                 <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Sign up :)</h1>
                 <form action="/signup/" method="POST">
                     <div>
-                        <input id="focusInput" className="input-basic round-3" type="text" ref="firstname" placeholder="First name"/>
+                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="first_name" ref="first_name" placeholder="First name"/>
                     </div>
                     <div>
-                        <input className="input-basic round-3" type="text" ref="lastname" placeholder="Last name"/>
+                        <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="last_name" ref="last_name" placeholder="Last name"/>
                     </div>
                     <div>
-                        <input className="input-basic round-3" type="text" ref="email" placeholder="Email"/>
+                        <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="email" ref="email" placeholder="Email"/>
                     </div>
                     <div>
-                        <input id="usernameInput" onChange={this.handleUsernameChange} className="input-basic round-3" type="text" ref="username" placeholder="Username" maxLength="15"/>
+                        <input onChange={this.changeHandler} id="usernameInput" className="input-basic round-3" type="text" name="username" ref="username" placeholder="Username" maxLength="15"/>
                         <span style={{"position":"absolute"}} ></span>
                     </div>
                     <div>
-                        <input className="input-basic round-3" type="password" ref="password" placeholder="Password"/>
+                        <input onChange={this.changeHandler} className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password"/>
                     </div>
                     <div style={{"fontWeight":"300","color":"rgb(220,100,100)","margin":"5px"}}></div>
                     <div>
-                        <input className="input-basic round-3" type="submit" ref="signup_button" value="Join the culture."/>
+                        {!this.good?
+                            <input onChange={this.changeHandler} className="input-basic round-3" type="submit" name="signup_button" ref="signup_button" value="Join the culture." disabled/>:
+                            <input onChange={this.changeHandler} className="input-basic round-3" type="submit" name="signup_button" ref="signup_button" value="Join the culture."/>}
                     </div>
                 </form>
-
+                {this.err}
                 <div className="login-accept-terms" style={{"textAlign":"center"," margin":"10px auto"," width":"300px"}}>
                     By clicking the above button and signing up for Wondrous, you have reviewed and accepted our Privacy Policy and Terms of Service
                 </div>

@@ -42,7 +42,8 @@ NotificationReasons = {
     LIKED: 2,
     FOLLOWED: 3,
     FOLLOW_REQUEST: 4,
-    FOLLOW_ACCEPTED: 5
+    FOLLOW_ACCEPTED: 5,
+    REPOSTED:6
 };
 
 var Notification = React.createClass({
@@ -103,6 +104,8 @@ var Notification = React.createClass({
             content = note.from_user_firstname + " followed you";
         } else if (reason==NotificationReasons.FOLLOW_ACCEPTED){
             content = note.from_user_firstname + " accepted your follow request";
+        }else if (reason==NotificationReasons.LIKED){
+            content = note.from_user_firstname + " liked your post";
         }
         return content;
     },
@@ -116,6 +119,7 @@ var Notification = React.createClass({
         var displayType = note.is_hidden?"none":"block";
         var unread = note.is_read?"":"notification-unread";
         var url = "/"+note.from_user_username;
+
         return (
             <div onClick={this.handleClick} className="dropdown-a">
                 <div className={"dropdown-element"} style={{'display':displayType}}>

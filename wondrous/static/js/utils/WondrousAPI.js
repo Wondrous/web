@@ -63,12 +63,28 @@ module.exports = {
     toggleFollow: function(options){
         var callback = options.callback;
         data = {
-            user_id:options.user_id,
+            subject_id:options.user_id,
             action:VoteAction.FOLLOW,
             vote_type:1
         }
 
         var url = '/api/user/vote';
+        request.post(url).send(data).end(_callback(callback));
+    },
+
+    // toggle like/object on objects
+    // options are:
+    // post_id
+    // callback
+    toggleLike: function(options){
+        var callback = options.callback;
+        data = {
+            subject_id:options.post_id,
+            action:VoteAction.LIKED,
+            vote_type:0
+        }
+
+        var url = '/api/post/vote';
         request.post(url).send(data).end(_callback(callback));
     },
 
@@ -128,6 +144,32 @@ module.exports = {
 
         // Make the get request
         request.get(url).end(_callback(callback));
+    },
+
+    // checks registration fields user account
+    // options are:
+    // first_name
+    // last_name
+    // email
+    // username
+    // password
+    // callback(err,json_res)
+    registerCheck: function(options){
+        var callback = options.callback;
+        var first_name = options.first_name;
+        var last_name = options.last_name;
+        var username = options.username;
+        var email = options.email;
+        var password = options.password;
+        var url ="/api/user/signupcheck";
+
+        request.post(url)
+        .send({ first_name: first_name })
+        .send({ last_name: last_name })
+        .send({ username: username })
+        .send({ email: email })
+        .send({ password: password })
+        .end(_callback(callback))
     },
 
     // Load their user info
@@ -301,6 +343,24 @@ module.exports = {
         .send({email:email, ref_uuid:ref_uuid})
         .end(_callback(callback));
     },
+
+    // retrieves referrer info by uuid
+    // options is:
+    // callback(err,json_res)
+    // uuid
+    getReferrerProgress: function(options) {
+        var email = options.email,
+            uuid=options.uuid,
+            callback=options.callback,
+            url = '/api/refer/progress?uuid='+uuid;
+
+        if (typeof uuid === 'undefined'){
+            return;
+        }
+
+        request.get(url).end(_callback(callback));
+    },
+
 
     // Upload file to s3
     // options:

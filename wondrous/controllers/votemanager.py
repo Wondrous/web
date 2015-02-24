@@ -14,7 +14,8 @@ from wondrous.models import (
     DBSession,
     Notification,
     Vote,
-    User
+    User,
+    Post
 )
 
 from sqlalchemy import or_
@@ -49,9 +50,9 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def vote_json(cls, person, user_id, vote_type, action):
+    def vote_json(cls, person, subject_id, vote_type, action):
         from_user_id = person.user.id
-        user_id      = long(user_id)
+        subject_id      = long(subject_id)
         vote_type    = int(vote_type)
         action       = int(action)
         # Translate action
@@ -59,34 +60,40 @@ class VoteManager(BaseManager):
 
         if vote_type == Vote.OBJECT:
             if action == VoteAction.LIKED:
-                vote = cls.like(from_user_id,user_id)
+                vote = cls.like(from_user_id,subject_id)
             elif action == VoteAction.BOOKMARKED:
                 pass
+
+            if vote:
+                return {"like":vote.status==Vote.LIKED}
+            else:
+                return {'error':'post not voted'}
+
         elif vote_type == Vote.USER:
             if action == VoteAction.FOLLOW:
-                vote = cls.follow(from_user_id,user_id)
+                vote = cls.follow(from_user_id,subject_id)
             elif action == VoteAction.ACCEPT:
-                vote = cls.accept(from_user_id,user_id)
+                vote = cls.accept(from_user_id,subject_id)
             elif action == VoteAction.CANCEL:
-                vote = cls.cancel(from_user_id,user_id)
+                vote = cls.cancel(from_user_id,subject_id)
             elif action == VoteAction.BLOCK:
-                vote = cls.block(from_user_id,user_id)
+                vote = cls.block(from_user_id,subject_id)
             elif action == VoteAction.DENY:
-                vote = cls.deny(from_user_id,user_id)
+                vote = cls.deny(from_user_id,subject_id)
             elif action == VoteAction.TOPFRIEND:
                 pass  # TODO
 
-        if vote:
-            DBSession.add(vote)
-            DBSession.flush()
-            if vote_type == Vote.USER:
-                return {
-                    "following" : vote.status == Vote.FOLLOWED or vote.status == Vote.TOPFRIEND,
-                    "total_following" : cls.get_following_count(user_id),
-                    "total_follower"  : cls.get_follower_count(user_id),
-                }
-            elif vote_type == Vote.OBJECT:
-                return super(VoteManager, cls).model_to_json(vote)
+            if vote:
+                DBSession.add(vote)
+                DBSession.flush()
+                if vote_type == Vote.USER:
+                    return {
+                        "following" : vote.status == Vote.FOLLOWED or vote.status == Vote.TOPFRIEND,
+                        "total_following" : cls.get_following_count(subject_id),
+                        "total_follower"  : cls.get_follower_count(subject_id),
+                    }
+                elif vote_type == Vote.OBJECT:
+                    return super(VoteManager, cls).model_to_json(vote)
         else:
             return {'error': 'invalid inputs'}
 
@@ -175,13 +182,16 @@ class VoteManager(BaseManager):
         return None
 
     @classmethod
-    def like(cls, from_user_id, object_id):
+    def like(cls, from_user_id, post_id):
 
         """
             PURPOSE: Checks if there exists a relationship between a person and an object, this is a toggle
         """
+        post = Post.by_id(post_id)
+        if not post:
+            return {'error':'bad id'}
 
-        vote = Vote.by_kwargs(user_id=from_user_id, subject_id=object_id, vote_type=Vote.OBJECT).first()
+        vote = Vote.by_kwargs(user_id=from_user_id, subject_id=post_id, vote_type=Vote.OBJECT).first()
 
         if vote:
             if vote.status == Vote.LIKED:
@@ -189,8 +199,17 @@ class VoteManager(BaseManager):
             elif vote.status == Vote.UNLIKED:
                 vote.status = Vote.LIKED
         else:
-            vote = Vote(user_id=from_user_id, subject_id=object_id, vote_type=Vote.OBJECT, status=Vote.LIKED)
+            vote = Vote(user_id=from_user_id, subject_id=post_id, vote_type=Vote.OBJECT, status=Vote.LIKED)
+            DBSession.add(vote)
 
+
+            # Notify if needed
+            new_notification = NotificationManager.add(
+                                from_user_id=from_user_id,
+                                to_user_id=post.user_id,
+                                subject_id=post_id,
+                                reason=Notification.LIKED)
+        DBSession.flush()
         return vote
 
     @classmethod
@@ -286,6 +305,14 @@ class VoteManager(BaseManager):
             'status'    : status
         }
         return Vote.by_kwargs(**kw).count()
+
+    @staticmethod
+    def is_liking(from_user_id,post_id):
+        vote = Vote.by_kwargs(user_id=from_user_id, subject_id=post_id, vote_type=Vote.OBJECT).first()
+        if not vote:
+            return False
+        logging.debug(vote.status == Vote.LIKED)
+        return vote.status == Vote.LIKED
 
     @staticmethod
     def is_following(user_id, user_to_get_id):

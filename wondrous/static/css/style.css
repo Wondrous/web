@@ -777,12 +777,9 @@ a:hover {
 
 .profile-photo {
   position: relative;
-  height: 100%;
-  width: 100%;
-  -webkit-box-shadow: 0 2px 3px #646464;
-  -moz-box-shadow: 0 2px 3px #646464;
-  -o-box-shadow: 0 2px 3px #646464;
-  box-shadow: 0 2px 3px #646464; }
+  height: 100px;
+  width: 100px;
+  margin: 20px 20px 20px 0; }
 
 .profile-photo-med {
   height: 60px;

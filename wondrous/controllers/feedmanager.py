@@ -63,7 +63,7 @@ class FeedManager(BaseManager):
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
 
-
+                post_dict.update({'liked':VoteManager.is_liking(person.user.id,post.id)})
                 data.append(post_dict)
         return data
 
@@ -118,5 +118,6 @@ class FeedManager(BaseManager):
                 picture_object = post.user.picture_object
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
+                post_dict.update({'liked':VoteManager.is_liking(person.user.id,post.id)})
                 data.append(post_dict)
         return data

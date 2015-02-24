@@ -39,7 +39,7 @@ def build_routes(config):
     config.add_route('auth_is_banned_handler',                 '/auth/is_banned/{user_id}/')
     config.add_route('auth_waitlist',                          '/auth/waitlist/{action}/')
     config.add_route('auth_signup_handler',                    '/signup/')
-    config.add_route('auth_signup_step_handler',               '/signup/step/{step_num}/')
+    # config.add_route('auth_signup_step_handler',               '/signup/step/{step_num}/')
     config.add_route('login_handler',                          '/login/')
 
     # SEARCH
@@ -62,8 +62,12 @@ def build_routes(config):
 
     # API
     config.add_route('api_user_login',                         '/api/user/login')      # POST
-    config.add_route('api_user_signup',                        '/api/user/signup')     # POST
+    config.add_route('api_signup_check',                       '/api/user/signupcheck')# POST
     config.add_route('api_user_vote',                          '/api/user/vote')       # POST
+
+    config.add_route('api_post_vote',                          '/api/post/vote')       # POST
+
+
     config.add_route('api_user_name',                          '/api/me/name')         # POST
     config.add_route('api_user_username',                      '/api/me/username')     # POST
 

@@ -136,13 +136,14 @@
 
 .profile-photo {
     position: relative;
-    height: 100%;
-    width: 100%;
+    height: 100px;
+   width: 100px;
+   margin: 20px 20px 20px 0;
 
-    -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
-       -moz-box-shadow: 0 2px 3px rgb(100,100,100);
-         -o-box-shadow: 0 2px 3px rgb(100,100,100);
-            box-shadow: 0 2px 3px rgb(100,100,100);
+    // -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+    //    -moz-box-shadow: 0 2px 3px rgb(100,100,100);
+    //      -o-box-shadow: 0 2px 3px rgb(100,100,100);
+    //         box-shadow: 0 2px 3px rgb(100,100,100);
 }
 
 .profile-photo-med {

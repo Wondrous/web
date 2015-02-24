@@ -75,6 +75,7 @@ from wondrous.utilities.validation_utilities import (
 from wondrous.views.main import BaseHandler
 
 from wondrous.models.refer import ReferrerManager
+import logging
 
 class APIViews(BaseHandler):
 
@@ -102,7 +103,7 @@ class APIViews(BaseHandler):
             PURPOSE: Retrieves/sign up the referrer
 
             USE: self.query_kwargs to provide all the required inputs.
-                email, uuid
+                email, ref_uuid
 
             PARAMS: (None)
 
@@ -122,6 +123,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array of the referrer json
         """
+
         return ReferrerManager.by_uuid(**self.query_kwargs)
 
 
@@ -406,8 +408,25 @@ class APIViews(BaseHandler):
         """
 
         person = self.request.person
-        self.query_kwargs['vote_type'] = 1
         return VoteManager.vote_json(person, **self.query_kwargs)
+
+    @view_config(request_method="POST",route_name='api_post_vote', renderer='json')
+    def api_post_vote(self):
+
+        """
+            PURPOSE: Toggles like/unlike for a post
+
+            USE: self.query_kwargs to provide all the required inputs.
+                person,post_id
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the current post status
+        """
+
+        person = self.request.person
+        posts  = VoteManager.vote_json(person, **self.query_kwargs)
+        return posts
 
     @api_login_required
     @view_config(request_method='GET',route_name='api_user_notification', renderer='json')
@@ -425,6 +444,42 @@ class APIViews(BaseHandler):
 
         person = self.request.person
         return NotificationManager.notification_json(person,**self.query_kwargs)
+
+    @view_config(request_method='POST',route_name='api_signup_check', renderer='json')
+    def api_signup_check(self):
+        error_message = None
+        try:
+            _s_valid_fn, len_err_fn = Sanitize.length_check(self.query_kwargs['first_name'], min_length=1, max_length=30)
+            _s_valid_ln, len_err_ln = Sanitize.length_check(self.query_kwargs['last_name'], min_length=1, max_length=30)
+            _s_valid_pw, len_err_pw = Sanitize.length_check(self.query_kwargs['password'], min_length=6, max_length=255)
+            _s_valid_em = Sanitize.is_valid_email(self.query_kwargs['email'])
+            _s_em_taken = User.by_kwargs(email=self.query_kwargs['email']).first()
+            _s_valid_un = Sanitize.is_valid_username(self.query_kwargs['username'].lower())
+            _s_un_taken = User.by_kwargs(username=self.query_kwargs['username'].lower()).first()
+
+        except Exception, e:
+            error_message = str(e)
+
+        # Check for validity
+        if not _s_valid_fn:
+            error_message = "Your first name is {err}".format(err=len_err_fn)
+        elif not _s_valid_ln:
+            error_message = "Your last name is {err}".format(err=len_err_ln)
+        elif not _s_valid_em:
+            error_message = "Please enter a valid email address"
+        elif _s_em_taken:
+            error_message = "This email has already been used to sign up. Please use a different one."
+        elif not _s_valid_pw:
+            error_message = "Your password is {err}".format(err=len_err_pw)
+        elif not _s_valid_un:
+            error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
+        elif _s_un_taken:
+            error_message = "This username has already been taken. Please use a different one."
+
+        if error_message:
+            return {'error':error_message}
+        else:
+            return {}
 
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_post_delete', renderer='json')

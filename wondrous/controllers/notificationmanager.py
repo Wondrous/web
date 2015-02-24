@@ -82,7 +82,7 @@ class NotificationManager(BaseManager):
                                         notification=notification)
 
         # Send to realtime push
-        if need_to_alert or reason == Notification.FOLLOW_ACCEPTED or reason == Notification.FOLLOW_REQUEST:
+        if need_to_alert or reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,Notification.LIKED]:
             send_notification(to_user_id, str({
                 'from_user_id' : from_user_id,
                 'to_user_id'   : to_user_id,

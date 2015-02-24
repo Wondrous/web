@@ -138,7 +138,7 @@ class BaseHandler(object):
 class AuthHandler(BaseHandler):
 
     @logout_required
-    @view_config(renderer='/login.jinja2', route_name='login_handler')
+    @view_config(renderer='index-html.jinja2', route_name='login_handler')
     def login(self):
 
         """
@@ -302,19 +302,19 @@ class AuthHandler(BaseHandler):
         return data
 
     @logout_required
-    @view_config(renderer='/auth/signup.jinja2', route_name='auth_signup_handler')
+    @view_config(renderer='/index-html.jinja2',route_name='auth_signup_handler')
     def signup(self):
 
         """
             PURPOSE: This method handles the signup process for all new users
         """
-        
+
         safe_in  = Sanitize.safe_input
         p = self.request.params
 
         # Some helpful constants
         PERSON = 1
-        SIGNUP_ROUTE = "/signup/step/1/"
+        # SIGNUP_ROUTE = "/signup/step/1/"
 
         # The data we need to validate
         error_message = None
@@ -323,7 +323,6 @@ class AuthHandler(BaseHandler):
         email      = safe_in(p.get('email'))
         password   = safe_in(p.get('password'), strip=False)
         username   = safe_in(Sanitize.strip_ampersand(p.get('username')))
-
         if 'signup_button' in p:
 
             # Check for presence
@@ -376,67 +375,70 @@ class AuthHandler(BaseHandler):
                 new_person = new_user.person
                 headers = self._set_session_headers(new_person)
                 new_user.last_login = datetime.now()
-
-                # If we're successful, redirect to the step process
-                return HTTPFound(location=SIGNUP_ROUTE, headers=headers)
+                logging.warn("registered")
+                return HTTPFound(location="/")
             else:
+
                 data = {
                     'error_message' : error_message,
                 }
+                logging.warn(data)
+                return HTTPFound(location="/")
         else:
+            logging.warn(" not found")
             data = {}
 
-        return data
+        return HTTPFound(location="/")
 
-    @login_required
-    @view_config(renderer='/auth/signup_step.jinja2', route_name='auth_signup_step_handler')
-    def signup_step(self):
-
-        """
-            PURPOSE: This method handles the next steps in the signup process.
-            It pushes a user through a sequence of LAST_STEP number of steps
-            in order to fully complete a new user's sign up process
-        """
-
-        # Update step every time you go to a new level
-        url_step_num = self.url_match(url_match='step_num', arg_type="int")
-        this_person = self.request.person
-
-        current_step = this_person.signup_step_num
-        next_step = current_step + 1
-        LAST_STEP = 4  # 4 steps in total
-
-        # If we're not in the signup sequence
-        if url_step_num not in [current_step, current_step+1]:
-            return HTTPFound(location="/signup/step/{step}/".format(step=current_step))
-
-        # If we're in the sequence, but we're advanced past last step
-        elif url_step_num == LAST_STEP+1:
-            this_person.signup_step_num += 1  # They've advanced 1 step
-            return HTTPFound(location="/")
-
-        # We've completed the full set of steps, so redirect
-        # user back to index
-        elif url_step_num > LAST_STEP + 1:
-            return HTTPFound(location="/")
-
-        # We're at the step we should be at...
-        elif url_step_num == current_step:
-            pass # No need to update step num
-
-        # Advance the step as long as we're not
-        # advancing it past the max step number!
-        elif this_person.signup_step_num < LAST_STEP:
-            this_person.signup_step_num += 1  # They've advanced 1 step
-            current_step = this_person.signup_step_num
-            next_step = current_step + 1
-
-        data = {
-            'current_step' : current_step,
-            'next_step'    : next_step,
-            'total_steps'  : LAST_STEP,
-        }
-        return data
+    # @login_required
+    # @view_config(route_name='auth_signup_step_handler', renderer='json')
+    # def signup_step(self):
+    #
+    #     """
+    #         PURPOSE: This method handles the next steps in the signup process.
+    #         It pushes a user through a sequence of LAST_STEP number of steps
+    #         in order to fully complete a new user's sign up process
+    #     """
+    #
+    #     # Update step every time you go to a new level
+    #     url_step_num = self.url_match(url_match='step_num', arg_type="int")
+    #     this_person = self.request.person
+    #
+    #     current_step = this_person.signup_step_num
+    #     next_step = current_step + 1
+    #     LAST_STEP = 4  # 4 steps in total
+    #
+    #     # If we're not in the signup sequence
+    #     if url_step_num not in [current_step, current_step+1]:
+    #         return HTTPFound(location="/signup/step/{step}/".format(step=current_step))
+    #
+    #     # If we're in the sequence, but we're advanced past last step
+    #     elif url_step_num == LAST_STEP+1:
+    #         this_person.signup_step_num += 1  # They've advanced 1 step
+    #         return HTTPFound(location="/")
+    #
+    #     # We've completed the full set of steps, so redirect
+    #     # user back to index
+    #     elif url_step_num > LAST_STEP + 1:
+    #         return HTTPFound(location="/")
+    #
+    #     # We're at the step we should be at...
+    #     elif url_step_num == current_step:
+    #         pass # No need to update step num
+    #
+    #     # Advance the step as long as we're not
+    #     # advancing it past the max step number!
+    #     elif this_person.signup_step_num < LAST_STEP:
+    #         this_person.signup_step_num += 1  # They've advanced 1 step
+    #         current_step = this_person.signup_step_num
+    #         next_step = current_step + 1
+    #
+    #     data = {
+    #         'current_step' : current_step,
+    #         'next_step'    : next_step,
+    #         'total_steps'  : LAST_STEP,
+    #     }
+    #     return data
 
     @logout_required
     @view_config(renderer='/auth/verify_signup.jinja2', route_name='auth_verify_handler')
