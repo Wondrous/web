@@ -26,6 +26,7 @@ from wondrous.models import (
     Post,
     PostTagLink,
     Tag,
+    Notification
     # User,
     # Vote,
 )
@@ -33,6 +34,8 @@ from wondrous.models import (
 from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.utilities.validation_utilities import UploadManager
+from wondrous.controllers.notificationmanager import NotificationManager
+
 import logging
 
 class PostManager(BaseManager):
@@ -126,6 +129,13 @@ class PostManager(BaseManager):
             original_post.update({"name": post.original.user.person.ascii_name})
             original_post.update({"username": post.original.user.username})
             data.update({"repost":original_post})
+
+        # Notify if needed
+        new_notification = NotificationManager.add(
+                            from_user_id=person.user.id,
+                            to_user_id=post.original.user_id,
+                            subject_id=post.id,
+                            reason=Notification.REPOSTED)
         return data
 
     @classmethod

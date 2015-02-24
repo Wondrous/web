@@ -39,6 +39,8 @@ class NotificationManager(BaseManager):
             retval = "sent you a follow request"
         elif reason == Notification.FOLLOW_ACCEPTED:
             retval = "accepted your follow request"
+        elif reason == Notification.FOLLOW_ACCEPTED:
+            retval = "reposted your post"
         return retval
 
     @staticmethod
@@ -82,7 +84,8 @@ class NotificationManager(BaseManager):
                                         notification=notification)
 
         # Send to realtime push
-        if need_to_alert or reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,Notification.LIKED]:
+        if need_to_alert or reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
+            Notification.LIKED, Notification.FOLLOW_ACCEPTED]:
             send_notification(to_user_id, str({
                 'from_user_id' : from_user_id,
                 'to_user_id'   : to_user_id,

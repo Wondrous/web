@@ -106,6 +106,8 @@ var Notification = React.createClass({
             content = note.from_user_firstname + " accepted your follow request";
         }else if (reason==NotificationReasons.LIKED){
             content = note.from_user_firstname + " liked your post";
+        }else if (reason==NotificationReasons.REPOSTED){
+            content = note.from_user_firstname + " reposted one of your posts";
         }
         return content;
     },
