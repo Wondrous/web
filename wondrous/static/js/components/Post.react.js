@@ -125,23 +125,11 @@ var Post = React.createClass({
         thisBrick.toggleClass('post-presentation');
         thisPostContent.slideToggle(SPEED);
 
-        // Trigger Masonry Layout
-        // debugger;
-
-        var container = document.querySelector('.masonry');
-        var msnry = new Masonry(container, {
-              transitionDuration : 0,
-              itemSelector       : ".masonry-brick",
-              columnWidth        : 288,
-        });
-
-        imagesLoaded(container, function(){
-            // Trigger Masonry Layout
-            msnry.layout();
-        });
-
         // Hmmmmm.... Let's try this out
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
+
+        // Trigger Masonry Layout
+        this.props.toggleMasonry();
 
     },
     handleData: function(err,res){

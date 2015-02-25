@@ -3,7 +3,6 @@ var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
-var imagesLoaded = require('imagesLoaded');
 
 // Method to retrieve state from stores
 function getFeedState() {
@@ -12,6 +11,7 @@ function getFeedState() {
 }
 
 var Feed = React.createClass({
+    masonry:null,
     handleData: function(err, data) {
         if (err == null) {
             WondrousActions.loadToFeed(data);
@@ -35,17 +35,17 @@ var Feed = React.createClass({
         UserStore.addChangeListener(this._onChange);
 
         var container = document.querySelector('.masonry');
-
-        // var msnry = new Masonry(container, {
-        //       transitionDuration : 0,
-        //       itemSelector       : ".masonry-brick",
-        //       columnWidth        : "200",
-        // });
-        //
-        // imagesLoaded(container, function(){
-        //     // Trigger Masonry Layout
-        //     msnry.layout();
-        // });
+        this.masonry = new Masonry(container, {
+              transitionDuration : 0,
+              itemSelector       : ".masonry-brick",
+              columnWidth        : 288,
+        });
+    },
+    toggleMasonry:function(){
+        masonry.layout();
+    },
+    componentWillUpdate:function(){
+        console.log("will update");
     },
     // Remove change listeners from stores
     componentWillUnmount: function() {
@@ -55,7 +55,7 @@ var Feed = React.createClass({
     render: function() {
         var posts = this.state.data.map(function(post, index) {
             return (
-                <Post key={post.id} data={post} />
+                <Post key={post.id} data={post} toggle={this.toggleMasonry}/>
             );
         });
 
