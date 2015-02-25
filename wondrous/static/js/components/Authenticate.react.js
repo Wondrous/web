@@ -15,13 +15,13 @@ var LoggedOut = React.createClass({
     },
     render: function(){
         return (
-            <div style={{"position":"relative", "margin":"0 auto", "textAlign":"center", "width":"80%", "maxWidth":"730px", "top":"10%"}}>
+            <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "maxWidth": "730px", "top": "10%"}}>
                 <img src="/static/pictures/p.logo.png" style={{"width": "350px", "height": "auto"}}/>
                 <p style={{"fontFamily": "helvetica, arial, sans-serif","color": "rgb(71,71,71)","fontSize": "20px","fontWeight": "100","width": "75%","margin": "20px auto"}}>
                     Some amazing slogan goes here to fill up space on our temporary home page
                 </p>
 
-                <div style={{"padding":"40px 0"}}>
+                <div style={{"padding": "40px 0"}}>
                     <Link className="index-lo-big-link signup-big-link round-5" to="signup">Sign up</Link>
                     <Link className="index-lo-big-link blue-big-link round-3" to="login">Log in</Link>
                 </div>
@@ -29,17 +29,17 @@ var LoggedOut = React.createClass({
         );
     },
     _onChange: function(){
-        if(UserStore.isUserLoggedIn()){
+        if(UserStore.isUserLoggedIn()) {
             this.replaceWith('/feed');
         }
     }
 });
 
 var Signup = React.createClass({
-    err:null,
-    good:false,
-    handleCheck:function(err,res){
-        if(err!=null){
+    err: null,
+    good: false,
+    handleCheck:function(err, res) {
+        if(err != null){
             this.err = err;
             this.good = false;
         }else{
@@ -51,16 +51,16 @@ var Signup = React.createClass({
     changeHandler: function(){
         var username = this.refs.username.getDOMNode().value.trim();
         WondrousAPI.registerCheck({
-            callback:this.handleCheck,
-            first_name:this.refs.first_name.getDOMNode().value.trim(),
-            last_name:this.refs.last_name.getDOMNode().value.trim(),
-            username:this.refs.username.getDOMNode().value.trim(),
-            email:this.refs.email.getDOMNode().value.trim(),
-            password:this.refs.password.getDOMNode().value.trim()
+            callback: this.handleCheck,
+            first_name: this.refs.first_name.getDOMNode().value.trim(),
+            last_name: this.refs.last_name.getDOMNode().value.trim(),
+            username: this.refs.username.getDOMNode().value.trim(),
+            email: this.refs.email.getDOMNode().value.trim(),
+            password: this.refs.password.getDOMNode().value
         });
     },
 
-    render: function(){
+    render: function() {
 
         return (
             <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
@@ -84,9 +84,9 @@ var Signup = React.createClass({
                     </div>
                     <div style={{"fontWeight":"300","color":"rgb(220,100,100)","margin":"5px"}}></div>
                     <div>
-                        {!this.good?
-                            <input onChange={this.changeHandler} className="input-basic round-3" type="submit" name="signup_button" ref="signup_button" value="Join the culture." disabled/>:
-                            <input onChange={this.changeHandler} className="input-basic round-3" type="submit" name="signup_button" ref="signup_button" value="Join the culture."/>}
+                        {!this.good ?
+                            <input onChange={this.changeHandler} className="input-basic round-3" type="submit" name="signup_button" ref="signup_button" value="Join Wondrous!." disabled/>:
+                            <input onChange={this.changeHandler} className="input-basic round-3" type="submit" name="signup_button" ref="signup_button" value="Join Wondrous!."/>}
                     </div>
                 </form>
                 {this.err}
@@ -109,13 +109,13 @@ var Login = React.createClass({
                         <input id="focusInput" className="input-basic round-3" type="text" ref="identifier" name="user_identification" placeholder="Email or username" />
                     </div>
                     <div>
-                        <input className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password"/>
+                        <input className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password" />
                     </div>
                     <div style={{"fontWeight": "300","color": "rgb(220,100,100)","margin": "5px"}}>
 
                     </div>
                     <div>
-                        <input className="input-basic round-3" type="submit" name="login_button" value="Log in!"/>
+                        <input className="input-basic round-3" type="submit" name="login_button" value="Log in!" />
                     </div>
                 </form>
 
@@ -127,4 +127,4 @@ var Login = React.createClass({
     }
 });
 
-module.exports = {Login:Login, Signup:Signup, LoggedOut:LoggedOut};
+module.exports = {Login: Login, Signup: Signup, LoggedOut: LoggedOut};

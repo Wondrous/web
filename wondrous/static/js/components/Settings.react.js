@@ -2,10 +2,10 @@ var UserStore = require('../stores/UserStore');
 var WondrousAPI = require('../utils/WondrousAPI');
 
 var NameChange = React.createClass({
-    handleData: function(err, res){
-        if(err==null){
+    handleData: function(err, res) {
+        if (err == null) {
             console.log("name change",res);
-        }else{
+        } else {
 
         }
     },
@@ -43,22 +43,22 @@ var NameChange = React.createClass({
 
 var UsernameChange = React.createClass({
     handleData: function(err, res){
-        if(err==null){
-            console.log("username change",res);
-        }else{
+        if (err == null) {
+            console.log("username change", res);
+        } else {
 
         }
     },
-    checkUsername: function(){
-        console.log("should check if username is good:",this.refs.username.getDOMNode().value);
+    checkUsername: function() {
+        console.log("should check if username is good:", this.refs.username.getDOMNode().value);
     },
-    handleSubmit: function(){
+    handleSubmit: function() {
         WondrousAPI.changeUsername({
             callback: this.handleData,
             username: this.refs.username.getDOMNode().value
         });
     },
-    render:function(){
+    render:function() {
         var username = this.props.user.username;
         return (
             <div className="info-settings-item">
@@ -77,24 +77,24 @@ var UsernameChange = React.createClass({
 });
 
 var PasswordChange = React.createClass({
-    handleData: function(err, res){
-        if(err==null){
-            console.log("password change",res);
-        }else{
+    handleData: function(err, res) {
+        if (err == null) {
+            console.log("password change", res);
+        } else {
 
         }
     },
-    handleSubmit: function(){
-        if (this.refs.old1.getDOMNode().value!==this.refs.old2.getDOMNode().value){
+    handleSubmit: function() {
+        if (this.refs.new_password.getDOMNode().value !== this.refs.new_password_confirm.getDOMNode().value) {
             return;
         }
         WondrousAPI.changePassword({
             callback: this.handleData,
-            old_password: this.refs.old2.getDOMNode().value,
+            old_password: this.refs.old_password.getDOMNode().value,
             new_password: this.refs.new_password.getDOMNode().value
         });
     },
-    render:function(){
+    render:function() {
         return (
             <div className="info-settings-item">
                 <div className="info-settings-item-header">
@@ -102,9 +102,9 @@ var PasswordChange = React.createClass({
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        <div><input type="password" ref="old1" className="basic-input" placeholder="Current password"/></div>
-                        <div><input type="password" ref="old2" className="basic-input" placeholder="New password"/></div>
-                        <div><input type="password" ref="new_password" className="basic-input" placeholder="Confirm new password"/></div>
+                        <div><input type="password" ref="old_password" className="basic-input" placeholder="Current password"/></div>
+                        <div><input type="password" ref="new_password" className="basic-input" placeholder="New password"/></div>
+                        <div><input type="password" ref="new_password_confirm" className="basic-input" placeholder="Confirm new password"/></div>
                         <div><input type="submit" value="Save changes"/></div>
                     </form>
                 </div>
@@ -114,12 +114,12 @@ var PasswordChange = React.createClass({
 });
 
 var VisibilityChange = React.createClass({
-    handleData:function(err,res){
-        if(!err){
+    handleData: function(err,res){
+        if (!err) {
             this.props.user.is_private = res.is_private;
             this.forceUpdate();
-        }else{
-            console.error('err',err)
+        } else {
+            console.error('err', err)
         }
     },
     toggleVisibility: function(){
@@ -127,7 +127,7 @@ var VisibilityChange = React.createClass({
             callback:this.handleData
         })
     },
-    render:function(){
+    render: function() {
         var is_private = this.props.user.is_private;
         return (
             <div className="info-settings-item">
@@ -136,7 +136,7 @@ var VisibilityChange = React.createClass({
                 </div>
                 <div>
                     Posts are private
-                   <button onClick={this.toggleVisibility} className="privacy-toggle ">{is_private?"on":"off"}</button>
+                    <button onClick={this.toggleVisibility} className="privacy-toggle">{is_private?"on":"off"}</button>
                 </div>
             </div>
         );
@@ -144,10 +144,10 @@ var VisibilityChange = React.createClass({
 });
 
 var ActiveChange = React.createClass({
-    handleDeletion:function(){
+    handleDeletion: function() {
 
     },
-    render:function(){
+    render:function() {
         return (
             <div className="info-settings-item">
                 <div className="info-settings-item-header">
@@ -161,7 +161,7 @@ var ActiveChange = React.createClass({
     }
 });
 
-function getUserState(){
+function getUserState() {
     var data = UserStore.getUserData();
     data.loggedin = UserStore.isUserLoggedIn();
     return {data:data};
@@ -175,10 +175,10 @@ var Settings = React.createClass({
         UserStore.addChangeListener(this._onChange);
     },
 
-    componentWillUnmount: function(){
+    componentWillUnmount: function() {
         UserStore.removeChangeListener(this._onChange);
     },
-    render:function(){
+    render:function() {
         return (
             <div className="info-content" style={{"paddingTop": "10px"}}>
                 <h1 className="info-h1">Account Settings</h1>
@@ -194,7 +194,7 @@ var Settings = React.createClass({
             </div>
         );
     },
-    _onChange:function(){
+    _onChange:function() {
         this.setState(getUserState());
     }
 });
