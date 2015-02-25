@@ -64,7 +64,7 @@ var UserTitle = React.createClass({
                 <span className="post-identifier ellipsis-overflow">
                     <a onClick={this.handleClick}>{name}</a>
                     {this.repost?" reposted from ":null}
-                    {this.repost?<a onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
+                    {this.repost?<a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
 
                 </span>
             </div>
@@ -129,6 +129,7 @@ var Post = React.createClass({
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
         // Trigger Masonry Layout
+        // this.props.toggle();
     },
     handleData: function(err,res){
         if(err==null){

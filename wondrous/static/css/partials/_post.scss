@@ -2,6 +2,7 @@
 
 /* post-body is visible, and transitions size */
 .post-body {
+    overflow: hidden;
     width: 100%;
     -webkit-transition: width 0.4s, height 0.4s;
        -moz-transition: width 0.4s, height 0.4s;
@@ -146,6 +147,14 @@ $post-cover-photo-height: 390px;
     font-weight: bold;
     color: rgb(0,0,200);
     cursor: pointer;
+    & > .recipient{
+        overflow: hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        width:50px;
+        display:inline-block;
+    }
+
 }
 
 .post-subject-text {

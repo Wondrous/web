@@ -17,9 +17,14 @@ $num-cols: $masonry-width / 4;
 
 
 .masonry {
-    margin: 0 auto;
     width: $masonry-width;
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
 }
+
 
 /* masonry-brick is invisible, but used for layout */
 .masonry-brick,

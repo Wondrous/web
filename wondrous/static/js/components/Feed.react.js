@@ -3,6 +3,7 @@ var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
+var MasonryMixin = require('../vendor/masonry.mixin');
 
 // Method to retrieve state from stores
 function getFeedState() {
@@ -12,7 +13,13 @@ function getFeedState() {
 
 var masonry = null;
 
+var masonryOptions = {
+    transitionDuration: 0,
+    columnWidth: 80
+};
+
 var Feed = React.createClass({
+    // mixins: [MasonryMixin('masonryContainer', masonryOptions)],
     handleData: function(err, data) {
         if (err == null) {
             WondrousActions.loadToFeed(data);
@@ -34,19 +41,8 @@ var Feed = React.createClass({
     componentDidMount: function() {
         FeedStore.addChangeListener(this._onChange);
         UserStore.addChangeListener(this._onChange);
+    },
 
-        if (masonry==null){
-            var container = document.querySelector('.masonry');
-            masonry = new Masonry(container, {
-                  transitionDuration : 0.5,
-                  itemSelector       : ".masonry-brick",
-                  columnWidth        : 288,
-            });
-        }
-    },
-    toggleMasonry:function(){
-        masonry.layout();
-    },
     componentDidUpdate:function(){
 
     },
@@ -60,18 +56,19 @@ var Feed = React.createClass({
 
         var posts = this.state.data.map(function(post, index) {
             return (
-                <Post key={post.id} data={post} toggle={this.toggleMasonry}/>
+                <Post key={post.id} data={post} />
             );
         });
 
         return (
             <div className="grid-padding">
                 <h1 className="tmp-feed-h1">Main Feed</h1>
-                <div className="masonry" id="asyncPosts">
+                <div className="masonry" ref="masonryContainer" id="asyncPosts">
                     <div className="backdrop"></div>
                     <div className="grid-sizer" style={{"display": "none"}}></div>
                     {posts}
                 </div>
+                <div>Loading more</div>
             </div>
         );
     },

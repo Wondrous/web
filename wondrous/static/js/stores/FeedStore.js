@@ -30,7 +30,9 @@ function deletePost(post_id){
     }
 
     if (to_delete>-1){
+        delete _posts_object[String(_posts[to_delete])];
         delete _posts[to_delete];
+
     }
 }
 
