@@ -1759,12 +1759,12 @@ a:hover {
   margin-left: 5%;
   padding: 9px 0 7px 5px;
   border: none;
-  background-color: #f8f8f8;
+  background-color: #eaeaea;
   font-family: helvetica, arial, sans-serif;
   font-size: 15px; }
   .banner-input:focus {
     outline: none;
-    background-color: white; }
+    background-color: #e4e4e4; }
 
 .banner-more-options {
   position: relative;
