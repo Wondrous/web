@@ -145,14 +145,19 @@ $post-cover-photo-height: 390px;
     top: -6px;
     font-size: 12px;
     font-weight: bold;
-    color: rgb(0,0,200);
-    cursor: pointer;
+    cursor: default;
+    & a{
+        display:inline-block;
+        color: rgb(0,0,200);
+        cursor: pointer;
+    }
     & > .recipient{
+        display:inline-block;
+        width:80px;
         overflow: hidden;
         white-space:nowrap;
         text-overflow:ellipsis;
-        width:50px;
-        display:inline-block;
+        vertical-align: bottom
     }
 
 }

@@ -15,7 +15,7 @@ var masonry = null;
 
 var masonryOptions = {
     transitionDuration: 0,
-    columnWidth: 80
+    columnWidth: 200
 };
 
 var Feed = React.createClass({

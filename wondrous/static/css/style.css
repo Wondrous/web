@@ -909,14 +909,18 @@ a:hover {
   top: -6px;
   font-size: 12px;
   font-weight: bold;
-  color: #0000c8;
-  cursor: pointer; }
+  cursor: default; }
+  .post-identifier a {
+    display: inline-block;
+    color: #0000c8;
+    cursor: pointer; }
   .post-identifier > .recipient {
+    display: inline-block;
+    width: 80px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: 50px;
-    display: inline-block; }
+    vertical-align: bottom; }
 
 .post-subject-text {
   font-size: 22px;
