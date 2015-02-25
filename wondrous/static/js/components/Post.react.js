@@ -129,8 +129,6 @@ var Post = React.createClass({
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
         // Trigger Masonry Layout
-        this.props.toggleMasonry();
-
     },
     handleData: function(err,res){
         if(err==null){
