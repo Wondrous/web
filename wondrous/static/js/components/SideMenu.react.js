@@ -49,17 +49,17 @@ NotificationReasons = {
 var Notification = React.createClass({
     mixins: [ Router.Navigation ],
 
-    handleProfileData:function(err, data){
-        if(err==null){
+    handleProfileData: function(err, data) {
+        if (err==null) {
             WondrousActions.loadProfileInfo(data);
-        }else{
+        } else {
             // WondrousActions.unloadUserInfo(err);
         }
     },
-    handleWallData:function(err, data){
+    handleWallData: function(err, data) {
         if(err==null){
             WondrousActions.loadWallPosts(data);
-        }else{
+        } else {
 
         }
     },
@@ -72,7 +72,7 @@ var Notification = React.createClass({
     loadWallFromServer: function(){
         WondrousAPI.getWallPosts({
             username: this.props.data.from_user_username,
-            page:0,
+            page: 0,
             callback: this.handleWallData
         });
     },
@@ -86,7 +86,7 @@ var Notification = React.createClass({
     handleAccept:function(){
         WondrousAPI.acceptRequest({
             user_id: this.props.data.from_user_id,
-            callback:this.handleAcceptData
+            callback: this.handleAcceptData
         });
     },
     handleClick: function(){
@@ -98,35 +98,41 @@ var Notification = React.createClass({
     },
     generateContent: function(reason){
         var content = '';
-        if (reason==NotificationReasons.FOLLOW_REQUEST){
-            content = note.from_user_firstname + " requested to follow you";
-        } else if (reason==NotificationReasons.FOLLOWED){
-            content = note.from_user_firstname + " followed you";
-        } else if (reason==NotificationReasons.FOLLOW_ACCEPTED){
-            content = note.from_user_firstname + " accepted your follow request";
-        }else if (reason==NotificationReasons.LIKED){
-            content = note.from_user_firstname + " liked your post";
-        }else if (reason==NotificationReasons.REPOSTED){
-            content = note.from_user_firstname + " reposted one of your posts";
+        if (reason == NotificationReasons.FOLLOW_REQUEST) {
+            content = "requested to follow you";
+        } else if (reason == NotificationReasons.FOLLOWED) {
+            content = "followed you";
+        } else if (reason == NotificationReasons.FOLLOW_ACCEPTED) {
+            content = "accepted your follow request";
+        } else if (reason == NotificationReasons.LIKED) {
+            content = "liked your post";
+        } else if (reason == NotificationReasons.REPOSTED) {
+            content = "reposted one of your posts";
         }
         return content;
     },
 
-    render: function(){
+    render: function() {
         note = this.props.data;
         var actionNeeded = false;
         var content = this.generateContent(note.reason);
         if(note.reason == NotificationReasons.FOLLOW_REQUEST) actionNeeded = true;
 
-        var displayType = note.is_hidden?"none":"block";
-        var unread = note.is_read?"":"notification-unread";
-        var url = "/"+note.from_user_username;
+        var displayType = note.is_hidden ? "none" : "block";
+        var unread = note.is_read ? "" : "notification-unread";
+        var url = "/" + note.from_user_username;
+
+        // TODO: Get sender's profile pic
+        //var profilePic = userFrom.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+userFrom.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         return (
             <div onClick={this.handleClick} className="dropdown-a">
-                <div className={"dropdown-element"} style={{'display':displayType}}>
-                    <img/>
-                    <span>{content}</span>
+                <div className={"dropdown-element"} style={{'display': displayType}}>
+                    <img ref="usericon" className="post-thumb round-50" src={profilePic} />
+                    <span>
+                        <b>{note.from_user_firstname}</b> {content}
+                    </span>
                     {actionNeeded ? <button onClick={this.handleAccept}>"Accept"</button> : ''}
                 </div>
             </div>
@@ -209,8 +215,8 @@ var SideMenu = React.createClass({
             data:{
                 isShowing: UserStore.isShowingSideBar(),
                 barOnDisplay: UserStore.barOnDisplay()
-                }
-            });
+            }
+        });
     }
 })
 

@@ -4,11 +4,11 @@ var UserStore = require('../stores/UserStore');
 
 
 var UserTitle = React.createClass({
-    repost:null,
+    repost: null,
     mixins: [Router.Navigation],
     handleProfileData: function(err, data) {
         if (err == null) {
-            console.log("profile from post", data);
+            console.log("Profile from post", data);
             WondrousActions.loadProfileInfo(data);
         } else {
             // WondrousActions.unloadUserInfo(err);
@@ -17,8 +17,7 @@ var UserTitle = React.createClass({
     handleWallData: function(err, data) {
         if (err == null) {
             WondrousActions.loadWallPosts(data);
-            console.log("wall from post", data);
-
+            console.log("Wall from post", data);
         } else {
 
         }
@@ -31,7 +30,7 @@ var UserTitle = React.createClass({
         });
     },
     loadWallFromServer: function(username) {
-        if (typeof username ==='undefined') username=this.props.data.username;
+        if (typeof username === 'undefined') username=this.props.data.username;
         WondrousAPI.getWallPosts({
             username: username,
             page: 0,
@@ -54,17 +53,17 @@ var UserTitle = React.createClass({
     },
     render: function() {
         var name = this.props.data.name;
-        if (this.props.data.hasOwnProperty('repost')){
+        if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
         }
-        var img_src = (typeof this.props.data.user_ouuid !== 'undefined')?"http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"
+        var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow">
                     <a onClick={this.handleClick}>{name}</a>
-                    {this.repost?" reposted from ":null}
-                    {this.repost?<a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
+                    {this.repost ? " reposted from " : null}
+                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
 
                 </span>
             </div>
@@ -75,11 +74,11 @@ var UserTitle = React.createClass({
 var Photo = React.createClass({
 
     render: function() {
-        if (this.props.data.hasOwnProperty('repost')){
+        if (this.props.data.hasOwnProperty('repost')) {
             this.props.data = this.props.data.repost;
         }
         photoStyle = {
-            backgroundImage: this.props.data.ouuid?"url(http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid+")" :"/static/pictures/500x500.gif",
+            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
         };
 
         // var img_src = this.props.data.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/500x500.gif";

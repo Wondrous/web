@@ -47,9 +47,9 @@ module.exports = {
     acceptRequest: function(options){
         var callback = options.callback;
         data = {
-            user_id:options.user_id,
-            action:VoteAction.ACCEPT,
-            vote_type:1
+            user_id: options.user_id,
+            action: VoteAction.ACCEPT,
+            vote_type: 1
         }
 
         var url = '/api/user/vote';

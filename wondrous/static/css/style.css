@@ -1776,9 +1776,9 @@ a:hover {
   width: 30px;
   cursor: pointer; }
   .banner-more-options:hover {
-    background-color: #cccccc; }
+    background-color: #eaeaea; }
   .banner-more-options:active {
-    background-color: #c1c1c1; }
+    background-color: #e6e6e6; }
 
 .banner-options-icon {
   position: absolute;
@@ -1807,10 +1807,10 @@ a:hover {
   .banner-user-name:link {
     text-decoration: none; }
   .banner-user-name:hover {
-    background-color: #cccccc;
+    background-color: #eaeaea;
     text-decoration: none; }
   .banner-user-name:active {
-    background-color: #c1c1c1; }
+    background-color: #e6e6e6; }
 
 .banner-user-img {
   position: absolute;
@@ -2371,9 +2371,7 @@ svg {
   top: 38px;
   right: 0px;
   width: 140px;
-  font-family: arial, helvetica, 'sans-serif';
-  font-size: 13px;
-  color: #444444;
+  font-family: helvetica, arial, 'sans-serif';
   background-color: #fbfbfb;
   border: 1px solid #aaaaaa;
   padding: 6px 0;
@@ -2385,14 +2383,14 @@ svg {
   padding: 10px 0;
   padding-left: 10px;
   padding-right: 30px;
-  color: #444444 !important;
+  color: #444444;
+  font-size: 14px;
   text-decoration: none !important;
   cursor: pointer; }
   .dropdown-element:hover {
-    color: #fbfbfb;
-    background-color: #9e9e9e; }
+    background-color: #f1f1f1; }
   .dropdown-element:active {
-    background-color: #646464; }
+    background-color: #ebebeb; }
 
 .dropdown-a:link {
   text-decoration: none; }
