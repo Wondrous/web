@@ -4,13 +4,15 @@ var WondrousConstants = require('../constants/WondrousConstants');
 var _ = require('underscore');
 
 // Define initial posts for the feed
-var _posts = [], _current_page = 0;
+var _posts = [], _current_page = 0, _posts_object={};
 
 // Method to load feed data from API
 function loadFeedData(data){
-    Array.prototype.push.apply(_posts,data);
-    if(data.length>0){
-        _current_page++;
+    for(var i = 0; i < data.length; i++){
+        if(!_posts_object.hasOwnProperty(String(data[i].id))){
+            _posts.push(data[i].id)
+        }
+        _posts_object[String(data[i].id)] = data[i];
     }
 }
 
@@ -37,7 +39,10 @@ var FeedStore = _.extend({},EventEmitter.prototype,{
 
     // Return the whole entire feed array, essentially an array of posts
     getFeed: function(){
-        return _posts;
+        var posts = _posts.map(function(post_id,index){
+            return _posts_object[String(post_id)];
+        });
+        return posts;
     },
 
     // Emit Change event

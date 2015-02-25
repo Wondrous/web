@@ -38,7 +38,6 @@ var WallStore = _.extend({},EventEmitter.prototype,{
     // Return the whole entire posts array, essentially an array of posts
     getWallData: function(){
         console.log("wall posts",_posts.length);
-
         return _posts;
     },
 

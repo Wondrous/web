@@ -10,8 +10,9 @@ function getFeedState() {
     return data;
 }
 
+var masonry = null;
+
 var Feed = React.createClass({
-    masonry:null,
     handleData: function(err, data) {
         if (err == null) {
             WondrousActions.loadToFeed(data);
@@ -34,18 +35,20 @@ var Feed = React.createClass({
         FeedStore.addChangeListener(this._onChange);
         UserStore.addChangeListener(this._onChange);
 
-        var container = document.querySelector('.masonry');
-        this.masonry = new Masonry(container, {
-              transitionDuration : 0,
-              itemSelector       : ".masonry-brick",
-              columnWidth        : 288,
-        });
+        if (masonry==null){
+            var container = document.querySelector('.masonry');
+            masonry = new Masonry(container, {
+                  transitionDuration : 0.5,
+                  itemSelector       : ".masonry-brick",
+                  columnWidth        : 288,
+            });
+        }
     },
     toggleMasonry:function(){
         masonry.layout();
     },
-    componentWillUpdate:function(){
-        console.log("will update");
+    componentDidUpdate:function(){
+
     },
     // Remove change listeners from stores
     componentWillUnmount: function() {
@@ -53,6 +56,8 @@ var Feed = React.createClass({
         UserStore.removeChangeListener(this._onChange);
     },
     render: function() {
+        console.log("will update");
+
         var posts = this.state.data.map(function(post, index) {
             return (
                 <Post key={post.id} data={post} toggle={this.toggleMasonry}/>
