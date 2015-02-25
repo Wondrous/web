@@ -34,8 +34,9 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_majority_posts(cls, feed_id, page=0, per_page=15):
+
         posts = Post.query.join(FeedPostLink, Post.id==FeedPostLink.post_id).filter(FeedPostLink.feed_id==feed_id).\
-            order_by(desc(FeedPostLink.created_at)).filter(Post.is_active==True).limit(per_page).offset(page).all()
+            order_by(desc(FeedPostLink.created_at)).filter(Post.is_active==True).limit(per_page).offset(page*per_page).all()
         return posts
 
             # users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
@@ -47,6 +48,7 @@ class FeedManager(BaseManager):
         # TODO public view
         if not person:
             return []
+        page = int(page)
         feed_id = person.user.feed.id
         posts = cls.get_majority_posts(feed_id,page)
         data = []
@@ -81,6 +83,7 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_feed_posts_json(cls, person, feed_type, page=0):
+        page = int(page)
         feed_type = int(feed_type)
         if feed_type == cls.MAJORITY:
             return cls.get_majority_posts_json(person,page)
@@ -89,11 +92,13 @@ class FeedManager(BaseManager):
 
     @classmethod
     def get_wall_posts(cls, page=0, per_page=15, **kwargs):
+        page = int(page)
         posts = Post.query.order_by(desc(Post.created_at)).filter_by(**kwargs).limit(per_page).offset(page*per_page).all()
         return posts
 
     @classmethod
     def get_wall_posts_json(cls, person, user_id=None, username=None, page=0):
+        page = int(page)
         if (not user_id and not username) or person==None:
             return []
         if user_id:

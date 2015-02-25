@@ -19,13 +19,19 @@ var masonryOptions = {
 };
 
 var Feed = React.createClass({
+    paging:false,
+    donePaging:false,
     // mixins: [MasonryMixin('masonryContainer', masonryOptions)],
     handleData: function(err, data) {
         if (err == null) {
+            if(data.length==0){
+                this.donePaging = true;
+            }
             WondrousActions.loadToFeed(data);
         } else {
             console.error("error", err);
         }
+        this.paging=false;
     },
     loadFeedFromServer: function() {
         WondrousAPI.getMajorityPosts({
@@ -35,22 +41,47 @@ var Feed = React.createClass({
     },
     getInitialState: function() {
         this.loadFeedFromServer();
-        return {'data': getFeedState()};
+        return {'data': getFeedState(), paging: false};
     },
+
+    checkWindowScroll: function(){
+
+        // Get scroll pos & window data
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        var s = document.body.scrollTop;
+        var scrolled = (h + s) > document.body.offsetHeight;
+
+        // If scrolled enough, not currently paging and not complete...
+        if(scrolled && !this.paging && !this.donePaging) {
+
+          // Set application state (Paging, Increment page)
+
+
+          // Get the next page of tweets from the server
+          console.log("getting more page")
+          this.paging = true;
+          FeedStore.incrementPage();
+          WondrousAPI.getMajorityPosts({
+              page: FeedStore.getCurrentPage(),
+              callback: this.handleData
+          });
+        }
+      },
     // Add change listener to stores
     componentDidMount: function() {
         FeedStore.addChangeListener(this._onChange);
         UserStore.addChangeListener(this._onChange);
+
+        // Attach scroll event to the window for infinity paging
+        window.addEventListener('scroll', this.checkWindowScroll);
     },
 
-    componentDidUpdate:function(){
-
-    },
     // Remove change listeners from stores
     componentWillUnmount: function() {
         FeedStore.removeChangeListener(this._onChange);
         UserStore.removeChangeListener(this._onChange);
     },
+
     render: function() {
         console.log("will update");
 
@@ -68,7 +99,6 @@ var Feed = React.createClass({
                     <div className="grid-sizer" style={{"display": "none"}}></div>
                     {posts}
                 </div>
-                <div>Loading more</div>
             </div>
         );
     },
