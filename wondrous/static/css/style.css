@@ -1887,6 +1887,14 @@ a:hover {
   font-family: helvetica, arial, sans-serif;
   font-weight: 100; }
 
+.notificationTextPosition {
+  position: relative; }
+
+.followerAcceptButton {
+  background-color: white;
+  border: 1px solid rgba(70, 140, 220, 0.7);
+  border-radius: 2px; }
+
 .notification-count {
   position: relative;
   float: right;
@@ -2400,5 +2408,5 @@ svg {
   height: 1px;
   width: 90%;
   margin: 4px 4px;
-  background-color: #bfbfbf;
+  background-color: #e7e7e7;
   border: 0; }

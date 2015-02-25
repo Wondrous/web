@@ -129,11 +129,11 @@ var Notification = React.createClass({
         return (
             <div onClick={this.handleClick} className="dropdown-a">
                 <div className={"dropdown-element"} style={{'display': displayType}}>
-                    <img ref="usericon" className="post-thumb round-50" src={profilePic} />
-                    <span>
+                    <span className="notificationTextPosition">
+                        <img ref="usericon" className="post-thumb round-50" src={profilePic} />
                         <b>{note.from_user_firstname}</b> {content}
                     </span>
-                    {actionNeeded ? <button onClick={this.handleAccept}>"Accept"</button> : ''}
+                    {actionNeeded ? <button className="followerAcceptButton" onClick={this.handleAccept}>+1</button> : ''}
                 </div>
             </div>
         );
