@@ -9,12 +9,11 @@ var _posts = [], _current_page = 0, _posts_object={};
 // Method to load feed data from API
 function loadFeedData(data){
     for(var i = 0; i < data.length; i++){
-        if(!_posts_object.hasOwnProperty(data[i].id)){
+        if(!_posts_object.hasOwnProperty(String(data[i].id))){
             _posts.push(data[i].id);
         }
-        _posts_object[data[i].id] = data[i];
+        _posts_object[String(data[i].id)] = data[i];
     }
-    console.log("length is",data.length);
 }
 
 function addNewPost(post){
@@ -24,16 +23,15 @@ function addNewPost(post){
 function deletePost(post_id){
     var to_delete = -1;
     for(var i = 0; i < _posts.length; i++){
-        if(_posts[i].id==post_id){
+        if(_posts[i]==post_id){
             to_delete = i;
+            console.log("deleting id",post_id,to_delete)
+            delete _posts_object[String(_posts[i])];
+            delete _posts[to_delete];
             break;
         }
     }
 
-    if (to_delete>-1){
-        delete _posts_object[_posts[to_delete]];
-        delete _posts[to_delete];
-    }
 }
 
 // Extend FeedStore with EventEmitter and underscore
@@ -49,7 +47,7 @@ var FeedStore = _.extend({},EventEmitter.prototype,{
     // Return the whole entire feed array, essentially an array of posts
     getFeed: function(){
         var posts = _posts.map(function(post_id,index){
-            return _posts_object[post_id];
+            return _posts_object[String(post_id)];
         });
         return posts;
     },

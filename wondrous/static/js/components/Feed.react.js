@@ -45,7 +45,6 @@ var Feed = React.createClass({
     },
 
     checkWindowScroll: function(){
-
         // Get scroll pos & window data
         var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         var s = document.body.scrollTop;
@@ -83,8 +82,6 @@ var Feed = React.createClass({
     },
 
     render: function() {
-        console.log("will update");
-
         var posts = this.state.data.map(function(post, index) {
             return (
                 <Post key={post.id} data={post} />

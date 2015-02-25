@@ -133,7 +133,6 @@ var Post = React.createClass({
     },
     handleData: function(err,res){
         if(err==null){
-            console.log("delete",res);
             this.handleClick();
             WondrousActions.postDelete(res.id);
         }else{
@@ -141,7 +140,6 @@ var Post = React.createClass({
         }
     },
     deletePost: function () {
-        console.log("deleting post",this.props.data.id);
         WondrousAPI.deletePost({
             post_id:this.props.data.id,
             callback:this.handleData
@@ -150,6 +148,8 @@ var Post = React.createClass({
     handlePostLike:function(err,res){
         if(err==null){
             console.log("liked",res);
+            this.props.data.liked=res.like;
+            this.forceUpdate();
         }else{
 
         }
@@ -181,6 +181,7 @@ var Post = React.createClass({
             uploadData:uploadData,
             callback:this.onRepost
         });
+        this.handleClick();
     },
     render: function() {
         var repost = null;
