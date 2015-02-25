@@ -83,9 +83,9 @@ var Photo = React.createClass({
 
         // var img_src = this.props.data.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/500x500.gif";
         return (
-            <div ref="container" className="post-cover-photo cover no-top-border"
+            <div ref="container" className="post-cover-photo cover no-top-border nh"
             style={photoStyle}>
-                    <div className="post-subject-text">
+                    <div className="post-subject-text nh">
                         <div className="post-subject-wrapper">
                             <div className="post-subject-text-position">
                                 {this.props.data.subject}

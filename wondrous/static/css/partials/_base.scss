@@ -5,8 +5,8 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
     min-width: 750px;
 }
 
-html, body, footer {
-    background-color: rgb(245,245,245);
+html, body, footer, .main-content {
+    background-color: rgb(241,241,241);
 }
 
 body {
@@ -32,8 +32,6 @@ h1, h2, h3, h4, h5 {
     position: relative;
     margin-top: 45px;
     min-height: 1000px;
-    /*background-color: rgb(245,245,245);*/
-    background-color: rgb(241,241,241);
 }
 
 .input-basic {

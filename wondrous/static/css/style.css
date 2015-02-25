@@ -410,8 +410,8 @@ td, th {
 body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
   min-width: 750px; }
 
-html, body, footer {
-  background-color: whitesmoke; }
+html, body, footer, .main-content {
+  background-color: #f1f1f1; }
 
 body {
   height: 100%; }
@@ -433,9 +433,7 @@ h1, h2, h3, h4, h5 {
 .main-content {
   position: relative;
   margin-top: 45px;
-  min-height: 1000px;
-  /*background-color: rgb(245,245,245);*/
-  background-color: #f1f1f1; }
+  min-height: 1000px; }
 
 .input-basic {
   -webkit-transition: all 0.3s ease-in-out;
