@@ -17,7 +17,8 @@ function loadFeedData(data){
 }
 
 function addNewPost(post){
-    _posts.unshift(post);
+    _posts_object[String(post.id)]=post;
+    _posts.unshift(post.id);
 }
 
 function deletePost(post_id){
