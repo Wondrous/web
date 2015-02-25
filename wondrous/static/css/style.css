@@ -434,7 +434,8 @@ h1, h2, h3, h4, h5 {
   position: relative;
   margin-top: 45px;
   min-height: 1000px;
-  background-color: whitesmoke; }
+  /*background-color: rgb(245,245,245);*/
+  background-color: #f1f1f1; }
 
 .input-basic {
   -webkit-transition: all 0.3s ease-in-out;
@@ -1712,7 +1713,8 @@ a:hover {
   top: 0;
   height: 45px;
   width: 100%;
-  background-color: #ebebeb;
+  /*background-color: rgb(235,235,235);*/
+  background-color: #fbfbfb;
   z-index: 101;
   -webkit-box-shadow: 0 0 3px 0 #c7c7c7;
   -moz-box-shadow: 0 0 3px 0 #c7c7c7;
