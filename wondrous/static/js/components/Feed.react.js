@@ -55,8 +55,6 @@ var Feed = React.createClass({
         if(scrolled && !this.paging && !this.donePaging) {
 
           // Set application state (Paging, Increment page)
-
-
           // Get the next page of tweets from the server
           console.log("getting more page")
           this.paging = true;
