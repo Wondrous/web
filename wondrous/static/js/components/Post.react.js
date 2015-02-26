@@ -195,7 +195,7 @@ var Post = React.createClass({
 
         return (
             <div ref="brick" className="masonry-brick">
-                <div ref="post"  className="post-body round-5" >
+                <div ref="post"  className="post-body round-3" >
                     <div style={{"backgroundColor": "#FFFFFF","position":"relative"}}>
                         <UserTitle data={this.props.data} />
                     </div>
