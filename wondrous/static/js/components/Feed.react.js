@@ -15,13 +15,14 @@ var masonry = null;
 
 var masonryOptions = {
     transitionDuration: 0,
-    columnWidth: 200
+    itemSelector: ".masonry-brick",
+    columnWidth: ".grid-sizer"
 };
 
 var Feed = React.createClass({
     paging:false,
     donePaging:false,
-    // mixins: [MasonryMixin('masonryContainer', masonryOptions)],
+    mixins: [MasonryMixin('masonryContainer', masonryOptions)],
     handleData: function(err, data) {
         if (err == null) {
             if(data.length==0){
