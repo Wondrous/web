@@ -376,7 +376,7 @@ class AuthHandler(BaseHandler):
                 headers = self._set_session_headers(new_person)
                 new_user.last_login = datetime.now()
                 logging.warn("registered")
-                return HTTPFound(location="/")
+                return HTTPFound(location="/", headers = headers)
             else:
 
                 data = {
