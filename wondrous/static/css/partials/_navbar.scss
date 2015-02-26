@@ -3,7 +3,8 @@
     top: 0;
     height: 45px;
     width: 100%;
-    background-color: rgb(235,235,235);
+    /*background-color: rgb(235,235,235);*/
+    background-color: rgb(251,251,251);
     z-index: 101;
 
     -webkit-box-shadow: 0 0 3px 0 rgb(199,199,199);
@@ -58,13 +59,13 @@
     margin-left: 5%;
     padding: 9px 0 7px 5px;
     border: none;
-    background-color: rgb(248,248,248);
+    background-color: rgb(234,234,234);
     font-family: helvetica, arial, sans-serif;
     font-size: 15px;
     
     &:focus {
         outline: none;
-        background-color: rgb(255,255,255);
+        background-color: rgb(228,228,228);
     }
 }
 
@@ -78,8 +79,8 @@
     width: 30px;
     cursor: pointer;
     
-    &:hover {background-color: rgb(204,204,204);}
-    &:active {background-color: rgb(193,193,193);}
+    &:hover {background-color: rgb(234,234,234);}
+    &:active {background-color: rgb(230,230,230);}
 }
 
 .banner-options-icon {
@@ -109,8 +110,8 @@
     white-space:nowrap;
     
     &:link {text-decoration: none;}
-    &:hover {background-color: rgb(204,204,204); text-decoration: none;}
-    &:active {background-color: rgb(193,193,193);}
+    &:hover {background-color: rgb(234,234,234); text-decoration: none;}
+    &:active {background-color: rgb(230,230,230);}
 }
 
 .banner-user-img {

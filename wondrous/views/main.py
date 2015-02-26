@@ -174,13 +174,13 @@ class AuthHandler(BaseHandler):
                 return HTTPFound(location="/", headers=headers)
 
             elif this_user and this_user.is_banned:
-                return HTTPFound("/auth/is_banned/{uid}/".format(uid=this_person.id))
+                return HTTPFound("/auth/is_banned/{uid}/".format(uid=this_user.id))
 
             # At this point, the login has totally
             # failed. We can safely disarm the this_person
             # object and return appropriate error messages
-            this_person = None
-            if not this_person:
+            this_user = None
+            if not this_user:
                 error_message = "Invalid email/username or password"
 
         data = {

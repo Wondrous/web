@@ -297,7 +297,7 @@ class APIViews(BaseHandler):
             USE: self.query_kwargs to provide all the required inputs.
                 person,username
 
-
+            PARAMS: (None)
 
             RETURNS: The JSON containing either an error or successful status
         """
@@ -310,11 +310,10 @@ class APIViews(BaseHandler):
     def api_user_password(self):
 
         """
-            PURPOSE: changes password
+            PURPOSE: Changes password
 
             USE: self.query_kwargs to provide all the required inputs.
                 person,old_password,new_password
-
 
             PARAMS: (None)
 
