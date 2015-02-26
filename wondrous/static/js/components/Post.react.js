@@ -187,12 +187,8 @@ var Post = React.createClass({
         if (this.props.data.hasOwnProperty('repost')) {
             repost = this.props.data.repost;
             this.props.data.text = repost.text;
-
             this.props.data.subject = repost.subject;
         }
-
-        console.log(this.props.data.subject);
-
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3" >
