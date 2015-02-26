@@ -8,6 +8,7 @@ var RouteHandler = require('react-router').RouteHandler;
 var DefaultRoute = require('react-router').DefaultRoute;
 var Route = require('react-router').Route;
 var Link = Router.Link;
+var MasonryMixin = require('../vendor/masonry.mixin');
 
 var WondrousAPI = require('../utils/WondrousAPI');
 var MouseWheel = require('kd-shim-jquery-mousewheel');
@@ -19,8 +20,16 @@ function getWallPosts() {
     return {data:WallStore.getWallData()};
 }
 
+var masonry = null;
+
+var masonryOptions = {
+    transitionDuration: 0,
+    itemSelector: ".masonry-brick",
+    columnWidth: ".grid-sizer"
+};
+
 var Wall = React.createClass({
-    mixins: [ Router.State ],
+    mixins: [MasonryMixin('masonryContainer', masonryOptions), Router.State],
 
     getInitialState: function() {
         return getWallPosts();
@@ -52,7 +61,7 @@ var Wall = React.createClass({
         return (
             <div>
                 {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
-                <div className="masonry" id="asyncPosts">
+                <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="backdrop"></div>
                 <div className="grid-sizer" style={{"display": "none"}}></div>
                     {posts}

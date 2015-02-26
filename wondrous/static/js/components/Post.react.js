@@ -64,7 +64,6 @@ var UserTitle = React.createClass({
                     <a onClick={this.handleClick}>{name}</a>
                     {this.repost ? " reposted from " : null}
                     {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
-
                 </span>
             </div>
             );
@@ -83,15 +82,14 @@ var Photo = React.createClass({
 
         // var img_src = this.props.data.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/500x500.gif";
         return (
-            <div ref="container" className="post-cover-photo cover no-top-border nh"
-            style={photoStyle}>
-                    <div className="post-subject-text nh">
+            <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
+                    {/*<div className="post-subject-text nh">
                         <div className="post-subject-wrapper">
                             <div className="post-subject-text-position">
                                 {this.props.data.subject}
                             </div>
                         </div>
-                    </div>
+                    </div>*/}
             </div>);
     },
     componentDidMount: function() {
@@ -185,17 +183,19 @@ var Post = React.createClass({
     render: function() {
         var repost = null;
         var is_it_mine = this.props.data.username === UserStore.getUserData().username;
-        if (this.props.data.hasOwnProperty('repost')){
+
+        if (this.props.data.hasOwnProperty('repost')) {
             repost = this.props.data.repost;
             this.props.data.text = repost.text;
+            this.props.data.subject = repost.subject;
         }
-
         return (
             <div ref="brick" className="masonry-brick">
-                <div ref="post"  className="post-body round-5" >
+                <div ref="post"  className="post-body round-3" >
                     <div style={{"backgroundColor": "#FFFFFF","position":"relative"}}>
                         <UserTitle data={this.props.data} />
                     </div>
+                    <div className="post-title">{this.props.data.subject}</div>
                     <div onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data}/>
                     </div>

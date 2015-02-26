@@ -564,7 +564,7 @@ hr {
 /* DS temporary addition to the global files */
 .dimmer {
   background: black;
-  opacity: 0.80;
+  opacity: 0.88;
   position: fixed;
   top: 0;
   left: 0;
@@ -610,10 +610,10 @@ body {
 
 /* masonry-brick is invisible, but used for layout */
 .masonry-brick, .post-body, .grid-sizer {
-  width: 25%; }
+  width: 33.33333%; }
 
 .post-presentation {
-  width: 50%;
+  width: 66.66667%;
   z-index: 5;
   position: relative; }
 
@@ -791,10 +791,6 @@ a:hover {
 .post-body {
   overflow: hidden;
   width: 100%;
-  -webkit-transition: width 0.4s, height 0.4s;
-  -moz-transition: width 0.4s, height 0.4s;
-  -o-transition: width 0.4s, height 0.4s;
-  transition: width 0.4s, height 0.4s;
   background-color: white;
   overflow: hidden;
   -webkit-box-shadow: 0 1px 2px 0 #9f9f9f;
@@ -802,6 +798,10 @@ a:hover {
   -o-box-shadow: 0 1px 2px 0 #9f9f9f;
   box-shadow: 0 1px 2px 0 #9f9f9f; }
   .post-body:hover {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
     -webkit-box-shadow: 0 2px 3px #646464;
     -moz-box-shadow: 0 2px 3px #646464;
     -o-box-shadow: 0 2px 3px #646464;
@@ -939,6 +939,14 @@ a:hover {
 .post-subject-text-position {
   position: relative;
   padding: 7px 3%; }
+
+.post-title {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #333333;
+  text-align: left;
+  margin: 15px; }
 
 .post-see-more {
   position: relative;

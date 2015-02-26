@@ -6,7 +6,6 @@ function MasonryMixin() {
     return function(reference, options) {
         return {
             masonry: false,
-
             domChildren: [],
 
             initializeMasonry: function(force) {
