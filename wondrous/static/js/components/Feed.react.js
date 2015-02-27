@@ -89,7 +89,7 @@ var Feed = React.createClass({
 
         return (
             <div className="grid-padding">
-                <h1 className="tmp-feed-h1">Main Feed</h1>
+                <h1 className="tmp-feed-h1">Majority Feed</h1>
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                     <div className="backdrop"></div>
                     <div className="grid-sizer" style={{"display": "none"}}></div>

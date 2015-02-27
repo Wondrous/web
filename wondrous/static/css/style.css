@@ -585,7 +585,7 @@ hr {
   padding: 2px; }
 
 .tmp-feed-h1 {
-  color: #333333;
+  color: #ababab;
   font-weight: bold;
   font-size: 18px;
   padding: 20px 0 0 5%; }
@@ -978,10 +978,6 @@ a:hover {
     cursor: pointer; }
   .post-identifier > .recipient {
     display: inline-block;
-    width: 80px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     vertical-align: bottom; }
 
 .post-subject-text {

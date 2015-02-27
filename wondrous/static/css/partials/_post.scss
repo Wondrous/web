@@ -158,11 +158,7 @@ $post-cover-photo-height: 390px;
     }
     & > .recipient{
         display:inline-block;
-        width:80px;
-        overflow: hidden;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-        vertical-align: bottom
+        vertical-align: bottom;
     }
 }
 
