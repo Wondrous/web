@@ -141,8 +141,8 @@
     width: 60%;
 }
 
-.current-tab {
-    border-bottom: 4px solid rgb(170,170,170) !important;
+.current-tab > .profile-header-nav-item {
+    background-color: rgb(245,245,245);
 }
 
 .profile-name {

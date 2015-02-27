@@ -675,12 +675,19 @@ a:hover {
 .is-following {
   border: 2px solid #0078fa;
   background-color: #0078fa;
-  color: #fbfbfb; }
+  color: #fbfbfb;
+  font-weight: 100; }
 
 .not-following {
   border: 2px solid #dddddd;
   background-color: #f1f1f1;
-  color: #797979; }
+  color: #797979;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .not-following:hover {
+    border-color: #0078fa; }
 
 .grid-padding, .info-content, .profile-content, .profile-header {
   padding: 0 5% 0 5%; }
@@ -794,8 +801,8 @@ a:hover {
   margin: 0 auto;
   width: 60%; }
 
-.current-tab {
-  border-bottom: 4px solid #aaaaaa !important; }
+.current-tab > .profile-header-nav-item {
+  background-color: whitesmoke; }
 
 .profile-name {
   font-size: 40px;

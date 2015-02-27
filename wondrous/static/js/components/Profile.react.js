@@ -322,25 +322,25 @@ var UserBar = React.createClass({
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
-                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">posts</div>
                             <span className="profile-header-nav-number">10</span>
                         </li>
                     </Link>
-                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">followers</div>
                             <span className="profile-header-nav-number">3</span>
                         </li>
                     </Link>
-                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">following</div>
                             <span className="profile-header-nav-number">3</span>
                         </li>
                     </Link>
-                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">clout</div>
                             <span className="profile-header-nav-number">34</span>
