@@ -203,7 +203,7 @@ var Post = React.createClass({
                         <div className="post-content-text">
                         {this.props.data.text}
                         </div>
-                        <hr style={{"width": "60%"}}/>
+                        <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
                         <div>
                             <span onClick={this.likePost} className="post-footer-btn post-like-btn round-2">{this.props.data.liked?"Unlike":"Like!"}</span>
                             <span onClick={this.clickRepost} className="post-footer-btn post-repost-btn round-2">Repost</span>

@@ -25,7 +25,14 @@
     text-decoration: none !important;
     cursor: pointer;
 
-    &:hover { background-color: rgb(241,241,241); }
+    &:hover {
+        background-color: rgb(241,241,241);
+
+        -webkit-box-shadow: -3px 0 0 0 rgb(161,161,161);
+           -moz-box-shadow: -3px 0 0 0 rgb(161,161,161);
+             -o-box-shadow: -3px 0 0 0 rgb(161,161,161);
+                box-shadow: -3px 0 0 0 rgb(161,161,161);
+    }
     &:active { background-color: rgb(235,235,235); }
 }
  

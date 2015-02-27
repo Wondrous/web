@@ -41,3 +41,29 @@ a:hover {text-decoration: underline;}
     &:visited { color: rgb(251,251,251); }
     &:hover { border: 3px solid rgb(0,200,140); }
 }
+
+.follow-button {
+    padding: 4px 15px;
+}
+
+.is-following {
+    border: 2px solid rgb(0,120,250);
+    background-color: rgb(0,120,250);
+    color: rgb(251,251,251);
+    font-weight: 100;
+}
+
+.not-following {
+    border: 2px solid rgb(221,221,221);
+    background-color: rgb(241,241,241);
+    color: rgb(121,121,121);
+
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
+         
+    &:hover {
+        border-color: rgb(0,120,250);
+    }
+}

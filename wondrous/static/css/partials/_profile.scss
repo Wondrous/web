@@ -77,40 +77,84 @@
 /* ===== PROFILE FULL ================= */
 
 .profile-header {
+    padding-top: 30px !important;
+    padding-bottom: 1px !important;
     background-color: rgb(255,255,255);
 }
 
 .profile-header-content {
-    position: absolute;
+    position: relative;
     top: 0;
-    margin-top: 40px;
-    padding: 0 10px;
-    font-size: 30px;
-    font-weight: 100;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0;
+    font-family: helvetica, arial, sans-serif;
     color: rgb(71,71,71);
 }
 
 .profile-header-nav {
     position: relative;
-    bottom: 30px;
+    margin: 25px auto;
+    margin-top: 15px;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-header-nav-item {
+    display: inline-block;
+    vertical-align: top;
+
+    padding: 23px 18px;
+    height: 90px;
+    width: 90px;
+
+    -webkit-transition: all 0.3s ease-in-out;
+       -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+         -o-transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: rgb(245,245,245);
+    }
 }
 
 .profile-header-nav-link {
-    padding: 6px;
-    color: rgb(71,71,71);
+    padding: 0;
+    font-size: 23px;
+    color: rgb(91,91,131) !important;
+    font-family: helvetica;
     font-weight: 100;
 
     &:link { text-decoration: none; }
     &:visited { color: rgb(71,71,71); }
-    &:hover { border-bottom: 1px solid rgb(170,170,170); }
 }
 
-.current-tab {
-    border-bottom: 4px solid rgb(170,170,170) !important;
+.profile-header-nav-title {
+    font-size: 15px;
+    color: rgb(130,130,130);
+    font-weight: 100;
+}
+
+.profile-hr {
+    margin: 0 auto;
+    width: 60%;
+}
+
+.current-tab > .profile-header-nav-item {
+    background-color: rgb(245,245,245);
 }
 
 .profile-name {
-    padding-right: 10px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.profile-username {
+    font-size: 23px;
+    font-weight: 100;
+    color: rgb(120,120,120);
+    padding: 5px;
 }
 
 .profile-name-row {
@@ -136,14 +180,15 @@
 
 .profile-photo {
     position: relative;
-    height: 100px;
-   width: 100px;
-   margin: 20px 20px 20px 0;
+    height: 130px;
+    width: 130px;
+    display: block;
+    margin: 0 auto;
 
-    // -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
-    //    -moz-box-shadow: 0 2px 3px rgb(100,100,100);
-    //      -o-box-shadow: 0 2px 3px rgb(100,100,100);
-    //         box-shadow: 0 2px 3px rgb(100,100,100);
+    -webkit-box-shadow: 0 1px 2px rgb(61,61,61);
+       -moz-box-shadow: 0 1px 2px rgb(61,61,61);
+         -o-box-shadow: 0 1px 2px rgb(61,61,61);
+            box-shadow: 0 1px 2px rgb(61,61,61);
 }
 
 .profile-photo-med {
