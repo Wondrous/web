@@ -963,9 +963,12 @@ a:hover {
   margin: 5px 5px 0 7px; }
 
 .post-identifier {
-  position: relative;
+  position: absolute;
   display: inline-block;
-  top: -6px;
+  top: 10px;
+  left: 0;
+  padding-left: 35px;
+  width: 90%;
   font-size: 12px;
   font-weight: bold;
   cursor: default; }
