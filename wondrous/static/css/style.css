@@ -2402,7 +2402,11 @@ svg {
   text-decoration: none !important;
   cursor: pointer; }
   .dropdown-element:hover {
-    background-color: #f1f1f1; }
+    background-color: #f1f1f1;
+    -webkit-box-shadow: -3px 0 0 0 #a1a1a1;
+    -moz-box-shadow: -3px 0 0 0 #a1a1a1;
+    -o-box-shadow: -3px 0 0 0 #a1a1a1;
+    box-shadow: -3px 0 0 0 #a1a1a1; }
   .dropdown-element:active {
     background-color: #ebebeb; }
 
