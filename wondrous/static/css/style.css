@@ -669,6 +669,19 @@ a:hover {
   .signup-big-link:hover {
     border: 3px solid #00c88c; }
 
+.follow-button {
+  padding: 4px 15px; }
+
+.is-following {
+  border: 2px solid #0078fa;
+  background-color: #0078fa;
+  color: #fbfbfb; }
+
+.not-following {
+  border: 2px solid #dddddd;
+  background-color: #f1f1f1;
+  color: #797979; }
+
 .grid-padding, .info-content, .profile-content, .profile-header {
   padding: 0 5% 0 5%; }
 
@@ -759,7 +772,7 @@ a:hover {
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out; }
   .profile-header-nav-item:hover {
-    background-color: #f9f9f9; }
+    background-color: whitesmoke; }
 
 .profile-header-nav-link {
   padding: 0;

@@ -300,6 +300,15 @@ var UserBar = React.createClass({
         var ouuid = (typeof getProfileState().data.ouuid !== 'undefined')?getProfileState().data.ouuid:false;
         var img_src = ouuid?"http://mojorankdev.s3.amazonaws.com/"+ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
 
+        var classes = "follow-button round-2 ";
+        if (this.am_following) {
+            var btnTitle = "Following";
+            classes += "is-following";
+        } else {
+            var btnTitle = "Follow";
+            classes += "not-following";
+        }
+
         return (
             <div className="profile-header">
             <img className="profile-photo round-50" onClick={this.handleClick} src={img_src} />
@@ -309,7 +318,7 @@ var UserBar = React.createClass({
                     {/*<span className="profile-wscore">
                         <span className="profile-wscore-text round-5">1</span>
                     </span>*/}
-                    {!is_me ? <button onClick={this.handleFollow}>{this.am_following ? 'UNFOLLOW' : 'FOLLOW'}</button> : null}
+                    {!is_me ? <button className={classes} style={{marginTop: 12}} onClick={this.handleFollow}>{btnTitle}</button> : null}
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
