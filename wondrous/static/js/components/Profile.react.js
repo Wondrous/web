@@ -302,21 +302,42 @@ var UserBar = React.createClass({
 
         return (
             <div className="profile-header">
-            <img className="profile-photo" onClick={this.handleClick} src={img_src} />
-                <span className="profile-header-content">
-                    <span className="profile-name">{this.state.data.name}</span>
-                    <span className="profile-wscore">
+            <img className="profile-photo round-50" onClick={this.handleClick} src={img_src} />
+                <div className="profile-header-content">
+                    <div className="profile-name">{this.state.data.name}</div>
+                    <div className="profile-username">@{this.state.data.username}</div>
+                    {/*<span className="profile-wscore">
                         <span className="profile-wscore-text round-5">1</span>
-                    </span>
+                    </span>*/}
                     {!is_me ? <button onClick={this.handleFollow}>{this.am_following ? 'UNFOLLOW' : 'FOLLOW'}</button> : null}
-                </span>
-
-                <span className="profile-header-nav">
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>Wall</Link>
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>Followers</Link>
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>Following</Link>
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>Likes</Link>
-                </span>
+                </div>
+                <hr className="profile-hr" />
+                <ul className="profile-header-nav">
+                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">posts</div>
+                            <span className="profile-header-nav-number">10</span>
+                        </li>
+                    </Link>
+                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">followers</div>
+                            <span className="profile-header-nav-number">3</span>
+                        </li>
+                    </Link>
+                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">following</div>
+                            <span className="profile-header-nav-number">3</span>
+                        </li>
+                    </Link>
+                    <Link activeClassName="profile-header-nav-link _current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">clout</div>
+                            <span className="profile-header-nav-number">34</span>
+                        </li>
+                    </Link>
+                </ul>
             </div>
         );
     },

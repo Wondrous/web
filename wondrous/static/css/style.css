@@ -456,7 +456,7 @@ hr {
   height: 1px;
   border: 0;
   border-top: 1px solid #e7e7e7;
-  margin: 1em 0;
+  margin: 0;
   padding: 0; }
 
 .lo-html {
@@ -727,37 +727,72 @@ a:hover {
 
 /* ===== PROFILE FULL ================= */
 .profile-header {
+  padding-top: 30px !important;
+  padding-bottom: 1px !important;
   background-color: white; }
 
 .profile-header-content {
-  position: absolute;
+  position: relative;
   top: 0;
-  margin-top: 40px;
-  padding: 0 10px;
-  font-size: 30px;
-  font-weight: 100;
+  width: 100%;
+  text-align: center;
+  margin: 20px 0;
+  font-family: helvetica, arial, sans-serif;
   color: #474747; }
 
 .profile-header-nav {
   position: relative;
-  bottom: 30px; }
+  margin: 25px auto;
+  margin-top: 15px;
+  padding: 0;
+  width: 100%;
+  text-align: center; }
+
+.profile-header-nav-item {
+  display: inline-block;
+  vertical-align: top;
+  padding: 23px 18px;
+  height: 90px;
+  width: 90px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .profile-header-nav-item:hover {
+    background-color: #f9f9f9; }
 
 .profile-header-nav-link {
-  padding: 6px;
-  color: #474747;
+  padding: 0;
+  font-size: 23px;
+  color: #5b5b83 !important;
+  font-family: helvetica;
   font-weight: 100; }
   .profile-header-nav-link:link {
     text-decoration: none; }
   .profile-header-nav-link:visited {
     color: #474747; }
-  .profile-header-nav-link:hover {
-    border-bottom: 1px solid #aaaaaa; }
+
+.profile-header-nav-title {
+  font-size: 15px;
+  color: #828282;
+  font-weight: 100; }
+
+.profile-hr {
+  margin: 0 auto;
+  width: 60%; }
 
 .current-tab {
   border-bottom: 4px solid #aaaaaa !important; }
 
 .profile-name {
-  padding-right: 10px; }
+  font-size: 40px;
+  font-weight: bold; }
+
+.profile-username {
+  font-size: 23px;
+  font-weight: 100;
+  color: #787878;
+  padding: 5px; }
 
 .profile-name-row {
   position: relative;
@@ -779,9 +814,14 @@ a:hover {
 
 .profile-photo {
   position: relative;
-  height: 100px;
-  width: 100px;
-  margin: 20px 20px 20px 0; }
+  height: 130px;
+  width: 130px;
+  display: block;
+  margin: 0 auto;
+  -webkit-box-shadow: 0 1px 2px #3d3d3d;
+  -moz-box-shadow: 0 1px 2px #3d3d3d;
+  -o-box-shadow: 0 1px 2px #3d3d3d;
+  box-shadow: 0 1px 2px #3d3d3d; }
 
 .profile-photo-med {
   height: 60px;
