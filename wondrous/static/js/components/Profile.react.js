@@ -245,8 +245,8 @@ function getProfileState() {
 var UserBar = React.createClass({
     mixins: [ Router.Navigation ],
 
-    am_following:getProfileState().data.following,
-    is_private:getProfileState().data.is_private,
+    am_following: getProfileState().data.following,
+    is_private: getProfileState().data.is_private,
 
     getInitialState: function() {
         return getProfileState();
@@ -297,8 +297,8 @@ var UserBar = React.createClass({
         this.am_following = getProfileState().data.following==true;
         var is_me = username === UserStore.getUserData().username;
 
-        var ouuid = (typeof getProfileState().data.ouuid !== 'undefined')?getProfileState().data.ouuid:false;
-        var img_src = ouuid?"http://mojorankdev.s3.amazonaws.com/"+ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        var ouuid = (typeof getProfileState().data.ouuid !== 'undefined') ? getProfileState().data.ouuid : false;
+        var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         var classes = "follow-button round-2 ";
         if (this.am_following) {
@@ -311,7 +311,7 @@ var UserBar = React.createClass({
 
         return (
             <div className="profile-header">
-            <img className="profile-photo round-50" onClick={this.handleClick} src={img_src} />
+                <img className="profile-photo round-50" onClick={this.handleClick} src={img_src} />
                 <div className="profile-header-content">
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
@@ -356,6 +356,10 @@ var UserBar = React.createClass({
 });
 
 var PrivateProfile = React.createClass({
+
+    am_following: getProfileState().data.following,
+    is_private: getProfileState().data.is_private,
+
     handleData: function(err, data){
         if (err == null){
             $(this.refs.requestBtn.getDOMNode()).html('request sent!');
@@ -375,14 +379,55 @@ var PrivateProfile = React.createClass({
         })
     },
     render: function() {
-        return (
-            <div>
-                <h1 className="profile-landing-name">{ this.props.user.name }</h1>
-                <img className="profile-landing-profile-picture round-50" src={typeof this.props.user.ouuid !== 'undefined' ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
+        var img_src = (typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        
+        var classes = "follow-button round-2 ";
+        if (this.am_following) {
+            var btnTitle = "Following";
+            classes += "is-following";
+        } else {
+            var btnTitle = "Follow";
+            classes += "not-following";
+        }
 
-                <div>
-                    <button onClick={this.handleClick} ref="requestBtn">Request to Follow</button>
+        return (
+            <div className="profile-header">
+                <img className="profile-photo round-50" src={img_src} />
+                <div className="profile-header-content">
+                    <div className="profile-name">{this.props.user.name}</div>
+                    <div className="profile-username">@{this.props.user.username}</div>
+                    {/*<span className="profile-wscore">
+                        <span className="profile-wscore-text round-5">1</span>
+                    </span>*/}
+                    <button className={classes} style={{marginTop: 12}} onClick={this.handleClick} ref="requestBtn">Request to Follow</button>
                 </div>
+                <hr className="profile-hr" />
+                <ul className="profile-header-nav">
+                    <span className="profile-header-nav-link">
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">posts</div>
+                            <span className="profile-header-nav-number">10</span>
+                        </li>
+                    </span>
+                    <span className="profile-header-nav-link">
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">followers</div>
+                            <span className="profile-header-nav-number">3</span>
+                        </li>
+                    </span>
+                    <span className="profile-header-nav-link">
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">following</div>
+                            <span className="profile-header-nav-number">3</span>
+                        </li>
+                    </span>
+                    <span className="profile-header-nav-link">
+                        <li className="profile-header-nav-item round-50">
+                            <div className="profile-header-nav-title">clout</div>
+                            <span className="profile-header-nav-number">34</span>
+                        </li>
+                    </span>
+                </ul>
             </div>
         );
     }

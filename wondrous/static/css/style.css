@@ -585,7 +585,7 @@ hr {
   padding: 2px; }
 
 .tmp-feed-h1 {
-  color: #333333;
+  color: #ababab;
   font-weight: bold;
   font-size: 18px;
   padding: 20px 0 0 5%; }
@@ -963,9 +963,12 @@ a:hover {
   margin: 5px 5px 0 7px; }
 
 .post-identifier {
-  position: relative;
+  position: absolute;
   display: inline-block;
-  top: -6px;
+  top: 10px;
+  left: 0;
+  padding-left: 35px;
+  width: 90%;
   font-size: 12px;
   font-weight: bold;
   cursor: default; }
@@ -975,10 +978,6 @@ a:hover {
     cursor: pointer; }
   .post-identifier > .recipient {
     display: inline-block;
-    width: 80px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     vertical-align: bottom; }
 
 .post-subject-text {
