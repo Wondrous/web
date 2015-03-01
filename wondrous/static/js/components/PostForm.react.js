@@ -166,14 +166,14 @@ var PostForm = React.createClass({
     handleSubmit:function(e){
         var isPictureModal = UserStore.isPictureModal();
 
-        if (isPictureModal){
+        if (isPictureModal) {
             if(typeof this.file.type !=='undefined' && this.file.type!=null){
                 WondrousAPI.changePicture({
                     file_type:this.file.type,
                     callback:this.onPostSubmitted
                 });
             }
-        }else{
+        } else {
             var postSubject     = $('#postSubject').val();
             var postText        = $('#postTextarea').val();
             var object_file_id  = $('#objectFileID').val(); // See if we have a object File value
@@ -195,7 +195,7 @@ var PostForm = React.createClass({
                 'tags'    : postTagsUnique
             };
 
-            if (typeof(this.file) !== 'undefined' && this.file){
+            if (typeof(this.file) !== 'undefined' && this.file) {
                 uploadData.file_type = this.file.type;
             }
             console.log("posting", uploadData);
@@ -221,51 +221,49 @@ var PostForm = React.createClass({
         };
 
         return (
-            <div>
-                <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
-                    <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
-                        style={{"MozBorderRadius": "20px",
-                                "KhtmlBorderRadius": "20px",
-                                "WebkitBorderRadius": "20px"}}/>
+            <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
+                <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
+                    style={{"MozBorderRadius": "20px",
+                            "KhtmlBorderRadius": "20px",
+                            "WebkitBorderRadius": "20px"}}/>
 
-                    <div className="new-post-element" style = {divStyle}>
-                        <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
-                            <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
-                        </div>
+                <div className="new-post-element" style = {divStyle}>
+                    <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
+                        <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
                     </div>
-
-                    <div className="new-post-element" style = {divStyle}>
-                        <div className="post-input-wrapper">
-                            <div className="highlighter"></div>
-                            <div className="typehead">
-                                <textarea id="postTextarea" onChange={this.postTextChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
-                                style={{"overflow": "hidden", "wordWrap": "break-word", "resize": "none", "height": "48px"}}></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="post-hashtags"></div>
-                    <div id="postUploadBtn" className="upload-button fileinput-button">
-                        Upload a photo
-                        <div className="upload-photo-icon">
-                            I
-                        </div>
-                        <input id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>
-                    </div>
-
-                    <div id="progress" className="small-red-bar fileinput-button progress post-dialogue-progress">
-                        <div className="progress-bar progress-bar-success" style={{"textAlign": "center"}}></div>
-                    </div>
-
-                    <div id="post-upload-file"  className="files" style={{"postion": "relative","marginLeft": "5px","fontSize":"14px"}}></div>
-
-                    <div className="post-error-wrapper">
-                        <span className="post-error"></span>
-                    </div>
-
-                    <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">{isPictureModal?"Upload":"Share"}</div>
-                    <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
                 </div>
+
+                <div className="new-post-element" style = {divStyle}>
+                    <div className="post-input-wrapper">
+                        <div className="highlighter"></div>
+                        <div className="typehead">
+                            <textarea id="postTextarea" onChange={this.postTextChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
+                            style={{"overflow": "hidden", "wordWrap": "break-word", "resize": "none", "height": "48px"}}></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="post-hashtags"></div>
+                <div id="postUploadBtn" className="upload-button fileinput-button">
+                    Upload a photo
+                    <div className="upload-photo-icon">
+                        I
+                    </div>
+                    <input id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>
+                </div>
+
+                <div id="progress" className="small-red-bar fileinput-button progress post-dialogue-progress">
+                    <div className="progress-bar progress-bar-success" style={{"textAlign": "center"}}></div>
+                </div>
+
+                <div id="post-upload-file"  className="files" style={{"postion": "relative","marginLeft": "5px","fontSize":"14px"}}></div>
+
+                <div className="post-error-wrapper">
+                    <span className="post-error"></span>
+                </div>
+
+                <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">{isPictureModal?"Upload":"Share"}</div>
+                <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
             </div>
         );
     },
