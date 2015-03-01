@@ -21,7 +21,6 @@ from wondrous.models import (
     Feed,
     Notification,
     Object,
-    Person,
     Post,
     # PostTagLink,
     Tag,
@@ -41,8 +40,6 @@ from wondrous.controllers import (
 
 from paste.deploy.loadwsgi import appconfig
 from sqlalchemy import engine_from_config
-
-print os.getcwd()
 
 
 # John, your setting breaks my build :/ im just going to leave yours as a comment, i think

@@ -148,24 +148,20 @@ module.exports = {
 
     // checks registration fields user account
     // options are:
-    // first_name
-    // last_name
+    // name
     // email
     // username
     // password
     // callback(err,json_res)
     registerCheck: function(options){
         var callback = options.callback;
-        var first_name = options.first_name;
-        var last_name = options.last_name;
-        var username = options.username;
+        var name = options.name;
         var email = options.email;
         var password = options.password;
         var url ="/api/user/signupcheck";
 
         request.post(url)
-        .send({ first_name: first_name })
-        .send({ last_name: last_name })
+        .send({ name: name })
         .send({ username: username })
         .send({ email: email })
         .send({ password: password })
@@ -311,16 +307,15 @@ module.exports = {
     // Change name
     // options is:
     // callback(err,json_res)
-    // first_name, last_name
+    // name, name
     changeName: function(options){
-        var first_name = options.first_name;
-        var last_name = options.last_name;
+        var name = options.name;
 
         var callback = options.callback;
 
         var url = '/api/me/name'
         request.post(url)
-        .send({first_name:first_name, last_name:last_name})
+        .send({name:name})
         .end(_callback(callback));
     },
 

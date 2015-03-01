@@ -114,6 +114,7 @@ var Notification = React.createClass({
 
     render: function() {
         note = this.props.data;
+
         var actionNeeded = false;
         var content = this.generateContent(note.reason);
         if(note.reason == NotificationReasons.FOLLOW_REQUEST) actionNeeded = true;
@@ -131,7 +132,7 @@ var Notification = React.createClass({
                 <div className={"dropdown-element"} style={{'display': displayType}}>
                     <span className="notificationTextPosition">
                         <img ref="usericon" className="post-thumb round-50" src={profilePic} />
-                        <b>{note.from_user_firstname}</b> {content}
+                        <b>{note.from_user_name}</b> {content}
                     </span>
                     {actionNeeded ? <button className="followerAcceptButton" onClick={this.handleAccept}>+1</button> : ''}
                 </div>

@@ -120,7 +120,7 @@ var UserIcon = React.createClass({
             <a onClick={this.handleClick}>
                 <div>
                     <img src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
-                    <span className="profile-name-row">{ this.props.user.first_name + " " + this.props.user.last_name }</span>
+                    <span className="profile-name-row">{ this.props.user.name }</span>
                 </div>
             </a>
         );
@@ -381,7 +381,7 @@ var PrivateProfile = React.createClass({
     },
     render: function() {
         var img_src = (typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
-        
+
         var classes = "follow-button round-2 ";
         if (this.am_following) {
             var btnTitle = "Following";

@@ -137,7 +137,7 @@ import json
 def api_login_required(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        if self.request.person:
+        if self.request.user:
             return func(self,*args,**kwargs)
         else:
             resp = self.request.response
@@ -168,7 +168,7 @@ def login_required(func):
 
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        return func(self,*args,**kwargs) if self.request.person else HTTPFound("/login/")
+        return func(self,*args,**kwargs) if self.request.user else HTTPFound("/login/")
     return wrapper
 
 def SYSTEM_ADMIN_REQUIRED(super_admin=False):
@@ -206,7 +206,7 @@ def logout_required(func):
 
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        return HTTPFound("/") if self.request.person else func(self,*args,**kwargs)
+        return HTTPFound("/") if self.request.user else func(self,*args,**kwargs)
     return wrapper
 
 def url_match(self, url_match=None, arg_type="str"):

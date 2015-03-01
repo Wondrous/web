@@ -101,20 +101,20 @@ class NotificationManager(BaseManager):
         return new_notification
 
     @classmethod
-    def notification_json(cls, person, page=0):
+    def notification_json(cls, user, page=0):
         per_page = 15
-        notes = Notification.query.order_by(desc(Notification.created_at)).filter_by(to_user_id=person.user.id).limit(per_page).offset(page*per_page).all()
+        notes = Notification.query.order_by(desc(Notification.created_at)).filter_by(to_user_id=user.id).limit(per_page).offset(page*per_page).all()
         data = []
         for note in notes:
-            note_dict = super(NotificationManager, cls).model_to_json(note)
+            note_dict = note.json()
             from_user = note.from_user
             to_user = note.to_user
 
             note_dict.update({"to_user_username":to_user.username});
-            note_dict.update({"to_user_firstname":to_user.person.first_name})
+            note_dict.update({"to_user_name":to_user.name})
 
             note_dict.update({"from_user_username":from_user.username});
-            note_dict.update({"from_user_firstname":from_user.person.first_name})
+            note_dict.update({"from_user_name":from_user.name})
             data.append(note_dict)
         return data
 

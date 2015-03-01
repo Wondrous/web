@@ -4,7 +4,7 @@
     <div style="float: right; margin-right: 5%;">
         <h5>Top Offenders</h5>
         {% for d in top_offenders %}
-            <div style="font-size: 14px;"><a href="/_admin/manage/users/{{d[0]}}/"><b>{{ d[1] }}-rp</b> | {{ get_person(d[0]).name }} (id: {{ d[0] }})</a></div>
+            <div style="font-size: 14px;"><a href="/_admin/manage/users/{{d[0]}}/"><b>{{ d[1] }}-rp</b> | {{ get_user(d[0]).name }} (id: {{ d[0] }})</a></div>
         {% endfor %}
     </div>
 
@@ -15,14 +15,14 @@
                 
                 <div style="font-size: 15px;">
                     {% if item.poster.user_type == 1 %}
-                        <b>Poster:</b> <a href="/_admin/manage/users/{{item.user_id}}/">{{ get_person(item.user_id).name }} (id: {{ item.user_id }})</a> | <b>{{ get_num_offenses(item.user_id) }}-rp</b>
+                        <b>Poster:</b> <a href="/_admin/manage/users/{{item.user_id}}/">{{ get_user(item.user_id).name }} (id: {{ item.user_id }})</a> | <b>{{ get_num_offenses(item.user_id) }}-rp</b>
                     {% else %}
                     {% endif %}
                 </div>
 
                 <div style="font-size: 15px;">
                     {% if item.poster.user_type == 1 %}
-                        <b>Reporter:</b> <a href="/_admin/manage/users/{{item.reporter_id}}/">{{ get_person(item.reporter_id).name }} (id: {{ item.reporter_id }})</a>
+                        <b>Reporter:</b> <a href="/_admin/manage/users/{{item.reporter_id}}/">{{ get_user(item.reporter_id).name }} (id: {{ item.reporter_id }})</a>
                     {% else %}
                     {% endif %}
                 </div>

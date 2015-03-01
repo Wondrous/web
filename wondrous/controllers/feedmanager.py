@@ -44,33 +44,33 @@ class FeedManager(BaseManager):
 
 
     @classmethod
-    def get_majority_posts_json(cls, person, page=0):
+    def get_majority_posts_json(cls, user, page=0):
         # TODO public view
-        if not person:
+        if not user:
             return []
         page = int(page)
-        feed_id = person.user.feed.id
+        feed_id = user.feed.id
         posts = cls.get_majority_posts(feed_id,page)
         data = []
         for post in posts:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = {}
                 if post.object:
-                    post_dict.update(super(FeedManager, cls).model_to_json(post.object))
+                    post_dict.update(post.object.json())
 
-                post_dict.update(super(FeedManager, cls).model_to_json(post))
-                post_dict.update({"name": post.user.person.ascii_name})
+                post_dict.update(post.json())
+                post_dict.update({"name": post.user.ascii_name})
                 post_dict.update({"username": post.user.username})
                 picture_object = post.user.picture_object
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
 
-                post_dict.update({'liked':VoteManager.is_liking(person.user.id,post.id)})
+                post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
 
                 if post.original:
-                    original_post = cls.model_to_json(post.original)
-                    original_post.update(cls.model_to_json(post.original.object))
-                    original_post.update({"name": post.original.user.person.ascii_name})
+                    original_post = post.original.json()
+                    original_post.update(post.original.object.json())
+                    original_post.update({"name": post.original.user.ascii_name})
                     original_post.update({"username": post.original.user.username})
                     post_dict.update({"repost":original_post})
 
@@ -78,17 +78,17 @@ class FeedManager(BaseManager):
         return data
 
     @classmethod
-    def get_priority_posts_json(cls, person, page=0):
+    def get_priority_posts_json(cls, user, page=0):
         pass
 
     @classmethod
-    def get_feed_posts_json(cls, person, feed_type, page=0):
+    def get_feed_posts_json(cls, user, feed_type, page=0):
         page = int(page)
         feed_type = int(feed_type)
         if feed_type == cls.MAJORITY:
-            return cls.get_majority_posts_json(person,page)
+            return cls.get_majority_posts_json(user,page)
         elif feed_type == cls.PRIORITY:
-            return cls.get_priority_posts_json(person,page)
+            return cls.get_priority_posts_json(user,page)
 
     @classmethod
     def get_wall_posts(cls, page=0, per_page=15, **kwargs):
@@ -97,9 +97,9 @@ class FeedManager(BaseManager):
         return posts
 
     @classmethod
-    def get_wall_posts_json(cls, person, user_id=None, username=None, page=0):
+    def get_wall_posts_json(cls, user, user_id=None, username=None, page=0):
         page = int(page)
-        if (not user_id and not username) or person==None:
+        if (not user_id and not username) or user==None:
             return []
         if user_id:
             user = User.by_id(user_id)
@@ -115,8 +115,8 @@ class FeedManager(BaseManager):
         # If the user is public, we dont need to check for relationship, else do
         # If we are logged in and the user happens to be private, we have to check for relationship
         if (not user.is_private and not user.is_banned and user.is_active) or \
-            (user.is_private and not user.is_banned and user.is_active and person \
-            and VoteManager.is_following(person.user.id,user.id)):
+            (user.is_private and not user.is_banned and user.is_active and user \
+            and VoteManager.is_following(user.id,user.id)):
 
             posts = cls.get_wall_posts(page=page, user_id=user.id)
 
@@ -125,19 +125,20 @@ class FeedManager(BaseManager):
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = {}
                 if post.object:
-                    post_dict.update(super(FeedManager,cls).model_to_json(post.object))
-                post_dict.update(super(FeedManager,cls).model_to_json(post))
-                post_dict.update({"name":post.user.person.ascii_name})
+                    post_dict.update(post.object.json())
+                post_dict.update(post.json())
+                post_dict.update({"name":post.user.ascii_name})
                 post_dict.update({"username":post.user.username})
                 picture_object = post.user.picture_object
+
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
-                post_dict.update({'liked':VoteManager.is_liking(person.user.id,post.id)})
+                post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
 
                 if post.original:
-                    original_post = cls.model_to_json(post.original)
-                    original_post.update(cls.model_to_json(post.original.object))
-                    original_post.update({"name": post.original.user.person.ascii_name})
+                    original_post = post.original.json()
+                    original_post.update(post.original.object.json())
+                    original_post.update({"name": post.original.user.ascii_name})
                     original_post.update({"username": post.original.user.username})
                     post_dict.update({"repost":original_post})
                 data.append(post_dict)

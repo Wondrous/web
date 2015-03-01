@@ -40,7 +40,7 @@ class Tag(Base,BaseMixin):
     def by_name_like(cls, key, num=50):
 
         """
-            TODO: Probably should go into its own controllers/personmanager.py file
+            TODO: Probably should go into its own controllers file
         """
 
         return cls.query.filter(cls.tag_name.ilike("%{q}%".format(q=key))).limit(num)

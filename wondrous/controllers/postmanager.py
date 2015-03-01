@@ -27,7 +27,8 @@ from wondrous.models import (
     Post,
     PostTagLink,
     Tag,
-    Notification
+    Notification,
+    Comment
     # User,
     # Vote,
 )
@@ -39,6 +40,26 @@ from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
 
 class PostManager(BaseManager):
+
+    @staticmethod
+    def get_comments_json(user,post_id,page=0,per_page=15):
+        comments = Comment.query.filter_by(post_id=post_id).offset(page*per_page).limit(per_page).all()
+        return [comment.json() for comment in comments]
+
+    @staticmethod
+    def comment_json(user,post_id,text):
+        p = Post.query.get(post_id)
+        if not p:
+            return {'error':'post not found'}
+
+        # am i following them?
+        am_following = VoteManager.is_following(user.id,p.user_id)
+        is_private = AccountManager.is_private(p.user_id)
+        if am_following or not is_private:
+            new_comment = Comment(user_id = user.id, post_id=post_id, text=text)
+            return new_comment.json()
+        else:
+            return {'error':'bad permission'}
 
     @staticmethod
     def _move_post_into_feeds(post_id, user_id):
@@ -116,37 +137,37 @@ class PostManager(BaseManager):
         return new_post
 
     @classmethod
-    def repost_json(cls, person, post_id, tags=None, text=None):
-        if not person:
+    def repost_json(cls, user, post_id, tags=None, text=None):
+        if not user:
             return {'error': 'insufficient data'}
-        post = PostManager.add(person.user.id, tags, None, text, repost_id=post_id)
-        data = PostManager.model_to_json(post)
+        post = PostManager.add(user.id, tags, None, text, repost_id=post_id)
+        data = post.json()
         picture_object = post.user.picture_object
         if picture_object:
             data.update({"user_ouuid": picture_object.ouuid})
-        data.update({"name":post.user.person.ascii_name})
+        data.update({"name":post.user.ascii_name})
         data.update({"username":post.user.username})
         if post.original:
-            original_post = PostManager.model_to_json(post.original)
-            original_post.update(PostManager.model_to_json(post.original.object))
-            original_post.update({"name": post.original.user.person.ascii_name})
+            original_post = post.original.json()
+            original_post.update(post.original.object.json())
+            original_post.update({"name": post.original.user.ascii_name})
             original_post.update({"username": post.original.user.username})
             data.update({"repost":original_post})
 
         # Notify if needed
         new_notification = NotificationManager.add(
-                            from_user_id=person.user.id,
+                            from_user_id=user.id,
                             to_user_id=post.original.user_id,
                             subject_id=post.id,
                             reason=Notification.REPOSTED)
         return data
 
     @classmethod
-    def post_json(cls, person, subject, text, tags=None, file_type=None):
-        if not person or not subject or not text:
+    def post_json(cls, user, subject, text, tags=None, file_type=None):
+        if not user or not subject or not text:
             return {'error': 'insufficient data'}
 
-        post = PostManager.add(person.user.id, tags, subject, text, repost_id=None, file_type=file_type)
+        post = PostManager.add(user.id, tags, subject, text, repost_id=None, file_type=file_type)
         object = post.object
 
         data = {}
@@ -154,9 +175,9 @@ class PostManager(BaseManager):
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
 
-        data.update(PostManager.model_to_json(object))
-        data.update(PostManager.model_to_json(post))
-        data.update({"name": post.user.person.ascii_name})
+        data.update(object.json())
+        data.update(post.json())
+        data.update({"name": post.user.ascii_name})
         data.update({"username": post.user.username})
         picture_object = post.user.picture_object
         if picture_object:
@@ -165,8 +186,8 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def delete_post_json(cls, person, post_id):
-        user_id = person.user.id
+    def delete_post_json(cls, user, post_id):
+        user_id = user.id
         post = Post.by_id(post_id)
 
         if post and post.user_id == user_id:

@@ -30,40 +30,16 @@ class Comment(Base,BaseMixin):
 
     """
         Defines the table which holds all data pertaining
-        to comments left on Objects, for either a person or page
+        to comments left on Objects, 
     """
 
-    object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
+    post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False)
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     text = Column(Unicode, nullable=False)
-    anonymous = Column(Boolean, nullable=False, default=True)
+    # anonymous = Column(Boolean, nullable=False, default=True)
     active = Column(Boolean, nullable=False, default=True)
     date_added = Column(DateTime, nullable=False, default=datetime.now)
 
-    @staticmethod
-    def add(object_comment_data):
-
-        """
-            PURPOSE:
-
-            USE:
-
-            PARAMS:
-
-            RETURNS:
-        """
-
-        new_object_comment = Comment()
-
-        new_object_comment.object_id = object_comment_data['object_id']
-        new_object_comment.user_id = object_comment_data['user_id']
-        new_object_comment.text = object_comment_data['text']
-        new_object_comment.anonymous = object_comment_data['anonymous']
-
-        DBSession.add(new_object_comment)
-        DBSession.flush()
-
-        return new_object_comment.id
 
     @staticmethod
     def get(comment_id, object_id=None, is_active=True):

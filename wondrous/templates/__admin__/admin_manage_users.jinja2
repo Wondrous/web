@@ -12,7 +12,7 @@
 <ul>
     {% if all_banned_users %}
         {% for user in all_banned_users %}
-            <li><a href="/_admin/manage/users/{{user.id}}/">{% if user.user_type == 1 %}{{get_person(user.id).name}}{%else%}<PAGE: TODO>{% endif %}</a></li>
+            <li><a href="/_admin/manage/users/{{user.id}}/">{% if user.user_type == 1 %}{{get_user(user.id).name}}{%else%}<PAGE: TODO>{% endif %}</a></li>
         {% endfor %}
     {% else %}
         <li>Oh joy, there are no banned users.</li>

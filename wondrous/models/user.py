@@ -40,10 +40,6 @@ DEFAULT_PROFILE_PICTURE_PATH = "/static/pictures/defaults/p.default-profile-pict
 class User(Base, PasswordManager, BaseMixin):
 
     """
-        Defines a core user object:
-            Person : A Person on the site
-            Page   : A page on the site.
-
         NOTE: Pages can act like Users. They can:
             Upvote,
             Downvote,
@@ -52,7 +48,8 @@ class User(Base, PasswordManager, BaseMixin):
             etc.
     """
 
-    user_type = Column(Integer, nullable=False) # 1 = Person, 2 = Page
+    name = Column(Unicode, nullable=False)
+    ascii_name = Column(Unicode, nullable=False)
 
     username = Column(Unicode, nullable=True, unique=True)  # nullable=True for FBAuth users
     email = Column(Unicode, nullable=False)
@@ -74,6 +71,22 @@ class User(Base, PasswordManager, BaseMixin):
 
     feed = relationship("Feed", uselist=False, backref="user")
     set_to_delete = Column(DateTime, nullable=True)
+
+    def __init__(self,*args,**kwargs):
+        super(User,self).__init__(*args,**kwargs)
+        self.ascii_name = unidecode.unidecode("{0}".format(fn=self.name).decode('utf-8'))
+
+    @classmethod
+    def by_id_like(cls, key, ascii=False, num=50):
+
+        """
+            TODO: Probably should go into its own controllers/personmanager.py file
+        """
+
+        if not ascii:
+            return cls.query.filter(cls.name.ilike("%{q}%".format(q=key))).limit(num)
+        elif ascii:
+            return cls.query.filter(cls.name.ilike("%{q}%".format(q=key))).limit(num)  # ascii_name
 
     @classmethod
     def get_all_banned_users(cls):

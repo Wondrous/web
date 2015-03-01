@@ -37,7 +37,7 @@ class AuthHelper(object):
         return True if request.person else False
 
     @staticmethod
-    def get_person(request):
+    def get_user(request):
 
         """
             PURPOSE: To create a global user object.
@@ -53,8 +53,8 @@ class AuthHelper(object):
                      None if one does not exist
         """
 
-        person_id = unauthenticated_userid(request)
-        return Person.query.options(joinedload(Person.user).joinedload(User.feed)).filter_by(id=person_id).first() if person_id else None
+        user_id = unauthenticated_userid(request)
+        return User.query.get(user_id) if user_id else None
 
     @staticmethod
     def get_admin(request):

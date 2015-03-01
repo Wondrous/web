@@ -254,7 +254,7 @@ class AdminHandler(AdminBaseHandler):
             admin=admin,
             render_items=all_reported_posts,
             top_offenders=ReportedContentManager.get_top_offenders(),
-            get_person=Person.by_id,  # unbound method
+            get_user=Person.by_id,  # unbound method
             get_num_offenses=ReportedContentManager.get_total_offenses_for_user,  # unbound method
             SUPER_ADMIN=self.SUPER_ADMIN,
         )
@@ -288,7 +288,7 @@ class AdminHandler(AdminBaseHandler):
             current_page='manage_users',
             admin=admin,
             all_banned_users=User.get_all_banned_users(),
-            get_person=Person.by_id,  # unbound method
+            get_user=Person.by_id,  # unbound method
             get_num_offenses=ReportedContentManager.get_total_offenses_for_user,  # unbound method
             SUPER_ADMIN=self.SUPER_ADMIN,
             error_message=error_message,

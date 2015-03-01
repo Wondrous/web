@@ -22,6 +22,7 @@ class BaseManager(object):
     def model_to_json(cls, model, level=0):
 
         """
+        DEPRECIATED!!!!!
             PURPOSE: Transforms a model into a dictionary which can be dumped to JSON.
 
             USE: Call like: <cls>.model_to_json(...)

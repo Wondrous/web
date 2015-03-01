@@ -14,7 +14,6 @@ import uuid
 from wondrous.models import (
     DBSession,
     Feed,
-    Person,
     User,
     Vote,
     Object
@@ -28,18 +27,17 @@ import logging
 class AccountManager(BaseManager):
 
     """
-        This is controller for both person and user models!
+        This is controller for both user models!
 
         'user_type'  : 1,
         'username'   : "username"+str(i),
         'email'      : email,
         'password'   : "password"+str(i),
 
-        'first_name' : "first_name"+str(i),
-        'last_name'  : "last_name"+str(i),
+        'name'  : "name"+str(i),
     """
 
-    DYNAMIC_FIELDS = ['username', 'first_name', 'last_name', 'ascii_name']  # TODO Should this be a set?
+    DYNAMIC_FIELDS = ['username', 'name', 'ascii_name']  # TODO Should this be a set?
 
     @staticmethod
     def is_username_taken(username):
@@ -60,17 +58,15 @@ class AccountManager(BaseManager):
         return True
 
     @classmethod
-    def add(cls, first_name, last_name, email, username, password, user_type=1):
-        # First let's create the person object - point of contact for the account
-        new_user = User(user_type=user_type, username=username, email=email, password=password, is_active=True)
+    def add(cls, name, email, username, password):
+        # First let's create the object object - point of contact for the account
+        new_user = User(name=name, user_type=user_type, username=username, email=email, password=password, is_active=True)
 
         DBSession.add(new_user)
         DBSession.flush()
 
-        new_person = Person(first_name=first_name, last_name=last_name, user_id=new_user.id)
         new_feed = Feed(user_id=new_user.id)
 
-        DBSession.add(new_person)
         DBSession.add(new_feed)
 
         # Follow yourself
@@ -81,13 +77,13 @@ class AccountManager(BaseManager):
         return new_user
 
     @classmethod
-    def upload_picture_json(cls,person,file_type):
-        picture_object = person.user.picture_object
+    def upload_picture_json(cls, user, file_type):
+        picture_object = user.picture_object
         if not picture_object:
-            picture_object = Object(subject=str(person.user.id), text="profile_picture")
+            picture_object = Object(subject=str(user.id), text="profile_picture")
             DBSession.add(picture_object)
             DBSession.flush()
-            person.user.picture_object_id = picture_object.id
+            user.picture_object_id = picture_object.id
 
         # TODO DELETE OLD PHOTO -- picture_object.ouuid
         picture_object.ouuid = str(picture_object.id)+'-'+unicode(uuid.uuid4()).lower()
@@ -115,7 +111,7 @@ class AccountManager(BaseManager):
         return data
 
     @classmethod
-    def get_json_by_username(cls, person, user_id = None, username = None):
+    def get_json_by_username(cls, user, user_id = None, username = None):
         from wondrous.controllers.votemanager import VoteManager
         if not user_id and not username:
             return {}
@@ -128,15 +124,13 @@ class AccountManager(BaseManager):
         if not user:
             return {'error':'no users found!'}
         user_id = user.id
-        am_following = VoteManager.is_following(person.user.id,user_id) if person else False
+        am_following = VoteManager.is_following(user.id,user_id) if user else False
 
         # Am i querying for myself?
-        if person and person.user.id == user_id:
+        if user and user.id == user_id:
             retval = cls._get_relationship_stats(user_id)
-            retval.update(super(AccountManager, cls).model_to_json(person.user, 1))
-            retval.update({"name": person.ascii_name})
-            retval.update({"first_name": person.first_name})
-            retval.update({"last_name": person.last_name})
+            retval.update(user.json(1))
+            retval.update({"name": user.ascii_name})
             retval.update({"following":am_following})
             retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
             picture_object = user.picture_object
@@ -148,12 +142,11 @@ class AccountManager(BaseManager):
 
         # if the user is public or I am following
         if (not user.is_private and not user.is_banned and user.is_active) or \
-            (person and not user.is_banned and user.is_active and am_following):
+            (user and not user.is_banned and user.is_active and am_following):
 
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager, cls).model_to_json(user))
-            retval.update({"name": user.person.ascii_name})
-            retval.update({"first_name": user.person.first_name})
+            retval.update({"name": user.ascii_name})
             retval.update({"following":am_following})
             picture_object = user.picture_object
             if picture_object:
@@ -162,7 +155,7 @@ class AccountManager(BaseManager):
 
         elif user.is_private and not user.is_banned and user.is_active:
             retval = {}
-            retval.update({"name": user.person.ascii_name})
+            retval.update({"name": user.ascii_name})
             retval.update({"following":am_following})
             retval.update({'is_private': True})
             retval.update({'id':user.id})
@@ -171,9 +164,9 @@ class AccountManager(BaseManager):
         return {'error':'no users found!'}
 
     @classmethod
-    def deactivate_json(cls, person, password):
+    def deactivate_json(cls, user, password):
         from wondrous.controllers.postmanager import PostManager
-        user = person.user
+
         if user and user.validate_password(password):
             user.is_active = False
             PostManager.deactivate_by_userid(user.id)
@@ -181,17 +174,17 @@ class AccountManager(BaseManager):
         return {'error': 'deactivation failed'}
 
     @classmethod
-    def delete_json(cls, person, password):
-        user = person.user
+    def delete_json(cls, user, password):
+
         if user and user.validate_password(password):
             user.set_to_delete = datetime.now()
-            cls.deactivate_json(person,password)
+            cls.deactivate_json(user,password)
             return {'status': 'set to delete in x days'}
         return {'error': 'deletion failed'}
 
     @classmethod
-    def change_password_json(cls, person, old_password, new_password):
-        user = person.user
+    def change_password_json(cls, user, old_password, new_password):
+
         if user and user.validate_password(old_password.encode('utf-8')):
             user.password = new_password
             DBSession.flush()
@@ -199,37 +192,24 @@ class AccountManager(BaseManager):
         return {"error": "password change failed"}
 
     @classmethod
-    def change_name_json(cls, person, first_name, last_name):
-        data = cls.change_profile_json(person,'first_name',first_name)
-        data.update(cls.change_profile_json(person,'last_name',last_name))
-        data.update(cls.change_profile_json(person,'ascii_name',unicode(first_name+" "+last_name)))
+    def change_name_json(cls, user, name):
+        data = cls.change_profile_json(user,'name',name)
+        data.update(cls.change_profile_json(user,'ascii_name',unicode(name)))
         return data
 
     @classmethod
-    def change_username_json(cls, person, username):
-        data = cls.change_profile_json(person,'username',username)
+    def change_username_json(cls, user, username):
+        data = cls.change_profile_json(user,'username',username)
         return data
 
     @classmethod
-    def change_profile_json(cls, person, field, new_value):
+    def change_profile_json(cls, user, field, new_value):
         if field not in cls.DYNAMIC_FIELDS:
             return {"error": field + " not found"}
 
-        user = person.user
-
-        # check both user and person
         exists = getattr(user, field, None)
         if exists:
             setattr(user, field, new_value)
-            try:
-                DBSession.flush()
-            except Exception, e:
-                return {'error':str(e)}
-            return {field: new_value}
-
-        exists = getattr(person, field, None)
-        if exists:
-            setattr(person, field, new_value)
             try:
                 DBSession.flush()
             except Exception, e:

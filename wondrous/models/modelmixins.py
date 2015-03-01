@@ -24,6 +24,8 @@ from sqlalchemy import Unicode
 
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import ClauseElement
+from sqlalchemy.orm import class_mapper
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -31,6 +33,11 @@ from wondrous.models import DBSession
 
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
+
+SENSITIVE_KW = [
+    ['_password','password','is_banned', 'email', 'last_login'],
+    ['_password','password','is_banned']
+]
 
 def convert_camel(name):
 
@@ -70,6 +77,21 @@ class BaseMixin(object):
         """
 
         return convert_camel(cls.__name__)
+
+    def json(self, level=0):
+            columns = [c.key for c in class_mapper(self.__class__).columns]
+            data = {}
+            for c in columns:
+                if c in SENSITIVE_KW[level]:
+                    continue
+                try:
+                    val = getattr(self, c)
+                    if isinstance(val, datetime):
+                        val = val.isoformat()
+                    data[c] = val
+                except Exception, e:
+                    pass
+            return data
 
     @classmethod
     def _add(cls,**kwargs):

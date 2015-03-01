@@ -13,13 +13,10 @@ var NameChange = React.createClass({
     handleSubmit: function(){
         WondrousAPI.changeName({
             callback: this.handleData,
-            first_name: this.refs.first_name.getDOMNode().value,
-            last_name: this.refs.last_name.getDOMNode().value
+            name: this.refs.name.getDOMNode().value,
         });
     },
     render:function(){
-        var firstName = this.props.user.first_name;
-        var lastName = this.props.user.last_name;
         var name = this.props.user.name;
         return (
             <div className="info-settings-item">
@@ -31,8 +28,7 @@ var NameChange = React.createClass({
                         Note: You can only change your name a very limited number of times.
                     </div>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" ref="first_name" className="basic-input" placeholder={firstName}/>
-                        <input type="text" ref="last_name" className="basic-input" placeholder={lastName}/>
+                        <input type="text" ref="name" className="basic-input" placeholder={name}/>
                         <input type="submit" value="Save changes"/>
                     </form>
                 </div>

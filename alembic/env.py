@@ -11,7 +11,6 @@ from wondrous.models import (
     notification,
     object,
     page,
-    person,
     refer,
     post,
     tag,

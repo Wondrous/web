@@ -50,8 +50,8 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def vote_json(cls, person, subject_id, vote_type, action):
-        from_user_id = person.user.id
+    def vote_json(cls, user, subject_id, vote_type, action):
+        from_user_id = user.id
         subject_id      = long(subject_id)
         vote_type    = int(vote_type)
         action       = int(action)
@@ -93,7 +93,7 @@ class VoteManager(BaseManager):
                         "total_follower"  : cls.get_follower_count(subject_id),
                     }
                 elif vote_type == Vote.OBJECT:
-                    return super(VoteManager, cls).model_to_json(vote)
+                    return vote.json()
         else:
             return {'error': 'invalid inputs'}
 
@@ -190,7 +190,7 @@ class VoteManager(BaseManager):
     def like(cls, from_user_id, post_id):
 
         """
-            PURPOSE: Checks if there exists a relationship between a person and an object, this is a toggle
+            PURPOSE: Checks if there exists a relationship between an object, this is a toggle
         """
         post = Post.by_id(post_id)
         if not post:
@@ -349,7 +349,7 @@ class VoteManager(BaseManager):
         return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
 
     @classmethod
-    def get_followers_json(cls, person, username = None, user_id = None, page = 0):
+    def get_followers_json(cls, user, username = None, user_id = None, page = 0):
         u = User.by_kwargs(username=username).first()
         if u:
             user_id = u.id
@@ -361,8 +361,7 @@ class VoteManager(BaseManager):
 
         retval = []
         for user in users:
-            model_dict = super(VoteManager,cls).model_to_json(user)
-            model_dict.update(super(VoteManager,cls).model_to_json(user.person))
+            model_dict = user.json()
             picture_object = user.picture_object
             if picture_object:
                 model_dict.update({"ouuid": picture_object.ouuid})
@@ -370,7 +369,7 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def get_following_json(cls, person, username = None, user_id = None, page = 0):
+    def get_following_json(cls, user, username = None, user_id = None, page = 0):
         u = User.by_kwargs(username=username).first()
         if u:
             user_id = u.id
@@ -382,8 +381,7 @@ class VoteManager(BaseManager):
 
         retval = []
         for user in users:
-            model_dict = super(VoteManager,cls).model_to_json(user)
-            model_dict.update(super(VoteManager,cls).model_to_json(user.person))
+            model_dict = user.json()
             picture_object = user.picture_object
             if picture_object:
                 model_dict.update({"ouuid": picture_object.ouuid})

@@ -52,8 +52,7 @@ var Signup = React.createClass({
         var username = this.refs.username.getDOMNode().value.trim();
         WondrousAPI.registerCheck({
             callback: this.handleCheck,
-            first_name: this.refs.first_name.getDOMNode().value.trim(),
-            last_name: this.refs.last_name.getDOMNode().value.trim(),
+            name: this.refs.name.getDOMNode().value.trim(),
             username: this.refs.username.getDOMNode().value.trim(),
             email: this.refs.email.getDOMNode().value.trim(),
             password: this.refs.password.getDOMNode().value
@@ -67,10 +66,7 @@ var Signup = React.createClass({
                 <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Sign up :)</h1>
                 <form action="/signup/" method="POST">
                     <div>
-                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="first_name" ref="first_name" placeholder="First name"/>
-                    </div>
-                    <div>
-                        <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="last_name" ref="last_name" placeholder="Last name"/>
+                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="name"/>
                     </div>
                     <div>
                         <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="email" ref="email" placeholder="Email"/>

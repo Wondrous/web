@@ -63,12 +63,6 @@ from wondrous.models.page import (
     UserToPage,  # UNUSED
 )
 
-from wondrous.models.person import (
-    Person,
-    # UnverifiedEmail,
-    # WaitingList,
-)
-
 from wondrous.models.tag import (
     Tag,
     PostTagLink,
