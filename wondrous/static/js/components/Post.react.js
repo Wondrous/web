@@ -190,7 +190,7 @@ var Post = React.createClass({
             this.props.data.subject = repost.subject;
         }
 
-        this.props.data.text = this.props.data.text.replace(/\n/g, "<br>");
+        var thisText = this.props.data.text.split('\n');
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3" >
@@ -203,7 +203,17 @@ var Post = React.createClass({
                     </div>
                     <div className="post-content" >
                         <div className="post-content-text">
-                            { this.props.data.text }
+                            {
+                                thisText.map(function(textChunk, idx) {
+                                    if (idx == thisText.length - 1) {
+                                        return textChunk;
+                                    } else {
+                                        return (
+                                            <span>{textChunk}<br/></span>
+                                        );
+                                    }
+                                })
+                            }
                         </div>
                         <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
                         <div>
