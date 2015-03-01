@@ -384,7 +384,7 @@ class APIViews(BaseHandler):
         tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
         # query_kwargs.update({'tags':tags})
-        return PostManager.repost_json(user,**query_kwargs)
+        return PostManager.repost_json(**query_kwargs)
 
     @api_login_required
     @view_config(request_method='POST', route_name='api_user_vote', renderer='json')
@@ -485,7 +485,7 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array containing the status of the delete
         """
 
-        return PostManager.delete_post_json(user,**self.query_kwargs)
+        return PostManager.delete_post_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_new_comment', renderer='json')
@@ -500,7 +500,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the comment
         """
-        return PostManager.new_comment_json(self.request.user,**self.query_kwargs)
+        return PostManager.new_comment_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_post_comments', renderer='json')
@@ -515,7 +515,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the comment
         """
-        return PostManager.get_comments_json(self.request.user,**self.query_kwargs)
+        return PostManager.get_comments_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_comment_delete', renderer='json')
@@ -530,4 +530,4 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the comment
         """
-        return PostManager.delete_comment_json(self.request.user,**self.query_kwargs)
+        return PostManager.delete_comment_json(**self.query_kwargs)
