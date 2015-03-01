@@ -17,11 +17,6 @@ from pyramid.view import view_config
 
 from wondrous.models.comment import Comment
 
-from wondrous.models.content import (
-    DeletedContentManager,
-    DeletedComment,
-    ReportedContentManager,
-)
 
 from wondrous.models.object import (
     Object,
@@ -358,7 +353,10 @@ class APIViews(BaseHandler):
             if len(tags) > 0:
                 query_kwargs.update({'tags': tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
+	logging.warn(query_kwargs)
         retval = PostManager.post_json(**query_kwargs)
+
+
         return retval
 
 
@@ -433,7 +431,7 @@ class APIViews(BaseHandler):
         """
 
 
-        return NotificationManager.notification_json(user,**self.query_kwargs)
+        return NotificationManager.notification_json(**self.query_kwargs)
 
     @view_config(request_method='POST',route_name='api_signup_check', renderer='json')
     def api_signup_check(self):

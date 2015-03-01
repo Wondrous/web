@@ -10,9 +10,6 @@
 
 from pyramid.view import view_config
 
-from wondrous.models.content import DeletedContentManager
-from wondrous.models.content import ReportedContentManager
-
 from wondrous.models.object import Object
 
 from wondrous.models.user import User
