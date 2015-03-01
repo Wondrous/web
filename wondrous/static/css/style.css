@@ -877,6 +877,9 @@ a:hover {
   color: #333333;
   line-height: 1.3em; }
 
+.post-content-text {
+  padding: 2px 10px; }
+
 .post-footer-btn {
   font-size: 15px;
   font-weight: normal;
@@ -1000,12 +1003,13 @@ a:hover {
   padding: 7px 3%; }
 
 .post-title {
-  font-family: helvetica, arial, sans-serif;
-  font-size: 30px;
+  font-family: 'arial black', georgia, helvetica, arial, sans-serif;
+  font-size: 28px;
   font-weight: bold;
   color: #333333;
   text-align: left;
-  margin: 15px; }
+  margin: 15px;
+  line-height: 1.2em; }
 
 .post-see-more {
   position: relative;
