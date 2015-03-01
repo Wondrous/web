@@ -217,7 +217,7 @@ var Post = React.createClass({
                         </div>
                         <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
                         <div>
-                            <span onClick={this.likePost} className="post-footer-btn post-like-btn round-2">{this.props.data.liked?"Unlike":"Like!"}</span>
+                            <span onClick={this.likePost} className="post-footer-btn post-like-btn round-2">{this.props.data.liked?"Liked!":"Like"}</span>
                             <span onClick={this.clickRepost} className="post-footer-btn post-repost-btn round-2">Repost</span>
                             {is_it_mine?<span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>:null}
                         </div>
