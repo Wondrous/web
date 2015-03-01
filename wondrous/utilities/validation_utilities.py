@@ -447,35 +447,6 @@ class ValidationHelper(object):
         return True if wait_period > start_date else False
 
     @staticmethod
-    def valid_community(community_id, person_id):
-
-        """
-            PURPOSE: Make sure the person person is valid,
-            the community is valid, and that the valid
-            person belongs to the valid community
-
-            USE: Call like: ValidationHelper.valid_community(...)
-
-            PARAMS: 2 required params:
-                - community_id : int : REQUIRED : The Community.id of the community being posted to
-                - person_id    : int : REQUIRED : The Person.id of the person posting
-
-            RETURNS: A boolean: True if all is valid, False if not.
-        """
-
-        # Circular imports be gone
-        from wondrous.models.community import CommunityManager
-        from wondrous.models.community import PersonToCommunityManager
-
-        community = CommunityManager.get(community_id)
-        person_to_community = PersonToCommunityManager.get(person_id)
-
-        if community and person_to_community:
-            return True if community.id == person_to_community.community_id else False
-        else:
-            return False
-
-    @staticmethod
     def valid_profile(user_id):
 
         """
@@ -562,8 +533,8 @@ class ValidatePost(object):
         if post_text:
             post_text = post_text.strip()  # strip trailing and leading whitespace
             post_text = cgi.escape(post_text)  # escape HTML characters
-            post_text = post_text.replace('\n', " <br>")  # Replace \n's with <br>'s
-            return re.sub("(\s*<br>\s*){3,}", ' <br><br>', post_text)  # Make 3 or more <br>'s into maximum 2 <br>
+            # post_text = post_text.replace('\n', " <br/>")  # Replace \n's with <br>'s
+            return re.sub("(\s*\n\s*){3,}", ' \n\n', post_text)  # Make 3 or more \n's into maximum 2 \n's
         else:
             return post_text
 

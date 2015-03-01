@@ -189,6 +189,8 @@ var Post = React.createClass({
             this.props.data.text = repost.text;
             this.props.data.subject = repost.subject;
         }
+
+        this.props.data.text = this.props.data.text.replace(/\n/g, "<br>");
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3" >
@@ -201,7 +203,7 @@ var Post = React.createClass({
                     </div>
                     <div className="post-content" >
                         <div className="post-content-text">
-                        {this.props.data.text}
+                            { this.props.data.text }
                         </div>
                         <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
                         <div>

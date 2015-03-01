@@ -1,4 +1,5 @@
 var Post = require('./Post.react');
+var PostForm = require('./PostForm.react');
 var WallStore = require('../stores/WallStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
@@ -498,6 +499,7 @@ var Profile = React.createClass({
                     <div>
                         <UserBar username={username} />
                         <div className="cover profile-content">
+                            <PostForm />
                             <RouteHandler />
                         </div>
                     </div>

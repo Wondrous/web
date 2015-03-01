@@ -10,6 +10,7 @@
 
 
 # import json
+import logging
 # import os
 import time
 import urllib
@@ -31,12 +32,11 @@ from wondrous.models import (
     # Vote,
 )
 
-from wondrous.controllers.votemanager import VoteManager
 from wondrous.controllers.basemanager import BaseManager
-from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.controllers.notificationmanager import NotificationManager
-
-import logging
+from wondrous.controllers.votemanager import VoteManager
+from wondrous.utilities.validation_utilities import UploadManager
+from wondrous.utilities.validation_utilities import ValidatePost
 
 class PostManager(BaseManager):
 
@@ -66,7 +66,7 @@ class PostManager(BaseManager):
             repost objects
 
             Params:
-                user_id: int : id of the author
+                user_id   : int : id of the author
                 tags      : set : set list of tags
                 subject   : str : subject text of the item
                 text      : str : text of the post
@@ -90,8 +90,11 @@ class PostManager(BaseManager):
         else:
             # take it apart
             # First create the post container, then the object
+
+            text = ValidatePost.sanitize_post_text(text)
             new_post = Post(user_id=user_id)
             new_object = Object(subject=subject, text=text)
+
             DBSession.add(new_object)
             DBSession.flush()
 
