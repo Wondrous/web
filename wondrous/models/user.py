@@ -8,7 +8,7 @@
 #
 
 from datetime import datetime
-
+import unidecode
 from sqlalchemy import (
     BigInteger,
     Boolean,
@@ -74,7 +74,7 @@ class User(Base, PasswordManager, BaseMixin):
 
     def __init__(self,*args,**kwargs):
         super(User,self).__init__(*args,**kwargs)
-        self.ascii_name = unidecode.unidecode("{0}".format(fn=self.name).decode('utf-8'))
+        self.ascii_name = unidecode.unidecode("{0}".format(self.name).decode('utf-8'))
 
     @classmethod
     def by_id_like(cls, key, ascii=False, num=50):
