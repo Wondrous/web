@@ -481,155 +481,47 @@ class APIViews(BaseHandler):
         user = self.request.user
         return PostManager.delete_post_json(user,**self.query_kwargs)
 
-class AjaxHandler(BaseHandler):
-
-    """
-        PURPOSE: This class contains all the methods called via AJAX
-        for the main platform
-    """
-
-    @view_config(route_name='ajax_username_check_handler', renderer='json')
-    def ajax_login_check_handler(self):
-
+    @api_login_required
+    @view_config(request_method='DELETE', route_name='api_new_comment', renderer='json')
+    def api_new_comment(self):
         """
-            PURPOSE: This method is called on the JS onkeyup event,
-            and it dyanmically checks to see if your new username is
-            valid and/or is already taken
+            PURPOSE: creates a new comment by post_id
+
+            USE: self.query_kwargs to provide all the required inputs.
+                user,post_id, text
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array containing the comment
         """
+        return PostManager.new_comment_json(self.request.user,**self.query_kwargs)
 
-        safe_in  = Sanitize.safe_input
-        success  = None
-        error    = None
-        username = safe_in(self.request.POST.get('un'))
-
-        valid_un_regex = Sanitize.is_valid_username(username)
-        un_is_taken    = AccountManager.is_username_taken(username)
-
-        if valid_un_regex and not un_is_taken:
-            success = "Your username looks great!"
-        else:
-            if not valid_un_regex:
-                error = "This is not a valid username"
-            else:
-                error = "Sorry, this is username is taken"
-
-        return {
-            'success' : success,
-            'error'   : error,
-        }
-
-    @login_required
-    @view_config(route_name='ajax_hide_tutorial', xhr=True, renderer='json')
-    def ajax_hide_tutorial(self):
-
+    @api_login_required
+    @view_config(request_method='DELETE', route_name='api_post_comments', renderer='json')
+    def api_post_comments(self):
         """
-            PURPOSE: This method is called when a user clicks
-            out of the tutorial. It indicates in the DB that
-            the user has completed the mini-tutorial on signup
+            PURPOSE: get a list of comments for post_id
+
+            USE: self.query_kwargs to provide all the required inputs.
+                user,post_id, page=0, per_page = 15
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array containing the comment
         """
+        return PostManager.get_comments_json(self.request.user,**self.query_kwargs)
 
-        current_user = self.request.user
-        if current_user:
-            current_user.show_tutorial = False
-        return {}
-
-
-    @login_required
-    @view_config(route_name='accept_user_request', xhr=True, renderer='json')
-    def accept_user_request(self):
-        user_id = int(self.request.POST.get('user_id'))
-        accepted = VoteManager.accept_request(self.request.user.user.id,user_id)
-        if accepted:
-            vote_data = {
-                'total_following'    : VoteManager.get_following_count(self.request.user.user.id),
-                'total_follower'     : VoteManager.get_follower_count(self.request.user.user.id),
-            }
-            return vote_data
-        else:
-            return {}
-
-    @login_required
-    @view_config(route_name='ajax_user_vote_handler', xhr=True, renderer='json')
-    def ajax_user_vote_handler(self):
-        vote_type = int(self.request.POST.get('vote_type'))
-        status = int(self.request.POST.get('vote_status'))
-        if not VoteManager.validate_vote_args(vote_type=vote_type, status=status):
-            return {}
-
-        current_user = self.request.user.user
-        user_id = int(self.request.POST.get('user_id'))
-        voter_id = str(current_user.id)
-
-        notified = VoteManager.vote_on_user(voter_id,user_id,status)
-
-        if notified:
-            vote_data = {
-                'total_following'    : VoteManager.get_following_count(user_id),
-                'total_follower'     : VoteManager.get_follower_count(user_id),
-            }
-            return vote_data
-        else:
-            return {}
-
-    @login_required
-    @view_config(route_name='ajax_toggle_profile_visibility_handler', xhr=True, renderer='json')
-    def ajax_toggle_profile_visibility_handler(self):
-
+    @api_login_required
+    @view_config(request_method='DELETE', route_name='api_comment_delete', renderer='json')
+    def api_comment_delete(self):
         """
-            PURPOSE: This method enables users make their profiles
-            either publically accessible, or private.
+            PURPOSE: delete a comment by user_id
 
-            If it is publically accessible, they do not need to
-            approve followers. If it is private, they must manually
-            approve all pending follow requests
+            USE: self.query_kwargs to provide all the required inputs.
+                user,comment_id
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array containing the comment
         """
-
-        current_user = self.request.user.user
-        current_user.is_private = not current_user.is_private
-        return {}
-
-    
-
-    @login_required
-    @view_config(route_name='ajax_notification', xhr=True, renderer='json')
-    def ajax_notification(self):
-
-        ajax_method  = self.url_match(url_match='ajax_method')
-        current_user = self.request.user
-        # batch      = safe_in(self.request.GET.get('batch')) # The search term
-
-        if ajax_method == "count":
-
-            nc = NotificationManager.get_unseen_notification_count_for_user(current_user.id)
-            data = {'notification_count' : nc}
-            return data
-
-        elif ajax_method == "get":
-
-            # try:
-            #   bnum = int(batch) if batch else 1
-            # except:
-            #   bnum = 1
-
-            all_notifications_for_user = NotificationManager.get_notifications_for_user(current_user.id)
-            notification_data = [{
-                'nid'        : n.id,
-                'from_name'  : User.by_id(n.from_user_id).username,
-                'from_photo' : n.from_user.profile_picture,
-                'ntext'      : n.notification,
-                'url'        : n.url if n.url else "#",
-                'is_read'    : n.is_read,
-            } for n in all_notifications_for_user]
-
-            data = {
-                'notification_data' : notification_data,
-            }
-            return data
-
-        elif ajax_method == "mark_all_seen":
-
-            NotificationManager.set_all_seen(current_user.id)
-            return {}
-
-        else:
-            return {}
+        return PostManager.delete_comment_json(self.request.user,**self.query_kwargs)

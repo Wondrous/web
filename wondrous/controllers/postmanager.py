@@ -40,6 +40,17 @@ from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
 
 class PostManager(BaseManager):
+    @staticmethod
+    def delete_comment_json(user,comment_id):
+        c = Comment.by_id(comment_id)
+        if c:
+            p = Post.by_id(c.post_id)
+            if (p and p.user_id == user.id) or c.user_id==user.id:
+                DBSession.delete(c)
+                DBSession.flush()
+                return {'status':True}
+        else:
+            return {'error':'failed to delete comment'}
 
     @staticmethod
     def get_comments_json(user,post_id,page=0,per_page=15):
@@ -47,7 +58,7 @@ class PostManager(BaseManager):
         return [comment.json() for comment in comments]
 
     @staticmethod
-    def comment_json(user,post_id,text):
+    def new_comment_json(user,post_id,text):
         p = Post.query.get(post_id)
         if not p:
             return {'error':'post not found'}
@@ -57,6 +68,8 @@ class PostManager(BaseManager):
         is_private = AccountManager.is_private(p.user_id)
         if am_following or not is_private:
             new_comment = Comment(user_id = user.id, post_id=post_id, text=text)
+            DBSession.add(new_comment)
+            DBSession.flush()
             return new_comment.json()
         else:
             return {'error':'bad permission'}
