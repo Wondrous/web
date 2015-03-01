@@ -223,7 +223,6 @@ module.exports = {
         var uploadData = options.uploadData;
         var callback = options.callback;
         if (!uploadData.hasOwnProperty('subject')||!uploadData.hasOwnProperty('text')) callback({error:"not sufficient"},null);
-
         var url = '/api/wall/new';
         request.post(url)
         .send(uploadData).end(_callback(callback));

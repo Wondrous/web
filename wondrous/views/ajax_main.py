@@ -58,6 +58,7 @@ from wondrous.utilities.validation_utilities import (
 from wondrous.views.main import BaseHandler
 
 from wondrous.models.refer import ReferrerManager
+import json
 import logging
 
 class APIViews(BaseHandler):
@@ -66,6 +67,11 @@ class APIViews(BaseHandler):
     def query_kwargs(self):
         kwargs = defaultdict(lambda: None)
         kwargs.update(self.request.params)
+        try:
+            if self.request.body:
+                kwargs.update(json.loads(self.request.body))
+        except Exception, e:
+            pass
 
         for key in kwargs.keys():
             val = kwargs[key]
@@ -345,7 +351,6 @@ class APIViews(BaseHandler):
         """
 
         p            = self.request.POST
-        user       = self.request.user
         tags         = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
         if 'tags[]' in query_kwargs.keys():
@@ -353,7 +358,7 @@ class APIViews(BaseHandler):
             if len(tags) > 0:
                 query_kwargs.update({'tags': tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
-	logging.warn(query_kwargs)
+        logging.warn(query_kwargs)
         retval = PostManager.post_json(**query_kwargs)
 
 
