@@ -93,7 +93,7 @@ class FeedManager(BaseManager):
     @classmethod
     def get_wall_posts(cls, page=0, per_page=15, **kwargs):
         page = int(page)
-        posts = Post.query.order_by(desc(Post.created_at)).filter_by(**kwargs).limit(per_page).offset(page*per_page).all()
+        posts = Post.query.order_by(desc(Post.created_at)).filter_by(**kwargs).filter_by(set_to_delete=None).limit(per_page).offset(page*per_page).all()
         return posts
 
     @classmethod

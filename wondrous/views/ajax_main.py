@@ -72,17 +72,21 @@ class APIViews(BaseHandler):
         kwargs = defaultdict(lambda: None)
         kwargs.update(self.request.params)
 
-        #sanitize everything
-        try:
-            if self.request.body:
-                kwargs.update(json.loads(self.request.body))
-        except Exception, e:
-            pass
-
         for key in kwargs.keys():
             val = kwargs[key]
+
             if isinstance(val,str):
-                kwargs[key] = Sanitize.safe_input(val)
+                kwargs[key] = val.strip().text.encode('utf-8')
+
+            if key in ['page','per_page']:
+                try:
+                    kwargs[key] = int(val)
+                except ValueError:
+                    kwargs[key] = None
+
+        if self.request.user:
+            kwargs['user'] = self.request.user
+
         return kwargs
 
     @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
@@ -130,8 +134,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array of the wallpost objects
         """
 
-        user = self.request.user
-        posts  = VoteManager.get_followers_json(user, **self.query_kwargs)
+
+        posts  = VoteManager.get_followers_json(**self.query_kwargs)
         return posts
 
     @view_config(request_method="GET",route_name='api_user_following', renderer='json')
@@ -149,8 +153,7 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array of the wallpost objects
         """
 
-        user = self.request.user
-        posts  = VoteManager.get_following_json(user, **self.query_kwargs)
+        posts  = VoteManager.get_following_json(**self.query_kwargs)
         return posts
 
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
@@ -161,15 +164,15 @@ class APIViews(BaseHandler):
                 status
 
             USE: self.query_kwargs to provide all the required inputs.
-                user, user_id or username
+                user_id or username
 
             PARAMS: (None)
 
             RETURNS: The JSON of the user+user model if valid else {}
         """
 
-        user = self.request.user
-        return AccountManager.get_json_by_username(user, **self.query_kwargs)
+
+        return AccountManager.get_json_by_username(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="GET",route_name='api_user_me', renderer='json')
@@ -179,14 +182,14 @@ class APIViews(BaseHandler):
                 status
 
             USE: self.query_kwargs to provide all the required inputs.
-                user, user_id
+                user_id
 
             PARAMS: (None)
 
             RETURNS: The JSON of the user+user model if valid else {}
         """
-        user = self.request.user
-        return AccountManager.get_json_by_username(user, **{'user_id': user.id})
+        user = self.query_kwargs['user']
+        return AccountManager.get_json_by_username(user,**{'user_id': user.id})
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_picture', renderer='json')
@@ -195,14 +198,14 @@ class APIViews(BaseHandler):
             PURPOSE: Changes profile picture
 
             USE: self.query_kwargs to provide all the required inputs.
-                user, file_type
+                file_type
 
             PARAMS: (None)
 
             RETURNS: The JSON of the user+user model if valid else {}
         """
-        user = self.request.user
-        return AccountManager.upload_picture_json(user, **self.query_kwargs)
+
+        return AccountManager.upload_picture_json(**self.query_kwargs)
 
     @login_required
     @view_config(request_method="POST", route_name='api_user_visibility_toggle', renderer='json')
@@ -217,7 +220,7 @@ class APIViews(BaseHandler):
             approve all pending follow requests
         """
 
-        current_user = self.request.user
+        current_
         current_user.is_private = not current_user.is_private
         return {'is_private': current_user.is_private}
 
@@ -236,8 +239,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array of the wallpost objects
         """
 
-        user = self.request.user
-        posts  = FeedManager.get_wall_posts_json(user, **self.query_kwargs)
+
+        posts  = FeedManager.get_wall_posts_json(**self.query_kwargs)
         return posts
 
     @api_login_required
@@ -255,8 +258,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing either an error or successful status
         """
 
-        user = self.request.user
-        return AccountManager.deactivate_json(user, **self.query_kwargs)
+
+        return AccountManager.deactivate_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_name', renderer='json')
@@ -272,8 +275,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing either an error or successful status
         """
 
-        user = self.request.user
-        return AccountManager.change_name_json(user, **self.query_kwargs)
+
+        return AccountManager.change_name_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_username', renderer='json')
@@ -290,8 +293,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing either an error or successful status
         """
 
-        user = self.request.user
-        return AccountManager.change_username_json(user, **self.query_kwargs)
+
+        return AccountManager.change_username_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_password', renderer='json')
@@ -308,8 +311,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing either an error or successful status
         """
 
-        user = self.request.user
-        return AccountManager.change_password_json(user, **self.query_kwargs)
+
+        return AccountManager.change_password_json(**self.query_kwargs)
 
     @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
@@ -327,8 +330,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing the feed posts
         """
 
-        user = self.request.user
-        return FeedManager.get_feed_posts_json(user, **self.query_kwargs)
+
+        return FeedManager.get_feed_posts_json(**self.query_kwargs)
 
 
     @api_login_required
@@ -355,7 +358,7 @@ class APIViews(BaseHandler):
             if len(tags) > 0:
                 query_kwargs.update({'tags': tags})
         # sanitized_post_links = [l for l in p.getall('post_links[]') if vl.sanitize_post_link(l)]
-        retval = PostManager.post_json(user, **query_kwargs)
+        retval = PostManager.post_json(**query_kwargs)
         return retval
 
 
@@ -394,8 +397,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing the following/follower stats
         """
 
-        user = self.request.user
-        return VoteManager.vote_json(user, **self.query_kwargs)
+
+        return VoteManager.vote_json(**self.query_kwargs)
 
     @view_config(request_method="POST",route_name='api_post_vote', renderer='json')
     def api_post_vote(self):
@@ -411,8 +414,8 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array of the current post status
         """
 
-        user = self.request.user
-        posts  = VoteManager.vote_json(user, **self.query_kwargs)
+
+        posts  = VoteManager.vote_json(**self.query_kwargs)
         return posts
 
     @api_login_required
@@ -429,7 +432,7 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array containing the notifications
         """
 
-        user = self.request.user
+
         return NotificationManager.notification_json(user,**self.query_kwargs)
 
     @view_config(request_method='POST',route_name='api_signup_check', renderer='json')
@@ -478,7 +481,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the status of the delete
         """
-        user = self.request.user
+
         return PostManager.delete_post_json(user,**self.query_kwargs)
 
     @api_login_required
