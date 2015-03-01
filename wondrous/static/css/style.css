@@ -704,7 +704,7 @@ a:hover {
 .profile-landing-name {
   margin-top: 10%;
   margin-bottom: 0;
-  font-family: helvetica, arial, sans-serif;
+  font-family: 'arial black', helvetica, arial, sans-serif;
   font-weight: 100;
   font-size: 35px;
   color: #474747; }
@@ -806,7 +806,8 @@ a:hover {
 
 .profile-name {
   font-size: 40px;
-  font-weight: bold; }
+  font-weight: bold;
+  font-family: 'arial black', helvetica, arial, sans-serif; }
 
 .profile-username {
   font-size: 23px;
