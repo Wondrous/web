@@ -60,7 +60,7 @@ class AccountManager(BaseManager):
     @classmethod
     def add(cls, name, email, username, password):
         # First let's create the object object - point of contact for the account
-        new_user = User(name=name, user_type=user_type, username=username, email=email, password=password, is_active=True)
+        new_user = User(name=name, username=username, email=email, password=password, is_active=True)
 
         DBSession.add(new_user)
         DBSession.flush()

@@ -277,7 +277,7 @@ class AuthHandler(BaseHandler):
 
             if not error_message:
 
-                _s_valid_fn, len_err_fn = Sanitize.length_check(name, min_length=1, max_length=30)
+                _s_valid_n, len_err_fn = Sanitize.length_check(name, min_length=1, max_length=30)
                 _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
                 _s_valid_em = Sanitize.is_valid_email(email)
                 _s_em_taken = User.by_kwargs(email=email).first()
@@ -285,10 +285,9 @@ class AuthHandler(BaseHandler):
                 _s_un_taken = User.by_kwargs(username=username).first()
 
                 # Check for validity
-                if not _s_valid_fn:
-                    error_message = "Your first name is {err}".format(err=len_err_fn)
-                elif not _s_valid_ln:
-                    error_message = "Your last name is {err}".format(err=len_err_ln)
+                if not _s_valid_n:
+                    error_message = "Your name is {err}".format(err=len_err_fn)
+
                 elif not _s_valid_em:
                     error_message = "Please enter a valid email address"
                 elif _s_em_taken:

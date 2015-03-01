@@ -155,6 +155,7 @@ module.exports = {
     // callback(err,json_res)
     registerCheck: function(options){
         var callback = options.callback;
+        var username = options.username;
         var name = options.name;
         var email = options.email;
         var password = options.password;
