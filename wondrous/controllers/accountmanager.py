@@ -112,6 +112,8 @@ class AccountManager(BaseManager):
 
     @classmethod
     def get_json_by_username(cls, user, user_id = None, username = None):
+        from wondrous.controllers.postmanager import PostManager
+
         from wondrous.controllers.votemanager import VoteManager
         if not user_id and not username:
             return {}
@@ -133,6 +135,7 @@ class AccountManager(BaseManager):
             retval.update({"name": user.ascii_name})
             retval.update({"following":am_following})
             retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
+            retval.update({"post_count":PostManager.post_count(user,user_id)})
             picture_object = user.picture_object
 
             if picture_object:
@@ -148,6 +151,8 @@ class AccountManager(BaseManager):
             retval.update(super(AccountManager, cls).model_to_json(user))
             retval.update({"name": user.ascii_name})
             retval.update({"following":am_following})
+            retval.update({"post_count":PostManager.post_count(user,user_id)})
+
             picture_object = user.picture_object
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
