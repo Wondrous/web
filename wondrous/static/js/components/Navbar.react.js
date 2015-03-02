@@ -86,7 +86,7 @@ var ProfileLink = React.createClass({
                 className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
                     src={img_src}/>
-                {this.props.user.first_name}
+                {this.props.user.name}
             </a>);
     }
 });

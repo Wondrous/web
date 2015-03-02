@@ -208,7 +208,7 @@ class APIViews(BaseHandler):
 
         return AccountManager.upload_picture_json(**self.query_kwargs)
 
-    @login_required
+    @api_login_required
     @view_config(request_method="POST", route_name='api_user_visibility_toggle', renderer='json')
     def api_user_visibility_toggle(self):
 
@@ -225,6 +225,7 @@ class APIViews(BaseHandler):
         current_user.is_private = not current_user.is_private
         return {'is_private': current_user.is_private}
 
+    @api_login_required
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
 

@@ -293,6 +293,7 @@ var UserBar = React.createClass({
     },
 
     render: function() {
+        console.log("asd",getProfileState().data);
         var username = this.props.username;
         this.is_private = getProfileState().data.is_private;
         this.am_following = getProfileState().data.following==true;
@@ -316,9 +317,7 @@ var UserBar = React.createClass({
                 <div className="profile-header-content">
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
-                    {/*<span className="profile-wscore">
-                        <span className="profile-wscore-text round-5">1</span>
-                    </span>*/}
+
                     {!is_me ? <button className={classes} style={{marginTop: 12}} onClick={this.handleFollow}>{btnTitle}</button> : null}
                 </div>
                 <hr className="profile-hr" />
