@@ -105,7 +105,7 @@ var Feed = React.createClass({
     _onChange: function() {
         var data = getFeedState();
         this.setState({data:data});
-        this.performLayout();
+        this.masonry.layout();
     }
 });
 
