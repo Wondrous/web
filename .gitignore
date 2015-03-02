@@ -63,3 +63,4 @@ target/
 *bundle.js
 *bundle.min.js
 *.css
+*.out
