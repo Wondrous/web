@@ -58,6 +58,10 @@ class PostManager(BaseManager):
         return [comment.json() for comment in comments]
 
     @staticmethod
+    def post_count(user,user_id):
+        return DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).count()
+
+    @staticmethod
     def new_comment_json(user,post_id,text):
         p = Post.query.get(post_id)
         if not p:

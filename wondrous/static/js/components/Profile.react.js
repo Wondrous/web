@@ -328,7 +328,7 @@ var UserBar = React.createClass({
                     <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">posts</div>
-                            <span className="profile-header-nav-number">10</span>
+                            <span className="profile-header-nav-number">{this.state.data.post_count}</span>
                         </li>
                     </Link>
                     <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>
