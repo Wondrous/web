@@ -79,14 +79,17 @@ var Feed = React.createClass({
         FeedStore.removeChangeListener(this._onChange);
         UserStore.removeChangeListener(this._onChange);
     },
-
+    toggleUpdate:function(){
+        this.masonry.reloadItems();
+        this.masonry.layout();
+    },
     render: function() {
         var posts = this.state.data.map(function(post, index) {
             return (
-                <Post key={post.id} data={post} />
+                <Post key={post.id} data={post}/>
             );
         });
-
+        console.log(this.masonry);
         return (
             <div className="grid-padding">
                 <h1 className="tmp-feed-h1">Majority Feed</h1>
@@ -103,6 +106,8 @@ var Feed = React.createClass({
     _onChange: function() {
         var data = getFeedState();
         this.setState({data:data});
+        this.performLayout();
+        console.log("changed");
     }
 });
 

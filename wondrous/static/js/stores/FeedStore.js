@@ -94,6 +94,9 @@ AppDispatcher.register(function(payload){
             deletePost(action.data);
             break;
 
+        case WondrousConstants.FEED_ANIMATE:
+            break;
+
         default:
             return true;
     }

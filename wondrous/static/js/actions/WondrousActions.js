@@ -20,6 +20,14 @@ var WondrousActions = {
         });
     },
 
+    //toggle feed animation
+    toggleFeedAnimation: function(data){
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.FEED_ANIMATE,
+            data: data
+        });
+    },
+
     // An user logged in
     loadUserInfo: function(data){
         AppDispatcher.handleAction({
