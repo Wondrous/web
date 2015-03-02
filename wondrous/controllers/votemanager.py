@@ -346,7 +346,7 @@ class VoteManager(BaseManager):
 
     @staticmethod
     def get_following_count(user_id):
-        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
+        return Vote.query.filter(Vote.user_id == user_id).filter(Vote.status == Vote.FOLLOWED).count()
 
     @classmethod
     def get_followers_json(cls, user, username = None, user_id = None, page = 0):
