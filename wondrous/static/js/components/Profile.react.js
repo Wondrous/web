@@ -334,13 +334,13 @@ var UserBar = React.createClass({
                     <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">followers</div>
-                            <span className="profile-header-nav-number">3</span>
+                            <span className="profile-header-nav-number">{this.state.data.follower_count}</span>
                         </li>
                     </Link>
                     <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">following</div>
-                            <span className="profile-header-nav-number">3</span>
+                            <span className="profile-header-nav-number">{this.state.data.following_count}</span>
                         </li>
                     </Link>
                     <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>
