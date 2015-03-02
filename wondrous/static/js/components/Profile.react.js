@@ -115,7 +115,7 @@ var UserIcon = React.createClass({
         this.loadWallFromServer();
     },
     render: function() {
-
+        var is_me = this.props.username === UserStore.getUserData().username;
         return (
             <a onClick={this.handleClick}>
                 <div>
@@ -129,8 +129,8 @@ var UserIcon = React.createClass({
 
 var Follower = React.createClass({
     mixins: [ Router.State, Router.Navigation ],
-    am_following:getProfileState().data.following,
-    is_private:getProfileState().data.is_private,
+    am_following: getProfileState().data.following,
+    is_private: getProfileState().data.is_private,
 
     handleData: function(err, data) {
         if (err == null) {
@@ -189,8 +189,8 @@ function getFollowing() {
 
 var Following = React.createClass({
     mixins: [ Router.State, Router.Navigation ],
-    am_following:getProfileState().data.following,
-    is_private:getProfileState().data.is_private,
+    am_following: getProfileState().data.following,
+    is_private: getProfileState().data.is_private,
 
     handleData: function(err, data) {
         if (err == null){
@@ -254,7 +254,7 @@ var UserBar = React.createClass({
     },
     componentDidMount: function() {
         ProfileStore.addChangeListener(this._onChange);
-        if(UserStore.getUserData().username===this.props.username){
+        if (UserStore.getUserData().username===this.props.username) {
             UserStore.addChangeListener(this._onChange);
         }
     },
@@ -288,8 +288,11 @@ var UserBar = React.createClass({
         })
     },
 
-    handleClick: function(){
-        WondrousActions.togglePictureUpload();
+    handleClick: function() {
+        var is_me = this.props.username === UserStore.getUserData().username;
+        if (is_me) {
+            WondrousActions.togglePictureUpload();
+        }
     },
 
     render: function() {
@@ -313,7 +316,7 @@ var UserBar = React.createClass({
 
         return (
             <div className="profile-header">
-                <img className="profile-photo round-50" onClick={this.handleClick} src={img_src} />
+                <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
                 <div className="profile-header-content">
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
