@@ -79,10 +79,10 @@ var Feed = React.createClass({
         FeedStore.removeChangeListener(this._onChange);
         UserStore.removeChangeListener(this._onChange);
     },
-    toggleUpdate:function(){
-        this.masonry.reloadItems();
-        this.masonry.layout();
-    },
+    // toggleUpdate:function(){
+    //     this.masonry.reloadItems();
+    //     this.masonry.layout();
+    // },
     render: function() {
         var posts = this.state.data.map(function(post, index) {
             return (
@@ -105,7 +105,7 @@ var Feed = React.createClass({
     _onChange: function() {
         var data = getFeedState();
         this.setState({data:data});
-        this.masonry.layout();
+        //this.masonry.layout();
     }
 });
 

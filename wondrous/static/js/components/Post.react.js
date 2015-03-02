@@ -126,7 +126,7 @@ var Post = React.createClass({
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
 
         // Trigger Masonry Layout
-        WondrousActions.toggleFeedAnimation(null);
+        // WondrousActions.toggleFeedAnimation(null);
     },
     handleData: function(err,res){
         if(err==null){
