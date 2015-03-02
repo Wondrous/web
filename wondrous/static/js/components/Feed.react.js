@@ -89,7 +89,6 @@ var Feed = React.createClass({
                 <Post key={post.id} data={post}/>
             );
         });
-        console.log(this.masonry);
         return (
             <div className="grid-padding">
                 <h1 className="tmp-feed-h1">Majority Feed</h1>
@@ -107,7 +106,6 @@ var Feed = React.createClass({
         var data = getFeedState();
         this.setState({data:data});
         this.performLayout();
-        console.log("changed");
     }
 });
 
