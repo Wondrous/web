@@ -3,7 +3,7 @@ This is the core web platform for Wondrous.
 
 ### Installation
 ```
-virtualenv --no-site-package webenv
+virtualenv --no-site-packages webenv
 cd webenv
 git clone https://github.com/Wondrous/web.git
 source bin/activate
