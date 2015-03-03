@@ -29,6 +29,8 @@ $VENV/bin/initialize_wondrous_db development.ini
 $VENV/bin/pserve development.ini
 ```
 
+*Note: ```$VENV``` indicates that you are currently within your virtual environment, having run the command ```source activate``` (likely from within the ```bin``` directory – wherever the ```activate``` file is).*
+
 ### API Documentation
 
 #### Change User Relationships
