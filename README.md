@@ -7,7 +7,7 @@ To install Python's ```pip``` (if you haven't installed it already), follow the 
 Then, to install ```virtualenv``` (if you haven't installed it already), run the following command:  
 ```sudo pip install virtualenv```.
 
-------------------------------
+==============================
 
 ```cd``` into the directory where you'd like to build the project, then...
 ```
@@ -46,6 +46,8 @@ $VENV/bin/pserve development.ini --reload
 **Note:** Never directly edit `style.scss` or `style.css`. When you run `npm run build`, the files in `/css/partials/`, `/css/vendor/`, `/css/fonts/`, and `/css/modules/` are compiled into the `styles.scss` file. In other words, the files in those 4 directories are the ones you want to edit, not the dynamically compiled `styles.scss` file.
 
 **Note:** Never directly edit `bundle.js`. All the JS files for editing are found in the `js/actions/`, `js/components/`, `js/constants/`, `js/dispatcher/`, `js/stores/`,`js/util/`, and `js/vendor/` directories. When you run `npm run start`, the files in those directories are watched, and auto-compiled into `bundle.js` whenever you make a change.
+
+--------------------------------
 
 ### API Documentation
 
