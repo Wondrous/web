@@ -2,7 +2,7 @@
 This is the core web platform for Wondrous.
 
 ### Installation
-To install Python's "pip" (if you haven't installed it already), follow the instructions here: ```https://pip.pypa.io/en/latest/installing.html```.
+To install Python's ```pip``` (if you haven't installed it already), follow the instructions here: ```https://pip.pypa.io/en/latest/installing.html```.
 
 Then, to install ```virtualenv``` (if you haven't installed it already), run the following command:  
 ```sudo pip install virtualenv```.
