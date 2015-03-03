@@ -7,7 +7,7 @@ To install Python's ```pip``` (if you haven't installed it already), follow the 
 Then, to install ```virtualenv``` (if you haven't installed it already), run the following command:  
 ```sudo pip install virtualenv```.
 
-------------------------------
+==============================
 
 ```cd``` into the directory where you'd like to build the project, then...
 ```
@@ -26,7 +26,7 @@ pip install -r requirements.txt
 cd <directory containing this file>
 $VENV/bin/python setup.py develop
 $VENV/bin/initialize_wondrous_db development.ini
-$VENV/bin/pserve development.ini
+$VENV/bin/pserve development.ini --reload
 ```
 
 *Note: ```$VENV``` indicates that you are currently within your virtual environment, having run the command ```source activate``` (likely from within the ```bin``` directory – wherever the ```activate``` file is).*
@@ -43,6 +43,11 @@ $VENV/bin/pserve development.ini
 
 5) To start watching for changes (compiles to bundle.js) `npm run start`
 
+**Note:** Never directly edit `style.scss` or `style.css`. When you run `npm run build`, the files in `/css/partials/`, `/css/vendor/`, `/css/fonts/`, and `/css/modules/` are compiled into the `styles.scss` file. In other words, the files in those 4 directories are the ones you want to edit, not the dynamically compiled `styles.scss` file.
+
+**Note:** Never directly edit `bundle.js`. All the JS files for editing are found in the `js/actions/`, `js/components/`, `js/constants/`, `js/dispatcher/`, `js/stores/`,`js/util/`, and `js/vendor/` directories. When you run `npm run start`, the files in those directories are watched, and auto-compiled into `bundle.js` whenever you make a change.
+
+--------------------------------
 
 ### API Documentation
 
