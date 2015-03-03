@@ -31,9 +31,9 @@ $VENV/bin/pserve development.ini
 
 *Note: ```$VENV``` indicates that you are currently within your virtual environment, having run the command ```source activate``` (likely from within the ```bin``` directory – wherever the ```activate``` file is).*
 
-**To build the front-end (React + Flux):**
+**To build the front-end (React + Flux) [also in ```/static/readme.md```]:**
 
-1) Install Node.js at: http://nodejs.org (also in ```/static/readme.md```)
+1) Install Node.js at: http://nodejs.org
 
 2) ```cd``` into the ```/static/``` dir.
 
