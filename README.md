@@ -21,7 +21,7 @@ cd web
 python setup.py develop
 pip install -r requirements.txt
 ```
-To run
+**To run the server:**
 ```
 cd <directory containing this file>
 $VENV/bin/python setup.py develop
@@ -30,6 +30,19 @@ $VENV/bin/pserve development.ini
 ```
 
 *Note: ```$VENV``` indicates that you are currently within your virtual environment, having run the command ```source activate``` (likely from within the ```bin``` directory – wherever the ```activate``` file is).*
+
+**To build the front-end (React + Flux):**
+
+1) Install Node.js at: http://nodejs.org (also in ```/static/readme.md```)
+
+2) ```cd``` into the ```/static/``` dir.
+
+3) To install everything in package.json `sudo npm install`
+
+4) To build bundle.min.js `npm run build`
+
+5) To start watching for changes (compiles to bundle.js) `npm run start`
+
 
 ### API Documentation
 
