@@ -1,6 +1,26 @@
 # web
 This is the core web platform for Wondrous.
 
+### Installation
+```
+virtualenv --no-site-package webenv
+cd webenv
+git clone https://github.com/Wondrous/web.git
+source bin/activate
+brew install pkg-config libffi;
+export PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.0.13/lib/pkgconfig/
+cd web
+python setup.py develop
+pip install -r requirements.txt
+```
+To run
+```
+cd <directory containing this file>
+$VENV/bin/python setup.py develop
+$VENV/bin/initialize_wondrous_db development.ini
+$VENV/bin/pserve development.ini
+```
+
 ### API Documentation
 
 #### Change User Relationships
@@ -214,20 +234,7 @@ $.ajax({
    });
 ```
 
-```
-### Installation
-```
-brew install pkg-config libffi;
-export PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.0.13/lib/pkgconfig/
-pip install -r requirements.txt
-```
-To run
-```
-cd <directory containing this file>
-$VENV/bin/python setup.py develop
-$VENV/bin/initialize_wondrous_db development.ini
-$VENV/bin/pserve development.ini
-```
+
 
 ### Backend Documentation
 Sphinx Documentation is used to lessen the madness of a growing codebase. The documented ReST documents are located in ./docs.
