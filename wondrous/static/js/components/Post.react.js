@@ -129,9 +129,12 @@ var Comments = React.createClass({
                 <Comment data={comment}/>
             );
         });
+
+
+
         return (
             <div>
-                {comments}
+                {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
                 <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" />
