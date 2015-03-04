@@ -20,19 +20,20 @@ var masonryOptions = {
 };
 
 var Feed = React.createClass({
-    paging:false,
-    donePaging:false,
+    paging: false,
+    donePaging: false,
     mixins: [MasonryMixin('masonryContainer', masonryOptions)],
+    
     handleData: function(err, data) {
         if (err == null) {
-            if(data.length==0){
+            if (data.length == 0) {
                 this.donePaging = true;
             }
             WondrousActions.loadToFeed(data);
         } else {
             console.error("error", err);
         }
-        this.paging=false;
+        this.paging = false;
     },
     loadFeedFromServer: function() {
         WondrousAPI.getMajorityPosts({
@@ -55,7 +56,7 @@ var Feed = React.createClass({
         if(scrolled && !this.paging && !this.donePaging) {
 
           // Set application state (Paging, Increment page)
-          // Get the next page of tweets from the server
+          // Get the next page of posts from the server
           console.log("getting more page")
           this.paging = true;
           FeedStore.incrementPage();

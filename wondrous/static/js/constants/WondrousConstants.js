@@ -18,6 +18,7 @@ module.exports = keyMirror({
     SHOW_NOTIFICATIONS: null,   // Show sidebar notifications
     NEW_POST: null,             // New Post
     POST_COMPLETED: null,       // New Post uploaded completely
+    COMMENT_LOAD: null,         // Load a posts comments
     FOLLOWER_LOAD: null,        // Follower just loaded
     FOLLOWING_LOAD: null,       // Following just loaded
     NOTIFICATION_LOAD: null,    // Notifications just loaded
@@ -29,6 +30,6 @@ module.exports = keyMirror({
     POST_DELETED: null,         // a post is deleted -- alert feed + wall
     MODALTYPE_PICTURE: null,    // modaltype picture
     MODALTYPE_POST: null,       // modaltype picture
-    MODALTYPE_REPOST: null,      // modaltype picture
-    FEED_ANIMATE:null           // we need relayout the feed 
+    MODALTYPE_REPOST: null,     // modaltype picture
+    FEED_ANIMATE: null          // we need relayout the feed 
 });

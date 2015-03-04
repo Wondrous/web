@@ -323,7 +323,9 @@ class APIViews(BaseHandler):
             PURPOSE: get different feed posts by the type
 
             USE: self.query_kwargs to provide all the required inputs.
-                user,page=0,feed_type=0
+                user,
+                page=0,
+                feed_type=0
 
                 can only obtain the feed of the logged in user
 
@@ -381,8 +383,8 @@ class APIViews(BaseHandler):
         """
         # Basic setup
         p            = self.request.POST
-        user       = self.request.user
-        tags            = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
+        user         = self.request.user
+        tags         = set(t for t in p.getall('tags[]') if vh.valid_tag(t))
         query_kwargs = self.query_kwargs
         # query_kwargs.update({'tags':tags})
         return PostManager.repost_json(**query_kwargs)
@@ -411,7 +413,8 @@ class APIViews(BaseHandler):
             PURPOSE: Toggles like/unlike for a post
 
             USE: self.query_kwargs to provide all the required inputs.
-                user,post_id
+                user,
+                post_id
 
             PARAMS: (None)
 
@@ -429,7 +432,8 @@ class APIViews(BaseHandler):
             PURPOSE: get a list of notifications for current user
 
             USE: self.query_kwargs to provide all the required inputs.
-                user,page=0
+                user,
+                page=0
 
             PARAMS: (None)
 
@@ -489,46 +493,58 @@ class APIViews(BaseHandler):
         return PostManager.delete_post_json(**self.query_kwargs)
 
     @api_login_required
-    @view_config(request_method='DELETE', route_name='api_new_comment', renderer='json')
+    @view_config(request_method='POST', route_name='api_new_comment', renderer='json')
     def api_new_comment(self):
+
         """
             PURPOSE: creates a new comment by post_id
 
             USE: self.query_kwargs to provide all the required inputs.
-                user,post_id, text
+                user,
+                post_id,
+                text
 
             PARAMS: (None)
 
             RETURNS: The JSON array containing the comment
         """
+
         return PostManager.new_comment_json(**self.query_kwargs)
 
     @api_login_required
-    @view_config(request_method='DELETE', route_name='api_post_comments', renderer='json')
+    @view_config(request_method='GET', route_name='api_post_comments', renderer='json')
     def api_post_comments(self):
+
         """
             PURPOSE: get a list of comments for post_id
 
             USE: self.query_kwargs to provide all the required inputs.
-                user,post_id, page=0, per_page = 15
+                user, (supplied on server)
+                post_id,
+                page = 0,
+                per_page = 15
 
             PARAMS: (None)
 
             RETURNS: The JSON array containing the comment
         """
+
         return PostManager.get_comments_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_comment_delete', renderer='json')
     def api_comment_delete(self):
+
         """
             PURPOSE: delete a comment by user_id
 
             USE: self.query_kwargs to provide all the required inputs.
-                user,comment_id
+                user,
+                comment_id
 
             PARAMS: (None)
 
             RETURNS: The JSON array containing the comment
         """
+
         return PostManager.delete_comment_json(**self.query_kwargs)

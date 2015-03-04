@@ -3,37 +3,37 @@ var request = require('superagent');
 
 function _callback(cb){
     return function(err,res){
-        console.log("res",res);
-        if(res){
-            if(typeof res.body !== 'undefined' && res.body && res.body.hasOwnProperty('error')){
+        //console.log("res",res);
+        if (res) {
+            if (typeof res.body !== 'undefined' && res.body && res.body.hasOwnProperty('error')) {
                 err = res.body;
             }
         }
 
-        if(err!=null){
-            if(cb) cb(err,null);
-        }else{
-            if(cb) cb(err,res.body);
+        if (err!=null) {
+            if (cb) cb(err, null);
+        } else {
+            if (cb) cb(err, res.body);
         }
     }
 }
 
 VoteAction = {
-    LIKED:0,
-    BOOKMARKED:1,
-    CANCEL:2,
-    FOLLOW:3,
-    ACCEPT:4,
-    BLOCK:5,
-    DENY:6,
-    TOPFRIEND:7
+    LIKED: 0,
+    BOOKMARKED: 1,
+    CANCEL: 2,
+    FOLLOW: 3,
+    ACCEPT: 4,
+    BLOCK: 5,
+    DENY: 6,
+    TOPFRIEND: 7
 };
 
 module.exports = {
     // toggle privacy
     // options are:
     // callback
-    toggleVisibility: function(options){
+    toggleVisibility: function(options) {
         var callback = options.callback;
         var url = '/api/user/visibility';
 
@@ -44,7 +44,7 @@ module.exports = {
     // options are:
     // user_id
     // callback
-    acceptRequest: function(options){
+    acceptRequest: function(options) {
         var callback = options.callback;
         data = {
             user_id: options.user_id,
@@ -60,7 +60,7 @@ module.exports = {
     // options are:
     // user_id
     // callback
-    toggleFollow: function(options){
+    toggleFollow: function(options) {
         var callback = options.callback;
         data = {
             subject_id:options.user_id,
@@ -76,12 +76,12 @@ module.exports = {
     // options are:
     // post_id
     // callback
-    toggleLike: function(options){
+    toggleLike: function(options) {
         var callback = options.callback;
         data = {
-            subject_id:options.post_id,
-            action:VoteAction.LIKED,
-            vote_type:0
+            subject_id: options.post_id,
+            action: VoteAction.LIKED,
+            vote_type: 0
         }
 
         var url = '/api/post/vote';
@@ -92,7 +92,7 @@ module.exports = {
     // options are
     // page: 0
     // callback
-    getNotifications: function(options){
+    getNotifications: function(options) {
         var callback = options.callback;
         var page = options.page;
         if(typeof(options.page)==='undefined') page = 0;
@@ -108,7 +108,7 @@ module.exports = {
     // username
     // page, default = 0
     // callback(err,json_res)
-    getWallPosts: function(options){
+    getWallPosts: function(options) {
         var username = options.username;
         var page = options.page;
         var callback = options.callback;
@@ -120,11 +120,26 @@ module.exports = {
         request.get(url).end(_callback(callback));
     },
 
+    // Load comments for a given post
+    // options are:
+    // 
+    getPostComments: function(options) {
+        var page = options.page;
+        var post_id = options.post_id;
+        var callback = options.callback;
+
+        if(typeof(options.page)==='undefined') page = 0;
+
+        var url = '/api/post/comment?post_id='+String(post_id)+'&page='+String(page);
+        // Make the get request
+        request.get(url).end(_callback(callback));  
+    },
+
     // Load wall posts for majority feed
     // options are:
     // page, default = 0
     // callback(err,json_res)
-    getMajorityPosts: function(options){
+    getMajorityPosts: function(options) {
         var page = options.page;
         var callback = options.callback;
 

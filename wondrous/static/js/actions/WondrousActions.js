@@ -53,7 +53,7 @@ var WondrousActions = {
     },
 
     // An user's followers are loaded
-    loadProfileFollower: function(data){
+    loadProfileFollower: function(data) {
         AppDispatcher.handleAction({
             actionType: WondrousConstants.FOLLOWER_LOAD,
             data: data
@@ -61,7 +61,7 @@ var WondrousActions = {
     },
 
     // An user's following are loaded
-    loadProfileFollowing: function(data){
+    loadProfileFollowing: function(data) {
         AppDispatcher.handleAction({
             actionType: WondrousConstants.FOLLOWING_LOAD,
             data: data
@@ -69,10 +69,17 @@ var WondrousActions = {
     },
 
     // An user wall loaded
-    loadWallPosts: function(data){
+    loadWallPosts: function(data) {
         AppDispatcher.handleAction({
             actionType: WondrousConstants.WALL_LOAD,
             data: data
+        });
+    },
+
+    loadPostComments: function(data) {
+        AppDispatcher.handleAction({
+            actionType: WondrousConstants.COMMENT_LOAD,
+            data: data,
         });
     },
 
@@ -85,7 +92,7 @@ var WondrousActions = {
     },
 
     // toggles the settings sidebar
-    toggleSettings: function(data){
+    toggleSettings: function(data) {
         AppDispatcher.handleAction({
             actionType: WondrousConstants.SHOW_SETTINGS,
             data: data
