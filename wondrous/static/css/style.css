@@ -874,7 +874,7 @@ a:hover {
   padding: 16px;
   font-family: helvetica, arial, sans-serif;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 17px;
   color: #333333;
   line-height: 1.3em; }
 
@@ -882,13 +882,6 @@ a:hover {
   padding: 2px 10px; }
 
 .post-footer-btn {
-  /*    font-size: 15px;
-    font-weight: normal;
-    color: rgb(61,61,61);
-    background-color: rgb(241,241,241);
-    padding: 5px 10px;
-    margin: 0 3px;
-    cursor: pointer;*/
   font-size: 15px;
   font-weight: normal;
   color: #3d3d3d;
