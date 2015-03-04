@@ -915,7 +915,7 @@ a:hover {
 
 .post-delete-btn {
   position: relative;
-  top: -13px;
+  float: right;
   margin-left: 15px;
   color: #fbfbfb;
   background-color: #dc645a; }
