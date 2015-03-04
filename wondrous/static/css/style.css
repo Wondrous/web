@@ -1763,6 +1763,8 @@ a:hover {
     text-decoration: none; }
   .post-comment-un:hover {
     text-decoration: underline; }
+  .post-comment-un:visited {
+    color: #0064aa; }
 
 .top-banner {
   position: fixed;
