@@ -100,7 +100,7 @@ var Comment = React.createClass({
 var Comments = React.createClass({
     handleCommentPost: function(err,res){
         if (err == null){
-            console.log("you have successfully posted a comment" ,res);
+            console.log("You have successfully posted a comment", res);
             this.refs.commentBox.getDOMNode().value = ''
             this.refs.commentBox.getDOMNode().blur();
             this.props.data.push(res);
@@ -112,11 +112,15 @@ var Comments = React.createClass({
     onComment: function(evt){
         evt.preventDefault();
         var text = this.refs.commentBox.getDOMNode().value.trim();
-        WondrousAPI.commentOnPost({
-            text:text,
-            post_id: this.props.post_id,
-            callback: this.handleCommentPost
-        })
+        if (text.length > 0) {
+            WondrousAPI.commentOnPost({
+                text:text,
+                post_id: this.props.post_id,
+                callback: this.handleCommentPost
+            });
+        } else {
+            // Send out a friendly error: "Please add some text!"
+        }
     },
     render: function() {
         console.log(this.props.data);
@@ -129,8 +133,9 @@ var Comments = React.createClass({
             <div>
                 {comments}
                 <div>
-                    <form onSubmit={this.onComment}>
-                        <input ref="commentBox" placeholder="your comment?"></input>
+                    <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
+                        <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
+                        <input className="post-comment-btn" type="submit" value="Share" />
                     </form>
                 </div>
             </div>
