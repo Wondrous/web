@@ -1,9 +1,17 @@
 // Anything to do with profiles
 
 .grid-padding,
-.info-content,
 .profile-content,
 .profile-header {
+    margin: 0 auto;
+}
+
+.grid-padding,
+.profile-content {
+    max-width: 1000px;
+}
+
+.info-content {
     padding: 0 5% 0 5%;
 }
 
