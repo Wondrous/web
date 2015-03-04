@@ -8,8 +8,6 @@
 # VIEWS/AJAX_MAIN.PY
 #
 
-import json
-
 from collections import defaultdict
 from unidecode import unidecode
 
@@ -37,6 +35,7 @@ from wondrous.controllers import (
     PostManager,
     VoteManager,
     TagManager,
+    SearchManager
 )
 
 from wondrous.utilities.general_utilities import (
@@ -58,8 +57,11 @@ from wondrous.utilities.validation_utilities import (
 from wondrous.views.main import BaseHandler
 
 from wondrous.models.refer import ReferrerManager
+
+
 import json
 import logging
+import urllib
 
 class APIViews(BaseHandler):
 
@@ -78,6 +80,9 @@ class APIViews(BaseHandler):
 
             if isinstance(val,str):
                 kwargs[key] = val.strip().text.encode('utf-8')
+
+            if key == 'search':
+                kwargs[key] = urllib.unquote(kwargs[key]).decode('utf8')
 
             if key in ['page','per_page']:
                 try:
@@ -547,3 +552,16 @@ class APIViews(BaseHandler):
         """
 
         return PostManager.delete_comment_json(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method='GET', route_name='api_search_users', renderer='json')
+    def api_search_users(self):
+
+        return SearchManager.user_search_json(**self.query_kwargs)
+
+
+    @api_login_required
+    @view_config(request_method='GET', route_name='api_search_posts', renderer='json')
+    def api_search_posts(self):
+
+        return SearchManager.post_search_json(**self.query_kwargs)
