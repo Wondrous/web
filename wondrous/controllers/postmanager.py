@@ -60,7 +60,8 @@ class PostManager(BaseManager):
             filter(Comment.user_id==User.id).offset(page*per_page).limit(per_page).all():
 
             data = user.json()
-            data.update(user.picture_object.json())
+            if user.picture_object:
+                data.update(user.picture_object.json())
             data.update(comment.json())
 
             retval.append(data)
@@ -86,8 +87,16 @@ class PostManager(BaseManager):
             DBSession.flush()
 
             retval= user.json()
-            retval.update(user.picture_object.json())
+            if user.picture_object:
+                retval.update(user.picture_object.json())
             retval.update(new_comment.json())
+
+            # Notify if needed
+            new_notification = NotificationManager.add(
+                                from_user_id=user.id,
+                                to_user_id=p.user_id,
+                                subject_id=post_id,
+                                reason=Notification.COMMENTED)
             return retval
         else:
             return {'error':'bad permission'}

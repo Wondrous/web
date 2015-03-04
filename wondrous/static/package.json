@@ -4,6 +4,7 @@
   "description": "wondrous frontend app",
   "main": "js/app.js",
   "dependencies": {
+    "reflux": "*",
     "flux": "^2.0.0",
     "react": "^0.12.0",
     "underscore": "^1.7.0",
@@ -51,4 +52,3 @@
     ]
   }
 }
-

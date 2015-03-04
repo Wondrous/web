@@ -108,6 +108,8 @@ var Notification = React.createClass({
             content = "liked your post";
         } else if (reason == NotificationReasons.REPOSTED) {
             content = "reposted one of your posts";
+        }else if (reason == NotificationReasons.COMMENTED) {
+            content = "commented on one of your posts";
         }
         return content;
     },
