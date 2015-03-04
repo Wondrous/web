@@ -132,14 +132,11 @@ var Comments = React.createClass({
         return (
             <div>
                 {comments}
-                <div>
-                    <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
-                        <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
-                        <input className="post-comment-btn" type="submit" value="Share" />
-                    </form>
-                </div>
-            </div>
-            );
+                <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
+                    <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
+                    <input className="post-comment-btn" type="submit" value="Share" />
+                </form>
+            </div>);
     }
 });
 
@@ -315,7 +312,7 @@ var Post = React.createClass({
                                 })
                             }
                         </div>
-                        <hr style={{"width": "60%", "margin": "1.1em 0", "marginBottom": -2}}/>
+                        <hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
                         {this.state.commentsVisible?
                             <div className="post-comment-wrapper">
                                 <Comments data={this.state.comments} post_id={this.props.data.id} />
