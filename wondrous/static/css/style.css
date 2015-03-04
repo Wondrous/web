@@ -1702,8 +1702,29 @@ a:hover {
   background-color: #ababab; }
 
 .comment-textarea {
-  height: 2em;
-  width: 100%; }
+  padding: 5px;
+  height: 3.4em;
+  width: 100%;
+  border: 1px solid #dddddd;
+  font-size: 15px;
+  outline: none;
+  resize: none; }
+  .comment-textarea:focus {
+    border-color: #00aae0; }
+
+.post-comment-btn {
+  border: none;
+  font-size: 14px;
+  color: #fbfbfb;
+  padding: 6px 16px;
+  border-radius: 2px;
+  background-color: #0064aa; }
+  .post-comment-btn:hover {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    background-color: #006eb4; }
 
 .post-comment-wrapper {
   padding: 17px;
