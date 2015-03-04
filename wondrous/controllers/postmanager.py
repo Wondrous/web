@@ -36,6 +36,7 @@ from wondrous.models import (
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
 from wondrous.controllers.votemanager import VoteManager
+from wondrous.controllers.accountmanager import AccountManager
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
 

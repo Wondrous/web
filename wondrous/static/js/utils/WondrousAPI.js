@@ -122,7 +122,7 @@ module.exports = {
 
     // Load comments for a given post
     // options are:
-    // 
+    //
     getPostComments: function(options) {
         var page = options.page;
         var post_id = options.post_id;
@@ -132,8 +132,23 @@ module.exports = {
 
         var url = '/api/post/comment?post_id='+String(post_id)+'&page='+String(page);
         // Make the get request
-        request.get(url).end(_callback(callback));  
+        request.get(url).end(_callback(callback));
     },
+
+    // comment on post
+    // options are
+    // post_id
+    // text
+    // callback
+    commentOnPost: function(options){
+        var text = options.text;
+        var post_id = options.post_id;
+        var callback = options.callback;
+
+        var url = '/api/comment/new';
+        request.post(url).send({text:text,post_id:post_id}).end(_callback(callback));
+    },
+
 
     // Load wall posts for majority feed
     // options are:

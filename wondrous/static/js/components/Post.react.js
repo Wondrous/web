@@ -7,7 +7,7 @@ var UserStore = require('../stores/UserStore');
 var UserTitle = React.createClass({
     repost: null,
     mixins: [Router.Navigation],
-    
+
     handleProfileData: function(err, data) {
         if (err == null) {
             console.log("Profile from post", data);
@@ -16,7 +16,7 @@ var UserTitle = React.createClass({
             // WondrousActions.unloadUserInfo(err);
         }
     },
-    
+
     handleWallData: function(err, data) {
         if (err == null) {
             WondrousActions.loadWallPosts(data);
@@ -25,7 +25,7 @@ var UserTitle = React.createClass({
 
         }
     },
-    
+
     loadProfileFromServer: function(username) {
         if (typeof username ==='undefined') username=this.props.data.username;
         WondrousAPI.getUserInfo({
@@ -33,7 +33,7 @@ var UserTitle = React.createClass({
             callback: this.handleProfileData
         });
     },
-    
+
     loadWallFromServer: function(username) {
         if (typeof username === 'undefined') username=this.props.data.username;
         WondrousAPI.getWallPosts({
@@ -42,7 +42,7 @@ var UserTitle = React.createClass({
             callback: this.handleWallData
         });
     },
-    
+
     handleClick: function() {
         if (typeof this.props.data.username != 'undefined') {
             this.transitionTo('/' + this.props.data.username);
@@ -50,7 +50,7 @@ var UserTitle = React.createClass({
             this.loadWallFromServer();
         }
     },
-    
+
     handleClickOnOwner: function(){
         if (typeof this.repost.username != 'undefined') {
             this.transitionTo('/' + this.repost.username);
@@ -58,7 +58,7 @@ var UserTitle = React.createClass({
             this.loadWallFromServer(this.repost.username);
         }
     },
-    
+
     render: function() {
         var name = this.props.data.name;
         if (this.props.data.hasOwnProperty('repost')) {
@@ -78,34 +78,53 @@ var UserTitle = React.createClass({
     }
 });
 
-var Comments = React.createClass({
+var Comment = React.createClass({
 
-    handleComments: function(err, res) {
-        if (err == null) {
-            WondrousActions.loadPostComments(res);
-        } else {
-            //console.log(res);
+    render: function(){
+        return (
+            <div>{this.props.data}</div>
+        );
+    }
+});
+
+var Comments = React.createClass({
+    handleCommentPost: function(err,res){
+        if (err == null){
+            console.log("you have successfully posted a comment" ,res);
+            this.refs.commentBox.getDOMNode().value = ''
+            this.refs.commentBox.getDOMNode().blur();
+            this.props.data.push(res);
+            this.forceUpdate();
+        }else{
+
         }
     },
-
-    getPostComments: function() {
-        WondrousAPI.getPostComments({
-            post_id: this.props.data.id,
-            callback: this.handleComments
-        });
+    onComment: function(evt){
+        evt.preventDefault();
+        var text = this.refs.commentBox.getDOMNode().value.trim();
+        WondrousAPI.commentOnPost({
+            text:text,
+            post_id: this.props.post_id,
+            callback: this.handleCommentPost
+        })
     },
-
     render: function() {
-        this.getPostComments();
-
         console.log(this.props.data);
-        console.log(commentsArr);
-
-        var commentsArr = this.state.data;
-        var comments = commentsArr.map(function(comment, index) {
-            return (<div>{comment.text}</div>);
+        var comments = this.props.data.map(function(comment, index) {
+            return (
+                <Comment data={comment}/>
+            );
         });
-        return (<div>{comments}</div>);
+        return (
+            <div>
+                {comments}
+                <div>
+                    <form onSubmit={this.onComment}>
+                        <input ref="commentBox" placeholder="your comment?"></input>
+                    </form>
+                </div>
+            </div>
+            );
     }
 });
 
@@ -137,7 +156,9 @@ var Photo = React.createClass({
 });
 
 var Post = React.createClass({
-
+    getInitialState: function() {
+        return {comments: [], commentsVisible:false};
+    },
     handleClick: function() {
         var SPEED = 0;
         var thisPost = $(this.refs.post.getDOMNode());
@@ -168,7 +189,7 @@ var Post = React.createClass({
         // Trigger Masonry Layout
         // WondrousActions.toggleFeedAnimation(null);
     },
-    
+
     handleData: function(err, res){
         if (err == null) {
             this.handleClick();
@@ -177,14 +198,14 @@ var Post = React.createClass({
 
         }
     },
-    
+
     deletePost: function () {
         WondrousAPI.deletePost({
             post_id: this.props.data.id,
             callback: this.handleData
         });
     },
-    
+
     handlePostLike: function(err, res) {
         if (err == null) {
             //console.log("liked",res);
@@ -194,7 +215,7 @@ var Post = React.createClass({
 
         }
     },
-    
+
     likePost: function() {
         //console.log("liking post");
         WondrousAPI.toggleLike({
@@ -202,11 +223,16 @@ var Post = React.createClass({
             callback: this.handlePostLike
         });
     },
-    
-    onViewComments: function() {
-        // Handle the comment modal view
+
+    onViewComments: function(err, res) {
+        if (err == null){
+            console.log("loaded comments are",res);
+            this.setState({comments:res});
+        }else{
+            console.error("problems with loading comments",err);
+        }
     },
-    
+
     onRepost: function(err, res) {
         if (err == null) {
             console.log("repost results",res);
@@ -215,7 +241,7 @@ var Post = React.createClass({
             console.error("repost err", err);
         }
     },
-    
+
     clickRepost: function() {
         uploadData = {
             'post_id' : this.props.data.id
@@ -229,18 +255,16 @@ var Post = React.createClass({
         });
         this.handleClick();
     },
-    
-    clickViewComments: function() {
-        uploadData = {
-            'post_id' : this.props.data.id
-        };
 
-        WondrousAPI.comment({
-            uploadData: uploadData,
+    clickViewComments: function() {
+        this.setState({commentsVisible:!this.state.commentsVisible});
+        WondrousAPI.getPostComments({
+            page: 0,
+            post_id:this.props.data.id,
             callback: this.onViewComments
         });
     },
-    
+
     render: function() {
         var repost = null;
         var is_it_mine = this.props.data.username === UserStore.getUserData().username;
@@ -277,8 +301,9 @@ var Post = React.createClass({
                             }
                         </div>
                         <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
-                        
-                        <Comments data={this.props.data} />
+                        {this.state.commentsVisible?
+                            <Comments data={this.state.comments} post_id={this.props.data.id} />:null}
+
 
                         <div>
                             <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
@@ -289,16 +314,16 @@ var Post = React.createClass({
                                 <img src="/static/pictures/icons/comment/cloud_white.svg" className="post-general-icon" />
                             </span>
 
-                            {!is_it_mine ? 
+                            {!is_it_mine ?
                                 <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50">
                                     <img src="/static/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
-                                </span> 
+                                </span>
                                 : null}
 
-                            {is_it_mine ? 
+                            {is_it_mine ?
                                 <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50">
                                     <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
-                                </span> 
+                                </span>
                                 : null}
                         </div>
                     </div>

@@ -528,7 +528,6 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the comment
         """
-
         return PostManager.get_comments_json(**self.query_kwargs)
 
     @api_login_required
