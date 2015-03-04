@@ -17,6 +17,16 @@
     width: 100%;
 }
 
+.post-comment-wrapper {
+    padding: 17px;
+    background-color: rgb(251,251,251);
+    
+    -webkit-box-shadow: inset 0 1px 4px rgb(151,151,151);
+       -moz-box-shadow: inset 0 1px 4px rgb(151,151,151);
+         -o-box-shadow: inset 0 1px 4px rgb(151,151,151);
+            box-shadow: inset 0 1px 4px rgb(151,151,151);
+}
+
 .post-comment {
     position: relative;
     min-height: 32px;

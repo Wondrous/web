@@ -86,7 +86,7 @@ var Comment = React.createClass({
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
-                    <img className="round-2" style={{height: 25, width: 25}} src={img_src} />
+                    <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
                 </div>
                 <div className="post-comment-content">
                     <a href="#" className="post-comment-un" onClick={this.handleClick}>Elon Musk</a>
@@ -289,7 +289,7 @@ var Post = React.createClass({
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3" >
-                    <div style={{"backgroundColor": "#FFFFFF","position":"relative"}}>
+                    <div style={{"backgroundColor": "#FFFFFF", "position":"relative"}}>
                         <UserTitle data={this.props.data} />
                     </div>
                     <div className="post-title">{this.props.data.subject}</div>
@@ -310,12 +310,14 @@ var Post = React.createClass({
                                 })
                             }
                         </div>
-                        <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
+                        <hr style={{"width": "60%", "margin": "1.1em 0", "marginBottom": -2}}/>
                         {this.state.commentsVisible?
-                            <Comments data={this.state.comments} post_id={this.props.data.id} />:null}
+                            <div className="post-comment-wrapper">
+                                <Comments data={this.state.comments} post_id={this.props.data.id} />
+                            </div>
+                            : null}
 
-
-                        <div>
+                        <div className="post-footer">
                             <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
                                 <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_white.svg"} className="post-general-icon" />
                             </span>
