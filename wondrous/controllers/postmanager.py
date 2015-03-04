@@ -28,8 +28,8 @@ from wondrous.models import (
     PostTagLink,
     Tag,
     Notification,
-    Comment
-    # User,
+    Comment,
+    User
     # Vote,
 )
 
@@ -55,8 +55,17 @@ class PostManager(BaseManager):
 
     @staticmethod
     def get_comments_json(user,post_id,page=0,per_page=15):
-        comments = Comment.query.filter_by(post_id=post_id).offset(page*per_page).limit(per_page).all()
-        return [comment.json() for comment in comments]
+        retval = []
+        for user,comment in DBSession.query(User, Comment).filter(Comment.user_id==User.id).\
+            offset(page*per_page).limit(per_page).all():
+
+            data = user.json()
+            data.update(user.picture_object.json())
+            data.update(comment.json())
+
+            retval.append(data)
+
+        return retval
 
     @staticmethod
     def post_count(user,user_id):
@@ -75,7 +84,11 @@ class PostManager(BaseManager):
             new_comment = Comment(user_id = user.id, post_id=post_id, text=text)
             DBSession.add(new_comment)
             DBSession.flush()
-            return new_comment.json()
+
+            retval= user.json()
+            retval.update(user.picture_object.json())
+            retval.update(new_comment.json())
+            return retval
         else:
             return {'error':'bad permission'}
 

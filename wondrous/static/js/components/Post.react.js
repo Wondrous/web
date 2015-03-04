@@ -81,15 +81,15 @@ var UserTitle = React.createClass({
 var Comment = React.createClass({
 
     render: function() {
-        var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        
+        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
                     <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a href="#" className="post-comment-un" onClick={this.handleClick}>Elon Musk</a>
+                    <a href="#" className="post-comment-un" onClick={this.handleClick}>{this.props.data.name}</a>
                     <span>{this.props.data.text}</span>
                 </div>
             </div>
