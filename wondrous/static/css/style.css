@@ -1716,6 +1716,10 @@ a:hover {
   outline: none;
   resize: none; }
   .comment-textarea:focus {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
     border-color: #00aae0; }
 
 .post-comment-btn {
