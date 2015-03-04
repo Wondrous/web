@@ -80,9 +80,19 @@ var UserTitle = React.createClass({
 
 var Comment = React.createClass({
 
-    render: function(){
+    render: function() {
+        var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        
         return (
-            <div>{this.props.data}</div>
+            <div className="post-comment">
+                <div className="post-comment-image-wrapper round-2">
+                    <img className="round-2" style={{height: 25, width: 25}} src={img_src} />
+                </div>
+                <div className="post-comment-content">
+                    <a href="#" className="post-comment-un" onClick={this.handleClick}>Elon Musk</a>
+                    <span>{this.props.data.text}</span>
+                </div>
+            </div>
         );
     }
 });
@@ -95,7 +105,7 @@ var Comments = React.createClass({
             this.refs.commentBox.getDOMNode().blur();
             this.props.data.push(res);
             this.forceUpdate();
-        }else{
+        } else {
 
         }
     },
@@ -227,9 +237,9 @@ var Post = React.createClass({
     onViewComments: function(err, res) {
         if (err == null){
             console.log("loaded comments are",res);
-            this.setState({comments:res});
-        }else{
-            console.error("problems with loading comments",err);
+            this.setState({comments: res});
+        } else {
+            console.error("problems with loading comments", err);
         }
     },
 
@@ -257,7 +267,7 @@ var Post = React.createClass({
     },
 
     clickViewComments: function() {
-        this.setState({commentsVisible:!this.state.commentsVisible});
+        this.setState({commentsVisible: !this.state.commentsVisible});
         WondrousAPI.getPostComments({
             page: 0,
             post_id:this.props.data.id,

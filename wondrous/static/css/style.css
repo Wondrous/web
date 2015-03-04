@@ -1706,6 +1706,36 @@ a:hover {
   height: 2em;
   width: 100%; }
 
+.post-comment {
+  position: relative;
+  min-height: 32px;
+  padding: 0;
+  margin: 0 0 8px; }
+
+.post-comment-image-wrapper {
+  position: absolute;
+  width: 25px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0; }
+
+.post-comment-content {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 15px;
+  color: #474747;
+  padding: 0 8px 0 34px; }
+
+.post-comment-un {
+  display: block;
+  color: #0064aa;
+  font-weight: bold;
+  cursor: pointer; }
+  .post-comment-un:link {
+    text-decoration: none; }
+  .post-comment-un:hover {
+    text-decoration: underline; }
+
 .top-banner {
   position: fixed;
   top: 0;
