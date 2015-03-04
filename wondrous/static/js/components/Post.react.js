@@ -191,6 +191,7 @@ var Post = React.createClass({
         }
 
         var thisText = this.props.data.text.split('\n');
+        console.log(this.props.data);
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3" >
@@ -217,9 +218,25 @@ var Post = React.createClass({
                         </div>
                         <hr style={{"width": "60%", "margin": "1.1em 0"}}/>
                         <div>
-                            <span onClick={this.likePost} className="post-footer-btn post-like-btn round-2">{this.props.data.liked?"Liked!":"Like"}</span>
-                            <span onClick={this.clickRepost} className="post-footer-btn post-repost-btn round-2">Repost</span>
-                            {is_it_mine?<span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-2">Delete</span>:null}
+                            <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
+                                <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_white.svg"} className="post-general-icon" />
+                            </span>
+
+                            <span className="post-footer-btn post-like-btn round-50">
+                                <img src="/static/pictures/icons/comment/cloud_white.svg" className="post-general-icon" />
+                            </span>
+
+                            {!is_it_mine ? 
+                                <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50">
+                                    <img src="/static/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
+                                </span> 
+                                : null}
+
+                            {is_it_mine ? 
+                                <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50">
+                                    <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
+                                </span> 
+                                : null}
                         </div>
                     </div>
                 </div>

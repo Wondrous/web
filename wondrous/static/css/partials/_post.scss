@@ -42,35 +42,54 @@
 }
 
 .post-footer-btn {
-    font-size: 15px;
+/*    font-size: 15px;
     font-weight: normal;
     color: rgb(61,61,61);
     background-color: rgb(241,241,241);
     padding: 5px 10px;
     margin: 0 3px;
-    cursor: pointer;
+    cursor: pointer;*/
+
+    font-size: 15px;
+    font-weight: normal;
+    color: #3d3d3d;
+    background-color: #f1f1f1;
+    cursor: pointer; 
+    /* padding: 5px 10px; */
+
+    display: inline-block;
+    margin: 0 3px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
 
     &:hover { background-color: rgb(230,230,230); }
 }
 
 .post-like-btn {
-    padding: 5px 14px;
     color: rgb(251,251,251);
-    background-color: rgb(3,216,165);
+    background-color: rgb(221,221,221);
 
     &:hover {
-        background-color: rgb(3,200,165);
-        background: -webkit-linear-gradient(rgb(3,200,165), rgb(3,216,165));
+        background-color: rgb(210,210,210);
+/*        background: -webkit-linear-gradient(rgb(3,200,165), rgb(3,216,165));
         background:   -moz-linear-gradient(rgb(3,200,165), rgb(3,216,165));
         background:     -o-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-        background:        linear-gradient(rgb(3,200,165), rgb(3,216,165));
+        background:        linear-gradient(rgb(3,200,165), rgb(3,216,165));*/
     }
 }
 
 .post-delete-btn {
-    padding: 5px 14px;
+    position: relative;
+    top: -13px;
+    margin-left: 15px;
+
     color: rgb(251,251,251);
     background-color: rgb(220,100,90);
+
+    &:hover {
+        background-color: rgb(240,110,90);
+    }
 }
 
 .post-repost-btn {
@@ -83,6 +102,20 @@
         background:     -o-linear-gradient(rgb(230,230,230), rgb(241,241,241));
         background:        linear-gradient(rgb(230,230,230), rgb(241,241,241));
     }
+}
+
+.post-general-icon {
+    position: relative;
+    top: 5px;
+    height: 33px;
+    width: 33px; 
+}
+
+.post-delete-icon {
+    position: relative;
+    top: 10px;
+    height: 20px;
+    width: 20px;
 }
 
 .no-top-border {
