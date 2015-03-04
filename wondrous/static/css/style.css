@@ -1747,7 +1747,9 @@ a:hover {
 .post-no-comments {
   font-weight: bold;
   font-size: 15px;
-  color: #bebebe; }
+  color: #bebebe;
+  margin: 10px 0;
+  margin-left: 30px; }
 
 .post-comment {
   position: relative;
