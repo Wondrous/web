@@ -95,6 +95,9 @@ def build_routes(config):
     config.add_route('api_refer_register',                     '/api/refer')            # POST
     config.add_route('api_refer_progress',                     '/api/refer/progress')   # GET
 
+    config.add_route('api_search_users',                         '/api/search/user')    # GET
+    config.add_route('api_search_posts',                         '/api/search/post')    # GET
+
     # INDEX
     config.add_route('stuff1_handler',                         '/{stuff}')
     config.add_route('stuff_handler',                          '/{stuff}/{stuff1}')

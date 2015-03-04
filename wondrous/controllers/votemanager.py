@@ -346,7 +346,7 @@ class VoteManager(BaseManager):
 
     @staticmethod
     def get_following_count(user_id):
-        return Vote.query.filter(Vote.user_id == user_id).filter(Vote.status == Vote.FOLLOWED).count()
+        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
 
     @classmethod
     def get_followers_json(cls, user, username = None, user_id = None, page = 0):
@@ -386,6 +386,7 @@ class VoteManager(BaseManager):
             if picture_object:
                 model_dict.update({"ouuid": picture_object.ouuid})
             retval.append(model_dict)
+
         return retval
 
     @staticmethod

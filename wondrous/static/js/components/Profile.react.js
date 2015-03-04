@@ -325,7 +325,7 @@ var UserBar = React.createClass({
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="user" params={{username: username}}>
+                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="wall" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">posts</div>
                             <span className="profile-header-nav-number">{this.state.data.post_count}</span>
@@ -515,6 +515,7 @@ var Profile = React.createClass({
 
 var ProfileRoute = (
     <Route name="user" path="/:username" handler={Profile}>
+        <Route name="wall" handler={Wall}/>
         <Route name="followers" path="/:username/followers" handler={Follower} />
         <Route name="following" path="/:username/following" handler={Following} />
         <Route name="likes" path="/:username/likes" />

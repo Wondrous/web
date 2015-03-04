@@ -238,7 +238,7 @@ var Post = React.createClass({
 
     onViewComments: function(err, res) {
         if (err == null){
-            console.log("loaded comments are",res);
+            console.log("loaded comments are for",this.props.data.id,res);
             this.setState({comments: res});
         } else {
             console.error("problems with loading comments", err);
