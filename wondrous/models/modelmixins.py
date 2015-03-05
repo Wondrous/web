@@ -55,6 +55,7 @@ def convert_camel(name):
     s1 = first_cap_re.sub(r'\1_\2', name)
     return all_cap_re.sub(r'\1_\2', s1).lower()
 
+
 class BaseMixin(object):
 
     """
@@ -94,7 +95,7 @@ class BaseMixin(object):
             return data
 
     @classmethod
-    def _add(cls,**kwargs):
+    def _add(cls, **kwargs):
         return cls(**kwargs)
 
     @classmethod
@@ -114,7 +115,7 @@ class BaseMixin(object):
         try:
             return cls.query.filter_by(**kwargs).one(), False
         except NoResultFound:
-            params = dict((k, v) for k, v in kwargs.iteritems() if not isinstance(v, ClauseElement))
+            params = dict((k,v) for k,v in kwargs.iteritems() if not isinstance(v, ClauseElement))
             params.update(defaults or {})
             instance = cls(**params)
             try:
