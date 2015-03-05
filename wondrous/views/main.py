@@ -71,9 +71,9 @@ class BaseHandler(object):
         return headers
 
 
-
 class AuthHandler(BaseHandler):
     pass
+
 
 class IndexHandler(BaseHandler):
     @view_config(renderer='/index-html.jinja2', route_name='index_handler')
