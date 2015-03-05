@@ -409,25 +409,25 @@ var PrivateProfile = React.createClass({
                     <span className="profile-header-nav-link">
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">posts</div>
-                            <span className="profile-header-nav-number">10</span>
+                            <span className="profile-header-nav-number">0</span>
                         </li>
                     </span>
                     <span className="profile-header-nav-link">
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">followers</div>
-                            <span className="profile-header-nav-number">3</span>
+                            <span className="profile-header-nav-number">0</span>
                         </li>
                     </span>
                     <span className="profile-header-nav-link">
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">following</div>
-                            <span className="profile-header-nav-number">3</span>
+                            <span className="profile-header-nav-number">0</span>
                         </li>
                     </span>
                     <span className="profile-header-nav-link">
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">clout</div>
-                            <span className="profile-header-nav-number">34</span>
+                            <span className="profile-header-nav-number">1</span>
                         </li>
                     </span>
                 </ul>

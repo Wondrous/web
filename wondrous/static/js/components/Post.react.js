@@ -79,6 +79,33 @@ var UserTitle = React.createClass({
 });
 
 var Comment = React.createClass({
+    mixins: [Router.Navigation],
+
+    loadProfileFromServer: function(username) {
+        if (typeof username ==='undefined') username=this.props.data.username;
+        WondrousAPI.getUserInfo({
+            username: username,
+            callback: this.handleProfileData
+        });
+    },
+
+    loadWallFromServer: function(username) {
+        if (typeof username === 'undefined') username=this.props.data.username;
+        WondrousAPI.getWallPosts({
+            username: username,
+            page: 0,
+            callback: this.handleWallData
+        });
+    },
+
+    handleClick: function(evt) {
+        evt.preventDefault();
+        if (typeof this.props.data.username != 'undefined') {
+            this.transitionTo('/' + this.props.data.username);
+            this.loadProfileFromServer();
+            this.loadWallFromServer();
+        }
+    },
 
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
@@ -89,7 +116,10 @@ var Comment = React.createClass({
                     <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a href="#" className="post-comment-un" onClick={this.handleClick}>{this.props.data.name}</a>
+                    <a href={this.props.data.username} onClick={this.handleClick} className="post-comment-un">
+                        {this.props.data.name}
+                        <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
+                    </a>
                     <span>{this.props.data.text}</span>
                 </div>
             </div>
@@ -123,6 +153,7 @@ var Comments = React.createClass({
         }
     },
     render: function() {
+        console.log(this.props.data);
         var comments = this.props.data.map(function(comment, index) {
             return (
                 <Comment data={comment}/>
@@ -231,8 +262,8 @@ var Post = React.createClass({
     },
 
     onViewComments: function(err, res) {
-        if (err == null){
-            console.log("loaded comments are for",this.props.data.id,res);
+        if (err == null) {
+            console.log("loaded comments are for", this.props.data.id, res);
             this.setState({comments: res});
         } else {
             console.error("problems with loading comments", err);
@@ -266,7 +297,7 @@ var Post = React.createClass({
         this.setState({commentsVisible: !this.state.commentsVisible});
         WondrousAPI.getPostComments({
             page: 0,
-            post_id:this.props.data.id,
+            post_id: this.props.data.id,
             callback: this.onViewComments
         });
     },
