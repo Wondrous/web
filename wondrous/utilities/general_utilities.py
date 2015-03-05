@@ -254,7 +254,8 @@ def url_match(self, url_match=None, arg_type="str"):
 
     return p
 
-def title_case(text, exceptions=set(['a', 'an', 'of', 'the', 'is', 'to'])):
+def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 'in', 
+                                     'of', 'off', 'on', 'per', 'the', 'to', 'up', 'via'])):
     def _capitalize(word, punct=set(['"','\'','`','#'])):
         first_char = word[0]
         if first_char in punct:
@@ -265,11 +266,17 @@ def title_case(text, exceptions=set(['a', 'an', 'of', 'the', 'is', 'to'])):
 
     word_list = re.split(' ', text.strip())
     title_fw  = _capitalize(word_list[0])
-    final     = [title_fw]
+    title_lw  = _capitalize(word_list[-1])
+
+    # Always capitalize first word
+    final = [title_fw]
     
-    for word in word_list[1:]:
+    for word in word_list[1:-1]:
         final.append(word in exceptions and word or _capitalize(word))
     
+    # Always capitalize last word
+    final.append(title_lw)
+
     return " ".join(final)
 
 def send_email(to_email, verification_code):
