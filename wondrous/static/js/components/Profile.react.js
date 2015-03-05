@@ -74,17 +74,24 @@ var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
 
     handleClick: function() {
+        evt.preventDefault();
         this.transitionTo('/' + this.props.user.username);
     },
     render: function() {
         var is_me = this.props.username === UserStore.user.username;
+        var hrefPlaceholder = "/" + this.props.user.username;
         return (
-            <a onClick={this.handleClick}>
-                <div>
-                    <img src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
-                    <span className="profile-name-row">{ this.props.user.name }</span>
+            <li className="user-itemizer">
+                <a className="avatar" href={hrefPlaceholder} onClick={this.handleClick}>
+                    <img className="profile-photo-med round-50" src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
+                </a>
+                <div className="user-itemizer-data">
+                    <a className="user-itemizer-data-name" href={hrefPlaceholder} onClick={this.handleClick} >{ this.props.user.name }</a>
+                    <div className="user-itemizer-data-desc">
+                        @{ this.props.user.username }
+                    </div>
                 </div>
-            </a>
+            </li>
         );
     }
 });
@@ -115,9 +122,9 @@ var Follower = React.createClass({
             );
         })
         return (
-            <div>
+            <ul>
                 {followers}
-            </div>
+            </ul>
         );
     },
     _onChange: function() {
@@ -150,9 +157,9 @@ var Following = React.createClass({
             );
         })
         return (
-            <div>
+            <ul>
                 {following}
-            </div>
+            </ul>
         );
     },
     _onChange:function() {
@@ -246,7 +253,7 @@ var UserBar = React.createClass({
                     <ProfileBarBadge to={"wall"} name={"posts"} number={this.state.data.post_count} username={this.state.data.username} />
                     <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
                     <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
-                    <ProfileBarBadge to={"wall"} name={"clout"} number={32} username={this.state.data.username} />
+                    <ProfileBarBadge to={"wall"} name={"clout"} number={1} username={this.state.data.username} />
                 </ul>
             </div>
         );
