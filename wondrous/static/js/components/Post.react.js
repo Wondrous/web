@@ -43,7 +43,8 @@ var UserTitle = React.createClass({
         });
     },
 
-    handleClick: function() {
+    handleClick: function(evt) {
+        evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
             this.transitionTo('/' + this.props.data.username);
             this.loadProfileFromServer();
@@ -51,7 +52,8 @@ var UserTitle = React.createClass({
         }
     },
 
-    handleClickOnOwner: function(){
+    handleClickOnOwner: function(evt) {
+        evt.preventDefault();
         if (typeof this.repost.username != 'undefined') {
             this.transitionTo('/' + this.repost.username);
             this.loadProfileFromServer(this.repost.username);
@@ -63,15 +65,17 @@ var UserTitle = React.createClass({
         var name = this.props.data.name;
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
+            var hrefRepostPlaceholder = this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var hrefPlaceholder = this.props.data.username;
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow">
-                    <a onClick={this.handleClick}>{name}</a>
+                    <a href={hrefPlaceholder} onClick={this.handleClick}>{name}</a>
                     {this.repost ? " reposted from " : null}
-                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
+                    {this.repost ? <a href={hrefRepostPlaceholder} className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
                 </span>
             </div>
             );
@@ -109,14 +113,14 @@ var Comment = React.createClass({
 
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-
+        var hrefPlaceholder = "/" + this.props.data.username;
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
                     <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a href={this.props.data.username} onClick={this.handleClick} className="post-comment-un">
+                    <a href={hrefPlaceholder} onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
                         <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
                     </a>

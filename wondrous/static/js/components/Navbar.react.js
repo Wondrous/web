@@ -44,7 +44,8 @@ var SettingsGear = React.createClass({
 
 var ProfileLink = React.createClass({
     mixins: [ Router.Navigation ],
-    handleProfileData:function(err, data) {
+
+    handleProfileData: function(err, data) {
         if (err == null) {
             console.log("profile", data);
             WondrousActions.loadProfileInfo(data);
@@ -52,7 +53,7 @@ var ProfileLink = React.createClass({
             // WondrousActions.unloadUserInfo(err);
         }
     },
-    handleWallData:function(err, data) {
+    handleWallData: function(err, data) {
         if (err == null) {
             WondrousActions.loadWallPosts(data);
         }else{
@@ -72,7 +73,8 @@ var ProfileLink = React.createClass({
             callback: this.handleWallData
         });
     },
-    handleClick:function() {
+    handleClick: function(evt) {
+        evt.preventDefault();
         if (typeof this.props.user.username != 'undefined') {
             this.transitionTo('/' + this.props.user.username);
             this.loadProfileFromServer();
@@ -81,9 +83,9 @@ var ProfileLink = React.createClass({
     },
     render: function () {
         var img_src = (typeof this.props.user.ouuid !== 'undefined')? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        var hrefPlaceholder = "/" + this.props.user.username;
         return (
-            <a id="linkToProfile" onClick={this.handleClick}
-                className="general-text banner-user-name">
+            <a id="linkToProfile" href={hrefPlaceholder} onClick={this.handleClick} className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
                     src={img_src}/>
                 {this.props.user.name}
