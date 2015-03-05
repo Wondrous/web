@@ -13,19 +13,20 @@ var WallStore = Reflux.createStore({
         this.current_page = 0;
         this.donePaging = false;
         this.paging = false;
+        this.username = ''
 
 
         this.listenTo(ProfileStore,"onProfileUpdate");
     },
 
     onProfileUpdate: function(profileData){
-        if (profileData.hasOwnProperty('profile')){
+        if (profileData.hasOwnProperty('profile') && profileData.profile.username!==this.username){
             this.wall = [];
             this.posts = {};
             this.current_page = 0;
             this.donePaging = false;
             this.paging = false;
-
+            this.username = '';
             this.trigger(this.getWall());
         }
     },

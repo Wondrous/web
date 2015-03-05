@@ -28,7 +28,6 @@ var Wall = React.createClass({
     mixins: [MasonryMixin('masonryContainer', masonryOptions), Router.State, Reflux.connect(WallStore,"data")],
 
     getInitialState: function() {
-        console.log("wall is",WallStore.wall);
         return {data:WallStore.getWall()};
     },
 
@@ -331,6 +330,7 @@ var Profile = React.createClass({
         if(ProfileStore.user.username !== username){
             WondrousActions.loadProfile(username);
             WondrousActions.loadWall(username,ProfileStore.current_page);
+            WallStore.username = username; 
         }
 
         return (

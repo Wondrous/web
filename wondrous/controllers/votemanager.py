@@ -18,7 +18,7 @@ from wondrous.models import (
     Post
 )
 
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
@@ -339,14 +339,21 @@ class VoteManager(BaseManager):
     def is_blocking(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_id, user_to_get_id, Vote.USER)
         return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) == Vote.BLOCKED else False
-
     @staticmethod
-    def get_follower_count(user_id):
-        return Vote.query.filter(Vote.subject_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
+    def get_count(q):
+        count_q = q.statement.with_only_columns([func.count()]).order_by(None)
+        count = q.session.execute(count_q).scalar()
+        return count
 
-    @staticmethod
-    def get_following_count(user_id):
-        return Vote.query.filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).count()
+    @classmethod
+    def get_follower_count(cls,user_id):
+        return cls.get_count(DBSession.query(Vote).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
+            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
+
+    @classmethod
+    def get_following_count(cls,user_id):
+        return cls.get_count(DBSession.query(Vote).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
+            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
 
     @classmethod
     def get_followers_json(cls, user, username = None, user_id = None, page = 0):
@@ -357,7 +364,7 @@ class VoteManager(BaseManager):
             return {'error':'bad user info'}
 
         users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
-            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
+            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).all()
 
         retval = []
         for user in users:
@@ -377,7 +384,7 @@ class VoteManager(BaseManager):
             return {'error':'bad user info'}
 
         users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
-            filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
+            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
 
         retval = []
         for user in users:

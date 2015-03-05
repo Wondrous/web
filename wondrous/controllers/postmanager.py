@@ -42,7 +42,7 @@ from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
 
 class PostManager(BaseManager):
-    
+
     @staticmethod
     def delete_comment_json(user,comment_id):
         c = Comment.by_id(comment_id)
@@ -72,6 +72,8 @@ class PostManager(BaseManager):
 
     @staticmethod
     def post_count(user,user_id):
+        f = DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).first()
+        
         return DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).count()
 
     @staticmethod

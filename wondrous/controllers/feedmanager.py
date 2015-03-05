@@ -18,6 +18,7 @@ from wondrous.models import (
     Feed,
     FeedPostLink,
     Post,
+    DBSession,
     User,
 )
 
@@ -59,7 +60,7 @@ class FeedManager(BaseManager):
                 post_dict = {}
                 if post.object:
                     post_dict.update(post.object.json())
-                    
+
                     # Title case the post subject
                     post_dict.update({"subject": title_case(post.object.subject)})
 
@@ -102,7 +103,7 @@ class FeedManager(BaseManager):
     @classmethod
     def get_wall_posts(cls, page=0, per_page=15, **kwargs):
         page = int(page)
-        posts = Post.query.order_by(desc(Post.created_at)).filter_by(**kwargs).filter_by(set_to_delete=None).limit(per_page).offset(page*per_page).all()
+        posts = DBSession.query(Post).order_by(desc(Post.created_at)).filter_by(**kwargs).filter_by(set_to_delete=None).limit(per_page).offset(page*per_page).all()
         return posts
 
     @classmethod
@@ -156,7 +157,7 @@ class FeedManager(BaseManager):
                     original_post.update({"subject": title_case(post.original.object.subject)})
                     original_post.update({"name": post.original.user.ascii_name})
                     original_post.update({"username": post.original.user.username})
-                    
+
                     post_dict.update({"repost": original_post})
                 data.append(post_dict)
         return data

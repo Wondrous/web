@@ -22,7 +22,7 @@ var ProfileStore = Reflux.createStore({
 
         this.following = getNewSet();
         this.followers = getNewSet();
-        
+
 
         this.listenTo(UserStore,"onUserChange");
     },
