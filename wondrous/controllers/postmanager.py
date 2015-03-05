@@ -20,6 +20,11 @@ from datetime import datetime
 
 from sqlalchemy import or_
 
+from wondrous.controllers.accountmanager import AccountManager
+from wondrous.controllers.basemanager import BaseManager
+from wondrous.controllers.notificationmanager import NotificationManager
+from wondrous.controllers.votemanager import VoteManager
+
 from wondrous.models import (
     DBSession,
     FeedPostLink,
@@ -33,14 +38,11 @@ from wondrous.models import (
     # Vote,
 )
 
-from wondrous.controllers.basemanager import BaseManager
-from wondrous.controllers.notificationmanager import NotificationManager
-from wondrous.controllers.votemanager import VoteManager
-from wondrous.controllers.accountmanager import AccountManager
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
 
 class PostManager(BaseManager):
+    
     @staticmethod
     def delete_comment_json(user,comment_id):
         c = Comment.by_id(comment_id)
@@ -49,9 +51,9 @@ class PostManager(BaseManager):
             if (p and p.user_id == user.id) or c.user_id==user.id:
                 DBSession.delete(c)
                 DBSession.flush()
-                return {'status':True}
+                return {'status': True}
         else:
-            return {'error':'failed to delete comment'}
+            return {'error': 'failed to delete comment'}
 
     @staticmethod
     def get_comments_json(user,post_id,page=0,per_page=15):
@@ -76,7 +78,7 @@ class PostManager(BaseManager):
     def new_comment_json(user,post_id,text):
         p = Post.query.get(post_id)
         if not p:
-            return {'error':'post not found'}
+            return {'error': 'post not found'}
 
         # am i following them?
         am_following = VoteManager.is_following(user.id,p.user_id)

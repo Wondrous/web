@@ -21,6 +21,8 @@ from wondrous.models import (
     User,
 )
 
+from wondrous.utilities.general_utilities import title_case
+
 import logging
 
 class FeedManager(BaseManager):
@@ -57,11 +59,15 @@ class FeedManager(BaseManager):
                 post_dict = {}
                 if post.object:
                     post_dict.update(post.object.json())
+                    
+                    # Title case the post subject
+                    post_dict.update({"subject": title_case(post.object.subject)})
 
                 post_dict.update(post.json())
                 post_dict.update({"name": post.user.ascii_name})
                 post_dict.update({"username": post.user.username})
                 picture_object = post.user.picture_object
+
                 if picture_object:
                     post_dict.update({"user_ouuid": picture_object.ouuid})
 
@@ -70,9 +76,12 @@ class FeedManager(BaseManager):
                 if post.original:
                     original_post = post.original.json()
                     original_post.update(post.original.object.json())
+
+                    # Title case the post subject
+                    original_post.update({"subject": title_case(post.original.object.subject)})
                     original_post.update({"name": post.original.user.ascii_name})
                     original_post.update({"username": post.original.user.username})
-                    post_dict.update({"repost":original_post})
+                    post_dict.update({"repost": original_post})
 
                 data.append(post_dict)
         return data
@@ -126,6 +135,10 @@ class FeedManager(BaseManager):
                 post_dict = {}
                 if post.object:
                     post_dict.update(post.object.json())
+
+                    # Title case the post subject
+                    post_dict.update({"subject": title_case(post.object.subject)})
+
                 post_dict.update(post.json())
                 post_dict.update({"name":post.user.ascii_name})
                 post_dict.update({"username":post.user.username})
@@ -138,8 +151,12 @@ class FeedManager(BaseManager):
                 if post.original:
                     original_post = post.original.json()
                     original_post.update(post.original.object.json())
+
+                    # Title case the post subject
+                    original_post.update({"subject": title_case(post.original.object.subject)})
                     original_post.update({"name": post.original.user.ascii_name})
                     original_post.update({"username": post.original.user.username})
-                    post_dict.update({"repost":original_post})
+                    
+                    post_dict.update({"repost": original_post})
                 data.append(post_dict)
         return data
