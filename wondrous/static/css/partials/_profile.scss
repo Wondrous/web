@@ -238,14 +238,12 @@
 .avatar {
     display: inline-block;
     margin-right: 10px;
-
     background-position: center;
     margin: 0 auto;
     overflow: hidden;
     line-height: 0;
     background-size: cover;
     border-radius: 100%;
-
     cursor: pointer;
 }
 
@@ -254,4 +252,5 @@
     height: 60px;
     vertical-align: top;
     margin-right: 10px;
+    background-color: rgb(255,255,255);
 }

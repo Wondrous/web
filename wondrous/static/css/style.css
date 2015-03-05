@@ -899,7 +899,8 @@ a:hover {
   width: 60px;
   height: 60px;
   vertical-align: top;
-  margin-right: 10px; }
+  margin-right: 10px;
+  background-color: white; }
 
 /* post-body is visible, and transitions size */
 .post-body {
