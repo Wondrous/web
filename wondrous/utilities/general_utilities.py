@@ -8,6 +8,7 @@
 # GENERAL_UTILITIES.PY
 #
 
+import re
 import smtplib
 
 from functools import wraps
@@ -264,6 +265,24 @@ def url_match(self, url_match=None, arg_type="str"):
             p = None
 
     return p
+
+def title_case(text, exceptions=set(['a', 'an', 'of', 'the', 'is', 'to'])):
+    def _capitalize(word, punct=set(['"','\'','`','#'])):
+        first_char = word[0]
+        if first_char in punct:
+            word = word[1:]
+            return first_char + word.capitalize()
+        else:
+            return word.capitalize()
+
+    word_list = re.split(' ', text.strip())
+    title_fw  = _capitalize(word_list[0])
+    final     = [title_fw]
+    
+    for word in word_list[1:]:
+        final.append(word in exceptions and word or _capitalize(word))
+    
+    return " ".join(final)
 
 def send_email(to_email, verification_code):
 
