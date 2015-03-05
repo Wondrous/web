@@ -849,8 +849,14 @@ a:hover {
   box-shadow: 0 1px 2px #3d3d3d; }
 
 .user-itemizer {
-  padding: 25px 0 20px;
-  border-top: 1px solid #dddddd; }
+  padding: 25px 35px;
+  border-top: 1px solid #dddddd;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .user-itemizer:hover {
+    background-color: white; }
 
 .user-itemizer:first-child {
   border-top: none; }
