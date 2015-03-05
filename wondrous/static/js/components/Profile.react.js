@@ -68,7 +68,9 @@ var UserIcon = React.createClass({
 
     handleClick: function() {
         evt.preventDefault();
-        this.transitionTo('/' + this.props.user.username);
+        if (typeof this.repost.username != 'undefined') {
+            this.transitionTo('/' + this.props.user.username);
+        }
     },
     render: function() {
         var is_me = this.props.username === UserStore.user.username;
