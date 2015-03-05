@@ -3,33 +3,6 @@ var UserStore = require('../stores/UserStore');
 var LoginStore = require('../stores/LoginStore');
 var Link = Router.Link;
 
-var LoggedOut = React.createClass({
-    mixins: [
-        Router.Navigation,
-        Reflux.listenTo(UserStore,'onUserUpdate'),
-    ],
-
-    onUserUpdate: function(userData){
-        if(UserStore.loggedIn){
-            this.transitionTo('feed');
-        }
-    },
-    render: function(){
-        return (
-            <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "maxWidth": "730px", "top": "10%"}}>
-                <img src="/static/pictures/p.logo.png" style={{"width": "350px", "height": "auto"}}/>
-                <p style={{"fontFamily": "helvetica, arial, sans-serif","color": "rgb(71,71,71)","fontSize": "20px","fontWeight": "100","width": "75%","margin": "20px auto"}}>
-                    Some amazing slogan goes here to fill up space on our temporary home page
-                </p>
-                <div style={{"padding": "40px 0"}}>
-                    <Link className="index-lo-big-link signup-big-link round-5" to="signup">Sign up</Link>
-                    <Link className="index-lo-big-link blue-big-link round-3" to="login">Log in</Link>
-                </div>
-            </div>
-        );
-    }
-});
-
 var Signup = React.createClass({
     err: null,
     good: true,
@@ -58,7 +31,7 @@ var Signup = React.createClass({
     },
     onUserUpdate: function(userData){
         if(UserStore.loggedIn){
-            this.transitionTo('feed');
+            this.transitionTo('/');
         }
     },
     onRegister: function(evt){
@@ -116,7 +89,7 @@ var Login = React.createClass({
     onUserUpdate: function(userData){
         console.log(UserStore);
         if(UserStore.loggedIn){
-            this.transitionTo('feed');
+            this.transitionTo('/');
         }
     },
     onLoginError: function(errMessage){
@@ -157,4 +130,4 @@ var Login = React.createClass({
     }
 });
 
-module.exports = {Login: Login, Signup: Signup, LoggedOut: LoggedOut};
+module.exports = {Login: Login, Signup: Signup};

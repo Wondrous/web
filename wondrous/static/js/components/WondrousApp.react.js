@@ -12,13 +12,13 @@ var WallStore = require('../stores/WallStore');
 
 // Other components -- stitch them together
 var Buffer = require('./Buffer.react');
-var Feed = require('./Feed.react');
+var Home = require('./Feed.react');
 var Login = require('../components/Authenticate.react').Login;
-var LoggedOut = require('../components/Authenticate.react').LoggedOut;
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
+var Search = require('../components/Search.react');
 var Signup = require('../components/Authenticate.react').Signup;
 var LandingApp = require('./Landing.react');
 
@@ -43,13 +43,12 @@ var Routes = (
         <Route name="landingBare" path="/landing" handler={LandingApp}/>
         <Route name="landing" path="/refer/:ref_uuid" handler={LandingApp}/>
         <Route name="progress" path="/progress/:uuid" handler={LandingApp}/>
-
-        <Route name="feed" handler={Feed}/>
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
+        <Route name="search" path="/search" handler={Search}/>
         <Route name="settings" path="/settings" handler={Settings}/>
         {ProfileRoute}
-        <DefaultRoute handler={LoggedOut}/>
+        <DefaultRoute name="default" handler={Home}/>
     </Route>
 );
 

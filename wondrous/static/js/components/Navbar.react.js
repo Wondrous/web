@@ -80,10 +80,9 @@ var Navbar = React.createClass({
     },
 
     render: function () {
-        var location = UserStore.loggedIn?"feed":"/";
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "top-banner" : "top-banner banner-lo"}>
-                <Link to={location} style={{"color": "rgb(235, 235, 235)"}}>
+                <Link to="/" style={{"color": "rgb(235, 235, 235)"}}>
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </Link>
                 { UserStore.loggedIn ? <SearchBox /> : null}
