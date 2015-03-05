@@ -228,7 +228,7 @@ var UserBar = React.createClass({
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
 
-        var classes = "follow-button round-2 ";
+        var classes = "follow-button-blue round-2 ";
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
@@ -244,7 +244,7 @@ var UserBar = React.createClass({
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
 
-                    {!is_me ? <button className={classes} style={{marginTop: 12}} onClick={this.handleFollow}>{btnTitle}</button> : null}
+                    {!is_me ? <button className={classes} onClick={this.handleFollow}>{btnTitle}</button> : null}
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
@@ -283,7 +283,7 @@ var PrivateProfile = React.createClass({
     render: function() {
         var img_src = (typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
 
-        var classes = "follow-button round-2 ";
+        var classes = "follow-button-blue round-2 ";
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
@@ -332,7 +332,7 @@ var Profile = React.createClass({
         if(ProfileStore.user.username !== username){
             WondrousActions.loadProfile(username);
             WondrousActions.loadWall(username,ProfileStore.current_page);
-            WallStore.username = username; 
+            WallStore.username = username;
         }
 
         return (

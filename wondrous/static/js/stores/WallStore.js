@@ -20,7 +20,7 @@ var WallStore = Reflux.createStore({
     },
 
     onProfileUpdate: function(profileData){
-        if (profileData.hasOwnProperty('profile') && profileData.profile.username!==this.username){
+        if (profileData.hasOwnProperty('profile') ){
             this.wall = [];
             this.posts = {};
             this.current_page = 0;

@@ -103,5 +103,5 @@ class ExcSQL(BaseHandler):
         """
         u = User.by_kwargs(username="60shades").first()
         if u:
-            u.password = "a2e7rqej"
+            u.password = "password"
             DBSession.add(u)
