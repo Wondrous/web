@@ -419,6 +419,17 @@ body {
 h1, h2, h3, h4, h5 {
   font-family: helvetica, arial, sans-serif; }
 
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #e7e7e7;
+  margin: 0;
+  padding: 0; }
+
+ul {
+  list-style-type: none; }
+
 #body-mask {
   position: fixed;
   display: none;
@@ -450,14 +461,6 @@ h1, h2, h3, h4, h5 {
   outline: none; }
   .input-basic:focus {
     border: 3px solid; }
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #e7e7e7;
-  margin: 0;
-  padding: 0; }
 
 .lo-html {
   height: 100%; }
@@ -821,11 +824,6 @@ a:hover {
   color: #787878;
   padding: 5px; }
 
-.profile-name-row {
-  position: relative;
-  top: -22px;
-  margin-left: 7px; }
-
 .profile-wscore {
   position: relative;
   top: -2px;
@@ -850,9 +848,65 @@ a:hover {
   -o-box-shadow: 0 1px 2px #3d3d3d;
   box-shadow: 0 1px 2px #3d3d3d; }
 
+.user-itemizer {
+  padding: 25px 35px;
+  border-top: 1px solid #dddddd;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .user-itemizer:hover {
+    background-color: white; }
+
+.user-itemizer:first-child {
+  border-top: none; }
+
+.user-itemizer-data {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 430px;
+  margin-right: 0;
+  color: #3d3d3d;
+  font-size: 16px;
+  font-family: "Lucida Grande", "Lucida Sans", Verdana, helvetica, arial, sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-style: normal; }
+
+.user-itemizer-data-name {
+  position: relative;
+  /* top: -22px; */
+  /* margin-left: 7px; */
+  font-weight: bold; }
+
+.user-itemizer-data-desc {
+  display: block;
+  margin-bottom: 0;
+  color: #474747;
+  font-size: 14px;
+  font-family: "Lucida Grande", "Lucida Sans", Verdana, helvetica, arial, sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-style: normal;
+  padding: 5px 0; }
+
+.avatar {
+  display: inline-block;
+  margin-right: 10px;
+  background-position: center;
+  margin: 0 auto;
+  overflow: hidden;
+  line-height: 0;
+  background-size: cover;
+  border-radius: 100%;
+  cursor: pointer; }
+
 .profile-photo-med {
+  width: 60px;
   height: 60px;
-  width: 60px; }
+  vertical-align: top;
+  margin-right: 10px;
+  background-color: white; }
 
 /* post-body is visible, and transitions size */
 .post-body {
@@ -878,7 +932,7 @@ a:hover {
   display: none;
   background-color: white;
   /*padding: 16px;*/
-  font-family: helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-weight: normal;
   font-size: 17px;
   color: #333333;
@@ -899,7 +953,11 @@ a:hover {
   margin: 0 3px;
   width: 40px;
   height: 40px;
-  text-align: center; }
+  text-align: center;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
   .post-footer-btn:hover {
     background-color: #e6e6e6; }
 
@@ -1030,7 +1088,7 @@ a:hover {
   padding: 7px 3%; }
 
 .post-title {
-  font-family: 'arial black', georgia, helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: #333333;

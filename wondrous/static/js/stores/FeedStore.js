@@ -23,6 +23,7 @@ var FeedStore = Reflux.createStore({
     },
 
     updateFeed: function(feedItems){
+        this.paging = false; 
         if (feedItems.length==0){
             this.donePaging = true;
         }
@@ -34,7 +35,7 @@ var FeedStore = Reflux.createStore({
 
     _addToFeed: function(post){
         if(!this.posts.hasOwnProperty(String(post.id))){
-            this.feed.unshift(post.id);
+            this.feed.push(post.id);
         }
         this.posts[String(post.id)] = post;
     },

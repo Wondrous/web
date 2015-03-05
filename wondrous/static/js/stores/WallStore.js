@@ -11,6 +11,9 @@ var WallStore = Reflux.createStore({
         this.wall = defaultWall;
         this.posts = defaultPosts;
         this.current_page = 0;
+        this.donePaging = false;
+        this.paging = false;
+
 
         this.listenTo(ProfileStore,"onProfileUpdate");
     },
@@ -19,11 +22,17 @@ var WallStore = Reflux.createStore({
         this.wall = [];
         this.posts = {};
         this.current_page = 0;
+        this.donePaging = false;
+        this.paging = false;
 
         this.trigger(this.getWall());
     },
 
     updateWall: function(wallItems){
+        if (wallItems.length==0){
+            this.donePaging = true;
+        }
+        this.paging = false;
         for(var i = 0; i < wallItems.length; i++){
             this._addToWall(wallItems[i]);
         }

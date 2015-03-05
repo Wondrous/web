@@ -1,5 +1,6 @@
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
+var Set = require("collections/set");
 
 var defaultUser = {username:''};
 
@@ -8,8 +9,14 @@ var ProfileStore = Reflux.createStore({
 
     init:function(){
         this.user = defaultUser;
-        this.following = [];
-        this.followers = [];
+        this.follower_page = 0;
+        this.following_page = 0;
+
+        this.following = this.followers = new Set(null, function(a,b){
+            return a.id==b.id;
+        }, function(obj){
+            return obj.id;
+        });
 
         this.listenTo(UserStore,"onUserChange");
     },
@@ -21,8 +28,14 @@ var ProfileStore = Reflux.createStore({
     },
     updateProfile: function(profile){
         this.user = profile;
-        this.following = [];
-        this.followers = [];
+        this.following = this.followers = new Set(null, function(a,b){
+            return a.id==b.id;
+        }, function(obj){
+            return obj.username;
+        });
+
+        this.follower_page = 0;
+        this.following_page = 0;
         this.trigger({profile:this.user});
     },
 
@@ -32,23 +45,19 @@ var ProfileStore = Reflux.createStore({
     },
 
     updateFollowers: function(followers){
-        this.followers = followers;
-        for (var k in this.followers){
-            if (this.followers.hasOwnProperty(k)){
-                follower.push(this.followers[k]);
-            }
+        for (var i = 0; i < followers.length; i++){
+            this.followers.add(followers[i]);
         }
-        this.trigger({followers:this.followers})
+
+        this.trigger({followers:this.followers.toArray()})
     },
 
     updateFollowing: function(following){
-        this.following = following;
-        for (var k in this.following){
-            if (this.following.hasOwnProperty(k)){
-                this.following.push(_following[k]);
-            }
+        for (var i = 0; i < following.length; i++){
+            this.following.add(following[i]);
         }
-        this.trigger({following:this.following})
+
+        this.trigger({following:this.following.toArray()})
     }
 });
 

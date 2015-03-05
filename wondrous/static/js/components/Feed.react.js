@@ -27,7 +27,7 @@ var Feed = React.createClass({
     ],
 
     getInitialState: function() {
-        return {data: [], paging: false};
+        return {data: FeedStore.getFeed(), paging: false};
     },
 
     onFeedUpdate: function(posts){
@@ -49,13 +49,13 @@ var Feed = React.createClass({
             FeedStore.paging = true;
             console.log("getting more page")
             FeedStore.incrementPage();
+            WondrousActions.loadFeed(FeedStore.current_page);
         }
     },
 
     // Add change listener to stores
     componentDidMount: function() {
         WondrousActions.loadFeed(FeedStore.current_page);
-        // Attach scroll event to the window for infinity paging
         window.addEventListener('scroll', this.checkWindowScroll);
     },
 

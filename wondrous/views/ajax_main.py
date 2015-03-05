@@ -66,6 +66,11 @@ class APIViews(BaseHandler):
 
     @property
     def query_kwargs(self):
+
+        """
+            TODO
+        """
+
         kwargs = defaultdict(lambda: None)
         kwargs.update(self.request.params)
         try:
@@ -122,6 +127,7 @@ class APIViews(BaseHandler):
 
     @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
     def api_refer_register(self):
+        
         """
             PURPOSE: Retrieves/sign up the referrer
 
@@ -132,10 +138,12 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array of the referrer json
         """
+
         return ReferrerManager.register(**self.query_kwargs)
 
     @view_config(request_method="GET",route_name='api_refer_progress',renderer='json')
     def api_refer_progress(self):
+        
         """
             PURPOSE: Retrieves the referrer
 
@@ -203,12 +211,12 @@ class APIViews(BaseHandler):
             RETURNS: The JSON of the user+user model if valid else {}
         """
 
-
         return AccountManager.get_json_by_username(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="GET",route_name='api_user_me', renderer='json')
     def api_user_me(self):
+        
         """
             PURPOSE: Retrieves my user information based on relationship and login
                 status
@@ -220,12 +228,14 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON of the user+user model if valid else {}
         """
+
         user = self.query_kwargs['user']
-        return AccountManager.get_json_by_username(user,**{'user_id': user.id})
+        return AccountManager.get_json_by_username(user, **{'user_id': user.id})
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_picture', renderer='json')
     def api_user_picture(self):
+        
         """
             PURPOSE: Changes profile picture
 
@@ -272,7 +282,6 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array of the wallpost objects
         """
 
-
         posts  = FeedManager.get_wall_posts_json(**self.query_kwargs)
         return posts
 
@@ -291,7 +300,6 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing either an error or successful status
         """
 
-
         return AccountManager.deactivate_json(**self.query_kwargs)
 
     @api_login_required
@@ -307,7 +315,6 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing either an error or successful status
         """
-
 
         return AccountManager.change_name_json(**self.query_kwargs)
 
@@ -326,7 +333,6 @@ class APIViews(BaseHandler):
             RETURNS: The JSON containing either an error or successful status
         """
 
-
         return AccountManager.change_username_json(**self.query_kwargs)
 
     @api_login_required
@@ -343,7 +349,6 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing either an error or successful status
         """
-
 
         return AccountManager.change_password_json(**self.query_kwargs)
 
@@ -367,7 +372,6 @@ class APIViews(BaseHandler):
         """
 
         return FeedManager.get_feed_posts_json(**self.query_kwargs)
-
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_new_post', renderer='json')
@@ -395,13 +399,12 @@ class APIViews(BaseHandler):
         logging.warn(query_kwargs)
         retval = PostManager.post_json(**query_kwargs)
 
-
         return retval
-
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_repost', renderer='json')
     def api_repost(self):
+        
         """
             PURPOSE: issue a repost
 
@@ -412,6 +415,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing the new repost else containing JSON with error
         """
+
         # Basic setup
         p            = self.request.POST
         user         = self.request.user
@@ -423,6 +427,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method='POST', route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
+        
         """
             PURPOSE: uses an action to vote on someone else
 
@@ -433,7 +438,6 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON containing the following/follower stats
         """
-
 
         return VoteManager.vote_json(**self.query_kwargs)
 
@@ -452,13 +456,13 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array of the current post status
         """
 
-
         posts  = VoteManager.vote_json(**self.query_kwargs)
         return posts
 
     @api_login_required
     @view_config(request_method='GET',route_name='api_user_notification', renderer='json')
     def api_user_notification(self):
+        
         """
             PURPOSE: get a list of notifications for current user
 
@@ -471,11 +475,25 @@ class APIViews(BaseHandler):
             RETURNS: The JSON array containing the notifications
         """
 
-
         return NotificationManager.notification_json(**self.query_kwargs)
 
     @view_config(request_method='POST',route_name='api_signup_check', renderer='json')
     def api_signup_check(self):
+
+        """
+            PURPOSE: Handle a user sign up
+
+            USE: self.query_kwargs to provide all the required fields
+                name,
+                password,
+                email,
+                username
+
+            PARAMS: (None)
+
+            RETURNS: The JSON error response
+        """
+
         error_message = None
         try:
             _s_valid_n, len_err_fn = Sanitize.length_check(self.query_kwargs['name'], min_length=5, max_length=30)
@@ -503,13 +521,14 @@ class APIViews(BaseHandler):
             error_message = "This username has already been taken. Please use a different one."
 
         if error_message:
-            return {'error':error_message}
+            return {'error': error_message}
         else:
             return {}
 
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_post_delete', renderer='json')
     def api_post_delete(self):
+        
         """
             PURPOSE: deletes the given post by post_id
 
@@ -558,6 +577,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the comment
         """
+        
         return PostManager.get_comments_json(**self.query_kwargs)
 
     @api_login_required
@@ -582,12 +602,20 @@ class APIViews(BaseHandler):
     @view_config(request_method='GET', route_name='api_search_users', renderer='json')
     def api_search_users(self):
 
+        """
+            TODO
+        """
+
         return SearchManager.user_search_json(**self.query_kwargs)
 
 
     @api_login_required
     @view_config(request_method='GET', route_name='api_search_posts', renderer='json')
     def api_search_posts(self):
+
+        """
+            TODO
+        """
 
         return SearchManager.post_search_json(**self.query_kwargs)
 

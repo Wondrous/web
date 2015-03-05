@@ -69,9 +69,6 @@ var Wall = React.createClass({
     }
 });
 
-function getFollower() {
-    return {data:ProfileStore.getProfileFollower()};
-}
 
 var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
@@ -93,12 +90,15 @@ var UserIcon = React.createClass({
 });
 
 var Follower = React.createClass({
-    mixins: [ Router.State, Router.Navigation ],
+    mixins: [ Router.State, Router.Navigation , Reflux.listenTo(ProfileStore,"onProfileChange")],
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
-
+    onProfileChange: function(profileData){
+        this.setState({data:ProfileStore.followers});
+    },
     getInitialState: function() {
-        return getFollower();
+        WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.follower_page);
+        return {data:ProfileStore.followers};
     },
 
     handleClick: function(username) {
@@ -111,7 +111,7 @@ var Follower = React.createClass({
         var handle = this.handleClick;
         var followers = this.state.data.map(function(user, index){
             return (
-                <UserIcon user={user}/>
+                <UserIcon key={user.id} user={user}/>
             );
         })
         return (
@@ -125,18 +125,18 @@ var Follower = React.createClass({
     }
 });
 
-function getFollowing() {
-    return {data:ProfileStore.getProfileFollowing()};
-}
 
 var Following = React.createClass({
-    mixins: [ Router.State, Router.Navigation ],
-
+    mixins: [ Router.State, Router.Navigation, Reflux.listenTo(ProfileStore,"onProfileChange") ],
+    onProfileChange: function(profileData){
+        this.setState({data:ProfileStore.following});
+    },
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
 
     getInitialState: function() {
-        return getFollowing();
+        WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.following_page);
+        return {data:ProfileStore.following};
     },
 
     render: function() {
@@ -146,7 +146,7 @@ var Following = React.createClass({
 
         var following = this.state.data.map(function(user, index){
             return (
-                <UserIcon user={user} />
+                <UserIcon key={user.id} user={user} />
             );
         })
         return (
@@ -327,7 +327,6 @@ var Profile = React.createClass({
         if(ProfileStore.user.username !== username){
             WondrousActions.loadProfile(username);
             WondrousActions.loadWall(username,ProfileStore.current_page);
-
         }
 
         return (

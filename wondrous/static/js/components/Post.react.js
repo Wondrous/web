@@ -13,7 +13,8 @@ var UserTitle = React.createClass({
         }
     },
 
-    handleClickOnOwner: function(){
+    handleClickOnOwner: function(evt) {
+        evt.preventDefault();
         if (typeof this.repost.username != 'undefined') {
             this.transitionTo('/' + this.repost.username);
         }
@@ -23,15 +24,17 @@ var UserTitle = React.createClass({
         var name = this.props.data.name;
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
+            var hrefRepostPlaceholder = this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var hrefPlaceholder = this.props.data.username;
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow">
-                    <a onClick={this.handleClick}>{name}</a>
+                    <a href={hrefPlaceholder} onClick={this.handleClick}>{name}</a>
                     {this.repost ? " reposted from " : null}
-                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a>:null}
+                    {this.repost ? <a href={hrefRepostPlaceholder} className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
                 </span>
             </div>
             );
@@ -39,17 +42,47 @@ var UserTitle = React.createClass({
 });
 
 var Comment = React.createClass({
+    mixins: [Router.Navigation],
+
+    loadProfileFromServer: function(username) {
+        if (typeof username ==='undefined') username=this.props.data.username;
+        WondrousAPI.getUserInfo({
+            username: username,
+            callback: this.handleProfileData
+        });
+    },
+
+    loadWallFromServer: function(username) {
+        if (typeof username === 'undefined') username=this.props.data.username;
+        WondrousAPI.getWallPosts({
+            username: username,
+            page: 0,
+            callback: this.handleWallData
+        });
+    },
+
+    handleClick: function(evt) {
+        evt.preventDefault();
+        if (typeof this.props.data.username != 'undefined') {
+            this.transitionTo('/' + this.props.data.username);
+            this.loadProfileFromServer();
+            this.loadWallFromServer();
+        }
+    },
 
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-
+        var hrefPlaceholder = "/" + this.props.data.username;
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
                     <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a href="#" className="post-comment-un" onClick={this.handleClick}>{this.props.data.name}</a>
+                    <a href={hrefPlaceholder} onClick={this.handleClick} className="post-comment-un">
+                        {this.props.data.name}
+                        <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
+                    </a>
                     <span>{this.props.data.text}</span>
                 </div>
             </div>
@@ -90,8 +123,6 @@ var Comments = React.createClass({
             );
         });
 
-
-
         return (
             <div>
                 {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
@@ -113,7 +144,6 @@ var Photo = React.createClass({
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
         };
 
-        // var img_src = this.props.data.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/500x500.gif";
         return (
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     {/*<div className="post-subject-text nh">
@@ -132,9 +162,10 @@ var Photo = React.createClass({
 
 var Post = React.createClass({
     getInitialState: function() {
-        return {comments: [], commentsVisible:false};
+        return {comments: [], commentsVisible: false};
     },
     handleClick: function() {
+    	// add modal functionality
         var SPEED = 0;
         var thisPost = $(this.refs.post.getDOMNode());
         var thisBrick = $(this.refs.brick.getDOMNode());
@@ -158,11 +189,7 @@ var Post = React.createClass({
         thisBrick.toggleClass('post-presentation');
         thisPostContent.slideToggle(SPEED);
 
-        // Hmmmmm.... Let's try this out
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
-
-        // Trigger Masonry Layout
-        // WondrousActions.toggleFeedAnimation(null);
     },
 
     deletePost: function () {
@@ -189,8 +216,8 @@ var Post = React.createClass({
     },
 
     onViewComments: function(err, res) {
-        if (err == null){
-            console.log("loaded comments are for",this.props.data.id,res);
+        if (err == null) {
+            console.log("loaded comments are for", this.props.data.id, res);
             this.setState({comments: res});
         } else {
             console.error("problems with loading comments", err);
@@ -207,7 +234,7 @@ var Post = React.createClass({
         this.setState({commentsVisible: !this.state.commentsVisible});
         WondrousAPI.getPostComments({
             page: 0,
-            post_id:this.props.data.id,
+            post_id: this.props.data.id,
             callback: this.onViewComments
         });
     },
@@ -248,6 +275,7 @@ var Post = React.createClass({
                             }
                         </div>
                         <hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
+
                         {this.state.commentsVisible?
                             <div className="post-comment-wrapper">
                                 <Comments data={this.state.comments} post_id={this.props.data.id} />
