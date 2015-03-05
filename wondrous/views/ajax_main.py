@@ -82,13 +82,13 @@ class APIViews(BaseHandler):
         for key in kwargs.keys():
             val = kwargs[key]
 
-            if isinstance(val,str):
+            if isinstance(val, str):
                 kwargs[key] = val.strip().text.encode('utf-8')
 
             if key == 'search':
                 kwargs[key] = urllib.unquote(kwargs[key]).decode('utf8')
 
-            if key in ['page','per_page']:
+            if key in ['page', 'per_page']:
                 try:
                     kwargs[key] = int(val)
                 except ValueError:
@@ -634,6 +634,7 @@ class APIViews(BaseHandler):
     @api_logout_required
     @view_config(request_method='POST', renderer='json', route_name='api_login')
     def api_login(self):
+
         """
             PURPOSE: This method handles the login process for all users
         """
@@ -661,9 +662,9 @@ class APIViews(BaseHandler):
             return this_user.json()
 
         elif this_user and this_user.is_banned:
-            return {'error':'banned'}
+            return {'error': 'banned'}
         else:
-            return {'error': 'invalid login information'}
+            return {'error': 'Sorry, incorrect username/email or passwrd. Please try again.'}
 
     @api_logout_required
     @view_config(renderer='json',route_name='api_register')
