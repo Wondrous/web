@@ -46,7 +46,9 @@ var ProfileStore = Reflux.createStore({
 
     updateFollowers: function(followers){
         for (var i = 0; i < followers.length; i++){
-            this.followers.add(followers[i]);
+            if (UserStore.user.id!=followers[i].id){
+                this.followers.add(followers[i]);
+            }
         }
 
         this.trigger({followers:this.followers.toArray()})
@@ -54,7 +56,9 @@ var ProfileStore = Reflux.createStore({
 
     updateFollowing: function(following){
         for (var i = 0; i < following.length; i++){
-            this.following.add(following[i]);
+            if (UserStore.user.id!=following[i].id){
+                this.following.add(following[i]);
+            }
         }
 
         this.trigger({following:this.following.toArray()})

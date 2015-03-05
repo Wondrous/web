@@ -18,14 +18,16 @@ var WallStore = Reflux.createStore({
         this.listenTo(ProfileStore,"onProfileUpdate");
     },
 
-    onProfileUpdate: function(){
-        this.wall = [];
-        this.posts = {};
-        this.current_page = 0;
-        this.donePaging = false;
-        this.paging = false;
+    onProfileUpdate: function(profileData){
+        if (profileData.hasOwnProperty('profile')){
+            this.wall = [];
+            this.posts = {};
+            this.current_page = 0;
+            this.donePaging = false;
+            this.paging = false;
 
-        this.trigger(this.getWall());
+            this.trigger(this.getWall());
+        }
     },
 
     updateWall: function(wallItems){

@@ -44,29 +44,13 @@ var UserTitle = React.createClass({
 var Comment = React.createClass({
     mixins: [Router.Navigation],
 
-    loadProfileFromServer: function(username) {
-        if (typeof username ==='undefined') username=this.props.data.username;
-        WondrousAPI.getUserInfo({
-            username: username,
-            callback: this.handleProfileData
-        });
-    },
-
-    loadWallFromServer: function(username) {
-        if (typeof username === 'undefined') username=this.props.data.username;
-        WondrousAPI.getWallPosts({
-            username: username,
-            page: 0,
-            callback: this.handleWallData
-        });
-    },
 
     handleClick: function(evt) {
         evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
+            this.props.dismiss();
             this.transitionTo('/' + this.props.data.username);
-            this.loadProfileFromServer();
-            this.loadWallFromServer();
+
         }
     },
 
@@ -116,12 +100,11 @@ var Comments = React.createClass({
         }
     },
     render: function() {
-        console.log(this.props.data);
         var comments = this.props.data.map(function(comment, index) {
             return (
-                <Comment key={comment.id} data={comment}/>
+                <Comment key={comment.id} data={comment} dismiss={this.dismiss}/>
             );
-        });
+        },this.props);
 
         return (
             <div>
@@ -278,7 +261,7 @@ var Post = React.createClass({
 
                         {this.state.commentsVisible?
                             <div className="post-comment-wrapper">
-                                <Comments data={this.state.comments} post_id={this.props.data.id} />
+                                <Comments data={this.state.comments} post_id={this.props.data.id} dismiss={this.handleClick} />
                             </div>
                             : null}
 

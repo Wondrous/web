@@ -16,11 +16,6 @@ var MouseWheel = require('kd-shim-jquery-mousewheel');
 var CropBox = require('jquery-cropbox');
 
 // Components
-
-function getWallPosts() {
-    return {data:WallStore.getWall()};
-}
-
 var masonry = null;
 
 var masonryOptions = {
@@ -33,7 +28,8 @@ var Wall = React.createClass({
     mixins: [MasonryMixin('masonryContainer', masonryOptions), Router.State, Reflux.connect(WallStore,"data")],
 
     getInitialState: function() {
-        return getWallPosts();
+        console.log("wall is",WallStore.wall);
+        return {data:WallStore.getWall()};
     },
 
     showNewPost: function(e) {
@@ -63,9 +59,6 @@ var Wall = React.createClass({
                 </div>
             </div>
         );
-    },
-    _onChange: function() {
-        this.setState(getWallPosts());
     }
 });
 
