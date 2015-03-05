@@ -4,6 +4,14 @@ var Set = require("collections/set");
 
 var defaultUser = {username:''};
 
+var getNewSet = function(){
+    return new Set(null, function(a,b){
+        return a.id==b.id;
+    }, function(obj){
+        return obj.username;
+    });
+}
+
 var ProfileStore = Reflux.createStore({
     listenables: WondrousActions,
 
@@ -12,11 +20,9 @@ var ProfileStore = Reflux.createStore({
         this.follower_page = 0;
         this.following_page = 0;
 
-        this.following = this.followers = new Set(null, function(a,b){
-            return a.id==b.id;
-        }, function(obj){
-            return obj.id;
-        });
+        this.following = getNewSet();
+        this.followers = getNewSet();
+        
 
         this.listenTo(UserStore,"onUserChange");
     },
@@ -28,11 +34,8 @@ var ProfileStore = Reflux.createStore({
     },
     updateProfile: function(profile){
         this.user = profile;
-        this.following = this.followers = new Set(null, function(a,b){
-            return a.id==b.id;
-        }, function(obj){
-            return obj.username;
-        });
+        this.following = getNewSet();
+        this.followers = getNewSet();
 
         this.follower_page = 0;
         this.following_page = 0;
@@ -46,7 +49,7 @@ var ProfileStore = Reflux.createStore({
 
     updateFollowers: function(followers){
         for (var i = 0; i < followers.length; i++){
-            if (UserStore.user.id!=followers[i].id){
+            if (ProfileStore.user.id!=followers[i].id){
                 this.followers.add(followers[i]);
             }
         }
@@ -56,7 +59,7 @@ var ProfileStore = Reflux.createStore({
 
     updateFollowing: function(following){
         for (var i = 0; i < following.length; i++){
-            if (UserStore.user.id!=following[i].id){
+            if (ProfileStore.user.id!=following[i].id){
                 this.following.add(following[i]);
             }
         }

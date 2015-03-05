@@ -94,7 +94,9 @@ var Follower = React.createClass({
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
     onProfileChange: function(profileData){
-        this.setState({data:ProfileStore.followers});
+        if (profileData.hasOwnProperty('followers')){
+            this.setState({data:profileData.followers});
+        }
     },
     getInitialState: function() {
         WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.follower_page);
@@ -129,7 +131,9 @@ var Follower = React.createClass({
 var Following = React.createClass({
     mixins: [ Router.State, Router.Navigation, Reflux.listenTo(ProfileStore,"onProfileChange") ],
     onProfileChange: function(profileData){
-        this.setState({data:ProfileStore.following});
+        if (profileData.hasOwnProperty('following')){
+            this.setState({data:profileData.following});
+        }
     },
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,

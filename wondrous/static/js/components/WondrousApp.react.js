@@ -36,8 +36,6 @@ var WondrousApp = React.createClass({
             </div>
         );
     },
-
-
 });
 
 var Routes = (
