@@ -18,7 +18,7 @@ var CropBox = require('jquery-cropbox');
 // Components
 
 function getWallPosts() {
-    return {data:WallStore.getWallData()};
+    return {data:WallStore.getWall()};
 }
 
 var masonry = null;
@@ -30,27 +30,21 @@ var masonryOptions = {
 };
 
 var Wall = React.createClass({
-    mixins: [MasonryMixin('masonryContainer', masonryOptions), Router.State],
+    mixins: [MasonryMixin('masonryContainer', masonryOptions), Router.State, Reflux.connect(WallStore,"data")],
 
     getInitialState: function() {
         return getWallPosts();
     },
 
-    componentDidMount: function() {
-        WallStore.addChangeListener(this._onChange);
-    },
-
-    componentWillUnmount: function(){
-        WallStore.removeChangeListener(this._onChange);
-    },
     showNewPost: function(e) {
-        WondrousActions.toggleNewPostModal();
+        WondrousActions.togglePostModal();
     },
     render: function() {
-        var am_following = getProfileState().data.following;
-        var is_private = getProfileState().data.is_private;
+        var am_following = ProfileStore.user.following;
+        var is_private = ProfileStore.user.is_private;
         var is_visible = am_following || is_private;
         is_visible = is_visible==true;
+        // console.log("rendering post",this.state.data);
         var posts = this.state.data.map(function(post,index){
             return(
                 <Post key={post.id} data={post} />
@@ -58,7 +52,7 @@ var Wall = React.createClass({
         });
 
         var username = this.getParams().username;
-        var is_me = username === UserStore.getUserData().username;
+        var is_me = username === UserStore.user.username;
         return (
             <div>
                 {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
@@ -75,115 +69,55 @@ var Wall = React.createClass({
     }
 });
 
-function getFollower() {
-    return {data:ProfileStore.getProfileFollower()};
-}
 
 var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
-    handleProfileData: function(err, data) {
-        if (err == null) {
-            console.log("profile", data);
-            WondrousActions.loadProfileInfo(data);
-        } else {
-            // WondrousActions.unloadUserInfo(err);
-        }
-    },
-    handleWallData: function(err, data) {
-        if (err == null) {
-            WondrousActions.loadWallPosts(data);
-        } else {
 
-        }
-    },
-    loadProfileFromServer: function() {
-        WondrousAPI.getUserInfo({
-            username: this.props.user.username,
-            callback: this.handleProfileData
-        });
-    },
-    loadWallFromServer: function() {
-        WondrousAPI.getWallPosts({
-            username: this.props.user.username,
-            page:0,
-            callback: this.handleWallData
-        });
-    },
-    handleClick: function(evt) {
-        evt.preventDefault();
-
+    handleClick: function() {
         this.transitionTo('/' + this.props.user.username);
-        this.loadProfileFromServer();
-        this.loadWallFromServer();
     },
     render: function() {
-        var is_me = this.props.username === UserStore.getUserData().username;
-        var hrefPlaceholder = "/" + this.props.user.username;
+        var is_me = this.props.username === UserStore.user.username;
         return (
-            <li className="user-itemizer">
-                <a className="avatar" onClick={this.handleClick}>
-                    <img className="profile-photo-med round-50" href={hrefPlaceholder} src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
-                </a>
-                <div className="user-itemizer-data">
-                    <a className="user-itemizer-data-name" href={hrefPlaceholder} onClick={this.handleClick} >{ this.props.user.name }</a>
-                    <div className="user-itemizer-data-desc">
-                        @{ this.props.user.username }
-                    </div>
+            <a onClick={this.handleClick}>
+                <div>
+                    <img src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
+                    <span className="profile-name-row">{ this.props.user.name }</span>
                 </div>
-            </li>
+            </a>
         );
     }
 });
 
 var Follower = React.createClass({
-    mixins: [ Router.State, Router.Navigation ],
-    am_following: getProfileState().data.following,
-    is_private: getProfileState().data.is_private,
-
-    handleData: function(err, data) {
-        if (err == null) {
-            WondrousActions.loadProfileFollower(data);
-        } else {
-            console.error("error", err);
-        }
-    },
-    loadFollowersFromServer: function() {
-        var username = this.getParams().username;
-        console.log("getting followers for",username);
-        WondrousAPI.getFollowers({
-            page: 0,
-            username: username,
-            callback: this.handleData
-        });
+    mixins: [ Router.State, Router.Navigation , Reflux.listenTo(ProfileStore,"onProfileChange")],
+    am_following: ProfileStore.user.following,
+    is_private: ProfileStore.user.is_private,
+    onProfileChange: function(profileData){
+        this.setState({data:ProfileStore.followers});
     },
     getInitialState: function() {
-        return getFollower();
-    },
-    componentDidMount: function() {
-        ProfileStore.addChangeListener(this._onChange);
-        this.loadFollowersFromServer();
+        WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.follower_page);
+        return {data:ProfileStore.followers};
     },
 
-    componentWillUnmount: function() {
-        ProfileStore.removeChangeListener(this._onChange);
-    },
     handleClick: function(username) {
         return this.transitionTo('/' + username)
     },
     render: function(){
-        this.am_following = getProfileState().data.following;
-        this.is_private = getProfileState().data.is_private;
+        this.am_following = ProfileStore.user.following;
+        this.is_private = ProfileStore.user.is_private;
         var is_visible = this.am_following || this.is_private;
         var handle = this.handleClick;
         var followers = this.state.data.map(function(user, index){
             return (
-                <UserIcon user={user}/>
+                <UserIcon key={user.id} user={user}/>
             );
         })
         return (
-            <ul>
+            <div>
                 {followers}
-            </ul>
+            </div>
         );
     },
     _onChange: function() {
@@ -191,55 +125,34 @@ var Follower = React.createClass({
     }
 });
 
-function getFollowing() {
-    return {data:ProfileStore.getProfileFollowing()};
-}
 
 var Following = React.createClass({
-    mixins: [ Router.State, Router.Navigation ],
-    am_following: getProfileState().data.following,
-    is_private: getProfileState().data.is_private,
+    mixins: [ Router.State, Router.Navigation, Reflux.listenTo(ProfileStore,"onProfileChange") ],
+    onProfileChange: function(profileData){
+        this.setState({data:ProfileStore.following});
+    },
+    am_following: ProfileStore.user.following,
+    is_private: ProfileStore.user.is_private,
 
-    handleData: function(err, data) {
-        if (err == null){
-            WondrousActions.loadProfileFollowing(data);
-        } else {
-            console.error("error", err);
-        }
-    },
-    loadFollowingFromServer: function() {
-        var username = this.getParams().username;
-        WondrousAPI.getFollowing({
-            page: 0,
-            username: username,
-            callback: this.handleData
-        });
-    },
     getInitialState: function() {
-        return getFollowing();
-    },
-    componentDidMount: function() {
-        ProfileStore.addChangeListener(this._onChange);
-        this.loadFollowingFromServer();
+        WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.following_page);
+        return {data:ProfileStore.following};
     },
 
-    componentWillUnmount: function() {
-        ProfileStore.removeChangeListener(this._onChange);
-    },
     render: function() {
-        this.am_following = getProfileState().data.following;
-        this.is_private = getProfileState().data.is_private;
+        this.am_following = ProfileStore.user.following;
+        this.is_private = ProfileStore.user.is_private;
         var is_visible = this.am_following || this.is_private;
 
         var following = this.state.data.map(function(user, index){
             return (
-                <UserIcon user={user} />
+                <UserIcon key={user.id} user={user} />
             );
         })
         return (
-            <ul>
+            <div>
                 {following}
-            </ul>
+            </div>
         );
     },
     _onChange:function() {
@@ -247,35 +160,32 @@ var Following = React.createClass({
     }
 });
 
-function getProfileState() {
-    return {data:ProfileStore.getProfileData()};
-}
+var ProfileBarBadge = React.createClass({
+    render: function(){
+        return (
+            <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to={this.props.to} params={{username: this.props.username}}>
+                <li className="profile-header-nav-item round-50">
+                    <div className="profile-header-nav-title">{this.props.name}</div>
+                    <span className="profile-header-nav-number">{this.props.number}</span>
+                </li>
+            </Link>
+        );
+    }
+})
 
 var UserBar = React.createClass({
-    mixins: [ Router.Navigation ],
+    mixins: [ Router.Navigation, Reflux.listenTo(ProfileStore,'onProfileChange')],
 
-    am_following: getProfileState().data.following,
-    is_private: getProfileState().data.is_private,
+    am_following: ProfileStore.user.following,
+    is_private: ProfileStore.user.is_private,
 
-    getInitialState: function() {
-        return getProfileState();
-    },
-    componentDidMount: function() {
-        ProfileStore.addChangeListener(this._onChange);
-        if (UserStore.getUserData().username===this.props.username) {
-            UserStore.addChangeListener(this._onChange);
-        }
-    },
-
-    componentWillUnmount: function() {
-        ProfileStore.removeChangeListener(this._onChange);
-        if(UserStore.getUserData().username===this.props.username){
-            UserStore.removeChangeListener(this._onChange);
-        }
+    onProfileChange: function(){
+        this.setState({data:ProfileStore.user});
     },
     getInitialState: function() {
-        return getProfileState();
+        return {data:ProfileStore.user};
     },
+
     handleData: function(err, data) {
         if (err == null){
             var currentState = this.state.data;
@@ -287,7 +197,7 @@ var UserBar = React.createClass({
         }
     },
     handleFollow: function() {
-        user_id = getProfileState().data.id;
+        user_id = ProfileStore.user.id;
         if (!user_id && typeof user_id === 'undefined') return;
 
         WondrousAPI.toggleFollow({
@@ -297,20 +207,20 @@ var UserBar = React.createClass({
     },
 
     handleClick: function() {
-        var is_me = this.props.username === UserStore.getUserData().username;
+        var is_me = this.props.username === UserStore.user.username;
+        console.log("me",this.props.username, UserStore.user.username);
         if (is_me) {
-            WondrousActions.togglePictureUpload();
+            WondrousActions.togglePictureModal();
         }
     },
 
     render: function() {
-        console.log("asd",getProfileState().data);
         var username = this.props.username;
-        this.is_private = getProfileState().data.is_private;
-        this.am_following = getProfileState().data.following==true;
-        var is_me = username === UserStore.getUserData().username;
+        this.is_private = ProfileStore.user.is_private;
+        this.am_following = ProfileStore.user.following==true;
+        var is_me = username === UserStore.user.username;
 
-        var ouuid = (typeof getProfileState().data.ouuid !== 'undefined') ? getProfileState().data.ouuid : false;
+        var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         var classes = "follow-button round-2 ";
@@ -333,43 +243,19 @@ var UserBar = React.createClass({
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link" to="wall" params={{username: username}}>
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">posts</div>
-                            <span className="profile-header-nav-number">{this.state.data.post_count}</span>
-                        </li>
-                    </Link>
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="followers" params={{username: username}}>
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">followers</div>
-                            <span className="profile-header-nav-number">{this.state.data.follower_count - 1}</span>
-                        </li>
-                    </Link>
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="following" params={{username: username}}>
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">following</div>
-                            <span className="profile-header-nav-number">{this.state.data.following_count - 1}</span>
-                        </li>
-                    </Link>
-                    <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">clout</div>
-                            <span className="profile-header-nav-number">1</span>
-                        </li>
-                    </Link>
+                    <ProfileBarBadge to={"wall"} name={"posts"} number={this.state.data.post_count} username={this.state.data.username} />
+                    <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
+                    <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
+                    <ProfileBarBadge to={"wall"} name={"clout"} number={32} username={this.state.data.username} />
                 </ul>
             </div>
         );
-    },
-    _onChange: function() {
-        this.setState({data:getProfileState().data});
     }
 });
 
 var PrivateProfile = React.createClass({
-
-    am_following: getProfileState().data.following,
-    is_private: getProfileState().data.is_private,
+    am_following: ProfileStore.user.following,
+    is_private: ProfileStore.user.is_private,
 
     handleData: function(err, data){
         if (err == null){
@@ -407,94 +293,30 @@ var PrivateProfile = React.createClass({
                 <div className="profile-header-content">
                     <div className="profile-name">{this.props.user.name}</div>
                     <div className="profile-username">@{this.props.user.username}</div>
-                    {/*<span className="profile-wscore">
-                        <span className="profile-wscore-text round-5">1</span>
-                    </span>*/}
                     <button className={classes} style={{marginTop: 12}} onClick={this.handleClick} ref="requestBtn">Request to Follow</button>
                 </div>
-                <hr className="profile-hr" />
-                <ul className="profile-header-nav">
-                    <span className="profile-header-nav-link">
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">posts</div>
-                            <span className="profile-header-nav-number">0</span>
-                        </li>
-                    </span>
-                    <span className="profile-header-nav-link">
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">followers</div>
-                            <span className="profile-header-nav-number">0</span>
-                        </li>
-                    </span>
-                    <span className="profile-header-nav-link">
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">following</div>
-                            <span className="profile-header-nav-number">0</span>
-                        </li>
-                    </span>
-                    <span className="profile-header-nav-link">
-                        <li className="profile-header-nav-item round-50">
-                            <div className="profile-header-nav-title">clout</div>
-                            <span className="profile-header-nav-number">1</span>
-                        </li>
-                    </span>
-                </ul>
             </div>
         );
     }
 });
 
 var Profile = React.createClass({
-    mixins: [Router.Navigation, Router.State],
-    getInitialState: function() {
-        return getProfileState();
-    },
-    handleProfileData: function(err, data) {
-        if (err == null) {
-            console.log("profile", data);
-            WondrousActions.loadProfileInfo(data);
-        } else {
-            this.replaceWith('/')
-            console.error("error", err);
+    mixins: [Router.Navigation, Router.State, Reflux.listenTo(ProfileStore,"onProfileChange")],
+    onProfileChange: function(){
+        if (!UserStore.loggedIn){
+            this.transitionTo('/');
+        }else{
+
+            this.forceUpdate();
         }
     },
-    handleWallData: function(err, data) {
-        if (err == null) {
-            WondrousActions.loadWallPosts(data);
-        } else {
-            // Nothing much happening here...
-        }
-    },
-    loadProfileFromServer: function() {
-        WondrousAPI.getUserInfo({
-            username: this.getParams().username,
-            callback: this.handleProfileData
-        });
-    },
-    loadWallFromServer: function() {
-        WondrousAPI.getWallPosts({
-            username: this.getParams().username,
-            page: 0,
-            callback: this.handleWallData
-        });
-    },
-    componentDidMount: function() {
-        ProfileStore.addChangeListener(this._onChange);
 
-        this.loadProfileFromServer();
-        this.loadWallFromServer();
-    },
-
-    componentWillUnmount: function() {
-        ProfileStore.removeChangeListener(this._onChange);
-
-    },
     render: function () {
         var username = this.getParams().username;
-        var am_following = getProfileState().data.following;
-        var is_private = getProfileState().data.is_private;
+        var am_following = ProfileStore.user.following;
+        var is_private = ProfileStore.user.is_private;
         var is_visible = (typeof am_following !== 'undefined' && am_following == true) || (typeof is_private !== 'undefined' && !is_private == true);
-        var loaded = (typeof this.state.data.is_private !== 'undefined');
+        var loaded = (typeof ProfileStore.user.is_private !== 'undefined');
         var style = {display: 'none'};
 
         // we don't load until we are loaded :)
@@ -502,12 +324,17 @@ var Profile = React.createClass({
             style.display = 'block';
         }
 
+        if(ProfileStore.user.username !== username){
+            WondrousActions.loadProfile(username);
+            WondrousActions.loadWall(username,ProfileStore.current_page);
+        }
+
         return (
             <div className="main-content" style={style}>
 
-                {!is_visible ? <PrivateProfile user={getProfileState().data} /> :
+                {!is_visible ? <PrivateProfile user={ProfileStore.user} /> :
                     <div>
-                        <UserBar username={username} />
+                        <UserBar username={username}/>
                         <div className="cover profile-content">
                             <PostForm />
                             <RouteHandler />
@@ -515,9 +342,6 @@ var Profile = React.createClass({
                     </div>
                 }
             </div>);
-    },
-    _onChange: function(){
-        this.setState(getProfileState());
     }
 });
 

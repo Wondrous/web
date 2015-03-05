@@ -1,16 +1,18 @@
 var UserStore = require('../stores/UserStore');
 var WondrousAPI = require('../utils/WondrousAPI');
+var WondrousActions = require('../actions/WondrousActions');
 
 var NameChange = React.createClass({
     handleData: function(err, res) {
         if (err == null) {
-            console.log("name change",res);
+            WondrousActions.updateUser(res);
         } else {
 
         }
     },
 
-    handleSubmit: function(){
+    handleSubmit: function(evt){
+        evt.preventDefault();
         WondrousAPI.changeName({
             callback: this.handleData,
             name: this.refs.name.getDOMNode().value,
@@ -40,7 +42,7 @@ var NameChange = React.createClass({
 var UsernameChange = React.createClass({
     handleData: function(err, res){
         if (err == null) {
-            console.log("username change", res);
+            WondrousActions.updateUser(res);
         } else {
 
         }
@@ -48,7 +50,8 @@ var UsernameChange = React.createClass({
     checkUsername: function() {
         console.log("should check if username is good:", this.refs.username.getDOMNode().value);
     },
-    handleSubmit: function() {
+    handleSubmit: function(evt) {
+        evt.preventDefault();
         WondrousAPI.changeUsername({
             callback: this.handleData,
             username: this.refs.username.getDOMNode().value
@@ -75,12 +78,14 @@ var UsernameChange = React.createClass({
 var PasswordChange = React.createClass({
     handleData: function(err, res) {
         if (err == null) {
-            console.log("password change", res);
+            console.log("pass changed",res);
+            WondrousActions.updateUser(res);
         } else {
 
         }
     },
-    handleSubmit: function() {
+    handleSubmit: function(evt) {
+        evt.preventDefault();
         if (this.refs.new_password.getDOMNode().value !== this.refs.new_password_confirm.getDOMNode().value) {
             return;
         }
@@ -158,21 +163,15 @@ var ActiveChange = React.createClass({
 });
 
 function getUserState() {
-    var data = UserStore.getUserData();
-    data.loggedin = UserStore.isUserLoggedIn();
+    var data = UserStore.user;
+    data.loggedin = UserStore.loggedIn;
     return {data:data};
 }
 
 var Settings = React.createClass({
+    mixins: [Reflux.listenTo(UserStore,"onUserChange")],
     getInitialState: function() {
         return getUserState();
-    },
-    componentDidMount: function() {
-        UserStore.addChangeListener(this._onChange);
-    },
-
-    componentWillUnmount: function() {
-        UserStore.removeChangeListener(this._onChange);
     },
     render:function() {
         return (
@@ -190,8 +189,10 @@ var Settings = React.createClass({
             </div>
         );
     },
-    _onChange:function() {
-        this.setState(getUserState());
+    onUserChange:function(userData) {
+        if(userData.hasOwnProperty('user')){
+            this.setState(getUserState());
+        }
     }
 });
 

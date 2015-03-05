@@ -1,90 +1,94 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var WondrousConstants = require('../constants/WondrousConstants');
-var _ = require('underscore');
+var WondrousActions = require('../actions/WondrousActions');
+var ProfileStore = require('../stores/ProfileStore');
 
-// Define initial posts for the feed
-var _posts = [], _current_page = 0, _username = null;
+var defaultWall = [];
+var defaultPosts = {};
 
-// Method to load wall data from API
-function loadWallData(data){
-    Array.prototype.push.apply(_posts,data);
-    if(data.length>0){
-        _current_page++;
-    }
-}
+var WallStore = Reflux.createStore({
+    listenables: WondrousActions,
 
-function addNewPost(post){
-    _posts.unshift(post);
-}
+    init:function(){
+        this.wall = defaultWall;
+        this.posts = defaultPosts;
+        this.current_page = 0;
+        this.donePaging = false;
+        this.paging = false;
 
-function deletePost(post_id){
-    var to_delete = -1;
-    for(var i = 0; i < _posts.length; i++){
-        if(_posts[i].id==post_id){
-            to_delete = i;
-            break;
+
+        this.listenTo(ProfileStore,"onProfileUpdate");
+    },
+
+    onProfileUpdate: function(){
+        this.wall = [];
+        this.posts = {};
+        this.current_page = 0;
+        this.donePaging = false;
+        this.paging = false;
+
+        this.trigger(this.getWall());
+    },
+
+    updateWall: function(wallItems){
+        if (wallItems.length==0){
+            this.donePaging = true;
         }
-    }
-
-    if (to_delete>-1){
-        delete _posts[to_delete];
-    }
-}
-
-// Extend WallStore with EventEmitter and underscore
-var WallStore = _.extend({},EventEmitter.prototype,{
-
-    // Return the whole entire posts array, essentially an array of posts
-    getWallData: function(){
-        console.log("wall posts",_posts.length);
-        return _posts;
+        this.paging = false;
+        for(var i = 0; i < wallItems.length; i++){
+            this._addToWall(wallItems[i]);
+        }
+        this.trigger(this.getWall());
     },
 
-    // Emit Change event
-    emitChange: function(){
-        this.emit('change');
+    _addToWall: function(post){
+        if(!this.posts.hasOwnProperty(String(post.id))){
+            this.wall.push(post.id);
+        }
+        this.posts[String(post.id)] = post;
     },
 
-    // Add change listener
-    addChangeListener: function(callback){
-        this.on('change', callback);
+    _unshiftToWall: function(post){
+        if(!this.posts.hasOwnProperty(String(post.id))){
+            this.wall.unshift(post.id);
+        }
+        this.posts[String(post.id)] = post;
     },
 
-    // Remove change listener
-    removeChangeListener: function(callback){
-        this.removeListener('change', callback);
+    addToWall: function(post){
+        this._unshiftToWall(post);
+        console.log("added",post.id,this.wall);
+        this.trigger(this.getWall());
+    },
+
+    incrementPage: function(){
+        this.current_page++;
+        // this.refreshFromServer();
+    },
+
+    getWall: function(){
+        return this.wall.map(function(post_id,index){
+            return this[String(post_id)]
+        },this.posts);
+    },
+
+    removeFromWall: function(post_id){
+        var to_delete = -1;
+        for(var i = 0; i < this.wall.length; i++){
+            if(this.wall[i]==post_id){
+                to_delete = i;
+
+                break;
+            }
+        }
+
+        if (to_delete!=-1){
+            delete this.posts[String(this.wall[i])];
+            this.wall.splice(to_delete,1);
+            this.trigger(this.getWall());
+        }
+
     }
+
 });
 
-// Register callback with AppDispatcher
-AppDispatcher.register(function(payload){
-    var action = payload.action;
-
-    switch(action.actionType){
-        // Respond to NEW_POST
-        case WondrousConstants.NEW_POST:
-            addNewPost(action.data);
-            break;
-
-        // Respond to WALL_LOAD
-        case WondrousConstants.WALL_LOAD:
-            _posts = [];
-            loadWallData(action.data);
-            break;
-
-        // respond to post_deleted
-        case WondrousConstants.POST_DELETED:
-            deletePost(action.data);
-            break;
-
-        default:
-            return true;
-    }
-
-    // If action was responded to, emit the change event
-    WallStore.emitChange();
-    return true;
-});
 
 module.exports = WallStore;

@@ -3,7 +3,7 @@ var request = require('superagent');
 
 function _callback(cb){
     return function(err,res){
-        //console.log("res",res);
+        console.log("res",res);
         if (res) {
             if (typeof res.body !== 'undefined' && res.body && res.body.hasOwnProperty('error')) {
                 err = res.body;
@@ -154,7 +154,7 @@ module.exports = {
     // options are:
     // page, default = 0
     // callback(err,json_res)
-    getMajorityPosts: function(options) {
+    getMajorityFeed: function(options) {
         var page = options.page;
         var callback = options.callback;
 
@@ -168,7 +168,7 @@ module.exports = {
     // Load my user info, different level of info
     // options are:
     // callback(err,json_res)
-    getMyInfo: function(options){
+    auth: function(options){
         var callback = options.callback;
         var url = '/api/me';
 
@@ -195,6 +195,54 @@ module.exports = {
         .send({ name: name })
         .send({ username: username })
         .send({ email: email })
+        .send({ password: password })
+        .end(_callback(callback))
+    },
+
+    // logs the current user out!
+    // callback
+    logout: function(options){
+        var url = '/api/auth/logout';
+        var callback = options.callback;
+        request.post(url).end(_callback(callback));
+    },
+
+    // checks registration fields user account
+    // options are:
+    // name
+    // email
+    // username
+    // password
+    // callback(err,json_res)
+    register: function(options){
+        var callback = options.callback;
+        var username = options.username;
+        var name = options.name;
+        var email = options.email;
+        var password = options.password;
+        var url ='/api/auth/register';
+
+        request.post(url)
+        .send({ name: name })
+        .send({ username: username })
+        .send({ email: email })
+        .send({ password: password })
+        .end(_callback(callback))
+    },
+
+    // logs the user in fields user account
+    // options are:
+    // user_identification
+    // password
+    // callback(err,json_res)
+    login: function(options){
+        var callback = options.callback;
+        var user_identification = options.user_identification;
+        var password = options.password;
+        var url ='/api/auth/login';
+
+        request.post(url)
+        .send({ user_identification: user_identification })
         .send({ password: password })
         .end(_callback(callback))
     },
@@ -262,17 +310,15 @@ module.exports = {
     // repost post
     // options is:
     // callback(err,json_res)
-    // uploadData: object comprised of the the follow:
-    //      post_id
+    // repost_id
 
     repost: function(options){
-        var uploadData = options.uploadData;
+        var post_id = options.post_id;
         var callback = options.callback;
-        if (!uploadData.hasOwnProperty('post_id')) callback({error:"not sufficient"},null);
 
         var url = '/api/wall/repost';
         request.post(url)
-        .send(uploadData).end(_callback(callback));
+        .send({post_id:post_id}).end(_callback(callback));
     },
 
     // Change profile picture

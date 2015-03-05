@@ -12,7 +12,8 @@ from collections import defaultdict
 from unidecode import unidecode
 
 from pyramid.view import view_config
-
+from pyramid.security import forget
+from pyramid.security import remember
 from wondrous.models.comment import Comment
 
 
@@ -40,7 +41,7 @@ from wondrous.controllers import (
 
 from wondrous.utilities.general_utilities import (
     api_login_required,
-    login_required,
+    api_logout_required,
 )
 
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
@@ -54,10 +55,8 @@ from wondrous.utilities.validation_utilities import (
     ValidatePost as vp,
 )
 
-from wondrous.views.main import BaseHandler
-
 from wondrous.models.refer import ReferrerManager
-
+from wondrous.views.main import BaseHandler
 
 import json
 import logging
@@ -99,6 +98,32 @@ class APIViews(BaseHandler):
             kwargs['user'] = self.request.user
 
         return kwargs
+
+    def _set_session_headers(self, this_user, MAX_AGE=60 * 60 * 24 * 3):
+
+        """
+            PURPOSE: Sets the headers for a user logging in to the site
+
+            USE: Call like: self._set_session_headers(<User object>)
+
+            PARAMS: 2 params, one of which is optional:
+                this_user : <user> : REQUIRED : a user object to set headers for
+                MAX_AGE     : int : default = 60 * 60 * 24 * 3 (3 days) : The max age of the headers before they auto-expire
+
+            NOTE: We use the Primary Key "id" as our identifier once someone has
+            authenticated rather than the username.  You can change what is
+            returned as the userid by altering what is passed to remember.
+
+            RETURNS: The a header object to be
+            used in the HTTPFound(<location>, <headers>)
+        """
+
+        headers = remember(
+                    self.request,
+                    this_user.id,
+                    max_age=MAX_AGE,
+                )
+        self.request.response.headerlist.extend(headers)
 
     @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
     def api_refer_register(self):
@@ -170,6 +195,7 @@ class APIViews(BaseHandler):
         posts  = VoteManager.get_following_json(**self.query_kwargs)
         return posts
 
+    @api_login_required
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
 
@@ -326,6 +352,7 @@ class APIViews(BaseHandler):
 
         return AccountManager.change_password_json(**self.query_kwargs)
 
+    @api_login_required
     @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
 
@@ -469,7 +496,7 @@ class APIViews(BaseHandler):
 
         error_message = None
         try:
-            _s_valid_n, len_err_fn = Sanitize.length_check(self.query_kwargs['name'], min_length=1, max_length=30)
+            _s_valid_n, len_err_fn = Sanitize.length_check(self.query_kwargs['name'], min_length=5, max_length=30)
             _s_valid_pw, len_err_pw = Sanitize.length_check(self.query_kwargs['password'], min_length=6, max_length=255)
             _s_valid_em = Sanitize.is_valid_email(self.query_kwargs['email'])
             _s_em_taken = User.by_kwargs(email=self.query_kwargs['email']).first()
@@ -512,7 +539,6 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the status of the delete
         """
-
         return PostManager.delete_post_json(**self.query_kwargs)
 
     @api_login_required
@@ -592,3 +618,120 @@ class APIViews(BaseHandler):
         """
 
         return SearchManager.post_search_json(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method='POST', renderer='json', route_name='api_logout')
+    def api_logout(self):
+
+        """
+            PURPOSE: This method handles the logout process for all users
+        """
+
+        headers = forget(self.request)
+        self.request.response.headerlist.extend(headers)
+        return {'status':True}
+
+    @api_logout_required
+    @view_config(request_method='POST', renderer='json', route_name='api_login')
+    def api_login(self):
+        """
+            PURPOSE: This method handles the login process for all users
+        """
+
+        safe_in  = Sanitize.safe_input
+        safe_out = Sanitize.safe_output
+        p        = self.request.POST
+
+        credential = safe_in(self.query_kwargs.get('user_identification'))
+        password   = safe_in(self.query_kwargs.get('password'), strip=False)
+
+        if credential:
+            credential = credential.lower()
+
+        if Sanitize.is_valid_email(credential):
+            this_user = User.by_kwargs(email=credential).first()
+        else:
+            this_user = User.by_kwargs(username=credential).first()
+
+        if this_user and this_user.validate_password(password) and not this_user.is_banned:
+
+            # Reactivating a user when they log in
+            # TODO -- this needs to be more 'offical'
+            self._set_session_headers(this_user)
+            return this_user.json()
+
+        elif this_user and this_user.is_banned:
+            return {'error':'banned'}
+        else:
+            return {'error': 'invalid login information'}
+
+    @api_logout_required
+    @view_config(renderer='json',route_name='api_register')
+    def api_register(self):
+
+        """
+            PURPOSE: This method handles the signup process for all new users
+        """
+
+        safe_in  = Sanitize.safe_input
+        p = self.request.params
+
+        # Some helpful constants
+        PERSON = 1
+        # SIGNUP_ROUTE = "/signup/step/1/"
+
+        # The data we need to validate
+        error_message = None
+        name = safe_in(self.query_kwargs.get('name'))
+        email      = safe_in(self.query_kwargs.get('email'))
+        password   = safe_in(self.query_kwargs.get('password'), strip=False)
+        username   = safe_in(Sanitize.strip_ampersand(self.query_kwargs.get('username')))
+
+
+        # Check for presence
+        if not name:
+            error_message = "Please enter your  name."
+        elif not email:
+            error_message = "Please enter your email."
+        elif not password:
+            error_message = "Please enter a password."
+        elif not username:
+            error_message = "Please enter a username."
+
+        if not error_message:
+            _s_valid_n, len_err_fn = Sanitize.length_check(name, min_length=1, max_length=30)
+            _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
+            _s_valid_em = Sanitize.is_valid_email(email)
+            _s_em_taken = User.by_kwargs(email=email).first()
+            _s_valid_un = Sanitize.is_valid_username(username.lower())
+            _s_un_taken = User.by_kwargs(username=username).first()
+
+            # Check for validity
+            if not _s_valid_n:
+                error_message = "Your name is {err}".format(err=len_err_fn)
+
+            elif not _s_valid_em:
+                error_message = "Please enter a valid email address"
+            elif _s_em_taken:
+                error_message = "This email has already been used to sign up. Please use a different one."
+            elif not _s_valid_pw:
+                error_message = "Your password is {err}".format(err=len_err_pw)
+            elif not _s_valid_un:
+                error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
+            elif _s_un_taken:
+                error_message = "This username has already been taken. Please use a different one."
+
+            if not error_message:
+
+                new_user = AccountManager.add(
+                                name,
+                                email,
+                                username,
+                                password
+                            )
+                self._set_session_headers(new_user)
+                return new_user.json()
+            else:
+                return {'error':error_message}
+        else:
+            return {'error':error_message}

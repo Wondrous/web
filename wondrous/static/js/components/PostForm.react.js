@@ -2,13 +2,28 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var MouseWheel = require('kd-shim-jquery-mousewheel');
 var CropBox = require('jquery-cropbox');
 var WondrousActions = require('../actions/WondrousActions');
+var WondrousConstants = require('../constants/WondrousConstants');
 var hashtags = require('jquery-hashtags');
 var UserStore = require('../stores/UserStore');
+var UploadStore = require('../stores/UploadStore');
 
 var PostForm = React.createClass({
+    mixins: [Reflux.listenTo(UserStore,"onUserChange"), Reflux.listenTo(UploadStore,"onUploadChange")],
     file: null,
-    data_to_update: null,
+    getInitialState: function(){
+        return {percent:0,error:null};
+    },
 
+    onUploadChange: function(msg){
+        if(msg.hasOwnProperty('error')){
+            this.setState({error:msg.error});
+        }else if(msg.hasOwnProperty('percent')){
+            this.setState({percent:msg.percent});
+        }else if(msg.hasOwnProperty('completed')){
+            this.handleCancel();
+            this.state.percent = 0;
+        }
+    },
     handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
         $(this.refs.cropBox.getDOMNode()).cropbox({
@@ -61,12 +76,12 @@ var PostForm = React.createClass({
     },
 
     handleCancel: function(e){
-        var isPictureModal = UserStore.isPictureModal();
+        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if(!isPictureModal){
-            WondrousActions.toggleNewPostModal();
+            WondrousActions.togglePostModal();
         }else{
-            WondrousActions.togglePictureUpload();
+            WondrousActions.togglePictureModal();
         }
 
         // Fade out the post form
@@ -110,7 +125,7 @@ var PostForm = React.createClass({
             console.error("upload file error", err);
         }
         this.handleCancel(null);
-        var isPictureModal = UserStore.isPictureModal();
+        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if(isPictureModal){
             setTimeout(this.updateProfile, 500);
@@ -119,59 +134,14 @@ var PostForm = React.createClass({
         }
 
     },
-    updateProfile:function(){
-        if (this.data_to_update) {
-            // console.log("data to ",this.data_to_update);
-            WondrousActions.addNewProfilePicture(this.data_to_update.ouuid);
-            this.data_to_update = null;
-        }
-    },
-
-    addToFeeds: function() {
-        if (this.data_to_update) {
-            WondrousActions.addNewPost(this.data_to_update);
-            this.data_to_update = null;
-        }
-    },
-
-    onPostSubmitted: function(err,res) {
-        if(!err) {
-            this.data_to_update = res;
-            if(this.file==null){
-                this.handleCancel(null);
-                var isPictureModal = UserStore.isPictureModal();
-
-                if(isPictureModal){
-                    setTimeout(this.updateProfile, 500);
-                }else{
-                    setTimeout(this.addToFeeds, 500);
-                }
-                return;
-            }
-            var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
-
-            WondrousAPI.uploadFile({
-                blob:dataURL,
-                post_data:res,
-                file_type:this.file.type,
-                callback:this.onFileUploadComplete,
-                onProgress:this.onProgress
-            });
-
-        } else {
-            console.error(err);
-        }
-    },
 
     handleSubmit:function(e){
-        var isPictureModal = UserStore.isPictureModal();
+        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if (isPictureModal) {
-            if(typeof this.file.type !=='undefined' && this.file.type!=null){
-                WondrousAPI.changePicture({
-                    file_type:this.file.type,
-                    callback:this.onPostSubmitted
-                });
+            if(typeof this.file !=='undefined' && this.file!=null){
+                var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+                WondrousActions.addProfilePicture(this.file,dataURL);
             }
         } else {
             var postSubject     = $('#postSubject').val();
@@ -199,11 +169,8 @@ var PostForm = React.createClass({
                 uploadData.file_type = this.file.type;
             }
             console.log("posting", uploadData);
-
-            WondrousAPI.newPost({
-                uploadData:uploadData,
-                callback:this.onPostSubmitted
-            });
+            var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+            WondrousActions.addNewPost(postSubject,postText,postTagsUnique,this.file,dataURL);
         }
     },
 
@@ -212,8 +179,7 @@ var PostForm = React.createClass({
     },
 
     render: function(){
-        var isPictureModal = UserStore.isPictureModal();
-        var isRepostModal = UserStore.isRepostModal();
+        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         var divStyle = {
             display: isPictureModal?"none":"block",
@@ -226,7 +192,8 @@ var PostForm = React.createClass({
                     style={{"MozBorderRadius": "20px",
                             "KhtmlBorderRadius": "20px",
                             "WebkitBorderRadius": "20px"}}/>
-
+                <span>{this.state.percent}% uploaded</span>
+                {this.state.error?<span>{this.state.error}% uploaded</span>:null}
                 <div className="new-post-element" style = {divStyle}>
                     <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
                         <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
@@ -269,23 +236,19 @@ var PostForm = React.createClass({
     },
 
     componentDidMount: function () {
-        UserStore.addChangeListener(this._onChange);
-        var isPictureModal = UserStore.isPictureModal();
+        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
         if(!isPictureModal){
             $("textarea#postTextarea").hashtags();
         }
     },
 
-    componentWillUnmount: function(){
-        UserStore.removeChangeListener(this._onChange);
-    },
-    _onChange:function(){
-        console.log("toggle",UserStore.isPostModalOpen());
-
-        this.forceUpdate();
-        if (UserStore.isPostModalOpen()){
-            var form = this.refs.postform.getDOMNode();
-            $(form).slideDown(200);
+    onUserChange:function(userData){
+        if (userData.hasOwnProperty('modalType')){
+            this.forceUpdate();
+            if (UserStore.modalOpen){
+                var form = this.refs.postform.getDOMNode();
+                $(form).slideDown(200);
+            }
         }
     }
 });

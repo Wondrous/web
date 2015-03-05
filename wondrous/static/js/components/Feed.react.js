@@ -2,7 +2,6 @@ var Post = require('./Post.react');
 var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
-var WondrousAPI = require('../utils/WondrousAPI');
 var MasonryMixin = require('../vendor/masonry.mixin');
 
 // Method to retrieve state from stores
@@ -20,30 +19,23 @@ var masonryOptions = {
 };
 
 var Feed = React.createClass({
-    paging: false,
-    donePaging: false,
-    mixins: [MasonryMixin('masonryContainer', masonryOptions)],
-    
-    handleData: function(err, data) {
-        if (err == null) {
-            if (data.length == 0) {
-                this.donePaging = true;
-            }
-            WondrousActions.loadToFeed(data);
-        } else {
-            console.error("error", err);
-        }
-        this.paging = false;
-    },
-    loadFeedFromServer: function() {
-        WondrousAPI.getMajorityPosts({
-            page: 0,
-            callback: this.handleData
-        });
-    },
+    mixins: [
+        MasonryMixin('masonryContainer', masonryOptions),
+        Reflux.listenTo(FeedStore,'onFeedUpdate'),
+        Reflux.listenTo(UserStore,'onUserUpdate'),
+        Router.Navigation
+    ],
+
     getInitialState: function() {
-        this.loadFeedFromServer();
-        return {'data': getFeedState(), paging: false};
+        return {data: FeedStore.getFeed(), paging: false};
+    },
+
+    onFeedUpdate: function(posts){
+        this.setState({data:posts})
+    },
+
+    onUserUpdate: function(userData){
+
     },
 
     checkWindowScroll: function(){
@@ -53,37 +45,20 @@ var Feed = React.createClass({
         var scrolled = (h + s) > document.body.offsetHeight;
 
         // If scrolled enough, not currently paging and not complete...
-        if(scrolled && !this.paging && !this.donePaging) {
-
-          // Set application state (Paging, Increment page)
-          // Get the next page of posts from the server
-          console.log("getting more page")
-          this.paging = true;
-          FeedStore.incrementPage();
-          WondrousAPI.getMajorityPosts({
-              page: FeedStore.getCurrentPage(),
-              callback: this.handleData
-          });
+        if(scrolled && !FeedStore.paging && !FeedStore.donePaging) {
+            FeedStore.paging = true;
+            console.log("getting more page")
+            FeedStore.incrementPage();
+            WondrousActions.loadFeed(FeedStore.current_page);
         }
-      },
+    },
+
     // Add change listener to stores
     componentDidMount: function() {
-        FeedStore.addChangeListener(this._onChange);
-        UserStore.addChangeListener(this._onChange);
-
-        // Attach scroll event to the window for infinity paging
+        WondrousActions.loadFeed(FeedStore.current_page);
         window.addEventListener('scroll', this.checkWindowScroll);
     },
 
-    // Remove change listeners from stores
-    componentWillUnmount: function() {
-        FeedStore.removeChangeListener(this._onChange);
-        UserStore.removeChangeListener(this._onChange);
-    },
-    // toggleUpdate:function(){
-    //     this.masonry.reloadItems();
-    //     this.masonry.layout();
-    // },
     render: function() {
         var posts = this.state.data.map(function(post, index) {
             return (
@@ -101,13 +76,6 @@ var Feed = React.createClass({
             </div>
         );
     },
-
-    // Method to setState based upon Store changes
-    _onChange: function() {
-        var data = getFeedState();
-        this.setState({data:data});
-        //this.masonry.layout();
-    }
 });
 
 module.exports = Feed;

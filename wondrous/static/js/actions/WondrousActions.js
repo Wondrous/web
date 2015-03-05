@@ -1,159 +1,393 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var WondrousConstants = require('../constants/WondrousConstants');
+var WondrousAPI = require("../utils/WondrousAPI");
 
-// Define actions object
-var WondrousActions = {
+var WondrousActions = Reflux.createActions({
+    // SECTION loading from server
+    // register
+    "register": {},
 
-    // Receive a post to add to feed
-    addToFeed: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.POST_RECEIVE,
-            data: data
-        });
-    },
+    "registerCheck": {},
 
-    // Load an array of posts to feed
-    loadToFeed: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.FEED_LOAD,
-            data: data
-        });
-    },
+    // get current user
+    "auth": {},
 
-    //toggle feed animation
-    toggleFeedAnimation: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.FEED_ANIMATE,
-            data: data
-        });
-    },
+    // login
+    "login": {},
 
-    // An user logged in
-    loadUserInfo: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.USER_LOAD,
-            data: data
-        });
-    },
+    // logout
+    "logout": {},
 
-    // Load Notifications
-    loadUserNotification: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.NOTIFICATION_LOAD,
-            data:data
-        });
-    },
+    // repost
+    "repost": {},
 
-    // An user profile loaded
-    loadProfileInfo: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.PROFILE_LOAD,
-            data: data
-        });
-    },
+    // submits new post
+    "addNewPost": {},
 
-    // An user's followers are loaded
-    loadProfileFollower: function(data) {
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.FOLLOWER_LOAD,
-            data: data
-        });
-    },
+    // submits new profile pic
+    "addProfilePicture": {},
 
-    // An user's following are loaded
-    loadProfileFollowing: function(data) {
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.FOLLOWING_LOAD,
-            data: data
-        });
-    },
+    // deletes the post
+    "deletePost": {},
 
-    // An user wall loaded
-    loadWallPosts: function(data) {
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.WALL_LOAD,
-            data: data
-        });
-    },
+    // uploadFile
+    "uploadFile": {},
 
-    loadPostComments: function(data) {
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.COMMENT_LOAD,
-            data: data,
-        });
-    },
+    // loads notification from server
+    "loadNotifications": {},
 
-    // An user logs out
-    unloadUserInfo: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.USER_UNLOAD,
-            data: data
-        });
-    },
+    // loads wall post from server
+    "loadWall": {},
 
-    // toggles the settings sidebar
-    toggleSettings: function(data) {
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.SHOW_SETTINGS,
-            data: data
-        });
-    },
+    // load comments
+    "loadComments": {},
 
-    // toggles the notifications sidebar
-    toggleNotifications: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.SHOW_NOTIFICATIONS,
-            data: data
-        });
-    },
+    // load the feed
+    "loadFeed": {},
 
-    // new posts
-    addNewPost: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.NEW_POST,
-            data: data
-        });
-    },
+    // load profile from server
+    "loadProfile": {},
 
-    // new profile pic
-    addNewProfilePicture: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.NEW_PROFILE_PICTURE,
-            data: data
-        });
-    },
+    // load followers from server
+    "loadFollower": {},
 
-    // show picture upload modal
-    togglePictureUpload: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.SHOW_PICTURE_CHANGE,
-            data: data
-        });
-    },
+    // load following from server
+    "loadFollowing": {},
 
-    // show post upload modal
-    toggleNewPostModal: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.SHOW_NEW_POST,
-            data: data
-        });
-    },
+    // SECTION UI/UX consideration
+    // might have problem logging in
+    "loginError": {},
 
-    // show post upload modal
-    toggleNewRepostModal: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.SHOW_NEW_REPOST,
-            data: data
-        });
-    },
+    //upload stuff
+    "uploadComplete": {},
 
-    // post deleted
-    postDelete: function(data){
-        AppDispatcher.handleAction({
-            actionType: WondrousConstants.POST_DELETED,
-            data: data
-        });
+    "uploadProgress": {},
+
+    // toggles settings side bar
+    "toggleSettings": {},
+
+    // toggles the notifications side bar
+    "toggleNotifications": {},
+
+    // toggles the picture upload form
+    "togglePictureModal": {},
+
+    // toggles the post upload form
+    "togglePostModal": {},
+
+    // adding new info to feed
+    "addToFeed": {},
+
+    // adding new info to wall
+    "addToWall": {},
+
+    // update initially to feed
+    "updateFeed": {},
+
+    // removes the post from wall
+    "removeFromWall": {},
+
+    // removes from feed
+    "removeFromFeed": {},
+
+    // update current user info
+    "updateUser": {},
+
+    // update initially to notification
+    "updateNotification": {},
+
+    // update initial to profile
+    "updateProfile": {},
+
+    // profile not found
+    "profileError": {},
+
+    // update initial followers
+    "updateFollowers": {},
+
+    // update initial following
+    "updateFollowing": {},
+
+    // update initial wall posts
+    "updateWall": {},
+
+    // update initial post comments
+    "updateComments": {},
+
+    // upload error
+    "uploadError": {},
+
+    // upload complete
+    "uploadComplete": {}
+
+});
+
+WondrousActions.registerCheck.listen(function(name, username, email, password){
+    WondrousAPI.registerCheck({
+        name: name,
+        username: username,
+        email: email,
+        password: password,
+        callback: function(err,res){
+            if (err==null){
+                WondrousActions.loginError(null);
+            }else{
+                WondrousActions.loginError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.register.listen(function(name,email,username,password){
+    console.log("register request");
+
+    WondrousAPI.register({
+        name: name,
+        email: email,
+        username: username,
+        password: password,
+        callback: function(err, res){
+            if (err == null){
+                WondrousActions.updateUser(res);
+            }else{
+                WondrousActions.loginError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.login.listen(function(user_identification,password){
+    console.log("login request");
+
+    WondrousAPI.login({
+        user_identification: user_identification,
+        password: password,
+        callback: function(err, res){
+            if (err == null){
+                WondrousActions.updateUser(res);
+            }else{
+                WondrousActions.loginError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadNotifications.listen(function(page){
+    console.log("loading note");
+    WondrousAPI.getNotifications({
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateNotification(res);
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadWall.listen(function(username,page){
+    console.log('loading wall for:',username);
+    WondrousAPI.getWallPosts({
+        username:username,
+        page: page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateWall(res);
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadComments.listen(function(post_id,page){
+    WondrousAPI.getPostComments({
+        post_id:post_id,
+        page: page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.loadComments(res);
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadFeed.listen(function(page){
+    console.log("loading feed");
+    WondrousAPI.getMajorityFeed({
+        page: page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateFeed(res);
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.auth.listen(function(){
+    console.log("loading auth");
+
+    WondrousAPI.auth({
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateUser(res);
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.logout.listen(function(){
+    WondrousAPI.logout({
+        callback: function(err,res){
+            if (err == null){
+
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadProfile.listen(function(username){
+    console.log("loading profile:",username);
+    WondrousAPI.getUserInfo({
+        username:username,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateProfile(res);
+            }else{
+                WondrousActions.profileError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadFollower.listen(function(username,page){
+    WondrousAPI.getFollowers({
+        username:username,
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateFollowers(res);
+            }else{
+                WondrousActions.profileError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadFollowing.listen(function(username,page){
+    WondrousAPI.getFollowing({
+        username:username,
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateFollowing(res);
+            }else{
+                WondrousActions.profileError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.uploadFile.listen(function(blob,post_data,file_type){
+    WondrousAPI.uploadFile({
+        blob:blob,
+        post_data:post_data,
+        file_type:file_type,
+        callback:function(err,res){
+            if (err==null){
+                if (post_data.hasOwnProperty('object_id')){
+                    setTimeout(WondrousActions.addToFeed,200,post_data);
+                    setTimeout(WondrousActions.addToWall,200,post_data);
+                }else if(post_data.hasOwnProperty('is_private')){
+                    WondrousActions.updateUser(post_data);
+                }
+                WondrousActions.uploadComplete();
+            }else{
+                WondrousActions.uploadError(err);
+            }
+        },
+        onProgress:WondrousActions.uploadProgress
+    });
+});
+
+WondrousActions.addNewPost.listen(function(subject,text,tags,file_to_upload,blob){
+    var uploadData = {
+        subject: subject,
+        text: text,
+        tags: tags
+    };
+
+    if (file_to_upload){
+        uploadData.file_type = file_to_upload.type
     }
-}
+
+    WondrousAPI.newPost({
+        uploadData:uploadData,
+        callback: function(err,res){
+            if (err == null){
+                if(file_to_upload!=null){
+                    WondrousActions.uploadFile(blob,res,file_to_upload.type);
+                }else if(res.hasOwnProperty('object_id')){
+                    WondrousActions.uploadComplete();
+                    setTimeout(WondrousActions.addToFeed,200,res);
+                    setTimeout(WondrousActions.addToWall,200,res);
+
+                }
+            }else{
+                WondrousActions.uploadError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.addProfilePicture.listen(function(file_to_upload,blob){
+    console.log("new pic",file_to_upload);
+    WondrousAPI.changePicture({
+        file_type:file_to_upload.type,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.uploadFile(blob,res,file_to_upload.type);
+            }else{
+                WondrousActions.uploadError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.repost.listen(function(post_id){
+    WondrousAPI.repost({
+        post_id:post_id,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.addToFeed(res);
+                WondrousActions.addToWall(res);
+            }else{
+                WondrousActions.uploadError(err);
+            }
+        }
+    });
+});
+
+
+WondrousActions.deletePost.listen(function(post_id){
+    WondrousAPI.deletePost({
+        post_id:post_id,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.removeFromWall(post_id);
+                WondrousActions.removeFromFeed(post_id);
+            }else{
+                // WondrousActions.uploadError(err);
+            }
+        }
+    });
+});
 
 module.exports = WondrousActions

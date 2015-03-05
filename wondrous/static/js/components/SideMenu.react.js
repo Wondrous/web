@@ -30,7 +30,7 @@ var SettingsBar = React.createClass({
                 </Link>
 
                 <hr className="dropdown-hr" />
-                <a href="/auth/logout/" className="dropdown-element" style={{"textDecoration": "none", "display": "block"}}>Log out</a>
+                <a onClick={WondrousActions.logout} className="dropdown-element" style={{"textDecoration": "none", "display": "block"}}>Log out</a>
             </div>
         );
     }
@@ -49,33 +49,6 @@ NotificationReasons = {
 var Notification = React.createClass({
     mixins: [ Router.Navigation ],
 
-    handleProfileData: function(err, data) {
-        if (err==null) {
-            WondrousActions.loadProfileInfo(data);
-        } else {
-            // WondrousActions.unloadUserInfo(err);
-        }
-    },
-    handleWallData: function(err, data) {
-        if(err==null){
-            WondrousActions.loadWallPosts(data);
-        } else {
-
-        }
-    },
-    loadProfileFromServer: function(){
-        WondrousAPI.getUserInfo({
-            username: this.props.data.from_user_username,
-            callback: this.handleProfileData
-        });
-    },
-    loadWallFromServer: function(){
-        WondrousAPI.getWallPosts({
-            username: this.props.data.from_user_username,
-            page: 0,
-            callback: this.handleWallData
-        });
-    },
     handleAcceptData:function(err,res){
         if(err==null){
             console.log("accepted! ",res);
@@ -92,8 +65,6 @@ var Notification = React.createClass({
     handleClick: function(){
         note = this.props.data;
         var url = "/"+note.from_user_username;
-        this.loadProfileFromServer();
-        this.loadWallFromServer();
         this.transitionTo(url);
     },
     generateContent: function(reason){
@@ -144,31 +115,11 @@ var Notification = React.createClass({
 })
 
 var NotificationsBar = React.createClass({
-    handleData:function(err,data){
-        if(!err){
-            WondrousActions.loadUserNotification(data);
-        }else{
-            console.error("err",err);
-        }
-    },
-    loadFromServer: function(){
-        WondrousAPI.getNotifications({
-            page: 0,
-            callback:this.handleData
-        });
-    },
+    mixins: [Reflux.connect(NotificationStore,"data")],
     getInitialState: function() {
         return {data:NotificationStore.getNotifications()};
     },
 
-    componentDidMount: function() {
-        NotificationStore.addChangeListener(this._onChange);
-        this.loadFromServer();
-    },
-
-    componentWillUnmount: function(){
-        NotificationStore.removeChangeListener(this._onChange);
-    },
     render:function(){
         var notifications = this.state.data.map(function(notification,index){
             return(
@@ -182,44 +133,31 @@ var NotificationsBar = React.createClass({
             </div>
         );
     },
-    _onChange: function(){
-        this.setState({data:NotificationStore.getNotifications()});
-    }
 });
 
 var SideMenu = React.createClass({
+    mixins: [Reflux.listenTo(UserStore, "onChange")],
     getInitialState: function() {
-        return {data:UserStore.isShowingSideBar()};
-    },
-    componentDidMount: function() {
-        UserStore.addChangeListener(this._onChange);
+        return {data:UserStore.sidebarOpen};
     },
 
-    componentWillUnmount: function(){
-        UserStore.removeChangeListener(this._onChange);
-    },
     render: function(){
         var displayStyle = {
-            display: this.state.data.isShowing ? "block" : "none"
+            display: UserStore.sidebarOpen ? "block" : "none"
         };
 
         return(
             <div className="sidemenu" style={displayStyle}>
                 <div className="sidemenuOptions _open_bmo">
-                    {this.state.data.barOnDisplay==WondrousConstants.SHOW_SETTINGS ? <SettingsBar/>: ''}
-                    {this.state.data.barOnDisplay==WondrousConstants.SHOW_NOTIFICATIONS ? <NotificationsBar/>: ''}
+                    {UserStore.sidebarType==WondrousConstants.SHOW_SETTINGS ? <SettingsBar/>: ''}
+                    {UserStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS ? <NotificationsBar/>: ''}
                 </div>
             </div>
         );
     },
 
-    _onChange: function(){
-        this.setState({
-            data:{
-                isShowing: UserStore.isShowingSideBar(),
-                barOnDisplay: UserStore.barOnDisplay()
-            }
-        });
+    onChange: function(){
+        this.forceUpdate();
     }
 })
 

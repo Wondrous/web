@@ -17,11 +17,12 @@ var SearchBox = React.createClass({
 });
 
 var NotificationBox = React.createClass({
+
     toggleNotifications: function(e) {
         WondrousActions.toggleNotifications();
     },
     render: function () {
-        var notes = UserStore.getUserData().unseen_notifications || 0;
+        var notes = UserStore.user.unseen_notifications || 0;
         var cn = (notes > 0) ? "notification-count nc-general round-2 notification-alert":"notification-count nc-general round-2";
         return (
             <span onClick={this.toggleNotifications} id="right-menu" className={cn}>
@@ -44,41 +45,10 @@ var SettingsGear = React.createClass({
 
 var ProfileLink = React.createClass({
     mixins: [ Router.Navigation ],
-
-    handleProfileData: function(err, data) {
-        if (err == null) {
-            console.log("profile", data);
-            WondrousActions.loadProfileInfo(data);
-        }else{
-            // WondrousActions.unloadUserInfo(err);
-        }
-    },
-    handleWallData: function(err, data) {
-        if (err == null) {
-            WondrousActions.loadWallPosts(data);
-        }else{
-
-        }
-    },
-    loadProfileFromServer: function() {
-        WondrousAPI.getUserInfo({
-            username: this.props.user.username,
-            callback: this.handleProfileData
-        });
-    },
-    loadWallFromServer: function() {
-        WondrousAPI.getWallPosts({
-            username: this.props.user.username,
-            page: 0,
-            callback: this.handleWallData
-        });
-    },
-    handleClick: function(evt) {
+    handleClick:function(evt) {
         evt.preventDefault();
         if (typeof this.props.user.username != 'undefined') {
             this.transitionTo('/' + this.props.user.username);
-            this.loadProfileFromServer();
-            this.loadWallFromServer();
         }
     },
     render: function () {
@@ -95,55 +65,37 @@ var ProfileLink = React.createClass({
 
 // Method to retrieve state from stores
 function getUserState() {
-    var data = UserStore.getUserData();
-    data.loggedin = UserStore.isUserLoggedIn();
+    var data = UserStore.user;
+    data.loggedin = UserStore.loggedIn;
     return data;
 }
 
 var Navbar = React.createClass({
-    handleData:function(err, data) {
-        if (err == null) {
-            WondrousActions.loadUserInfo(data);
-        } else {
-            WondrousActions.unloadUserInfo(err);
-        }
-    },
-
-    loadUserFromServer: function() {
-        WondrousAPI.getMyInfo({
-            callback:this.handleData
-        });
-    },
-
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(UserStore,'onUserUpdate'),
+    ],
     getInitialState: function() {
-        // Return the default value, but also request new from server
-        this.loadUserFromServer();
         return getUserState();
     },
 
-    componentDidMount: function() {
-        UserStore.addChangeListener(this._onChange);
-    },
-
-    componentWillUnmount: function() {
-        UserStore.removeChangeListener(this._onChange);
-    },
     render: function () {
+        var location = UserStore.loggedIn?"feed":"/";
         return (
-            <div id="topBanner" className={this.state.loggedin ? "top-banner" : "top-banner banner-lo"}>
-                <Link to="/" style={{"color": "rgb(235, 235, 235)"}}>
+            <div id="topBanner" className={UserStore.loggedIn ? "top-banner" : "top-banner banner-lo"}>
+                <Link to={location} style={{"color": "rgb(235, 235, 235)"}}>
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </Link>
-                { this.state.loggedin ? <SearchBox /> : null}
-                { this.state.loggedin ? <SettingsGear user={this.state.data}/> : null}
-                { this.state.loggedin ? <ProfileLink user={this.state} /> : null}
-                { this.state.loggedin ? <NotificationBox /> : null}
+                { UserStore.loggedIn ? <SearchBox /> : null}
+                { UserStore.loggedIn ? <SettingsGear user={this.state}/> : null}
+                { UserStore.loggedIn ? <ProfileLink user={this.state} /> : null}
+                { UserStore.loggedIn ? <NotificationBox /> : null}
             </div>
             );
     },
 
     // Method to setState based upon Store changes
-    _onChange: function() {
+    onUserUpdate: function(userData) {
         this.setState(getUserState());
     }
 });
