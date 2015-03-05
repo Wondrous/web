@@ -878,7 +878,7 @@ a:hover {
   display: none;
   background-color: white;
   /*padding: 16px;*/
-  font-family: helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-weight: normal;
   font-size: 17px;
   color: #333333;
@@ -1034,7 +1034,7 @@ a:hover {
   padding: 7px 3%; }
 
 .post-title {
-  font-family: 'arial black', georgia, helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: #333333;
