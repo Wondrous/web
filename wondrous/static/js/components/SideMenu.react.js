@@ -6,6 +6,11 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var Link = Router.Link;
 
 var SettingsBar = React.createClass({
+    mixins: [Router.Navigation],
+    onLogout: function(){
+        WondrousActions.logout();
+        this.transitionTo('/');
+    },
     render: function(){
         return (
             <div>
@@ -30,7 +35,7 @@ var SettingsBar = React.createClass({
                 </Link>
 
                 <hr className="dropdown-hr" />
-                <a onClick={WondrousActions.logout} className="dropdown-element" style={{"textDecoration": "none", "display": "block"}}>Log out</a>
+                <a onClick={this.onLogout} className="dropdown-element" style={{"textDecoration": "none", "display": "block"}}>Log out</a>
             </div>
         );
     }
