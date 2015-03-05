@@ -109,20 +109,28 @@ var UserIcon = React.createClass({
             callback: this.handleWallData
         });
     },
-    handleClick: function() {
+    handleClick: function(evt) {
+        evt.preventDefault();
+
         this.transitionTo('/' + this.props.user.username);
         this.loadProfileFromServer();
         this.loadWallFromServer();
     },
     render: function() {
         var is_me = this.props.username === UserStore.getUserData().username;
+        var hrefPlaceholder = "/" + this.props.user.username;
         return (
-            <a onClick={this.handleClick}>
-                <div>
-                    <img src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} className="profile-photo-med round-50"/>
-                    <span className="profile-name-row">{ this.props.user.name }</span>
+            <li className="user-itemizer">
+                <a className="avatar" onClick={this.handleClick}>
+                    <img className="profile-photo-med round-50" href={hrefPlaceholder} src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
+                </a>
+                <div className="user-itemizer-data">
+                    <a className="user-itemizer-data-name" href={hrefPlaceholder} onClick={this.handleClick} >{ this.props.user.name }</a>
+                    <div className="user-itemizer-data-desc">
+                        @{ this.props.user.username }
+                    </div>
                 </div>
-            </a>
+            </li>
         );
     }
 });
@@ -173,9 +181,9 @@ var Follower = React.createClass({
             );
         })
         return (
-            <div>
+            <ul>
                 {followers}
-            </div>
+            </ul>
         );
     },
     _onChange: function() {
@@ -229,9 +237,9 @@ var Following = React.createClass({
             );
         })
         return (
-            <div>
+            <ul>
                 {following}
-            </div>
+            </ul>
         );
     },
     _onChange:function() {
@@ -346,7 +354,7 @@ var UserBar = React.createClass({
                     <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to="likes" params={{username: username}}>
                         <li className="profile-header-nav-item round-50">
                             <div className="profile-header-nav-title">clout</div>
-                            <span className="profile-header-nav-number">34</span>
+                            <span className="profile-header-nav-number">1</span>
                         </li>
                     </Link>
                 </ul>
