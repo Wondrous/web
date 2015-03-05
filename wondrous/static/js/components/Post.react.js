@@ -123,7 +123,6 @@ var Comments = React.createClass({
         }
     },
     render: function() {
-        //console.log(this.props.data);
         var comments = this.props.data.map(function(comment, index) {
             return (
                 <Comment data={comment}/>
@@ -151,7 +150,6 @@ var Photo = React.createClass({
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
         };
 
-        // var img_src = this.props.data.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/500x500.gif";
         return (
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     {/*<div className="post-subject-text nh">
@@ -173,6 +171,7 @@ var Post = React.createClass({
         return {comments: [], commentsVisible: false};
     },
     handleClick: function() {
+    	// add modal functionality
         var SPEED = 0;
         var thisPost = $(this.refs.post.getDOMNode());
         var thisBrick = $(this.refs.brick.getDOMNode());
@@ -196,20 +195,14 @@ var Post = React.createClass({
         thisBrick.toggleClass('post-presentation');
         thisPostContent.slideToggle(SPEED);
 
-        // Hmmmmm.... Let's try this out
         $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
-
-        // Trigger Masonry Layout
-        // WondrousActions.toggleFeedAnimation(null);
     },
 
     handleData: function(err, res){
         if (err == null) {
             this.handleClick();
             WondrousActions.postDelete(res.id);
-        } else {
-
-        }
+        } 
     },
 
     deletePost: function () {
