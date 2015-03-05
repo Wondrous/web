@@ -60,13 +60,12 @@ def build_routes(config):
     config.add_route('info_delete_handler',                    '/info/delete/')
     config.add_route('info_account_delete_handler',            '/info/delete_account/')
 
-    # API
+    # --- API -----
     config.add_route('api_user_login',                         '/api/user/login')       # POST
     config.add_route('api_signup_check',                       '/api/user/signupcheck') # POST
     config.add_route('api_user_vote',                          '/api/user/vote')        # POST
 
     config.add_route('api_post_vote',                          '/api/post/vote')        # POST
-
 
     config.add_route('api_user_name',                          '/api/me/name')          # POST
     config.add_route('api_user_username',                      '/api/me/username')      # POST
@@ -91,12 +90,14 @@ def build_routes(config):
     config.add_route('api_new_comment',                        '/api/comment/new')      # POST
     config.add_route('api_comment_delete',                     '/api/comment/delete')   # DELETE
     config.add_route('api_post_comments',                      '/api/post/comment')     # GET
-    # referral stuff
+    
+    # Waitlist Routes
     config.add_route('api_refer_register',                     '/api/refer')            # POST
     config.add_route('api_refer_progress',                     '/api/refer/progress')   # GET
 
-    config.add_route('api_search_users',                         '/api/search/user')    # GET
-    config.add_route('api_search_posts',                         '/api/search/post')    # GET
+    # Search routes
+    config.add_route('api_search_users',                       '/api/search/user')      # GET
+    config.add_route('api_search_posts',                       '/api/search/post')      # GET
 
     # INDEX
     config.add_route('stuff1_handler',                         '/{stuff}')

@@ -8,8 +8,10 @@
 # CONTROLLERS/ACCOUNTMANAGER.PY
 #
 
-from datetime import datetime
+import logging
 import uuid
+
+from datetime import datetime
 
 from wondrous.models import (
     DBSession,
@@ -22,7 +24,6 @@ from wondrous.models import (
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
 from wondrous.utilities.validation_utilities import UploadManager
-import logging
 
 class AccountManager(BaseManager):
 
@@ -34,7 +35,7 @@ class AccountManager(BaseManager):
         'email'      : email,
         'password'   : "password"+str(i),
 
-        'name'  : "name"+str(i),
+        'name'       : "name"+str(i),
     """
 
     DYNAMIC_FIELDS = ['username', 'name', 'ascii_name']  # TODO Should this be a set?
@@ -124,18 +125,18 @@ class AccountManager(BaseManager):
             user = User.by_id(user_id)
 
         if not user:
-            return {'error':'no users found!'}
+            return {'error': 'no users found!'}
         user_id = user.id
         am_following = VoteManager.is_following(user.id,user_id) if user else False
 
-        # Am i querying for myself?
+        # Am I querying for myself?
         if user and user.id == user_id:
             retval = cls._get_relationship_stats(user_id)
             retval.update(user.json(1))
             retval.update({"name": user.ascii_name})
-            retval.update({"following":am_following})
-            retval.update({"unseen_notifications":NotificationManager.get_all_unseen_count(user_id)})
-            retval.update({"post_count":PostManager.post_count(user,user_id)})
+            retval.update({"following": am_following})
+            retval.update({"unseen_notifications": NotificationManager.get_all_unseen_count(user_id)})
+            retval.update({"post_count": PostManager.post_count(user,user_id)})
             picture_object = user.picture_object
 
             if picture_object:
@@ -143,15 +144,15 @@ class AccountManager(BaseManager):
 
             return retval
 
-        # if the user is public or I am following
+        # If the user is public or I am following
         if (not user.is_private and not user.is_banned and user.is_active) or \
             (user and not user.is_banned and user.is_active and am_following):
 
             retval = cls._get_relationship_stats(user_id)
             retval.update(super(AccountManager, cls).model_to_json(user))
             retval.update({"name": user.ascii_name})
-            retval.update({"following":am_following})
-            retval.update({"post_count":PostManager.post_count(user,user_id)})
+            retval.update({"following": am_following})
+            retval.update({"post_count": PostManager.post_count(user,user_id)})
 
             picture_object = user.picture_object
             if picture_object:
@@ -161,9 +162,9 @@ class AccountManager(BaseManager):
         elif user.is_private and not user.is_banned and user.is_active:
             retval = {}
             retval.update({"name": user.ascii_name})
-            retval.update({"following":am_following})
+            retval.update({"following": am_following})
             retval.update({'is_private': True})
-            retval.update({'id':user.id})
+            retval.update({'id': user.id})
             return retval
 
         return {'error':'no users found!'}
@@ -198,13 +199,13 @@ class AccountManager(BaseManager):
 
     @classmethod
     def change_name_json(cls, user, name):
-        data = cls.change_profile_json(user,'name',name)
-        data.update(cls.change_profile_json(user,'ascii_name',unicode(name)))
+        data = cls.change_profile_json(user, 'name', name)
+        data.update(cls.change_profile_json(user, 'ascii_name', unicode(name)))
         return data
 
     @classmethod
     def change_username_json(cls, user, username):
-        data = cls.change_profile_json(user,'username',username)
+        data = cls.change_profile_json(user, 'username', username)
         return data
 
     @classmethod
