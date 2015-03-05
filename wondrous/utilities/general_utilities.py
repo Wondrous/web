@@ -146,6 +146,18 @@ def api_login_required(func):
             return resp
     return wrapper
 
+def api_logout_required(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        if not self.request.user:
+            return func(self,*args,**kwargs)
+        else:
+            resp = self.request.response
+            resp.body = json.dumps({'error':'logged in'})
+            resp.content_type = 'application/json'
+            return resp
+    return wrapper
+
 def login_required(func):
 
     """

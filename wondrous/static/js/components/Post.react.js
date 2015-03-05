@@ -1,6 +1,5 @@
-var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
-var PostStore = require('../stores/PostStore');
+var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
 
 
@@ -8,54 +7,15 @@ var UserTitle = React.createClass({
     repost: null,
     mixins: [Router.Navigation],
 
-    handleProfileData: function(err, data) {
-        if (err == null) {
-            console.log("Profile from post", data);
-            WondrousActions.loadProfileInfo(data);
-        } else {
-            // WondrousActions.unloadUserInfo(err);
-        }
-    },
-
-    handleWallData: function(err, data) {
-        if (err == null) {
-            WondrousActions.loadWallPosts(data);
-            console.log("Wall from post", data);
-        } else {
-
-        }
-    },
-
-    loadProfileFromServer: function(username) {
-        if (typeof username ==='undefined') username=this.props.data.username;
-        WondrousAPI.getUserInfo({
-            username: username,
-            callback: this.handleProfileData
-        });
-    },
-
-    loadWallFromServer: function(username) {
-        if (typeof username === 'undefined') username=this.props.data.username;
-        WondrousAPI.getWallPosts({
-            username: username,
-            page: 0,
-            callback: this.handleWallData
-        });
-    },
-
     handleClick: function() {
         if (typeof this.props.data.username != 'undefined') {
             this.transitionTo('/' + this.props.data.username);
-            this.loadProfileFromServer();
-            this.loadWallFromServer();
         }
     },
 
     handleClickOnOwner: function(){
         if (typeof this.repost.username != 'undefined') {
             this.transitionTo('/' + this.repost.username);
-            this.loadProfileFromServer(this.repost.username);
-            this.loadWallFromServer(this.repost.username);
         }
     },
 
@@ -126,7 +86,7 @@ var Comments = React.createClass({
         console.log(this.props.data);
         var comments = this.props.data.map(function(comment, index) {
             return (
-                <Comment data={comment}/>
+                <Comment key={comment.id} data={comment}/>
             );
         });
 
@@ -205,20 +165,9 @@ var Post = React.createClass({
         // WondrousActions.toggleFeedAnimation(null);
     },
 
-    handleData: function(err, res){
-        if (err == null) {
-            this.handleClick();
-            WondrousActions.postDelete(res.id);
-        } else {
-
-        }
-    },
-
     deletePost: function () {
-        WondrousAPI.deletePost({
-            post_id: this.props.data.id,
-            callback: this.handleData
-        });
+        this.handleClick();
+        WondrousActions.deletePost(this.props.data.id);
     },
 
     handlePostLike: function(err, res) {
@@ -248,26 +197,9 @@ var Post = React.createClass({
         }
     },
 
-    onRepost: function(err, res) {
-        if (err == null) {
-            console.log("repost results",res);
-            WondrousActions.addNewPost(res);
-        } else {
-            console.error("repost err", err);
-        }
-    },
 
     clickRepost: function() {
-        uploadData = {
-            'post_id' : this.props.data.id
-        };
-
-        //console.log("reposting", uploadData);
-
-        WondrousAPI.repost({
-            uploadData: uploadData,
-            callback: this.onRepost
-        });
+        WondrousActions.repost(this.props.data.id) ;
         this.handleClick();
     },
 
@@ -282,7 +214,7 @@ var Post = React.createClass({
 
     render: function() {
         var repost = null;
-        var is_it_mine = this.props.data.username === UserStore.getUserData().username;
+        var is_it_mine = this.props.data.username === UserStore.user.username;
 
         if (this.props.data.hasOwnProperty('repost')) {
             repost = this.props.data.repost;

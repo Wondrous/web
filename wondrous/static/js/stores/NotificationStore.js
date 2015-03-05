@@ -1,69 +1,52 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var WondrousConstants = require('../constants/WondrousConstants');
-var _ = require('underscore');
+var WondrousActions = require('../actions/WondrousActions');
+var WondrousAPI = require('../utils/WondrousAPI');
+var UserStore = require('../stores/UserStore');
 
-// Define initial notifications for the feed
-var _notes = [], _current_page = 0;
+var defaultFeed = [];
+var defaultNotifications = {};
 
-// Method to load feed data from API
-function loadNoteData(data){
-    Array.prototype.push.apply(_notes,data);
-    if(data.length>0){
-        _current_page++;
-    }
-}
+var NotificationStore = Reflux.createStore({
+    listenables: WondrousActions,
 
-function addNewNote(note){
-    _notes.unshift(note);
-}
+    init:function(){
+        this.feed = defaultFeed;
+        this.notifications = defaultNotifications;
+        this.current_page = 0;
+        this.listenTo(UserStore,this.onUserChange);
+    },
+    onUserChange: function(userData){
+        if(userData.hasOwnProperty('user')){
+            WondrousActions.loadNotifications(this.current_page);
+        }
+    },
 
-// Extend NotificationStore with EventEmitter and underscore
-var NotificationStore = _.extend({},EventEmitter.prototype,{
+    updateNotification: function(feedItems){
+        for(var i = 0; i < feedItems.length; i++){
+            this._addToNotification(feedItems[i]);
+        }
+        this.trigger(this.getNotifications());
+    },
 
-    // Return the whole entire feed array, essentially an array of notifications
+    _addToNotification: function(post){
+        if(!this.notifications.hasOwnProperty(String(post.id))){
+            this.feed.push(post.id);
+        }
+        this.notifications[String(post.id)] = post;
+    },
+
+    incrementPage: function(){
+        this.current_page++;
+        this.refreshFromServer();
+    },
+
     getNotifications: function(){
-        return _notes;
-    },
 
-    // Emit Change event
-    emitChange: function(){
-        this.emit('change');
-    },
-
-    // Add change listener
-    addChangeListener: function(callback){
-        this.on('change', callback);
-    },
-
-    // Remove change listener
-    removeChangeListener: function(callback){
-        this.removeListener('change', callback);
-    }
-});
-
-// Register callback with AppDispatcher
-AppDispatcher.register(function(payload){
-    var action = payload.action;
-
-    switch(action.actionType){
-        // Respond to NOTIFICATION_RECEIVE
-        case WondrousConstants.NOTIFICATION_RECEIVE:
-            addNewNote(action.data);
-            break;
-
-        // Respond to NOTIFICATION_LOAD
-        case WondrousConstants.NOTIFICATION_LOAD:
-            loadNoteData(action.data);
-            break;
-
-        default:
-            return true;
+        return this.feed.map(function(note_id,index){
+            return this[String(note_id)]
+        },this.notifications);
     }
 
-    // If action was responded to, emit the change event
-    NotificationStore.emitChange();
-    return true;
 });
+
 
 module.exports = NotificationStore;

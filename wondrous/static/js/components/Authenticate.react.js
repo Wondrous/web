@@ -1,17 +1,18 @@
-var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
+var LoginStore = require('../stores/LoginStore');
 var Link = Router.Link;
 
 var LoggedOut = React.createClass({
-    mixins: [ Router.Navigation ],
-    componentDidMount: function(){
-        UserStore.addChangeListener(this._onChange);
-        this._onChange();
-    },
-    // Remove change listeners from stores
-    componentWillUnmount: function(){
-        UserStore.removeChangeListener(this._onChange);
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(UserStore,'onUserUpdate'),
+    ],
+
+    onUserUpdate: function(userData){
+        if(UserStore.loggedIn){
+            this.transitionTo('feed');
+        }
     },
     render: function(){
         return (
@@ -20,51 +21,60 @@ var LoggedOut = React.createClass({
                 <p style={{"fontFamily": "helvetica, arial, sans-serif","color": "rgb(71,71,71)","fontSize": "20px","fontWeight": "100","width": "75%","margin": "20px auto"}}>
                     Some amazing slogan goes here to fill up space on our temporary home page
                 </p>
-
                 <div style={{"padding": "40px 0"}}>
                     <Link className="index-lo-big-link signup-big-link round-5" to="signup">Sign up</Link>
                     <Link className="index-lo-big-link blue-big-link round-3" to="login">Log in</Link>
                 </div>
             </div>
         );
-    },
-    _onChange: function(){
-        if(UserStore.isUserLoggedIn()) {
-            this.replaceWith('/feed');
-        }
     }
 });
 
 var Signup = React.createClass({
     err: null,
-    good: false,
-    handleCheck:function(err, res) {
-        if(err != null){
-            this.err = err;
-            this.good = false;
-        }else{
-            this.err = null;
+    good: true,
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(UserStore,'onUserUpdate'),
+        Reflux.listenTo(LoginStore,'onLoginError')
+    ],
+    changeHandler: function(){
+        WondrousActions.registerCheck(
+            this.refs.name.getDOMNode().value.trim(),
+            this.refs.username.getDOMNode().value.trim(),
+            this.refs.email.getDOMNode().value.trim(),
+            this.refs.password.getDOMNode().value
+        );
+    },
+    onLoginError: function(errMessage){
+        this.err = errMessage;
+        if (this.err==null){
             this.good = true;
+        }else{
+            this.good = false;
         }
+        console.log("good>",this.good);
         this.forceUpdate();
     },
-    changeHandler: function(){
-        var username = this.refs.username.getDOMNode().value.trim();
-        WondrousAPI.registerCheck({
-            callback: this.handleCheck,
-            name: this.refs.name.getDOMNode().value.trim(),
-            username: this.refs.username.getDOMNode().value.trim(),
-            email: this.refs.email.getDOMNode().value.trim(),
-            password: this.refs.password.getDOMNode().value
-        });
+    onUserUpdate: function(userData){
+        if(UserStore.loggedIn){
+            this.transitionTo('feed');
+        }
     },
-
+    onRegister: function(evt){
+        evt.preventDefault();
+        WondrousActions.register(
+            this.refs.name.getDOMNode().value.trim(),
+            this.refs.username.getDOMNode().value.trim(),
+            this.refs.email.getDOMNode().value.trim(),
+            this.refs.password.getDOMNode().value
+        );
+    },
     render: function() {
-
         return (
             <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
                 <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Sign up :)</h1>
-                <form action="/signup/" method="POST">
+                <form onSubmit={this.onRegister}>
                     <div>
                         <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="name"/>
                     </div>
@@ -95,14 +105,38 @@ var Signup = React.createClass({
 });
 
 var Login = React.createClass({
-
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(UserStore,'onUserUpdate'),
+        Reflux.listenTo(LoginStore,'onLoginError')
+    ],
+    componentsWillMount: function(){
+        this.err = '';
+    },
+    onUserUpdate: function(userData){
+        console.log(UserStore);
+        if(UserStore.loggedIn){
+            this.transitionTo('feed');
+        }
+    },
+    onLoginError: function(errMessage){
+        this.err = errMessage;
+        this.forceUpdate();
+    },
+    onLogin: function(evt){
+        evt.preventDefault();
+        WondrousActions.login(
+            this.refs.user_identification.getDOMNode().value.trim(),
+            this.refs.password.getDOMNode().value
+        );
+    },
     render: function(){
         return (
             <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "10%"}}>
                 <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Log in</h1>
-                <form action="/login/" method="POST">
+                <form onSubmit={this.onLogin}>
                     <div>
-                        <input id="focusInput" className="input-basic round-3" type="text" ref="identifier" name="user_identification" placeholder="Email or username" />
+                        <input id="focusInput" className="input-basic round-3" type="text" ref="user_identification" name="user_identification" placeholder="Email or username" />
                     </div>
                     <div>
                         <input className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password" />
@@ -114,7 +148,7 @@ var Login = React.createClass({
                         <input className="input-basic round-3" type="submit" name="login_button" value="Log in!" />
                     </div>
                 </form>
-
+                {this.err}
                 <div className="login-accept-terms" style={{"textAlign": "center","margin": "10px auto","width": "300px"}}>
                     By clicking the above button and logging in to Cloaky, you have reviewed and accepted our Privacy Policy and Terms of Service
                 </div>

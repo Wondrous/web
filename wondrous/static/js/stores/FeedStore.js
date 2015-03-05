@@ -1,109 +1,85 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var WondrousConstants = require('../constants/WondrousConstants');
-var _ = require('underscore');
+var WondrousActions = require('../actions/WondrousActions');
+var WondrousAPI = require('../utils/WondrousAPI');
+var UserStore = require('../stores/UserStore');
 
-// Define initial posts for the feed
-var _posts = [], _current_page = 0, _posts_object={};
+var defaultFeed = [];
+var defaultPosts = {};
 
-// Method to load feed data from API
-function loadFeedData(data){
-    for(var i = 0; i < data.length; i++){
-        if(!_posts_object.hasOwnProperty(String(data[i].id))){
-            _posts.push(data[i].id);
+var FeedStore = Reflux.createStore({
+    listenables: WondrousActions,
+    init:function(){
+        this.feed = defaultFeed;
+        this.posts = defaultPosts;
+        this.current_page = 0;
+        this.donePaging = false;
+        this.paging = false;
+
+        this.listenTo(UserStore,this.onUserChange);
+    },
+    onUserChange: function(userData){
+        if(userData.hasOwnProperty('user')){
+            WondrousActions.loadFeed(this.current_page);
         }
-        _posts_object[String(data[i].id)] = data[i];
-    }
-}
+    },
 
-function addNewPost(post){
-    _posts_object[String(post.id)]=post;
-    _posts.unshift(post.id);
-}
-
-function deletePost(post_id){
-    var to_delete = -1;
-    for(var i = 0; i < _posts.length; i++){
-        if(_posts[i]==post_id){
-            to_delete = i;
-            console.log("deleting id",post_id,to_delete)
-            delete _posts_object[String(_posts[i])];
-            delete _posts[to_delete];
-            break;
+    updateFeed: function(feedItems){
+        if (feedItems.length==0){
+            this.donePaging = true;
         }
-    }
+        for(var i = 0; i < feedItems.length; i++){
+            this._addToFeed(feedItems[i]);
+        }
+        this.trigger(this.getFeed());
+    },
 
-}
+    _addToFeed: function(post){
+        if(!this.posts.hasOwnProperty(String(post.id))){
+            this.feed.unshift(post.id);
+        }
+        this.posts[String(post.id)] = post;
+    },
 
-// Extend FeedStore with EventEmitter and underscore
-var FeedStore = _.extend({},EventEmitter.prototype,{
+    addToFeed: function(post){
+        this._unshiftToFeed(post);
+        this.trigger(this.getFeed());
+    },
+
     incrementPage: function(){
-        _current_page++;
+        this.current_page++;
     },
 
-    getCurrentPage: function(){
-        return _current_page;
+    _unshiftToFeed: function(post){
+        if(!this.posts.hasOwnProperty(String(post.id))){
+            this.wall.unshift(post.id);
+        }
+        this.posts[String(post.id)] = post;
     },
 
-    // Return the whole entire feed array, essentially an array of posts
     getFeed: function(){
-        var posts = _posts.map(function(post_id,index){
-            return _posts_object[String(post_id)];
-        });
-        return posts;
+        return this.feed.map(function(post_id,index){
+            return this[String(post_id)]
+        },this.posts);
     },
 
-    // Emit Change event
-    emitChange: function(){
-        this.emit('change');
-    },
+    removeFromFeed: function(post_id){
+        var to_delete = -1;
+        for(var i = 0; i < this.feed.length; i++){
+            if(this.feed[i]==post_id){
+                to_delete = i;
+                console.log("deleting id",post_id,to_delete)
+                break;
+            }
+        }
 
-    // Add change listener
-    addChangeListener: function(callback){
-        this.on('change', callback);
-    },
+        if(to_delete!=-1){
+            delete this.posts[String(this.feed[i])];
+            this.feed.splice(to_delete,1);
+            this.trigger(this.getFeed());
+        }
 
-    // Remove change listener
-    removeChangeListener: function(callback){
-        this.removeListener('change', callback);
-    }
-});
-
-// Register callback with AppDispatcher
-AppDispatcher.register(function(payload){
-    var action = payload.action;
-
-    switch(action.actionType){
-        // Respond to POST_RECEIVE
-        case WondrousConstants.POST_RECEIVE:
-            loadFeedData(action.data);
-            break;
-
-        // Respond to NEW_POST
-        case WondrousConstants.NEW_POST:
-            addNewPost(action.data);
-            break;
-
-        // Respond to FEED_LOAD
-        case WondrousConstants.FEED_LOAD:
-            loadFeedData(action.data);
-            break;
-
-        // respond to post_deleted
-        case WondrousConstants.POST_DELETED:
-            deletePost(action.data);
-            break;
-
-        case WondrousConstants.FEED_ANIMATE:
-            break;
-
-        default:
-            return true;
     }
 
-    // If action was responded to, emit the change event
-    FeedStore.emitChange();
-    return true;
 });
+
 
 module.exports = FeedStore;

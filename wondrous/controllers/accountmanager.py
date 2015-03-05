@@ -89,7 +89,9 @@ class AccountManager(BaseManager):
         picture_object.ouuid = str(picture_object.id)+'-'+unicode(uuid.uuid4()).lower()
         picture_object.mime_type = file_type
         data = UploadManager.sign_upload_request(picture_object.ouuid, picture_object.mime_type)
+        data.update(user.json())
         data.update({"ouuid":picture_object.ouuid})
+
         return data
 
     @classmethod
@@ -193,19 +195,26 @@ class AccountManager(BaseManager):
         if user and user.validate_password(old_password.encode('utf-8')):
             user.password = new_password
             DBSession.flush()
-            return {"status": "new password set"}
+
+            retval = user.json(1)
+            return retval
         return {"error": "password change failed"}
 
     @classmethod
     def change_name_json(cls, user, name):
         data = cls.change_profile_json(user,'name',name)
         data.update(cls.change_profile_json(user,'ascii_name',unicode(name)))
-        return data
+
+        retval = user.json(1)
+        retval.update(data)
+        return retval
 
     @classmethod
     def change_username_json(cls, user, username):
         data = cls.change_profile_json(user,'username',username)
-        return data
+        retval = user.json(1)
+        retval.update(data)
+        return retval
 
     @classmethod
     def change_profile_json(cls, user, field, new_value):

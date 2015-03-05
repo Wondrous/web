@@ -228,6 +228,7 @@ class PostManager(BaseManager):
     @classmethod
     def delete_post_json(cls, user, post_id):
         user_id = user.id
+        logging.warn(post_id)
         post = Post.by_id(post_id)
 
         if post and post.user_id == user_id:

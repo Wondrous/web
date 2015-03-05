@@ -33,23 +33,17 @@ def build_routes(config):
     # AUTH
     # config.add_route('auth_login_handler',                   '/auth/login/{auth_type}/')
     # config.add_route('auth_login_handler2',                  '/auth/login/{auth_type}/{code}/')
-    config.add_route('auth_logout_handler',                    '/auth/logout/')
-    config.add_route('auth_delete_handler',                    '/auth/delete/')
+
     config.add_route('auth_verify_handler',                    '/auth/verify/{code}/')
-    config.add_route('auth_is_banned_handler',                 '/auth/is_banned/{user_id}/')
-    config.add_route('auth_waitlist',                          '/auth/waitlist/{action}/')
-    config.add_route('auth_signup_handler',                    '/signup/')
-    # config.add_route('auth_signup_step_handler',               '/signup/step/{step_num}/')
-    config.add_route('login_handler',                          '/login/')
 
     # SEARCH
     config.add_route('search_handler',                         '/search/')
 
     # TAG
-    config.add_route('tag_handler',                            '/tag/{tag_name}/')
+    # config.add_route('tag_handler',                            '/tag/{tag_name}/')
 
     # SINGLE POST
-    config.add_route('post_handler',                           '/post/{object_id}/{object_uuid}/')
+    # config.add_route('post_handler',                           '/post/{object_id}/{object_uuid}/')
 
     # INFO
     config.add_route('info_about_handler',                     '/info/about/')
@@ -64,6 +58,11 @@ def build_routes(config):
     config.add_route('api_user_login',                         '/api/user/login')       # POST
     config.add_route('api_signup_check',                       '/api/user/signupcheck') # POST
     config.add_route('api_user_vote',                          '/api/user/vote')        # POST
+
+    config.add_route('api_logout',                             '/api/auth/logout')         # POST
+    config.add_route('api_login',                              '/api/auth/login')          # POST
+    config.add_route('api_register',                           '/api/auth/register')       # POST
+
 
     config.add_route('api_post_vote',                          '/api/post/vote')        # POST
 
@@ -95,20 +94,18 @@ def build_routes(config):
     config.add_route('api_refer_register',                     '/api/refer')            # POST
     config.add_route('api_refer_progress',                     '/api/refer/progress')   # GET
 
-    config.add_route('api_search_users',                         '/api/search/user')    # GET
-    config.add_route('api_search_posts',                         '/api/search/post')    # GET
+    config.add_route('api_search_users',                       '/api/search/user')    # GET
+    config.add_route('api_search_posts',                       '/api/search/post')    # GET
 
     # INDEX
-    config.add_route('stuff1_handler',                         '/{stuff}')
-    config.add_route('stuff_handler',                          '/{stuff}/{stuff1}')
+    config.add_route('index_handler1',                          '/{a}')
+    config.add_route('index_handler2',                          '/{a}/{b}')
     config.add_route('index_handler',                          '/')
 
-    config.add_route('index_priority_feed_handler',            '/priority-feed/')
+    # config.add_route('index_priority_feed_handler',            '/priority-feed/')
 
     # PROFILE -- MUST BE AT BOTTOM --
     # config.add_route('profile_handler',                        '/{username}/')
     # config.add_route('profile_tab_handler',                    '/{username}/{tab}/')
-
-    config.add_static_view('/tmp', 'wondrous:templates')
 
     return config
