@@ -123,14 +123,12 @@ var Comments = React.createClass({
         }
     },
     render: function() {
-        console.log(this.props.data);
+        //console.log(this.props.data);
         var comments = this.props.data.map(function(comment, index) {
             return (
                 <Comment data={comment}/>
             );
         });
-
-
 
         return (
             <div>
@@ -172,7 +170,7 @@ var Photo = React.createClass({
 
 var Post = React.createClass({
     getInitialState: function() {
-        return {comments: [], commentsVisible:false};
+        return {comments: [], commentsVisible: false};
     },
     handleClick: function() {
         var SPEED = 0;
@@ -316,6 +314,7 @@ var Post = React.createClass({
                             }
                         </div>
                         <hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
+
                         {this.state.commentsVisible?
                             <div className="post-comment-wrapper">
                                 <Comments data={this.state.comments} post_id={this.props.data.id} />
