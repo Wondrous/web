@@ -597,7 +597,8 @@ $post-cover-photo-height: 390px;
 }
 
 .modal-wrapper {
-    max-width: 800px;
+    width: 750px;
+    /*max-width: 800px;*/
     margin: 0 auto;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
