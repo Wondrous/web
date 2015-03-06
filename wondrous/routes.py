@@ -37,7 +37,7 @@ def build_routes(config):
     config.add_route('auth_verify_handler',                    '/auth/verify/{code}/')
 
     # SEARCH
-    config.add_route('search_handler',                         '/search/')
+    # config.add_route('search_handler',                         '/search/')
 
     # TAG
     # config.add_route('tag_handler',                            '/tag/{tag_name}/')

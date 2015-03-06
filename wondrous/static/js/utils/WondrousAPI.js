@@ -448,6 +448,29 @@ module.exports = {
         request.get(url).end(_callback(callback));
     },
 
+    //search user
+    // callback
+    // search term
+    // page
+    searchForUsers: function(options){
+        var url = "/api/search/user";
+        var search = encodeURIComponent(options.search);
+        var page = options.page;
+        var callback = options.callback;
+        request.get(url).query({search:search,page:page}).end(_callback(callback));
+    },
+
+    //search post
+    // callback
+    // search term
+    // page
+    searchForPosts: function(options){
+        var url = "/api/search/post";
+        var search = encodeURIComponent(options.search);
+        var page = options.page;
+        var callback = options.callback;
+        request.get(url).query({search:search,page:page}).end(_callback(callback));
+    },
 
     // Upload file to s3
     // options:

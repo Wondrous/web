@@ -52,6 +52,11 @@ var WondrousActions = Reflux.createActions({
     // load following from server
     "loadFollowing": {},
 
+    // search respectively
+    "searchForUsers": {},
+
+    "searchForPosts": {},
+
     // SECTION UI/UX consideration
     // might have problem logging in
     "loginError": {},
@@ -116,7 +121,16 @@ var WondrousActions = Reflux.createActions({
     "uploadError": {},
 
     // upload complete
-    "uploadComplete": {}
+    "uploadComplete": {},
+
+    // search stuff
+    "updateSearchUsers": {},
+
+    "updateSearchPosts": {},
+
+    "newSearch":{},
+
+    "searchError": {}
 
 });
 
@@ -389,5 +403,35 @@ WondrousActions.deletePost.listen(function(post_id){
         }
     });
 });
+
+WondrousActions.searchForUsers.listen(function(search,page){
+    WondrousAPI.searchForUsers({
+        search:search,
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateSearchUsers(res);
+            }else{
+                WondrousActions.searchError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.searchForPosts.listen(function(search,page){
+    WondrousAPI.searchForPosts({
+        search:search,
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateSearchPosts(res);
+            }else{
+                WondrousActions.searchError(err);
+            }
+        }
+    });
+});
+
+
 
 module.exports = WondrousActions

@@ -127,7 +127,7 @@ class APIViews(BaseHandler):
 
     @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
     def api_refer_register(self):
-        
+
         """
             PURPOSE: Retrieves/sign up the referrer
 
@@ -143,7 +143,7 @@ class APIViews(BaseHandler):
 
     @view_config(request_method="GET",route_name='api_refer_progress',renderer='json')
     def api_refer_progress(self):
-        
+
         """
             PURPOSE: Retrieves the referrer
 
@@ -216,7 +216,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="GET",route_name='api_user_me', renderer='json')
     def api_user_me(self):
-        
+
         """
             PURPOSE: Retrieves my user information based on relationship and login
                 status
@@ -235,7 +235,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_picture', renderer='json')
     def api_user_picture(self):
-        
+
         """
             PURPOSE: Changes profile picture
 
@@ -404,7 +404,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method="POST",route_name='api_repost', renderer='json')
     def api_repost(self):
-        
+
         """
             PURPOSE: issue a repost
 
@@ -427,7 +427,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method='POST', route_name='api_user_vote', renderer='json')
     def api_user_vote(self):
-        
+
         """
             PURPOSE: uses an action to vote on someone else
 
@@ -462,7 +462,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method='GET',route_name='api_user_notification', renderer='json')
     def api_user_notification(self):
-        
+
         """
             PURPOSE: get a list of notifications for current user
 
@@ -528,7 +528,7 @@ class APIViews(BaseHandler):
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_post_delete', renderer='json')
     def api_post_delete(self):
-        
+
         """
             PURPOSE: deletes the given post by post_id
 
@@ -577,7 +577,7 @@ class APIViews(BaseHandler):
 
             RETURNS: The JSON array containing the comment
         """
-        
+
         return PostManager.get_comments_json(**self.query_kwargs)
 
     @api_login_required
@@ -605,7 +605,6 @@ class APIViews(BaseHandler):
         """
             TODO
         """
-
         return SearchManager.user_search_json(**self.query_kwargs)
 
 

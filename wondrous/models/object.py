@@ -22,6 +22,7 @@ from wondrous.models import (
     Base,
     DBSession,
 )
+from sqlalchemy import or_
 
 from wondrous.models.tag import Tag
 
@@ -42,6 +43,13 @@ class Object(Base, BaseMixin):
     mime_type = Column(Unicode, nullable=True)
     ouuid = Column(Unicode, nullable=True)
     # comments = relationship("Comment",cascade="delete")
+    @classmethod
+    def by_text_like(cls, text, num=50):
+
+        """
+            TODO: Probably should go into its own controllers/personmanager.py file
+        """
+        return DBSession.query(Object).filter(or_(Object.subject.ilike("%{q}%".format(q=text)),Object.text.ilike("%{q}%".format(q=text)))).limit(num)
 
 
 class ObjectLink(Base, BaseMixin):
