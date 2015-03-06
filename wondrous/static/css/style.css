@@ -428,7 +428,9 @@ hr {
   padding: 0; }
 
 ul {
-  list-style-type: none; }
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
 
 #body-mask {
   position: fixed;
@@ -727,17 +729,17 @@ a:hover {
   -o-box-shadow: 0 2px 3px #646464;
   box-shadow: 0 2px 3px #646464; }
 
-.follow-btn {
+.follow-button-blue {
   padding: 7px 10px;
   color: #fbfbfb;
   font-weight: 100;
   background-color: #6482c8;
   border: 3px solid #6482c8;
   cursor: pointer; }
-  .follow-btn:hover {
+  .follow-button-blue:hover {
     border: 3px solid #6464f0;
     background-color: #7891cc; }
-  .follow-btn:active {
+  .follow-button-blue:active {
     border: 3px solid #6464f0;
     background-color: #6482c8; }
 
@@ -907,6 +909,9 @@ a:hover {
   vertical-align: top;
   margin-right: 10px;
   background-color: white; }
+
+.item-ul {
+  margin: 20px; }
 
 /* post-body is visible, and transitions size */
 .post-body {

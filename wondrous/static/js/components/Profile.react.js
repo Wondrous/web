@@ -119,7 +119,7 @@ var Follower = React.createClass({
         });
         
         return (
-            <ul>
+            <ul className="item-ul">
                 {followers}
             </ul>
         );
@@ -156,7 +156,7 @@ var Following = React.createClass({
             );
         })
         return (
-            <ul>
+            <ul className="item-ul">
                 {following}
             </ul>
         );
