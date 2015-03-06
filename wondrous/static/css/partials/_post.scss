@@ -2,9 +2,7 @@
 
 /* post-body is visible, and transitions size */
 .post-body {
-    overflow: hidden;
     width: 100%;
-
     background-color: rgb(255,255,255);
     overflow: hidden;
 
@@ -27,10 +25,9 @@
 }
 
 .post-content {
-    // display: none;
     background-color: rgb(255,255,255);
-    padding: 16px;
-    font-family: arial, helvetica, sans-serif;
+    padding: 16px 28px;
+    font-family: helvetica, arial, sans-serif;
     font-weight: normal;
     font-size: 17px;
     color: rgb(51,51,51);
@@ -595,15 +592,13 @@ $post-cover-photo-height: 390px;
 .modal {
     position: relative;
     width: 100%;
-
-    height: 600px;
+    height: auto;
     margin: 100px 0;
 }
 
 .modal-wrapper {
     max-width: 800px;
     margin: 0 auto;
-    background: rgb(251,251,251);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
 }
@@ -625,7 +620,7 @@ $post-cover-photo-height: 390px;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(1,1,1,.725);
+    background-color: rgba(0,0,0,0.88);
     z-index: 100;
     overflow: auto;
 }

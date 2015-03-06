@@ -915,7 +915,6 @@ a:hover {
 
 /* post-body is visible, and transitions size */
 .post-body {
-  overflow: hidden;
   width: 100%;
   background-color: white;
   overflow: hidden;
@@ -935,8 +934,8 @@ a:hover {
 
 .post-content {
   background-color: white;
-  padding: 16px;
-  font-family: arial, helvetica, sans-serif;
+  padding: 16px 28px;
+  font-family: helvetica, arial, sans-serif;
   font-weight: normal;
   font-size: 17px;
   color: #333333;
@@ -1425,13 +1424,12 @@ a:hover {
 .modal {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: auto;
   margin: 100px 0; }
 
 .modal-wrapper {
   max-width: 800px;
   margin: 0 auto;
-  background: #fbfbfb;
   -webkit-background-clip: padding-box;
   background-clip: padding-box; }
 
@@ -1450,7 +1448,7 @@ a:hover {
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(1, 1, 1, 0.725);
+  background-color: rgba(0, 0, 0, 0.88);
   z-index: 100;
   overflow: auto; }
 
@@ -1849,7 +1847,7 @@ a:hover {
   position: relative;
   min-height: 32px;
   padding: 0;
-  margin: 0 0 8px; }
+  margin: 0 0 12px; }
 
 .post-comment-image-wrapper {
   position: absolute;
@@ -1863,19 +1861,25 @@ a:hover {
   font-family: helvetica, arial, sans-serif;
   font-size: 15px;
   color: #474747;
-  padding: 0 8px 0 34px; }
+  padding: 0 8px 0 32px; }
 
 .post-comment-un {
   display: block;
   color: #0064aa;
   font-weight: bold;
-  cursor: pointer; }
+  cursor: pointer;
+  margin-bottom: 2px; }
   .post-comment-un:link {
     text-decoration: none; }
   .post-comment-un:hover {
     text-decoration: underline; }
   .post-comment-un:visited {
     color: #0064aa; }
+
+.post-comment-img {
+  height: 25px;
+  width: 25px;
+  margin-top: 2px; }
 
 .top-banner {
   position: fixed;

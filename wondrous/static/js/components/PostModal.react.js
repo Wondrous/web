@@ -64,7 +64,7 @@ var Comment = React.createClass({
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
-                    <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
+                    <img className="post-comment-img round-2" src={img_src} />
                 </div>
                 <div className="post-comment-content">
                     <a href={hrefPlaceholder} onClick={this.handleClick} className="post-comment-un">
@@ -84,7 +84,9 @@ var Comments = React.createClass({
     onComment: function(evt){
         evt.preventDefault();
         var text = this.refs.commentBox.getDOMNode().value.trim();
-        console.log(text,this.props.post_id);
+        
+        //console.log(text,this.props.post_id);
+        
         if (text.length > 0) {
             WondrousActions.addNewComment(this.props.post_id,text);
             this.refs.commentBox.getDOMNode().value = '';
@@ -182,7 +184,8 @@ var PostFooter = React.createClass({
     }
 })
 var Post = React.createClass({
-	render: function(){
+	
+	render: function() {
 		var repost = null;
 		if (typeof this.props.data ==='undefined'){
 			return (
@@ -213,7 +216,7 @@ var Post = React.createClass({
 									return textChunk;
 								} else {
 									return (
-										<span>{textChunk}<br/></span>
+										<span>{textChunk}<br /></span>
 									);
 								}
 							})
@@ -250,7 +253,7 @@ var PostModal = React.createClass({
 	},
 
 	render: function() {
-		divStyle = this.state.modalOpen? {display:"block"}:{display:"none"};
+		divStyle = this.state.modalOpen ? {display:"block"} : {display:"none"};
 
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
@@ -259,7 +262,7 @@ var PostModal = React.createClass({
 					<div className="vertical-center">
 
 						<div className="modal-wrapper">
-							<div onClick={this.stopProp} className="modal">
+							<div onClick={this.stopProp} className="modal round-5">
 								<Post data={this.state.post} comments={this.state.comments}/>
 							</div>
 						</div>
