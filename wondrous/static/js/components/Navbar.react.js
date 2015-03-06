@@ -4,11 +4,18 @@ var UserStore = require('../stores/UserStore');
 var Link = Router.Link;
 
 var SearchBox = React.createClass({
+    mixins: [Router.Navigation],
+    handleSearch: function(evt){
+        evt.preventDefault();
+        var search = this.refs.query.getDOMNode().value.trim();
+        this.transitionTo("search",{search:search});
+        WondrousActions.newSearch(search);
+    },
     render: function() {
         return (
-        <form method="GET" action="/search/" style={{"display": "inline-block"}}>
+        <form method="GET" onSubmit={this.handleSearch} style={{"display": "inline-block"}}>
             <div className="container">
-              <input type="text" id="query" className="banner-input"
+              <input type="text" ref="query" className="banner-input"
                   placeholder="Search for people and #tags" name="q"
                   data-provide="typeahead" autoComplete="off" />
             </div>

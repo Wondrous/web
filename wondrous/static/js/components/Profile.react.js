@@ -116,7 +116,8 @@ var Follower = React.createClass({
             return (
                 <UserIcon key={user.id} user={user}/>
             );
-        })
+        });
+        
         return (
             <ul>
                 {followers}

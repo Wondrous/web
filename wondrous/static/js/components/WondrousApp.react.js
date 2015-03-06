@@ -45,8 +45,8 @@ var Routes = (
         <Route name="progress" path="/progress/:uuid" handler={LandingApp}/>
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
-        <Route name="search" path="/search" handler={Search}/>
-        <Route name="settings" path="/settings" handler={Settings}/>
+        <Route name="search" path="/search/:search" handler={Search}/>
+        <Route name="settings" path="/settings/" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>
     </Route>

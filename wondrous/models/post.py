@@ -72,14 +72,6 @@ class Post(Base, BaseMixin):
     set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod
-    def by_text_like(cls, text, num=50):
-
-        """
-            TODO: Probably should go into its own controllers/personmanager.py file
-        """
-        return cls.query.filter(or_(cls.object.subject.ilike("%{q}%".format(q=text)),cls.object.text.ilike("%{q}%".format(q=text)))).limit(num)
-
-    @classmethod
     def get_all(cls,user_id):
         from wondrous.models.object import Object
         return cls.query.join(Object).filter(cls.user_id == user_id).\
