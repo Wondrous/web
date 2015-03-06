@@ -11,7 +11,7 @@ var pushstream = new PushStream({
     useJSONP:true
 });
 
-// pushstream.onmessage=messageReceived;
+
 pushstream.onmessage = function(text,id,channel) {
     console.log(text,id,channel);
 };

@@ -117,7 +117,7 @@ var Follower = React.createClass({
                 <UserIcon key={user.id} user={user}/>
             );
         });
-        
+
         return (
             <ul className="item-ul">
                 {followers}
@@ -223,7 +223,7 @@ var UserBar = React.createClass({
     render: function() {
         var username = this.props.username;
         this.is_private = ProfileStore.user.is_private;
-        this.am_following = ProfileStore.user.following==true;
+        this.am_following = this.state.data.following==true;
         var is_me = username === UserStore.user.username;
 
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
