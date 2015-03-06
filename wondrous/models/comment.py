@@ -30,7 +30,7 @@ class Comment(Base,BaseMixin):
 
     """
         Defines the table which holds all data pertaining
-        to comments left on Objects, 
+        to comments left on Objects,
     """
 
     post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False)

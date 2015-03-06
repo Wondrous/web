@@ -152,15 +152,11 @@ class NotificationManager(BaseManager):
 
     @classmethod
     def set_all_seen(cls, user_id):
-        # TODO OPTIMIZE
-        for note in Notification.by_kwargs(is_seen=True).all():
-            note.is_seen = True
+        DBSession.query(Notification).by_kwargs(to_user_id=user_id,is_seen=False).update({'is_seen':True})
 
     @classmethod
     def set_all_read(cls, user_id):
-        # TODO OPTIMIZE
-        for note in Notification.by_kwargs(is_read=True).all():
-            note.is_read = True
+        DBSession.query(Notification).by_kwargs(to_user_id=user_id,is_read=False).update({'is_read':True})
 
     @classmethod
     def get_all_unseen_count(cls,user_id):

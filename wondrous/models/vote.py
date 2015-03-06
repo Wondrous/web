@@ -57,18 +57,3 @@ class Vote(Base, BaseMixin):
         elif self.vote_type==1:
             # user
             return User.by_id(self.subject_id).first()
-
-
-    @classmethod
-    def delete_vote(cls,vote_object):
-        """
-            PURPOSE: *HARD DELETE* a vote row from the database
-
-            USE: Vote.delete_vote(<Vote>)
-
-            PARAMS: the vote object
-
-            RETURNS: (None)
-
-        """
-        DBSession.delete(vote_object)

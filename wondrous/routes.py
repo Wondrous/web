@@ -63,7 +63,6 @@ def build_routes(config):
     config.add_route('api_login',                              '/api/auth/login')          # POST
     config.add_route('api_register',                           '/api/auth/register')       # POST
 
-
     config.add_route('api_post_vote',                          '/api/post/vote')        # POST
 
     config.add_route('api_user_name',                          '/api/me/name')          # POST

@@ -354,7 +354,7 @@ var Profile = React.createClass({
 
 var ProfileRoute = (
     <Route name="user" path="/:username" handler={Profile}>
-        <Route name="wall" handler={Wall}/>
+        <Route name="wall" path="/:username/wall" handler={Wall}/>
         <Route name="followers" path="/:username/followers" handler={Follower} />
         <Route name="following" path="/:username/following" handler={Following} />
         <Route name="likes" path="/:username/likes" />
