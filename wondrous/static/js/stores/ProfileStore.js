@@ -16,15 +16,18 @@ var ProfileStore = Reflux.createStore({
     listenables: WondrousActions,
 
     init:function(){
+        this.newProfile();
+
+        this.listenTo(UserStore,"onUserChange");
+    },
+
+    newProfile: function(){
         this.user = defaultUser;
-        this.follower_page = 0;
-        this.following_page = 0;
+        this.followerPage = 0;
+        this.followingPage = 0;
 
         this.following = getNewSet();
         this.followers = getNewSet();
-
-
-        this.listenTo(UserStore,"onUserChange");
     },
     onUserChange: function(userData){
         if(userData.hasOwnProperty("user") && userData.user.username===this.user.username){
@@ -33,12 +36,8 @@ var ProfileStore = Reflux.createStore({
         }
     },
     updateProfile: function(profile){
+        this.newProfile();
         this.user = profile;
-        this.following = getNewSet();
-        this.followers = getNewSet();
-
-        this.follower_page = 0;
-        this.following_page = 0;
         this.trigger({profile:this.user});
     },
 
