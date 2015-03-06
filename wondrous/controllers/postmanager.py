@@ -19,6 +19,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import or_
+from sqlalchemy import desc, asc
 
 from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
@@ -59,7 +60,7 @@ class PostManager(BaseManager):
     def get_comments_json(user,post_id,page=0,per_page=15):
         retval = []
         for user,comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
-            filter(Comment.user_id==User.id).offset(page*per_page).limit(per_page).all():
+            filter(Comment.user_id==User.id).order_by(asc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
 
             data = user.json()
             if user.picture_object:
