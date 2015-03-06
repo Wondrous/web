@@ -43,7 +43,12 @@ var Feed = React.createClass({
     ],
 
     getInitialState: function() {
+        var post_id = this.getParams().post_id;
         console.log("post_id",this.getParams().post_id);
+        if (typeof post_id !== 'undefined'){
+            WondrousActions.loadPost(post_id);
+            WondrousActions.newPostLoad(post_id);
+        }
         return {data: FeedStore.getFeed(), paging: false};
     },
 

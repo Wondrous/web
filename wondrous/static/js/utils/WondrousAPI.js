@@ -399,7 +399,7 @@ module.exports = {
     // options is:
     // callback(err,json_res)
     // uploadData: object comprised of the the follow:
-    //      file_type
+    //      post_id
     //      callback
     deletePost: function(options) {
         var post_id = options.post_id,
@@ -408,6 +408,36 @@ module.exports = {
 
         request.del(url)
         .send({post_id: post_id})
+        .end(_callback(callback));
+    },
+
+    // Requests the server to get the post
+    // options is:
+    // callback(err,json_res)
+    // uploadData: object comprised of the the follow:
+    //      post_id
+    //      callback
+    getPost: function(options) {
+        var post_id = options.post_id,
+            callback=options.callback,
+            url = '/api/post';
+
+        request.get(url)
+        .query({post_id: post_id})
+        .end(_callback(callback));
+    },
+
+    // Request to delete the comment
+    // options are:
+    //  comment_id
+    //  callback
+    deleteComment: function(options){
+        var comment_id = options.comment_id;
+        var callback = options.callback;
+
+        var url = '/api/comment/delete';
+        request.del(url)
+        .send({comment_id: comment_id})
         .end(_callback(callback));
     },
 

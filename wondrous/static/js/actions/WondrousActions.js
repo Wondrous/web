@@ -22,11 +22,17 @@ var WondrousActions = Reflux.createActions({
     // submits new post
     "addNewPost": {},
 
+    "newPostLoad": {},
+
     // submits new profile pic
     "addProfilePicture": {},
 
     // deletes the post
     "deletePost": {},
+
+    "deleteComment": {},
+
+    "addNewComment": {},
 
     // uploadFile
     "uploadFile": {},
@@ -42,6 +48,9 @@ var WondrousActions = Reflux.createActions({
 
     // load the feed
     "loadFeed": {},
+
+    // load a certain post
+    "loadPost": {},
 
     // load profile from server
     "loadProfile": {},
@@ -84,6 +93,8 @@ var WondrousActions = Reflux.createActions({
     // adding new info to wall
     "addToWall": {},
 
+    "addToComments": {},
+
     // update initially to feed
     "updateFeed": {},
 
@@ -92,6 +103,8 @@ var WondrousActions = Reflux.createActions({
 
     // removes from feed
     "removeFromFeed": {},
+
+    "removeFromComment": {},
 
     // update current user info
     "updateUser": {},
@@ -117,6 +130,8 @@ var WondrousActions = Reflux.createActions({
     // update initial post comments
     "updateComments": {},
 
+    "commentError": {},
+
     // upload error
     "uploadError": {},
 
@@ -130,7 +145,12 @@ var WondrousActions = Reflux.createActions({
 
     "newSearch":{},
 
-    "searchError": {}
+    "searchError": {},
+
+    "toggleCardModal": {},
+
+    // loads the post onto modal
+    "updatePost": {},
 
 });
 
@@ -206,20 +226,6 @@ WondrousActions.loadWall.listen(function(username,page){
         callback: function(err,res){
             if (err == null){
                 WondrousActions.updateWall(res);
-            }else{
-                console.error(err);
-            }
-        }
-    });
-});
-
-WondrousActions.loadComments.listen(function(post_id,page){
-    WondrousAPI.getPostComments({
-        post_id:post_id,
-        page: page,
-        callback: function(err,res){
-            if (err == null){
-                WondrousActions.loadComments(res);
             }else{
                 console.error(err);
             }
@@ -404,6 +410,33 @@ WondrousActions.deletePost.listen(function(post_id){
     });
 });
 
+WondrousActions.loadPost.listen(function(post_id){
+    WondrousAPI.getPost({
+        post_id:post_id,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updatePost(res);
+                WondrousActions.toggleCardModal(res.id);
+            }else{
+                // WondrousActions.uploadError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.deleteComment.listen(function(comment_id){
+    WondrousAPI.deleteComment({
+        comment_id:comment_id,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.removeFromComment(comment_id);
+            }else{
+                WondrousActions.commentError(err);
+            }
+        }
+    });
+});
+
 WondrousActions.searchForUsers.listen(function(search,page){
     WondrousAPI.searchForUsers({
         search:search,
@@ -432,6 +465,33 @@ WondrousActions.searchForPosts.listen(function(search,page){
     });
 });
 
+WondrousActions.updateComments.listen(function(post_id,page){
+    WondrousAPI.getPostComments({
+        page: page,
+        post_id: post_id,
+        callback: function(err,res){
+            if(err==null){
+                WondrousActions.loadComments(res);
+            }else{
+                WondrousActions.commentError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.addNewComment.listen(function(post_id,text){
+    WondrousAPI.commentOnPost({
+        post_id: post_id,
+        text: text,
+        callback: function(err,res){
+            if(err==null){
+                WondrousActions.addToComments(res);
+            }else{
+                WondrousActions.commentError(err);
+            }
+        }
+    });
+});
 
 
 module.exports = WondrousActions

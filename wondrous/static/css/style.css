@@ -934,7 +934,6 @@ a:hover {
     box-shadow: 0 2px 3px #646464; }
 
 .post-content {
-  display: none;
   background-color: white;
   /*padding: 16px;*/
   font-family: arial, helvetica, sans-serif;

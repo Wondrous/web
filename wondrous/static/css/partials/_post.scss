@@ -27,7 +27,7 @@
 }
 
 .post-content {
-    display: none;
+    // display: none;
     background-color: rgb(255,255,255);
     /*padding: 16px;*/
     font-family: arial, helvetica, sans-serif;
@@ -46,7 +46,7 @@
     font-weight: normal;
     color: #3d3d3d;
     background-color: #f1f1f1;
-    cursor: pointer; 
+    cursor: pointer;
     /* padding: 5px 10px; */
 
     display: inline-block;
@@ -105,7 +105,7 @@
     position: relative;
     top: 5px;
     height: 33px;
-    width: 33px; 
+    width: 33px;
 }
 
 .post-delete-icon {

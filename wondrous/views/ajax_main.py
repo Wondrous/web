@@ -460,6 +460,26 @@ class APIViews(BaseHandler):
         return posts
 
     @api_login_required
+    @view_config(request_method="GET",route_name='api_get_post', renderer='json')
+    def api_get_post(self):
+
+        """
+            PURPOSE: Toggles like/unlike for a post
+
+            USE: self.query_kwargs to provide all the required inputs.
+                user,
+                post_id
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the current post status
+        """
+
+        posts  = PostManager.get_by_id_json(**self.query_kwargs)
+        return posts
+
+
+    @api_login_required
     @view_config(request_method='GET',route_name='api_user_notification', renderer='json')
     def api_user_notification(self):
 

@@ -68,6 +68,7 @@ var Comment = React.createClass({
                         <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
+                    
                 </div>
             </div>
         );
@@ -147,37 +148,42 @@ var Photo = React.createClass({
 });
 
 var Post = React.createClass({
-    
+
     getInitialState: function() {
         return {comments: [], commentsVisible: false};
     },
-    
+
     handleClick: function() {
     	// add modal functionality
-        var SPEED = 0;
-        var thisPost = $(this.refs.post.getDOMNode());
-        var thisBrick = $(this.refs.brick.getDOMNode());
-        var thisPostContent = thisPost.find('.post-content');
-        var thisCoverPhoto = thisPost.find('.post-cover-photo');
+        WondrousActions.newPostLoad(this.props.data.id);
+        WondrousActions.updatePost(this.props.data);
 
-        $('.backdrop').toggleClass('dimmer');
-        thisPost.css('z-index', 9);
+        WondrousActions.toggleCardModal(this.props.data.id);
 
-        $('.post-body').not(thisPost).removeClass('is-expanded');
-        $('.post-content').not(thisPostContent).slideUp(SPEED);
-        $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
-        $('.post-content').not(thisPostContent).removeClass('no-top-border');
-        $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
-
-        thisPost.toggleClass('is-expanded');
-        thisPost.find('.pseudo-bg-img').toggleClass('pseudo-bg-img-closed').toggleClass('pseudo-bg-img-expanded');
-        thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-        thisPostContent.toggleClass('no-top-border');
-
-        thisBrick.toggleClass('post-presentation');
-        thisPostContent.slideToggle(SPEED);
-
-        $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
+        // var SPEED = 0;
+        // var thisPost = $(this.refs.post.getDOMNode());
+        // var thisBrick = $(this.refs.brick.getDOMNode());
+        // var thisPostContent = thisPost.find('.post-content');
+        // var thisCoverPhoto = thisPost.find('.post-cover-photo');
+        //
+        // $('.backdrop').toggleClass('dimmer');
+        // thisPost.css('z-index', 9);
+        //
+        // $('.post-body').not(thisPost).removeClass('is-expanded');
+        // $('.post-content').not(thisPostContent).slideUp(SPEED);
+        // $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
+        // $('.post-content').not(thisPostContent).removeClass('no-top-border');
+        // $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
+        //
+        // thisPost.toggleClass('is-expanded');
+        // thisPost.find('.pseudo-bg-img').toggleClass('pseudo-bg-img-closed').toggleClass('pseudo-bg-img-expanded');
+        // thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
+        // thisPostContent.toggleClass('no-top-border');
+        //
+        // thisBrick.toggleClass('post-presentation');
+        // thisPostContent.slideToggle(SPEED);
+        //
+        // $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
     },
 
     deletePost: function () {
@@ -248,52 +254,10 @@ var Post = React.createClass({
                     <div onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data}/>
                     </div>
-                    <div className="post-content" >
-                        <div className="post-content-text">
-                            {
-                                thisText.map(function(textChunk, idx) {
-                                    if (idx == thisText.length - 1) {
-                                        return textChunk;
-                                    } else {
-                                        return (
-                                            <span>{textChunk}<br/></span>
-                                        );
-                                    }
-                                })
-                            }
-                        </div>
-                        <hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
 
-                        {this.state.commentsVisible?
-                            <div className="post-comment-wrapper">
-                                <Comments data={this.state.comments} post_id={this.props.data.id} dismiss={this.handleClick} />
-                            </div>
-                            : null}
-
-                        <div className="post-footer">
-                            <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
-                                <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_white.svg"} className="post-general-icon" />
-                            </span>
-
-                            <span onClick={this.clickViewComments} className="post-footer-btn post-like-btn round-50">
-                                <img src="/static/pictures/icons/comment/cloud_white.svg" className="post-general-icon" />
-                            </span>
-
-                            {!is_it_mine ?
-                                <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50">
-                                    <img src="/static/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
-                                </span>
-                                : null}
-
-                            {is_it_mine ?
-                                <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50">
-                                    <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
-                                </span>
-                                : null}
-                        </div>
-                    </div>
                 </div>
-            </div>);
+            </div>
+            );
     }
 });
 

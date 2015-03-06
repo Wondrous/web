@@ -228,9 +228,46 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
+    def get_by_id_json(cls,user,post_id):
+        post = Post.by_id(post_id)
+        if post:
+            if not post.is_hidden and post.is_active and not post.set_to_delete:
+                post_dict = {}
+                if post.object:
+                    post_dict.update(post.object.json())
+
+                    # Title case the post subject
+                    post_dict.update({"subject": post.object.subject})
+
+                post_dict.update(post.json())
+                post_dict.update({"name": post.user.ascii_name})
+                post_dict.update({"username": post.user.username})
+                picture_object = post.user.picture_object
+
+                if picture_object:
+                    post_dict.update({"user_ouuid": picture_object.ouuid})
+
+                post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
+
+                if post.original:
+                    original_post = post.original.json()
+                    original_post.update(post.original.object.json())
+
+                    # Title case the post subject
+                    original_post.update({"subject": post.original.object.subject})
+                    original_post.update({"name": post.original.user.ascii_name})
+                    original_post.update({"username": post.original.user.username})
+                    post_dict.update({"repost": original_post})
+
+                return post_dict
+            else:
+                return {'error':'post not found'}
+        else:
+            return {'error':'post not found'}
+
+    @classmethod
     def delete_post_json(cls, user, post_id):
         user_id = user.id
-        logging.warn(post_id)
         post = Post.by_id(post_id)
 
         if post and post.user_id == user_id:

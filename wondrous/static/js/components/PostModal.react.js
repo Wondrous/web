@@ -1,56 +1,257 @@
 var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var Post = require('./Post.react');
+var PostStore = require('../stores/PostStore');
+var UserStore = require('../stores/UserStore');
+
+var UserTitle = React.createClass({
+    repost: null,
+    mixins: [Router.Navigation],
+
+    handleClick: function() {
+        if (typeof this.props.data.username != 'undefined') {
+            this.transitionTo('/' + this.props.data.username);
+        }
+    },
+
+    handleClickOnOwner: function(evt) {
+        evt.preventDefault();
+        if (typeof this.repost.username != 'undefined') {
+            this.transitionTo('/' + this.repost.username);
+        }
+    },
+
+    render: function() {
+        var name = this.props.data.name;
+        if (this.props.data.hasOwnProperty('repost')) {
+            this.repost = this.props.data.repost;
+            var hrefRepostPlaceholder = this.repost.username;
+        }
+        var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var hrefPlaceholder = this.props.data.username;
+        return (
+            <div>
+                <img ref="usericon" className="post-thumb round-50" src={img_src}/>
+                <span className="post-identifier ellipsis-overflow">
+                    <a href={hrefPlaceholder} onClick={this.handleClick}>{name}</a>
+                    {this.repost ? " reposted from " : null}
+                    {this.repost ? <a href={hrefRepostPlaceholder} className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
+                </span>
+            </div>
+            );
+    }
+});
+
+var Comment = React.createClass({
+    mixins: [Router.Navigation],
+
+
+    handleClick: function(evt) {
+        evt.preventDefault();
+        if (typeof this.props.data.username != 'undefined') {
+            WondrousActions.toggleCardModal();
+            this.transitionTo('/' + this.props.data.username);
+        }
+    },
+
+    onDelete: function(){
+        WondrousActions.deleteComment(this.props.data.id);
+    },
+    render: function() {
+        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var hrefPlaceholder = "/" + this.props.data.username;
+        var is_it_mine = (this.props.data.user_id == UserStore.user.id);
+        return (
+            <div className="post-comment">
+                <div className="post-comment-image-wrapper round-2">
+                    <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
+                </div>
+                <div className="post-comment-content">
+                    <a href={hrefPlaceholder} onClick={this.handleClick} className="post-comment-un">
+                        {this.props.data.name}
+                        <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
+                    </a>
+                    <span>{this.props.data.text}</span>
+                    {is_it_mine?<button onClick={this.onDelete}>delete</button>:null}
+                </div>
+            </div>
+        );
+    }
+});
+
+var Comments = React.createClass({
+
+    onComment: function(evt){
+        evt.preventDefault();
+        var text = this.refs.commentBox.getDOMNode().value.trim();
+        console.log(text,this.props.post_id);
+        if (text.length > 0) {
+            WondrousActions.addNewComment(this.props.post_id,text);
+            this.refs.commentBox.getDOMNode().value = '';
+            this.refs.commentBox.getDOMNode().blur();
+        } else {
+            // Send out a friendly error: "Please add some text!"
+        }
+    },
+    render: function() {
+        var comments = this.props.data.map(function(comment, index) {
+            return (
+                <Comment key={comment.id} data={comment}/>
+            );
+        });
+
+        return (
+            <div>
+                {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
+                <form style={{ "marginLeft": 28, "marginRight": 10 }} >
+                    <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
+                    <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>
+                </form>
+            </div>);
+    }
+});
+
+var Photo = React.createClass({
+
+    render: function() {
+        if (this.props.data.hasOwnProperty('repost')) {
+            this.props.data = this.props.data.repost;
+        }
+        photoStyle = {
+            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
+        };
+
+        return (
+            <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
+                    {/*<div className="post-subject-text nh">
+                        <div className="post-subject-wrapper">
+                            <div className="post-subject-text-position">
+                                {this.props.data.subject}
+                            </div>
+                        </div>
+                    </div>*/}
+            </div>);
+    },
+    componentDidMount: function() {
+        // Nothing much happening here!!!
+    }
+});
+
+var PostFooter = React.createClass({
+    deletePost: function () {
+        WondrousActions.toggleCardModal();
+        WondrousActions.deletePost(this.props.data.id);
+    },
+    likePost: function() {
+        this.props.data.liked = !this.props.data.liked;
+        this.forceUpdate();
+        WondrousAPI.toggleLike({
+            post_id: this.props.data.id,
+            callback: null
+        });
+    },
+    clickRepost: function() {
+        WondrousActions.repost(this.props.data.id) ;
+    },
+    render: function(){
+        var is_it_mine = (this.props.data.username === UserStore.user.username);
+
+        return (
+            <div className="post-footer">
+                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
+                    <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_white.svg"} className="post-general-icon" />
+                </span>
+
+                {!is_it_mine ?
+                    <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50">
+                        <img src="/static/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
+                    </span>
+                    : null}
+
+                {is_it_mine ?
+                    <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50">
+                        <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
+                    </span>
+                    : null}
+            </div>
+        );
+    }
+})
+var Post = React.createClass({
+	render: function(){
+		var repost = null;
+		if (typeof this.props.data ==='undefined'){
+			return (
+				<div></div>
+			);
+		}
+
+		if (this.props.data.hasOwnProperty('repost')) {
+			repost = this.props.data.repost;
+			this.props.data.text = repost.text;
+			this.props.data.subject = repost.subject;
+		}
+
+		var thisText = this.props.data.text.split('\n');
+		return (
+			<div ref="post"  className="post-body round-3" >
+				<div style={{"backgroundColor": "#FFFFFF", "position":"relative"}}>
+					<UserTitle data={this.props.data} />
+				</div>
+				<div className="post-title">{this.props.data.subject}</div>
+				<div className="is-expanded" onClick={this.handleClick} id="slidePhoto">
+					<Photo ref="photo" data={this.props.data}/>
+				</div>
+				<div className="post-content" >
+						{
+							thisText.map(function(textChunk, idx) {
+								if (idx == thisText.length - 1) {
+									return textChunk;
+								} else {
+									return (
+										<span>{textChunk}<br/></span>
+									);
+								}
+							})
+						}
+					<hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
+                    <div className="post-comment-wrapper">
+                        <Comments post_id={this.props.data.id} data={this.props.comments} />
+                    </div>
+					<PostFooter data={this.props.data}/>
+				</div>
+			</div>
+		);
+	}
+});
 
 var PostModal = React.createClass({
-
+	mixins:[Reflux.listenTo(PostStore,"onPostUpdate")],
+	onPostUpdate: function(postData){
+		this.setState(postData);
+	},
+	getInitialState: function(){
+		return UserStore;
+	},
+	handleClose: function(evt){
+		WondrousActions.toggleCardModal(12);
+	},
+	stopProp: function(evt){
+		evt.preventDefault();
+		evt.stopPropagation();
+	},
 	render: function() {
+		divStyle = this.state.modalOpen? {display:"block"}:{display:"none"};
+
 		return (
-			<div className="_dimmer">
-				
+			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
+
 				<div className="vertical-center-wrapper">
 					<div className="vertical-center">
-						
+
 						<div className="modal-wrapper">
-							<div className="modal">
-								{/*
-									This is where the post goes (kinda):
-									<Post />
-
-									^ The above <Post /> component is the
-									expanded post, i.e.,
-										<UserTitle>
-										<Post Subject>
-										<Cover Photo>
-										<Post Content>
-										<Comments>
-										<Footer Buttons>
-
-									The only part of <Post /> that is clearly
-									not acceptable is the outermost wrapper div,
-									.masonry-brick. .masonry-brick is only good for
-									displaying the closed post in the grid.
-
-									Once the modal pops up, all we need is the
-									"post-body is-expanded" compontents.
-
-									And, needless to say, as long as the data is 
-									here to work with, I will continually work on 
-									the styles. 
-								*/}
-
-								<ol>
-									<li>This is where the post content goes!</li>
-									<li>This modal has some pretty crazy CSS</li>
-									<li>I will need to modify after the fact</li>
-									<li>We will need to prevent the background grid from scrolling
-									while the modal is visible.</li>
-									<li>The goal is to let the modal scroll
-									but not the background content.</li>
-									<li>See the comment I added to the PostModal.react.js file. </li>
-									<li>The styles for the PostModal are currently in the _post.scss file</li>
-									<li>Mabye all PostModal CSS would be better off in its own file...hmmm.</li>
-								</ol>
+							<div onClick={this.stopProp} className="modal">
+								<Post data={this.state.post} comments={this.state.comments}/>
 							</div>
 						</div>
 
