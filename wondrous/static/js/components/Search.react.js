@@ -68,8 +68,6 @@ var Search = React.createClass({
             );
         });
 
-
-
         return (
             <div className="search-result">
                 {this.state.error?this.state.error:this.state.error}

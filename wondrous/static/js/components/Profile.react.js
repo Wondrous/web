@@ -52,7 +52,7 @@ var Wall = React.createClass({
             <div>
                 {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
-                <div className="backdrop"></div>
+                <div className="--backdrop"></div>
                 <div className="grid-sizer" style={{"display": "none"}}></div>
                     {posts}
                 </div>
@@ -309,10 +309,9 @@ var PrivateProfile = React.createClass({
 var Profile = React.createClass({
     mixins: [Router.Navigation, Router.State, Reflux.listenTo(ProfileStore,"onProfileChange")],
     onProfileChange: function(){
-        if (!UserStore.loggedIn){
+        if (!UserStore.loggedIn) {
             this.transitionTo('/');
-        }else{
-
+        } else {
             this.forceUpdate();
         }
     },
@@ -337,8 +336,7 @@ var Profile = React.createClass({
         }
 
         return (
-            <div className="main-content" style={style}>
-
+            <div style={style}>
                 {!is_visible ? <PrivateProfile user={ProfileStore.user} /> :
                     <div>
                         <UserBar username={username}/>

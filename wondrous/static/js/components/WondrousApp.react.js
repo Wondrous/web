@@ -16,6 +16,7 @@ var Home = require('./Feed.react');
 var Login = require('../components/Authenticate.react').Login;
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
+var PostModal = require('./PostModal.react');
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Search = require('../components/Search.react');
@@ -33,6 +34,7 @@ var WondrousApp = React.createClass({
                 <div className="main-content">
                     <RouteHandler />
                 </div>
+                <PostModal />
             </div>
         );
     },
