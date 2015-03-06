@@ -65,22 +65,21 @@ var Wall = React.createClass({
 var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
 
-    handleClick: function() {
+    handleClick: function(evt) {
         evt.preventDefault();
-        if (typeof this.repost.username != 'undefined') {
+        if (typeof this.props.user.username != 'undefined') {
             this.transitionTo('/' + this.props.user.username);
         }
     },
     render: function() {
         var is_me = this.props.username === UserStore.user.username;
-        var hrefPlaceholder = "/" + this.props.user.username;
         return (
             <li className="user-itemizer">
-                <a className="avatar" href={hrefPlaceholder} onClick={this.handleClick}>
+                <a className="avatar" onClick={this.handleClick}>
                     <img className="profile-photo-med round-50" src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
                 </a>
                 <div className="user-itemizer-data">
-                    <a className="user-itemizer-data-name" href={hrefPlaceholder} onClick={this.handleClick} >{ this.props.user.name }</a>
+                    <a className="user-itemizer-data-name" onClick={this.handleClick} >{ this.props.user.name }</a>
                     <div className="user-itemizer-data-desc">
                         @{ this.props.user.username }
                     </div>
@@ -97,10 +96,12 @@ var Follower = React.createClass({
     onProfileChange: function(profileData){
         if (profileData.hasOwnProperty('followers')){
             this.setState({data:profileData.followers});
+        }else{
+            WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.followerPage);
         }
     },
     getInitialState: function() {
-        WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.follower_page);
+        WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.followerPage);
         return {data:ProfileStore.followers};
     },
 
@@ -135,13 +136,15 @@ var Following = React.createClass({
     onProfileChange: function(profileData){
         if (profileData.hasOwnProperty('following')){
             this.setState({data:profileData.following});
+        }else{
+            WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.followingPage);
         }
     },
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
 
     getInitialState: function() {
-        WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.following_page);
+        WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.followingPage);
         return {data:ProfileStore.following};
     },
 
@@ -185,7 +188,7 @@ var UserBar = React.createClass({
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
 
-    onProfileChange: function(){
+    onProfileChange: function(profileData){
         this.setState({data:ProfileStore.user});
     },
     getInitialState: function() {
