@@ -1423,6 +1423,38 @@ a:hover {
 .pseudo-bg-img-expanded {
   width: 100%; }
 
+.modal {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  margin: 100px 0; }
+
+.modal-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fbfbfb;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box; }
+
+.vertical-center {
+  display: table-cell;
+  vertical-align: middle; }
+
+.vertical-center-wrapper {
+  display: table;
+  height: 100%;
+  width: 100%; }
+
+._dimmer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(1, 1, 1, 0.725);
+  z-index: 100;
+  overflow: auto; }
+
 /* ==== NEW POST================ */
 .autocomplete-selected {
   position: relative;

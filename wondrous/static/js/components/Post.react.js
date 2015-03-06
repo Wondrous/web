@@ -147,9 +147,11 @@ var Photo = React.createClass({
 });
 
 var Post = React.createClass({
+    
     getInitialState: function() {
         return {comments: [], commentsVisible: false};
     },
+    
     handleClick: function() {
     	// add modal functionality
         var SPEED = 0;
