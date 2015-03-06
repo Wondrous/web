@@ -107,6 +107,10 @@ class BaseMixin(object):
         return cls.query.filter_by(**kwargs)
 
     @classmethod
+    def by_case_insensitive_username(cls, username):
+        return cls.query.filter(func.lower(cls.username) == func.lower(username))
+
+    @classmethod
     def count(cls):
         return cls.query.count()
 

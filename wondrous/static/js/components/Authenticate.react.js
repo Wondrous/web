@@ -123,7 +123,7 @@ var Login = React.createClass({
                 </form>
                 {this.err}
                 <div className="login-accept-terms" style={{"textAlign": "center","margin": "10px auto","width": "300px"}}>
-                    By clicking the above button and logging in to Cloaky, you have reviewed and accepted our Privacy Policy and Terms of Service
+                    By clicking the above button and logging in to Wondrous, you have reviewed and accepted our Privacy Policy and Terms of Service
                 </div>
             </div>
         );

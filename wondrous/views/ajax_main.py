@@ -652,10 +652,9 @@ class APIViews(BaseHandler):
         if Sanitize.is_valid_email(credential):
             this_user = User.by_kwargs(email=credential).first()
         else:
-            this_user = User.by_kwargs(username=credential).first()
+            this_user = User.by_case_insensitive_username(credential).first()
 
         if this_user and this_user.validate_password(password) and not this_user.is_banned:
-
             # Reactivating a user when they log in
             # TODO -- this needs to be more 'offical'
             self._set_session_headers(this_user)

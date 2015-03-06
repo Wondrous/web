@@ -271,8 +271,7 @@ def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 
     def _capitalize(word, punct=set(['"','\'','`','#'])):
         first_char = word[0]
         if first_char in punct:
-            word = word[1:]
-            return first_char + word.capitalize()
+            return first_char + word[1:].capitalize()
         else:
             return word.capitalize()
 
