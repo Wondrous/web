@@ -935,7 +935,7 @@ a:hover {
 
 .post-content {
   background-color: white;
-  /*padding: 16px;*/
+  padding: 16px;
   font-family: arial, helvetica, sans-serif;
   font-weight: normal;
   font-size: 17px;
