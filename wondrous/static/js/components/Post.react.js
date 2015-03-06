@@ -246,7 +246,7 @@ var Post = React.createClass({
         var thisText = this.props.data.text.split('\n');
         return (
             <div ref="brick" className="masonry-brick">
-                <div ref="post"  className="post-body round-3" >
+                <div ref="post"  className="post-body round-3">
                     <div style={{"backgroundColor": "#FFFFFF", "position":"relative"}}>
                         <UserTitle data={this.props.data} />
                     </div>
@@ -254,7 +254,6 @@ var Post = React.createClass({
                     <div onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data}/>
                     </div>
-
                 </div>
             </div>
             );

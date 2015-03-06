@@ -113,6 +113,10 @@ var Comments = React.createClass({
 
 var Photo = React.createClass({
 
+	handleClose: function(evt){
+		WondrousActions.toggleCardModal(12);
+	},
+
     render: function() {
         if (this.props.data.hasOwnProperty('repost')) {
             this.props.data = this.props.data.repost;
@@ -122,7 +126,7 @@ var Photo = React.createClass({
         };
 
         return (
-            <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
+            <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     {/*<div className="post-subject-text nh">
                         <div className="post-subject-wrapper">
                             <div className="post-subject-text-position">
@@ -199,7 +203,7 @@ var Post = React.createClass({
 					<UserTitle data={this.props.data} />
 				</div>
 				<div className="post-title">{this.props.data.subject}</div>
-				<div className="is-expanded" onClick={this.handleClick} id="slidePhoto">
+				<div onClick={this.handleClick} id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
 				<div className="post-content" >
@@ -214,12 +218,12 @@ var Post = React.createClass({
 								}
 							})
 						}
-					<hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
-                    <div className="post-comment-wrapper">
-                        <Comments post_id={this.props.data.id} data={this.props.comments} />
-                    </div>
-					<PostFooter data={this.props.data}/>
 				</div>
+				<hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
+                <div className="post-comment-wrapper">
+                    <Comments post_id={this.props.data.id} data={this.props.comments} />
+                </div>
+				<PostFooter data={this.props.data} />
 			</div>
 		);
 	}
@@ -227,19 +231,24 @@ var Post = React.createClass({
 
 var PostModal = React.createClass({
 	mixins:[Reflux.listenTo(PostStore,"onPostUpdate")],
+	
 	onPostUpdate: function(postData){
 		this.setState(postData);
 	},
+
 	getInitialState: function(){
 		return UserStore;
 	},
+
 	handleClose: function(evt){
 		WondrousActions.toggleCardModal(12);
 	},
+
 	stopProp: function(evt){
 		evt.preventDefault();
 		evt.stopPropagation();
 	},
+
 	render: function() {
 		divStyle = this.state.modalOpen? {display:"block"}:{display:"none"};
 
