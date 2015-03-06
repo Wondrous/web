@@ -72,8 +72,6 @@ class PostManager(BaseManager):
 
     @staticmethod
     def post_count(user,user_id):
-        f = DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).first()
-        
         return DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).count()
 
     @staticmethod

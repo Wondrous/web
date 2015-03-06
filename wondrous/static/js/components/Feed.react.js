@@ -39,9 +39,11 @@ var Feed = React.createClass({
         MasonryMixin('masonryContainer', masonryOptions),
         Reflux.listenTo(FeedStore,'onFeedUpdate'),
         Reflux.listenTo(UserStore,'onUserUpdate'),
+        Router.State
     ],
 
     getInitialState: function() {
+        console.log("post_id",this.getParams().post_id);
         return {data: FeedStore.getFeed(), paging: false};
     },
 

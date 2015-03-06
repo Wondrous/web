@@ -75,6 +75,9 @@ var Comment = React.createClass({
 });
 
 var Comments = React.createClass({
+    getInitialState: function(){
+        return {data:[]};
+    },
     handleCommentPost: function(err,res){
         if (err == null){
             console.log("You have successfully posted a comment", res);

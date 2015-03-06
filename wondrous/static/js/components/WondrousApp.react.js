@@ -46,6 +46,7 @@ var Routes = (
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
         <Route name="search" path="/search/:search" handler={Search}/>
+        <Route name="post" path="/post/:post_id" handler={Home}/>
         <Route name="settings" path="/settings/" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>
