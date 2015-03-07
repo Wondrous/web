@@ -51,6 +51,11 @@ class Object(Base, BaseMixin):
         """
         return DBSession.query(Object).filter(or_(Object.subject.ilike("%{q}%".format(q=text)),Object.text.ilike("%{q}%".format(q=text)))).limit(num)
 
+    def json(self,level=0):
+        data = super(Object,self).json(level)
+        if 'id' in data:
+            del data['id']
+        return data 
 
 class ObjectLink(Base, BaseMixin):
 

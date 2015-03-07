@@ -65,25 +65,12 @@ var Feed = React.createClass({
         this.forceUpdate();
     },
 
-    checkWindowScroll: function(){
-        // Get scroll pos & window data
-        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        var s = document.body.scrollTop;
-        var scrolled = (h + s) > document.body.offsetHeight;
 
-        // If scrolled enough, not currently paging and not complete...
-        if(scrolled && !FeedStore.paging && !FeedStore.donePaging) {
-            FeedStore.paging = true;
-            console.log("getting more page")
-            FeedStore.incrementPage();
-            WondrousActions.loadFeed(FeedStore.current_page);
-        }
-    },
 
     // Add change listener to stores
     componentDidMount: function() {
         WondrousActions.loadFeed(FeedStore.current_page);
-        window.addEventListener('scroll', this.checkWindowScroll);
+
     },
 
     render: function() {
@@ -101,6 +88,7 @@ var Feed = React.createClass({
                         <div className="grid-sizer" style={{"display": "none"}}></div>
                         {posts}
                     </div>
+
                 </div>
             </div>
         );

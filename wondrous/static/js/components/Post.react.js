@@ -21,7 +21,7 @@ var UserTitle = React.createClass({
     },
 
     render: function() {
-        if(typeof this.props.data.username === 'undefined'){
+        if(typeof this.props.data === 'undefined'){
             return (<div></div>);
         }
 
@@ -163,11 +163,11 @@ var Post = React.createClass({
     	// add modal functionality
         if (!evt.metaKey){
             evt.preventDefault();
-
+            console.log("getting shit for",this.props.data);
             WondrousActions.newPostLoad(this.props.data.id);
             WondrousActions.updatePost(this.props.data);
 
-            WondrousActions.toggleCardModal();
+            WondrousActions.openCardModal();
         }
     },
 

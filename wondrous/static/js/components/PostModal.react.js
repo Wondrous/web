@@ -12,20 +12,20 @@ var UserTitle = React.createClass({
     handleClick: function(evt) {
         if (typeof this.props.data.username != 'undefined') {
 
-            WondrousActions.toggleCardModal();
+            WondrousActions.closeCardModal();
             // this.transitionTo('/' + this.props.data.username);
         }
     },
 
     handleClickOnOwner: function(evt) {
         if (typeof this.repost.username != 'undefined') {
-            WondrousActions.toggleCardModal();
+            WondrousActions.closeCardModal();
             // this.transitionTo('/' + this.repost.username);
         }
     },
 
     render: function() {
-        if(typeof this.props.data.username === 'undefined'){
+        if(typeof this.props.data === 'undefined'){
             return (<div></div>);
         }
         var name = this.props.data.name;
@@ -56,7 +56,7 @@ var Comment = React.createClass({
     handleClick: function(evt) {
         evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
-            WondrousActions.toggleCardModal();
+            WondrousActions.closeCardModal();
             this.transitionTo('/' + this.props.data.username);
         }
     },
@@ -137,7 +137,7 @@ var Comments = React.createClass({
 var Photo = React.createClass({
 
 	handleClose: function(evt){
-		WondrousActions.toggleCardModal();
+		WondrousActions.closeCardModal();
 	},
 
     render: function() {
@@ -149,7 +149,7 @@ var Photo = React.createClass({
         };
 
         return (
-            <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
+            <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     {/*<div className="post-subject-text nh">
                         <div className="post-subject-wrapper">
                             <div className="post-subject-text-position">
@@ -166,7 +166,7 @@ var Photo = React.createClass({
 
 var PostFooter = React.createClass({
     deletePost: function () {
-        WondrousActions.toggleCardModal();
+        WondrousActions.closeCardModal();
         WondrousActions.deletePost(this.props.data.id);
     },
     likePost: function() {
@@ -265,7 +265,7 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt){
-		WondrousActions.toggleCardModal();
+		WondrousActions.closeCardModal();
 	},
 
 	stopProp: function(evt){

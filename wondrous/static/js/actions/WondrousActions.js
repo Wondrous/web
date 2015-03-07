@@ -147,7 +147,10 @@ var WondrousActions = Reflux.createActions({
 
     "searchError": {},
 
-    "toggleCardModal": {},
+    "openCardModal": {},
+
+    "closeCardModal": {},
+
 
     // loads the post onto modal
     "updatePost": {},
@@ -418,7 +421,7 @@ WondrousActions.loadPost.listen(function(post_id){
         callback: function(err,res){
             if (err == null){
                 WondrousActions.updatePost(res);
-                WondrousActions.toggleCardModal();
+                WondrousActions.openCardModal();
             }else{
                 // WondrousActions.uploadError(err);
             }
