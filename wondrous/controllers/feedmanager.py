@@ -42,9 +42,6 @@ class FeedManager(BaseManager):
             order_by(desc(FeedPostLink.created_at)).filter(Post.is_active==True).limit(per_page).offset(page*per_page).all()
         return posts
 
-            # users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
-            #     filter(Vote.user_id == user_id).filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
-
 
     @classmethod
     def get_majority_posts_json(cls, user, page=0):

@@ -62,11 +62,11 @@ var ProfileLink = React.createClass({
         var img_src = (typeof this.props.user.ouuid !== 'undefined')? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.user.username;
         return (
-            <a id="linkToProfile" href={hrefPlaceholder} onClick={this.handleClick} className="general-text banner-user-name">
+            <Link id="linkToProfile" to={hrefPlaceholder}  className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
                     src={img_src}/>
                 {this.props.user.name}
-            </a>);
+            </Link>);
     }
 });
 
