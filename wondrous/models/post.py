@@ -59,13 +59,13 @@ class Post(Base, BaseMixin):
     set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod
-    def get_all(cls,user_id):
+    def get_all(cls, user_id):
         from wondrous.models.object import Object
         return cls.query.join(Object).filter(cls.user_id == user_id).\
                                     order_by(desc(Object.created_at)).all()
 
     @classmethod
-    def toggle_post_visibility(cls,object_id, current_user_id):
+    def toggle_post_visibility(cls, object_id, current_user_id):
 
         """
             PURPOSE: Hide or show an object accross the site.

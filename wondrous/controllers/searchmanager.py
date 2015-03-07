@@ -1,27 +1,23 @@
-import logging
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-from sqlalchemy import or_
+#
+# Company: WONDROUS
+# Created by: Ziyuan Liu
+#
+# CONTROLLERS/SEARCHMANAGER.PY
+#
 
 from wondrous.models import (
-    DBSession,
-    FeedPostLink,
     Object,
-    Post,
-    PostTagLink,
-    Tag,
-    Notification,
-    Comment,
-    User
-    # Vote,
+    User,
 )
-
-from wondrous.controllers import VoteManager
 
 class SearchManager:
 
     @staticmethod
     def user_search_json(user,search,page):
-        users = User.by_id_like(search,num=15).offset(page*15).all()
+        users = User.by_id_like(search, num=15).offset(page*15).all()
         retval = []
         for user in users:
             data = user.json()
@@ -32,7 +28,7 @@ class SearchManager:
 
     @staticmethod
     def post_search_json(user,search,page):
-        objs = Object.by_text_like(search,num=20).offset(page*15).all()
+        objs = Object.by_text_like(search, num=20).offset(page*15).all()
         retval = []
         for obj in objs:
             post = obj.post

@@ -15,6 +15,7 @@ from sqlalchemy import (
     Boolean,
     Column,
     DateTime,
+    or_,
     Unicode,
     ForeignKey,
 )
@@ -83,9 +84,12 @@ class User(Base, PasswordManager, BaseMixin):
         """
 
         if not ascii:
-            return cls.query.filter(cls.name.ilike("%{q}%".format(q=key))).limit(num)
+            base = cls.query.filter(cls.name.ilike("%{q}%".format(q=key)))
         elif ascii:
-            return cls.query.filter(cls.name.ilike("%{q}%".format(q=key))).limit(num)  # ascii_name
+            base = cls.query.filter(cls.name.ilike("%{q}%".format(q=key)))
+
+        return base.filter(cls.is_active==True).\
+                    filter(cls.is_banned==False).limit(num)  # ascii_name
 
     @classmethod
     def get_all_banned_users(cls):

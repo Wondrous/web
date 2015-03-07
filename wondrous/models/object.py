@@ -33,12 +33,14 @@ class Object(Base, BaseMixin):
         objects should not be directly accessible by users
         objects are simply the goods carried by posts (the containing structure)
     """
+
     # user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     subject = Column(Unicode, default=None, nullable=True)
     text = Column(Unicode, default=None)
     mime_type = Column(Unicode, nullable=True)
     ouuid = Column(Unicode, nullable=True)
     # comments = relationship("Comment",cascade="delete")
+
     @classmethod
     def by_text_like(cls, text, num=50):
 
@@ -46,7 +48,8 @@ class Object(Base, BaseMixin):
             TODO: Probably should go into its own controllers/personmanager.py file
         """
 
-        return DBSession.query(Object).filter(or_(Object.subject.ilike("%{q}%".format(q=text)),Object.text.ilike("%{q}%".format(q=text)))).limit(num)
+        return DBSession.query(Object).filter(or_(Object.subject.ilike("%{q}%".format(q=text)),
+                                                  Object.text.ilike("%{q}%".format(q=text)))).limit(num)
 
 
 class ObjectLink(Base, BaseMixin):
@@ -62,7 +65,7 @@ class ObjectLink(Base, BaseMixin):
 
     @classmethod
     def get(cls,url):
-        return super(ObjectLink,cls).by_kwargs(url=url).first()
+        return super(ObjectLink, cls).by_kwargs(url=url).first()
 
     @classmethod
     def add(object_link_data):
