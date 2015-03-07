@@ -217,7 +217,6 @@ var UserBar = React.createClass({
 
     handleClick: function() {
         var is_me = this.props.username === UserStore.user.username;
-        console.log("me",this.props.username, UserStore.user.username);
         if (is_me) {
             WondrousActions.togglePictureModal();
         }
@@ -226,7 +225,6 @@ var UserBar = React.createClass({
     render: function() {
         var username = this.props.username;
         this.is_private = ProfileStore.user.is_private;
-        console.log("check out profile",this.state.data);
         this.am_following = this.state.data.following==true;
         var is_me = username === UserStore.user.username;
 
@@ -322,6 +320,14 @@ var Profile = React.createClass({
 
     render: function () {
         var username = this.getParams().username;
+        if(ProfileStore.user.username !== username){
+            WondrousActions.newProfile();
+            WondrousActions.loadProfile(username);
+            WondrousActions.loadWall(username,ProfileStore.current_page);
+            return (
+                <div></div>
+            );
+        }
         var am_following = ProfileStore.user.following;
         var is_private = ProfileStore.user.is_private;
         var is_visible = (typeof am_following !== 'undefined' && am_following == true) || (typeof is_private !== 'undefined' && !is_private == true);
@@ -331,12 +337,6 @@ var Profile = React.createClass({
         // we don't load until we are loaded :)
         if (loaded) {
             style.display = 'block';
-        }
-
-        if(ProfileStore.user.username !== username){
-            WondrousActions.loadProfile(username);
-            WondrousActions.loadWall(username,ProfileStore.current_page);
-            WallStore.username = username;
         }
 
         return (

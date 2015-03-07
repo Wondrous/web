@@ -152,6 +152,8 @@ var WondrousActions = Reflux.createActions({
     // loads the post onto modal
     "updatePost": {},
 
+    "newProfile": {}
+
 });
 
 WondrousActions.registerCheck.listen(function(name, username, email, password){
