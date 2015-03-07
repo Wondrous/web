@@ -149,7 +149,7 @@ var Photo = React.createClass({
         };
 
         return (
-            <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
+            <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     {/*<div className="post-subject-text nh">
                         <div className="post-subject-wrapper">
                             <div className="post-subject-text-position">
