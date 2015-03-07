@@ -3,42 +3,45 @@ var WondrousActions = require('../actions/WondrousActions');
 var Post = require('./Post.react');
 var PostStore = require('../stores/PostStore');
 var UserStore = require('../stores/UserStore');
+var Link = Router.Link;
 
 var UserTitle = React.createClass({
     repost: null,
     mixins: [Router.Navigation],
 
     handleClick: function(evt) {
-        evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
+
             WondrousActions.toggleCardModal();
-            this.transitionTo('/' + this.props.data.username);
+            // this.transitionTo('/' + this.props.data.username);
         }
     },
 
     handleClickOnOwner: function(evt) {
-        evt.preventDefault();
         if (typeof this.repost.username != 'undefined') {
             WondrousActions.toggleCardModal();
-            this.transitionTo('/' + this.repost.username);
+            // this.transitionTo('/' + this.repost.username);
         }
     },
 
     render: function() {
+        if(typeof this.props.data.username === 'undefined'){
+            return (<div></div>);
+        }
         var name = this.props.data.name;
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
-            var hrefRepostPlaceholder = this.repost.username;
+            var hrefRepostPlaceholder = '/'+this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        var hrefPlaceholder = this.props.data.username;
+        var hrefPlaceholder = '/'+this.props.data.username;
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow" style={this.repost ? {top:0} : null}>
-                    <a onClick={this.handleClick}>{name}</a>
+                    <Link to={hrefPlaceholder} onClick={this.handleClick}>{name}</Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
-                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
+                    {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder} onClick={this.handleClickOnOwner}>{this.repost.name}</Link> : null}
                 </span>
             </div>
             );
@@ -133,7 +136,7 @@ var Comments = React.createClass({
 var Photo = React.createClass({
 
 	handleClose: function(evt){
-		WondrousActions.toggleCardModal(12);
+		WondrousActions.toggleCardModal();
 	},
 
     render: function() {
@@ -261,7 +264,7 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt){
-		WondrousActions.toggleCardModal(12);
+		WondrousActions.toggleCardModal();
 	},
 
 	stopProp: function(evt){

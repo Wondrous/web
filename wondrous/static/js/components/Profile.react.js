@@ -65,23 +65,15 @@ var Wall = React.createClass({
 var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
 
-    handleClick: function(evt) {
-        if (typeof this.props.user.username != 'undefined') {
-            if(!evt.metaKey){
-                evt.preventDefault();
-                this.transitionTo('/' + this.props.user.username);
-            }
-        }
-    },
     render: function() {
         var hrefPlaceholder = "/" + this.props.user.username;
         return (
             <li className="user-itemizer">
-                <Link className="avatar" to={hrefPlaceholder} onClick={this.handleClick}>
+                <Link className="avatar" to={hrefPlaceholder}>
                     <img className="profile-photo-med round-50" src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
                 </Link>
                 <div className="user-itemizer-data">
-                    <Link className="user-itemizer-data-name" to={hrefPlaceholder} onClick={this.handleClick} >{ this.props.user.name }</Link>
+                    <Link className="user-itemizer-data-name" to={hrefPlaceholder} >{ this.props.user.name }</Link>
                     <div className="user-itemizer-data-desc">
                         @{ this.props.user.username }
                     </div>

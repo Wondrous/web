@@ -42,13 +42,18 @@ var Feed = React.createClass({
         Router.State
     ],
 
-    getInitialState: function() {
+    checkForParams: function(){
         var post_id = this.getParams().post_id;
         console.log("post_id",this.getParams().post_id);
         if (typeof post_id !== 'undefined'){
-            WondrousActions.loadPost(post_id);
             WondrousActions.newPostLoad(post_id);
+            WondrousActions.loadPost(post_id);
         }
+    },
+
+
+    getInitialState: function() {
+        this.checkForParams();
         return {data: FeedStore.getFeed(), paging: false};
     },
 

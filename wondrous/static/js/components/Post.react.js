@@ -1,7 +1,7 @@
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
-
+var Link = Router.Link;
 
 var UserTitle = React.createClass({
     repost: null,
@@ -21,105 +21,109 @@ var UserTitle = React.createClass({
     },
 
     render: function() {
+        if(typeof this.props.data.username === 'undefined'){
+            return (<div></div>);
+        }
+
         var name = this.props.data.name;
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
-            var hrefRepostPlaceholder = this.repost.username;
+            var hrefRepostPlaceholder = '/' + this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        var hrefPlaceholder = this.props.data.username;
+        var hrefPlaceholder = '/' + this.props.data.username;
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow" style={this.repost ? {top:0} : null}>
-                    <a onClick={this.handleClick}>{name}</a>
+                    <Link to={hrefPlaceholder}>{name}</Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
-                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
+                    {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder}>{this.repost.name}</Link> : null}
                 </span>
             </div>
             );
     }
 });
 
-var Comment = React.createClass({
-    mixins: [Router.Navigation],
-
-
-    handleClick: function(evt) {
-        evt.preventDefault();
-        if (typeof this.props.data.username != 'undefined') {
-            this.props.dismiss();
-            this.transitionTo('/' + this.props.data.username);
-
-        }
-    },
-
-    render: function() {
-        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        var hrefPlaceholder = "/" + this.props.data.username;
-        return (
-            <div className="post-comment">
-                <div className="post-comment-image-wrapper round-2">
-                    <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
-                </div>
-                <div className="post-comment-content">
-                    <a onClick={this.handleClick} className="post-comment-un">
-                        {this.props.data.name}
-                        <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
-                    </a>
-                    <span>{this.props.data.text}</span>
-
-                </div>
-            </div>
-        );
-    }
-});
-
-var Comments = React.createClass({
-    getInitialState: function(){
-        return {data:[]};
-    },
-    handleCommentPost: function(err,res){
-        if (err == null){
-            console.log("You have successfully posted a comment", res);
-            this.refs.commentBox.getDOMNode().value = ''
-            this.refs.commentBox.getDOMNode().blur();
-            this.props.data.push(res);
-            this.forceUpdate();
-        } else {
-
-        }
-    },
-    onComment: function(evt){
-        evt.preventDefault();
-        var text = this.refs.commentBox.getDOMNode().value.trim();
-        if (text.length > 0) {
-            WondrousAPI.commentOnPost({
-                text:text,
-                post_id: this.props.post_id,
-                callback: this.handleCommentPost
-            });
-        } else {
-            // Send out a friendly error: "Please add some text!"
-        }
-    },
-    render: function() {
-        var comments = this.props.data.map(function(comment, index) {
-            return (
-                <Comment key={comment.id} data={comment} dismiss={this.dismiss}/>
-            );
-        },this.props);
-
-        return (
-            <div>
-                {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
-                <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
-                    <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
-                    <input className="post-comment-btn" type="submit" value="Share" />
-                </form>
-            </div>);
-    }
-});
+// var Comment = React.createClass({
+//     mixins: [Router.Navigation],
+//
+//
+//     handleClick: function(evt) {
+//         evt.preventDefault();
+//         if (typeof this.props.data.username != 'undefined') {
+//             this.props.dismiss();
+//             this.transitionTo('/' + this.props.data.username);
+//
+//         }
+//     },
+//
+//     render: function() {
+//         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+//         var hrefPlaceholder = "/" + this.props.data.username;
+//         return (
+//             <div className="post-comment">
+//                 <div className="post-comment-image-wrapper round-2">
+//                     <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
+//                 </div>
+//                 <div className="post-comment-content">
+//                     <Link to={hrefPlaceholder} className="post-comment-un">
+//                         {this.props.data.name}
+//                         <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
+//                     </Link>
+//                     <span>{this.props.data.text}</span>
+//
+//                 </div>
+//             </div>
+//         );
+//     }
+// });
+//
+// var Comments = React.createClass({
+//     getInitialState: function(){
+//         return {data:[]};
+//     },
+//     handleCommentPost: function(err,res){
+//         if (err == null){
+//             console.log("You have successfully posted a comment", res);
+//             this.refs.commentBox.getDOMNode().value = ''
+//             this.refs.commentBox.getDOMNode().blur();
+//             this.props.data.push(res);
+//             this.forceUpdate();
+//         } else {
+//
+//         }
+//     },
+//     onComment: function(evt){
+//         evt.preventDefault();
+//         var text = this.refs.commentBox.getDOMNode().value.trim();
+//         if (text.length > 0) {
+//             WondrousAPI.commentOnPost({
+//                 text:text,
+//                 post_id: this.props.post_id,
+//                 callback: this.handleCommentPost
+//             });
+//         } else {
+//             // Send out a friendly error: "Please add some text!"
+//         }
+//     },
+//     render: function() {
+//         var comments = this.props.data.map(function(comment, index) {
+//             return (
+//                 <Comment key={comment.id} data={comment} dismiss={this.dismiss}/>
+//             );
+//         },this.props);
+//
+//         return (
+//             <div>
+//                 {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
+//                 <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
+//                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
+//                     <input className="post-comment-btn" type="submit" value="Share" />
+//                 </form>
+//             </div>);
+//     }
+// });
 
 var Photo = React.createClass({
 
@@ -153,37 +157,16 @@ var Post = React.createClass({
         return {comments: [], commentsVisible: false};
     },
 
-    handleClick: function() {
+    handleClick: function(evt) {
     	// add modal functionality
-        WondrousActions.newPostLoad(this.props.data.id);
-        WondrousActions.updatePost(this.props.data);
+        if (!evt.metaKey){
+            evt.preventDefault();
+            
+            WondrousActions.newPostLoad(this.props.data.id);
+            WondrousActions.updatePost(this.props.data);
 
-        WondrousActions.toggleCardModal(this.props.data.id);
-
-        // var SPEED = 0;
-        // var thisPost = $(this.refs.post.getDOMNode());
-        // var thisBrick = $(this.refs.brick.getDOMNode());
-        // var thisPostContent = thisPost.find('.post-content');
-        // var thisCoverPhoto = thisPost.find('.post-cover-photo');
-        //
-        // $('.backdrop').toggleClass('dimmer');
-        // thisPost.css('z-index', 9);
-        //
-        // $('.post-body').not(thisPost).removeClass('is-expanded');
-        // $('.post-content').not(thisPostContent).slideUp(SPEED);
-        // $('.post-cover-photo').not(thisCoverPhoto).removeClass('no-bottom-border');
-        // $('.post-content').not(thisPostContent).removeClass('no-top-border');
-        // $('.masonry-brick').not(thisBrick).removeClass('post-presentation');
-        //
-        // thisPost.toggleClass('is-expanded');
-        // thisPost.find('.pseudo-bg-img').toggleClass('pseudo-bg-img-closed').toggleClass('pseudo-bg-img-expanded');
-        // thisPost.find('.post-cover-photo').toggleClass('no-bottom-border');
-        // thisPostContent.toggleClass('no-top-border');
-        //
-        // thisBrick.toggleClass('post-presentation');
-        // thisPostContent.slideToggle(SPEED);
-        //
-        // $('html, body').animate({ scrollTop: thisBrick.offset().top-60 }, 300);
+            WondrousActions.toggleCardModal();
+        }
     },
 
     deletePost: function () {
@@ -243,6 +226,7 @@ var Post = React.createClass({
             this.props.data.subject = repost.subject;
         }
 
+
         var thisText = this.props.data.text.split('\n');
         return (
             <div ref="brick" className="masonry-brick">
@@ -251,9 +235,9 @@ var Post = React.createClass({
                         <UserTitle data={this.props.data} />
                     </div>
                     <div className="post-title">{this.props.data.subject}</div>
-                    <div onClick={this.handleClick} id="slidePhoto">
+                    <a href={"/post/"+this.props.data.id} onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data}/>
-                    </div>
+                    </a>
                 </div>
             </div>
             );

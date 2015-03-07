@@ -37,7 +37,7 @@ var PostStore = Reflux.createStore({
         this.commentPage++;
     },
 
-    toggleCardModal: function(post_id){
+    toggleCardModal: function(){
         this.modalOpen=!this.modalOpen;
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
     },

@@ -21,19 +21,7 @@ from wondrous.models import (
 from wondrous.models.modelmixins import BaseMixin
 
 class PostView(Base, BaseMixin):
-
-    """
-        Vote keeps track of relationship status and data
-        ALWAYS between an user and user/object
-
-        If VOTE_TYPE is 0, the user is building a relationship with an object
-        else 1, the user is building a relationship with another user
-
-        This is always a one to one (one to many abstracted)
-        Vote is similar to an intermediary model
-
-    """
-    user_id = sa.Column(sa.BigInteger,sa.ForeignKey('user.id'), nullable=False)
+    user_id = sa.Column(sa.BigInteger,sa.ForeignKey('user.id'), nullable=False, index = True)
     user = sorm.relationship("User", backref=sorm.backref("views"))
-    post_id = sa.Column(sa.BigInteger,sa.ForeignKey('post.id'), nullable=False)
+    post_id = sa.Column(sa.BigInteger,sa.ForeignKey('post.id'), nullable=False, index = True)
     post = sorm.relationship("Post", backref=sorm.backref("views"))
