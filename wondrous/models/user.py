@@ -7,14 +7,14 @@
 # MODELS/USER.PY
 #
 
-from datetime import datetime
 import unidecode
+from datetime import datetime
+
 from sqlalchemy import (
     BigInteger,
     Boolean,
     Column,
     DateTime,
-    #Integer,
     Unicode,
     ForeignKey,
 )
@@ -31,7 +31,6 @@ from wondrous.models import (
 )
 
 from wondrous.models.modelmixins import BaseMixin
-
 from wondrous.utilities.validation_utilities import PasswordManager
 
 DEFAULT_PROFILE_PICTURE_PATH = "/static/pictures/defaults/p.default-profile-picture.jpg"

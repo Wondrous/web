@@ -9,7 +9,6 @@
 #
 
 from sqlalchemy import desc
-from sqlalchemy.orm import joinedload
 
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.votemanager import VoteManager
@@ -23,8 +22,6 @@ from wondrous.models import (
 )
 
 from wondrous.utilities.general_utilities import title_case
-
-import logging
 
 class FeedManager(BaseManager):
     MAJORITY, PRIORITY = range(2)

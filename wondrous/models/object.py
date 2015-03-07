@@ -13,6 +13,7 @@ from sqlalchemy import (
     Boolean,
     Column,
     ForeignKey,
+    or_,
     Unicode,
 )
 
@@ -22,11 +23,6 @@ from wondrous.models import (
     Base,
     DBSession,
 )
-from sqlalchemy import or_
-
-from wondrous.models.tag import Tag
-
-from wondrous.utilities.validation_utilities import ValidateLink
 
 from wondrous.models.modelmixins import BaseMixin
 
@@ -49,6 +45,7 @@ class Object(Base, BaseMixin):
         """
             TODO: Probably should go into its own controllers/personmanager.py file
         """
+
         return DBSession.query(Object).filter(or_(Object.subject.ilike("%{q}%".format(q=text)),Object.text.ilike("%{q}%".format(q=text)))).limit(num)
 
     def json(self,level=0):
@@ -62,6 +59,7 @@ class ObjectLink(Base, BaseMixin):
     """
         OBJECT_TYPE: 1 --> LINK
     """
+
     url = Column(Unicode, nullable=False)
     scheme = Column(Unicode, nullable=False, default=unicode("http"))
     mime_type = Column(Unicode, nullable=True)
@@ -91,6 +89,7 @@ class ObjectLink(Base, BaseMixin):
         DBSession.flush()
 
         return new_object_link
+
 
 class ObjectFile(Base, BaseMixin):
 
@@ -136,6 +135,7 @@ class ObjectFile(Base, BaseMixin):
         return new_object_file
 
 class LinkToObject(Base, BaseMixin):
+
     object_id = Column(BigInteger, ForeignKey('object.id'), nullable=False)
     object_link_id = Column(BigInteger, ForeignKey('object_link.id'), nullable=False)
 
