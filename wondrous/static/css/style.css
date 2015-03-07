@@ -1882,6 +1882,14 @@ a:hover {
   width: 25px;
   margin-top: 2px; }
 
+.post-comment-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: 'heydings_iconsregular';
+  color: #d2d2d2;
+  cursor: pointer; }
+
 .top-banner {
   position: fixed;
   top: 0;

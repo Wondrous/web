@@ -72,11 +72,25 @@ var Comment = React.createClass({
                         <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
-                    {is_it_mine?<button onClick={this.onDelete}>delete</button>:null}
+                    {is_it_mine ? 
+                    	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
+                    	: null}
                 </div>
             </div>
         );
-    }
+    },
+
+    componentDidMount: function() {
+    	$(".post-comment-delete-btn").hide();
+		$(document).on({
+		    mouseenter: function(e) {
+				$(this).find(".post-comment-delete-btn").show();
+		    },
+		    mouseleave: function(e) {
+				$(this).find(".post-comment-delete-btn").hide();		
+		    }
+		}, '.post-comment');
+    },
 });
 
 var Comments = React.createClass({
