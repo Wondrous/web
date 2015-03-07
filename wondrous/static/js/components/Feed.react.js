@@ -69,8 +69,8 @@ var Feed = React.createClass({
 
     // Add change listener to stores
     componentDidMount: function() {
-        WondrousActions.loadFeed(FeedStore.current_page);
-
+        WondrousActions.loadFeed(FeedStore.currentPage);
+        WondrousActions.feedLoaded();
     },
 
     render: function() {

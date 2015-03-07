@@ -30,6 +30,9 @@ var defaultUser = {};
 
 var UserStore = Reflux.createStore({
     listenables: WondrousActions,
+    handleUnload: function(){
+        pushstream.disconnect();
+    },
 
     init:function(){
         this.user = defaultUser;
@@ -39,6 +42,8 @@ var UserStore = Reflux.createStore({
 
         this.sidebarType = null;
         this.modalType = null;
+        this.pageType = null;
+        window.onbeforeunload = this.handleUnload;
         WondrousActions.auth();
     },
 
@@ -106,6 +111,14 @@ var UserStore = Reflux.createStore({
         this.sidebarType = WondrousConstants.SHOW_NOTIFICATIONS;
         this.toggleSideBar();
         this.trigger({sidebarType:this.sidebarType});
+    },
+
+    wallLoaded: function(){
+        this.pageType = WondrousConstants.PROFILE_PAGE;
+    },
+
+    feedLoaded: function(){
+        this.pageType = WondrousConstants.FEED_PAGE;
     }
 
 });

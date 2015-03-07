@@ -155,7 +155,11 @@ var WondrousActions = Reflux.createActions({
     // loads the post onto modal
     "updatePost": {},
 
-    "newProfile": {}
+    "newProfile": {},
+
+    "wallLoaded": {},
+
+    "feedLoaded": {}
 
 });
 

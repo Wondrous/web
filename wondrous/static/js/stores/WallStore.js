@@ -10,7 +10,7 @@ var WallStore = Reflux.createStore({
     init:function(){
         this.wall = defaultWall;
         this.posts = defaultPosts;
-        this.current_page = 0;
+        this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
         this.username = ''
@@ -21,7 +21,7 @@ var WallStore = Reflux.createStore({
     newProfile: function(profileData){
         this.wall = [];
         this.posts = {};
-        this.current_page = 0;
+        this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
         this.username = '';
@@ -60,7 +60,7 @@ var WallStore = Reflux.createStore({
     },
 
     incrementPage: function(){
-        this.current_page++;
+        this.currentPage++;
         // this.refreshFromServer();
     },
 

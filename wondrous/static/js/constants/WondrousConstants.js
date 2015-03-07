@@ -8,4 +8,6 @@ module.exports = keyMirror({
     SHOW_NOTIFICATIONS: null,   // Show sidebar notifications
     MODALTYPE_PICTURE: null,    // modaltype picture
     MODALTYPE_POST: null,       // modaltype picture
+    PROFILE_PAGE: null,
+    FEED_PAGE: null
 });

@@ -10,7 +10,7 @@ var FeedStore = Reflux.createStore({
     init:function(){
         this.feed = defaultFeed;
         this.posts = defaultPosts;
-        this.current_page = 0;
+        this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
 
@@ -18,7 +18,7 @@ var FeedStore = Reflux.createStore({
     },
     onUserChange: function(userData){
         if(userData.hasOwnProperty('user')){
-            WondrousActions.loadFeed(this.current_page);
+            WondrousActions.loadFeed(this.currentPage);
         }
     },
 
@@ -46,7 +46,7 @@ var FeedStore = Reflux.createStore({
     },
 
     incrementPage: function(){
-        this.current_page++;
+        this.currentPage++;
     },
 
     _unshiftToFeed: function(post){
