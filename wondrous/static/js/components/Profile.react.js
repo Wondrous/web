@@ -72,14 +72,14 @@ var UserIcon = React.createClass({
         }
     },
     render: function() {
-        var is_me = this.props.username === UserStore.user.username;
+        var hrefPlaceholder = "/" + this.props.user.username;
         return (
             <li className="user-itemizer">
-                <a className="avatar" onClick={this.handleClick}>
+                <a className="avatar" href={hrefPlaceholder} onClick={this.handleClick}>
                     <img className="profile-photo-med round-50" src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
                 </a>
                 <div className="user-itemizer-data">
-                    <a className="user-itemizer-data-name" onClick={this.handleClick} >{ this.props.user.name }</a>
+                    <a className="user-itemizer-data-name" href={hrefPlaceholder} onClick={this.handleClick} >{ this.props.user.name }</a>
                     <div className="user-itemizer-data-desc">
                         @{ this.props.user.username }
                     </div>

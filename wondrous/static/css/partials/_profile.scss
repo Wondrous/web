@@ -230,6 +230,10 @@
     /* top: -22px; */
     /* margin-left: 7px; */
     font-weight: bold;
+    cursor: pointer;
+
+    &:link {color: rgb(61,61,61);}
+    &:visited {color: rgb(61,61,61);}
 }
 
 .user-itemizer-data-desc {
