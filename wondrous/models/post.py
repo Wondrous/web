@@ -12,32 +12,19 @@ from sqlalchemy import (
     BigInteger,
     Boolean,
     Column,
+    DateTime,
     desc,
     ForeignKey,
-    Unicode,
 )
 
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import backref
+from sqlalchemy.orm import (
+    backref,
+    relationship
+)
 
 from wondrous.models import Base
-
-import wondrous.models
-from wondrous.models.feed import (
-    Feed,
-    # FeedPostLink,
-)
-
-from sqlalchemy import or_
-
-
-from sqlalchemy import DateTime
-
 from wondrous.models.modelmixins import BaseMixin
-from sqlalchemy.orm import column_property
 
-# from wondrous.models.object import Object
-# from wondrous.models.user import User
 
 class Post(Base, BaseMixin):
 

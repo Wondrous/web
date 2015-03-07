@@ -8,7 +8,6 @@
 # CONTROLLERS/ACCOUNTMANAGER.PY
 #
 
-import logging
 import uuid
 
 from datetime import datetime
