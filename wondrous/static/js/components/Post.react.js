@@ -32,9 +32,9 @@ var UserTitle = React.createClass({
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow" style={this.repost ? {top:0} : null}>
-                    <a href={hrefPlaceholder} onClick={this.handleClick}>{name}</a>
+                    <a onClick={this.handleClick}>{name}</a>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
-                    {this.repost ? <a href={hrefRepostPlaceholder} className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
+                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
                 </span>
             </div>
             );
@@ -63,12 +63,12 @@ var Comment = React.createClass({
                     <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a href={hrefPlaceholder} onClick={this.handleClick} className="post-comment-un">
+                    <a onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
                         <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
-                    
+
                 </div>
             </div>
         );

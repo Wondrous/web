@@ -317,18 +317,18 @@ class VoteManager(BaseManager):
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=post_id, vote_type=Vote.OBJECT).first()
         if not vote:
             return False
-        logging.debug(vote.status == Vote.LIKED)
         return vote.status == Vote.LIKED
 
     @staticmethod
     def is_following(user_id, user_to_get_id):
-        vote = VoteManager.get_vote(user_id, user_to_get_id, Vote.USER)
-        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOWED,Vote.TOPFRIEND] else False
+        vote = Vote.by_kwargs(user_id=user_id, subject_id=user_to_get_id, vote_type=Vote.USER).\
+            filter(or_(Vote.status==Vote.FOLLOWED,Vote.status==Vote.TOPFRIEND)).first()
+        return True if vote else False
 
     @staticmethod
     def is_followed_by(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_to_get_id,user_id, Vote.USER)
-        return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) in [Vote.FOLLOWED,Vote.TOPFRIEND] else False
+        return True if vote else False
 
     @staticmethod
     def is_blocked_by(user_id, user_to_get_id):
@@ -347,11 +347,13 @@ class VoteManager(BaseManager):
 
     @classmethod
     def get_follower_count(cls,user_id):
+
         return cls.get_count(DBSession.query(Vote).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
 
     @classmethod
     def get_following_count(cls,user_id):
+
         return cls.get_count(DBSession.query(Vote).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
 

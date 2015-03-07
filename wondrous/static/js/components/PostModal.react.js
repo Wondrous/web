@@ -8,8 +8,10 @@ var UserTitle = React.createClass({
     repost: null,
     mixins: [Router.Navigation],
 
-    handleClick: function() {
+    handleClick: function(evt) {
+        evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
+            WondrousActions.toggleCardModal();
             this.transitionTo('/' + this.props.data.username);
         }
     },
@@ -17,6 +19,7 @@ var UserTitle = React.createClass({
     handleClickOnOwner: function(evt) {
         evt.preventDefault();
         if (typeof this.repost.username != 'undefined') {
+            WondrousActions.toggleCardModal();
             this.transitionTo('/' + this.repost.username);
         }
     },
@@ -33,9 +36,9 @@ var UserTitle = React.createClass({
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow">
-                    <a href={hrefPlaceholder} onClick={this.handleClick}>{name}</a>
-                    {this.repost ? " reposted from " : null}
-                    {this.repost ? <a href={hrefRepostPlaceholder} className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
+                    <a onClick={this.handleClick}>{name}</a>
+                    {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
+                    {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
                 </span>
             </div>
             );
@@ -67,12 +70,12 @@ var Comment = React.createClass({
                     <img className="post-comment-img round-2" src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a href={hrefPlaceholder} onClick={this.handleClick} className="post-comment-un">
+                    <a onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
                         <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
-                    {is_it_mine ? 
+                    {is_it_mine ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
                     	: null}
                 </div>
@@ -87,7 +90,7 @@ var Comment = React.createClass({
 				$(this).find(".post-comment-delete-btn").show();
 		    },
 		    mouseleave: function(e) {
-				$(this).find(".post-comment-delete-btn").hide();		
+				$(this).find(".post-comment-delete-btn").hide();
 		    }
 		}, '.post-comment');
     },
@@ -98,9 +101,9 @@ var Comments = React.createClass({
     onComment: function(evt){
         evt.preventDefault();
         var text = this.refs.commentBox.getDOMNode().value.trim();
-        
+
         //console.log(text,this.props.post_id);
-        
+
         if (text.length > 0) {
             WondrousActions.addNewComment(this.props.post_id,text);
             this.refs.commentBox.getDOMNode().value = '';
@@ -198,7 +201,7 @@ var PostFooter = React.createClass({
     }
 })
 var Post = React.createClass({
-	
+
 	render: function() {
 		var repost = null;
 		if (typeof this.props.data ==='undefined'){
@@ -248,7 +251,7 @@ var Post = React.createClass({
 
 var PostModal = React.createClass({
 	mixins:[Reflux.listenTo(PostStore,"onPostUpdate")],
-	
+
 	onPostUpdate: function(postData){
 		this.setState(postData);
 	},

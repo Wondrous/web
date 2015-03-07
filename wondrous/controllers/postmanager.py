@@ -72,7 +72,7 @@ class PostManager(BaseManager):
         return retval
 
     @staticmethod
-    def post_count(user,user_id):
+    def post_count(user_id):
         return DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).count()
 
     @staticmethod

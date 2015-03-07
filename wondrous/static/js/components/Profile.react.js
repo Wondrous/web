@@ -226,6 +226,7 @@ var UserBar = React.createClass({
     render: function() {
         var username = this.props.username;
         this.is_private = ProfileStore.user.is_private;
+        console.log("check out profile",this.state.data);
         this.am_following = this.state.data.following==true;
         var is_me = username === UserStore.user.username;
 
