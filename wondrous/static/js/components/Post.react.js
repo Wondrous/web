@@ -33,7 +33,7 @@ var UserTitle = React.createClass({
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow" style={this.repost ? {top:0} : null}>
                     <a onClick={this.handleClick}>{name}</a>
-                    {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
+                    {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{ height: 22, width: 22, top: 7 }} /> : null}
                     {this.repost ? <a className="recipient" onClick={this.handleClickOnOwner}>{this.repost.name}</a> : null}
                 </span>
             </div>
@@ -60,12 +60,12 @@ var Comment = React.createClass({
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
-                    <img className="round-2" style={{"height": 25, "width": 25}} src={img_src} />
+                    <img className="round-2" style={{ height: 25, width: 25 }} src={img_src} />
                 </div>
                 <div className="post-comment-content">
                     <a onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
-                        <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
+                        <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
 
@@ -113,7 +113,8 @@ var Comments = React.createClass({
         return (
             <div>
                 {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
-                <form style={{ "marginLeft": 28, "marginRight": 10 }} onSubmit={this.onComment}>
+                
+                <form style={{ marginLeft: 28, marginRight: 10 }} onSubmit={this.onComment}>
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" />
                 </form>
@@ -247,7 +248,7 @@ var Post = React.createClass({
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3">
-                    <div style={{"backgroundColor": "#FFFFFF", "position":"relative"}}>
+                    <div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
                         <UserTitle data={this.props.data} />
                     </div>
                     <div className="post-title">{this.props.data.subject}</div>
