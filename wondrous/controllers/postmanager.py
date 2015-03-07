@@ -68,7 +68,6 @@ class PostManager(BaseManager):
             if user.picture_object:
                 data.update(user.picture_object.json())
             data.update(comment.json())
-
             retval.append(data)
 
         return retval

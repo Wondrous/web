@@ -23,7 +23,41 @@ var Search = require('../components/Search.react');
 var Signup = require('../components/Authenticate.react').Signup;
 var LandingApp = require('./Landing.react');
 
+var WondrousConstants = require('../constants/WondrousConstants');
+var WondrousActions = require('../actions/WondrousActions');
+
+
 var WondrousApp = React.createClass({
+    checkWindowScroll: function(){
+        // Get scroll pos & window data
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        var s = $(document).scrollTop();
+        var scrolled = (s+2*h) > document.body.offsetHeight;
+        if (scrolled){
+            if(UserStore.pageType == WondrousConstants.PROFILE_PAGE && !WallStore.paging && !WallStore.donePaging){
+                console.log("getting more profile");
+                WallStore.paging = true;
+                WallStore.incrementPage();
+                WondrousActions.loadWall(ProfileStore.user.username,WallStore.currentPage);
+            }else if(UserStore.pageType == WondrousConstants.FEED_PAGE && !FeedStore.paging && !FeedStore.donePaging){
+                console.log("getting more page");
+                FeedStore.paging = true;
+                FeedStore.incrementPage();
+                WondrousActions.loadFeed(FeedStore.currentPage);
+            }
+        }
+        // If scrolled enough, not currently paging and not complete...
+        // if(scrolled && !FeedStore.paging && !FeedStore.donePaging) {
+        //     FeedStore.paging = true;
+        //     console.log("getting more page")
+        //     FeedStore.incrementPage();
+        //     WondrousActions.loadFeed(FeedStore.currentPage);
+        // }
+    },
+
+    componentDidMount: function(){
+        window.addEventListener('scroll', this.checkWindowScroll);
+    },
 
     // Render our child components
     render: function() {

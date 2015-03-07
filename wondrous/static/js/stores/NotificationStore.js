@@ -11,12 +11,12 @@ var NotificationStore = Reflux.createStore({
     init:function(){
         this.feed = defaultFeed;
         this.notifications = defaultNotifications;
-        this.current_page = 0;
+        this.currentPage = 0;
         this.listenTo(UserStore,this.onUserChange);
     },
     onUserChange: function(userData){
         if(userData.hasOwnProperty('user')){
-            WondrousActions.loadNotifications(this.current_page);
+            WondrousActions.loadNotifications(this.currentPage);
         }
     },
 
@@ -35,7 +35,7 @@ var NotificationStore = Reflux.createStore({
     },
 
     incrementPage: function(){
-        this.current_page++;
+        this.currentPage++;
         this.refreshFromServer();
     },
 

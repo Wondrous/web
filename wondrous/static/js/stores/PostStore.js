@@ -37,9 +37,18 @@ var PostStore = Reflux.createStore({
         this.commentPage++;
     },
 
-    toggleCardModal: function(){
-        this.modalOpen=!this.modalOpen;
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+    openCardModal: function(){
+        if (this.modalOpen!=true){
+            this.modalOpen=true;
+            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        }
+    },
+
+    closeCardModal: function(){
+        if (this.modalOpen!=false){
+            this.modalOpen=false;
+            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        }
     },
 
     onUserChange: function(userData){
