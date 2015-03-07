@@ -39,6 +39,7 @@ var UserTitle = React.createClass({
                     <Link to={hrefPlaceholder}>{name}</Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder}>{this.repost.name}</Link> : null}
+
                 </span>
             </div>
             );
@@ -125,6 +126,7 @@ var UserTitle = React.createClass({
 //     }
 // });
 
+
 var Photo = React.createClass({
 
     render: function() {
@@ -161,7 +163,7 @@ var Post = React.createClass({
     	// add modal functionality
         if (!evt.metaKey){
             evt.preventDefault();
-            
+
             WondrousActions.newPostLoad(this.props.data.id);
             WondrousActions.updatePost(this.props.data);
 
@@ -231,7 +233,7 @@ var Post = React.createClass({
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3">
-                    <div style={{"backgroundColor": "#FFFFFF", "position":"relative"}}>
+                    <div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
                         <UserTitle data={this.props.data} />
                     </div>
                     <div className="post-title">{this.props.data.subject}</div>

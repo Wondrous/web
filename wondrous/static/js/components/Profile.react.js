@@ -53,7 +53,7 @@ var Wall = React.createClass({
                 {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="--backdrop"></div>
-                <div className="grid-sizer" style={{"display": "none"}}></div>
+                <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}
                 </div>
             </div>
@@ -295,7 +295,7 @@ var PrivateProfile = React.createClass({
                 <div className="profile-header-content">
                     <div className="profile-name">{this.props.user.name}</div>
                     <div className="profile-username">@{this.props.user.username}</div>
-                    <button className={classes} style={{marginTop: 12}} onClick={this.handleClick} ref="requestBtn">Request to Follow</button>
+                    <button className={classes} style={{ marginTop: 12 }} onClick={this.handleClick} ref="requestBtn">Request to Follow</button>
                 </div>
             </div>
         );

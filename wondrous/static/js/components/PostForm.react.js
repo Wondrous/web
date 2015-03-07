@@ -27,8 +27,8 @@ var PostForm = React.createClass({
     handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
         $(this.refs.cropBox.getDOMNode()).cropbox({
-            width:  500,
-            height: 500
+            width:  750,
+            height: 390,
         }).on('cropbox',function(e,results,img){
 
         });
@@ -187,15 +187,17 @@ var PostForm = React.createClass({
         };
 
         return (
-            <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{"width":"530px"}}>
+            <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
-                    style={{"MozBorderRadius": "20px",
-                            "KhtmlBorderRadius": "20px",
-                            "WebkitBorderRadius": "20px"}}/>
+                    style={{"MozBorderRadius": 20,
+                            "KhtmlBorderRadius": 20,
+                            "WebkitBorderRadius": 20,
+                            "width": 750,
+                            "height": 390 }}/>
                 <span>{this.state.percent}% uploaded</span>
                 {this.state.error?<span>{this.state.error}% uploaded</span>:null}
                 <div className="new-post-element" style = {divStyle}>
-                    <div style={{"position":"relative", "margin":"0 auto", "marginBottom":"-1px"}}>
+                    <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
                         <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
                     </div>
                 </div>
@@ -205,7 +207,7 @@ var PostForm = React.createClass({
                         <div className="highlighter"></div>
                         <div className="typehead">
                             <textarea id="postTextarea" onChange={this.postTextChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
-                            style={{"overflow": "hidden", "wordWrap": "break-word", "resize": "none", "height": "48px"}}></textarea>
+                            style={{ overflow: "hidden", wordWrap: "break-word", resize: "none", height: 48 }}></textarea>
                         </div>
                     </div>
                 </div>
@@ -223,7 +225,7 @@ var PostForm = React.createClass({
                     <div className="progress-bar progress-bar-success" style={{"textAlign": "center"}}></div>
                 </div>
 
-                <div id="post-upload-file"  className="files" style={{"postion": "relative","marginLeft": "5px","fontSize":"14px"}}></div>
+                <div id="post-upload-file"  className="files" style={{postion: "relative", marginLeft: 5, fontSize: 14 }}></div>
 
                 <div className="post-error-wrapper">
                     <span className="post-error"></span>

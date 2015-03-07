@@ -13,7 +13,7 @@ var SearchBox = React.createClass({
     },
     render: function() {
         return (
-        <form method="GET" onSubmit={this.handleSearch} style={{"display": "inline-block"}}>
+        <form method="GET" onSubmit={this.handleSearch} style={{ display: "inline-block" }}>
             <div className="container">
               <input type="text" ref="query" className="banner-input"
                   placeholder="Search for people and #tags" name="q"
@@ -89,7 +89,7 @@ var Navbar = React.createClass({
     render: function () {
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "top-banner" : "top-banner banner-lo"}>
-                <Link to="/" style={{"color": "rgb(235, 235, 235)"}}>
+                <Link to="/" style={{ color: "rgb(235, 235, 235)" }}>
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </Link>
                 { UserStore.loggedIn ? <SearchBox /> : null}

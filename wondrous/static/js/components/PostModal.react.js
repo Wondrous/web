@@ -42,6 +42,7 @@ var UserTitle = React.createClass({
                     <Link to={hrefPlaceholder} onClick={this.handleClick}>{name}</Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder} onClick={this.handleClickOnOwner}>{this.repost.name}</Link> : null}
+
                 </span>
             </div>
             );
@@ -75,7 +76,7 @@ var Comment = React.createClass({
                 <div className="post-comment-content">
                     <a onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
-                        <span style={{"fontWeight": 100}}> (@{this.props.data.username})</span>
+                        <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
                     {is_it_mine ?
@@ -125,7 +126,7 @@ var Comments = React.createClass({
         return (
             <div>
                 {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
-                <form style={{ "marginLeft": 28, "marginRight": 10 }} >
+                <form style={{ marginLeft: 28, marginRight: 10 }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>
                 </form>
@@ -222,7 +223,7 @@ var Post = React.createClass({
 		var thisText = this.props.data.text.split('\n');
 		return (
 			<div ref="post"  className="post-body round-3" >
-				<div style={{"backgroundColor": "#FFFFFF", "position":"relative"}}>
+				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
 					<UserTitle data={this.props.data} />
 				</div>
 				<div className="post-title">{this.props.data.subject}</div>
@@ -242,7 +243,7 @@ var Post = React.createClass({
 							})
 						}
 				</div>
-				<hr style={{ "width": "60%", "margin": "1.1em 0", "marginBottom": -2, "marginLeft": 16 }} />
+				<hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
                 <div className="post-comment-wrapper">
                     <Comments post_id={this.props.data.id} data={this.props.comments} />
                 </div>
