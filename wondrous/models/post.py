@@ -99,3 +99,28 @@ class Post(Base, BaseMixin):
         post = super(Post,cls).by_id(object_id)
         if post and post.obj.user_id == current_user_id:
             post.is_hidden = False if post.is_hidden else True
+
+    def json(self,level=0):
+        post_dict = super(Post,self).json(level)
+        if self.object:
+            post_dict.update(self.object.json())
+            # Title case the self subject
+            post_dict.update({"subject": self.object.subject})
+        post_dict.update({"name": self.user.ascii_name})
+        post_dict.update({"username": self.user.username})
+        picture_object = self.user.picture_object
+
+        if picture_object:
+            post_dict.update({"user_ouuid": picture_object.ouuid})
+
+
+        if self.original:
+            original_post = self.original.json()
+            original_post.update(self.original.object.json())
+
+            # Title case the self subject
+            original_post.update({"subject": self.original.object.subject})
+            original_post.update({"name": self.original.user.ascii_name})
+            original_post.update({"username": self.original.user.username})
+            post_dict.update({"repost": original_post})
+        return post_dict

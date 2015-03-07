@@ -185,17 +185,6 @@ class PostManager(BaseManager):
             return {'error': 'insufficient data'}
         post = PostManager.add(user.id, tags, None, text, repost_id=post_id)
         data = post.json()
-        picture_object = post.user.picture_object
-        if picture_object:
-            data.update({"user_ouuid": picture_object.ouuid})
-        data.update({"name":post.user.ascii_name})
-        data.update({"username":post.user.username})
-        if post.original:
-            original_post = post.original.json()
-            original_post.update(post.original.object.json())
-            original_post.update({"name": post.original.user.ascii_name})
-            original_post.update({"username": post.original.user.username})
-            data.update({"repost":original_post})
 
         # Notify if needed
         new_notification = NotificationManager.add(
@@ -218,14 +207,7 @@ class PostManager(BaseManager):
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
 
-        data.update(object.json())
         data.update(post.json())
-        data.update({"name": post.user.ascii_name})
-        data.update({"username": post.user.username})
-        picture_object = post.user.picture_object
-        if picture_object:
-            data.update({"user_ouuid": picture_object.ouuid})
-
         return data
 
     @classmethod
@@ -233,33 +215,7 @@ class PostManager(BaseManager):
         post = Post.by_id(post_id)
         if post:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
-                post_dict = {}
-                if post.object:
-                    post_dict.update(post.object.json())
-
-                    # Title case the post subject
-                    post_dict.update({"subject": post.object.subject})
-
-                post_dict.update(post.json())
-                post_dict.update({"name": post.user.ascii_name})
-                post_dict.update({"username": post.user.username})
-                picture_object = post.user.picture_object
-
-                if picture_object:
-                    post_dict.update({"user_ouuid": picture_object.ouuid})
-
-                post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
-
-                if post.original:
-                    original_post = post.original.json()
-                    original_post.update(post.original.object.json())
-
-                    # Title case the post subject
-                    original_post.update({"subject": post.original.object.subject})
-                    original_post.update({"name": post.original.user.ascii_name})
-                    original_post.update({"username": post.original.user.username})
-                    post_dict.update({"repost": original_post})
-
+                post_dict = post.json()
                 return post_dict
             else:
                 return {'error':'post not found'}
