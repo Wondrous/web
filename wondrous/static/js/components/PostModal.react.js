@@ -63,7 +63,7 @@ var Comment = React.createClass({
     onDelete: function(){
         WondrousActions.deleteComment(this.props.data.id);
     },
-    
+
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
@@ -220,6 +220,8 @@ var Post = React.createClass({
 			this.props.data.text = repost.text;
 			this.props.data.subject = repost.subject;
 		}
+
+        console.log("PostRender:", this.props.data);
 
 		var thisText = this.props.data.text.split('\n');
 		return (
