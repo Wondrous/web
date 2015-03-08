@@ -43,7 +43,6 @@ var UserTitle = React.createClass({
                     <Link to={hrefPlaceholder} onClick={this.handleClick}>{name}</Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder} onClick={this.handleClickOnOwner}>{this.repost.name}</Link> : null}
-
                 </span>
             </div>
             );
