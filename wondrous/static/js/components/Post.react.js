@@ -39,7 +39,7 @@ var UserTitle = React.createClass({
                     <Link to={hrefPlaceholder}>{name}</Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder}>{this.repost.name}</Link> : null}
-
+                    Views: {this.props.data.view_count+1}
                 </span>
             </div>
             );
@@ -164,6 +164,7 @@ var Post = React.createClass({
         if (!evt.metaKey){
             evt.preventDefault();
             WondrousActions.newPostLoad(this.props.data.id);
+            WondrousActions.loadPost(this.props.data.id);
             WondrousActions.updatePost(this.props.data);
 
             WondrousActions.openCardModal();
@@ -218,6 +219,9 @@ var Post = React.createClass({
     },
 
     render: function() {
+        if (typeof this.props.data === 'undefined'){
+            return (<div></div>);
+        }
         var repost = null;
         var is_it_mine = this.props.data.username === UserStore.user.username;
 
@@ -228,7 +232,11 @@ var Post = React.createClass({
         }
 
 
-        var thisText = this.props.data.text.split('\n');
+        var thisText = '';
+        if (typeof this.props.data.text!=='undefined'){
+            thisText =this.props.data.text.split('\n');
+        }
+
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3">

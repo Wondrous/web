@@ -16,6 +16,7 @@ from wondrous.models import (
     tag,
     user,
     vote,
+    scores
 )
 
 # this is the Alembic Config object, which provides

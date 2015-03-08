@@ -37,9 +37,11 @@ from wondrous.models import (
     Tag,
     Notification,
     Comment,
-    User
+    User,
+    PostView
     # Vote,
 )
+
 
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
@@ -217,6 +219,8 @@ class PostManager(BaseManager):
         if post:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
+                ctn = PostView.increment_or_create(user_id=user.id,post_id=post_id)
+                post_dict.update({'view_count':ctn})
                 return post_dict
             else:
                 return {'error':'post not found'}

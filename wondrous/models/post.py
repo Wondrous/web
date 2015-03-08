@@ -24,7 +24,7 @@ from sqlalchemy.orm import (
 
 from wondrous.models import Base
 from wondrous.models.modelmixins import BaseMixin
-
+from wondrous.models.scores import PostView
 
 class Post(Base, BaseMixin):
 
@@ -95,6 +95,8 @@ class Post(Base, BaseMixin):
             post_dict.update({"subject": self.object.subject})
         post_dict.update({"name": self.user.ascii_name})
         post_dict.update({"username": self.user.username})
+        post_dict.update({"view_count": len(self.post_views)})
+
         picture_object = self.user.picture_object
 
         if picture_object:
@@ -109,5 +111,7 @@ class Post(Base, BaseMixin):
             original_post.update({"subject": self.original.object.subject})
             original_post.update({"name": self.original.user.ascii_name})
             original_post.update({"username": self.original.user.username})
+            original_post.update({"view_count": len(self.original.post_views)})
             post_dict.update({"repost": original_post})
+
         return post_dict

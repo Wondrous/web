@@ -68,6 +68,10 @@ from wondrous.models.vote import (
     Vote
 )
 
+from wondrous.models.scores import (
+    PostView 
+)
+
 from wondrous.models.refer import (
     Referrer
 )
