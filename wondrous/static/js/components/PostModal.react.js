@@ -220,6 +220,8 @@ var Post = React.createClass({
 			this.props.data.subject = repost.subject;
 		}
 
+        console.log("PostRender:", this.props.data);
+
 		var thisText = this.props.data.text.split('\n');
 		return (
 			<div ref="post"  className="post-body round-3" >
