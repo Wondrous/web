@@ -52,7 +52,6 @@ var UserTitle = React.createClass({
 var Comment = React.createClass({
     mixins: [Router.Navigation],
 
-
     handleClick: function(evt) {
         evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
@@ -64,6 +63,7 @@ var Comment = React.createClass({
     onDelete: function(){
         WondrousActions.deleteComment(this.props.data.id);
     },
+    
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
@@ -203,7 +203,8 @@ var PostFooter = React.createClass({
             </div>
         );
     }
-})
+});
+
 var Post = React.createClass({
 
 	render: function() {
