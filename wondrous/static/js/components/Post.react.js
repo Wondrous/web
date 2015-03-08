@@ -24,11 +24,11 @@ var UserTitle = React.createClass({
         if(typeof this.props.data === 'undefined'){
             return (<div></div>);
         }
-
+        var hrefRepostPlaceholder = '';
         var name = this.props.data.name;
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
-            var hrefRepostPlaceholder = '/' + this.repost.username;
+            hrefRepostPlaceholder = '/' + this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/' + this.props.data.username;
@@ -163,7 +163,6 @@ var Post = React.createClass({
     	// add modal functionality
         if (!evt.metaKey){
             evt.preventDefault();
-            console.log("getting shit for",this.props.data);
             WondrousActions.newPostLoad(this.props.data.id);
             WondrousActions.updatePost(this.props.data);
 

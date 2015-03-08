@@ -29,9 +29,10 @@ var UserTitle = React.createClass({
             return (<div></div>);
         }
         var name = this.props.data.name;
+        var hrefRepostPlaceholder = '';
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
-            var hrefRepostPlaceholder = '/'+this.repost.username;
+            hrefRepostPlaceholder = '/'+this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/'+this.props.data.username;

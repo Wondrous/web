@@ -89,8 +89,8 @@ var PostForm = React.createClass({
         $(form).slideDown().slideUp(200);
 
         if(this.file){
-            $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
             this.file = null;
+            $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
             $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
 
@@ -165,11 +165,13 @@ var PostForm = React.createClass({
                 'tags'    : postTagsUnique
             };
 
+            var dataURL = null;
             if (typeof(this.file) !== 'undefined' && this.file) {
                 uploadData.file_type = this.file.type;
+                dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
             }
             console.log("posting", uploadData);
-            var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+
             WondrousActions.addNewPost(postSubject,postText,postTagsUnique,this.file,dataURL);
         }
     },
