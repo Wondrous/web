@@ -41,7 +41,6 @@ var Photo = React.createClass({
         photoStyle = {
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
         };
-
         return (
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     <div className="post-subject-text nh">
@@ -52,7 +51,7 @@ var Photo = React.createClass({
                                     {this.props.data.view_count}
                                 </span>
 
-                                <span className="post-micro-data-super-analytics-item">                                
+                                <span className="post-micro-data-super-analytics-item">
                                     <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon" style={{height: 18, width: 18, top: 5, marginRight: 2}} />
                                     {this.props.data.like_count}
                                 </span>
@@ -76,60 +75,14 @@ var Post = React.createClass({
     	// add modal functionality
         if (!evt.metaKey){
             evt.preventDefault();
+            WondrousActions.openCardModal();
             WondrousActions.newPostLoad(this.props.data.id);
             WondrousActions.loadPost(this.props.data.id);
             WondrousActions.updatePost(this.props.data);
-
-            WondrousActions.openCardModal();
-        }
-    },
-
-    deletePost: function () {
-        this.handleClick();
-        WondrousActions.deletePost(this.props.data.id);
-    },
-
-    handlePostLike: function(err, res) {
-        if (err == null) {
-            //console.log("liked",res);
-            this.props.data.liked = res.like;
-            this.forceUpdate();
-        } else {
-
-        }
-    },
-
-    likePost: function() {
-        //console.log("liking post");
-        WondrousAPI.toggleLike({
-            post_id: this.props.data.id,
-            callback: this.handlePostLike
-        });
-    },
-
-    onViewComments: function(err, res) {
-        if (err == null) {
-            console.log("loaded comments are for", this.props.data.id, res);
-            this.setState({comments: res});
-        } else {
-            console.error("problems with loading comments", err);
         }
     },
 
 
-    clickRepost: function() {
-        WondrousActions.repost(this.props.data.id) ;
-        this.handleClick();
-    },
-
-    clickViewComments: function() {
-        this.setState({commentsVisible: !this.state.commentsVisible});
-        WondrousAPI.getPostComments({
-            page: 0,
-            post_id: this.props.data.id,
-            callback: this.onViewComments
-        });
-    },
 
     render: function() {
         if (typeof this.props.data === 'undefined'){
@@ -149,7 +102,6 @@ var Post = React.createClass({
         if (typeof this.props.data.text!=='undefined'){
             thisText =this.props.data.text.split('\n');
         }
-
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3">

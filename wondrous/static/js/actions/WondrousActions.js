@@ -425,7 +425,6 @@ WondrousActions.loadPost.listen(function(post_id){
         callback: function(err,res){
             if (err == null){
                 WondrousActions.updatePost(res);
-                WondrousActions.openCardModal();
             }else{
                 // WondrousActions.uploadError(err);
             }

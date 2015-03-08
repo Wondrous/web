@@ -25,17 +25,19 @@ var UserTitle = React.createClass({
     },
 
     render: function() {
+        this.repost = null;
         if(typeof this.props.data === 'undefined'){
             return (<div></div>);
         }
         var name = this.props.data.name;
         var hrefRepostPlaceholder = '';
-        if (this.props.data.hasOwnProperty('repost')) {
+        if (this.props.data.repost_id!=null) {
             this.repost = this.props.data.repost;
             hrefRepostPlaceholder = '/'+this.repost.username;
         }
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/'+this.props.data.username;
+
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
@@ -276,6 +278,9 @@ var PostModal = React.createClass({
 	},
 
 	render: function() {
+        if (typeof this.state.post === 'undefined'){
+            return (<div></div>);
+        }
 		divStyle = this.state.modalOpen ? {display:"block"} : {display:"none"};
 
 		return (

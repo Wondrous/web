@@ -16,6 +16,7 @@ var PostStore = Reflux.createStore({
     listenables: WondrousActions,
 
     init:function(){
+        this.modalOpen = false;
         this.newPostLoad();
 
         this.listenTo(UserStore,"onUserChange");
@@ -25,7 +26,6 @@ var PostStore = Reflux.createStore({
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;
         this.comments = getNewSet(null);
-        this.modalOpen = false;
 
         if (typeof post_id !=='undefined'){
             WondrousActions.updateComments(post_id,this.commentPage);

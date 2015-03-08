@@ -15,6 +15,7 @@ from sqlalchemy import (
     ForeignKey,
     or_,
     Unicode,
+    DateTime
 )
 
 from sqlalchemy.orm import relationship
@@ -22,9 +23,11 @@ from sqlalchemy.orm import relationship
 from wondrous.models import (
     Base,
     DBSession,
+
 )
 
 from wondrous.models.modelmixins import BaseMixin
+from wondrous.models.post import Post
 
 class Object(Base, BaseMixin):
 
@@ -40,6 +43,7 @@ class Object(Base, BaseMixin):
     mime_type = Column(Unicode, nullable=True)
     ouuid = Column(Unicode, nullable=True)
     # comments = relationship("Comment",cascade="delete")
+    set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod
     def by_text_like(cls, text, num=50):
@@ -55,7 +59,7 @@ class Object(Base, BaseMixin):
         data = super(Object,self).json(level)
         if 'id' in data:
             del data['id']
-        return data 
+        return data
 
 class ObjectLink(Base, BaseMixin):
 

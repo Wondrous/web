@@ -46,6 +46,7 @@ var Feed = React.createClass({
         var post_id = this.getParams().post_id;
         console.log("post_id",this.getParams().post_id);
         if (typeof post_id !== 'undefined'){
+            WondrousActions.openCardModal();
             WondrousActions.newPostLoad(post_id);
             WondrousActions.loadPost(post_id);
         }

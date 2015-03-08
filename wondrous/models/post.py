@@ -110,7 +110,6 @@ class Post(Base, BaseMixin):
         if self.original:
             # Syntactic sugar, yum
             original_post = self.original.json()
-            original_post.update(self.original.object.json())
             post_dict.update({"repost": original_post})
 
         return post_dict
