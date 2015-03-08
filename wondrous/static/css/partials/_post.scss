@@ -645,3 +645,11 @@ $post-cover-photo-height: 390px;
     z-index: 100;
     overflow: auto;
 }
+
+.modal-open{
+    overflow:hidden;
+
+    & div{
+        overflow-y:scroll;
+    }
+}

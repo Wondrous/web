@@ -41,6 +41,7 @@ var PostStore = Reflux.createStore({
         if (this.modalOpen!=true){
             this.modalOpen=true;
             this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+            $('body').addClass('modal-open');
         }
     },
 
@@ -48,6 +49,7 @@ var PostStore = Reflux.createStore({
         if (this.modalOpen!=false){
             this.modalOpen=false;
             this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+            $('body').removeClass('modal-open');
         }
     },
 

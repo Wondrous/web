@@ -1466,6 +1466,11 @@ a:hover {
   z-index: 100;
   overflow: auto; }
 
+.modal-open {
+  overflow: hidden; }
+  .modal-open div {
+    overflow-y: scroll; }
+
 /* ==== NEW POST================ */
 .autocomplete-selected {
   position: relative;
