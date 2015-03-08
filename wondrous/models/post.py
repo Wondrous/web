@@ -7,7 +7,7 @@
 #
 # MODELS/POST.PY
 #
-
+import logging
 from sqlalchemy import (
     BigInteger,
     Boolean,
@@ -22,9 +22,10 @@ from sqlalchemy.orm import (
     relationship
 )
 
-from wondrous.models import Base
+from wondrous.models import Base, DBSession
 from wondrous.models.modelmixins import BaseMixin
 from wondrous.models.scores import PostView
+from wondrous.models.vote import Vote
 
 class Post(Base, BaseMixin):
 
@@ -54,6 +55,9 @@ class Post(Base, BaseMixin):
 
     owner_id = Column(BigInteger, ForeignKey('user.id'), nullable=True)
     owner = relationship('User', foreign_keys=owner_id)
+
+    like_count = Column(BigInteger, default=0, nullable=False)
+    view_count = Column(BigInteger, default=1, nullable=False)
 
     # set to delete
     set_to_delete = Column(DateTime, nullable=True)
@@ -95,23 +99,18 @@ class Post(Base, BaseMixin):
             post_dict.update({"subject": self.object.subject})
         post_dict.update({"name": self.user.ascii_name})
         post_dict.update({"username": self.user.username})
-        post_dict.update({"view_count": len(self.post_views)})
+        post_dict.update({"view_count": self.view_count})
+        post_dict.update({"like_count": self.like_count})
 
         picture_object = self.user.picture_object
 
         if picture_object:
             post_dict.update({"user_ouuid": picture_object.ouuid})
 
-
         if self.original:
+            # Syntactic sugar, yum
             original_post = self.original.json()
             original_post.update(self.original.object.json())
-
-            # Title case the self subject
-            original_post.update({"subject": self.original.object.subject})
-            original_post.update({"name": self.original.user.ascii_name})
-            original_post.update({"username": self.original.user.username})
-            original_post.update({"view_count": len(self.original.post_views)})
             post_dict.update({"repost": original_post})
 
         return post_dict

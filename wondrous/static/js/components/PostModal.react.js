@@ -63,7 +63,7 @@ var Comment = React.createClass({
     onDelete: function(){
         WondrousActions.deleteComment(this.props.data.id);
     },
-    
+
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
@@ -182,7 +182,6 @@ var PostFooter = React.createClass({
     },
     render: function(){
         var is_it_mine = (this.props.data.username === UserStore.user.username);
-
         return (
             <div className="post-footer">
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">

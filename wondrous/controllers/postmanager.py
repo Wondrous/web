@@ -14,7 +14,7 @@
 # import os
 # import time
 # import urllib
-import uuid
+import uuid, logging
 
 from datetime import datetime
 
@@ -219,8 +219,19 @@ class PostManager(BaseManager):
         if post:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
-                ctn = PostView.increment_or_create(user_id=user.id,post_id=post_id)
-                post_dict.update({'view_count':ctn})
+                if post_dict:
+                    post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
+                    
+                pv = DBSession.query(PostView).filter_by(post_id=post.id, user_id=user.id).first()
+
+                if not pv:
+                    pv = PostView(post_id=post.id, user_id=user.id)
+                    DBSession.query(Post).filter(Post.id==post.id).update({'view_count':Post.view_count+1})
+                    DBSession.add(pv)
+                elif pv.count <10:
+                    DBSession.query(Post).filter(Post.id==post.id).update({'view_count':Post.view_count+1})
+                    DBSession.query(PostView).filter(PostView.id==pv.id).update({'count':PostView.count+1})
+
                 return post_dict
             else:
                 return {'error':'post not found'}

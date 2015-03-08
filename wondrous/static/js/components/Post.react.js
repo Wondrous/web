@@ -49,12 +49,12 @@ var Photo = React.createClass({
                             <div className="post-subject-text-position">
                                 <span className="post-micro-data-super-analytics-item">
                                     <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7, marginRight: 2}} />
-                                    {this.props.data.view_count + 1}
+                                    {this.props.data.view_count}
                                 </span>
 
                                 <span className="post-micro-data-super-analytics-item">
                                     <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon" style={{height: 18, width: 18, top: 5, marginRight: 2}} />
-                                    ?
+                                    {this.props.data.like_count}
                                 </span>
                             </div>
                         </div>

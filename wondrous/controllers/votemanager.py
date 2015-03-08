@@ -201,12 +201,15 @@ class VoteManager(BaseManager):
         if vote:
             if vote.status == Vote.LIKED:
                 vote.status = Vote.UNLIKED
+                DBSession.query(Post).filter(Post.id==post_id).update({'like_count':Post.like_count-1})
+
             elif vote.status == Vote.UNLIKED:
                 vote.status = Vote.LIKED
+                DBSession.query(Post).filter(Post.id==post_id).update({'like_count':Post.like_count+1})
         else:
             vote = Vote(user_id=from_user_id, subject_id=post_id, vote_type=Vote.OBJECT, status=Vote.LIKED)
             DBSession.add(vote)
-
+            DBSession.query(Post).filter(Post.id==post_id).update({'like_count':Post.like_count+1})
 
             # Notify if needed
             new_notification = NotificationManager.add(
@@ -214,6 +217,7 @@ class VoteManager(BaseManager):
                                 to_user_id=post.user_id,
                                 subject_id=post_id,
                                 reason=Notification.LIKED)
+
 
         DBSession.flush()
         return vote
