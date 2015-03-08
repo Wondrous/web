@@ -163,7 +163,7 @@ var WondrousActions = Reflux.createActions({
 
 });
 
-WondrousActions.registerCheck.listen(function(name, username, email, password){
+WondrousActions.registerCheck.listen(function(name, username, email, password) {
     WondrousAPI.registerCheck({
         name: name,
         username: username,
@@ -179,7 +179,7 @@ WondrousActions.registerCheck.listen(function(name, username, email, password){
     });
 });
 
-WondrousActions.register.listen(function(name,email,username,password){
+WondrousActions.register.listen(function(name, username, email, password) {
     console.log("register request");
 
     WondrousAPI.register({

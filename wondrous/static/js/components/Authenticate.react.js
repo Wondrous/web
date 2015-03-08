@@ -12,6 +12,9 @@ var Signup = React.createClass({
         Reflux.listenTo(LoginStore,'onLoginError')
     ],
     changeHandler: function(){
+        // Order matters: name, username, email, password.
+        // Be sure to keep this updated with the associated
+        // method in WondrousActions.js
         WondrousActions.registerCheck(
             this.refs.name.getDOMNode().value.trim(),
             this.refs.username.getDOMNode().value.trim(),
@@ -36,6 +39,9 @@ var Signup = React.createClass({
     },
     onRegister: function(evt){
         evt.preventDefault();
+        // Order matters: name, username, email, password.
+        // Be sure to keep this updated with the associated
+        // method in WondrousActions.js
         WondrousActions.register(
             this.refs.name.getDOMNode().value.trim(),
             this.refs.username.getDOMNode().value.trim(),
@@ -49,14 +55,14 @@ var Signup = React.createClass({
                 <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Sign up :)</h1>
                 <form onSubmit={this.onRegister}>
                     <div>
-                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="name"/>
-                    </div>
-                    <div>
-                        <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="email" ref="email" placeholder="Email"/>
+                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="name" maxLength="30"/>
                     </div>
                     <div>
                         <input onChange={this.changeHandler} id="usernameInput" className="input-basic round-3" type="text" name="username" ref="username" placeholder="Username" maxLength="15"/>
                         <span style={{"position":"absolute"}} ></span>
+                    </div>
+                    <div>
+                        <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="email" ref="email" placeholder="Email"/>
                     </div>
                     <div>
                         <input onChange={this.changeHandler} className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password"/>

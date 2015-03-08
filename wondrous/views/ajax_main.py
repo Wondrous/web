@@ -516,7 +516,7 @@ class APIViews(BaseHandler):
 
         error_message = None
         try:
-            _s_valid_n, len_err_fn = Sanitize.length_check(self.query_kwargs['name'], min_length=5, max_length=30)
+            _s_valid_n, len_err_fn = Sanitize.length_check(self.query_kwargs['name'], min_length=1, max_length=30)
             _s_valid_pw, len_err_pw = Sanitize.length_check(self.query_kwargs['password'], min_length=6, max_length=255)
             _s_valid_em = Sanitize.is_valid_email(self.query_kwargs['email'])
             _s_em_taken = User.by_kwargs(email=self.query_kwargs['email']).first()
@@ -701,10 +701,10 @@ class APIViews(BaseHandler):
 
         # The data we need to validate
         error_message = None
-        name = safe_in(self.query_kwargs.get('name'))
-        email      = safe_in(self.query_kwargs.get('email'))
-        password   = safe_in(self.query_kwargs.get('password'), strip=False)
-        username   = safe_in(Sanitize.strip_ampersand(self.query_kwargs.get('username')))
+        name     = safe_in(self.query_kwargs.get('name'))
+        email    = safe_in(self.query_kwargs.get('email'))
+        password = safe_in(self.query_kwargs.get('password'), strip=False)
+        username = safe_in(Sanitize.strip_ampersand(self.query_kwargs.get('username')))
 
 
         # Check for presence
@@ -728,7 +728,6 @@ class APIViews(BaseHandler):
             # Check for validity
             if not _s_valid_n:
                 error_message = "Your name is {err}".format(err=len_err_fn)
-
             elif not _s_valid_em:
                 error_message = "Please enter a valid email address"
             elif _s_em_taken:
