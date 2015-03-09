@@ -147,6 +147,7 @@ var NotificationsBar = React.createClass({
 
         return (
             <div style={{ marginBottom: 60 }}>
+                <h5 className="notification-menu-header">Activity</h5>
                 {notifications}
             </div>
         );
