@@ -26,7 +26,6 @@ TAKEN_PATHS = set([
 ])
 
 def build_routes(config):
-
     # --- DEV PURPOSES ONLY. *MUST REMOVE FOR PRODUCTION* ---
     config.add_route('exc_sql', '/exc_sql/')
 

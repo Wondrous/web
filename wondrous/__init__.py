@@ -25,6 +25,11 @@ from wondrous.admin_routes import build_admin_routes
 
 from wondrous.utilities.user_utilities import AuthHelper
 
+import wondrous.controllers
+from wondrous.controllers import (
+    EmailManager
+)
+
 MAIN_AUTH_TKN  = '23dkjDFJ23jjfSDFJ34jfQWK23jjfSDFDwJzXXZZZ33hsd8s8s8fsdjkfhjh568dfsks'
 ADMIN_AUTH_TKN = 'm2kjn23fkjSH345GIIHW122F3EIHGI345DF7G34533HFuhe241wfiug34hfswoihe09209209skhsSDFHSF'
 
@@ -36,10 +41,9 @@ def main_app(global_config, **settings):
 
 
     """ This function returns a Pyramid WSGI application. """
-
     settings['app_root'] = abspath(dirname(dirname(__file__)))
     initialize_sql(settings)
-
+    wondrous.controllers.email_controller = EmailManager(**settings)
     config = Configurator(settings=settings)
     config = build_routes(config)  # URL map on routes.py
 

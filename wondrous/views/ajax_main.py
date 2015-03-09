@@ -230,7 +230,7 @@ class APIViews(BaseHandler):
         """
 
         user = self.query_kwargs['user']
-        return AccountManager.get_json_by_username(user, **{'user_id': user.id})
+        return AccountManager.get_json_by_username(user, **{'user_id': user.id,'auth':True})
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_picture', renderer='json')

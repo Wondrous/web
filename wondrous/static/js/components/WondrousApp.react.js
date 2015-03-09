@@ -83,7 +83,7 @@ var Routes = (
         <Route name="signup" path="/signup" handler={Signup}/>
         <Route name="search" path="/search/:search" handler={Search}/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
-        <Route name="settings" path="/settings/" handler={Settings}/>
+        <Route name="settings" path="/settings" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>
     </Route>

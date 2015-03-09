@@ -95,8 +95,7 @@ class Post(Base, BaseMixin):
         post_dict = super(Post,self).json(level)
         if self.object:
             post_dict.update(self.object.json())
-            # Title case the self subject
-            post_dict.update({"subject": self.object.subject})
+
         post_dict.update({"name": self.user.ascii_name})
         post_dict.update({"username": self.user.username})
         post_dict.update({"view_count": self.view_count})

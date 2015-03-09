@@ -53,15 +53,18 @@ class User(Base, PasswordManager, BaseMixin):
     username = Column(Unicode, nullable=True, unique=True)  # nullable=True for FBAuth users
     email = Column(Unicode, nullable=False)
     _password = Column('password', Unicode(255), nullable=False)
-    
+
     # profile_picture = Column(Unicode, nullable=True, default=unicode(DEFAULT_PROFILE_PICTURE_PATH))  # nullable=True for FBAuth users
+    verification_date = Column(DateTime, default=datetime.now())
+    verification_random = Column(Unicode, nullable=True)
+
     verified = Column(Boolean, default=False)
     picture_object_id = Column(BigInteger,ForeignKey('object.id'), nullable=True)
 
     is_active = Column(Boolean, nullable=False, default=True)  # Used to deactivate a user
     is_banned = Column(Boolean, nullable=True, default=False)  # Is this user banned from the enire system?
     is_private = Column(Boolean, nullable=False, default=False)  # Is the profile private or public?
-    
+
     last_login = Column(DateTime, nullable=False, default=datetime.now)
     set_to_delete = Column(DateTime, nullable=True)
 
@@ -70,7 +73,7 @@ class User(Base, PasswordManager, BaseMixin):
     comments = relationship("Comment")
     feed = relationship("Feed", uselist=False, backref="user")
     picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
-    
+
 
     def __init__(self, *args, **kwargs):
         super(User,self).__init__(*args, **kwargs)

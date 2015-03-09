@@ -23,6 +23,8 @@ from wondrous.models import (
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
 from wondrous.utilities.validation_utilities import UploadManager
+from wondrous.utilities.notification_utilities import send_notification
+import shortuuid
 
 class AccountManager(BaseManager):
 
@@ -113,10 +115,10 @@ class AccountManager(BaseManager):
         return data
 
     @classmethod
-    def get_json_by_username(cls, user, user_id = None, username = None):
+    def get_json_by_username(cls, user, user_id = None, username = None, auth = False):
         from wondrous.controllers.postmanager import PostManager
-
         from wondrous.controllers.votemanager import VoteManager
+
         if not user_id and not username:
             return {}
 
@@ -124,6 +126,8 @@ class AccountManager(BaseManager):
             profile_user = User.by_kwargs(username=username).first()
         else:
             profile_user = User.by_id(user_id)
+
+
 
         if not profile_user:
             return {'error': 'no users found!'}
@@ -142,7 +146,10 @@ class AccountManager(BaseManager):
 
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
-
+            if auth:
+                key = shortuuid.uuid()
+                retval.update({'auth':key})
+                send_notification(-1,str(key)+":"+str(user_id))
             return retval
 
         # If the profile_user is public or I am following

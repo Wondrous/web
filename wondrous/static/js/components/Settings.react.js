@@ -62,7 +62,7 @@ var UsernameChange = React.createClass({
         return (
             <div className="info-settings-item">
                 <div className="info-settings-item-header">
-                    <b>Change Username:</b> @{username}, www.wondrous.co/<b>{username}</b>/
+                    <b>Change Username:</b> @{username}, www.wondrous.co/<b>{username}</b>
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
@@ -190,6 +190,7 @@ var Settings = React.createClass({
         );
     },
     onUserChange:function(userData) {
+
         if(userData.hasOwnProperty('user')){
             this.setState(getUserState());
         }
