@@ -102,8 +102,8 @@ var Notification = React.createClass({
         var url = "/" + note.from_user_username;
 
         // TODO: Get sender's profile pic
-        // var profilePic = userFrom.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+userFrom.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var profilePic = note.from_user_ouuid ? "http://mojorankdev.s3.amazonaws.com/"+note.from_user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        // var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         // console.log("NotificationData:", note);
 

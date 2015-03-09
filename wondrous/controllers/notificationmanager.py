@@ -58,7 +58,7 @@ class NotificationManager(BaseManager):
                 from_user_id : int  : REQUIRED  : The User.id who did the action
                 to_user_id   : int  : REQUIRED  : The User.id recieving the notification
                 reason       : int  : REQUIRED  : The Notification Index
-                subject_id   : int  : *REQUIRED : The Object.id or User.id of the object involved in the action
+                subject_id   : int  : REQUIRED  : The Object.id or User.id of the object involved in the action
         """
 
         try:
@@ -108,13 +108,14 @@ class NotificationManager(BaseManager):
         for note in notes:
             note_dict = note.json()
             from_user = note.from_user
-            to_user = note.to_user
+            to_user   = note.to_user
 
-            note_dict.update({"to_user_username":to_user.username});
-            note_dict.update({"to_user_name":to_user.name})
+            note_dict.update({"to_user_username": to_user.username});
+            note_dict.update({"to_user_name": to_user.name})
 
-            note_dict.update({"from_user_username":from_user.username});
-            note_dict.update({"from_user_name":from_user.name})
+            note_dict.update({"from_user_username": from_user.username});
+            note_dict.update({"from_user_name": from_user.name})
+            note_dict.update({"from_user_ouuid": from_user.picture_object.ouuid})
             data.append(note_dict)
         return data
 
