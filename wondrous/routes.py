@@ -83,6 +83,7 @@ def build_routes(config):
     config.add_route('api_repost',                             '/api/wall/repost')      # POST
     config.add_route('api_user_feed',                          '/api/feed')             # GET
     config.add_route('api_user_notification',                  '/api/notification')     # GET
+    config.add_route('api_seen_notification',                  '/api/notification/seen')     # POST
     config.add_route('api_post_delete',                        '/api/post/delete')      # DELETE
 
     config.add_route('api_new_comment',                        '/api/comment/new')      # POST

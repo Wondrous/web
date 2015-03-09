@@ -2,6 +2,10 @@ var WondrousActions = require('../actions/WondrousActions');
 var request = require('superagent');
 
 function _callback(cb){
+    if (!cb){
+        return function(err,res){};
+    }
+
     return function(err,res){
         console.log("res",res);
         if (res) {
@@ -500,6 +504,12 @@ module.exports = {
         var page = options.page;
         var callback = options.callback;
         request.get(url).query({search:search,page:page}).end(_callback(callback));
+    },
+
+    setNotificationSeen:function(options){
+        var url = '/api/notification/seen';
+        var callback = options.callback;
+        request.post(url).end(_callback(callback));
     },
 
     // Upload file to s3

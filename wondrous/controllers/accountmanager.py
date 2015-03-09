@@ -8,7 +8,7 @@
 # CONTROLLERS/ACCOUNTMANAGER.PY
 #
 
-import uuid
+import uuid, logging
 
 from datetime import datetime
 
@@ -135,7 +135,7 @@ class AccountManager(BaseManager):
         am_following = VoteManager.is_following(user.id,user_id) if user else False
 
         # Am I querying for myself?
-        if profile_user and profile_user.id == user_id:
+        if profile_user and profile_user.id == user.id:
             retval = cls._get_relationship_stats(user_id)
             retval.update(profile_user.json(1))
             retval.update({"name": profile_user.ascii_name})

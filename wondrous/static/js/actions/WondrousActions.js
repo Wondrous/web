@@ -34,6 +34,8 @@ var WondrousActions = Reflux.createActions({
 
     "addNewComment": {},
 
+    "setNotificationSeen":{},
+
     // uploadFile
     "uploadFile": {},
 
@@ -501,5 +503,17 @@ WondrousActions.addNewComment.listen(function(post_id,text){
     });
 });
 
+WondrousActions.setNotificationSeen.listen(function(){
+
+    WondrousAPI.setNotificationSeen({
+        callback: function(err,res){
+            if(err==null){
+                console.log("all is seen",res);
+            }else{
+                console.error("set all seen error",err);
+            }
+        }
+    })
+});
 
 module.exports = WondrousActions

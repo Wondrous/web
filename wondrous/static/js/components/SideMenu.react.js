@@ -133,12 +133,16 @@ var Notification = React.createClass({
 })
 
 var NotificationsBar = React.createClass({
-    mixins: [Reflux.connect(NotificationStore,"data")],
+    mixins: [Reflux.listenTo(NotificationStore,"onNotificationChange")],
     getInitialState: function() {
         return {data:NotificationStore.getNotifications()};
     },
-
+    onNotificationChange: function(){
+        this.setState({data:NotificationStore.getNotifications()});
+    },
     render:function(){
+        console.log("note bar",this.state);
+
         var notifications = this.state.data.map(function(notification,index){
             return(
                 <Notification key={notification.id} data={notification}/>

@@ -27,8 +27,11 @@ def send_notification(channel,message):
 
         RETURNS: None
     """
-    data = {"channel":channel,"message":message}
-    package = json.dumps(data, ensure_ascii=False)
+    msg = message if channel != -1 else message
+
+    data = {"channel":channel,"message":msg}
+    package = json.dumps(data)
+
     try:
         c.publish(CHANNEL_NOTIFICATION,package)
     except Exception, e:
