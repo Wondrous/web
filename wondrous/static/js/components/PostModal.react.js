@@ -167,16 +167,22 @@ var Photo = React.createClass({
 });
 
 var PostFooter = React.createClass({
-    deletePost: function () {
+    
+    deletePost: function() {
         WondrousActions.closeCardModal();
         WondrousActions.deletePost(this.props.data.id);
     },
+
+    _setIconSize: function() {
+        // $(".postHeartIcon").css("height", 33).css("width", 33);
+    },
+
     likePost: function() {
         this.props.data.liked = !this.props.data.liked;
         this.forceUpdate();
         WondrousAPI.toggleLike({
             post_id: this.props.data.id,
-            callback: null
+            callback: this._setIconSize
         });
     },
     clickRepost: function() {
@@ -186,8 +192,18 @@ var PostFooter = React.createClass({
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         return (
             <div className="post-footer">
-                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
-                    <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_white.svg"} className="post-general-icon" />
+                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">    
+                    {this.props.data.liked ? 
+                        <span>
+                            <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" />
+                            <img src="/static/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
+                        </span>
+                        :
+                        <span>
+                            <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
+                            <img src="/static/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" />
+                        </span>
+                    }
                 </span>
 
                 {!is_it_mine ?
