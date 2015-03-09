@@ -102,17 +102,30 @@ var Notification = React.createClass({
         var url = "/" + note.from_user_username;
 
         // TODO: Get sender's profile pic
-        //var profilePic = userFrom.ouuid ? "http://mojorankdev.s3.amazonaws.com/"+userFrom.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var profilePic = note.from_user_ouuid ? "http://mojorankdev.s3.amazonaws.com/"+note.from_user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        // var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
+
+        var notificationTitle = "@" + note.from_user_username;
 
         return (
             <div onClick={this.handleClick} className="dropdown-a">
-                <div className={"dropdown-element"} style={{'display': displayType}}>
+                <div className="dropdown-element dropdown-element-notification" style={{ "display": displayType, padding: "10px 0" }}>
                     <span className="notificationTextPosition">
-                        <img ref="usericon" className="post-thumb round-50" src={profilePic} />
-                        <b>{note.from_user_name}</b> {content}
+                        <img ref="usericon" className="post-thumb round-50" style={{ position: "absolute" }} src={profilePic} />
+                        <div className="notification-content">
+                            <div>
+                                <b title={notificationTitle}>
+                                    {note.from_user_name}
+                                </b>
+                            </div>
+                            {content}
+                            {actionNeeded ? 
+                                <div>
+                                    <button className="followerAcceptButton round-2" onClick={this.handleAccept}>Accept +1</button>
+                                </div> : ''}
+
+                        </div>
                     </span>
-                    {actionNeeded ? <button className="followerAcceptButton" onClick={this.handleAccept}>+1</button> : ''}
                 </div>
             </div>
         );
@@ -137,7 +150,7 @@ var NotificationsBar = React.createClass({
         });
 
         return (
-            <div>
+            <div style={{ marginBottom: 60 }}>
                 {notifications}
             </div>
         );

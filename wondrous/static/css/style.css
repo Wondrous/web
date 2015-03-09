@@ -1009,6 +1009,18 @@ a:hover {
   height: 20px;
   width: 20px; }
 
+.post-like-icon {
+  height: 18px !important;
+  width: 18px !important;
+  top: 5px;
+  margin-right: 2px; }
+
+.post-view-icon {
+  height: 22px !important;
+  width: 22px !important;
+  top: 7px;
+  margin-right: 2px; }
+
 .no-top-border {
   -webkit-border-top-left-radius: 0;
   -moz-border-top-left-radius: 0;
@@ -2072,7 +2084,8 @@ a:hover {
   top: 0;
   right: 0;
   margin-top: 38px;
-  width: 250px;
+  /*width: 250px;*/
+  width: 280px;
   background-color: #fbfbfb;
   overflow-y: scroll;
   color: #2c2c2c;
@@ -2093,8 +2106,14 @@ a:hover {
 
 .followerAcceptButton {
   background-color: white;
-  border: 1px solid rgba(70, 140, 220, 0.7);
-  border-radius: 2px; }
+  border: 1px solid #c8c8c8;
+  margin: 5px 0;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .followerAcceptButton:hover {
+    border-color: #6f9fd8; }
 
 .notification-count {
   position: relative;
@@ -2175,6 +2194,11 @@ a:hover {
   height: 50px;
   width: 50px;
   margin-left: 20px; }
+
+.notification-content {
+  position: relative;
+  display: inline-block;
+  margin-left: 35px; }
 
 .notification-text {
   position: relative;
@@ -2604,6 +2628,12 @@ svg {
     box-shadow: -3px 0 0 0 #a1a1a1; }
   .dropdown-element:active {
     background-color: #ebebeb; }
+
+.dropdown-element-notification:hover {
+  -webkit-box-shadow: -3px 0 0 0 #f08200;
+  -moz-box-shadow: -3px 0 0 0 #f08200;
+  -o-box-shadow: -3px 0 0 0 #f08200;
+  box-shadow: -3px 0 0 0 #f08200; }
 
 .dropdown-a:link {
   text-decoration: none; }
