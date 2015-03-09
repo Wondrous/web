@@ -2169,8 +2169,14 @@ a:hover {
 
 .followerAcceptButton {
   background-color: white;
-  border: 1px solid rgba(70, 140, 220, 0.7);
-  margin: 5px 0; }
+  border: 1px solid #c8c8c8;
+  margin: 5px 0;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .followerAcceptButton:hover {
+    border-color: #6f9fd8; }
 
 .notification-count {
   position: relative;
