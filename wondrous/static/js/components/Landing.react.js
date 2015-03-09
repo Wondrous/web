@@ -1,26 +1,65 @@
 var Post = require('./post.react');
 var WondrousAPI = require('../utils/WondrousAPI');
 
-var sample_posts =
-    {
-        created_at: "2015-02-21T22:09:43.705031",
-        id: 27,
-        is_active: true,
-        is_hidden: false,
-        mime_type: "image/jpeg",
-        name: "Pizza Man",
-        object_id: 31,
-        original_id: null,
-        ouuid: "31-1a2c20f7-cc69-41e0-932c-5e0ea15f35e3",
-        owner_id: null,
-        repost_id: null,
-        set_to_delete: null,
-        subject: "flower",
-        text: "flower",
-        user_id: 1,
-        user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
-        username: "60shades"
-    };
+var sp1 = {
+    created_at: "2015-02-21T22:09:43.705031",
+    id: 27,
+    is_active: true,
+    is_hidden: false,
+    mime_type: "image/jpeg",
+    name: "John Zimmerman",
+    object_id: 31,
+    original_id: null,
+    ouuid: "31-1a2c20f7-cc69-41e0-932c-5e0ea15f35e3",
+    owner_id: null,
+    repost_id: null,
+    set_to_delete: null,
+    subject: "Create beautiful content!",
+    text: "Share your thoughts and epress yourself. Have some fun!",
+    user_id: 1,
+    user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
+    username: "john"
+};
+
+var sp2 = {
+    created_at: "2015-02-21T22:09:43.705031",
+    id: 27,
+    is_active: true,
+    is_hidden: false,
+    mime_type: "image/jpeg",
+    name: "Tim West",
+    object_id: 31,
+    original_id: null,
+    ouuid: "31-1a2c20f7-cc69-41e0-932c-5e0ea15f35e3",
+    owner_id: null,
+    repost_id: null,
+    set_to_delete: null,
+    subject: "Share your amazing experiences with your followers!",
+    text: "Tell your stories with your followers!",
+    user_id: 1,
+    user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
+    username: "timwest"
+};
+
+var sp3 = {
+    created_at: "2015-02-21T22:09:43.705031",
+    id: 27,
+    is_active: true,
+    is_hidden: false,
+    mime_type: "image/jpeg",
+    name: "Ziyuan Liu",
+    object_id: 31,
+    original_id: null,
+    ouuid: "31-1a2c20f7-cc69-41e0-932c-5e0ea15f35e3",
+    owner_id: null,
+    repost_id: null,
+    set_to_delete: null,
+    subject: "Brand yourself.",
+    text: "Turn yourself into a brand.",
+    user_id: 1,
+    user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
+    username: "zman0225"
+};
 
 
 var SignedUp = React.createClass({
@@ -37,73 +76,74 @@ var SignedUp = React.createClass({
 });
 
 var LandingApp = React.createClass({
-    registered:false,
-    referrer_info:{},
+    registered: false,
+    referrer_info: {},
     mixins: [Router.State],
-    handleData:function(err,res){
-        if(err==null){
-            console.log("asd",res);
+
+    handleData: function(err, res) {
+        if (err == null) {
+            //console.log("asd", res);
             this.registered = true;
             this.referrer_info = res;
             this.forceUpdate();
-        }else{
-
-        }
+        } else {}
     },
-    handleClick: function(){
+
+    handleClick: function() {
         var ref_uuid = this.getParams().ref_uuid;
-        if (typeof ref_uuid==='undefined'){
+        if (typeof ref_uuid === 'undefined') {
             ref_uuid = null;
         }
 
         WondrousAPI.registerReferrer({
-            callback:this.handleData,
-            email:this.refs.email.getDOMNode().value,
-            ref_uuid:ref_uuid
+            callback: this.handleData,
+            email: this.refs.email.getDOMNode().value,
+            ref_uuid: ref_uuid
         });
     },
-    getProgress:function(){
+
+    getProgress:function() {
         WondrousAPI.getReferrerProgress({
-            callback:this.handleData,
-            uuid:this.getParams().uuid
+            callback: this.handleData,
+            uuid: this.getParams().uuid
         });
     },
-    componentDidMount:function(){
+
+    componentDidMount:function() {
         var is_progress = this.getRoutes()[1].name==="progress";
-        if (is_progress){
+        if (is_progress) {
             this.getProgress();
         }
     },
-    render: function(){
+
+    render: function() {
+        var bigHeading = "Wondrous helps you create, share, & discuss your interests like never before."
         return (
             <div>
-                <section>
-                    <h1>$omething Wondrou$ i$ happening</h1>
-                    {!this.registered?
-                        <div>
-                        <h3>"There's 500000000 people waiting, join them and help us get $1,000,000,000 in funding"</h3>
-                        <input ref="email" type="email"/> <button onClick={this.handleClick}>$ign up</button></div>:
-                        <SignedUp data={this.referrer_info}/>}
-
-                </section>
-                <hr/>
-                <section>
-                    <div className="masonry">
-                        <Post data={sample_posts}/>
-                        <Post data={sample_posts}/>
-                        <Post data={sample_posts}/>
-                    </div>
-                </section>
-                <hr/>
-                <section>
+                <div className="landing-wrapper-1">
                     <div>
-                        <h1> FEATURES </h1>
-                        <p>blah blah blah</p>
+                        <img className="landing-main-logo" src="/static/pictures/p.logo.png" />
                     </div>
-                </section>
-                <section>
-
-                </section>
+                    {!this.registered ?
+                        <div>
+                            <h1 className="landing-big-heading">{bigHeading}</h1>
+                            
+                            <input className="landing-input round-5" ref="email" type="email" placeholder="Enter your email!" />
+                            <button className="landing-btn round-5" onClick={this.handleClick}>Sign up</button>
+                        
+                        </div>
+                        : <SignedUp data={this.referrer_info} />}
+                </div>
+                <div className="masonry" style={{ position: "relative", top: 410, maxWidth: 900, margin: "0 auto", zIndex: 2 }} >
+                    <Post data={sp1}/>
+                    <Post data={sp2}/>
+                    <Post data={sp3}/>
+                </div>
+                <div className="landing-wrapper-2">
+                    <div>
+                        <h2 className="landing-med-heading">Use Wondrous However You Like</h2>
+                    </div>
+                </div>
             </div>
         );
     }
