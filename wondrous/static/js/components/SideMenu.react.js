@@ -105,7 +105,7 @@ var Notification = React.createClass({
         var profilePic = note.from_user_ouuid ? "http://mojorankdev.s3.amazonaws.com/"+note.from_user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         // var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
 
-        // console.log("NotificationData:", note);
+        var notificationTitle = "@" + note.from_user_username;
 
         return (
             <div onClick={this.handleClick} className="dropdown-a">
@@ -114,7 +114,9 @@ var Notification = React.createClass({
                         <img ref="usericon" className="post-thumb round-50" style={{ position: "absolute" }} src={profilePic} />
                         <div className="notification-content">
                             <div>
-                                <b>{note.from_user_name}</b>
+                                <b title={notificationTitle}>
+                                    {note.from_user_name}
+                                </b>
                             </div>
                             {content}
                             {actionNeeded ? 
