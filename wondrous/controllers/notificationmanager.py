@@ -99,6 +99,8 @@ class NotificationManager(BaseManager):
 
             note_dict.update({"from_user_username":from_user.username});
             note_dict.update({"from_user_name":from_user.name})
+            if from_user.picture_object:
+                note_dict.update({"from_user_ouuid": from_user.picture_object.ouuid})
             send_notification(to_user_id, note_dict)
 
         logging.debug("need to alert?"+str(need_to_alert))
@@ -121,7 +123,8 @@ class NotificationManager(BaseManager):
 
             note_dict.update({"from_user_username": from_user.username});
             note_dict.update({"from_user_name": from_user.name})
-            note_dict.update({"from_user_ouuid": from_user.picture_object.ouuid})
+            if from_user.picture_object:
+                note_dict.update({"from_user_ouuid": from_user.picture_object.ouuid})
             data.append(note_dict)
         return data
 
