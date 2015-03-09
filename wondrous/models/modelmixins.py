@@ -66,7 +66,7 @@ class BaseMixin(object):
     """
 
     id = Column(BigInteger, primary_key=True)
-    created_at = Column(DateTime, default=func.now())
+    created_at = Column(DateTime, default=func.now(), nullable=False)
 
     @declared_attr
     def __tablename__(cls):

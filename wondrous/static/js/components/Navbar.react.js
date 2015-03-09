@@ -1,7 +1,10 @@
 var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
+var NotificationStore = require('../stores/NotificationStore');
+
 var Link = Router.Link;
+
 
 var SearchBox = React.createClass({
     mixins: [Router.Navigation],
@@ -24,15 +27,30 @@ var SearchBox = React.createClass({
 });
 
 var NotificationBox = React.createClass({
-
+    first:true,
+    unseen:0,
+    mixins: [Reflux.listenTo(NotificationStore, 'onNotificationUpdate')],
+    componentDidMount: function(){
+        $(this.refs.noteCount.getDOMNode()).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', this.removeAnimation);
+    },
+    removeAnimation: function(){
+        $(this.refs.noteCount.getDOMNode()).removeClass('animated flash');
+    },
+    onNotificationUpdate: function(){
+        if (this.unseen!=NotificationStore.unseen){
+            $(this.refs.noteCount.getDOMNode()).addClass('animated flash');
+            this.unseen = NotificationStore.unseen || 0;
+            this.forceUpdate();
+        }
+    },
     toggleNotifications: function(e) {
         WondrousActions.toggleNotifications();
     },
     render: function () {
-        var notes = UserStore.user.unseen_notifications || 0;
+        var notes = this.unseen;
         var cn = (notes > 0) ? "notification-count nc-general round-2 notification-alert":"notification-count nc-general round-2";
         return (
-            <span onClick={this.toggleNotifications} id="right-menu" className={cn}>
+            <span onClick={this.toggleNotifications} ref="noteCount" className={cn}>
                 <span className="notification-count-text">{notes}</span>
             </span>);
     }
@@ -80,7 +98,7 @@ function getUserState() {
 var Navbar = React.createClass({
     mixins: [
         Router.Navigation,
-        Reflux.listenTo(UserStore,'onUserUpdate'),
+        Reflux.listenTo(UserStore,'onUserUpdate')
     ],
     getInitialState: function() {
         return getUserState();
@@ -104,6 +122,7 @@ var Navbar = React.createClass({
     onUserUpdate: function(userData) {
         this.setState(getUserState());
     }
+
 });
 
 module.exports = Navbar;

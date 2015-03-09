@@ -34,7 +34,7 @@ from wondrous.models.modelmixins import BaseMixin
 
 
 class Notification(Base, BaseMixin):
-    COMMENTED, UPDATED, LIKED, FOLLOWED, FOLLOW_REQUEST, FOLLOW_ACCEPTED, REPOSTED = range(7)
+    COMMENTED, UPDATED, LIKED, FOLLOWED, FOLLOW_REQUEST, FOLLOW_ACCEPTED, REPOSTED, FEED = range(8)
 
     subject_id = Column(BigInteger)
 

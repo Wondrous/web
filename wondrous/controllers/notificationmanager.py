@@ -83,21 +83,27 @@ class NotificationManager(BaseManager):
                                         subject_id=subject_id,
                                         notification=notification)
 
+        if new_notification:
+            DBSession.add(new_notification)
+            DBSession.flush()
+
         # Send to realtime push
         if need_to_alert or reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
-            Notification.LIKED, Notification.FOLLOW_ACCEPTED]:
-            send_notification(to_user_id, str({
-                'from_user_id' : from_user_id,
-                'to_user_id'   : to_user_id,
-                'reason'       : reason,
-                'subject_id'   : subject_id,
-                'notification' : notification,
-            }))
+            Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED]:
+            note_dict = new_notification.json()
+            from_user = new_notification.from_user
+            to_user = new_notification.to_user
+
+            note_dict.update({"to_user_username":to_user.username});
+            note_dict.update({"to_user_name":to_user.name})
+
+            note_dict.update({"from_user_username":from_user.username});
+            note_dict.update({"from_user_name":from_user.name})
+            send_notification(to_user_id, note_dict)
 
         logging.debug("need to alert?"+str(need_to_alert))
         logging.debug("new notification?"+str(new_notification.reason))
-        if new_notification:
-            DBSession.add(new_notification)
+
         return new_notification
 
     @classmethod
@@ -152,7 +158,12 @@ class NotificationManager(BaseManager):
 
     @classmethod
     def set_all_seen(cls, user_id):
-        DBSession.query(Notification).by_kwargs(to_user_id=user_id,is_seen=False).update({'is_seen':True})
+        DBSession.query(Notification).filter_by(to_user_id=user_id,is_seen=False).update({'is_seen':True})
+
+    @classmethod
+    def seen_all_json(cls,user):
+        cls.set_all_seen(user.id)
+        return {'status':True}
 
     @classmethod
     def set_all_read(cls, user_id):
@@ -160,5 +171,5 @@ class NotificationManager(BaseManager):
 
     @classmethod
     def get_all_unseen_count(cls,user_id):
-        count = Notification.by_kwargs(is_seen=False,to_user_id=user_id).count()
+        count = DBSession.query(Notification).filter_by(is_seen=False,to_user_id=user_id).count()
         return count if count else 0

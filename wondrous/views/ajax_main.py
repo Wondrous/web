@@ -45,7 +45,7 @@ from wondrous.utilities.general_utilities import (
 )
 
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
-
+from wondrous.utilities.notification_utilities import send_notification
 # from wondrous.utilities.pyexif import ExifEditor
 
 from wondrous.utilities.validation_utilities import (
@@ -61,6 +61,7 @@ from wondrous.views.main import BaseHandler
 import json
 import logging
 import urllib
+import shortuuid
 
 class APIViews(BaseHandler):
 
@@ -639,6 +640,16 @@ class APIViews(BaseHandler):
         return SearchManager.post_search_json(**self.query_kwargs)
 
     @api_login_required
+    @view_config(request_method='POST', route_name='api_seen_notification', renderer='json')
+    def api_seen_notification(self):
+
+        """
+            TODO
+        """
+
+        return NotificationManager.seen_all_json(**self.query_kwargs)
+
+    @api_login_required
     @view_config(request_method='POST', renderer='json', route_name='api_logout')
     def api_logout(self):
 
@@ -677,7 +688,11 @@ class APIViews(BaseHandler):
             # Reactivating a user when they log in
             # TODO -- this needs to be more 'offical'
             self._set_session_headers(this_user)
-            return this_user.json()
+            retval = this_user.json()
+            key = shortuuid.uuid()
+            retval.update({'auth':key})
+            send_notification(-1,str(key)+":"+str(this_user.id))
+            return retval
 
         elif this_user and this_user.is_banned:
             return {'error': 'banned'}
