@@ -2147,7 +2147,8 @@ a:hover {
   top: 0;
   right: 0;
   margin-top: 38px;
-  width: 250px;
+  /*width: 250px;*/
+  width: 280px;
   background-color: #fbfbfb;
   overflow-y: scroll;
   color: #2c2c2c;
@@ -2169,7 +2170,7 @@ a:hover {
 .followerAcceptButton {
   background-color: white;
   border: 1px solid rgba(70, 140, 220, 0.7);
-  border-radius: 2px; }
+  margin: 5px 0; }
 
 .notification-count {
   position: relative;
@@ -2250,6 +2251,11 @@ a:hover {
   height: 50px;
   width: 50px;
   margin-left: 20px; }
+
+.notification-content {
+  position: relative;
+  display: inline-block;
+  margin-left: 35px; }
 
 .notification-text {
   position: relative;
@@ -2679,6 +2685,12 @@ svg {
     box-shadow: -3px 0 0 0 #a1a1a1; }
   .dropdown-element:active {
     background-color: #ebebeb; }
+
+.dropdown-element-notification:hover {
+  -webkit-box-shadow: -3px 0 0 0 #f08200;
+  -moz-box-shadow: -3px 0 0 0 #f08200;
+  -o-box-shadow: -3px 0 0 0 #f08200;
+  box-shadow: -3px 0 0 0 #f08200; }
 
 .dropdown-a:link {
   text-decoration: none; }

@@ -35,6 +35,15 @@
     }
     &:active { background-color: rgb(235,235,235); }
 }
+
+.dropdown-element-notification {
+    &:hover {
+        -webkit-box-shadow: -3px 0 0 0 rgb(240,130,0);
+           -moz-box-shadow: -3px 0 0 0 rgb(240,130,0);
+             -o-box-shadow: -3px 0 0 0 rgb(240,130,0);
+                box-shadow: -3px 0 0 0 rgb(240,130,0);
+    }
+}
  
 
 .dropdown-a:link {

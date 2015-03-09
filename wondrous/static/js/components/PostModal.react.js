@@ -173,16 +173,12 @@ var PostFooter = React.createClass({
         WondrousActions.deletePost(this.props.data.id);
     },
 
-    _setIconSize: function() {
-        // $(".postHeartIcon").css("height", 33).css("width", 33);
-    },
-
     likePost: function() {
         this.props.data.liked = !this.props.data.liked;
         this.forceUpdate();
         WondrousAPI.toggleLike({
             post_id: this.props.data.id,
-            callback: this._setIconSize
+            callback: null,
         });
     },
     clickRepost: function() {

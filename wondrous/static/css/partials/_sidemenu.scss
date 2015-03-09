@@ -5,7 +5,8 @@
     top: 0;
     right: 0;
     margin-top: 38px;
-    width: 250px;
+    /*width: 250px;*/
+    width: 280px;
     background-color: rgb(251,251,251);
     overflow-y: scroll;
     color: rgb(44,44,44);
@@ -31,5 +32,5 @@
 .followerAcceptButton {
     background-color: rgb(255,255,255);
     border: 1px solid rgba(70,140,220,0.7);
-    border-radius: 2px;
+    margin: 5px 0;
 }
