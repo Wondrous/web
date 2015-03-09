@@ -7,7 +7,9 @@
 #
 # MODELS/POST.PY
 #
+
 import logging
+
 from sqlalchemy import (
     BigInteger,
     Boolean,
