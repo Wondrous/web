@@ -11,9 +11,8 @@ global CONNECTED
 try:
     logging.info("Notification server connected")
     c.connect()
-    CONNECTED = True
 except Exception, e:
-    CONNECTED = False
+    logging.warn(e)
 
 def send_notification(channel,message):
     """
@@ -28,17 +27,14 @@ def send_notification(channel,message):
 
         RETURNS: None
     """
-    if CONNECTED:
-        data = {"channel":channel,"message":message}
-        package = json.dumps(data, ensure_ascii=False)
+    data = {"channel":channel,"message":message}
+    package = json.dumps(data, ensure_ascii=False)
+    try:
+        c.publish(CHANNEL_NOTIFICATION,package)
+    except Exception, e:
+        logging.warn(e)
         try:
-            c.publish(CHANNEL_NOTIFICATION,package)
+            logging.info("Notification server connected")
+            c.connect()
         except Exception, e:
             logging.warn(e)
-    else:
-        # NOT CONNECTED
-        pass
-
-#simple testing
-# for i in range(100):
-#     send_notification(i,"hello world!"+str(i))
