@@ -258,6 +258,7 @@ var Post = React.createClass({
                             {this.props.data.like_count}
                         </span>
                     </div>
+                    <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
                 </div>
 				<div className="post-content" >
 						{
