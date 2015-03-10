@@ -109,15 +109,12 @@ var Comment = React.createClass({
 
     componentDidMount: function() {
     	$(".post-comment-delete-btn").hide();
-        // $(".post-comment-date").hide();
 		$(document).on({
 		    mouseenter: function(e) {
 				$(this).find(".post-comment-delete-btn").show();
-                // $(this).find(".post-comment-date").show();
 		    },
 		    mouseleave: function(e) {
 				$(this).find(".post-comment-delete-btn").hide();
-                // $(this).find(".post-comment-date").show();
 		    }
 		}, '.post-comment');
     },
@@ -283,6 +280,11 @@ var Post = React.createClass({
                         <span className="post-micro-data-super-analytics-item">
                             <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.props.data.view_count}
+                        </span>
+
+                        <span className="post-micro-data-super-analytics-item">
+                            <img src="/static/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-view-icon" />
+                            ?
                         </span>
 
                         <span className="post-micro-data-super-analytics-item">
