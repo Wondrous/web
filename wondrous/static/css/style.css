@@ -407,6 +407,13 @@ td, th {
   font-weight: normal;
   font-style: normal; }
 
+@font-face {
+  font-family: 'geosanslightregular';
+  src: url('fonts/geosanslight/geosanslight-webfont.eot');
+  src: url('fonts/geosanslight/geosanslight-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geosanslight/geosanslight-webfont.woff2') format('woff2'), url('fonts/geosanslight/geosanslight-webfont.woff') format('woff'), url('fonts/geosanslight/geosanslight-webfont.ttf') format('truetype'), url('fonts/geosanslight/geosanslight-webfont.svg#geosanslightregular') format('svg');
+  font-weight: normal;
+  font-style: normal; }
+
 body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
   min-width: 750px; }
 
@@ -723,6 +730,7 @@ a:hover {
   padding-top: 570px;
   text-align: center;
   background-color: white;
+  overflow-x: hidden;
   z-index: 1; }
 
 .landing-main-logo {
@@ -734,10 +742,12 @@ a:hover {
   margin-top: 100px; }
 
 .landing-big-heading {
-  font-size: 20px;
-  font-family: helvetica, arial, sans-serif;
+  /*font-size: 20px;*/
+  font-size: 27px;
+  font-family: 'geosanslightregular', helvetica, arial, sans-serif;
   font-weight: 100;
   color: #fbfbfb;
+  margin: 30px 20%;
   margin-bottom: 100px; }
 
 .landing-med-heading {

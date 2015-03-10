@@ -107,6 +107,8 @@ var LandingApp = React.createClass({
     },
 
     componentDidMount:function() {
+        $('.top-banner').hide();
+
         var is_progress = this.getRoutes()[1].name==="progress";
         if (is_progress) {
             this.getProgress();
