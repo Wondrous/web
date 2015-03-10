@@ -72,9 +72,10 @@ var PostStore = Reflux.createStore({
     },
 
     loadComments: function(comments){
-        comments.map(function(comment,index){
-            this.add(comment);
-        },this.comments);
+        comments.reverse();
+        var temp = getNewSet(comments);
+        temp.union(this.comments);
+        this.comments = temp; 
 
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
     },

@@ -89,7 +89,7 @@ class NotificationManager(BaseManager):
 
         # Send to realtime push
         if need_to_alert or reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
-            Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED]:
+            Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED, Notification.MENTIONED]:
             note_dict = new_notification.json()
             from_user = new_notification.from_user
             to_user = new_notification.to_user
@@ -102,6 +102,7 @@ class NotificationManager(BaseManager):
             if from_user.picture_object:
                 note_dict.update({"from_user_ouuid": from_user.picture_object.ouuid})
             send_notification(to_user_id, note_dict)
+
 
         logging.debug("need to alert?"+str(need_to_alert))
         logging.debug("new notification?"+str(new_notification.reason))
