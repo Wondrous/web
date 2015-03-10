@@ -71,3 +71,36 @@
     color: rgb(100,100,100);
     background-color: rgb(251,251,251);
 }
+
+.landing-feature {
+    position: relative;
+    display: inline-block;
+    max-width: 300px;
+
+    background-color: rgb(0,226,174);
+    border-radius: 50%;
+    height: 230px;
+    width: 230px;
+    margin: 50px;
+
+    vertical-align: top;
+    padding: 0 75px;
+    
+    -webkit-transition: left 800ms ease;
+       -moz-transition: left 800ms ease;
+        -ms-transition: left 800ms ease;
+         -o-transition: left 800ms ease;
+            transition: left 800ms ease;
+}
+
+.landing-in {
+    left: 0 !important;
+}
+
+.landing-feature:nth-child(1) {
+    left: -300px;
+}
+
+.landing-feature:nth-child(2) {
+    left: 300px;
+}

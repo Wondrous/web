@@ -111,6 +111,48 @@ var LandingApp = React.createClass({
         if (is_progress) {
             this.getProgress();
         }
+
+        // MUST BE REFACTORED
+        (function(){
+            
+            window.onload = Init;
+            
+            function Init(){
+                BindBubbles();
+            }
+            
+            function BindBubbles(){
+                var lastscroll = window.scrollY, allopen = true, allclosed = false;
+                var bubbles = document.getElementsByClassName('landing-feature');
+                window.addEventListener('scroll', OnScroll);
+                
+                OnScroll();
+                function OnScroll(){
+                    var y = window.scrollY, direction = lastscroll <= y ? 1 : -1;
+                    
+                    lastscroll = y;
+                    if (allclosed && direction == 1)
+                        return;
+                    if (allopen && direction == -1)
+                        return;
+
+                    allclosed = allopen = true;
+
+                    for (var i=0, bubble; bubble=bubbles[i++];) {
+                        if(bubble.getAttribute('class').indexOf('landing-in') == -1)
+                            allclosed = false;
+                        else
+                            allopen = false;
+                        
+                        if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop) )
+                            bubble.setAttribute('class', 'landing-feature landing-in');
+                        else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop + bubble.offsetHeight/2) )
+                            bubble.setAttribute('class', 'landing-feature');
+                    }
+                }
+            }
+            
+        })();
     },
 
     render: function() {
@@ -137,8 +179,34 @@ var LandingApp = React.createClass({
                     <Post data={sp3}/>
                 </div>
                 <div className="landing-wrapper-2">
-                    <div>
+                    <div style={{ paddingBottom: 400 }}>
                         <h2 className="landing-med-heading">Use Wondrous However You Like</h2>
+
+                        <div>
+                            <div className="landing-feature">
+                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <h2>Read and write meaningful content in just minutes</h2>
+                                <p></p>
+                            </div>
+
+                            <div className="landing-feature">
+                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <h2>Can you answer the question of the day?</h2>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="landing-feature">
+                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <h2>Join the conversation on trending topics</h2>
+                            </div>
+
+                            <div className="landing-feature">
+                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <h2>Become an influencer</h2>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
