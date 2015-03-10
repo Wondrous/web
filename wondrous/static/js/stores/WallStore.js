@@ -22,13 +22,15 @@ var WallStore = Reflux.createStore({
     },
 
     newProfile: function(username){
-        if (this.username!==''&&username!==this.username){
-            this.wall.reset();
+        if (typeof username!=='undefined'){
             this.currentPage = 0;
-            this.donePaging = false;
-            this.paging = false;
-            this.username = username;
         }
+
+        this.donePaging = false;
+        this.paging = false;
+        this.username = username;
+        this.wall.reset();
+
     },
 
     loadMore: function(username){

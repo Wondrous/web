@@ -7,7 +7,7 @@ function _callback(cb){
     }
 
     return function(err,res){
-        console.log("res",res);
+        // console.log("res",res);
         if (res) {
             if (typeof res.body !== 'undefined' && res.body && res.body.hasOwnProperty('error')) {
                 err = res.body;

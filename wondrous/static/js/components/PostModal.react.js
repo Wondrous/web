@@ -71,7 +71,21 @@ var Comment = React.createClass({
         var hrefPlaceholder = "/" + this.props.data.username;
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
         var createdAt = moment(this.props.data.created_at);
-        var createdAtDisplay = createdAt.format("h:m a MMM wo GG");
+
+        var mmtMidnight = moment().startOf('day');
+        var createdAtDisplay = "";
+        if (createdAt.isBefore(mmtMidnight)){
+            var mmtYear = moment().startOf('year');
+            if (createdAt.isBefore(mmtYear)){
+                createdAtDisplay = createdAt.format("h:mm a MMM wo 'GG");
+            }else{
+                createdAtDisplay = createdAt.format("h:mm a MMM wo");
+            }
+
+        }else{
+            createdAtDisplay = createdAt.format("h:mm a");
+        }
+
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
@@ -83,9 +97,9 @@ var Comment = React.createClass({
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
-                    
+
                     <div className="post-comment-date">{createdAtDisplay}</div>
-                    
+
                     {is_it_mine ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
                     	: null}
