@@ -99,7 +99,6 @@ var Notification = React.createClass({
             content = "commented on one of your posts";
         }else if (reason == NotificationReasons.MENTIONED) {
             content = "mentioned you in a post";
-            console.log("here")
         }
         return content;
     },
