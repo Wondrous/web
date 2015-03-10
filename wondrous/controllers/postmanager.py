@@ -110,7 +110,7 @@ class PostManager(BaseManager):
             for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
                 u_id = user_id[0]
                 # Notify if needed
-                if u_id!=user.id:
+                if u_id!=p.user_id:
                     new_notification = NotificationManager.add(
                                         from_user_id=user.id,
                                         to_user_id=u_id,
