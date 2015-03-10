@@ -41,6 +41,11 @@ var NotificationBox = React.createClass({
             $(this.refs.noteCount.getDOMNode()).removeClass('animated flash');
             $(this.refs.noteCount.getDOMNode()).addClass('animated flash');
             this.unseen = NotificationStore.unseen || 0;
+            if (this.unseen==0){
+                document.title = "Wondrous";
+            }else{
+                document.title = "Wondrous ("+String(this.unseen)+")";
+            }
             this.forceUpdate();
         }
     },
