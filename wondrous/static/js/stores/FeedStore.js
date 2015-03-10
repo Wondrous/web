@@ -2,14 +2,11 @@ var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
 
-var defaultFeed = [];
-var defaultPosts = {};
-
 var FeedStore = Reflux.createStore({
     listenables: WondrousActions,
     init:function(){
-        this.feed = defaultFeed;
-        this.posts = defaultPosts;
+        this.feed = [];
+        this.posts = {};
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
@@ -20,6 +17,14 @@ var FeedStore = Reflux.createStore({
         if(userData.hasOwnProperty('user')){
             WondrousActions.loadFeed(this.currentPage);
         }
+    },
+
+    unloadUser: function(){
+        this.feed = [];
+        this.posts = {};
+        this.currentPage = 0;
+        this.donePaging = false;
+        this.paging = false;
     },
 
     updateFeed: function(feedItems){

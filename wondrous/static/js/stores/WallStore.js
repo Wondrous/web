@@ -1,21 +1,25 @@
 var WondrousActions = require('../actions/WondrousActions');
 var ProfileStore = require('../stores/ProfileStore');
 
-var defaultWall = [];
-var defaultPosts = {};
-
 var WallStore = Reflux.createStore({
     listenables: WondrousActions,
 
     init:function(){
-        this.wall = defaultWall;
-        this.posts = defaultPosts;
+        this.wall = [];
+        this.posts = {};
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
-        this.username = ''
+        this.username = '';
+    },
 
-
+    unloadUser: function(){
+        this.wall = [];
+        this.posts = {};
+        this.currentPage = 0;
+        this.donePaging = false;
+        this.paging = false;
+        this.username = '';
     },
 
     newProfile: function(profileData){

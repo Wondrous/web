@@ -111,6 +111,8 @@ var WondrousActions = Reflux.createActions({
     // update current user info
     "updateUser": {},
 
+    "unloadUser": {},
+
     // update initially to notification
     "updateNotification": {},
 
@@ -276,7 +278,7 @@ WondrousActions.logout.listen(function(){
     WondrousAPI.logout({
         callback: function(err,res){
             if (err == null){
-
+                WondrousActions.unloadUser();
             }else{
                 console.error(err);
             }

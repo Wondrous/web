@@ -21,6 +21,10 @@ var ProfileStore = Reflux.createStore({
         this.listenTo(UserStore,"onUserChange");
     },
 
+    unloadUser: function(){
+        this.newProfile();
+    },
+
     newProfile: function(){
         this.user = defaultUser;
         this.followerPage = 0;

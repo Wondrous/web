@@ -692,6 +692,8 @@ class APIViews(BaseHandler):
             key = shortuuid.uuid()
             retval.update({'auth':key})
             send_notification(-1,str(key)+":"+str(this_user.id))
+            if this_user.picture_object:
+                retval.update({"ouuid":this_user.picture_object.ouuid})
             return retval
 
         elif this_user and this_user.is_banned:

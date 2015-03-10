@@ -21,7 +21,11 @@ var PostStore = Reflux.createStore({
 
         this.listenTo(UserStore,"onUserChange");
     },
-
+    unloadUser: function(){
+        this.post = {subject:'',text:'',id:-1};
+        this.commentPage = 0;
+        this.comments = getNewSet(null);
+    },
     newPostLoad: function(post_id){
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;

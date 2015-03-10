@@ -69,8 +69,17 @@ var Notification = React.createClass({
     },
     handleClick: function(){
         note = this.props.data;
-        var url = "/"+note.from_user_username;
-        this.transitionTo(url);
+        var reason = note.reason;
+        console.log("reason is",note);
+        if (reason == NotificationReasons.LIKED || reason == NotificationReasons.REPOSTED || reason == NotificationReasons.COMMENTED) {
+            WondrousActions.newPostLoad(note.subject_id);
+            WondrousActions.loadPost(note.subject_id);
+            WondrousActions.openCardModal();
+
+        }else{
+            var url = "/"+note.from_user_username;
+            this.transitionTo(url);
+        }
     },
     generateContent: function(reason){
         var content = '';
@@ -119,7 +128,7 @@ var Notification = React.createClass({
                                 </b>
                             </div>
                             {content}
-                            {actionNeeded ? 
+                            {actionNeeded ?
                                 <div>
                                     <button className="followerAcceptButton round-2" onClick={this.handleAccept}>Accept +1</button>
                                 </div> : ''}
