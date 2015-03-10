@@ -25,13 +25,11 @@ var NOTIFICATION = {
 
 var NotificationStore = Reflux.createStore({
     listenables: WondrousActions,
-
     // pushstream stuff
     onmessage: function(note,id,channel){
         this.unseen++;
         document.title = "Wondrous ("+String(this.unseen)+")";
         var temp = this.notifications.toArray();
-        console.log("received note",note);
         temp.unshift(note);
         this.notifications = getNewSet(temp);
         this.trigger(this.notifications);
