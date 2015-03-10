@@ -34,6 +34,7 @@ def send_notification(channel,message):
 
     try:
         c.publish(CHANNEL_NOTIFICATION,package)
+        logging.warn("sent"+str(package))
     except Exception, e:
         logging.warn(e)
         try:

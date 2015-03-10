@@ -30,6 +30,7 @@ var NotificationStore = Reflux.createStore({
     onmessage: function(note,id,channel){
         this.unseen++;
         var temp = this.notifications.toArray();
+        console.log("received note",note);
         temp.unshift(note);
         this.notifications = getNewSet(temp);
         this.trigger(this.notifications);
@@ -113,6 +114,8 @@ var NotificationStore = Reflux.createStore({
     toggleNotifications: function(){
         if (UserStore.sidebarOpen){
             this.unseen = 0;
+            document.title = "Wondrous"
+
             WondrousActions.setNotificationSeen();
             this.trigger();
         }
