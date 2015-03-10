@@ -153,6 +153,8 @@ var NotificationsBar = React.createClass({
     onNotificationChange: function(){
         this.setState({data:NotificationStore.getNotifications()});
     },
+
+
     render:function(){
         console.log("note bar",this.state);
 
@@ -166,7 +168,11 @@ var NotificationsBar = React.createClass({
             <div style={{ marginBottom: 60 }}>
                 <h5 className="notification-menu-header">Activity</h5>
                 {notifications}
+                <div>
+                {!NotificationStore.donePaging&&notifications.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:null}
+                </div>
             </div>
+
         );
     },
 });
@@ -176,14 +182,21 @@ var SideMenu = React.createClass({
     getInitialState: function() {
         return {data:UserStore.sidebarOpen};
     },
-
+    onSideScroll: function(){
+        if($(this.refs.noteContainer.getDOMNode()).scrollTop() + $(this.refs.noteContainer.getDOMNode()).innerHeight()+25 >= $(this.refs.noteContainer.getDOMNode())[0].scrollHeight) {
+            NotificationStore.loadMore();
+        }
+    },
+    componentDidMount: function(){
+        $(this.refs.noteContainer.getDOMNode()).scroll(this.onSideScroll);
+    },
     render: function(){
         var displayStyle = {
             display: UserStore.sidebarOpen ? "block" : "none"
         };
 
         return(
-            <div className="sidemenu" style={displayStyle}>
+            <div ref="noteContainer" className="sidemenu" style={displayStyle}>
                 <div className="sidemenuOptions _open_bmo">
                     {UserStore.sidebarType==WondrousConstants.SHOW_SETTINGS ? <SettingsBar/>: ''}
                     {UserStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS ? <NotificationsBar/>: ''}

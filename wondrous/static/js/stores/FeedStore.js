@@ -29,7 +29,7 @@ var FeedStore = Reflux.createStore({
 
     updateFeed: function(feedItems){
         this.paging = false;
-        if (feedItems.length==0){
+        if (feedItems.length<15){
             this.donePaging = true;
         }
         for(var i = 0; i < feedItems.length; i++){

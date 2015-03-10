@@ -71,9 +71,7 @@ class NotificationManager(BaseManager):
         # Delete overlapping notifications
         # TODO: Merge follow requests IF the user.is_private = False
         # TODO: Before I change this need_to_send = need_to_send redundancy,
-        need_to_alert = cls._merge_unseen_votes(from_user_id=from_user_id,
-                                                to_user_id=to_user_id,
-                                                reason=reason)
+        # need_to_alert = cls._merge_unseen_votes(from_user_id=from_user_id,to_user_id=to_user_id,reason=reason)
 
         # Add the new notification after the overlap handling
         notification = cls.construct_notification(reason,from_user_id,to_user_id)
@@ -88,7 +86,7 @@ class NotificationManager(BaseManager):
             DBSession.flush()
 
         # Send to realtime push
-        if need_to_alert or reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
+        if  reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
             Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED, Notification.MENTIONED]:
             note_dict = new_notification.json()
             from_user = new_notification.from_user
@@ -104,7 +102,6 @@ class NotificationManager(BaseManager):
             send_notification(to_user_id, note_dict)
 
 
-        logging.debug("need to alert?"+str(need_to_alert))
         logging.debug("new notification?"+str(new_notification.reason))
 
         return new_notification

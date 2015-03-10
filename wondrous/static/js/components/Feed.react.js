@@ -25,10 +25,12 @@ var Home = React.createClass({
         this.forceUpdate();
     },
     render: function(){
-        var loggedIn = UserStore.loggedIn;
+        if (!UserStore.loggedIn&&!UserStore.loaded){
+            return (<div></div>);
+        }
         return (
             <div>
-            {loggedIn ? <Feed />:<LoggedOut />}
+            {UserStore.loggedIn ? <Feed />:<LoggedOut />}
             </div>
         );
     }

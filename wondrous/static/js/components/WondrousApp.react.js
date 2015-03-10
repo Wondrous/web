@@ -46,13 +46,6 @@ var WondrousApp = React.createClass({
                 WondrousActions.loadFeed(FeedStore.currentPage);
             }
         }
-        // If scrolled enough, not currently paging and not complete...
-        // if(scrolled && !FeedStore.paging && !FeedStore.donePaging) {
-        //     FeedStore.paging = true;
-        //     console.log("getting more page")
-        //     FeedStore.incrementPage();
-        //     WondrousActions.loadFeed(FeedStore.currentPage);
-        // }
     },
 
     componentDidMount: function(){
