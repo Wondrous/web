@@ -3,7 +3,6 @@ var WondrousAPI = require('../utils/WondrousAPI');
 
 var sp1 = {
     created_at: "2015-02-21T22:09:43.705031",
-    id: 27,
     is_active: true,
     is_hidden: false,
     mime_type: "image/jpeg",
@@ -23,7 +22,6 @@ var sp1 = {
 
 var sp2 = {
     created_at: "2015-02-21T22:09:43.705031",
-    id: 27,
     is_active: true,
     is_hidden: false,
     mime_type: "image/jpeg",
@@ -43,7 +41,6 @@ var sp2 = {
 
 var sp3 = {
     created_at: "2015-02-21T22:09:43.705031",
-    id: 27,
     is_active: true,
     is_hidden: false,
     mime_type: "image/jpeg",
@@ -127,10 +124,10 @@ var LandingApp = React.createClass({
                     {!this.registered ?
                         <div>
                             <h1 className="landing-big-heading">{bigHeading}</h1>
-                            
+
                             <input className="landing-input round-5" ref="email" type="email" placeholder="Enter your email!" />
                             <button className="landing-btn round-5" onClick={this.handleClick}>Sign up</button>
-                        
+
                         </div>
                         : <SignedUp data={this.referrer_info} />}
                 </div>

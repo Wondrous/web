@@ -76,8 +76,10 @@ var Post = React.createClass({
         if (!evt.metaKey){
             evt.preventDefault();
             WondrousActions.openCardModal();
-            WondrousActions.newPostLoad(this.props.data.id);
-            WondrousActions.loadPost(this.props.data.id);
+            if (typeof this.props.data.id !=='undefined'){
+                WondrousActions.newPostLoad(this.props.data.id);
+                WondrousActions.loadPost(this.props.data.id);
+            }
             WondrousActions.updatePost(this.props.data);
         }
     },
