@@ -439,6 +439,7 @@ WondrousActions.loadPost.listen(function(post_id){
             if (err == null){
                 WondrousActions.updatePost(res);
             }else{
+                console.error(err);
                 WondrousActions.loadPostError(err);
             }
         }
