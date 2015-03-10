@@ -87,7 +87,9 @@ var Feed = React.createClass({
                         <div className="grid-sizer" style={{"display": "none"}}></div>
                         {posts}
                     </div>
-
+                    <div>
+                    {!FeedStore.donePaging&&posts.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:null}
+                    </div>
                 </div>
             </div>
         );

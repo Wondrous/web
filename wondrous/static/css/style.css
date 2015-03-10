@@ -628,6 +628,12 @@ body {
   background: transparent;
   padding: 10px; }
 
+.loading-wheel {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px; }
+
 a:link {
   text-decoration: none; }
 
