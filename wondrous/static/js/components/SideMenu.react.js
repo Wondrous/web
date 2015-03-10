@@ -48,7 +48,9 @@ NotificationReasons = {
     FOLLOWED: 3,
     FOLLOW_REQUEST: 4,
     FOLLOW_ACCEPTED: 5,
-    REPOSTED:6
+    REPOSTED:6,
+    FEED:7,
+    MENTIONED:8
 };
 
 var Notification = React.createClass({
@@ -71,7 +73,7 @@ var Notification = React.createClass({
         note = this.props.data;
         var reason = note.reason;
         console.log("reason is",note);
-        if (reason == NotificationReasons.LIKED || reason == NotificationReasons.REPOSTED || reason == NotificationReasons.COMMENTED) {
+        if (reason == NotificationReasons.LIKED || reason == NotificationReasons.REPOSTED || reason == NotificationReasons.COMMENTED || reason == NotificationReasons.MENTIONED) {
             WondrousActions.newPostLoad(note.subject_id);
             WondrousActions.loadPost(note.subject_id);
             WondrousActions.openCardModal();
@@ -95,6 +97,9 @@ var Notification = React.createClass({
             content = "reposted one of your posts";
         }else if (reason == NotificationReasons.COMMENTED) {
             content = "commented on one of your posts";
+        }else if (reason == NotificationReasons.MENTIONED) {
+            content = "mentioned you in a post";
+            console.log("here")
         }
         return content;
     },

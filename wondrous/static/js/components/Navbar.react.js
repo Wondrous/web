@@ -38,6 +38,7 @@ var NotificationBox = React.createClass({
     },
     onNotificationUpdate: function(){
         if (this.unseen!=NotificationStore.unseen){
+            $(this.refs.noteCount.getDOMNode()).removeClass('animated flash');
             $(this.refs.noteCount.getDOMNode()).addClass('animated flash');
             this.unseen = NotificationStore.unseen || 0;
             this.forceUpdate();

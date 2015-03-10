@@ -19,6 +19,7 @@ import uuid, logging
 from datetime import datetime
 
 from sqlalchemy import (
+    desc,
     asc,
     or_,
 )
@@ -64,7 +65,7 @@ class PostManager(BaseManager):
     def get_comments_json(user,post_id,page=0,per_page=15):
         retval = []
         for user,comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
-            filter(Comment.user_id==User.id).order_by(asc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
+            filter(Comment.user_id==User.id).order_by(desc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
 
             data = user.json()
             if user.picture_object:
@@ -103,6 +104,18 @@ class PostManager(BaseManager):
                                 to_user_id=p.user_id,
                                 subject_id=post_id,
                                 reason=Notification.COMMENTED)
+            import re
+            usernames = list(set(re.findall('\s*@\s*(\w+)', text)))
+            for user_id in DBSession.query(User.id).filter(User.username.in_(usernames)).distinct():
+                u_id = user_id[0]
+                # Notify if needed
+                if u_id!=user.id:
+                    new_notification = NotificationManager.add(
+                                        from_user_id=user.id,
+                                        to_user_id=u_id,
+                                        subject_id=post_id,
+                                        reason=Notification.MENTIONED)
+
             return retval
         else:
             return {'error':'bad permission'}
@@ -221,7 +234,7 @@ class PostManager(BaseManager):
                 post_dict = post.json()
                 if post_dict:
                     post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
-                    
+
                 pv = DBSession.query(PostView).filter_by(post_id=post.id, user_id=user.id).first()
 
                 if not pv:
