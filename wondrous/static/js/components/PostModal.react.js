@@ -286,19 +286,19 @@ var Post = React.createClass({
 var PostModal = React.createClass({
 	mixins:[Reflux.listenTo(PostStore,"onPostUpdate")],
 
-	onPostUpdate: function(postData){
+	onPostUpdate: function(postData) {
 		this.setState(postData);
 	},
 
-	getInitialState: function(){
+	getInitialState: function() {
 		return UserStore;
 	},
 
-	handleClose: function(evt){
+	handleClose: function(evt) {
 		WondrousActions.closeCardModal();
 	},
 
-	stopProp: function(evt){
+	stopProp: function(evt) {
 		evt.preventDefault();
 		evt.stopPropagation();
 	},
