@@ -108,21 +108,25 @@ class PostManager(BaseManager):
                                 subject_id=post_id,
                                 reason=Notification.COMMENTED)
 
-            usernames = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
-            if len(usernames)>0:
-                for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
-                    u_id = user_id[0]
-                    # Notify if needed
-                    if u_id!=p.user_id:
-                        new_notification = NotificationManager.add(
-                                            from_user_id=user.id,
-                                            to_user_id=u_id,
-                                            subject_id=post_id,
-                                            reason=Notification.MENTIONED)
+            cls.send_mentions(p,user,text)
+
             return retval
         else:
             return {'error':'bad permission'}
 
+    @staticmethod
+    def send_mentions(post,user,text):
+        usernames = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
+        if len(usernames)>0:
+            for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
+                u_id = user_id[0]
+                # Notify if needed
+                if u_id!=post.user_id:
+                    new_notification = NotificationManager.add(
+                                        from_user_id=user.id,
+                                        to_user_id=u_id,
+                                        subject_id=post.id,
+                                        reason=Notification.MENTIONED)
     @staticmethod
     def _move_post_into_feeds(post_id, user_id):
         # TODO if we ever reach over 100 followers? Time to work queue it up to a
@@ -225,7 +229,7 @@ class PostManager(BaseManager):
 
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
-
+        cls.send_mentions(post,user,text+" "+subject)
         data.update(post.json())
         return data
 
