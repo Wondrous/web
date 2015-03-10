@@ -242,7 +242,7 @@ var Post = React.createClass({
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
 					<UserTitle data={this.props.data} />
 				</div>
-				<div className="post-title post-title-big">{this.props.data.subject}</div>
+				<div className="post-title post-title-big" style={{ marginLeft: 28, marginRight: 28 }}>{this.props.data.subject}</div>
 				<div onClick={this.handleClick} id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
