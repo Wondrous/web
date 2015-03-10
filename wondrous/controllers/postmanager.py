@@ -82,8 +82,8 @@ class PostManager(BaseManager):
     def post_count(user_id):
         return DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).count()
 
-    @staticmethod
-    def new_comment_json(user,post_id,text):
+    @classmethod
+    def new_comment_json(cls,user,post_id,text):
         p = Post.query.get(post_id)
         if not p:
             return {'error': 'post not found'}
