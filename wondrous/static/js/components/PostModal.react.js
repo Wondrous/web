@@ -83,7 +83,9 @@ var Comment = React.createClass({
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
-                    <span> TIME: {createdAtDisplay}</span>
+                    
+                    <div className="post-comment-date">{createdAtDisplay}</div>
+                    
                     {is_it_mine ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
                     	: null}

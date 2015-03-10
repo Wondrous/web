@@ -2073,6 +2073,13 @@ a:hover {
   color: #d2d2d2;
   cursor: pointer; }
 
+.post-comment-date {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  color: #d2d2d2;
+  font-size: 13px; }
+
 .top-banner {
   position: fixed;
   top: 0;
