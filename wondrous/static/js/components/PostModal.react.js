@@ -107,6 +107,7 @@ var Comments = React.createClass({
     // postStoreChanged: function(){
     //     this.forceUpdate();
     // },
+    
     onComment: function(evt){
         evt.preventDefault();
         var text = this.refs.commentBox.getDOMNode().value.trim();
@@ -121,21 +122,23 @@ var Comments = React.createClass({
             // Send out a friendly error: "Please add some text!"
         }
     },
+
     loadMoreComments: function(){
         PostStore.loadMoreComments();
     },
+
     render: function() {
         var comments = this.props.data.map(function(comment, index) {
             return (
                 <Comment key={comment.id} data={comment}/>
             );
         });
-        console.log("done paging?",!PostStore.donePaging);
+        console.log("done paging?", !PostStore.donePaging);
         return (
             <div>
-                {!PostStore.donePaging?<button onClick={this.loadMoreComments}>LOAD MORE COMMENTS</button>:null}
+                {!PostStore.donePaging ? <button onClick={this.loadMoreComments}>LOAD MORE COMMENTS</button> : null}
                 {comments}
-                {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div>:null}
+                {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div> : null}
                 <form style={{ marginLeft: 28, marginRight: 10 }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>

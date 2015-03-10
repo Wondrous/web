@@ -78,23 +78,23 @@ var PostStore = Reflux.createStore({
         }
     },
 
-    loadComments: function(comments){
+    loadComments: function(comments) {
         this.paging = false;
-        if (comments.length<15){
+        if (comments.length < 10) {
             this.donePaging = true;
         }
 
         comments.reverse();
         var temp = getNewSet(comments);
-        console.log("starting up with",this.comments.length);
+        console.log("starting up with", this.comments.length);
 
         this.comments.map(function(com,index){
             temp.add(com);
         },temp);
         this.comments = temp;
-        console.log("ending up with",temp.length);
+        console.log("ending up with", temp.length);
 
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        this.trigger({modalOpen: this.modalOpen, post: this.post, comments: this.comments});
     },
 
     removeFromComment: function(comment_id){

@@ -63,7 +63,7 @@ class PostManager(BaseManager):
             return {'error': 'failed to delete comment'}
 
     @staticmethod
-    def get_comments_json(user,post_id,page=0,per_page=15):
+    def get_comments_json(user, post_id, page=0, per_page=10):
         retval = []
         for user,comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
             filter(Comment.user_id==User.id).order_by(desc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
