@@ -2074,11 +2074,17 @@ a:hover {
   cursor: pointer; }
 
 .post-comment-date {
-  position: absolute;
-  top: 1px;
-  right: 25px;
+  /*    position: absolute;
+    top: 1px;
+    right: 25px;
+    color: rgb(210,210,210);
+    font-size: 13px;*/
+  position: relative;
+  top: 0;
+  left: 0;
   color: #d2d2d2;
-  font-size: 13px; }
+  font-size: 13px;
+  padding-top: 5px; }
 
 .top-banner {
   position: fixed;

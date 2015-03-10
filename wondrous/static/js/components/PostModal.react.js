@@ -74,15 +74,14 @@ var Comment = React.createClass({
 
         var mmtMidnight = moment().startOf('day');
         var createdAtDisplay = "";
-        if (createdAt.isBefore(mmtMidnight)){
+        if (createdAt.isBefore(mmtMidnight)) {
             var mmtYear = moment().startOf('year');
-            if (createdAt.isBefore(mmtYear)){
+            if (createdAt.isBefore(mmtYear)) {
                 createdAtDisplay = createdAt.format("h:mm a MMM wo 'GG");
-            }else{
+            } else {
                 createdAtDisplay = createdAt.format("h:mm a MMM wo");
             }
-
-        }else{
+        } else {
             createdAtDisplay = createdAt.format("h:mm a");
         }
 
@@ -110,12 +109,15 @@ var Comment = React.createClass({
 
     componentDidMount: function() {
     	$(".post-comment-delete-btn").hide();
+        // $(".post-comment-date").hide();
 		$(document).on({
 		    mouseenter: function(e) {
 				$(this).find(".post-comment-delete-btn").show();
+                // $(this).find(".post-comment-date").show();
 		    },
 		    mouseleave: function(e) {
 				$(this).find(".post-comment-delete-btn").hide();
+                // $(this).find(".post-comment-date").show();
 		    }
 		}, '.post-comment');
     },
