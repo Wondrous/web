@@ -58,6 +58,9 @@ var Wall = React.createClass({
                 <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}
                 </div>
+                <div>
+                {!WallStore.donePaging&&posts.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:null}
+                </div>
             </div>
         );
     }
