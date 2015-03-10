@@ -242,12 +242,16 @@ $post-cover-photo-height: 390px;
 
 .post-title {
     font-family: arial, helvetica, sans-serif;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
-    color: rgb(31,31,31);
+    color: rgb(45,45,45);
     text-align: left;
     margin: 15px;
     line-height: 1.2em;
+}
+
+.post-title-big {
+    font-size: 28px;
 }
 
 .post-micro-data-super-analytics-item {
