@@ -411,7 +411,8 @@ body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
   min-width: 750px; }
 
 html, body, footer, .main-content {
-  background-color: #f1f1f1; }
+  background-color: #f1f1f1;
+  -webkit-font-smoothing: antialiased; }
 
 body {
   height: 100%; }
@@ -1928,7 +1929,8 @@ a:hover {
   color: #fbfbfb;
   padding: 6px 16px;
   border-radius: 2px;
-  background-color: #0064aa; }
+  background-color: #0064aa;
+  outline: none; }
   .post-comment-btn:hover {
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;

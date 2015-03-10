@@ -37,20 +37,20 @@ var Search = React.createClass({
     componentWillMount: function(){
         WondrousActions.newSearch(this.getParams().search);
     },
-    getInitialState: function(){
+    getInitialState: function() {
         return {users:[],posts:[],error:null}
     },
     onSearchChange: function(searchData){
-        if(searchData.hasOwnProperty("error")){
+        if(searchData.hasOwnProperty("error")) {
             this.setState({error:searchData.error})
         }
 
-        if(searchData.hasOwnProperty("users")){
+        if(searchData.hasOwnProperty("users")) {
             console.log("names",searchData);
             this.setState({users:searchData.users})
         }
 
-        if(searchData.hasOwnProperty("posts")){
+        if(searchData.hasOwnProperty("posts")) {
             this.setState({posts:searchData.posts})
         }
     },
@@ -58,19 +58,19 @@ var Search = React.createClass({
         console.log("props",this.props);
         var posts = this.state.posts.map(function(post, index) {
             return (
-                <Post key={post.id} data={post}/>
+                <Post key={post.id} data={post} />
             );
         });
 
         var users = this.state.users.map(function(user, index){
             return (
-                <UserIcon key={user.id} user={user}/>
+                <UserIcon key={user.id} user={user} />
             );
         });
 
         return (
             <div className="search-result">
-                {this.state.error?this.state.error:this.state.error}
+                {this.state.error ? this.state.error : this.state.error}
                 <ul>{users}</ul>
                 <div>{posts}</div>
             </div>
