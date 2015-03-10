@@ -70,7 +70,7 @@ var Search = React.createClass({
 
         return (
             <div className="search-result">
-                {this.state.error?this.state.error:this.state.error}
+                {this.state.error ? this.state.error : this.state.error}
                 <ul>{users}</ul>
                 <div>{posts}</div>
             </div>
