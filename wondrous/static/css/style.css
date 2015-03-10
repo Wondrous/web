@@ -766,19 +766,19 @@ a:hover {
 .landing-feature {
   position: relative;
   display: inline-block;
-  max-width: 300px;
-  background-color: #00e2ae;
-  border-radius: 50%;
-  height: 230px;
-  width: 230px;
+  max-width: 230px;
   margin: 50px;
   vertical-align: top;
-  padding: 0 75px;
   -webkit-transition: left 800ms ease;
   -moz-transition: left 800ms ease;
   -ms-transition: left 800ms ease;
   -o-transition: left 800ms ease;
   transition: left 800ms ease; }
+
+.landing-feature-img {
+  background-color: #00e2ae;
+  height: 230px;
+  width: 230px; }
 
 .landing-in {
   left: 0 !important; }

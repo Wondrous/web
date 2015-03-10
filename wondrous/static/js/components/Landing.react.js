@@ -144,9 +144,9 @@ var LandingApp = React.createClass({
                         else
                             allopen = false;
                         
-                        if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop*1.8) )
+                        if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop*1.7) )
                             bubble.setAttribute('class', 'landing-feature landing-in');
-                        else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop*1.8 + bubble.offsetHeight) )
+                        else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop*1.7 + bubble.offsetHeight) )
                             bubble.setAttribute('class', 'landing-feature');
                     }
                 }
@@ -184,25 +184,25 @@ var LandingApp = React.createClass({
 
                         <div>
                             <div className="landing-feature">
-                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <img className="landing-feature-img round-50" />
                                 <h2>Read and write meaningful content in just minutes</h2>
                                 <p></p>
                             </div>
 
                             <div className="landing-feature">
-                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <img className="landing-feature-img round-50" />
                                 <h2>Can you answer the question of the day?</h2>
                             </div>
                         </div>
 
                         <div>
                             <div className="landing-feature">
-                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <img className="landing-feature-img round-50" />
                                 <h2>Join the conversation on trending topics</h2>
                             </div>
 
                             <div className="landing-feature">
-                                <img className="round-50" style={{ backgroundColor: "rgb(102,201,215)" }} />
+                                <img className="landing-feature-img round-50" />
                                 <h2>Become an influencer</h2>
                             </div>
                         </div>
