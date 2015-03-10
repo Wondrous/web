@@ -47,7 +47,6 @@ var Wall = React.createClass({
                 <Post key={post.id} data={post} />
             );
         });
-
         var username = this.getParams().username;
         var is_me = username === UserStore.user.username;
         return (
@@ -101,7 +100,7 @@ var Follower = React.createClass({
     },
     getInitialState: function() {
         WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.followerPage);
-        return {data:ProfileStore.followers};
+        return {data:ProfileStore.followers.sortedSet};
     },
 
     handleClick: function(username) {
@@ -144,7 +143,7 @@ var Following = React.createClass({
 
     getInitialState: function() {
         WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.followingPage);
-        return {data:ProfileStore.following};
+        return {data:ProfileStore.following.sortedSet};
     },
 
     render: function() {
@@ -322,12 +321,11 @@ var Profile = React.createClass({
 
     render: function () {
         var username = this.getParams().username;
-        console.log("is he visible to me?",ProfileStore.user);
 
         if(ProfileStore.user.username !== username){
-            WondrousActions.newProfile();
+            WondrousActions.newProfile(username);
             WondrousActions.loadProfile(username);
-            WondrousActions.loadWall(username,ProfileStore.currentPage);
+            WallStore.loadMore(username);
             return (
                 <div></div>
             );

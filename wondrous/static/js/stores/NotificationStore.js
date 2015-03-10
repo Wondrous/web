@@ -20,7 +20,8 @@ var NOTIFICATION = {
     FOLLOW_REQUEST:4,
     FOLLOW_ACCEPTED:5,
     REPOSTED:6,
-    FEED:7
+    FEED:7,
+    MENTIONED:8
 }
 
 var NotificationStore = Reflux.createStore({
@@ -68,6 +69,7 @@ var NotificationStore = Reflux.createStore({
         this.listenTo(UserStore,this.onUserChange);
         window.onbeforeunload = this.handleUnload;
     },
+
     unloadUser: function(){
         this.notifications = getNewSet(null);
         this.unseen = 0;
@@ -85,21 +87,27 @@ var NotificationStore = Reflux.createStore({
             this.incrementPage();
         }
     },
+    establishConnection: function(userData){
+        try {
+            this.pushstream.addChannel(userData.user.auth);
+            this.pushstream.connect();
+            console.log("pushstream connected to",userData.user.auth);
+        } catch(e) {
+            this.onerror(e);
+        };
+
+        this.loadMore();
+        this.unseen = userData.user.unseen_notifications;
+        this.subscribed=true;
+        this.trigger({});
+    },
     onUserChange: function(userData){
         if(userData.hasOwnProperty('user')){
             if(UserStore.loggedIn&&!this.subscribed && userData.user.hasOwnProperty('auth')){
-                try {
-                    this.pushstream.addChannel(userData.user.auth);
-                    this.pushstream.connect();
-                    console.log("pushstream connected to",userData.user.auth);
-                } catch(e) {
-                    this.onerror(e);
-                };
-
-                this.loadMore();
-                this.unseen = userData.user.unseen_notifications;
-                this.subscribed=true;
-                this.trigger({});
+                var that = this;
+                setTimeout(function(){
+                    that.establishConnection(userData);
+                },750);
             }else if(this.subscribed){
                 this.pushstream.disconnect();
                 this.subscribed=false;

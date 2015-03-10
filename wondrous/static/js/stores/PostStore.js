@@ -1,16 +1,10 @@
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
-var Set = require("collections/set");
+var FeedSet = require('../libs/FeedSet');
 
 var defaultUser = {username:''};
 
-var getNewSet = function(arr){
-    return new Set(arr, function(a,b){
-        return a.id==b.id;
-    }, function(obj){
-        return String(obj.id);
-    });
-}
+
 
 var PostStore = Reflux.createStore({
     listenables: WondrousActions,
@@ -22,24 +16,34 @@ var PostStore = Reflux.createStore({
     unloadUser: function(){
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;
-        this.comments = getNewSet(null);
+        this.comments = new FeedSet(null,true);
         this.paging = false;
         this.donePaging = false;
     },
     newPostLoad: function(post_id){
         this.unloadUser();
         if (typeof post_id !=='undefined'){
-            WondrousActions.updateComments(post_id,this.commentPage);
-            this.incrementCommentPage();
+            this.post.id = post_id;
+            this.loadMoreComments();
         }
     },
 
     loadMoreComments: function(){
-        if (typeof this.post.id !=='undefined' && !this.paging && !this.donePaging){
+        if (typeof this.post.id !=='undefined' &&this.post.id>0&& !this.paging && !this.donePaging){
             this.paging = true;
-            WondrousActions.updateComments(this.post.id,this.commentPage);
+            WondrousActions.loadComments(this.post.id,this.commentPage);
+            console.log("loading comments",this.post.id,this.commentPage);
             this.incrementCommentPage();
         }
+    },
+
+    loadCommentsError: function(err){
+        this.paging = false;
+        this.trigger();
+    },
+
+    commentError: function(err){
+
     },
 
     incrementCommentPage: function(){
@@ -49,7 +53,7 @@ var PostStore = Reflux.createStore({
     openCardModal: function(){
         if (this.modalOpen!=true){
             this.modalOpen=true;
-            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
             $('body').addClass('modal-open');
         }
     },
@@ -57,7 +61,7 @@ var PostStore = Reflux.createStore({
     closeCardModal: function(){
         if (this.modalOpen!=false){
             this.modalOpen=false;
-            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
             $('body').removeClass('modal-open');
         }
     },
@@ -68,39 +72,34 @@ var PostStore = Reflux.createStore({
 
     updatePost: function(postData){
         this.post = postData;
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
     addToComments: function(comment){
         if(this.post.id == comment.post_id){
-            this.comments.add(comment);
-            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+            this.comments.push(comment);
+            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
         }
     },
 
-    loadComments: function(comments) {
+    updateComments: function(comments) {
         this.paging = false;
         if (comments.length < 10) {
             this.donePaging = true;
         }
 
-        comments.reverse();
-        var temp = getNewSet(comments);
-        console.log("starting up with", this.comments.length);
+        comments.map(function(comment,index){
+            this.push(comment);
+        }, this.comments);
 
-        this.comments.map(function(com,index){
-            temp.add(com);
-        },temp);
-        this.comments = temp;
-        console.log("ending up with", temp.length);
+        console.log("loaded bubble",comments.length);
 
-        this.trigger({modalOpen: this.modalOpen, post: this.post, comments: this.comments});
+        this.trigger({modalOpen: this.modalOpen, post: this.post, comments: this.comments.sortedSet});
     },
 
     removeFromComment: function(comment_id){
-        var placeholder = {id:comment_id}
-        this.comments.deleteAll(placeholder);
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        this.comments.delete(comment_id);
+        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     }
 });
 

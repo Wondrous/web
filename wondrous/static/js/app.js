@@ -4,6 +4,7 @@ window.$ = window.jQuery = require('jquery');
 window.imagesLoaded = require('imagesloaded');
 window.Masonry = require('masonry-layout');
 window.Reflux = require('reflux');
+window.moment = require('moment');
 
 var Routes = require('./components/WondrousApp.react')
 

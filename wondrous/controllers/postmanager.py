@@ -65,15 +65,14 @@ class PostManager(BaseManager):
     @staticmethod
     def get_comments_json(user, post_id, page=0, per_page=10):
         retval = []
-        for user,comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
+        for comment_user, comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
             filter(Comment.user_id==User.id).order_by(desc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
 
-            data = user.json()
-            if user.picture_object:
-                data.update(user.picture_object.json())
+            data = comment_user.json()
+            if comment_user.picture_object:
+                data.update(comment_user.picture_object.json())
             data.update(comment.json())
             retval.append(data)
-
         return retval
 
     @staticmethod
@@ -107,16 +106,16 @@ class PostManager(BaseManager):
                                 reason=Notification.COMMENTED)
 
             usernames = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
-            for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
-                u_id = user_id[0]
-                # Notify if needed
-                if u_id!=p.user_id:
-                    new_notification = NotificationManager.add(
-                                        from_user_id=user.id,
-                                        to_user_id=u_id,
-                                        subject_id=post_id,
-                                        reason=Notification.MENTIONED)
-
+            if len(usernames)>0:
+                for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
+                    u_id = user_id[0]
+                    # Notify if needed
+                    if u_id!=p.user_id:
+                        new_notification = NotificationManager.add(
+                                            from_user_id=user.id,
+                                            to_user_id=u_id,
+                                            subject_id=post_id,
+                                            reason=Notification.MENTIONED)
             return retval
         else:
             return {'error':'bad permission'}

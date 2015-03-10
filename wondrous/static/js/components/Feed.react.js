@@ -70,7 +70,7 @@ var Feed = React.createClass({
 
     // Add change listener to stores
     componentDidMount: function() {
-        WondrousActions.loadFeed(FeedStore.currentPage);
+        FeedStore.loadMore();
         WondrousActions.feedLoaded();
     },
 

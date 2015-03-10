@@ -1,27 +1,35 @@
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
+var FeedSet = require('../libs/FeedSet');
 
 var FeedStore = Reflux.createStore({
     listenables: WondrousActions,
     init:function(){
-        this.feed = [];
-        this.posts = {};
+        this.feed = new FeedSet(null);
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
-
         this.listenTo(UserStore,this.onUserChange);
     },
+
     onUserChange: function(userData){
         if(userData.hasOwnProperty('user')){
+            this.loadMore();
+        }
+    },
+
+    loadMore: function(){
+        if(!this.paging&&!this.donePaging){
+            this.paging = true;
             WondrousActions.loadFeed(this.currentPage);
+            console.log("loaded page",this.currentPage);
+            this.incrementPage();
         }
     },
 
     unloadUser: function(){
-        this.feed = [];
-        this.posts = {};
+        this.feed.reset();
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
@@ -33,20 +41,14 @@ var FeedStore = Reflux.createStore({
             this.donePaging = true;
         }
         for(var i = 0; i < feedItems.length; i++){
-            this._addToFeed(feedItems[i]);
+            this.feed.push(feedItems[i]);
         }
+        console.log("feed is now",this.feed.sortedSet.length);
         this.trigger(this.getFeed());
     },
 
-    _addToFeed: function(post){
-        if(!this.posts.hasOwnProperty(String(post.id))){
-            this.feed.push(post.id);
-        }
-        this.posts[String(post.id)] = post;
-    },
-
     addToFeed: function(post){
-        this._unshiftToFeed(post);
+        this.feed.unshift(post);
         this.trigger(this.getFeed());
     },
 
@@ -54,35 +56,12 @@ var FeedStore = Reflux.createStore({
         this.currentPage++;
     },
 
-    _unshiftToFeed: function(post){
-        if(!this.posts.hasOwnProperty(String(post.id))){
-            this.feed.unshift(post.id);
-        }
-        this.posts[String(post.id)] = post;
-    },
-
     getFeed: function(){
-        return this.feed.map(function(post_id,index){
-            return this[String(post_id)]
-        },this.posts);
+        return this.feed.sortedSet;
     },
 
     removeFromFeed: function(post_id){
-        var to_delete = -1;
-        for(var i = 0; i < this.feed.length; i++){
-            if(this.feed[i]==post_id){
-                to_delete = i;
-                console.log("deleting id",post_id,to_delete)
-                break;
-            }
-        }
-
-        if(to_delete!=-1){
-            delete this.posts[String(this.feed[i])];
-            this.feed.splice(to_delete,1);
-            this.trigger(this.getFeed());
-        }
-
+        return this.feed.delete(post_id);
     }
 
 });

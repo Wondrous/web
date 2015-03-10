@@ -45,11 +45,17 @@ var WondrousActions = Reflux.createActions({
     // loads wall post from server
     "loadWall": {},
 
+    "loadWallError": {},
+
     // load comments
     "loadComments": {},
 
+    "loadCommentsError": {},
+
     // load the feed
     "loadFeed": {},
+
+    "loadFeedError": {},
 
     // load a certain post
     "loadPost": {},
@@ -241,7 +247,7 @@ WondrousActions.loadWall.listen(function(username,page){
             if (err == null){
                 WondrousActions.updateWall(res);
             }else{
-                console.error(err);
+                WondrousActions.loadWallError(err);
             }
         }
     });
@@ -478,15 +484,15 @@ WondrousActions.searchForPosts.listen(function(search,page){
     });
 });
 
-WondrousActions.updateComments.listen(function(post_id,page){
+WondrousActions.loadComments.listen(function(post_id,page){
     WondrousAPI.getPostComments({
         page: page,
         post_id: post_id,
         callback: function(err,res){
             if(err==null){
-                WondrousActions.loadComments(res);
+                WondrousActions.updateComments(res);
             }else{
-                WondrousActions.commentError(err);
+                WondrousActions.loadCommentsError(err);
             }
         }
     });

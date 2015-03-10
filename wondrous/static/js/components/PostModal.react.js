@@ -70,6 +70,9 @@ var Comment = React.createClass({
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
+        var createdAt = moment(this.props.data.created_at);
+        var createdAtDisplay = createdAt.format("h:m a MMM wo GG");
+        console.log("memome",createdAt);
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
@@ -81,6 +84,7 @@ var Comment = React.createClass({
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </a>
                     <span>{this.props.data.text}</span>
+                    <span> TIME: {createdAtDisplay}</span>
                     {is_it_mine ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
                     	: null}
@@ -133,7 +137,7 @@ var Comments = React.createClass({
                 <Comment key={comment.id} data={comment}/>
             );
         });
-        console.log("done paging?", !PostStore.donePaging);
+
         return (
             <div>
                 {!PostStore.donePaging ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}

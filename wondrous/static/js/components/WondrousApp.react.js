@@ -34,16 +34,10 @@ var WondrousApp = React.createClass({
         var s = $(document).scrollTop();
         var scrolled = (s+2*h) > document.body.offsetHeight;
         if (scrolled){
-            if(UserStore.pageType == WondrousConstants.PROFILE_PAGE && !WallStore.paging && !WallStore.donePaging){
-                console.log("getting more profile");
-                WallStore.paging = true;
-                WallStore.incrementPage();
-                WondrousActions.loadWall(ProfileStore.user.username,WallStore.currentPage);
-            }else if(UserStore.pageType == WondrousConstants.FEED_PAGE && !FeedStore.paging && !FeedStore.donePaging){
-                console.log("getting more page");
-                FeedStore.paging = true;
-                FeedStore.incrementPage();
-                WondrousActions.loadFeed(FeedStore.currentPage);
+            if(UserStore.pageType == WondrousConstants.PROFILE_PAGE){
+                WallStore.loadMore();
+            }else if(UserStore.pageType == WondrousConstants.FEED_PAGE){
+                FeedStore.loadMore();
             }
         }
     },
