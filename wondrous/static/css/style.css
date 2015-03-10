@@ -1953,6 +1953,21 @@ a:hover {
   margin: 10px 0;
   margin-left: 30px; }
 
+.post-comment-load-more {
+  padding: 8px 30px;
+  margin-bottom: 10px;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  color: #969696;
+  font-weight: bold;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .post-comment-load-more:hover {
+    color: #737373; }
+
 .post-comment {
   position: relative;
   min-height: 32px;

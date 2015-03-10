@@ -107,7 +107,7 @@ var Comments = React.createClass({
     // postStoreChanged: function(){
     //     this.forceUpdate();
     // },
-    
+
     onComment: function(evt){
         evt.preventDefault();
         var text = this.refs.commentBox.getDOMNode().value.trim();
@@ -136,7 +136,7 @@ var Comments = React.createClass({
         console.log("done paging?", !PostStore.donePaging);
         return (
             <div>
-                {!PostStore.donePaging ? <button onClick={this.loadMoreComments}>LOAD MORE COMMENTS</button> : null}
+                {!PostStore.donePaging ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
                 {comments}
                 {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div> : null}
                 <form style={{ marginLeft: 28, marginRight: 10 }} >
