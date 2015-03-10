@@ -48,10 +48,12 @@
 }
 
 .landing-med-heading {
-    font-family: helvetica, arial, sans-serif;
-    color: rgb(190,190,190);
+    font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+    color: rgb(180,180,180);
     font-weight: 100;
-    font-size: 37px;
+    
+    /*font-size: 37px;*/
+    font-size: 42px;
 }
 
 .landing-input {
@@ -133,5 +135,7 @@
 
 .landing-feature-h2 {
     font-weight: 100;
-    color: rgb(51,51,51);
+    font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+    font-size: 27px;
+    color: rgb(90,90,90);
 }

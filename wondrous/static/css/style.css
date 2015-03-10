@@ -751,10 +751,11 @@ a:hover {
   margin-bottom: 100px; }
 
 .landing-med-heading {
-  font-family: helvetica, arial, sans-serif;
-  color: #bebebe;
+  font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+  color: #b4b4b4;
   font-weight: 100;
-  font-size: 37px; }
+  /*font-size: 37px;*/
+  font-size: 42px; }
 
 .landing-input {
   font-family: helvetica, arial, sans-serif;
@@ -817,7 +818,9 @@ a:hover {
 
 .landing-feature-h2 {
   font-weight: 100;
-  color: #333333; }
+  font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+  font-size: 27px;
+  color: #5a5a5a; }
 
 .grid-padding, .profile-content, .profile-header {
   margin: 0 auto; }
