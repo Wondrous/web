@@ -1195,6 +1195,12 @@ a:hover {
   font-size: 12px;
   font-weight: normal; }
 
+.post-modal-micro-data-wrapper {
+  position: relative;
+  margin: 4px 22px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eaeaea; }
+
 .post-see-more {
   position: relative;
   top: -10px;

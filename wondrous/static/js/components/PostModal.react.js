@@ -246,6 +246,19 @@ var Post = React.createClass({
 				<div onClick={this.handleClick} id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
+                <div>
+                    <div className="post-modal-micro-data-wrapper">
+                        <span className="post-micro-data-super-analytics-item">
+                            <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
+                            {this.props.data.view_count}
+                        </span>
+
+                        <span className="post-micro-data-super-analytics-item">
+                            <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
+                            {this.props.data.like_count}
+                        </span>
+                    </div>
+                </div>
 				<div className="post-content" >
 						{
 							thisText.map(function(textChunk, idx) {
