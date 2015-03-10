@@ -118,7 +118,7 @@ var Notification = React.createClass({
 
         return (
             <div onClick={this.handleClick} className="dropdown-a">
-                <div className="dropdown-element dropdown-element-notification" style={{ "display": displayType, padding: "10px 0" }}>
+                <div className="dropdown-element dropdown-element-notification" style={{ "display": displayType }}>
                     <span className="notificationTextPosition">
                         <img ref="usericon" className="post-thumb round-2" style={{ position: "absolute" }} src={profilePic} />
                         <div className="notification-content">

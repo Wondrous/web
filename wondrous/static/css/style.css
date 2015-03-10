@@ -2640,11 +2640,14 @@ svg {
   .dropdown-element:active {
     background-color: #ebebeb; }
 
-.dropdown-element-notification:hover {
-  -webkit-box-shadow: -3px 0 0 0 #f08200;
-  -moz-box-shadow: -3px 0 0 0 #f08200;
-  -o-box-shadow: -3px 0 0 0 #f08200;
-  box-shadow: -3px 0 0 0 #f08200; }
+.dropdown-element-notification {
+  padding: 10px 0;
+  font-size: 13px; }
+  .dropdown-element-notification:hover {
+    -webkit-box-shadow: -3px 0 0 0 #f08200;
+    -moz-box-shadow: -3px 0 0 0 #f08200;
+    -o-box-shadow: -3px 0 0 0 #f08200;
+    box-shadow: -3px 0 0 0 #f08200; }
 
 .dropdown-a:link {
   text-decoration: none; }
