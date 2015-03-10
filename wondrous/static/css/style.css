@@ -2168,6 +2168,17 @@ a:hover {
   font-size: 14px;
   overflow-y: scroll; }
 
+.notification-menu-header {
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 7px;
+  margin: 10px;
+  margin-top: 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #969696;
+  border-bottom: 1px solid #eaeaea; }
+
 .notification-anchor:link {
   color: #dddddd;
   text-decoration: none; }
