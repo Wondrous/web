@@ -176,7 +176,7 @@ var LandingApp = React.createClass({
                         </div>
                         : <SignedUp data={this.referrer_info} />}
                 </div>
-                <div className="masonry" style={{ position: "relative", top: 410, maxWidth: 900, margin: "0 auto", zIndex: 2 }} >
+                <div className="masonry landing-masonry">
                     <Post data={sp1}/>
                     <Post data={sp2}/>
                     <Post data={sp3}/>
@@ -188,25 +188,24 @@ var LandingApp = React.createClass({
                         <div>
                             <div className="landing-feature">
                                 <img className="landing-feature-img round-50" />
-                                <h2>Read and write meaningful content in just minutes</h2>
-                                <p></p>
+                                <h2 className="landing-feature-h2">Read and write meaningful content in just minutes</h2>
                             </div>
 
                             <div className="landing-feature">
                                 <img className="landing-feature-img round-50" />
-                                <h2>Can you answer the question of the day?</h2>
+                                <h2 className="landing-feature-h2">Can you answer the question of the day?</h2>
                             </div>
                         </div>
 
                         <div>
                             <div className="landing-feature">
                                 <img className="landing-feature-img round-50" />
-                                <h2>Join the conversation on trending topics</h2>
+                                <h2 className="landing-feature-h2">Join the conversation on trending topics</h2>
                             </div>
 
                             <div className="landing-feature">
                                 <img className="landing-feature-img round-50" />
-                                <h2>Become an influencer</h2>
+                                <h2 className="landing-feature-h2">Become an influencer</h2>
                             </div>
                         </div>
 
