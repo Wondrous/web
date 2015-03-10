@@ -144,9 +144,9 @@ var LandingApp = React.createClass({
                         else
                             allopen = false;
                         
-                        if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop) )
+                        if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop*1.8) )
                             bubble.setAttribute('class', 'landing-feature landing-in');
-                        else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop + bubble.offsetHeight/0.2) )
+                        else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop*1.8 + bubble.offsetHeight) )
                             bubble.setAttribute('class', 'landing-feature');
                     }
                 }
