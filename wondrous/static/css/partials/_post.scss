@@ -263,6 +263,12 @@ $post-cover-photo-height: 390px;
     font-weight: normal;
 }
 
+.post-modal-micro-data-wrapper {
+    position: relative;
+    margin: 4px 25px;
+    /*border-bottom: 1px solid rgb(234,234,234);*/
+}
+
 .post-see-more {
     position: relative;
     top: -10px;

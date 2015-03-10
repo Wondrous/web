@@ -242,10 +242,24 @@ var Post = React.createClass({
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
 					<UserTitle data={this.props.data} />
 				</div>
-				<div className="post-title post-title-big">{this.props.data.subject}</div>
+				<div className="post-title post-title-big" style={{ marginLeft: 28, marginRight: 28 }}>{this.props.data.subject}</div>
 				<div onClick={this.handleClick} id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
+                <div>
+                    <div className="post-modal-micro-data-wrapper">
+                        <span className="post-micro-data-super-analytics-item">
+                            <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
+                            {this.props.data.view_count}
+                        </span>
+
+                        <span className="post-micro-data-super-analytics-item">
+                            <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
+                            {this.props.data.like_count}
+                        </span>
+                    </div>
+                    <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
+                </div>
 				<div className="post-content" >
 						{
 							thisText.map(function(textChunk, idx) {
@@ -272,19 +286,19 @@ var Post = React.createClass({
 var PostModal = React.createClass({
 	mixins:[Reflux.listenTo(PostStore,"onPostUpdate")],
 
-	onPostUpdate: function(postData){
+	onPostUpdate: function(postData) {
 		this.setState(postData);
 	},
 
-	getInitialState: function(){
+	getInitialState: function() {
 		return UserStore;
 	},
 
-	handleClose: function(evt){
+	handleClose: function(evt) {
 		WondrousActions.closeCardModal();
 	},
 
-	stopProp: function(evt){
+	stopProp: function(evt) {
 		evt.preventDefault();
 		evt.stopPropagation();
 	},
