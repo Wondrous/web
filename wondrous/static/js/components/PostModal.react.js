@@ -77,12 +77,12 @@ var Comment = React.createClass({
         if (createdAt.isBefore(mmtMidnight)) {
             var mmtYear = moment().startOf('year');
             if (createdAt.isBefore(mmtYear)) {
-                createdAtDisplay = createdAt.format("h:mm a MMM wo 'GG");
+                createdAtDisplay = createdAt.format("h:mma, MMM wo 'GG");
             } else {
-                createdAtDisplay = createdAt.format("h:mm a MMM wo");
+                createdAtDisplay = createdAt.format("h:mma, MMM wo");
             }
         } else {
-            createdAtDisplay = createdAt.format("h:mm a");
+            createdAtDisplay = createdAt.format("h:mma");
         }
 
         return (
