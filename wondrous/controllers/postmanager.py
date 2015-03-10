@@ -65,6 +65,9 @@ class PostManager(BaseManager):
     @staticmethod
     def get_comments_json(user, post_id, page=0, per_page=10):
         retval = []
+        exists = DBSession.query(Post).filter(Post.id==post_id).filter(Post.set_to_delete==None).first()
+        if not exists:
+            return retval
         for comment_user, comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
             filter(Comment.user_id==User.id).order_by(desc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
 
@@ -230,6 +233,7 @@ class PostManager(BaseManager):
     def get_by_id_json(cls,user,post_id):
         post = Post.by_id(post_id)
         if post:
+            # logging.warn(str(post.json()))
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
                 if post_dict:

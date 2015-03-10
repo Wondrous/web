@@ -75,6 +75,10 @@ var PostStore = Reflux.createStore({
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
+    loadPostError: function(err){
+        this.comments.reset();
+    },
+
     addToComments: function(comment){
         if(this.post.id == comment.post_id){
             this.comments.push(comment);
@@ -91,8 +95,6 @@ var PostStore = Reflux.createStore({
         comments.map(function(comment,index){
             this.push(comment);
         }, this.comments);
-
-        console.log("loaded bubble",comments.length);
 
         this.trigger({modalOpen: this.modalOpen, post: this.post, comments: this.comments.sortedSet});
     },

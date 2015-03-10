@@ -166,6 +166,8 @@ var WondrousActions = Reflux.createActions({
     // loads the post onto modal
     "updatePost": {},
 
+    "loadPostError": {},
+
     "newProfile": {},
 
     "wallLoaded": {},
@@ -437,7 +439,7 @@ WondrousActions.loadPost.listen(function(post_id){
             if (err == null){
                 WondrousActions.updatePost(res);
             }else{
-                // WondrousActions.uploadError(err);
+                WondrousActions.loadPostError(err);
             }
         }
     });

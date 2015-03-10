@@ -72,7 +72,6 @@ var Comment = React.createClass({
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
         var createdAt = moment(this.props.data.created_at);
         var createdAtDisplay = createdAt.format("h:m a MMM wo GG");
-        console.log("memome",createdAt);
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
