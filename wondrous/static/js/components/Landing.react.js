@@ -189,24 +189,32 @@ var LandingApp = React.createClass({
 
                         <div>
                             <div className="landing-feature">
-                                <img className="landing-feature-img round-50" />
+                                <img className="landing-feature-img round-50" src="/static/pictures/landing/clock2.png" />
                                 <h2 className="landing-feature-h2">Read and write meaningful content in just minutes</h2>
                             </div>
 
                             <div className="landing-feature">
-                                <img className="landing-feature-img round-50" />
+                                <div className="landing-feature-img round-50">
+                                    <span style={{ position: "relative", fontSize: 60, color: "rgb(255,255,255)", top: 25, fontFamily: "geosanslight", fontSize: 160 }}>
+                                        ?
+                                    </span>
+                                </div>
                                 <h2 className="landing-feature-h2">Can you answer the question of the day?</h2>
                             </div>
                         </div>
 
                         <div>
                             <div className="landing-feature">
-                                <img className="landing-feature-img round-50" />
+                                <img className="landing-feature-img round-50" src="/static/pictures/landing/trend-line.png" />
                                 <h2 className="landing-feature-h2">Join the conversation on trending topics</h2>
                             </div>
 
                             <div className="landing-feature">
-                                <img className="landing-feature-img round-50" />
+                                <div className="landing-feature-img round-50">
+                                    <span style={{ position: "relative", fontSize: 60, color: "rgb(255,255,255)", top: 25, fontFamily: "geosanslight", fontSize: 150 }}>
+                                        99
+                                    </span>
+                                </div>
                                 <h2 className="landing-feature-h2">Become an influencer</h2>
                             </div>
                         </div>
