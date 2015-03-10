@@ -15,7 +15,7 @@
 # import time
 # import urllib
 import uuid, logging
-
+import re, string
 from datetime import datetime
 
 from sqlalchemy import (
@@ -104,8 +104,8 @@ class PostManager(BaseManager):
                                 to_user_id=p.user_id,
                                 subject_id=post_id,
                                 reason=Notification.COMMENTED)
-            import re
-            usernames = list(set(re.findall('\s*@\s*(\w+)', text)))
+
+            usernames = [re.sub(r'\W+', '', un) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
             for user_id in DBSession.query(User.id).filter(User.username.in_(usernames)).distinct():
                 u_id = user_id[0]
                 # Notify if needed
