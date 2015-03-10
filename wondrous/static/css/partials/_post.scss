@@ -671,9 +671,9 @@ $post-cover-photo-height: 390px;
 }
 
 .modal-open{
-    overflow:hidden;
+    overflow: hidden;
 
     & div{
-        overflow-y:scroll;
+        /*overflow-y:scroll;*/
     }
 }

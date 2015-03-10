@@ -1558,7 +1558,7 @@ a:hover {
 .modal-open {
   overflow: hidden; }
   .modal-open div {
-    overflow-y: scroll; }
+    /*overflow-y:scroll;*/ }
 
 /* ==== NEW POST================ */
 .autocomplete-selected {
