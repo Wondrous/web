@@ -52,10 +52,12 @@
 
 .landing-input {
     font-family: helvetica, arial, sans-serif;
-    font-size: 17px;
+    /*font-size: 17px;*/
+    font-size: 20px;
     font-weight: 100;
 
-    padding: 8px 10px 6px;
+    /*padding: 8px 10px 6px;*/
+    padding: 12px 13px;
     width: 350px;
     border: 3px solid rgb(0,226,174);
     outline: none;
@@ -72,12 +74,25 @@
 
 .landing-btn {
     border: 3px solid rgb(0,226,174);
-    padding: 9px 10px 7px;
+    
+    /*padding: 9px 10px 7px;*/
+    padding: 16px 13px 14px;
+    
     font-family: helvetica, arial, sans-serif;
     font-size: 15px;
     font-weight: 100;
     color: rgb(100,100,100);
     background-color: rgb(251,251,251);
+
+    &:hover {
+        -webkit-transition: all 0.30s ease-in-out;
+           -moz-transition: all 0.30s ease-in-out;
+            -ms-transition: all 0.30s ease-in-out;
+             -o-transition: all 0.30s ease-in-out;
+
+        background-color: rgb(234,234,234);
+    }
+
 }
 
 .landing-feature {
