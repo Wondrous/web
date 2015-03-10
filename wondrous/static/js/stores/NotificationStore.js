@@ -29,6 +29,7 @@ var NotificationStore = Reflux.createStore({
     // pushstream stuff
     onmessage: function(note,id,channel){
         this.unseen++;
+        document.title = "Wondrous ("+String(this.unseen)+")";
         var temp = this.notifications.toArray();
         console.log("received note",note);
         temp.unshift(note);
@@ -65,22 +66,26 @@ var NotificationStore = Reflux.createStore({
     },
 
     init:function(){
-        this.notifications = getNewSet(null);
-        this.unseen = 0;
-        this.currentPage = 0;
-        this.subscribed = false;
+        this.unloadUser();
         this.listenTo(UserStore,this.onUserChange);
-        this.initializeClient();
-
         window.onbeforeunload = this.handleUnload;
     },
     unloadUser: function(){
         this.notifications = getNewSet(null);
         this.unseen = 0;
         this.currentPage = 0;
+        this.paging = false;
+        this.donePaging = false;
         this.subscribed = false;
-        this.listenTo(UserStore,this.onUserChange);
         this.initializeClient();
+    },
+
+    loadMore: function(){
+        if (!this.paging && !this.donePaging){
+            this.paging = true;
+            WondrousActions.loadNotifications(this.currentPage);
+            this.incrementPage();
+        }
     },
     onUserChange: function(userData){
         if(userData.hasOwnProperty('user')){
@@ -93,7 +98,7 @@ var NotificationStore = Reflux.createStore({
                     this.onerror(e);
                 };
 
-                WondrousActions.loadNotifications(this.currentPage);
+                this.loadMore();
                 this.unseen = userData.user.unseen_notifications;
                 this.subscribed=true;
                 this.trigger({});
@@ -121,6 +126,10 @@ var NotificationStore = Reflux.createStore({
         }
     },
     updateNotification: function(feedItems){
+        if (feedItems.length<15){
+            this.donePaging = true;
+        }
+        this.paging = false;
         for(var i = 0; i < feedItems.length; i++){
             this._addToNotification(feedItems[i]);
         }
@@ -133,7 +142,6 @@ var NotificationStore = Reflux.createStore({
 
     incrementPage: function(){
         this.currentPage++;
-        this.refreshFromServer();
     },
 
     getNotifications: function(){
