@@ -51,7 +51,7 @@ module.exports = {
     acceptRequest: function(options) {
         var callback = options.callback;
         data = {
-            user_id: options.user_id,
+            subject_id: options.user_id,
             action: VoteAction.ACCEPT,
             vote_type: 1
         }

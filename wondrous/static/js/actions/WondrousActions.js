@@ -113,6 +113,8 @@ var WondrousActions = Reflux.createActions({
 
     "unloadUser": {},
 
+    "notLoggedIn": {},
+
     // update initially to notification
     "updateNotification": {},
 
@@ -154,7 +156,6 @@ var WondrousActions = Reflux.createActions({
     "openCardModal": {},
 
     "closeCardModal": {},
-
 
     // loads the post onto modal
     "updatePost": {},
@@ -268,7 +269,7 @@ WondrousActions.auth.listen(function(){
             if (err == null){
                 WondrousActions.updateUser(res);
             }else{
-                console.error(err);
+                WondrousActions.notLoggedIn(res);
             }
         }
     });

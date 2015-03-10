@@ -11,6 +11,7 @@ var UserStore = Reflux.createStore({
 
     init:function(){
         this.user = defaultUser;
+        this.loaded = false;
         this.loggedIn = false;
         this.modalOpen = false;
         this.sidebarOpen = false;
@@ -24,7 +25,7 @@ var UserStore = Reflux.createStore({
     updateUser: function(userData){
         this.user = userData;
         this.loggedIn = true;
-
+        this.loaded = true;
         this.trigger({user:this.user});
     },
 
@@ -37,6 +38,10 @@ var UserStore = Reflux.createStore({
         this.sidebarType = null;
         this.modalType = null;
         this.trigger({user:this.user});
+    },
+
+    notLoggedIn: function(){
+        this.loaded = true;
     },
 
     toggleSideBar:function(){

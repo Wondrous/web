@@ -103,7 +103,10 @@ var Comment = React.createClass({
 });
 
 var Comments = React.createClass({
-
+    // mixins:[Reflux.listenTo(PostStore,"postStoreChanged")],
+    // postStoreChanged: function(){
+    //     this.forceUpdate();
+    // },
     onComment: function(evt){
         evt.preventDefault();
         var text = this.refs.commentBox.getDOMNode().value.trim();
@@ -118,16 +121,21 @@ var Comments = React.createClass({
             // Send out a friendly error: "Please add some text!"
         }
     },
+    loadMoreComments: function(){
+        PostStore.loadMoreComments();
+    },
     render: function() {
         var comments = this.props.data.map(function(comment, index) {
             return (
                 <Comment key={comment.id} data={comment}/>
             );
         });
-
+        console.log("done paging?",!PostStore.donePaging);
         return (
             <div>
-                {comments.length > 0 ? comments : <div className="post-no-comments">Be the first to share your thoughts!</div>}
+                {!PostStore.donePaging?<button onClick={this.loadMoreComments}>LOAD MORE COMMENTS</button>:null}
+                {comments}
+                {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div>:null}
                 <form style={{ marginLeft: 28, marginRight: 10 }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>
@@ -167,7 +175,7 @@ var Photo = React.createClass({
 });
 
 var PostFooter = React.createClass({
-    
+
     deletePost: function() {
         WondrousActions.closeCardModal();
         WondrousActions.deletePost(this.props.data.id);
@@ -188,8 +196,8 @@ var PostFooter = React.createClass({
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         return (
             <div className="post-footer">
-                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">    
-                    {this.props.data.liked ? 
+                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
+                    {this.props.data.liked ?
                         <span>
                             <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" />
                             <img src="/static/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
