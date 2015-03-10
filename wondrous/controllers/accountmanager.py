@@ -169,6 +169,7 @@ class AccountManager(BaseManager):
 
         elif profile_user.is_private and not profile_user.is_banned and profile_user.is_active:
             retval = {}
+            retval.update({"username": profile_user.username})
             retval.update({"name": profile_user.ascii_name})
             retval.update({"following": am_following})
             retval.update({'is_private': True})

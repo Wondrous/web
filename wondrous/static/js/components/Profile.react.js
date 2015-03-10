@@ -310,15 +310,20 @@ var PrivateProfile = React.createClass({
 var Profile = React.createClass({
     mixins: [Router.Navigation, Router.State, Reflux.listenTo(ProfileStore,"onProfileChange")],
     onProfileChange: function(){
-        if (!UserStore.loggedIn) {
+        if (!UserStore.loggedIn&&UserStore.loaded) {
             this.transitionTo('/');
         } else {
-            this.forceUpdate();
+            var username = this.getParams().username;
+            if(ProfileStore.user.username === username){
+                this.forceUpdate();
+            }
         }
     },
 
     render: function () {
         var username = this.getParams().username;
+        console.log("is he visible to me?",ProfileStore.user);
+
         if(ProfileStore.user.username !== username){
             WondrousActions.newProfile();
             WondrousActions.loadProfile(username);
@@ -337,7 +342,6 @@ var Profile = React.createClass({
         if (loaded) {
             style.display = 'block';
         }
-
         return (
             <div style={style}>
                 {!is_visible ? <PrivateProfile user={ProfileStore.user} /> :

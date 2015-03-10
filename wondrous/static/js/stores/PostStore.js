@@ -16,23 +16,28 @@ var PostStore = Reflux.createStore({
     listenables: WondrousActions,
 
     init:function(){
-        this.modalOpen = false;
-        this.newPostLoad();
-
+        this.unloadUser();
         this.listenTo(UserStore,"onUserChange");
     },
     unloadUser: function(){
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;
         this.comments = getNewSet(null);
+        this.paging = false;
+        this.donePaging = false;
     },
     newPostLoad: function(post_id){
-        this.post = {subject:'',text:'',id:-1};
-        this.commentPage = 0;
-        this.comments = getNewSet(null);
-
+        this.unloadUser();
         if (typeof post_id !=='undefined'){
             WondrousActions.updateComments(post_id,this.commentPage);
+            this.incrementCommentPage();
+        }
+    },
+
+    loadMoreComments: function(){
+        if (typeof this.post.id !=='undefined' && !this.paging && !this.donePaging){
+            this.paging = true;
+            WondrousActions.updateComments(this.post.id,this.commentPage);
             this.incrementCommentPage();
         }
     },
@@ -67,15 +72,27 @@ var PostStore = Reflux.createStore({
     },
 
     addToComments: function(comment){
-        this.comments.add(comment);
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        if(this.post.id == comment.post_id){
+            this.comments.add(comment);
+            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
+        }
     },
 
     loadComments: function(comments){
+        this.paging = false;
+        if (comments.length<15){
+            this.donePaging = true;
+        }
+
         comments.reverse();
         var temp = getNewSet(comments);
-        temp.union(this.comments);
-        this.comments = temp; 
+        console.log("starting up with",this.comments.length);
+
+        this.comments.map(function(com,index){
+            temp.add(com);
+        },temp);
+        this.comments = temp;
+        console.log("ending up with",temp.length);
 
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments});
     },
