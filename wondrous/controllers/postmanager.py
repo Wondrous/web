@@ -21,6 +21,7 @@ from datetime import datetime
 from sqlalchemy import (
     desc,
     asc,
+    func,
     or_,
 )
 
@@ -43,9 +44,9 @@ from wondrous.models import (
     # Vote,
 )
 
-
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
+
 
 class PostManager(BaseManager):
 
@@ -105,8 +106,8 @@ class PostManager(BaseManager):
                                 subject_id=post_id,
                                 reason=Notification.COMMENTED)
 
-            usernames = [re.sub(r'\W+', '', un) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
-            for user_id in DBSession.query(User.id).filter(User.username.in_(usernames)).distinct():
+            usernames = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
+            for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
                 u_id = user_id[0]
                 # Notify if needed
                 if u_id!=user.id:
@@ -241,7 +242,7 @@ class PostManager(BaseManager):
                     pv = PostView(post_id=post.id, user_id=user.id)
                     DBSession.query(Post).filter(Post.id==post.id).update({'view_count':Post.view_count+1})
                     DBSession.add(pv)
-                elif pv.count <10:
+                elif pv.count < 10:
                     DBSession.query(Post).filter(Post.id==post.id).update({'view_count':Post.view_count+1})
                     DBSession.query(PostView).filter(PostView.id==pv.id).update({'count':PostView.count+1})
 
