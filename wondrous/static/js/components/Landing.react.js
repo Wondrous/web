@@ -67,7 +67,7 @@ var SignedUp = React.createClass({
                 <h3>Thank you, {this.props.data.email}</h3>
                 <p>You have referred {this.props.data.referred} people!</p>
                 <p>Your reference: </p>
-                <input type="text" style={{"width":"200px"}} value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
+                <input className="landing-input round-5" type="text" value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
             </div>
         );
     }
@@ -83,22 +83,26 @@ var LandingApp = React.createClass({
 
     handleData: function(err, res) {
         if (err == null) {
-            //console.log("asd", res);
+            console.log("asd", res);
             this.registered = true;
             this.referrer_info = res;
             this.forceUpdate();
-        } else {}
+        } else {
+            console.log("asd", err);
+        }
     },
 
-    handleClick: function() {
+    handleClick: function(evt) {
+        evt.preventDefault();
         var ref_uuid = this.getParams().ref_uuid;
         if (typeof ref_uuid === 'undefined') {
             ref_uuid = null;
         }
-
+        console.log("sending",this.refs.email.getDOMNode().value);
+        var email = this.refs.email.getDOMNode().value||this.refs.email1.getDOMNode().value
         WondrousAPI.registerReferrer({
             callback: this.handleData,
-            email: this.refs.email.getDOMNode().value,
+            email: email,
             ref_uuid: ref_uuid
         });
     },
@@ -110,6 +114,35 @@ var LandingApp = React.createClass({
         });
     },
 
+    onScroll: function(allopen,allclosed,bubbles){
+        var lastscroll = window.scrollY;
+
+        var y = window.scrollY, direction = lastscroll <= y ? 1 : -1;
+
+        lastscroll = y;
+        if (allclosed && direction == 1)
+            return;
+        if (allopen && direction == -1)
+            return;
+
+        allclosed = allopen = true;
+
+        for (var i=0, bubble; bubble=bubbles[i++];) {
+            if(bubble.getAttribute('class').indexOf('landing-in') == -1)
+                allclosed = false;
+            else
+                allopen = false;
+
+            // Move inward
+            if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop*1.65) )
+                bubble.setAttribute('class', 'landing-feature landing-in');
+
+            // Move outward
+            else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop*1.65 + bubble.offsetHeight) )
+                bubble.setAttribute('class', 'landing-feature');
+        }
+
+    },
     componentDidMount:function() {
         $('.top-banner').hide();
 
@@ -119,49 +152,12 @@ var LandingApp = React.createClass({
         }
 
         // MUST BE REFACTORED
-        (function(){
-            
-            window.onload = Init;
-            
-            function Init(){
-                BindBubbles();
-            }
-            
-            function BindBubbles(){
-                var lastscroll = window.scrollY, allopen = true, allclosed = false;
-                var bubbles = document.getElementsByClassName('landing-feature');
-                window.addEventListener('scroll', OnScroll);
-                
-                OnScroll();
-                function OnScroll(){
-                    var y = window.scrollY, direction = lastscroll <= y ? 1 : -1;
-                    
-                    lastscroll = y;
-                    if (allclosed && direction == 1)
-                        return;
-                    if (allopen && direction == -1)
-                        return;
-
-                    allclosed = allopen = true;
-
-                    for (var i=0, bubble; bubble=bubbles[i++];) {
-                        if(bubble.getAttribute('class').indexOf('landing-in') == -1)
-                            allclosed = false;
-                        else
-                            allopen = false;
-                        
-                        // Move inward
-                        if ( (direction == 1) && (y + window.innerHeight > bubble.offsetTop*1.65) )
-                            bubble.setAttribute('class', 'landing-feature landing-in');
-                        
-                        // Move outward
-                        else if ( (direction == -1) && (y + window.innerHeight < bubble.offsetTop*1.65 + bubble.offsetHeight) )
-                            bubble.setAttribute('class', 'landing-feature');
-                    }
-                }
-            }
-            
-        })();
+        var bubbles = document.getElementsByClassName('landing-feature'), allopen = true, allclosed = false
+        var that = this;
+        this.onScroll(allopen,allclosed,bubbles);
+        window.addEventListener('scroll', function(){
+            that.onScroll(allopen,allclosed,bubbles);
+        });
     },
 
     render: function() {
@@ -173,13 +169,13 @@ var LandingApp = React.createClass({
                         <img className="landing-main-logo" src="/static/pictures/p.logo.png" />
                     </div>
                     {!this.registered ?
-                        <div>
+                        <form onSubmit={this.handleClick}>
                             <h1 className="landing-big-heading">{bigHeading}</h1>
 
-                            <input className="landing-input round-5" ref="email" type="email" spellcheck="off" placeholder="Enter your email!" />
+                            <input className="landing-input round-5" ref="email" type="email" spellCheck="off" placeholder="Enter your email!" />
                             <button className="landing-btn round-5" onClick={this.handleClick}>Sign up</button>
 
-                        </div>
+                        </form>
                         : <SignedUp data={this.referrer_info} />}
                 </div>
                 <div className="masonry landing-masonry">
@@ -228,7 +224,7 @@ var LandingApp = React.createClass({
 
                 <div className="landing-wrapper-3">
                     <h2 className="landing-med-heading">Would you like to join Wondrous?</h2>
-                    <input className="landing-input landing-input-override round-5" ref="email" type="email" placeholder="Enter your email!" />
+                    <input className="landing-input landing-input-override round-5" ref="email1" type="email" placeholder="Enter your email!" />
                     <button className="landing-btn landing-btn-override round-5" onClick={this.handleClick}>Sign up</button>
                 </div>
 

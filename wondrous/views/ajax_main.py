@@ -127,6 +127,7 @@ class APIViews(BaseHandler):
                 )
         self.request.response.headerlist.extend(headers)
 
+    @api_logout_required
     @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
     def api_refer_register(self):
 
@@ -143,6 +144,7 @@ class APIViews(BaseHandler):
 
         return ReferrerManager.register(**self.query_kwargs)
 
+    @api_logout_required
     @view_config(request_method="GET",route_name='api_refer_progress',renderer='json')
     def api_refer_progress(self):
 

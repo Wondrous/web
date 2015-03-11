@@ -75,7 +75,7 @@ var PostStore = Reflux.createStore({
         this.post = postData;
         WondrousActions.updatePostOnWall();
         WondrousActions.updatePostOnFeed();
-        // this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
+        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
     loadPostError: function(err){

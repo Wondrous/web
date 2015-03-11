@@ -32,6 +32,7 @@ var PostForm = React.createClass({
         }).on('cropbox',function(e,results,img){
 
         });
+
     },
 
     readURL: function() {
