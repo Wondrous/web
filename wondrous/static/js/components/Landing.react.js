@@ -176,7 +176,7 @@ var LandingApp = React.createClass({
                         <div>
                             <h1 className="landing-big-heading">{bigHeading}</h1>
 
-                            <input className="landing-input round-5" ref="email" type="email" placeholder="Enter your email!" />
+                            <input className="landing-input round-5" ref="email" type="email" spellcheck="off" placeholder="Enter your email!" />
                             <button className="landing-btn round-5" onClick={this.handleClick}>Sign up</button>
 
                         </div>
