@@ -1,5 +1,6 @@
 var Post = require('./post.react');
 var WondrousAPI = require('../utils/WondrousAPI');
+var Link = Router.Link;
 
 var sp1 = {
     created_at: "2015-02-21T22:09:43.705031",
@@ -36,7 +37,7 @@ var sp2 = {
     text: "Tell your stories with your followers!",
     user_id: 1,
     user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
-    username: "timwest"
+    username: "tim"
 };
 
 var sp3 = {
@@ -75,7 +76,10 @@ var SignedUp = React.createClass({
 var LandingApp = React.createClass({
     registered: false,
     referrer_info: {},
-    mixins: [Router.State],
+    mixins: [
+        Router.Navigation,
+        Router.State,
+    ],
 
     handleData: function(err, res) {
         if (err == null) {
@@ -224,7 +228,8 @@ var LandingApp = React.createClass({
 
                 <div className="landing-wrapper-3">
                     <h2 className="landing-med-heading">Would you like to join Wondrous?</h2>
-                    <input className="landing-input round-5" ref="email" type="email" placeholder="Enter your email!" />
+                    <input className="landing-input landing-input-override round-5" ref="email" type="email" placeholder="Enter your email!" />
+                    <button className="landing-btn landing-btn-override round-5" onClick={this.handleClick}>Sign up</button>
                 </div>
 
                 <div className="landing-wrapper-4">

@@ -784,29 +784,36 @@ a:hover {
   padding: 12px 13px;
   width: 350px;
   border: 3px solid #00e2ae;
-  outline: none; }
+  outline: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
   .landing-input:focus {
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
     border-color: #00be8c; }
+
+.landing-input-override {
+  border-color: #eaeaea !important; }
+  .landing-input-override:focus {
+    border-color: #dddddd !important; }
 
 .landing-btn {
   border: 3px solid #00e2ae;
-  /*padding: 9px 10px 7px;*/
   padding: 16px 13px 14px;
   font-family: helvetica, arial, sans-serif;
   font-size: 15px;
   font-weight: 100;
-  color: #646464;
-  background-color: #fbfbfb; }
+  background-color: #0082f0;
+  color: white;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
   .landing-btn:hover {
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    background-color: #eaeaea; }
+    background-color: #0082dc; }
+
+.landing-btn-override {
+  border-color: #eaeaea !important; }
 
 .landing-feature {
   position: relative;
