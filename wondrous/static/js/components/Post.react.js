@@ -53,7 +53,7 @@ var Photo = React.createClass({
 
                                 <span className="post-micro-data-super-analytics-item">
                                     <img src="/static/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-comment-icon" />
-                                    ?
+                                    {this.props.data.comment_count}
                                 </span>
 
                                 <span className="post-micro-data-super-analytics-item">

@@ -34,6 +34,8 @@ class Comment(Base,BaseMixin):
     """
 
     post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False)
+    post = relationship("Post",backref="comments")
+    
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     text = Column(Unicode, nullable=False)
     # anonymous = Column(Boolean, nullable=False, default=True)

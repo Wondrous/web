@@ -35,7 +35,7 @@ var UserTitle = React.createClass({
             this.repost = this.props.data.repost;
             hrefRepostPlaceholder = '/'+this.repost.username;
         }
-        var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof this.props.data.user_ouuid !== 'undefined' ) ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/'+this.props.data.username;
 
         return (
@@ -175,19 +175,14 @@ var Photo = React.createClass({
         if (this.props.data.hasOwnProperty('repost')) {
             this.props.data = this.props.data.repost;
         }
+
         photoStyle = {
-            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
+            backgroundImage: this.props.data.ouuid!=null ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "url(/static/pictures/500x500.gif)",
         };
 
         return (
             <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
-                    {/*<div className="post-subject-text nh">
-                        <div className="post-subject-wrapper">
-                            <div className="post-subject-text-position">
-                                {this.props.data.subject}
-                            </div>
-                        </div>
-                    </div>*/}
+
             </div>);
     },
     componentDidMount: function() {
@@ -284,7 +279,7 @@ var Post = React.createClass({
 
                         <span className="post-micro-data-super-analytics-item">
                             <img src="/static/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-view-icon" />
-                            ?
+                            {this.props.data.comment_count}
                         </span>
 
                         <span className="post-micro-data-super-analytics-item">
