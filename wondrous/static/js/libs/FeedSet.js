@@ -52,8 +52,11 @@ FeedSet.prototype.delete = function(item_id){
 }
 
 FeedSet.prototype.update = function(item){
-    this.sortedSet.delete(temp);
-
+    if (this.sortedSet.delete(item)){
+        this.sortedSet.push(item);
+        return true;
+    }
+    return false;
 }
 
 module.exports = FeedSet;

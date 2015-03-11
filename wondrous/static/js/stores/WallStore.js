@@ -1,5 +1,6 @@
 var WondrousActions = require('../actions/WondrousActions');
 var ProfileStore = require('../stores/ProfileStore');
+var PostStore = require('../stores/PostStore');
 var FeedSet = require('../libs/FeedSet');
 
 var WallStore = Reflux.createStore({
@@ -58,7 +59,7 @@ var WallStore = Reflux.createStore({
         for(var i = 0; i < wallItems.length; i++){
             this.wall.push(wallItems[i]);
         }
-
+        
         this.trigger(this.getWall());
     },
 
@@ -77,6 +78,11 @@ var WallStore = Reflux.createStore({
 
     removeFromWall: function(post_id){
         var key = this.wall.delete(post_id);
+        this.trigger(this.getWall());
+    },
+
+    updatePostOnWall: function(){
+        var key = this.wall.update(PostStore.post);
         this.trigger(this.getWall());
     }
 

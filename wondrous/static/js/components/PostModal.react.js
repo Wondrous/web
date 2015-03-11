@@ -3,6 +3,7 @@ var WondrousActions = require('../actions/WondrousActions');
 var Post = require('./Post.react');
 var PostStore = require('../stores/PostStore');
 var UserStore = require('../stores/UserStore');
+
 var Link = Router.Link;
 
 var UserTitle = React.createClass({
@@ -199,12 +200,22 @@ var PostFooter = React.createClass({
         WondrousActions.deletePost(this.props.data.id);
     },
 
+    onLikeHandler: function(err,res){
+        if(err==null){
+            PostStore.post.liked = this.props.data.liked;
+            PostStore.post.like_count++;
+            WondrousActions.updatePostOnWall();
+            WondrousActions.updatePostOnFeed();
+        }else{
+
+        }
+    },
     likePost: function() {
         this.props.data.liked = !this.props.data.liked;
         this.forceUpdate();
         WondrousAPI.toggleLike({
             post_id: this.props.data.id,
-            callback: null,
+            callback: this.onLikeHandler,
         });
     },
     clickRepost: function() {

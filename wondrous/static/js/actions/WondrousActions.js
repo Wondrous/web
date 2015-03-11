@@ -166,6 +166,10 @@ var WondrousActions = Reflux.createActions({
     // loads the post onto modal
     "updatePost": {},
 
+    "updatePostOnWall": {},
+
+    "updatePostOnFeed": {},
+
     "loadPostError": {},
 
     "newProfile": {},

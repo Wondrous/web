@@ -1,6 +1,7 @@
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
+var PostStore = require('../stores/PostStore');
 var FeedSet = require('../libs/FeedSet');
 
 var FeedStore = Reflux.createStore({
@@ -60,7 +61,13 @@ var FeedStore = Reflux.createStore({
     },
 
     removeFromFeed: function(post_id){
-        return this.feed.delete(post_id);
+        this.feed.delete(post_id);
+        this.trigger(this.getFeed());
+    },
+
+    updatePostOnFeed: function(){
+        var key = this.feed.update(PostStore.post);
+        this.trigger(this.getFeed());
     }
 
 });

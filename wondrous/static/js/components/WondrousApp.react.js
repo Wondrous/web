@@ -23,6 +23,7 @@ var Login = require('../components/Authenticate.react').Login;
 var Signup = require('../components/Authenticate.react').Signup;
 var ResetPage = require('../components/Authenticate.react').ResetPage;
 var VerificationPage = require('../components/Authenticate.react').VerificationPage;
+var PasswordResetPage = require('../components/Authenticate.react').PasswordResetPage;
 var LandingApp = require('./Landing.react');
 
 var WondrousConstants = require('../constants/WondrousConstants');
@@ -70,10 +71,11 @@ var Routes = (
         <Route name="progress" path="/progress/:uuid" handler={LandingApp}/>
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
-        <Route name="reset" path="/reset/:page" handler={ResetPage}/>
+        <Route name="resetRequest" path="/reset_request/:page" handler={ResetPage}/>
         <Route name="search" path="/search/:search" handler={Search}/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
         <Route name="activate" path="/activate/:verification" handler={VerificationPage}/>
+        <Route name="passwordReset" path="/reset/:verification" handler={PasswordResetPage}/>
         <Route name="settings" path="/settings" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>

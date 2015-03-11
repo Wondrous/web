@@ -11,35 +11,47 @@ var PasswordResetPage = React.createClass({
     },
     onPasswordReset: function(err,res){
         if(err==null){
+            this.refs.passwordConfirm.getDOMNode().value = this.refs.password.getDOMNode().value = '';
             this.transitionTo('/login');
         }else{
             this.setState({error:err.error});
         }
     },
 
-    onSubmitReset: function(){
+    onSubmitReset: function(evt){
+        evt.preventDefault();
+        this.setState({error:null});
         if (this.refs.password.getDOMNode().value!==this.refs.passwordConfirm.getDOMNode().value){
-             
-        }
-        var verification = this.getParams().verification;
-        if (typeof verification !== 'undefined'){
-            WondrousAPI.passwordReset({
-                verification_code:verification,
-                password:this.refs.password.value.trim()
-                callback:this.onPasswordReset
-            })
+            this.setState({error:'your passwords do not match :('})
+        }else{
+            var verification = this.getParams().verification;
+            if (typeof verification !== 'undefined'){
+                WondrousAPI.passwordReset({
+                    verification_code:verification,
+                    password:this.refs.passwordConfirm.getDOMNode().value.trim(),
+                    callback:this.onPasswordReset
+                });
+            }
         }
     },
+
     render: function(){
+        if(UserStore.loggedIn){
+            return (
+                <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
+                <h1 ref="header" style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>You are logged in</h1>
+                </div>);
+        }
+
         return (
             <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "10%"}}>
                 <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Password Reset</h1>
-                <form onSubmit={this.onSubmitReset}>
+                <form method="POST" onSubmit={this.onSubmitReset}>
                     <div>
-                        <input className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password" />
+                        <input className="input-basic round-3" type="password" ref="password" placeholder="New Password" />
                     </div>
                     <div>
-                        <input className="input-basic round-3" type="password" name="password" ref="passwordConfirm" placeholder="Password" />
+                        <input className="input-basic round-3" type="password" ref="passwordConfirm" placeholder="Confirm Password" />
                     </div>
 
                     <div>
@@ -85,7 +97,12 @@ var VerificationPage = React.createClass({
 });
 
 var ResetPage = React.createClass({
-    mixins: [Router.State],
+    mixins: [Router.State, Router.Navigation, Reflux.listenTo(UserStore,'onUserUpdate')],
+    onUserUpdate: function(){
+        if(UserStore.loggedIn){
+            this.forceUpdate();
+        }
+    },
     getInitialState: function(){
         return {error:null,result:null}
     },
@@ -111,6 +128,7 @@ var ResetPage = React.createClass({
         }else{
             this.setState({error:err.error});
         }
+
         this.refs.email.getDOMNode().value = '';
     },
 
@@ -124,7 +142,10 @@ var ResetPage = React.createClass({
     render: function(){
         var page = this.getParams().page;
         if(UserStore.loggedIn || typeof page === 'undefined'){
-            return (<div></div>);
+            return (
+                <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
+                <h1 ref="header" style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>You are logged in</h1>
+                </div>);
         }
 
         if(page==='password'){
@@ -273,7 +294,7 @@ var Login = React.createClass({
                     <div style={{"fontWeight": "300","color": "rgb(220,100,100)","margin": "5px"}}>
 
                     </div>
-                    <Link to="/reset/password">forgot password</Link>
+                    <Link to="/reset_request/password">forgot password</Link>
 
                     <div>
                         <input className="input-basic round-3" type="submit" name="login_button" value="Log in!" />
@@ -288,4 +309,4 @@ var Login = React.createClass({
     }
 });
 
-module.exports = {Login: Login, Signup: Signup, ResetPage:ResetPage, VerificationPage:VerificationPage};
+module.exports = {Login: Login, Signup: Signup, ResetPage:ResetPage, VerificationPage:VerificationPage, PasswordResetPage:PasswordResetPage};

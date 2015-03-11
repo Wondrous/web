@@ -24,6 +24,9 @@ from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.notification_utilities import send_notification
+from wondrous.utilities.validation_utilities import (
+    Sanitize
+)
 import shortuuid
 from datetime import datetime, timedelta
 
@@ -50,7 +53,10 @@ class AccountManager(BaseManager):
             verification_date = u.verification_date
             if (datetime.utcnow()-verification_date<timedelta(1)):
                 if password:
-                    u.password = new_password
+                    _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
+                    if not _s_valid_pw:
+                        return None
+                    u.password = password
                 else:
                     u.verified = True
 

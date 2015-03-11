@@ -1,4 +1,5 @@
 var WondrousActions = require('../actions/WondrousActions');
+var PostStore = require('../stores/PostStore');
 var UserStore = require('../stores/UserStore');
 var FeedSet = require('../libs/FeedSet');
 
@@ -72,7 +73,9 @@ var PostStore = Reflux.createStore({
 
     updatePost: function(postData){
         this.post = postData;
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
+        WondrousActions.updatePostOnWall();
+        WondrousActions.updatePostOnFeed();
+        // this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
     loadPostError: function(err){
@@ -82,6 +85,9 @@ var PostStore = Reflux.createStore({
     addToComments: function(comment){
         if(this.post.id == comment.post_id){
             this.comments.push(comment);
+            this.comment_count++;
+            WondrousActions.updatePostOnWall();
+            WondrousActions.updatePostOnFeed();
             this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
         }
     },
@@ -95,7 +101,9 @@ var PostStore = Reflux.createStore({
         comments.map(function(comment,index){
             this.push(comment);
         }, this.comments);
-
+        this.post.comment_count=this.comments.sortedSet.length;
+        WondrousActions.updatePostOnWall();
+        WondrousActions.updatePostOnFeed();
         this.trigger({modalOpen: this.modalOpen, post: this.post, comments: this.comments.sortedSet});
     },
 
@@ -103,6 +111,7 @@ var PostStore = Reflux.createStore({
         this.comments.delete(comment_id);
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     }
+
 });
 
 

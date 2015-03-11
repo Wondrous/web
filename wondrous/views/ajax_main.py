@@ -260,10 +260,9 @@ class APIViews(BaseHandler):
         u = AccountManager.verify_user(**self.query_kwargs)
         if u:
             # extend the headers
-            self._set_session_headers(u)
             return u.json(1)
         else:
-            return {'error':'verification failed'}
+            return {'error':'verification failed, your verification might have expired or your password is not strong enough'}
 
     @api_logout_required
     @view_config(request_method="POST",route_name='api_request_reset', renderer='json')

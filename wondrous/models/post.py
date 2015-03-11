@@ -102,7 +102,6 @@ class Post(Base, BaseMixin):
         post_dict.update({"username": self.user.username})
         post_dict.update({"view_count": self.view_count})
         post_dict.update({"comment_count": len(self.comments)})
-
         picture_object = self.user.picture_object
 
         if picture_object:
