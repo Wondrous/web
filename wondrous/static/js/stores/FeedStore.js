@@ -15,7 +15,8 @@ var FeedStore = Reflux.createStore({
     },
 
     onUserChange: function(userData){
-        if(userData.hasOwnProperty('user')){
+        if(userData.hasOwnProperty('user')&&UserStore.loggedIn){
+
             this.loadMore();
         }
     },

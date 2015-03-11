@@ -69,6 +69,7 @@ var SignedUp = React.createClass({
             <div>
                 <h1 className="landing-big-heading">Thank you, {this.props.data.email} You have referred {this.props.data.referred} people! <br/>Your referral url: </h1>
                 <input onClick={this.onURLClicked} readOnly className="landing-input round-5" type="text" ref="referURL" value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
+                
             </div>
         );
     }

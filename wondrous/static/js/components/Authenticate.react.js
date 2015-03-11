@@ -264,9 +264,9 @@ var Login = React.createClass({
         this.err = '';
     },
     onUserUpdate: function(userData){
-        console.log(UserStore);
         if(UserStore.loggedIn){
             this.transitionTo('/');
+            WondrousActions.auth();
         }
     },
     onLoginError: function(errMessage){
