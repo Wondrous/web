@@ -203,7 +203,12 @@ var PostFooter = React.createClass({
     onLikeHandler: function(err,res){
         if(err==null){
             PostStore.post.liked = this.props.data.liked;
-            PostStore.post.like_count++;
+            if(PostStore.post.liked){
+                PostStore.post.like_count++;
+            }else{
+                PostStore.post.like_count--;
+            }
+            
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
         }else{
