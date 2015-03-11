@@ -29,6 +29,8 @@ from wondrous.models import (
 from wondrous.models.modelmixins import BaseMixin
 from wondrous.models.post import Post
 
+from wondrous.utilities.general_utilities import title_case
+
 class Object(Base, BaseMixin):
 
     """
@@ -55,8 +57,12 @@ class Object(Base, BaseMixin):
         return DBSession.query(Object).filter(or_(Object.subject.ilike("%{q}%".format(q=text)),
                                                   Object.text.ilike("%{q}%".format(q=text)))).limit(num)
 
-    def json(self,level=0):
+    def json(self, level=0):
         data = super(Object,self).json(level)
+
+        if 'subject' in data:
+            data['subject'] = title_case(data['subject'])
+
         if 'id' in data:
             del data['id']
         return data

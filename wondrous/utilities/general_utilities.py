@@ -8,6 +8,7 @@
 # GENERAL_UTILITIES.PY
 #
 
+import json
 import re
 import smtplib
 
@@ -132,8 +133,6 @@ VALID_MIME_TYPES = set(
     _VIDEO_MIMES +
     _MICROSOFT_MIMES
 )
-
-import json
 
 def api_login_required(func):
     @wraps(func)
@@ -275,15 +274,16 @@ def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 
         else:
             return word.capitalize()
 
-    word_list = re.split(' ', text.strip())
-    title_fw  = _capitalize(word_list[0])
-    title_lw  = _capitalize(word_list[-1])
+    NOCAP = set(["iCloud", "iMac", "iMacs", "iMovie", "iPad", "iPads", 
+                 "iPhone", "iPhones", "iPhoto", "iPod", "iPod", "iTunes"])
 
-    # Always capitalize first word
+    _cap = lambda w: w if w in NOCAP else _capitalize(w)
+    word_list = re.split(' ', text.strip())
+    title_fw, title_lw  = _cap(word_list[0]), _cap(word_list[-1])
     final = [title_fw]
     
     for word in word_list[1:-1]:
-        final.append(word in exceptions and word or _capitalize(word))
+        final.append(word if word in (exceptions|NOCAP) else _capitalize(word))
     
     # Always capitalize last word
     final.append(title_lw)

@@ -21,8 +21,6 @@ from wondrous.models import (
     User,
 )
 
-from wondrous.utilities.general_utilities import title_case
-
 class FeedManager(BaseManager):
     MAJORITY, PRIORITY = range(2)
 
