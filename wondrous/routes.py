@@ -73,6 +73,11 @@ def build_routes(config):
     config.add_route('api_user_picture',                       '/api/me/picture')       # POST
     config.add_route('api_user_me',                            '/api/me')               # GET
 
+    config.add_route('api_verify_user',                        '/api/me/verify')        # POST
+    config.add_route('api_request_verify',                     '/api/me/verify/request')         # POST
+    config.add_route('api_reset_password',                     '/api/me/reset')         # POST
+    config.add_route('api_request_reset',                      '/api/me/reset/request')         # POST
+
     config.add_route('api_user_info',                          '/api/user')             # GET
     config.add_route('api_user_followers',                     '/api/user/followers')   # GET
     config.add_route('api_user_following',                     '/api/user/following')   # GET

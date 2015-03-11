@@ -211,6 +211,54 @@ module.exports = {
         request.post(url).end(_callback(callback));
     },
 
+    // request password reset
+    // options are:
+    // email
+    // callback(err,json_res)
+    requestPasswordReset: function(options){
+        var callback = options.callback;
+        var email = options.email;
+        var url = '/api/me/reset/request'
+        request.post(url).send({email:email}).end(_callback(callback));
+    },
+
+    // verify user accounts
+    // options are:
+    // verification_code
+    // callback(err,json_res)
+    verifyUser: function(options){
+        var verification_code = options.verification_code;
+        var callback = options.callback;
+        var url = '/api/me/verify';
+        request.post(url).send({verification_code:verification_code}).end(_callback(callback));
+    },
+
+    // request for verifying user accounts
+    // options are:
+    // email
+    // callback(err,json_res)
+    requestVerification: function(options){
+        var email = options.email;
+        var callback = options.callback;
+        var url = '/api/me/verify/request';
+        request.post(url).send({email:email}).end(_callback(callback));
+    },
+
+    // sends a password reset request along with a verification_code
+    // options are:
+    // verification_code
+    // password
+    // callback(err,json_res)
+    passwordReset: function(options){
+        var verification_code = options.verification_code;
+        var password = options.password;
+        var callback = options.callback;
+        var url = '/api/me/reset';
+        request.post(url).send({verification_code:verification_code, password:password}).end(_callback(callback));
+    },
+
+
+
     // checks registration fields user account
     // options are:
     // name

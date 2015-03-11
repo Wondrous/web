@@ -13,14 +13,16 @@ var WallStore = require('../stores/WallStore');
 // Other components -- stitch them together
 var Buffer = require('./Buffer.react');
 var Home = require('./Feed.react');
-var Login = require('../components/Authenticate.react').Login;
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
 var PostModal = require('./PostModal.react');
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Search = require('../components/Search.react');
+var Login = require('../components/Authenticate.react').Login;
 var Signup = require('../components/Authenticate.react').Signup;
+var ResetPage = require('../components/Authenticate.react').ResetPage;
+var VerificationPage = require('../components/Authenticate.react').VerificationPage;
 var LandingApp = require('./Landing.react');
 
 var WondrousConstants = require('../constants/WondrousConstants');
@@ -68,8 +70,10 @@ var Routes = (
         <Route name="progress" path="/progress/:uuid" handler={LandingApp}/>
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
+        <Route name="reset" path="/reset/:page" handler={ResetPage}/>
         <Route name="search" path="/search/:search" handler={Search}/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
+        <Route name="activate" path="/activate/:verification" handler={VerificationPage}/>
         <Route name="settings" path="/settings" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>

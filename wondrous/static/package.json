@@ -4,21 +4,21 @@
   "description": "wondrous frontend app",
   "main": "js/app.js",
   "dependencies": {
-    "reflux": "*",
+    "collections": "^2.0.1",
     "flux": "^2.0.0",
-    "react": "^0.12.0",
-    "underscore": "^1.7.0",
-    "superagent": "^0.21.0",
-    "react-router": "0.12.0",
-    "jquery": "^2.1.3",
-    "jquery-hammerjs":"^2.0.0",
-    "kd-shim-jquery-mousewheel":"^3.1.12",
-    "masonry-layout": "^3.2.1",
     "imagesloaded": "^3.1.8",
-    "jquery-autosize":"^1.18.17",
-    "websocket":"^1.0.17",
-    "collections":"*",
-    "moment":"*"
+    "jquery": "^2.1.3",
+    "jquery-autosize": "^1.18.17",
+    "jquery-hammerjs": "^2.0.0",
+    "kd-shim-jquery-mousewheel": "^3.1.12",
+    "masonry-layout": "^3.2.1",
+    "moment": "*",
+    "react": "^0.12.2",
+    "react-router": "^0.12.0",
+    "reflux": "*",
+    "superagent": "^0.21.0",
+    "underscore": "^1.7.0",
+    "websocket": "^1.0.17"
   },
   "devDependencies": {
     "browserify": "~6.2.0",
@@ -30,15 +30,18 @@
     "uglify-js": "~2.4.15",
     "watchify": "~2.1.0",
     "browser-sync": "~2.1.6",
-    "node-sass":"^2.0.1"
+    "node-sass": "^2.0.1"
   },
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [
+      "reactify",
+      "envify"
+    ]
   },
   "browser": {
     "PushStream": "./js/vendor/pushstream.js",
     "jquery-hashtags": "./js/vendor/jquery.hashtags.js",
-    "jquery-cropbox":"./js/vendor/jquery.cropbox.js"
+    "jquery-cropbox": "./js/vendor/jquery.cropbox.js"
   },
   "scripts": {
     "start": "watchify -o js/bundle.js -v -d .",
@@ -46,11 +49,5 @@
     "build": "browserify . | uglifyjs -cm > js/bundle.min.js && node-sass --output_style compressed --output css css/style.scss style.css",
     "watch": "browser-sync start --proxy localhost:6543 --files \"js/bundle.js, css/style.css\""
   },
-  "author": "Ziyuan Liu",
-  "browserify": {
-    "transform": [
-      "reactify",
-      "envify"
-    ]
-  }
+  "author": "Ziyuan Liu"
 }

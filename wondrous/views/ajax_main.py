@@ -29,6 +29,7 @@ from wondrous.models.user import (
     User,
 )
 
+import wondrous.controllers
 from wondrous.controllers import (
     AccountManager,
     FeedManager,
@@ -232,6 +233,46 @@ class APIViews(BaseHandler):
 
         user = self.query_kwargs['user']
         return AccountManager.get_json_by_username(user, **{'user_id': user.id,'auth':True})
+
+    @api_logout_required
+    @view_config(request_method="POST",route_name='api_verify_user', renderer='json')
+    def api_verify_user(self):
+        u = AccountManager.verify_user(**self.query_kwargs)
+        if u:
+            # extend the headers
+            self._set_session_headers(u)
+            return u.json(1)
+        else:
+            return {'error':'verification failed'}
+
+    @api_logout_required
+    @view_config(request_method="POST",route_name='api_request_verify', renderer='json')
+    def api_request_verify(self):
+        user = AccountManager.request_verify(**self.query_kwargs)
+        if user and wondrous.controllers.email_controller.send_activation_link(user=user):
+            return {'status':'sent'}
+        else:
+            return {'error':'account doesn\'t exist or account already verified'}
+
+    @api_logout_required
+    @view_config(request_method="POST",route_name='api_reset_password', renderer='json')
+    def api_reset_password(self):
+        u = AccountManager.verify_user(**self.query_kwargs)
+        if u:
+            # extend the headers
+            self._set_session_headers(u)
+            return u.json(1)
+        else:
+            return {'error':'verification failed'}
+
+    @api_logout_required
+    @view_config(request_method="POST",route_name='api_request_reset', renderer='json')
+    def api_request_reset(self):
+        if wondrous.controllers.email_controller.send_password_reset(**self.query_kwargs):
+            return {'status':'sent'}
+        else:
+            return {'error':'invalid email addresses'}
+
 
     @api_login_required
     @view_config(request_method="POST",route_name='api_user_picture', renderer='json')

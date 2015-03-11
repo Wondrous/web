@@ -8,7 +8,7 @@
 # CONTROLLERS/EMAILMANAGER.PY
 #
 
-import boto
+import boto, logging
 import shortuuid
 from datetime import datetime
 
@@ -26,7 +26,7 @@ def verify_verification_code(uuid):
         return False
 
 def generate_verification_code(user):
-    
+
     """
         12 hours to activate
         format = "random stored in user.verification_random"
@@ -34,7 +34,7 @@ def generate_verification_code(user):
     """
 
     user.verification_date = datetime.now()
-    user.verification_random = random = shortuuid.ShortUUID().random(length=20)
+    user.verification_code = random = shortuuid.ShortUUID().random(length=20)
     DBSession.add(user)
     return random
 
@@ -43,15 +43,39 @@ class EmailManager:
     def __init__(self, aws_access_key, aws_secret_access_key, **kwargs):
         self.conn = boto.connect_ses(aws_access_key, aws_secret_access_key)
 
-    def send_activation_link(self,user):
-        code = generate_verification_code(user)
-        url = "https://wondrous.co/activate/"+code
-        # conn.send_email('hello@wondrous.co','verification email','something something something',['z@wondrous.co'])
+    def send_activation_link(self,user=None, email=None):
+        if email:
+            user = DBSession.query(User).filter_by(email=email).first() if not user else user
+        if user:
+            code = generate_verification_code(user)
+            url = "https://wondrous.co/activate/"+code
+            try:
+                self.conn.send_email('hello@wondrous.co','Wondrous Verification Email',url,[user.email])
+            except Exception, e:
+                logging.warn(e.message)
+                return False
+            return True
+        return False
 
-    def send_password_reset(self,user):
-        code = generate_verification_code(user)
-        url = "https://wondrous.co/reset/"+code
+    def send_password_reset(self,email):
+        user = DBSession.query(User).filter_by(email=email).first()
+        if user:
+            code = generate_verification_code(user)
+            url = "https://wondrous.co/reset/"+code
+            try:
+                self.conn.send_email('hello@wondrous.co','Reset Password',url,[email])
+            except Exception, e:
+                logging.warn(e.message)
+                return False
+            return True
+        else:
+            return False
 
-    def send_waitlist_confirmation(self,user):
-        code = generate_verification_code(user)
-        url = "https://wondrous.co/signup?link="+code
+    def send_waitlist_confirmation(self,ref_uuid,email):
+        url = "https://wondrous.co/refer/"+ref_uuid
+        self.conn.send_email('hello@wondrous.co',\
+            'Something wonderful is coming',"thank you for signing up for wondrous you check on your status "+url,\
+            [email])
+
+    def send_waitlist_signup(self,ref_uuid,email):
+        pass

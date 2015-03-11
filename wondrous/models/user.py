@@ -55,8 +55,8 @@ class User(Base, PasswordManager, BaseMixin):
     _password = Column('password', Unicode(255), nullable=False)
 
     # profile_picture = Column(Unicode, nullable=True, default=unicode(DEFAULT_PROFILE_PICTURE_PATH))  # nullable=True for FBAuth users
-    verification_date = Column(DateTime, default=datetime.now())
-    verification_random = Column(Unicode, nullable=True)
+    verification_date = Column(DateTime, default=datetime.now(), nullable=True)
+    verification_code = Column(Unicode, unique=True, nullable=True)
 
     verified = Column(Boolean, default=False)
     picture_object_id = Column(BigInteger,ForeignKey('object.id'), nullable=True)

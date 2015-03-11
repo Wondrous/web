@@ -23,7 +23,6 @@ var FeedStore = Reflux.createStore({
         if(!this.paging&&!this.donePaging){
             this.paging = true;
             WondrousActions.loadFeed(this.currentPage);
-            console.log("loaded page",this.currentPage);
             this.incrementPage();
         }
     },

@@ -39,7 +39,7 @@ var Photo = React.createClass({
             this.props.data.ouuid = this.props.data.repost.ouuid;
         }
         photoStyle = {
-            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "/static/pictures/500x500.gif",
+            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "url(/static/pictures/500x500.gif)",
         };
         return (
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>

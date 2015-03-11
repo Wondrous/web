@@ -25,6 +25,7 @@ from wondrous.controllers.notificationmanager import NotificationManager
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.notification_utilities import send_notification
 import shortuuid
+from datetime import datetime, timedelta
 
 class AccountManager(BaseManager):
 
@@ -40,6 +41,32 @@ class AccountManager(BaseManager):
     """
 
     DYNAMIC_FIELDS = ['username', 'name', 'ascii_name']  # TODO Should this be a set?
+
+    @staticmethod
+    def verify_user(verification_code, password = None):
+        u = DBSession.query(User).filter_by(verification_code=verification_code).first()
+        if u:
+            #check the time
+            verification_date = u.verification_date
+            if (datetime.utcnow()-verification_date<timedelta(1)):
+                if password:
+                    u.password = new_password
+                else:
+                    u.verified = True
+
+            u.verification_code = None
+            u.verification_date = None
+            DBSession.add(u)
+            return u
+        else:
+            return None
+
+    @staticmethod
+    def request_verify(email):
+        user = DBSession.query(User).filter_by(email=email).first()
+        if user and not user.verified:
+            return user
+        return None
 
     @staticmethod
     def is_username_taken(username):

@@ -1,7 +1,157 @@
 var WondrousActions = require('../actions/WondrousActions');
+var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
 var LoginStore = require('../stores/LoginStore');
 var Link = Router.Link;
+
+var PasswordResetPage = React.createClass({
+    mixins: [Router.State, Router.Navigation],
+    getInitialState: function(){
+        return {error:null};
+    },
+    onPasswordReset: function(err,res){
+        if(err==null){
+            this.transitionTo('/login');
+        }else{
+            this.setState({error:err.error});
+        }
+    },
+
+    onSubmitReset: function(){
+        if (this.refs.password.getDOMNode().value!==this.refs.passwordConfirm.getDOMNode().value){
+             
+        }
+        var verification = this.getParams().verification;
+        if (typeof verification !== 'undefined'){
+            WondrousAPI.passwordReset({
+                verification_code:verification,
+                password:this.refs.password.value.trim()
+                callback:this.onPasswordReset
+            })
+        }
+    },
+    render: function(){
+        return (
+            <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "10%"}}>
+                <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Password Reset</h1>
+                <form onSubmit={this.onSubmitReset}>
+                    <div>
+                        <input className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password" />
+                    </div>
+                    <div>
+                        <input className="input-basic round-3" type="password" name="password" ref="passwordConfirm" placeholder="Password" />
+                    </div>
+
+                    <div>
+                        <input className="input-basic round-3" type="submit" value="Reset" />
+                    </div>
+                </form>
+                {this.state.error?this.state.error:null}
+            </div>
+        );
+    }
+});
+
+var VerificationPage = React.createClass({
+    mixins: [Router.State, Router.Navigation],
+    getInitialState: function(){
+        return {error:null};
+    },
+    onVerification: function(err,res){
+        if(err==null){
+            WondrousActions.auth();
+            this.transitionTo('/');
+        }else{
+            this.setState({error:err.error});
+        }
+    },
+    componentDidMount: function(){
+        var verification = this.getParams().verification;
+        if (typeof verification !== 'undefined'){
+            WondrousAPI.verifyUser({
+                verification_code:verification,
+                callback:this.onVerification
+            })
+        }
+    },
+
+    render: function(){
+        return (
+            <div>
+                {this.state.error?this.state.error:null}
+            </div>
+        );
+    }
+});
+
+var ResetPage = React.createClass({
+    mixins: [Router.State],
+    getInitialState: function(){
+        return {error:null,result:null}
+    },
+    onPasswordResetHandler: function(err,res){
+        if(err==null){
+            this.refs.header.getDOMNode().innerHTML="Password link reset sent to: "+this.refs.email.getDOMNode().value.trim();
+        }else{
+            this.setState({error:err.error});
+        }
+        this.refs.email.getDOMNode().value = '';
+    },
+    onPasswordReset: function(evt){
+        evt.preventDefault();
+        WondrousAPI.requestPasswordReset({
+            email:this.refs.email.getDOMNode().value.trim(),
+            callback: this.onPasswordResetHandler
+        })
+    },
+
+    onRequestActivationHandler: function(err,res){
+        if(err==null){
+            this.refs.header.getDOMNode().innerHTML="Verification Email sent to: "+this.refs.email.getDOMNode().value.trim();
+        }else{
+            this.setState({error:err.error});
+        }
+        this.refs.email.getDOMNode().value = '';
+    },
+
+    onRequestActivation: function(evt){
+        evt.preventDefault();
+        WondrousAPI.requestVerification({
+            email:this.refs.email.getDOMNode().value.trim(),
+            callback: this.onRequestActivationHandler
+        })
+    },
+    render: function(){
+        var page = this.getParams().page;
+        if(UserStore.loggedIn || typeof page === 'undefined'){
+            return (<div></div>);
+        }
+
+        if(page==='password'){
+            return (
+                <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
+                    <h1 ref="header" style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>So... you forgot something important ;)</h1>
+                    <form onSubmit={this.onPasswordReset}>
+                    <input id="focusInput" className="input-basic round-3" type="email" ref="email" placeholder="Email" />
+                        <input className="input-basic round-3" type="submit" ref="signup_button" value="Send Password Reset"/>
+                    </form>
+                    {this.state.error?this.state.error:null}
+                </div>
+            );
+        }else if(page==='activate'){
+            return (
+                    <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
+                        <h1 ref="header" style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Need to activate your account?</h1>
+                        <form onSubmit={this.onRequestActivation}>
+                        <input id="focusInput" className="input-basic round-3" type="email" ref="email" placeholder="Email" />
+                            <input className="input-basic round-3" type="submit" ref="signup_button" value="Send verification email"/>
+                        </form>
+                        {this.state.error?this.state.error:null}
+                    </div>
+                );
+        }
+    }
+});
 
 var Signup = React.createClass({
     err: null,
@@ -123,6 +273,8 @@ var Login = React.createClass({
                     <div style={{"fontWeight": "300","color": "rgb(220,100,100)","margin": "5px"}}>
 
                     </div>
+                    <Link to="/reset/password">forgot password</Link>
+
                     <div>
                         <input className="input-basic round-3" type="submit" name="login_button" value="Log in!" />
                     </div>
@@ -136,4 +288,4 @@ var Login = React.createClass({
     }
 });
 
-module.exports = {Login: Login, Signup: Signup};
+module.exports = {Login: Login, Signup: Signup, ResetPage:ResetPage, VerificationPage:VerificationPage};
