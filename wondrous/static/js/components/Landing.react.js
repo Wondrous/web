@@ -184,7 +184,7 @@ var LandingApp = React.createClass({
                     <Post data={sp3}/>
                 </div>
                 <div className="landing-wrapper-2">
-                    <div style={{ paddingBottom: 400 }}>
+                    <div style={{ paddingBottom: 50 }}>
                         <h2 className="landing-med-heading">Use Wondrous However You Like</h2>
 
                         <div>
@@ -215,10 +215,24 @@ var LandingApp = React.createClass({
                                         99
                                     </span>
                                 </div>
-                                <h2 className="landing-feature-h2">Become an influencer</h2>
+                                <h2 className="landing-feature-h2">Become a Wondrous influencer</h2>
                             </div>
                         </div>
 
+                    </div>
+                </div>
+
+                <div className="landing-wrapper-3">
+                    <h2 className="landing-med-heading">Would you like to join Wondrous?</h2>
+                    <input className="landing-input round-5" ref="email" type="email" placeholder="Enter your email!" />
+                </div>
+
+                <div className="landing-wrapper-4">
+                    <div className="footer-link-wrapper">
+                        <span className="footer-link">Contact Us</span>
+                        <span className="footer-link">Team</span>
+                        <span className="footer-link">Become an influencer</span>
+                        <span className="footer-link">Invite your friends</span>
                     </div>
                 </div>
             </div>

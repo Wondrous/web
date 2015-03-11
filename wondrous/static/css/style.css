@@ -726,10 +726,28 @@ a:hover {
 
 .landing-wrapper-2 {
   position: relative;
-  top: -50px;
-  padding-top: 570px;
+  padding-top: 520px;
   text-align: center;
   background-color: white;
+  overflow-x: hidden;
+  z-index: 1; }
+
+.landing-wrapper-3 {
+  position: relative;
+  top: 0;
+  padding-top: 40px;
+  padding-bottom: 100px;
+  text-align: center;
+  background-color: #eaeaea;
+  overflow-x: hidden;
+  z-index: 1; }
+
+.landing-wrapper-4 {
+  position: relative;
+  top: 0;
+  padding: 70px 5% 110px;
+  text-align: center;
+  background-color: #00e2ae;
   overflow-x: hidden;
   z-index: 1; }
 
@@ -821,6 +839,15 @@ a:hover {
   font-family: 'geosanslightregular', helvetica, arial, sans-serif;
   font-size: 27px;
   color: #5a5a5a; }
+
+.footer-link-wrapper {
+  font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+  font-size: 25px;
+  font-weight: 100;
+  color: #fbfbfb; }
+
+.footer-link {
+  padding: 5px 10px; }
 
 .grid-padding, .profile-content, .profile-header {
   margin: 0 auto; }
