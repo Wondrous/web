@@ -85,7 +85,7 @@ var PostStore = Reflux.createStore({
     addToComments: function(comment){
         if(this.post.id == comment.post_id){
             this.comments.push(comment);
-            this.comment_count++;
+            this.post.comment_count++;
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
             this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
