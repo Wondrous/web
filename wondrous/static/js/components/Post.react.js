@@ -57,7 +57,17 @@ var Photo = React.createClass({
                                 </span>
 
                                 <span className="post-micro-data-super-analytics-item">
-                                    <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
+                                    {this.props.data.liked ?
+                                        <span>
+                                            <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon postHeartIcon" />
+                                            <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon postHeartIcon" style={{ display: "none" }} />
+                                        </span>
+                                        :
+                                        <span>
+                                            <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon postHeartIcon" style={{ display: "none" }} />
+                                            <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon postHeartIcon" />
+                                        </span>
+                                    }
                                     {this.props.data.like_count}
                                 </span>
                             </div>
