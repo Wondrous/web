@@ -71,6 +71,7 @@ var Routes = (
         <Route name="progress" path="/progress/:uuid" handler={LandingApp}/>
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
+        <Route name="signupEarly" path="/signup/:uuid" handler={Signup}/>
         <Route name="resetRequest" path="/reset_request/:page" handler={ResetPage}/>
         <Route name="search" path="/search/:search" handler={Search}/>
         <Route name="post" path="/post/:post_id" handler={Home}/>

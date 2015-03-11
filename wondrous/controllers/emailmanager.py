@@ -71,11 +71,16 @@ class EmailManager:
         else:
             return False
 
-    def send_waitlist_confirmation(self,ref_uuid,email):
-        url = "https://wondrous.co/refer/"+ref_uuid
-        self.conn.send_email('hello@wondrous.co',\
-            'Something wonderful is coming',"thank you for signing up for wondrous you check on your status "+url,\
-            [email])
+    def send_waitlist_confirmation(self,uuid,email):
+        url = "https://wondrous.co/progress/"+uuid
+        try:
+            self.conn.send_email('hello@wondrous.co',\
+                'Something wonderful is coming',"thank you for signing up for wondrous you check on your status "+url,\
+                [email])
+            return True
+        except Exception, e:
+            logging.warn(e.message)
+            return False 
 
     def send_waitlist_signup(self,ref_uuid,email):
         pass

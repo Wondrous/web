@@ -760,6 +760,7 @@ class APIViews(BaseHandler):
 
         # The data we need to validate
         error_message = None
+        uuid     = safe_in(self.query_kwargs.get('uuid'))
         name     = safe_in(self.query_kwargs.get('name'))
         email    = safe_in(self.query_kwargs.get('email'))
         password = safe_in(self.query_kwargs.get('password'), strip=False)
@@ -807,6 +808,7 @@ class APIViews(BaseHandler):
                                 password
                             )
                 self._set_session_headers(new_user)
+                wondrous.controllers.email_controller.send_activation_link(new_user)
                 return new_user.json()
             else:
                 return {'error':error_message}

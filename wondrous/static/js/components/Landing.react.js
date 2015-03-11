@@ -61,13 +61,14 @@ var sp3 = {
 
 
 var SignedUp = React.createClass({
+    onURLClicked : function(){
+        this.refs.referURL.getDOMNode().select();
+    },
     render: function(){
         return (
             <div>
-                <h3>Thank you, {this.props.data.email}</h3>
-                <p>You have referred {this.props.data.referred} people!</p>
-                <p>Your reference: </p>
-                <input className="landing-input round-5" type="text" value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
+                <h1 className="landing-big-heading">Thank you, {this.props.data.email} You have referred {this.props.data.referred} people! <br/>Your referral url: </h1>
+                <input onClick={this.onURLClicked} readOnly className="landing-input round-5" type="text" ref="referURL" value={"https://wondrous.co/refer/" +this.props.data.uuid}/>
             </div>
         );
     }
@@ -88,11 +89,12 @@ var LandingApp = React.createClass({
             this.referrer_info = res;
             this.forceUpdate();
         } else {
-            console.log("asd", err);
+            this.refs.email.getDOMNode().value = this.refs.email1.getDOMNode().value = '';
+            this.refs.email.getDOMNode().placeholder = this.refs.email1.getDOMNode().placeholder = err.error;
         }
     },
 
-    handleClick: function(evt) {
+    formSubmit: function(evt) {
         evt.preventDefault();
         var ref_uuid = this.getParams().ref_uuid;
         if (typeof ref_uuid === 'undefined') {
@@ -169,11 +171,11 @@ var LandingApp = React.createClass({
                         <img className="landing-main-logo" src="/static/pictures/p.logo.png" />
                     </div>
                     {!this.registered ?
-                        <form onSubmit={this.handleClick}>
+                        <form onSubmit={this.formSubmit}>
                             <h1 className="landing-big-heading">{bigHeading}</h1>
 
                             <input className="landing-input round-5" ref="email" type="email" spellCheck="off" placeholder="Enter your email!" />
-                            <button className="landing-btn round-5" onClick={this.handleClick}>Sign up</button>
+                            <button className="landing-btn round-5" >Sign up</button>
 
                         </form>
                         : <SignedUp data={this.referrer_info} />}
@@ -225,7 +227,7 @@ var LandingApp = React.createClass({
                 <div className="landing-wrapper-3">
                     <h2 className="landing-med-heading">Would you like to join Wondrous?</h2>
                     <input className="landing-input landing-input-override round-5" ref="email1" type="email" placeholder="Enter your email!" />
-                    <button className="landing-btn landing-btn-override round-5" onClick={this.handleClick}>Sign up</button>
+                    <button className="landing-btn landing-btn-override round-5" onClick={this.formSubmit}>Sign up</button>
                 </div>
 
                 <div className="landing-wrapper-4">

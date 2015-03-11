@@ -42,6 +42,7 @@ var UserStore = Reflux.createStore({
 
     notLoggedIn: function(){
         this.loaded = true;
+        this.trigger({user:this.user});
     },
 
     toggleSideBar:function(){
