@@ -1270,13 +1270,14 @@ a:hover {
   padding: 0 3% 2px; }
 
 .post-title {
-  font-family: 'Tahoma', arial, helvetica, sans-serif;
+  font-family: Verdana, arial, helvetica, sans-serif;
   font-size: 24px;
   font-weight: 900;
   color: #2d2d2d;
   text-align: left;
   margin: 15px;
-  line-height: 1.2em; }
+  line-height: 1.2em;
+  letter-spacing: -1px; }
 
 .post-title-big {
   font-size: 28px; }
