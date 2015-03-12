@@ -1,39 +1,35 @@
 var WondrousActions = require('../actions/WondrousActions');
+var WondrousConstants = require('../constants/WondrousConstants');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
 var ps = require('PushStream');
-var Set = require("collections/set");
+var FeedSet = require("../libs/FeedSet");
+var NotificationConstants = require('../constants/NotificationConstants');
 
-var getNewSet = function(arr){
-    return new Set(arr, function(a,b){
-        return a.id==b.id;
-    }, function(obj){
-        return String(obj.id);
-    });
-}
 
-var NOTIFICATION = {
-    COMMENTED:0,
-    UPDATED:1,
-    LIKED:2,
-    FOLLOWED:3,
-    FOLLOW_REQUEST:4,
-    FOLLOW_ACCEPTED:5,
-    REPOSTED:6,
-    FEED:7,
-    MENTIONED:8
-}
 
 var NotificationStore = Reflux.createStore({
     listenables: WondrousActions,
     // pushstream stuff
     onmessage: function(note,id,channel){
-        this.unseen++;
-        document.title = "Wondrous ("+String(this.unseen)+")";
-        var temp = this.notifications.toArray();
-        temp.unshift(note);
-        this.notifications = getNewSet(temp);
-        this.trigger(this.notifications);
+        if(note.reason===NotificationConstants.FEED){
+
+            setTimeout(function(){
+                console.log("loading",note.subject_id);
+                WondrousActions.loadPost(note.subject_id,true);
+            },2000);
+
+        }else{
+            if (UserStore.sidebarOpen==true && sidebarType==WondrousConstants.SHOW_NOTIFICATIONS){
+                this.unseen++;
+                document.title = "Wondrous ("+String(this.unseen)+")";
+            }else{
+                WondrousActions.setNotificationSeen();
+            }
+
+            this.notifications.push(note);
+            this.trigger(this.notifications);
+        }
     },
     onstatuschange: function(status){
         console.log("pushstream status:",status);
@@ -71,7 +67,7 @@ var NotificationStore = Reflux.createStore({
     },
 
     unloadUser: function(){
-        this.notifications = getNewSet(null);
+        this.notifications = new FeedSet(null,false);
         this.unseen = 0;
         this.currentPage = 0;
         this.paging = false;
@@ -143,7 +139,7 @@ var NotificationStore = Reflux.createStore({
     },
 
     _addToNotification: function(note){
-        this.notifications.add(note);
+        this.notifications.push(note);
     },
 
     incrementPage: function(){
@@ -151,7 +147,7 @@ var NotificationStore = Reflux.createStore({
     },
 
     getNotifications: function(){
-        return this.notifications;
+        return this.notifications.sortedSet;
     }
 
 });

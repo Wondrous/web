@@ -90,16 +90,12 @@ var Post = React.createClass({
     	// add modal functionality
         if (!evt.metaKey){
             evt.preventDefault();
-            WondrousActions.openCardModal();
             if (typeof this.props.data.id !=='undefined'){
                 WondrousActions.newPostLoad(this.props.data.id);
-                WondrousActions.loadPost(this.props.data.id);
             }
             WondrousActions.updatePost(this.props.data);
         }
     },
-
-
 
     render: function() {
         if (typeof this.props.data === 'undefined'){

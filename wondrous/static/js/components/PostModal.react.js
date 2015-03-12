@@ -157,7 +157,7 @@ var Comments = React.createClass({
 
         return (
             <div>
-                {!PostStore.donePaging ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
+                {!PostStore.donePaging&&comments.length>0 ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
                 {comments}
                 {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div> : null}
                 <form style={{ marginLeft: 28, marginRight: 10 }} >
@@ -208,7 +208,7 @@ var PostFooter = React.createClass({
             }else{
                 PostStore.post.like_count--;
             }
-            
+
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
         }else{

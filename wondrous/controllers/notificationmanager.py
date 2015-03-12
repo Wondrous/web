@@ -51,7 +51,7 @@ class NotificationManager(BaseManager):
         DBSession.flush()
 
     @classmethod
-    def add(cls,from_user_id, to_user_id, reason, subject_id):
+    def add(cls,from_user_id, to_user_id, reason, subject_id, is_seen=False):
 
         """
             PARAMS: 4 params:
@@ -79,7 +79,7 @@ class NotificationManager(BaseManager):
                                         to_user_id=to_user_id,
                                         reason=reason,
                                         subject_id=subject_id,
-                                        notification=notification)
+                                        notification=notification, is_seen=is_seen)
 
         if new_notification:
             DBSession.add(new_notification)
@@ -87,7 +87,7 @@ class NotificationManager(BaseManager):
 
         # Send to realtime push
         if  reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
-            Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED, Notification.MENTIONED]:
+            Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED, Notification.MENTIONED, Notification.FEED]:
             note_dict = new_notification.json()
             from_user = new_notification.from_user
             to_user = new_notification.to_user
@@ -109,7 +109,7 @@ class NotificationManager(BaseManager):
     @classmethod
     def notification_json(cls, user, page=0):
         per_page = 15
-        notes = Notification.query.order_by(desc(Notification.created_at)).filter_by(to_user_id=user.id).limit(per_page).offset(page*per_page).all()
+        notes = Notification.query.order_by(desc(Notification.created_at)).filter(Notification.reason!=Notification.FEED).filter_by(to_user_id=user.id).limit(per_page).offset(page*per_page).all()
         data = []
         for note in notes:
             note_dict = note.json()

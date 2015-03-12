@@ -40,13 +40,15 @@ from wondrous.models import (
     Notification,
     Comment,
     User,
-    PostView
+    Vote,
+    PostView,
+    Notification
     # Vote,
 )
 
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
-
+from wondrous.utilities.notification_utilities import send_notification
 
 class PostManager(BaseManager):
 
@@ -127,6 +129,26 @@ class PostManager(BaseManager):
                                         to_user_id=u_id,
                                         subject_id=post.id,
                                         reason=Notification.MENTIONED)
+
+    @staticmethod
+    def notify_followers(post_id,user_id):
+        #TODO MOVE TO GOLANG SIDE
+        #TODO THIS WILL BLOCK LIKE A MOTHERFUCKER
+        for u_id in DBSession.query(User.id).join(Vote,User.id==Vote.user_id).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
+            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).distinct():
+            u_id = u_id[0]
+            if user_id!=u_id:
+
+                new_notification = Notification(
+                                    from_user_id=user_id,
+                                    to_user_id=u_id,
+                                    subject_id=post_id,
+                                    notification="",
+                                    reason=Notification.FEED,
+                                    is_seen=True)
+                send_notification(u_id, new_notification.json())
+
+
     @staticmethod
     def _move_post_into_feeds(post_id, user_id):
         # TODO if we ever reach over 100 followers? Time to work queue it up to a
@@ -193,6 +215,8 @@ class PostManager(BaseManager):
 
         DBSession.add(new_post)
         DBSession.flush()
+
+        cls.notify_followers(new_post.id,user_id)
 
         if tags and len(tags)>0:
             cls._process_tags(tags, new_post.id)

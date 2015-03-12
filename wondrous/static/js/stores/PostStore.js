@@ -20,11 +20,16 @@ var PostStore = Reflux.createStore({
         this.comments = new FeedSet(null,true);
         this.paging = false;
         this.donePaging = false;
+        this.loading = false;
     },
     newPostLoad: function(post_id){
         this.unloadUser();
-        if (typeof post_id !=='undefined'){
+        if (typeof post_id !=='undefined'&&!this.loading){
+            this.loading = true;
+
             this.post.id = post_id;
+            WondrousActions.openCardModal();
+            WondrousActions.loadPost(post_id);
             this.loadMoreComments();
         }
     },
@@ -75,11 +80,14 @@ var PostStore = Reflux.createStore({
         this.post = postData;
         WondrousActions.updatePostOnWall();
         WondrousActions.updatePostOnFeed();
+        this.loading = true;
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
     loadPostError: function(err){
         this.comments.reset();
+        this.loading = false;
+        this.paging = false;
     },
 
     addToComments: function(comment){

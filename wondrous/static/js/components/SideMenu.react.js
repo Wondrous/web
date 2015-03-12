@@ -1,6 +1,7 @@
 var UserStore = require('../stores/UserStore');
 var NotificationStore = require('../stores/NotificationStore');
 var WondrousConstants = require('../constants/WondrousConstants');
+var NotificationConstants = require('../constants/NotificationConstants');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var Link = Router.Link;
@@ -41,17 +42,6 @@ var SettingsBar = React.createClass({
     }
 });
 
-NotificationReasons = {
-    COMMENTED: 0,
-    UPDATED: 1,
-    LIKED: 2,
-    FOLLOWED: 3,
-    FOLLOW_REQUEST: 4,
-    FOLLOW_ACCEPTED: 5,
-    REPOSTED:6,
-    FEED:7,
-    MENTIONED:8
-};
 
 var Notification = React.createClass({
     mixins: [ Router.Navigation ],
@@ -73,11 +63,8 @@ var Notification = React.createClass({
         note = this.props.data;
         var reason = note.reason;
         console.log("reason is",note);
-        if (reason == NotificationReasons.LIKED || reason == NotificationReasons.REPOSTED || reason == NotificationReasons.COMMENTED || reason == NotificationReasons.MENTIONED) {
+        if (reason == NotificationConstants.LIKED || reason == NotificationConstants.REPOSTED || reason == NotificationConstants.COMMENTED || reason == NotificationConstants.MENTIONED) {
             WondrousActions.newPostLoad(note.subject_id);
-            WondrousActions.loadPost(note.subject_id);
-            WondrousActions.openCardModal();
-
         }else{
             var url = "/"+note.from_user_username;
             this.transitionTo(url);
@@ -85,19 +72,19 @@ var Notification = React.createClass({
     },
     generateContent: function(reason){
         var content = '';
-        if (reason == NotificationReasons.FOLLOW_REQUEST) {
+        if (reason == NotificationConstants.FOLLOW_REQUEST) {
             content = "requested to follow you";
-        } else if (reason == NotificationReasons.FOLLOWED) {
+        } else if (reason == NotificationConstants.FOLLOWED) {
             content = "followed you";
-        } else if (reason == NotificationReasons.FOLLOW_ACCEPTED) {
+        } else if (reason == NotificationConstants.FOLLOW_ACCEPTED) {
             content = "accepted your follow request";
-        } else if (reason == NotificationReasons.LIKED) {
+        } else if (reason == NotificationConstants.LIKED) {
             content = "liked your post";
-        } else if (reason == NotificationReasons.REPOSTED) {
+        } else if (reason == NotificationConstants.REPOSTED) {
             content = "reposted one of your posts";
-        }else if (reason == NotificationReasons.COMMENTED) {
+        }else if (reason == NotificationConstants.COMMENTED) {
             content = "commented on one of your posts";
-        }else if (reason == NotificationReasons.MENTIONED) {
+        }else if (reason == NotificationConstants.MENTIONED) {
             content = "mentioned you in a post";
         }
         return content;
@@ -108,7 +95,7 @@ var Notification = React.createClass({
 
         var actionNeeded = false;
         var content = this.generateContent(note.reason);
-        if(note.reason == NotificationReasons.FOLLOW_REQUEST) actionNeeded = true;
+        if(note.reason == NotificationConstants.FOLLOW_REQUEST) actionNeeded = true;
 
         var displayType = note.is_hidden ? "none" : "block";
         var unread = note.is_read ? "" : "notification-unread";
