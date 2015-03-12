@@ -6,8 +6,6 @@ var ps = require('PushStream');
 var FeedSet = require("../libs/FeedSet");
 var NotificationConstants = require('../constants/NotificationConstants');
 
-
-
 var NotificationStore = Reflux.createStore({
     listenables: WondrousActions,
     // pushstream stuff

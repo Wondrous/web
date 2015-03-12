@@ -726,7 +726,7 @@ class APIViews(BaseHandler):
         else:
             this_user = User.by_case_insensitive_username(credential).first()
 
-        if this_user and this_user.validate_password(password) and not this_user.is_banned:
+        if this_user and this_user.validate_password(password) and not this_user.is_banned and this_user.verified:
             # Reactivating a user when they log in
             # TODO -- this needs to be more 'offical'
             self._set_session_headers(this_user)
@@ -740,6 +740,8 @@ class APIViews(BaseHandler):
 
         elif this_user and this_user.is_banned:
             return {'error': 'banned'}
+        elif this_user and not this_user.verified:
+            return {'error': 'verification'}
         else:
             return {'error': 'Sorry, incorrect username/email or passwrd. Please try again.'}
 
@@ -807,7 +809,7 @@ class APIViews(BaseHandler):
                                 username,
                                 password
                             )
-                self._set_session_headers(new_user)
+                # self._set_session_headers(new_user)
                 wondrous.controllers.email_controller.send_activation_link(new_user)
                 return new_user.json()
             else:
