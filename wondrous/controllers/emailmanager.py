@@ -8,8 +8,10 @@
 # CONTROLLERS/EMAILMANAGER.PY
 #
 
-import boto, logging
+import logging
 import shortuuid
+import boto.ses
+
 from datetime import datetime
 
 from wondrous.models import (
@@ -39,10 +41,9 @@ def generate_verification_code(user):
     return random
 
 class EmailManager:
-
     def __init__(self, aws_access_key, aws_secret_access_key, **kwargs):
-        self.conn = boto.connect_ses(aws_access_key, aws_secret_access_key)
-
+        self.conn = boto.ses.connect_to_region('us-west-2', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_access_key)
+        
     def send_activation_link(self,user=None, email=None):
         if email:
             user = DBSession.query(User).filter_by(email=email).first() if not user else user
@@ -80,7 +81,7 @@ class EmailManager:
             return True
         except Exception, e:
             logging.warn(e.message)
-            return False 
+            return False
 
     def send_waitlist_signup(self,ref_uuid,email):
         pass
