@@ -200,7 +200,7 @@ var PostForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
-                    style={{ "width": 750, "height": "auto" }}/>
+                    style={{ "width": 750, "height": 390 }}/>
                 
                 <span>{this.state.percent}% uploaded</span>
                 {this.state.error ? <span>{this.state.error}% uploaded</span> : null}
