@@ -14,15 +14,22 @@
 # trying to take the username "signup" or "tag".
 # We deem these paths to be already taken.
 TAKEN_PATHS = set([
-    'api',
-    'ajax',
-    'auth',
-    'info',
-    'login',
-    'post',
-    'search',
-    'signup',
-    'tag',
+    "activate",
+    "ajax",
+    "api",
+    "auth",
+    "info",
+    "landing",
+    "login",
+    "post",
+    "progress",
+    "refer",
+    "reset",
+    "reset_request",
+    "search",
+    "settings",
+    "signup",
+    "tag",
 ])
 
 def build_routes(config):
