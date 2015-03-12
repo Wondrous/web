@@ -168,7 +168,7 @@ var Following = React.createClass({
 });
 
 var ProfileBarBadge = React.createClass({
-    render: function(){
+    render: function() {
         return (
             <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to={this.props.to} params={{username: this.props.username}}>
                 <li className="profile-header-nav-item round-50">
@@ -187,10 +187,12 @@ var UserBar = React.createClass({
     is_private: ProfileStore.user.is_private,
 
     onProfileChange: function(profileData){
-        this.setState({data:ProfileStore.user});
+        this.setState({
+            data: ProfileStore.user
+        });
     },
     getInitialState: function() {
-        return {data:ProfileStore.user};
+        return {data: ProfileStore.user};
     },
 
     handleData: function(err, data) {
@@ -221,15 +223,16 @@ var UserBar = React.createClass({
     },
 
     render: function() {
-        var username = this.props.username;
         this.is_private = ProfileStore.user.is_private;
-        this.am_following = this.state.data.following==true;
-        var is_me = username === UserStore.user.username;
+        this.am_following = this.state.data.following == true;
 
+        var username = this.props.username;
+        var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-
         var classes = "follow-button-blue round-2 ";
+        var is_influencer = $.inArray(0, this.state.data.badges) !== null;
+
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
@@ -237,7 +240,7 @@ var UserBar = React.createClass({
             var btnTitle = "Follow";
             classes += "not-following";
         }
-        var is_influencer = $.inArray(0,this.state.data.badges)!=null;
+
         return (
             <div className="profile-header">
                 <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
