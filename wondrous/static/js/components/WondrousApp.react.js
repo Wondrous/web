@@ -73,7 +73,7 @@ var Routes = (
         <Route name="signup" path="/signup" handler={Signup}/>
         <Route name="signupEarly" path="/signup/:uuid" handler={Signup}/>
         <Route name="resetRequest" path="/reset_request/:page" handler={ResetPage}/>
-        <Route name="search" path="/search/:search" handler={Search}/>
+        <Route name="search" path="/search/:search" handler={Search} ignoreScrollBehavior/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
         <Route name="activate" path="/activate/:verification" handler={VerificationPage}/>
         <Route name="passwordReset" path="/reset/:verification" handler={PasswordResetPage}/>

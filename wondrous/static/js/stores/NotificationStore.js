@@ -20,11 +20,11 @@ var NotificationStore = Reflux.createStore({
             },2000);
 
         }else{
-            if (UserStore.sidebarOpen==true && sidebarType==WondrousConstants.SHOW_NOTIFICATIONS){
+            if (UserStore.sidebarOpen==true && UserStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS){
+                WondrousActions.setNotificationSeen();
+            }else{
                 this.unseen++;
                 document.title = "Wondrous ("+String(this.unseen)+")";
-            }else{
-                WondrousActions.setNotificationSeen();
             }
 
             this.notifications.push(note);

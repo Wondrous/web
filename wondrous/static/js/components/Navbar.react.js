@@ -18,7 +18,7 @@ var SearchBox = React.createClass({
         return (
         <form method="GET" onSubmit={this.handleSearch} style={{ display: "inline-block" }}>
             <div className="container">
-              <input type="text" ref="query" className="banner-input"
+              <input type="text" ref="query" id="query" className="banner-input"
                   placeholder="Search for people and #tags" name="q"
                   data-provide="typeahead" autoComplete="off" />
             </div>

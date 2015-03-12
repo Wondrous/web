@@ -10,7 +10,7 @@ var UserIcon = React.createClass({
         evt.preventDefault();
         if (typeof this.props.user.username != 'undefined') {
             this.transitionTo('/' + this.props.user.username);
-            
+
         }
     },
     render: function() {
@@ -36,6 +36,10 @@ var Search = React.createClass({
     mixins: [Router.State, Reflux.listenTo(SearchStore,'onSearchChange')],
     componentWillMount: function(){
         WondrousActions.newSearch(this.getParams().search);
+    },
+    componentWillUnmount: function(){
+        //TODO probably a better way to organize this.. 
+        $("#query").val('');
     },
     getInitialState: function() {
         return {users:[],posts:[],error:null}
