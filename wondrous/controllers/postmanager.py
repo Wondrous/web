@@ -110,7 +110,7 @@ class PostManager(BaseManager):
                                 subject_id=post_id,
                                 reason=Notification.COMMENTED)
 
-            cls.send_mentions(p,user,text)
+            cls.send_mentions(p, user, text)
 
             return retval
         else:
@@ -253,7 +253,10 @@ class PostManager(BaseManager):
 
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
-        cls.send_mentions(post,user,text+" "+subject)
+        
+        # For now, let's not allow @mentions in the post subject,
+        # let's keep them to comments and the post-text
+        cls.send_mentions(post, user, text)  # To add @mentions back to subject: +" "+subject
         data.update(post.json())
         return data
 
