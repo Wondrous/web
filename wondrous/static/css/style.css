@@ -399,6 +399,23 @@ td, th {
   display: block;
   text-align: center; }
 
+/* Overrides for Fit-To-Screen display */
+.cropFrame-FTS {
+  width: 750px;
+  /* height: <dynamically inject this>; */
+  text-align: center;
+  background-color: #141414; }
+
+.cropImage-FTS {
+  position: relative;
+  cursor: auto;
+  width: auto;
+  top: 0;
+  left: 0; }
+
+.cropControls-FTS {
+  display: none; }
+
 /* ====== FONTS ============================ */
 @font-face {
   font-family: 'heydings_iconsregular';
