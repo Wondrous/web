@@ -20,8 +20,11 @@ from wondrous.models import (
     Object,
     Badge,
     Post,
-    Comment
+    Comment,
+    Notification
 )
+import transaction
+
 
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
@@ -33,7 +36,7 @@ from wondrous.utilities.validation_utilities import (
 )
 import shortuuid
 from datetime import datetime, timedelta
-from sqlalchemy import func, distinct, or_
+from sqlalchemy import func, distinct, or_, case
 from sqlalchemy.orm import aliased
 
 
@@ -100,8 +103,15 @@ class AccountManager(BaseManager):
         return True
 
     @classmethod
+    def add_badge_benefits(cls,user):
+        scores = 0
+        for badge in user.badges:
+            if badge.badge_type == Badge.INFLUENCER:
+                scores += 75
+        return scores
+
+    @classmethod
     def calculate_wondrous_score(cls,user):
-        #TODO holy shit this can get scary, especially if we get multiple calculations :(
         #TODO probably background it in the future
 
         last_updated = user.last_calculated
@@ -109,29 +119,41 @@ class AccountManager(BaseManager):
             last_updated = datetime(year=2,month=2,day=2,hour=2,minute=2,second=2)
         if (datetime.now()-last_updated>timedelta(hours=0)):
             wondrous_score = 0
-            # calculate post count - weighted lowly
-            # calculate all the views - per post calculate
-            # calculate all the likes - per post calculate
-            v1 = aliased(Vote)
-            v2 = aliased(Vote)
-            c1 = aliased(Comment)
-            c2 = aliased(Comment)
-            q = DBSession.query(func.count(c2.id.distinct()),func.count(v1.id.distinct()), \
-                func.count(v2.id.distinct()),func.count(Post.id),func.sum(Post.view_count),func.sum(Post.like_count)).\
-                filter(v1.subject_id==user.id).filter(or_(v1.status==Vote.FOLLOWED,v1.status==Vote.TOPFRIEND)).\
-                filter(v2.user_id==user.id).filter(or_(v2.status==Vote.FOLLOWED,v2.status==Vote.TOPFRIEND)).\
-                filter(Post.set_to_delete==None).filter(Post.user_id==user.id).filter(c1.user_id==user.id).\
-                filter(c2.post_id==Post.id)
 
-            comment_count, follower_count, following_count, post_count, view_count, like_count = q.first()
-            logging.warn(comment_count)
-            # calculate all the comments one has - weighted lowly
+            ret = DBSession.execute("""Select
+                (select count(*)
+                from vote
+                where vote.subject_id=:user_id) as follower_count,
 
-            # calculate the followers
+                (select count(*)
+                from vote
+                where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
 
-            # follower_count, following_count = DBSession.query().first()
+                (select count(*)
+                from post
+                where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
 
-            # calculate the following
+                (select sum(post.like_count)
+                from post
+                where post.user_id=:user_id) as like_count,
+
+                (select sum(post.view_count)
+                from post
+                where post.user_id=:user_id) as view_count,
+
+                (select count(*)
+                from comment
+                join post
+                on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
+            ret = ret.fetchall()[0]
+            if ret:
+                follower_count, following_count, post_count, like_count, view_count, comment_count = ret
+
+                wondrous_score = float(comment_count*1 + follower_count*5 + following_count*1 + post_count*1 + view_count*5 + like_count*5)
+                wondrous_score/=10.0
+                logging.warn(wondrous_score)
+                logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
+                wondrous_score+=cls.add_badge_benefits(user)
             return wondrous_score
         return None
 
@@ -193,10 +215,10 @@ class AccountManager(BaseManager):
 
     @classmethod
     def _get_relationship_stats(cls, user_id):
-        from wondrous.controllers.votemanager import VoteManager
-
-        follower_count  = VoteManager.get_follower_count(user_id)
-        following_count = VoteManager.get_following_count(user_id)
+        v1 = aliased(Vote)
+        v2 = aliased(Vote)
+        follower_count, following_count = DBSession.query(func.count(v1.id.distinct()),func.count(v2.id.distinct())).filter(v1.subject_id==user_id).filter(or_(v1.status==Vote.FOLLOWED,v1.status==Vote.TOPFRIEND)).\
+        filter(v2.user_id==user_id).filter(or_(v2.status==Vote.FOLLOWED,v2.status==Vote.TOPFRIEND)).first()
 
         data = {
             "following_count" : following_count,
@@ -207,9 +229,6 @@ class AccountManager(BaseManager):
 
     @classmethod
     def get_json_by_username(cls, user, user_id = None, username = None, auth = False):
-        from wondrous.controllers.postmanager import PostManager
-        from wondrous.controllers.votemanager import VoteManager
-
         if not user_id and not username:
             return {}
 
@@ -218,24 +237,56 @@ class AccountManager(BaseManager):
         else:
             profile_user = User.by_id(user_id)
 
-
-
         if not profile_user:
             return {'error': 'no users found!'}
+
         user_id = profile_user.id
-        am_following = VoteManager.is_following(user.id,user_id) if user else False
+        ret = DBSession.execute("""Select
+            (select count(*)
+            from vote
+            where vote.subject_id=:user_id) as follower_count,
+
+            (select count(*)
+            from vote
+            where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
+
+            (select count(*)
+            from vote
+            where vote.user_id=:my_user_id and vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as am_following,
+
+            (select count(*)
+            from post
+            where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+
+            (select count(*)
+            from notification
+            where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
+
+            """,{'user_id':user.id,'my_user_id':user.id})
+        ret = ret.fetchall()[0]
+
+        follower_count, following_count, am_following, post_count, unseen_notification_count = ret
+
+        follow_data = {
+            "following_count" : following_count,
+            "follower_count"  : follower_count,
+            "following": am_following!=0,
+            "post_count": post_count
+        }
 
         # Am I querying for myself?
         if profile_user and profile_user.id == user.id:
-            retval = cls._get_relationship_stats(user_id)
+            retval = follow_data
+            score = cls.calculate_wondrous_score(profile_user)
+            if score:
+                profile_user.wondrous_score = score
+                profile_user.last_calculated = datetime.now()
+
             retval.update(profile_user.json(1))
             retval.update({"name": profile_user.ascii_name})
-            retval.update({"following": am_following})
-            retval.update({"unseen_notifications": NotificationManager.get_all_unseen_count(user_id)})
-            retval.update({"post_count": PostManager.post_count(user_id)})
+            retval.update({"unseen_notifications": unseen_notification_count})
             picture_object = profile_user.picture_object
-            t = cls.calculate_wondrous_score(profile_user)
-            profile_user.last_updated = t
+
             cls.add_influencer(profile_user)
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
@@ -249,11 +300,9 @@ class AccountManager(BaseManager):
         if (not profile_user.is_private and not profile_user.is_banned and profile_user.is_active) or \
             (profile_user and not profile_user.is_banned and profile_user.is_active and am_following):
 
-            retval = cls._get_relationship_stats(user_id)
+            retval = follow_data
             retval.update(super(AccountManager, cls).model_to_json(profile_user))
             retval.update({"name": profile_user.ascii_name})
-            retval.update({"following": am_following})
-            retval.update({"post_count": PostManager.post_count(user_id)})
 
             picture_object = profile_user.picture_object
             if picture_object:
@@ -264,7 +313,6 @@ class AccountManager(BaseManager):
             retval = {}
             retval.update({"username": profile_user.username})
             retval.update({"name": profile_user.ascii_name})
-            retval.update({"following": am_following})
             retval.update({'is_private': True})
             retval.update({'id': profile_user.id})
             return retval

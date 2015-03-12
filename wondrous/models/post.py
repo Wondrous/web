@@ -35,7 +35,7 @@ class Post(Base, BaseMixin):
         This defines the post table
     """
 
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     user = relationship('User', foreign_keys=user_id, backref="posts")
 
     object_id = Column(BigInteger, ForeignKey('object.id'))

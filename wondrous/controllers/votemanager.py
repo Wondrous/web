@@ -343,6 +343,7 @@ class VoteManager(BaseManager):
     def is_blocking(user_id, user_to_get_id):
         vote = VoteManager.get_vote(user_id, user_to_get_id, Vote.USER)
         return True if getattr(vote, 'vote_type', None) == Vote.USER and getattr(vote, 'status', None) == Vote.BLOCKED else False
+
     @staticmethod
     def get_count(q):
         count_q = q.statement.with_only_columns([func.count()]).order_by(None)

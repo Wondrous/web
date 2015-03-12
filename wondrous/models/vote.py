@@ -45,9 +45,9 @@ class Vote(Base, BaseMixin):
 
     vote_type = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
-    user_id = Column(BigInteger,ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger,ForeignKey('user.id'), nullable=False, index=True)
     user = relationship("User", backref=backref("votes"))
-    subject_id = Column(BigInteger)
+    subject_id = Column(BigInteger, index=True)
 
     def get_subject(self):
         if self.vote_type==0:
