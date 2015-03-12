@@ -43,7 +43,6 @@ def main_app(global_config, **settings):
     """ This function returns a Pyramid WSGI application. """
     settings['app_root'] = abspath(dirname(dirname(__file__)))
     initialize_sql(settings)
-    wondrous.controllers.email_controller = EmailManager(**settings)
     config = Configurator(settings=settings)
     config = build_routes(config)  # URL map on routes.py
 
@@ -63,6 +62,7 @@ def main_app(global_config, **settings):
         "wondrous.views.ajax_admin",
         "wondrous.views.api_views"
     ])
+    wondrous.controllers.email_controller = EmailManager(**settings)
 
     return config.make_wsgi_app()
 
