@@ -33,6 +33,7 @@ var ProfileStore = Reflux.createStore({
     updateProfile: function(profile){
         this.newProfile();
         this.user = profile;
+        console.log("profile",profile);
         this.trigger({profile:this.user});
     },
 

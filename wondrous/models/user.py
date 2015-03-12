@@ -102,6 +102,10 @@ class User(Base, PasswordManager, BaseMixin):
     def get_all_banned_users(cls):
         return cls.by_kwargs(cls.is_banned == True).all()
 
+    def json(self,level=0):
+        retval = super(User,self).json(level)
+        retval['badges'] = [badge.badge_type for badge in self.badges]
+        return retval
 
 
 class BlockedUser(Base, BaseMixin):

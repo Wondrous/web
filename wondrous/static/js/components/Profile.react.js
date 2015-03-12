@@ -237,14 +237,14 @@ var UserBar = React.createClass({
             var btnTitle = "Follow";
             classes += "not-following";
         }
-
+        var is_influencer = $.inArray(0,this.state.data.badges)!=null;
         return (
             <div className="profile-header">
                 <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
                 <div className="profile-header-content">
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
-
+                    {is_influencer?"I AM A INFLUENCER DUDE":null}
                     {!is_me ? <button className={classes} onClick={this.handleFollow}>{btnTitle}</button> : null}
                 </div>
                 <hr className="profile-hr" />

@@ -18,11 +18,14 @@ from wondrous.models import (
     User,
     Vote,
     Object,
-    Badge
+    Badge,
+    Post,
+    Comment
 )
 
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
+
 from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.notification_utilities import send_notification
 from wondrous.utilities.validation_utilities import (
@@ -30,6 +33,9 @@ from wondrous.utilities.validation_utilities import (
 )
 import shortuuid
 from datetime import datetime, timedelta
+from sqlalchemy import func, distinct, or_
+from sqlalchemy.orm import aliased
+
 
 class AccountManager(BaseManager):
 
@@ -95,10 +101,39 @@ class AccountManager(BaseManager):
 
     @classmethod
     def calculate_wondrous_score(cls,user):
+        #TODO holy shit this can get scary, especially if we get multiple calculations :(
+        #TODO probably background it in the future
+
         last_updated = user.last_calculated
-        if (datetime.now()-last_updated>timedelta(hours=1)):
-            user.last_calculated = datetime.now()
-            # cloud =
+        if not last_updated:
+            last_updated = datetime(year=2,month=2,day=2,hour=2,minute=2,second=2)
+        if (datetime.now()-last_updated>timedelta(hours=0)):
+            wondrous_score = 0
+            # calculate post count - weighted lowly
+            # calculate all the views - per post calculate
+            # calculate all the likes - per post calculate
+            v1 = aliased(Vote)
+            v2 = aliased(Vote)
+            c1 = aliased(Comment)
+            c2 = aliased(Comment)
+            q = DBSession.query(func.count(c2.id.distinct()),func.count(v1.id.distinct()), \
+                func.count(v2.id.distinct()),func.count(Post.id),func.sum(Post.view_count),func.sum(Post.like_count)).\
+                filter(v1.subject_id==user.id).filter(or_(v1.status==Vote.FOLLOWED,v1.status==Vote.TOPFRIEND)).\
+                filter(v2.user_id==user.id).filter(or_(v2.status==Vote.FOLLOWED,v2.status==Vote.TOPFRIEND)).\
+                filter(Post.set_to_delete==None).filter(Post.user_id==user.id).filter(c1.user_id==user.id).\
+                filter(c2.post_id==Post.id)
+
+            comment_count, follower_count, following_count, post_count, view_count, like_count = q.first()
+            logging.warn(comment_count)
+            # calculate all the comments one has - weighted lowly
+
+            # calculate the followers
+
+            # follower_count, following_count = DBSession.query().first()
+
+            # calculate the following
+            return wondrous_score
+        return None
 
     @classmethod
     def add(cls, name, email, username, password):
@@ -117,15 +152,22 @@ class AccountManager(BaseManager):
 
         DBSession.add(vote)
 
-        if (datetime.now()<datetime(year=2015,month=4,day=15)):
-            #TODO determine the datetime we can automatically endorse influencers
-            if Badge.INFLUENCER not in [b.badge_type for b in user.badges]:
-                b = Badge(user_id=new_user.id,badge_type=Badge.INFLUENCER)
-                DBSession.add(b)
+        cls.add_influencer(new_user)
 
         DBSession.flush()
 
         return new_user
+
+    @staticmethod
+    def add_influencer(user):
+        if (datetime.now()<datetime(year=2015,month=4,day=15)):
+            #TODO determine the datetime we can automatically endorse influencers
+            try:
+                b = Badge(user_id=user.id,badge_type=Badge.INFLUENCER)
+                DBSession.add(b)
+                DBSession.flush()
+            except Exception, e:
+                DBSession.rollback()
 
     @classmethod
     def upload_picture_json(cls, user, file_type):
@@ -192,7 +234,9 @@ class AccountManager(BaseManager):
             retval.update({"unseen_notifications": NotificationManager.get_all_unseen_count(user_id)})
             retval.update({"post_count": PostManager.post_count(user_id)})
             picture_object = profile_user.picture_object
-
+            t = cls.calculate_wondrous_score(profile_user)
+            profile_user.last_updated = t
+            cls.add_influencer(profile_user)
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
             if auth:

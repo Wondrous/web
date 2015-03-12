@@ -18,7 +18,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Unicode
 from sqlalchemy import Integer
-
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from wondrous.models import Base
@@ -28,13 +28,16 @@ from wondrous.models.modelmixins import BaseMixin
 
 
 class Badge(Base,BaseMixin):
-    INFLUENCER = range(1)
+    INFLUENCER = 0
 
     """
         Defines the table which holds all data pertaining
         to comments left on Objects,
     """
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    user = relationship('User', foreign_keys=user_id, backref="badges", lazy='joined')
+    user = relationship('User', foreign_keys=user_id, backref="badges")
     badge_type = Column(Integer, nullable=False)
     is_public = Column(Boolean, default=True)
+
+    __table_args__ = (UniqueConstraint('user_id', 'badge_type', name='user_badge_type_uc'),
+                     )
