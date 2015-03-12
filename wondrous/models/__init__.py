@@ -53,6 +53,9 @@ from wondrous.models.post import (
     Post,
 )
 
+from wondrous.models.badge import (
+    Badge
+)
 
 from wondrous.models.tag import (
     Tag,
@@ -69,12 +72,14 @@ from wondrous.models.vote import (
 )
 
 from wondrous.models.scores import (
-    PostView 
+    PostView
 )
 
 from wondrous.models.refer import (
     Referrer
 )
+
+
 
 def initialize_sql(settings, testing=False):
     """ Called by the app on startup to setup bindings to the DB """

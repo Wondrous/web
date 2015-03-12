@@ -17,7 +17,8 @@ from wondrous.models import (
     Feed,
     User,
     Vote,
-    Object
+    Object,
+    Badge
 )
 
 from wondrous.controllers.basemanager import BaseManager
@@ -93,6 +94,13 @@ class AccountManager(BaseManager):
         return True
 
     @classmethod
+    def calculate_wondrous_score(cls,user):
+        last_updated = user.last_calculated
+        if (datetime.now()-last_updated>timedelta(hours=1)):
+            user.last_calculated = datetime.now()
+            # cloud =
+
+    @classmethod
     def add(cls, name, email, username, password):
         # First let's create the object object - point of contact for the account
         new_user = User(name=name, username=username, email=email, password=password, is_active=True)
@@ -106,7 +114,15 @@ class AccountManager(BaseManager):
 
         # Follow yourself
         vote = Vote(user_id=new_user.id, subject_id=new_user.id, vote_type=Vote.USER, status=Vote.TOPFRIEND)
+
         DBSession.add(vote)
+
+        if (datetime.now()<datetime(year=2015,month=4,day=15)):
+            #TODO determine the datetime we can automatically endorse influencers
+            if Badge.INFLUENCER not in [b.badge_type for b in user.badges]:
+                b = Badge(user_id=new_user.id,badge_type=Badge.INFLUENCER)
+                DBSession.add(b)
+
         DBSession.flush()
 
         return new_user

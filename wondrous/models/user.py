@@ -18,6 +18,7 @@ from sqlalchemy import (
     or_,
     Unicode,
     ForeignKey,
+    Integer
 )
 
 from sqlalchemy.orm import (
@@ -74,6 +75,9 @@ class User(Base, PasswordManager, BaseMixin):
     feed = relationship("Feed", uselist=False, backref="user")
     picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
 
+    #Wondrous score
+    wondrous_score = Column(Integer, default=0)
+    last_calculated = Column(DateTime, default=datetime.now)
 
     def __init__(self, *args, **kwargs):
         super(User,self).__init__(*args, **kwargs)
@@ -97,6 +101,7 @@ class User(Base, PasswordManager, BaseMixin):
     @classmethod
     def get_all_banned_users(cls):
         return cls.by_kwargs(cls.is_banned == True).all()
+
 
 
 class BlockedUser(Base, BaseMixin):
