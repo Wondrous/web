@@ -116,44 +116,48 @@ class AccountManager(BaseManager):
 
         last_updated = user.last_calculated
         if not last_updated:
-            last_updated = datetime(year=2,month=2,day=2,hour=2,minute=2,second=2)
-        if (datetime.now()-last_updated>timedelta(hours=0)):
+            last_updated = datetime(year=2, month=2, day=2, hour=2, minute=2, second=2)
+        
+        if (datetime.now() - last_updated > timedelta(hours=0)):
             wondrous_score = 0
 
-            ret = DBSession.execute("""Select
-                (select count(*)
-                from vote
-                where vote.subject_id=:user_id) as follower_count,
+            ret = DBSession.execute("""SELECT
+                (SELECT COUNT(*)
+                FROM vote
+                WHERE vote.subject_id=:user_id) AS follower_count,
 
-                (select count(*)
-                from vote
-                where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
+                (SELECT COUNT(*)
+                FROM vote
+                WHERE vote.user_id=:user_id AND (vote.status=6 OR vote.status=7)) AS following_count,
 
-                (select count(*)
-                from post
-                where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+                (SELECT COUNT(*)
+                FROM post
+                WHERE post.user_id=:user_id AND post.set_to_delete IS NULL) AS post_count,
 
-                (select sum(post.like_count)
-                from post
-                where post.user_id=:user_id) as like_count,
+                (SELECT sum(post.like_count)
+                FROM post
+                WHERE post.user_id=:user_id) AS like_count,
 
-                (select sum(post.view_count)
-                from post
-                where post.user_id=:user_id) as view_count,
+                (SELECT sum(post.view_count)
+                FROM post
+                WHERE post.user_id=:user_id) AS view_count,
 
-                (select count(*)
-                from comment
-                join post
-                on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
+                (SELECT COUNT(*)
+                FROM comment
+                JOIN post
+                ON  post.user_id=:user_id AND 
+                    comment.post_id = post.id AND 
+                    post.set_to_delete IS NULL) AS comment_count""", {'user_id': user.id})
+            
             ret = ret.fetchall()[0]
             if ret:
                 follower_count, following_count, post_count, like_count, view_count, comment_count = ret
 
                 wondrous_score = float(comment_count*1 + follower_count*5 + following_count*1 + post_count*1 + view_count*5 + like_count*5)
-                wondrous_score/=10.0
+                wondrous_score /= 10.0
                 logging.warn(wondrous_score)
                 logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
-                wondrous_score+=cls.add_badge_benefits(user)
+                wondrous_score += cls.add_badge_benefits(user)
             return wondrous_score
         return None
 
