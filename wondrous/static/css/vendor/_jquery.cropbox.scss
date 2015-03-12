@@ -97,7 +97,7 @@
 
 /* Overrides for Fit-To-Screen display */
 .cropFrame-FTS {
-	width: auto !important;
+	width: 750px;
 	/* height: <dynamically inject this>; */
 	text-align: center;
 	background-color: rgb(20,20,20);
@@ -106,7 +106,7 @@
 .cropImage-FTS {
 	position: relative;
 	cursor: auto;
-	width: auto;
+	width: auto !important;
 	top: 0;
 	left: 0;
 }
