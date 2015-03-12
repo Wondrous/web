@@ -401,7 +401,7 @@ td, th {
 
 /* Overrides for Fit-To-Screen display */
 .cropFrame-FTS {
-  width: 750px;
+  width: auto !important;
   /* height: <dynamically inject this>; */
   text-align: center;
   background-color: #141414; }
