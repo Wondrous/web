@@ -148,6 +148,17 @@ class PostManager(BaseManager):
                                     is_seen=True)
                 send_notification(u_id, new_notification.json())
 
+    @classmethod
+    def move_n_posts_into_feed(cls,from_user_id,to_user_id,n=5):
+        logging.warn(str(from_user_id)+' '+str(to_user_id))
+        from_user = DBSession.query(User).get(from_user_id)
+        to_user = DBSession.query(User).get(to_user_id)
+        if from_user and to_user:
+            posts = from_user.posts[-n:]
+            for post in posts:
+                link = FeedPostLink(feed_id=to_user.feed.id, post_id=post.id)
+                DBSession.add(link)
+            DBSession.flush()
 
     @staticmethod
     def _move_post_into_feeds(post_id, user_id):
@@ -158,6 +169,7 @@ class PostManager(BaseManager):
             feed_id = vote.user.feed.id
             link = FeedPostLink(feed_id=feed_id, post_id=post_id)
             DBSession.add(link)
+        DBSession.flush()
 
     @staticmethod
     def _process_tags(tags, post_id):
@@ -253,7 +265,7 @@ class PostManager(BaseManager):
 
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
-        
+
         # For now, let's not allow @mentions in the post subject,
         # let's keep them to comments and the post-text
         cls.send_mentions(post, user, text)  # To add @mentions back to subject: +" "+subject

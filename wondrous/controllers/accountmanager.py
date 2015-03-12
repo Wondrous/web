@@ -262,7 +262,7 @@ class AccountManager(BaseManager):
             from notification
             where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
 
-            """,{'user_id':user.id,'my_user_id':user.id})
+            """,{'user_id':profile_user.id,'my_user_id':user.id})
         ret = ret.fetchall()[0]
 
         follower_count, following_count, am_following, post_count, unseen_notification_count = ret

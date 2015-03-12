@@ -34,7 +34,7 @@ class FeedManager(BaseManager):
     def get_majority_posts(cls, feed_id, page=0, per_page=15):
 
         posts = Post.query.join(FeedPostLink, Post.id==FeedPostLink.post_id).filter(Post.set_to_delete==None).filter(FeedPostLink.feed_id==feed_id).\
-            order_by(desc(FeedPostLink.created_at)).filter(Post.is_active==True).distinct().limit(per_page).offset(page*per_page).all()
+            order_by(desc(FeedPostLink.post_id)).filter(Post.is_active==True).distinct().limit(per_page).offset(page*per_page).all()
         return posts
 
 
