@@ -404,3 +404,18 @@
     background-image: url(/static/pictures/p.tag-bg.png);
     background-repeat: repeat;
 }
+
+.post-form-bg-display-option {
+    position: relative;
+    display: inline-block;
+    padding: 4px 13px;
+    margin: 5px;
+    font-size: 14px;
+    background-color: rgb(245,245,245);
+    border: 2px solid rgb(245,245,245);
+    cursor: pointer;
+}
+
+.post-form-bg-display-option--active {
+    border-color: rgb(0,100,200);
+}

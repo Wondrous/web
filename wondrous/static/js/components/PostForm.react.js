@@ -8,10 +8,11 @@ var UserStore = require('../stores/UserStore');
 var UploadStore = require('../stores/UploadStore');
 
 var PostForm = React.createClass({
-    mixins: [Reflux.listenTo(UserStore,"onUserChange"), Reflux.listenTo(UploadStore,"onUploadChange")],
+    mixins: [Reflux.listenTo(UserStore, "onUserChange"), Reflux.listenTo(UploadStore, "onUploadChange")],
     file: null,
-    getInitialState: function(){
-        return {percent:0,error:null};
+
+    getInitialState: function() {
+        return {percent: 0, error: null, isCover: true};
     },
 
     onUploadChange: function(msg){
@@ -39,7 +40,7 @@ var PostForm = React.createClass({
         if (this.file) {
             $('#postUploadBtn').hide();
             var reader = new FileReader();
-            reader.onload = this.handleCrop
+            reader.onload = this.handleCrop;
             reader.readAsDataURL(this.file);
         }
     },
@@ -173,20 +174,27 @@ var PostForm = React.createClass({
             }
             console.log("posting", uploadData);
 
-            WondrousActions.addNewPost(postSubject,postText,postTagsUnique,this.file,dataURL);
+            WondrousActions.addNewPost(postSubject, postText, postTagsUnique, this.file,dataURL);
         }
     },
 
-    postTextChange: function(){
+    postTextChange: function() {
 
     },
 
-    render: function(){
+    toggleBackgroundDisplay: function() {
+        this.setState({
+            isCover: !this.state.isCover
+        });
+        this.forceUpdate();
+    },
+
+    render: function() {
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         var divStyle = {
-            display: isPictureModal?"none":"block",
-            backgroundColor:"rgb(255,255,255)"
+            display: isPictureModal ? "none" : "block",
+            backgroundColor : "rgb(255,255,255)"
         };
 
         return (
@@ -197,6 +205,11 @@ var PostForm = React.createClass({
                 <span>{this.state.percent}% uploaded</span>
                 {this.state.error ? <span>{this.state.error}% uploaded</span> : null}
                 
+                <div>
+                    <div onClick={this.toggleBackgroundDisplay} className={!this.state.isCover  ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Cover</div>
+                    <div onClick={this.toggleBackgroundDisplay} className={this.state.isCover ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Fit-to-screen</div>
+                </div>
+
                 <div className="new-post-element" style = {divStyle}>
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
                         <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
@@ -226,7 +239,7 @@ var PostForm = React.createClass({
                     <div className="progress-bar progress-bar-success" style={{"textAlign": "center"}}></div>
                 </div>
 
-                <div id="post-upload-file"  className="files" style={{postion: "relative", marginLeft: 5, fontSize: 14 }}></div>
+                <div id="post-upload-file"  className="files" style={{ postion: "relative", marginLeft: 5, fontSize: 14 }}></div>
 
                 <div className="post-error-wrapper">
                     <span className="post-error"></span>

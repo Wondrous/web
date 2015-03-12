@@ -331,7 +331,7 @@ var Post = React.createClass({
 });
 
 var PostModal = React.createClass({
-	mixins:[Reflux.listenTo(PostStore,"onPostUpdate")],
+	mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
 
 	onPostUpdate: function(postData) {
 		this.setState(postData);

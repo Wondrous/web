@@ -2009,6 +2009,19 @@ a:hover {
   background-image: url(/static/pictures/p.tag-bg.png);
   background-repeat: repeat; }
 
+.post-form-bg-display-option {
+  position: relative;
+  display: inline-block;
+  padding: 4px 13px;
+  margin: 5px;
+  font-size: 14px;
+  background-color: whitesmoke;
+  border: 2px solid whitesmoke;
+  cursor: pointer; }
+
+.post-form-bg-display-option--active {
+  border-color: #0064c8; }
+
 /* === COMMENT ============================ */
 .comment-modal {
   position: relative;
