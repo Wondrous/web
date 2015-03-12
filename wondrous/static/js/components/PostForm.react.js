@@ -192,13 +192,11 @@ var PostForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
-                    style={{"MozBorderRadius": 20,
-                            "KhtmlBorderRadius": 20,
-                            "WebkitBorderRadius": 20,
-                            "width": 750,
-                            "height": 390 }}/>
+                    style={{ "width": 750, "height": "auto" }}/>
+                
                 <span>{this.state.percent}% uploaded</span>
-                {this.state.error?<span>{this.state.error}% uploaded</span>:null}
+                {this.state.error ? <span>{this.state.error}% uploaded</span> : null}
+                
                 <div className="new-post-element" style = {divStyle}>
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
                         <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>

@@ -94,3 +94,23 @@
 	display        : block;
 	text-align:center;
 }
+
+/* Overrides for Fit-To-Screen display */
+.cropFrame-FTS {
+	width: 750px;
+	height: <dynamic>;
+	text-align: center;
+	background-color: rgb(20,20,20);
+}
+
+.cropImage-FTS {
+	position: relative;
+	cursor: auto;
+	width: auto;
+	top: 0;
+	leeft: 0;
+}
+
+.cropControls-FTS {
+	display: none;
+}
