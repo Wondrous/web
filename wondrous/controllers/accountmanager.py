@@ -119,7 +119,7 @@ class AccountManager(BaseManager):
         last_updated = user.last_calculated
         if not last_updated:
             last_updated = datetime(year=2,month=2,day=2,hour=2,minute=2,second=2)
-        
+
         if (datetime.now() - last_updated>timedelta(hours=0)):
             wondrous_score = 0
 
@@ -151,18 +151,18 @@ class AccountManager(BaseManager):
                     on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
 
             except Exception, e:
-                return round_num(user.wondrous_score)
-            
+                return None
+
             ret = ret.fetchall()[0]
             if ret:
                 follower_count, following_count, post_count, like_count, view_count, comment_count = ret
 
                 wondrous_score = float(view_count*5 + like_count*5 + follower_count*5 + comment_count*1 + post_count*1 + following_count*1)
                 wondrous_score /= 100.0
-                
+
                 # logging.warn(wondrous_score)
                 # logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
-                
+
                 # ------------------------------------------------------------------------------------------
                 # WARNING: Maybe this is unique to me (JohnZ), but when I comment out this
                 # cls.add_badge_benefits method below, I recieve a DB error, to the effect of:
@@ -179,7 +179,7 @@ class AccountManager(BaseManager):
                 # 4. Use case:  Influencer/early-adopter signs up with promise of "influential" status
                 #               from day one (i.e., a score >= 75).
                 #    Solution:  We should make the 75 a min threshold, such that
-                #               if the true score is say, 50, we still display 75. BUT, 
+                #               if the true score is say, 50, we still display 75. BUT,
                 #               if the true score ends up rising above 75 to say, 83, then we display the 83.
                 # 5. Use case:  Regular user signs up and starts at score = 1, and works his/her way up the
                 #               Wondrous ladder. They acheive a score of 75. We need to add a badge
@@ -189,13 +189,11 @@ class AccountManager(BaseManager):
                 #               between 74 and 75...and then back to 74, and then back to 75. Who knows.
                 #               We should try to sustain a user's influential status in this situation as
                 #               long as possible, but not necessarily maintain their score of 75+. For
-                #               instance, they could be a verified user with a score of 73 (for a short while).   
+                #               instance, they could be a verified user with a score of 73 (for a short while).
                 # ------------------------------------------------------------------------------------------
-                wondrous_score += cls.add_badge_benefits(user)
+                # wondrous_score += cls.add_badge_benefits(user)
                 wondrous_score = round_num(wondrous_score)
-                user.wondrous_score = wondrous_score
-                user.last_calculated = datetime.now()
-            
+
             return wondrous_score
         return None
 
@@ -283,9 +281,12 @@ class AccountManager(BaseManager):
             return {'error': 'no users found!'}
 
         user_id = profile_user.id
-
-        #TODO combine the two sql calls 
-        cls.calculate_wondrous_score(profile_user)
+        #TODO combine the two sql calls
+        score = cls.calculate_wondrous_score(profile_user)
+        if score:
+            profile_user.last_calculated = datetime.now()
+            profile_user.wondrous_score = score
+            DBSession.refresh(profile_user)
 
         try:
             ret = DBSession.execute("""Select

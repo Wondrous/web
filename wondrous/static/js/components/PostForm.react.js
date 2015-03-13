@@ -149,7 +149,12 @@ var PostForm = React.createClass({
             var postSubject     = $('#postSubject').val();
             var postText        = $('#postTextarea').val();
 
-            WondrousActions.addNewPost(postSubject, postText, this.file,dataURL);
+            var dataURL = null;
+            if (typeof(this.file) !== 'undefined' && this.file) {
+                dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+            }
+
+            WondrousActions.addNewPost(postSubject, postText, this.file, dataURL);
         }
     },
 
@@ -225,7 +230,6 @@ var PostForm = React.createClass({
         var text = this.refs.postTextArea.getDOMNode().value;
         var mentions = text.match(/\s*@\s*(\w+)/g);
         var hashtags = text.match(/\s*#\s*(\w+)/g);
-        console.log('mentions ',mentions,"hashtags ",hashtags);
     },
     componentDidMount: function () {
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
