@@ -109,7 +109,7 @@ class AccountManager(BaseManager):
         scores = 0
         for badge in user.badges:
             if badge.badge_type == Badge.INFLUENCER:
-                scores += 75
+                scores += 0 #75
         return scores
 
     @classmethod
@@ -119,7 +119,8 @@ class AccountManager(BaseManager):
         last_updated = user.last_calculated
         if not last_updated:
             last_updated = datetime(year=2,month=2,day=2,hour=2,minute=2,second=2)
-        if (datetime.now()-last_updated>timedelta(hours=0)):
+        
+        if (datetime.now() - last_updated>timedelta(hours=0)):
             wondrous_score = 0
 
             try:
@@ -162,6 +163,34 @@ class AccountManager(BaseManager):
                 # logging.warn(wondrous_score)
                 # logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
                 
+                # ------------------------------------------------------------------------------------------
+                # WARNING: Maybe this is unique to me (JohnZ), but when I comment out this
+                # cls.add_badge_benefits method below, I recieve a DB error, to the effect of:
+                # "ResourceClosedError: This transaction is closed". I have no idea why, although
+                # it seems as if calling badge.badge_type or user.badges in the method makes a differnece...
+                # ------------------------------------------------------------------------------------------
+                # Some things to note for when I wake up, because otherwise I might forget:
+                # 1. It's good we can add in 75 on a whim if a user has been assigned a badge...
+                # 2. HOWEVER, most of the time, the badge being assigned is a product of the score,
+                #    rather than the score of 75 being a product of the badge.
+                # 3. We need to do our best to constrain the score to a fixed range, [1,100). The whole
+                #    point of having influential users be 75+ is based on the idea that the max is 100.
+                #    This is something to work at and give thought to.
+                # 4. Use case:  Influencer/early-adopter signs up with promise of "influential" status
+                #               from day one (i.e., a score >= 75).
+                #    Solution:  We should make the 75 a min threshold, such that
+                #               if the true score is say, 50, we still display 75. BUT, 
+                #               if the true score ends up rising above 75 to say, 83, then we display the 83.
+                # 5. Use case:  Regular user signs up and starts at score = 1, and works his/her way up the
+                #               Wondrous ladder. They acheive a score of 75. We need to add a badge
+                #    Soultion:  Add the damn badge if they don't have it. Tangent...but let's be very
+                #               careful, should we ever introduce attributes with subtract from the score,
+                #               not to toggle between verified and unverified if the user is on the border
+                #               between 74 and 75...and then back to 74, and then back to 75. Who knows.
+                #               We should try to sustain a user's influential status in this situation as
+                #               long as possible, but not necessarily maintain their score of 75+. For
+                #               instance, they could be a verified user with a score of 73 (for a short while).   
+                # ------------------------------------------------------------------------------------------
                 wondrous_score += cls.add_badge_benefits(user)
                 wondrous_score = round_num(wondrous_score)
                 user.wondrous_score = wondrous_score
