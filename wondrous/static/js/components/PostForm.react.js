@@ -148,38 +148,9 @@ var PostForm = React.createClass({
         } else {
             var postSubject     = $('#postSubject').val();
             var postText        = $('#postTextarea').val();
-            var object_file_id  = $('#objectFileID').val(); // See if we have a object File value
-            var postTagsRaw     = [];
-            var postTagsUnique  = [];
 
-            // Make array of raw tag data
-            $('.hashtag').each(function() {postTagsRaw.push($(this).text());});
-
-            // Create array of only unique tags (remove duplicates present in postTagsRaw)
-            $.each(postTagsRaw, function(i, obj) {
-                obj = obj.substring(1); // Remove first character (the hashtag #)
-                if($.inArray(obj, postTagsUnique) === -1) postTagsUnique.push(obj);
-            });
-
-            uploadData = {
-                'subject' : postSubject,
-                'text'    : postText,
-                'tags'    : postTagsUnique
-            };
-
-            var dataURL = null;
-            if (typeof(this.file) !== 'undefined' && this.file) {
-                uploadData.file_type = this.file.type;
-                dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
-            }
-            console.log("posting", uploadData);
-
-            WondrousActions.addNewPost(postSubject, postText, postTagsUnique, this.file,dataURL);
+            WondrousActions.addNewPost(postSubject, postText, this.file,dataURL);
         }
-    },
-
-    postTextChange: function() {
-
     },
 
     toggleBackgroundDisplay: function() {
@@ -201,10 +172,10 @@ var PostForm = React.createClass({
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
                     style={{ "width": 750, "height": 390 }}/>
-                
+
                 <span>{this.state.percent}% uploaded</span>
                 {this.state.error ? <span>{this.state.error}% uploaded</span> : null}
-                
+
                 <div>
                     <div onClick={this.toggleBackgroundDisplay} className={!this.state.isCover  ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Cover</div>
                     <div onClick={this.toggleBackgroundDisplay} className={this.state.isCover ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Fit-to-screen</div>
@@ -220,7 +191,7 @@ var PostForm = React.createClass({
                     <div className="post-input-wrapper">
                         <div className="highlighter"></div>
                         <div className="typehead">
-                            <textarea id="postTextarea" onChange={this.postTextChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
+                            <textarea id="postTextarea" onChange={this.onTextAreaChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
                             style={{ overflow: "hidden", wordWrap: "break-word", resize: "none", height: 48 }}></textarea>
                         </div>
                     </div>
@@ -250,11 +221,16 @@ var PostForm = React.createClass({
             </div>
         );
     },
-
+    onTextAreaChange: function(){
+        var text = this.refs.postTextArea.getDOMNode().value;
+        var mentions = text.match(/\s*@\s*(\w+)/g);
+        var hashtags = text.match(/\s*#\s*(\w+)/g);
+        console.log('mentions ',mentions,"hashtags ",hashtags);
+    },
     componentDidMount: function () {
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
         if(!isPictureModal){
-            $("textarea#postTextarea").hashtags();
+
         }
     },
 

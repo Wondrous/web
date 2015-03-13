@@ -23,7 +23,7 @@ from sqlalchemy import or_, func
 from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
-
+import wondrous.controllers
 
 class VoteAction:
     LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(8)
@@ -130,6 +130,10 @@ class VoteManager(BaseManager):
         else:
             vote = Vote(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER, status=status)
 
+        if status==Vote.FOLLOWED:
+            # add some posts to feed
+            wondrous.controllers.PostManager.move_n_posts_into_feed(vote.subject_id,vote.user_id)
+
         return vote
 
     @classmethod
@@ -183,6 +187,7 @@ class VoteManager(BaseManager):
                 to_user_id=from_user_id,
                 reason=Notification.FOLLOW_ACCEPTED,
                 subject_id=to_user_id)
+            wondrous.controllers.PostManager.move_n_posts_into_feed(vote.subject_id,vote.user_id)
             return vote
         return None
 

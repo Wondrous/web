@@ -116,48 +116,50 @@ class AccountManager(BaseManager):
 
         last_updated = user.last_calculated
         if not last_updated:
-            last_updated = datetime(year=2, month=2, day=2, hour=2, minute=2, second=2)
-        
-        if (datetime.now() - last_updated > timedelta(hours=0)):
+            last_updated = datetime(year=2,month=2,day=2,hour=2,minute=2,second=2)
+        if (datetime.now()-last_updated>timedelta(hours=0)):
             wondrous_score = 0
 
-            ret = DBSession.execute("""SELECT
-                (SELECT COUNT(*)
-                FROM vote
-                WHERE vote.subject_id=:user_id) AS follower_count,
+            try:
+                ret = DBSession.execute("""Select
+                    (select count(*)
+                    from vote
+                    where vote.subject_id=:user_id) as follower_count,
 
-                (SELECT COUNT(*)
-                FROM vote
-                WHERE vote.user_id=:user_id AND (vote.status=6 OR vote.status=7)) AS following_count,
+                    (select count(*)
+                    from vote
+                    where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
 
-                (SELECT COUNT(*)
-                FROM post
-                WHERE post.user_id=:user_id AND post.set_to_delete IS NULL) AS post_count,
+                    (select count(*)
+                    from post
+                    where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
 
-                (SELECT sum(post.like_count)
-                FROM post
-                WHERE post.user_id=:user_id) AS like_count,
+                    (select sum(post.like_count)
+                    from post
+                    where post.user_id=:user_id) as like_count,
 
-                (SELECT sum(post.view_count)
-                FROM post
-                WHERE post.user_id=:user_id) AS view_count,
+                    (select sum(post.view_count)
+                    from post
+                    where post.user_id=:user_id) as view_count,
 
-                (SELECT COUNT(*)
-                FROM comment
-                JOIN post
-                ON  post.user_id=:user_id AND 
-                    comment.post_id = post.id AND 
-                    post.set_to_delete IS NULL) AS comment_count""", {'user_id': user.id})
-            
+                    (select count(*)
+                    from comment
+                    join post
+                    on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
+
+            except Exception, e:
+                return user.wondrous_score
             ret = ret.fetchall()[0]
             if ret:
                 follower_count, following_count, post_count, like_count, view_count, comment_count = ret
 
                 wondrous_score = float(comment_count*1 + follower_count*5 + following_count*1 + post_count*1 + view_count*5 + like_count*5)
-                wondrous_score /= 10.0
+                wondrous_score/=10.0
                 logging.warn(wondrous_score)
                 logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
-                wondrous_score += cls.add_badge_benefits(user)
+                wondrous_score+=cls.add_badge_benefits(user)
+                user.wondrous_score = wondrous_score
+                user.last_calculated = datetime.now()
             return wondrous_score
         return None
 
@@ -245,28 +247,35 @@ class AccountManager(BaseManager):
             return {'error': 'no users found!'}
 
         user_id = profile_user.id
-        ret = DBSession.execute("""Select
-            (select count(*)
-            from vote
-            where vote.subject_id=:user_id) as follower_count,
 
-            (select count(*)
-            from vote
-            where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
+        #TODO combine the two sql calls 
+        cls.calculate_wondrous_score(profile_user)
 
-            (select count(*)
-            from vote
-            where vote.user_id=:my_user_id and vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as am_following,
+        try:
+            ret = DBSession.execute("""Select
+                (select count(*)
+                from vote
+                where vote.subject_id=:user_id) as follower_count,
 
-            (select count(*)
-            from post
-            where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+                (select count(*)
+                from vote
+                where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
 
-            (select count(*)
-            from notification
-            where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
+                (select count(*)
+                from vote
+                where vote.user_id=:my_user_id and vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as am_following,
 
-            """,{'user_id':user.id,'my_user_id':user.id})
+                (select count(*)
+                from post
+                where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+
+                (select count(*)
+                from notification
+                where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
+
+                """,{'user_id':profile_user.id,'my_user_id':user.id})
+        except Exception, e:
+            return {'error': 'no users found!'}
         ret = ret.fetchall()[0]
 
         follower_count, following_count, am_following, post_count, unseen_notification_count = ret
@@ -281,10 +290,6 @@ class AccountManager(BaseManager):
         # Am I querying for myself?
         if profile_user and profile_user.id == user.id:
             retval = follow_data
-            score = cls.calculate_wondrous_score(profile_user)
-            if score:
-                profile_user.wondrous_score = score
-                profile_user.last_calculated = datetime.now()
 
             retval.update(profile_user.json(1))
             retval.update({"name": profile_user.ascii_name})

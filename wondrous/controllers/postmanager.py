@@ -35,7 +35,6 @@ from wondrous.models import (
     FeedPostLink,
     Object,
     Post,
-    PostTagLink,
     Tag,
     Notification,
     Comment,
@@ -148,6 +147,17 @@ class PostManager(BaseManager):
                                     is_seen=True)
                 send_notification(u_id, new_notification.json())
 
+    @classmethod
+    def move_n_posts_into_feed(cls,from_user_id,to_user_id,n=5):
+        logging.warn(str(from_user_id)+' '+str(to_user_id))
+        from_user = DBSession.query(User).get(from_user_id)
+        to_user = DBSession.query(User).get(to_user_id)
+        if from_user and to_user:
+            posts = from_user.posts[-n:]
+            for post in posts:
+                link = FeedPostLink(feed_id=to_user.feed.id, post_id=post.id)
+                DBSession.add(link)
+            DBSession.flush()
 
     @staticmethod
     def _move_post_into_feeds(post_id, user_id):
@@ -158,17 +168,17 @@ class PostManager(BaseManager):
             feed_id = vote.user.feed.id
             link = FeedPostLink(feed_id=feed_id, post_id=post_id)
             DBSession.add(link)
+        DBSession.flush()
 
     @staticmethod
     def _process_tags(tags, post_id):
         # Add the tags
         for t in tags:
-            new_tag, created = Tag.get_one_or_create(tag_name=t)
-            link = PostTagLink(post_id=post_id, tag_id=new_tag.id)
-            DBSession.add(link)
+            new_tag = Tag(tag_name=t,post_id=post_id)
+            DBSession.add(new_tag)
 
     @classmethod
-    def add(cls, user_id, tags, subject, text, repost_id=None, file_type=None):
+    def add(cls, user_id, subject, text, repost_id=None, file_type=None):
 
         """
             PURPOSE: the purpose of the this method is to allow users to post and
@@ -176,7 +186,6 @@ class PostManager(BaseManager):
 
             Params:
                 user_id   : int : id of the author
-                tags      : set : set list of tags
                 subject   : str : subject text of the item
                 text      : str : text of the post
                 repost_id : int : optional -- the object id to be reposted
@@ -218,8 +227,10 @@ class PostManager(BaseManager):
 
         cls.notify_followers(new_post.id,user_id)
 
-        if tags and len(tags)>0:
-            cls._process_tags(tags, new_post.id)
+        tags = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*#\s*(\w+)', text)))]
+        if len(tags)>0:
+            logging.warn("tags "+str(tags))
+            cls._process_tags(tags,new_post.id)
 
         cls._move_post_into_feeds(new_post.id, user_id)
         DBSession.flush()
@@ -227,10 +238,10 @@ class PostManager(BaseManager):
         return new_post
 
     @classmethod
-    def repost_json(cls, user, post_id, tags=None, text=None):
+    def repost_json(cls, user, post_id, text=None):
         if not user:
             return {'error': 'insufficient data'}
-        post = PostManager.add(user.id, tags, None, text, repost_id=post_id)
+        post = PostManager.add(user.id, None, text, repost_id=post_id)
         data = post.json()
 
         # Notify if needed
@@ -242,18 +253,18 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def post_json(cls, user, subject, text, tags=None, file_type=None):
+    def post_json(cls, user, subject, text, file_type=None):
         if not user or not subject or not text:
             return {'error': 'insufficient data'}
 
-        post = PostManager.add(user.id, tags, subject, text, repost_id=None, file_type=file_type)
+        post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type)
         object = post.object
 
         data = {}
 
         if file_type:
             data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
-        
+
         # For now, let's not allow @mentions in the post subject,
         # let's keep them to comments and the post-text
         cls.send_mentions(post, user, text)  # To add @mentions back to subject: +" "+subject

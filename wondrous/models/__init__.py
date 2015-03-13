@@ -59,7 +59,6 @@ from wondrous.models.badge import (
 
 from wondrous.models.tag import (
     Tag,
-    PostTagLink,
 )
 
 from wondrous.models.user import (

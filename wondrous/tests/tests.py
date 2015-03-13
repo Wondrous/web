@@ -22,7 +22,6 @@ from wondrous.models import (
     Notification,
     Object,
     Post,
-    # PostTagLink,
     Tag,
     User,
     Vote,
