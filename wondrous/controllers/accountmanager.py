@@ -127,7 +127,7 @@ class AccountManager(BaseManager):
                 ret = DBSession.execute("""Select
                     (select count(*)
                     from vote
-                    where vote.subject_id=:user_id) as follower_count,
+                    where vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as follower_count,
 
                     (select count(*)
                     from vote
@@ -151,6 +151,7 @@ class AccountManager(BaseManager):
                     on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
 
             except Exception, e:
+                logging.warn(e)
                 return None
 
             ret = ret.fetchall()[0]
@@ -270,29 +271,33 @@ class AccountManager(BaseManager):
     @classmethod
     def get_json_by_username(cls, user, user_id = None, username = None, auth = False):
         if not user_id and not username:
-            return {}
+            return {'error': 'no users found!'}
 
         if username:
-            profile_user = User.by_kwargs(username=username).first()
-        else:
-            profile_user = User.by_id(user_id)
-
+            if username==user.username:
+                profile_user = user
+            else:
+                profile_user = User.by_kwargs(username=username).first()
+        elif user_id:
+            if user_id == user.id:
+                logging.warn('myself')
+                profile_user = user
+            else:
+                profile_user = User.by_id(user_id)
         if not profile_user:
             return {'error': 'no users found!'}
 
-        user_id = profile_user.id
         #TODO combine the two sql calls
         score = cls.calculate_wondrous_score(profile_user)
         if score:
             profile_user.last_calculated = datetime.now()
             profile_user.wondrous_score = score
-            DBSession.refresh(profile_user)
 
         try:
             ret = DBSession.execute("""Select
                 (select count(*)
                 from vote
-                where vote.subject_id=:user_id) as follower_count,
+                where vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as follower_count,
 
                 (select count(*)
                 from vote
@@ -309,7 +314,6 @@ class AccountManager(BaseManager):
                 (select count(*)
                 from notification
                 where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
-
                 """, {'user_id': profile_user.id, 'my_user_id': user.id})
         except Exception, e:
             return {'error': 'no users found!'}
@@ -327,7 +331,7 @@ class AccountManager(BaseManager):
         # Am I querying for myself?
         if profile_user and profile_user.id == user.id:
             retval = follow_data
-
+            DBSession.refresh(profile_user)
             retval.update(profile_user.json(1))
             retval.update({"name": profile_user.ascii_name})
             retval.update({"unseen_notifications": unseen_notification_count})
@@ -339,7 +343,7 @@ class AccountManager(BaseManager):
             if auth:
                 key = shortuuid.uuid()
                 retval.update({'auth':key})
-                send_notification(-1,str(key)+":"+str(user_id))
+                send_notification(-1,str(key)+":"+str(profile_user.id))
             return retval
 
         # If the profile_user is public or I am following
@@ -347,7 +351,7 @@ class AccountManager(BaseManager):
             (profile_user and not profile_user.is_banned and profile_user.is_active and am_following):
 
             retval = follow_data
-            retval.update(super(AccountManager, cls).model_to_json(profile_user))
+            retval.update(profile_user.json(0))
             retval.update({"name": profile_user.ascii_name})
 
             picture_object = profile_user.picture_object

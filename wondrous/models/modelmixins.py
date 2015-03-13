@@ -86,10 +86,8 @@ class BaseMixin(object):
                 if c in SENSITIVE_KW[level]:
                     continue
                 try:
-                    val = getattr(self, c)
-                    if isinstance(val, datetime):
-                        val = val.isoformat()
-                    data[c] = val
+                    val = getattr(self, c) 
+                    data[c] = val if not isinstance(val,datetime) else val.isoformat()
                 except Exception, e:
                     pass
             return data

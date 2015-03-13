@@ -7,7 +7,7 @@
 # MODELS/USER.PY
 #
 
-import unidecode
+import unidecode, logging
 from datetime import datetime
 
 from sqlalchemy import (

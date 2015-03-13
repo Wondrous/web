@@ -232,7 +232,7 @@ var UserBar = React.createClass({
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var classes = "follow-button-blue round-2 ";
         var is_influencer = $.inArray(0, this.state.data.badges) !== null;
-
+        
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
