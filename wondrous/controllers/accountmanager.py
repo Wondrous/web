@@ -39,6 +39,8 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, distinct, or_, case
 from sqlalchemy.orm import aliased
 
+from wondrous.utilities.general_utilities import round_num
+
 
 class AccountManager(BaseManager):
 
@@ -148,18 +150,23 @@ class AccountManager(BaseManager):
                     on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
 
             except Exception, e:
-                return user.wondrous_score
+                return round_num(user.wondrous_score)
+            
             ret = ret.fetchall()[0]
             if ret:
                 follower_count, following_count, post_count, like_count, view_count, comment_count = ret
 
-                wondrous_score = float(comment_count*1 + follower_count*5 + following_count*1 + post_count*1 + view_count*5 + like_count*5)
-                wondrous_score/=10.0
-                logging.warn(wondrous_score)
-                logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
-                wondrous_score+=cls.add_badge_benefits(user)
+                wondrous_score = float(view_count*5 + like_count*5 + follower_count*5 + comment_count*1 + post_count*1 + following_count*1)
+                wondrous_score /= 100.0
+                
+                # logging.warn(wondrous_score)
+                # logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
+                
+                wondrous_score += cls.add_badge_benefits(user)
+                wondrous_score = round_num(wondrous_score)
                 user.wondrous_score = wondrous_score
                 user.last_calculated = datetime.now()
+            
             return wondrous_score
         return None
 
@@ -273,7 +280,7 @@ class AccountManager(BaseManager):
                 from notification
                 where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
 
-                """,{'user_id':profile_user.id,'my_user_id':user.id})
+                """, {'user_id': profile_user.id, 'my_user_id': user.id})
         except Exception, e:
             return {'error': 'no users found!'}
         ret = ret.fetchall()[0]
@@ -283,8 +290,8 @@ class AccountManager(BaseManager):
         follow_data = {
             "following_count" : following_count,
             "follower_count"  : follower_count,
-            "following": am_following!=0,
-            "post_count": post_count
+            "following"       : am_following != 0,
+            "post_count"      : post_count
         }
 
         # Am I querying for myself?

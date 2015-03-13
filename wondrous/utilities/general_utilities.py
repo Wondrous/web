@@ -290,6 +290,29 @@ def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 
 
     return " ".join(final)
 
+def round_num(f):
+
+    """
+        PURPOSE: To round up a floating point number if 
+        the decimal is >= 0.5, or round down if < 0.5
+
+        NOTE: If the number provided is < 1, we return 1.
+        We don't want to give a score of 0.
+
+        USE: Call like: round_float(<float> or <int>)
+
+        PARAMS: 1 param, a number, typically a float, f.
+
+        RETURNS: A positive rounded int
+
+        NOTE: This is, in fact, slightly different than the
+        built in round function. The round func would round
+        down 0.2 to 0.0; we need it to round up in that case
+    """
+
+    rounded = int(round(f))
+    return 1 if (rounded < 1) else rounded
+
 def send_email(to_email, verification_code):
 
     """
