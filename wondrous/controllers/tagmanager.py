@@ -11,7 +11,6 @@
 from wondrous.controllers.basemanager import BaseManager
 
 from wondrous.models import (
-    PostTagLink,
     Tag,
 )
 
@@ -22,21 +21,12 @@ class TagManager(BaseManager):
     @staticmethod
     def by_post_id(post_id):
         # TODO run core SQL instead, better yet, run Psycopg2 core
-        links = PostTagLink.by_kwargs(post_id=post_id).all()
+        links = Tag.by_kwargs(post_id=post_id).all()
         return [link.tag for link in links]
 
     @staticmethod
     def by_name(tag_name):
         return Tag.by_kwargs(tag_name=tag_name).first()
-
-    @staticmethod
-    def get_all_objects_by_tag_name(tag_name):
-        # TODO paginate probably
-
-        tag = Tag.by_kwargs(tag_name=tag_name).first()
-        if tag:
-            links = PostTagLink.by_kwargs(tag_id=tag.id).all()
-            return [link.post_id for link in links]
 
     @staticmethod
     def by_name_like(name, page=0, per_page=50):

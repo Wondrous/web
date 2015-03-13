@@ -46,7 +46,7 @@ class Post(Base, BaseMixin):
 
     feed_post_links = relationship("FeedPostLink", backref="post")
 
-    post_tag_links = relationship("PostTagLink", backref="object")
+    tags = relationship("Tag", backref="post", lazy='joined')
 
     # repost section
     repost_id = Column(BigInteger, ForeignKey('post.id'), nullable=True)

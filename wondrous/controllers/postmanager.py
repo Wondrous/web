@@ -35,7 +35,6 @@ from wondrous.models import (
     FeedPostLink,
     Object,
     Post,
-    PostTagLink,
     Tag,
     Notification,
     Comment,
@@ -175,8 +174,7 @@ class PostManager(BaseManager):
     def _process_tags(tags, post_id):
         # Add the tags
         for t in tags:
-            new_tag, created = Tag.get_one_or_create(tag_name=t)
-            link = PostTagLink(post_id=post_id, tag_id=new_tag.id)
+            new_tag, created = Tag.get_one_or_create(tag_name=t,post_id=post_id)
             DBSession.add(link)
 
     @classmethod
