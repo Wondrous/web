@@ -23,7 +23,7 @@ from wondrous.models.modelmixins import BaseMixin
 
 
 class Tag(Base,BaseMixin):
-	tag_name = Column(Unicode, nullable=False, unique=True)
+	tag_name = Column(Unicode, nullable=False)
 	post_id = Column(BigInteger, ForeignKey('post.id'), index=True)
 
 	@classmethod

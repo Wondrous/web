@@ -363,11 +363,10 @@ WondrousActions.uploadFile.listen(function(blob,post_data,file_type){
     });
 });
 
-WondrousActions.addNewPost.listen(function(subject,text,tags,file_to_upload,blob){
+WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob){
     var uploadData = {
         subject: subject,
-        text: text,
-        tags: tags
+        text: text
     };
 
     if (file_to_upload){

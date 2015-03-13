@@ -174,11 +174,11 @@ class PostManager(BaseManager):
     def _process_tags(tags, post_id):
         # Add the tags
         for t in tags:
-            new_tag, created = Tag.get_one_or_create(tag_name=t,post_id=post_id)
-            DBSession.add(link)
+            new_tag = Tag(tag_name=t,post_id=post_id)
+            DBSession.add(new_tag)
 
     @classmethod
-    def add(cls, user_id, tags, subject, text, repost_id=None, file_type=None):
+    def add(cls, user_id, subject, text, repost_id=None, file_type=None):
 
         """
             PURPOSE: the purpose of the this method is to allow users to post and
@@ -186,7 +186,6 @@ class PostManager(BaseManager):
 
             Params:
                 user_id   : int : id of the author
-                tags      : set : set list of tags
                 subject   : str : subject text of the item
                 text      : str : text of the post
                 repost_id : int : optional -- the object id to be reposted
@@ -228,8 +227,10 @@ class PostManager(BaseManager):
 
         cls.notify_followers(new_post.id,user_id)
 
-        if tags and len(tags)>0:
-            cls._process_tags(tags, new_post.id)
+        tags = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*#\s*(\w+)', text)))]
+        if len(tags)>0:
+            logging.warn("tags "+str(tags))
+            cls._process_tags(tags,new_post.id)
 
         cls._move_post_into_feeds(new_post.id, user_id)
         DBSession.flush()
@@ -237,10 +238,10 @@ class PostManager(BaseManager):
         return new_post
 
     @classmethod
-    def repost_json(cls, user, post_id, tags=None, text=None):
+    def repost_json(cls, user, post_id, text=None):
         if not user:
             return {'error': 'insufficient data'}
-        post = PostManager.add(user.id, tags, None, text, repost_id=post_id)
+        post = PostManager.add(user.id, None, text, repost_id=post_id)
         data = post.json()
 
         # Notify if needed
@@ -252,11 +253,11 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def post_json(cls, user, subject, text, tags=None, file_type=None):
+    def post_json(cls, user, subject, text, file_type=None):
         if not user or not subject or not text:
             return {'error': 'insufficient data'}
 
-        post = PostManager.add(user.id, tags, subject, text, repost_id=None, file_type=file_type)
+        post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type)
         object = post.object
 
         data = {}
