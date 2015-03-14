@@ -1006,7 +1006,9 @@ a:hover {
 .profile-badge-influencer {
   position: relative;
   display: inline-block;
+  font-family: helvetica, arial, sans-serif;
   font-size: 14px;
+  font-weight: 100;
   color: #fbfbfb;
   background-color: #00e2ae;
   padding: 4px 10px;

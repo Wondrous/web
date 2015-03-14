@@ -70,6 +70,7 @@ var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
 
     render: function() {
+        var is_influencer = $.inArray(0, this.props.user.badges) != -1;
         var hrefPlaceholder = "/" + this.props.user.username;
         return (
             <li className="user-itemizer">
@@ -81,6 +82,11 @@ var UserIcon = React.createClass({
                     <div className="user-itemizer-data-desc">
                         @{ this.props.user.username }
                     </div>
+                    {is_influencer ? 
+                        <div className="profile-badge-influencer round-2">
+                            Influencer <span className="profile-badge-influencer--checkmark">O</span>
+                        </div>
+                        : null}
                 </div>
             </li>
         );
@@ -88,9 +94,14 @@ var UserIcon = React.createClass({
 });
 
 var Follower = React.createClass({
-    mixins: [ Router.State, Router.Navigation , Reflux.listenTo(ProfileStore,"onProfileChange")],
+    mixins: [
+        Router.State,
+        Router.Navigation,
+        Reflux.listenTo(ProfileStore,"onProfileChange")
+    ],
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
+    
     onProfileChange: function(profileData){
         if (profileData.hasOwnProperty('followers')){
             this.setState({data:profileData.followers});
@@ -98,8 +109,9 @@ var Follower = React.createClass({
             WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.followerPage);
         }
     },
+
     getInitialState: function() {
-        WondrousActions.loadFollower(ProfileStore.user.username,ProfileStore.followerPage);
+        WondrousActions.loadFollower(ProfileStore.user.username, ProfileStore.followerPage);
         return {data:ProfileStore.followers.sortedSet};
     },
 
