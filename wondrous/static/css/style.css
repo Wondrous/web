@@ -457,6 +457,13 @@ ul {
   margin: 0;
   padding: 0; }
 
+.grid-padding, .profile-content, .profile-header {
+  margin: 0 auto; }
+
+.grid-padding, .profile-content {
+  /*max-width: 1000px;*/
+  max-width: 900px; }
+
 #body-mask {
   position: fixed;
   display: none;
@@ -880,12 +887,6 @@ a:hover {
 
 .footer-link {
   padding: 5px 25px; }
-
-.grid-padding, .profile-content, .profile-header {
-  margin: 0 auto; }
-
-.grid-padding, .profile-content {
-  max-width: 1000px; }
 
 .info-content {
   padding: 0 5% 0 5%; }

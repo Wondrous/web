@@ -276,7 +276,7 @@ var UserBar = React.createClass({
                     
                     {!is_me ?
                         <div>
-                            <li style={{ marginLeft: 10 }} className={classes} onClick={this.handleFollow}>
+                            <li className={classes} onClick={this.handleFollow}>
                                 <div className="profile-header-nav-title">{btnTitle}</div>
                                 <span className="follow-button-plus">+</span>
                             </li>
