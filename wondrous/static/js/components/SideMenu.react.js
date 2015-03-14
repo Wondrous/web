@@ -156,7 +156,7 @@ var NotificationsBar = React.createClass({
                 <h5 className="notification-menu-header">Activity</h5>
                 {notifications}
                 <div>
-                {!NotificationStore.donePaging&&notifications.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:null}
+                {!NotificationStore.donePaging&&notifications.length>0?<img className="loading-wheel" style={{ height: 25, width: 25 }} src="/static/pictures/p.loading.gif"/>:null}
                 </div>
             </div>
 
