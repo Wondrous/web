@@ -714,7 +714,11 @@ a:hover {
 .follow-button {
   border: 1px solid #eaeaea !important;
   padding: 25px 0 !important;
-  cursor: pointer; }
+  cursor: pointer;
+  -webkit-box-shadow: 0 0px 3px #505050;
+  -moz-box-shadow: 0 0px 3px #505050;
+  -o-box-shadow: 0 0px 3px #505050;
+  box-shadow: 0 0px 3px #505050; }
 
 .follow-button > .profile-header-nav-title {
   text-transform: uppercase;
@@ -730,8 +734,18 @@ a:hover {
   font-weight: 100;
   color: #b4b4b4; }
 
+.follow-button-checkmark {
+  position: relative;
+  top: 2px;
+  height: 25px;
+  width: 25px; }
+
 .is-following {
-  border-color: #1bc922 !important; }
+  border-color: #1bc922 !important;
+  -webkit-box-shadow: 0 0px 7px #c8c8c8;
+  -moz-box-shadow: 0 0px 7px #c8c8c8;
+  -o-box-shadow: 0 0px 7px #c8c8c8;
+  box-shadow: 0 0px 7px #c8c8c8; }
 
 .not-following {
   -webkit-transition: all 0.3s ease-in-out;

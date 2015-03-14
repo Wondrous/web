@@ -46,6 +46,11 @@ a:hover {text-decoration: underline;}
     border: 1px solid rgb(234,234,234) !important;
     padding: 25px 0 !important;
     cursor: pointer;
+
+    -webkit-box-shadow: 0 0px 3px rgb(80,80,80);
+       -moz-box-shadow: 0 0px 3px rgb(80,80,80);
+         -o-box-shadow: 0 0px 3px rgb(80,80,80);
+            box-shadow: 0 0px 3px rgb(80,80,80);
 }
 
 .follow-button > .profile-header-nav-title {
@@ -65,8 +70,19 @@ a:hover {text-decoration: underline;}
     color: rgb(180,180,180);
 }
 
+.follow-button-checkmark {
+    position: relative;
+    top: 2px;
+    height: 25px;
+    width: 25px;
+}
+
 .is-following {
     border-color: rgb(27,201,34) !important;
+    -webkit-box-shadow: 0 0px 7px rgb(200,200,200);
+       -moz-box-shadow: 0 0px 7px rgb(200,200,200);
+         -o-box-shadow: 0 0px 7px rgb(200,200,200);
+            box-shadow: 0 0px 7px rgb(200,200,200);
 }
 
 .not-following {
