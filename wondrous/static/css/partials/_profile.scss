@@ -46,20 +46,21 @@
 }
 
 .follow-button-blue {
-    padding: 7px 10px;
+    font-size: 14px;
     color: rgb(251,251,251);
     font-weight: 100;
+    padding: 4px 10px;
     background-color: rgb(100,130,200);
-    border: 3px solid rgb(100,130,200);
+    border: 2px solid rgb(100,130,200);
     cursor: pointer;
 
     &:hover {
-        border: 3px solid rgb(100,100,240);
+        border-color: rgb(100,100,240);
         background-color: rgb(120,145,204);
     }
 
     &:active {
-        border: 3px solid rgb(100,100,240);
+        border-color: rgb(100,100,240);
         background-color: rgb(100,130,200);
     }
 }
@@ -142,6 +143,36 @@
     font-size: 15px;
     color: rgb(130,130,130);
     font-weight: 100;
+}
+
+.profile-header-nav-number--is-influencer {
+    font-weight: bold;
+    color: rgb(0,226,174);
+}
+
+.profile-badge-influencer {
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+    color: rgb(251,251,251);
+    background-color: rgb(0,226,174);
+    padding: 4px 10px;
+    margin: 5px 0;
+
+    -webkit-border-radius: 20px;
+       -moz-border-radius: 20px;
+         -o-border-radius: 20px;
+            border-radius: 20px;
+}
+
+.profile-badge-influencer--checkmark {
+    position: relative;
+    top: 1px;
+    margin-left: 2px;
+    font-family: 'heydings_iconsregular';
+    font-weight: normal;
+    font-size: 14px;
+    color: rgb(251,251,251);
 }
 
 .profile-hr {

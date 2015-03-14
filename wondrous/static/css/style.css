@@ -909,17 +909,18 @@ a:hover {
   box-shadow: 0 2px 3px #646464; }
 
 .follow-button-blue {
-  padding: 7px 10px;
+  font-size: 14px;
   color: #fbfbfb;
   font-weight: 100;
+  padding: 4px 10px;
   background-color: #6482c8;
-  border: 3px solid #6482c8;
+  border: 2px solid #6482c8;
   cursor: pointer; }
   .follow-button-blue:hover {
-    border: 3px solid #6464f0;
+    border-color: #6464f0;
     background-color: #7891cc; }
   .follow-button-blue:active {
-    border: 3px solid #6464f0;
+    border-color: #6464f0;
     background-color: #6482c8; }
 
 .private-message-btn {
@@ -986,6 +987,32 @@ a:hover {
   font-size: 15px;
   color: #828282;
   font-weight: 100; }
+
+.profile-header-nav-number--is-influencer {
+  font-weight: bold;
+  color: #00e2ae; }
+
+.profile-badge-influencer {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+  color: #fbfbfb;
+  background-color: #00e2ae;
+  padding: 4px 10px;
+  margin: 5px 0;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px; }
+
+.profile-badge-influencer--checkmark {
+  position: relative;
+  top: 1px;
+  margin-left: 2px;
+  font-family: 'heydings_iconsregular';
+  font-weight: normal;
+  font-size: 14px;
+  color: #fbfbfb; }
 
 .profile-hr {
   margin: 0 auto;

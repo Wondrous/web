@@ -169,11 +169,16 @@ var Following = React.createClass({
 
 var ProfileBarBadge = React.createClass({
     render: function() {
+        var isInfluencer = null;
+        if (this.props.name == "influence") {
+            isInfluencer = this.props.number >= 75 ? "profile-header-nav-number--is-influencer" : null
+        }
+
         return (
             <Link activeClassName="profile-header-nav-link current-tab" className="profile-header-nav-link " to={this.props.to} params={{username: this.props.username}}>
                 <li className="profile-header-nav-item round-50">
                     <div className="profile-header-nav-title">{this.props.name}</div>
-                    <span className="profile-header-nav-number">{this.props.number}</span>
+                    <span className={isInfluencer}>{this.props.number}</span>
                 </li>
             </Link>
         );
@@ -232,6 +237,12 @@ var UserBar = React.createClass({
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var classes = "follow-button-blue round-2 ";
         var is_influencer = $.inArray(0, this.state.data.badges) !== null;
+
+        // This is temporary...
+        var wondrousScore = this.state.data.wondrous_score;
+        if (is_influencer && wondrousScore < 75) {
+            wondrousScore = 75;
+        }
         
         if (this.am_following) {
             var btnTitle = "Following";
@@ -245,17 +256,30 @@ var UserBar = React.createClass({
             <div className="profile-header">
                 <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
                 <div className="profile-header-content">
+
+                    {is_influencer ? 
+                        <div className="profile-badge-influencer round-2">
+                            Influencer <span className="profile-badge-influencer--checkmark">O</span>
+                        </div>
+                        : null}
+
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
-                    {is_influencer?"I AM A INFLUENCER DUDE":null}
-                    {!is_me ? <button className={classes} onClick={this.handleFollow}>{btnTitle}</button> : null}
+                    
+                    {!is_me ? 
+                        <div>
+                            <button style={{ marginTop: 10 }} className={classes} onClick={this.handleFollow}>
+                                {btnTitle}
+                            </button>
+                        </div>
+                        : null}
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
                     <ProfileBarBadge to={"wall"} name={"posts"} number={this.state.data.post_count} username={this.state.data.username} />
                     <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
                     <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
-                    <ProfileBarBadge to={"wall"} name={"score"} number={this.state.data.wondrous_score} username={this.state.data.username} />
+                    <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
                 </ul>
             </div>
         );
