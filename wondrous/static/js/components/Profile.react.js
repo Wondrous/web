@@ -236,9 +236,9 @@ var UserBar = React.createClass({
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var classes = "profile-header-nav-item follow-button round-50 ";
-        var is_influencer = $.inArray(0, this.state.data.badges) !== null;
+        var is_influencer = $.inArray(0, this.state.data.badges) != -1;
 
-        // This is temporary...
+        // This is temporary...sorta
         var wondrousScore = this.state.data.wondrous_score;
         if (is_influencer && wondrousScore < 75) {
             wondrousScore = 75;
