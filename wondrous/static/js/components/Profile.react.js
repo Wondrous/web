@@ -277,16 +277,16 @@ var UserBar = React.createClass({
                     {!is_me ?
                         <div>
                             <li className={classes} onClick={this.handleFollow}>
-                                <div className="profile-header-nav-title">{btnTitle}</div>
+                                <div className="profile-header-nav-title" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
                                 {!this.am_following ?
                                     <span>
                                         <span className="follow-button-plus">+</span>
-                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png" />
+                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                         :
                                     <span>
                                         <span style={{ display: "none"}} className="follow-button-plus">+</span>
-                                        <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png" />
+                                        <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                 }
                             </li>
