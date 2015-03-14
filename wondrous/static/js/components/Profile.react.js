@@ -235,7 +235,7 @@ var UserBar = React.createClass({
         var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        var classes = "follow-button round-2 ";
+        var classes = "profile-header-nav-item follow-button round-50 ";
         var is_influencer = $.inArray(0, this.state.data.badges) !== null;
 
         // This is temporary...
@@ -245,10 +245,10 @@ var UserBar = React.createClass({
         }
         
         if (this.am_following) {
-            var btnTitle = "Following";
+            var btnTitle = "following";
             classes += "is-following";
         } else {
-            var btnTitle = "Follow";
+            var btnTitle = "follow";
             classes += "not-following";
         }
 
@@ -265,14 +265,7 @@ var UserBar = React.createClass({
 
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
-                    
-                    {!is_me ? 
-                        <div>
-                            <button style={{ margin: "25px 0 9px" }} className={classes} onClick={this.handleFollow}>
-                                {btnTitle}
-                            </button>
-                        </div>
-                        : null}
+
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">
@@ -280,6 +273,15 @@ var UserBar = React.createClass({
                     <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
                     <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
                     <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
+                    
+                    {!is_me ?
+                        <div>
+                            <li style={{ marginLeft: 10 }} className={classes} onClick={this.handleFollow}>
+                                <div className="profile-header-nav-title">{btnTitle}</div>
+                                <span className="follow-button-plus">+</span>
+                            </li>
+                        </div>
+                        : null}
                 </ul>
             </div>
         );

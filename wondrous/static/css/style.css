@@ -705,25 +705,32 @@ a:hover {
     border: 3px solid #00c88c; }
 
 .follow-button {
-  font-size: 14px;
-  padding: 4px 15px; }
+  border: 1px solid #eaeaea !important;
+  padding: 25px 0 !important;
+  cursor: pointer; }
+
+.follow-button > .profile-header-nav-title {
+  text-transform: uppercase;
+  font-size: 11px; }
+
+.follow-button.is-following > .profile-header-nav-title {
+  font-weight: bold; }
+
+.follow-button-plus {
+  position: relative;
+  top: -12px;
+  font-size: 38px;
+  font-weight: 100;
+  color: #b4b4b4; }
 
 .is-following {
-  border: 2px solid #0078fa;
-  background-color: #0078fa;
-  color: #fbfbfb;
-  font-weight: 100; }
+  border-color: #1bc922 !important; }
 
 .not-following {
-  border: 2px solid #dddddd;
-  background-color: #f1f1f1;
-  color: #797979;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out; }
-  .not-following:hover {
-    border-color: #0078fa; }
 
 .landing-wrapper-1 {
   position: absolute;
@@ -947,15 +954,19 @@ a:hover {
 .profile-header-nav-item {
   display: inline-block;
   vertical-align: top;
-  padding: 23px 0;
-  height: 90px;
-  width: 90px;
+  /*    padding: 23px 0;
+    height: 90px;
+    width: 90px;*/
+  padding: 21px 0;
+  height: 85px;
+  width: 85px;
+  border: 1px solid white;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out; }
   .profile-header-nav-item:hover {
-    background-color: whitesmoke; }
+    background-color: #f8f8f8; }
 
 .profile-header-nav-link {
   padding: 0;

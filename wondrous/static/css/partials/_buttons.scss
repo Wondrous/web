@@ -43,28 +43,35 @@ a:hover {text-decoration: underline;}
 }
 
 .follow-button {
-    font-size: 14px;
-    padding: 4px 15px;
+    border: 1px solid rgb(234,234,234) !important;
+    padding: 25px 0 !important;
+    cursor: pointer;
+}
+
+.follow-button > .profile-header-nav-title {
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.follow-button.is-following > .profile-header-nav-title {
+    font-weight: bold;
+}
+
+.follow-button-plus {
+    position: relative;
+    top: -12px;
+    font-size: 38px;
+    font-weight: 100;
+    color: rgb(180,180,180);
 }
 
 .is-following {
-    border: 2px solid rgb(0,120,250);
-    background-color: rgb(0,120,250);
-    color: rgb(251,251,251);
-    font-weight: 100;
+    border-color: rgb(27,201,34) !important;
 }
 
 .not-following {
-    border: 2px solid rgb(221,221,221);
-    background-color: rgb(241,241,241);
-    color: rgb(121,121,121);
-
     -webkit-transition: all 0.30s ease-in-out;
        -moz-transition: all 0.30s ease-in-out;
         -ms-transition: all 0.30s ease-in-out;
          -o-transition: all 0.30s ease-in-out;
-         
-    &:hover {
-        border-color: rgb(0,120,250);
-    }
 }
