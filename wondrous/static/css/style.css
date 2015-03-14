@@ -705,6 +705,7 @@ a:hover {
     border: 3px solid #00c88c; }
 
 .follow-button {
+  font-size: 14px;
   padding: 4px 15px; }
 
 .is-following {
@@ -908,21 +909,6 @@ a:hover {
   -o-box-shadow: 0 2px 3px #646464;
   box-shadow: 0 2px 3px #646464; }
 
-.follow-button-blue {
-  font-size: 14px;
-  color: #fbfbfb;
-  font-weight: 100;
-  padding: 4px 10px;
-  background-color: #6482c8;
-  border: 2px solid #6482c8;
-  cursor: pointer; }
-  .follow-button-blue:hover {
-    border-color: #6464f0;
-    background-color: #7891cc; }
-  .follow-button-blue:active {
-    border-color: #6464f0;
-    background-color: #6482c8; }
-
 .private-message-btn {
   padding: 10px 15px;
   color: #5b5b5b;
@@ -930,8 +916,7 @@ a:hover {
   border: 3px solid #bebebe;
   cursor: pointer; }
   .private-message-btn:hover {
-    border: 3px solid #8c8c8c;
-    background-color: #f1f1f8; }
+    border: 3px solid #8c8c8c; }
   .private-message-btn:active {
     border: 3px solid #6e6e6e;
     background-color: #eaeaea; }

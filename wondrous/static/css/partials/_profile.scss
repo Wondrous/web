@@ -45,26 +45,6 @@
             box-shadow: 0 2px 3px rgb(100,100,100);
 }
 
-.follow-button-blue {
-    font-size: 14px;
-    color: rgb(251,251,251);
-    font-weight: 100;
-    padding: 4px 10px;
-    background-color: rgb(100,130,200);
-    border: 2px solid rgb(100,130,200);
-    cursor: pointer;
-
-    &:hover {
-        border-color: rgb(100,100,240);
-        background-color: rgb(120,145,204);
-    }
-
-    &:active {
-        border-color: rgb(100,100,240);
-        background-color: rgb(100,130,200);
-    }
-}
-
 .private-message-btn {
     padding: 10px 15px;
     color: rgb(91,91,91);
@@ -74,7 +54,6 @@
 
     &:hover {
         border: 3px solid rgb(140,140,140);
-        background-color: rgb(241,241,248);
     }
     &:active {
         border: 3px solid rgb(110,110,110);
