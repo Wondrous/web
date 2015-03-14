@@ -198,7 +198,10 @@ var ProfileBarBadge = React.createClass({
 })
 
 var UserBar = React.createClass({
-    mixins: [ Router.Navigation, Reflux.listenTo(ProfileStore,'onProfileChange')],
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(ProfileStore,'onProfileChange')
+    ],
 
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
@@ -216,8 +219,7 @@ var UserBar = React.createClass({
         if (err == null){
             var currentState = this.state.data;
             currentState.following = data.following == true;
-
-            this.setState({data:currentState});
+            this.setState({data: currentState});
         } else{
             console.error("error", err);
         }
