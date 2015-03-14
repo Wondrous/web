@@ -268,7 +268,7 @@ var UserBar = React.createClass({
                     
                     {!is_me ? 
                         <div>
-                            <button style={{ marginTop: 10 }} className={classes} onClick={this.handleFollow}>
+                            <button style={{ margin: "25px 0 9px" }} className={classes} onClick={this.handleFollow}>
                                 {btnTitle}
                             </button>
                         </div>
