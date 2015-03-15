@@ -2159,7 +2159,7 @@ a:hover {
   top: 0; }
 
 .post-comment-content {
-  font-family: helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-size: 15px;
   color: #474747;
   padding: 0 8px 0 32px; }
@@ -2246,7 +2246,8 @@ a:hover {
   border: none;
   background-color: #eaeaea;
   font-family: helvetica, arial, sans-serif;
-  font-size: 15px; }
+  font-size: 15px;
+  line-height: 17px; }
   .banner-input:focus {
     outline: none;
     background-color: #e4e4e4; }
@@ -2370,7 +2371,7 @@ a:hover {
 .sidemenuOptions {
   margin: 10px;
   margin-top: 15px;
-  font-family: helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-weight: 100; }
 
 .notificationTextPosition {
