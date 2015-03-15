@@ -220,7 +220,7 @@ var ProfileBarBadge = React.createClass({
 var UserBar = React.createClass({
     mixins: [
         Router.Navigation,
-        Reflux.listenTo(ProfileStore,'onProfileChange')
+        Reflux.listenTo(ProfileStore, 'onProfileChange')
     ],
 
     am_following: ProfileStore.user.following,
@@ -332,35 +332,35 @@ var UserBar = React.createClass({
 });
 
 var PrivateProfile = React.createClass({
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(ProfileStore, 'onProfileChange')
+    ],
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
 
     handleData: function(err, data){
         if (err == null){
-            // $(this.refs.requestBtn.getDOMNode()).html('request sent!');
-            // $(this.refs.requestBtn.getDOMNode()).prop("disabled", true);
-
             $('._rmPending').hide();
             $('._pendingTitle').html("Request<br/>Sent");
             $('._requestBtn').removeClass('not-following').addClass('is-pending');
-
-
         } else {
             console.error("error", err);
         }
     },
     handleClick :function(){
         user_id = this.props.user.id;
-        console.log("sending", this.props.user);
+        //console.log("sending", this.props.user);
 
-        if(!user_id && typeof user_id === 'undefined') return;
+        if (!user_id && typeof user_id === 'undefined') return;
         WondrousAPI.toggleFollow({
             user_id: user_id,
             callback: this.handleData
         })
     },
     render: function() {
-        var img_src = (typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
+        var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         var classes = "profile-header-nav-item follow-button round-50 _requestBtn ";
         if (this.am_following) {
@@ -372,26 +372,36 @@ var PrivateProfile = React.createClass({
         }
 
         return (
-            <div className="profile-header">
-                <img className="profile-photo round-50" src={img_src} />
-                <div className="profile-header-content">
-                    <div className="profile-name">{this.props.user.name}</div>
-                    <div className="profile-username">@{this.props.user.username}</div>
-                    <div style={{ marginTop: 20 }}>
-                        <li className={classes} onClick={this.handleClick}>
-                            <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
-                            {!this.am_following ?
-                                <span className="_rmPending">
-                                    <span className="follow-button-plus">+</span>
-                                    <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
-                                </span>
-                                    :
-                                <span className="_rmPending">
-                                    <span style={{ display: "none"}} className="follow-button-plus">+</span>
-                                    <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
-                                </span>
-                            }
-                        </li>
+            <div>
+                <div className="profile-header">
+                    <img className="profile-photo round-50" src={img_src} />
+                    <div className="profile-header-content">
+                        <div className="profile-name">{this.props.user.name}</div>
+                        <div className="profile-username">@{this.props.user.username}</div>
+                        <div style={{ marginTop: 20 }}>
+                            <li className={classes} onClick={this.handleClick}>
+                                <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
+                                {!this.am_following ?
+                                    <span className="_rmPending">
+                                        <span className="follow-button-plus">+</span>
+                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                    </span>
+                                        :
+                                    <span className="_rmPending">
+                                        <span style={{ display: "none"}} className="follow-button-plus">+</span>
+                                        <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                    </span>
+                                }
+                            </li>
+                        </div>
+                    </div>
+                </div>
+                <div className="profile-content">
+                    <div style={{ textAlign: "center", margin: "80px 0 30px", color: "rgb(180,180,180)", fontWeight: 900 }}>
+                        This profile is private
+                        <div style={{ fontFamily: 'heydings_iconsregular', fontSize: 90, left: 1 }}>
+                            L
+                        </div>
                     </div>
                 </div>
             </div>

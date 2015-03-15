@@ -269,7 +269,7 @@ class AccountManager(BaseManager):
         return data
 
     @classmethod
-    def get_json_by_username(cls, user, user_id = None, username = None, auth = False):
+    def get_json_by_username(cls, user, user_id=None, username=None, auth=False):
         if not user_id and not username:
             return {'error': 'no users found!'}
 
@@ -332,12 +332,15 @@ class AccountManager(BaseManager):
         if profile_user and profile_user.id == user.id:
             retval = follow_data
             DBSession.refresh(profile_user)
+            
             retval.update(profile_user.json(1))
             retval.update({"name": profile_user.ascii_name})
             retval.update({"unseen_notifications": unseen_notification_count})
-            picture_object = profile_user.picture_object
 
             cls.add_influencer(profile_user)
+
+            # Add in profile picture to JSON
+            picture_object = profile_user.picture_object
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
             if auth:
@@ -354,9 +357,11 @@ class AccountManager(BaseManager):
             retval.update(profile_user.json(0))
             retval.update({"name": profile_user.ascii_name})
 
+            # Add in profile picture to JSON
             picture_object = profile_user.picture_object
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
+            
             return retval
 
         elif profile_user.is_private and not profile_user.is_banned and profile_user.is_active:
@@ -365,6 +370,12 @@ class AccountManager(BaseManager):
             retval.update({"name": profile_user.ascii_name})
             retval.update({'is_private': True})
             retval.update({'id': profile_user.id})
+
+            # Add in profile picture to JSON
+            picture_object = profile_user.picture_object
+            if picture_object:
+                retval.update({"ouuid": picture_object.ouuid})
+
             return retval
 
         return {'error':'no users found!'}
