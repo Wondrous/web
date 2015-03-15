@@ -226,7 +226,7 @@ class AccountManager(BaseManager):
         if (datetime.now()<datetime(year=2015,month=4,day=15)):
             #TODO determine the datetime we can automatically endorse influencers
             try:
-                b = Badge(user_id=user.id,badge_type=Badge.INFLUENCER)
+                b = Badge(user_id=user.id, badge_type=Badge.INFLUENCER)
                 DBSession.add(b)
                 DBSession.flush()
             except Exception, e:
@@ -337,7 +337,7 @@ class AccountManager(BaseManager):
             retval.update({"name": profile_user.ascii_name})
             retval.update({"unseen_notifications": unseen_notification_count})
 
-            cls.add_influencer(profile_user)
+            cls.add_influencer(profile_user)  # QUESTION: What does this do here?
 
             # Add in profile picture to JSON
             picture_object = profile_user.picture_object
@@ -370,6 +370,7 @@ class AccountManager(BaseManager):
             retval.update({"name": profile_user.ascii_name})
             retval.update({'is_private': True})
             retval.update({'id': profile_user.id})
+            retval.update({'badges': profile_user.json(0)['badges']})
 
             # Add in profile picture to JSON
             picture_object = profile_user.picture_object

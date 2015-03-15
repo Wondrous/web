@@ -231,7 +231,9 @@ var UserBar = React.createClass({
             data: ProfileStore.user
         });
     },
+
     getInitialState: function() {
+        console.log(ProfileStore.user);
         return {data: ProfileStore.user};
     },
 
@@ -339,6 +341,10 @@ var PrivateProfile = React.createClass({
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
 
+    getInitialState: function() {
+        return {data: ProfileStore.user};
+    },
+
     handleData: function(err, data){
         if (err == null){
             $('._rmPending').hide();
@@ -348,6 +354,7 @@ var PrivateProfile = React.createClass({
             console.error("error", err);
         }
     },
+
     handleClick :function(){
         user_id = this.props.user.id;
         //console.log("sending", this.props.user);
@@ -371,11 +378,18 @@ var PrivateProfile = React.createClass({
             classes += "not-following";
         }
 
+        var is_influencer = $.inArray(0, this.state.data.badges) != -1;
+
         return (
             <div>
                 <div className="profile-header">
                     <img className="profile-photo round-50" src={img_src} />
                     <div className="profile-header-content">
+
+                        {is_influencer ?
+                            <InfluencerBadge size="large" />
+                            : null}
+
                         <div className="profile-name">{this.props.user.name}</div>
                         <div className="profile-username">@{this.props.user.username}</div>
                         <div style={{ marginTop: 20 }}>
