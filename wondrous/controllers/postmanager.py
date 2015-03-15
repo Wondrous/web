@@ -131,21 +131,14 @@ class PostManager(BaseManager):
 
     @staticmethod
     def notify_followers(post_id,user_id):
-        #TODO MOVE TO GOLANG SIDE
-        #TODO THIS WILL BLOCK LIKE A MOTHERFUCKER
-        for u_id in DBSession.query(User.id).join(Vote,User.id==Vote.user_id).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
-            filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).distinct():
-            u_id = u_id[0]
-            if user_id!=u_id:
-
-                new_notification = Notification(
-                                    from_user_id=user_id,
-                                    to_user_id=u_id,
-                                    subject_id=post_id,
-                                    notification="",
-                                    reason=Notification.FEED,
-                                    is_seen=True)
-                send_notification(u_id, new_notification.json())
+        new_notification = Notification(
+                            from_user_id=user_id,
+                            to_user_id=0,
+                            subject_id=post_id,
+                            notification="",
+                            reason=Notification.FEED,
+                            is_seen=True)
+        send_notification(0, new_notification.json())
 
     @classmethod
     def move_n_posts_into_feed(cls,from_user_id,to_user_id,n=5):
@@ -250,6 +243,7 @@ class PostManager(BaseManager):
                             to_user_id=post.original.user_id,
                             subject_id=post.id,
                             reason=Notification.REPOSTED)
+        cls.notify_followers(post.id,user.id)
         return data
 
     @classmethod
