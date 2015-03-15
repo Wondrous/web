@@ -52,9 +52,10 @@ class VoteManager(BaseManager):
     @classmethod
     def vote_json(cls, user, subject_id, vote_type, action):
         from_user_id = user.id
-        subject_id      = long(subject_id)
+        subject_id   = long(subject_id)
         vote_type    = int(vote_type)
         action       = int(action)
+        
         # Translate action
         vote = None
 
@@ -65,21 +66,21 @@ class VoteManager(BaseManager):
                 pass
 
             if vote:
-                return {"like":vote.status==Vote.LIKED}
+                return {"like": vote.status==Vote.LIKED}
             else:
-                return {'error':'post not voted'}
+                return {'error': 'post not voted'}
 
         elif vote_type == Vote.USER:
             if action == VoteAction.FOLLOW:
-                vote = cls.follow(from_user_id,subject_id)
+                vote = cls.follow(from_user_id, subject_id)
             elif action == VoteAction.ACCEPT:
-                vote = cls.accept(from_user_id,subject_id)
+                vote = cls.accept(from_user_id, subject_id)
             elif action == VoteAction.CANCEL:
-                vote = cls.cancel(from_user_id,subject_id)
+                vote = cls.cancel(from_user_id, subject_id)
             elif action == VoteAction.BLOCK:
-                vote = cls.block(from_user_id,subject_id)
+                vote = cls.block(from_user_id, subject_id)
             elif action == VoteAction.DENY:
-                vote = cls.deny(from_user_id,subject_id)
+                vote = cls.deny(from_user_id, subject_id)
             elif action == VoteAction.TOPFRIEND:
                 pass  # TODO
 
@@ -88,7 +89,7 @@ class VoteManager(BaseManager):
                 DBSession.flush()
                 if vote_type == Vote.USER:
                     return {
-                        "following" : vote.status == Vote.FOLLOWED or vote.status == Vote.TOPFRIEND,
+                        "following"       : vote.status == Vote.FOLLOWED or vote.status == Vote.TOPFRIEND,
                         "total_following" : cls.get_following_count(subject_id),
                         "total_follower"  : cls.get_follower_count(subject_id),
                     }
