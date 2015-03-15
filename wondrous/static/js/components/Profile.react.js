@@ -65,6 +65,28 @@ var Wall = React.createClass({
     }
 });
 
+var InfluencerBadge = React.createClass({
+
+    render: function() {
+
+        var size = this.props.size;
+        styleAdjustmentsWrapper = null;
+        styleAdjustmentsCheckmark = null;
+
+        if (size == "small") {
+            styleAdjustmentsWrapper = { fontSize: 11, fontWeight: 400, padding: "2px 6px" };
+            styleAdjustmentsCheckmark = { marginLeft: 3, fontSize: 11 };
+        }
+
+        return (
+            <div className="profile-badge-influencer round-2" style={styleAdjustmentsWrapper}>
+                Influencer
+                <span className="profile-badge-influencer--checkmark" style={styleAdjustmentsCheckmark}>O</span>
+            </div>
+        );
+    }
+});
+
 
 var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
@@ -83,9 +105,7 @@ var UserIcon = React.createClass({
                         @{ this.props.user.username }
                     </div>
                     {is_influencer ?
-                        <div className="profile-badge-influencer round-2">
-                            Influencer <span className="profile-badge-influencer--checkmark">O</span>
-                        </div>
+                        <InfluencerBadge size="small" />
                         : null}
                 </div>
             </li>
@@ -272,9 +292,7 @@ var UserBar = React.createClass({
                 <div className="profile-header-content">
 
                     {is_influencer ?
-                        <div className="profile-badge-influencer round-2">
-                            Influencer <span className="profile-badge-influencer--checkmark">O</span>
-                        </div>
+                        <InfluencerBadge size="large" />
                         : null}
 
                     <div className="profile-name">{this.state.data.name}</div>
