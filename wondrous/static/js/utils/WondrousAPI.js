@@ -67,9 +67,9 @@ module.exports = {
     toggleFollow: function(options) {
         var callback = options.callback;
         data = {
-            subject_id:options.user_id,
-            action:VoteAction.FOLLOW,
-            vote_type:1
+            subject_id: options.user_id,
+            action: VoteAction.FOLLOW,
+            vote_type: 1
         }
 
         var url = '/api/user/vote';

@@ -727,6 +727,10 @@ a:hover {
 .follow-button.is-following > .profile-header-nav-title {
   font-weight: bold; }
 
+.follow-button.is-pending > .profile-header-nav-title {
+  font-weight: bold;
+  font-size: 12px; }
+
 .follow-button-plus {
   position: relative;
   top: -12px;
@@ -752,6 +756,14 @@ a:hover {
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out; }
+
+.is-pending {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+  cursor: default;
+  background-color: #f8f8f8 !important; }
 
 .landing-wrapper-1 {
   position: absolute;

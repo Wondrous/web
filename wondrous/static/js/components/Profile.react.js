@@ -249,8 +249,8 @@ var UserBar = React.createClass({
         if (!user_id && typeof user_id === 'undefined') return;
 
         WondrousAPI.toggleFollow({
-            user_id:user_id,
-            callback:this.handleData
+            user_id: user_id,
+            callback: this.handleData
         })
     },
 
@@ -265,6 +265,7 @@ var UserBar = React.createClass({
         this.is_private = ProfileStore.user.is_private;
         this.am_following = this.state.data.following == true;
         console.log("am following?",this.am_following);
+        
         var username = this.props.username;
         var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
@@ -336,8 +337,14 @@ var PrivateProfile = React.createClass({
 
     handleData: function(err, data){
         if (err == null){
-            $(this.refs.requestBtn.getDOMNode()).html('request sent!');
-            $(this.refs.requestBtn.getDOMNode()).prop("disabled", true);
+            // $(this.refs.requestBtn.getDOMNode()).html('request sent!');
+            // $(this.refs.requestBtn.getDOMNode()).prop("disabled", true);
+
+            $('._rmPending').hide();
+            $('._pendingTitle').html("Request<br/>Sent");
+            $('._requestBtn').removeClass('not-following').addClass('is-pending');
+
+
         } else {
             console.error("error", err);
         }
@@ -348,14 +355,14 @@ var PrivateProfile = React.createClass({
 
         if(!user_id && typeof user_id === 'undefined') return;
         WondrousAPI.toggleFollow({
-            user_id:user_id,
-            callback:this.handleData
+            user_id: user_id,
+            callback: this.handleData
         })
     },
     render: function() {
         var img_src = (typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
 
-        var classes = "profile-header-nav-item follow-button round-50 ";
+        var classes = "profile-header-nav-item follow-button round-50 _requestBtn ";
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
@@ -372,14 +379,14 @@ var PrivateProfile = React.createClass({
                     <div className="profile-username">@{this.props.user.username}</div>
                     <div style={{ marginTop: 20 }}>
                         <li className={classes} onClick={this.handleClick}>
-                            <div className="profile-header-nav-title" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
+                            <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
                             {!this.am_following ?
-                                <span>
+                                <span className="_rmPending">
                                     <span className="follow-button-plus">+</span>
                                     <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                 </span>
                                     :
-                                <span>
+                                <span className="_rmPending">
                                     <span style={{ display: "none"}} className="follow-button-plus">+</span>
                                     <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                 </span>
@@ -393,13 +400,18 @@ var PrivateProfile = React.createClass({
 });
 
 var Profile = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.listenTo(ProfileStore,"onProfileChange")],
+    mixins: [
+        Router.Navigation,
+        Router.State,
+        Reflux.listenTo(ProfileStore,"onProfileChange")
+    ],
+    
     onProfileChange: function(){
-        if (!UserStore.loggedIn&&UserStore.loaded) {
+        if (!UserStore.loggedIn && UserStore.loaded) {
             this.transitionTo('/');
         } else {
             var username = this.getParams().username;
-            if(ProfileStore.user.username === username){
+            if (ProfileStore.user.username === username){
                 this.forceUpdate();
             }
         }
