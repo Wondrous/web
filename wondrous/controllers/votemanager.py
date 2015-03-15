@@ -138,25 +138,20 @@ class VoteManager(BaseManager):
             status = Vote.FOLLOWED
             reason = Notification.FOLLOWED
 
-        # Notify if needed
-        new_notification = NotificationManager.add(
-                            from_user_id=from_user_id,
-                            to_user_id=to_user_id,
-                            subject_id=from_user_id,
-                            reason=reason)
-
         # Change the current one if it exists
         vote = Vote.by_kwargs(user_id=from_user_id,
                               subject_id=to_user_id,
                               vote_type=Vote.USER).first()
 
-        _scary_vote_list = Vote.by_kwargs(user_id=from_user_id,
-                                          subject_id=to_user_id,
-                                          vote_type=Vote.USER).all()
-        print "----------------"
-        for v in _scary_vote_list:
-            print "STATUS: {0}, USER_ID: {1}, SUBJECT_ID: {2}".format(v.status, v.user_id, v.subject_id)
-        print "----------------"
+        # If we toggle from follow to unfollow, don't send a notification.
+        # Thus, the vote.status is currently follow, but it will change to unfollow.
+        if vote.status != Vote.FOLLOWED:
+            # Notify if needed
+            # TODO: Don't send notification for an unfollow
+            NotificationManager.add(from_user_id=from_user_id,
+                                    to_user_id=to_user_id,
+                                    subject_id=from_user_id,
+                                    reason=reason)
 
         # If we have a vote, it's not pending, and we're not blocked...
         if vote and (vote.status != Vote.PENDING) and not cls.is_blocked_by(from_user_id, to_user_id):
@@ -221,6 +216,7 @@ class VoteManager(BaseManager):
         """
 
         vote = Vote.by_kwargs(user_id=to_user_id, subject_id=from_user_id, vote_type=Vote.USER).first()
+
         if vote.status == Vote.PENDING:
             vote.status = Vote.FOLLOWED
             NotificationManager.delete(
@@ -238,6 +234,7 @@ class VoteManager(BaseManager):
         """
             PURPOSE: Checks if there exists a relationship between an object, this is a toggle
         """
+
         post = Post.by_id(post_id)
         if not post:
             return {'error':'bad id'}
@@ -263,7 +260,6 @@ class VoteManager(BaseManager):
                                 to_user_id=post.user_id,
                                 subject_id=post_id,
                                 reason=Notification.LIKED)
-
 
         DBSession.flush()
         return vote

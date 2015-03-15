@@ -51,7 +51,7 @@ class NotificationManager(BaseManager):
         DBSession.flush()
 
     @classmethod
-    def add(cls,from_user_id, to_user_id, reason, subject_id, is_seen=False):
+    def add(cls, from_user_id, to_user_id, reason, subject_id, is_seen=False):
 
         """
             PARAMS: 4 params:
@@ -86,24 +86,30 @@ class NotificationManager(BaseManager):
             DBSession.flush()
 
         # Send to realtime push
-        if  reason in [Notification.FOLLOW_ACCEPTED,Notification.FOLLOW_REQUEST,\
-            Notification.LIKED, Notification.FOLLOW_ACCEPTED, Notification.COMMENTED, Notification.MENTIONED, Notification.FEED]:
+        if  reason in [Notification.FOLLOW_ACCEPTED,
+                       Notification.FOLLOW_REQUEST,
+                       Notification.LIKED,
+                       Notification.FOLLOW_ACCEPTED,
+                       Notification.COMMENTED,
+                       Notification.MENTIONED,
+                       Notification.FEED]:
+
             note_dict = new_notification.json()
             from_user = new_notification.from_user
-            to_user = new_notification.to_user
+            to_user   = new_notification.to_user
 
             note_dict.update({"to_user_username":to_user.username});
             note_dict.update({"to_user_name":to_user.name})
 
             note_dict.update({"from_user_username":from_user.username});
             note_dict.update({"from_user_name":from_user.name})
+
             if from_user.picture_object:
                 note_dict.update({"from_user_ouuid": from_user.picture_object.ouuid})
+
             send_notification(to_user_id, note_dict)
 
-
         logging.debug("new notification?"+str(new_notification.reason))
-
         return new_notification
 
     @classmethod

@@ -355,7 +355,7 @@ var PrivateProfile = React.createClass({
     render: function() {
         var img_src = (typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
 
-        var classes = "follow-button-blue round-2 ";
+        var classes = "profile-header-nav-item follow-button round-50 ";
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
@@ -370,7 +370,22 @@ var PrivateProfile = React.createClass({
                 <div className="profile-header-content">
                     <div className="profile-name">{this.props.user.name}</div>
                     <div className="profile-username">@{this.props.user.username}</div>
-                    <button className={classes} style={{ marginTop: 12 }} onClick={this.handleClick} ref="requestBtn">Request to Follow</button>
+                    <div style={{ marginTop: 20 }}>
+                        <li className={classes} onClick={this.handleClick}>
+                            <div className="profile-header-nav-title" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
+                            {!this.am_following ?
+                                <span>
+                                    <span className="follow-button-plus">+</span>
+                                    <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                </span>
+                                    :
+                                <span>
+                                    <span style={{ display: "none"}} className="follow-button-plus">+</span>
+                                    <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                </span>
+                            }
+                        </li>
+                    </div>
                 </div>
             </div>
         );
