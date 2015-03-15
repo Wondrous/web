@@ -82,7 +82,7 @@ var UserIcon = React.createClass({
                     <div className="user-itemizer-data-desc">
                         @{ this.props.user.username }
                     </div>
-                    {is_influencer ? 
+                    {is_influencer ?
                         <div className="profile-badge-influencer round-2">
                             Influencer <span className="profile-badge-influencer--checkmark">O</span>
                         </div>
@@ -101,7 +101,7 @@ var Follower = React.createClass({
     ],
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
-    
+
     onProfileChange: function(profileData){
         if (profileData.hasOwnProperty('followers')){
             this.setState({data:profileData.followers});
@@ -244,7 +244,7 @@ var UserBar = React.createClass({
     render: function() {
         this.is_private = ProfileStore.user.is_private;
         this.am_following = this.state.data.following == true;
-
+        console.log("am following?",this.am_following);
         var username = this.props.username;
         var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
@@ -257,7 +257,7 @@ var UserBar = React.createClass({
         if (is_influencer && wondrousScore < 75) {
             wondrousScore = 75;
         }
-        
+
         if (this.am_following) {
             var btnTitle = "following";
             classes += "is-following";
@@ -271,7 +271,7 @@ var UserBar = React.createClass({
                 <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
                 <div className="profile-header-content">
 
-                    {is_influencer ? 
+                    {is_influencer ?
                         <div className="profile-badge-influencer round-2">
                             Influencer <span className="profile-badge-influencer--checkmark">O</span>
                         </div>
@@ -287,7 +287,7 @@ var UserBar = React.createClass({
                     <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
                     <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
                     <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
-                    
+
                     {!is_me ?
                         <div>
                             <li className={classes} onClick={this.handleFollow}>
