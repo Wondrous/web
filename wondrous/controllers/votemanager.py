@@ -26,7 +26,15 @@ from wondrous.controllers.notificationmanager import NotificationManager
 import wondrous.controllers
 
 class VoteAction:
-    LIKED, BOOKMARKED, CANCEL, FOLLOW, ACCEPT, BLOCK, DENY, TOPFRIEND = range(8)
+    (LIKED,      # 0
+     BOOKMARKED, # 1
+     CANCEL,     # 2
+     FOLLOW,     # 3
+     ACCEPT,     # 4
+     BLOCK,      # 5
+     DENY,       # 6
+     TOPFRIEND   # 7
+    ) = xrange(8)
 
 
 class VoteManager(BaseManager):
@@ -61,7 +69,7 @@ class VoteManager(BaseManager):
 
         if vote_type == Vote.OBJECT:
             if action == VoteAction.LIKED:
-                vote = cls.like(from_user_id,subject_id)
+                vote = cls.like(from_user_id, subject_id)
             elif action == VoteAction.BOOKMARKED:
                 pass
 
@@ -100,9 +108,25 @@ class VoteManager(BaseManager):
 
     @classmethod
     def follow(cls, from_user_id, to_user_id):
+        
         """
             PURPOSE: This is a toggle method, follow -> unfollow, vice versa
+
+            TODO:
+            IF PRIVATE:
+                We must have an "Accept" and "Deny" option,
+                so that if you click accept, you now follow,
+                but if you click "Deny", the row is deleted
+                and the request vanishes from system. This also
+                implies that the user who submitted the request
+                can re-submit the request if it was denied.
+
+                If you chose to do nothing (i.e., click neither
+                "accept" or "deny"), then the user who submitted the
+                request can not submit anything else – it's simply
+                "Request Pending" with no other course of action.
         """
+
         # If profile is private, request, else follow
         is_private = AccountManager.is_private(to_user_id)
 
@@ -122,18 +146,34 @@ class VoteManager(BaseManager):
                             reason=reason)
 
         # Change the current one if it exists
-        vote = Vote.by_kwargs(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER).first()
-        if vote and vote.status!=Vote.PENDING and not cls.is_blocked_by(from_user_id,to_user_id):
-            if status == Vote.PENDING and vote.status!=Vote.FOLLOWED:
+        vote = Vote.by_kwargs(user_id=from_user_id,
+                              subject_id=to_user_id,
+                              vote_type=Vote.USER).first()
+
+        _scary_vote_list = Vote.by_kwargs(user_id=from_user_id,
+                                          subject_id=to_user_id,
+                                          vote_type=Vote.USER).all()
+        print "----------------"
+        for v in _scary_vote_list:
+            print "STATUS: {0}, USER_ID: {1}, SUBJECT_ID: {2}".format(v.status, v.user_id, v.subject_id)
+        print "----------------"
+
+        # If we have a vote, it's not pending, and we're not blocked...
+        if vote and (vote.status != Vote.PENDING) and not cls.is_blocked_by(from_user_id, to_user_id):
+
+            if status == Vote.PENDING and vote.status != Vote.FOLLOWED:
                 vote.status = status
             elif (vote.status != Vote.PENDING or not is_private):
                 vote.status = Vote.UNFOLLOWED if vote.status==Vote.FOLLOWED else status
         else:
-            vote = Vote(user_id=from_user_id, subject_id=to_user_id, vote_type=Vote.USER, status=status)
+            vote = Vote(user_id=from_user_id,
+                        subject_id=to_user_id,
+                        vote_type=Vote.USER,
+                        status=status)
 
-        if status==Vote.FOLLOWED:
-            # add some posts to feed
-            wondrous.controllers.PostManager.move_n_posts_into_feed(vote.subject_id,vote.user_id)
+        # If we have a new follow, add posts to the feed...
+        if status == Vote.FOLLOWED:
+            wondrous.controllers.PostManager.move_n_posts_into_feed(vote.subject_id, vote.user_id)
 
         return vote
 

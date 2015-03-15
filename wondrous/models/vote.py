@@ -37,10 +37,10 @@ class Vote(Base, BaseMixin):
 
         This is always a one to one (one to many abstracted)
         Vote is similar to an intermediary model
-
     """
 
     (OBJECT, USER) = xrange(2)
+    
     (UNLIKED,       # 0
      LIKED,         # 1
      BOOKMARKED,    # 2
@@ -53,7 +53,7 @@ class Vote(Base, BaseMixin):
 
     vote_type = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
-    user_id = Column(BigInteger,ForeignKey('user.id'), nullable=False, index=True)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     user = relationship("User", backref=backref("votes"))
     subject_id = Column(BigInteger, index=True)
 
