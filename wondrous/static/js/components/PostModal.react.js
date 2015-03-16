@@ -160,7 +160,7 @@ var Comments = React.createClass({
                 {!PostStore.donePaging&&comments.length>0 ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
                 {comments}
                 {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div> : null}
-                <form style={{ marginLeft: 28, marginRight: 10 }} >
+                <form style={{ margin: "0 28px" }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>
                 </form>
