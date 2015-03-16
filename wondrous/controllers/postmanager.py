@@ -41,7 +41,9 @@ from wondrous.models import (
     User,
     Vote,
     PostView,
-    Notification
+    Notification,
+    ReportedComment,
+    ReportedPost
     # Vote,
 )
 
@@ -50,6 +52,29 @@ from wondrous.utilities.validation_utilities import ValidatePost
 from wondrous.utilities.notification_utilities import send_notification
 
 class PostManager(BaseManager):
+
+    @staticmethod
+    def report_comment(user,comment_id,reason,text=None):
+        user_id = user.id
+        
+        try:
+            rc = ReportedComment(user_id = post_id, comment_id = comment_id, reason = reason, text = text)
+            DBSession.add(rc)
+            DBSession.flush()
+            return {"status": "comment reported"}
+        except Exception, e:
+            return {"error": "already submitted"}
+
+    @staticmethod
+    def report_post(user,post_id,reason,text=None):
+        user_id = user.id
+        try:
+            rp = ReportedPost(user_id = post_id, post_id = post_id, reason = reason, text = text)
+            DBSession.add(rp)
+            DBSession.flush()
+            return {"status": "post reported"}
+        except Exception, e:
+            return {"error": "already submitted"}
 
     @staticmethod
     def delete_comment_json(user,comment_id):

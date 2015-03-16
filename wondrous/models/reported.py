@@ -17,6 +17,8 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Unicode
+from sqlalchemy import Integer
+from sqlalchemy import UniqueConstraint
 
 from sqlalchemy.orm import relationship
 
@@ -26,14 +28,28 @@ from wondrous.models import DBSession
 from wondrous.models.modelmixins import BaseMixin
 
 
+class ReportedReason:
+    (
+        UNINTERESTING,      # 0
+        MATURE,             # 1
+        COPYRIGHT,          # 2
+        SPAM                # 3
+    ) = xrange(4)
+
 class ReportedPost(Base,BaseMixin):
     post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False)
     post = relationship("Post",backref="reports")
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    additional_detail = Column(Unicode, nullable=False)
+    reason = Column(Integer, nullable=False)
+    text = Column(Unicode, nullable=True)
+
+    __table_args__ = (UniqueConstraint('user_id', 'post_id', name='user_reported_post'),)
 
 class ReportedComment(Base,BaseMixin):
     comment_id = Column(BigInteger, ForeignKey('comment.id'), nullable=False)
     comment = relationship("Comment",backref="reports")
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
-    additional_detail = Column(Unicode, nullable=False)
+    reason = Column(Integer, nullable=False)
+    text = Column(Unicode, nullable=True)
+
+    __table_args__ = (UniqueConstraint('user_id', 'comment_id', name='user_reported_comment'),)

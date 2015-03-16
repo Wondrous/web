@@ -703,6 +703,27 @@ class APIViews(BaseHandler):
         self.request.response.headerlist.extend(headers)
         return {'status':True}
 
+    @api_login_required
+    @view_config(request_method='POST', renderer='json', route_name='api_report_post')
+    def api_report_post(self):
+
+        """
+            PURPOSE: This method handles reports for post
+        """
+
+        return PostManager.report_post(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method='POST', renderer='json', route_name='api_report_comment')
+    def api_report_comment(self):
+
+        """
+            PURPOSE: This method handles reports for comment
+        """
+
+        return PostManager.report_comment(**self.query_kwargs)
+
+
     @api_logout_required
     @view_config(request_method='POST', renderer='json', route_name='api_login')
     def api_login(self):

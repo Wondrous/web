@@ -33,7 +33,55 @@ VoteAction = {
     TOPFRIEND: 7
 };
 
+ReportedReason = {
+    UNINTERESTING = 0,
+    MATURE = 1,
+    COPYRIGHT = 2,
+    SPAM = 3
+};
+
+
 module.exports = {
+    // report a comment
+    // options are:
+    // callback
+    // comment_id
+    // reason
+    // text
+    reportComment: function(options){
+        var callback = options.callback;
+        var comment_id = options.comment_id;
+        var reason = options.reason;
+        var text = options.text;
+        var url = '/api/report/comment';
+
+        request.post(url).send({
+            comment_id:comment_id,
+            reason:reason,
+            text:text
+        }).end(_callback(callback));
+    },
+
+    // report a post
+    // options are:
+    // callback
+    // comment_id
+    // reason
+    // text
+    reportPost: function(options){
+        var callback = options.callback;
+        var post_id = options.post_id;
+        var reason = options.reason;
+        var text = options.text;
+        var url = '/api/report/post';
+
+        request.post(url).send({
+            post_id:post_id,
+            reason:reason,
+            text:text
+        }).end(_callback(callback));
+    },
+
     // toggle privacy
     // options are:
     // callback

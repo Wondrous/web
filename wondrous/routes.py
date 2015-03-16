@@ -110,6 +110,10 @@ def build_routes(config):
     config.add_route('api_search_users',                       '/api/search/user')      # GET
     config.add_route('api_search_posts',                       '/api/search/post')      # GET
 
+    # Reported Comment/Post
+    config.add_route('api_report_post',                         '/api/report/post')      # POST
+    config.add_route('api_report_comment',                      '/api/report/comment')      # POST
+
     # INDEX
     config.add_route('index_handler1',                          '/{a}')
     config.add_route('index_handler2',                          '/{a}/{b}')
