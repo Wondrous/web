@@ -90,10 +90,16 @@ var PostForm = React.createClass({
         // Fade out the post form
         var form = this.refs.postform.getDOMNode();
         $(form).slideDown().slideUp(200);
+        $('#cropBox').cropper('destroy');
+        $('#cropBox').attr('src', "/static/pictures/500x500.gif");
 
         if(this.file){
             this.file = null;
+<<<<<<< HEAD
             $('#cropBox').cropper('destroy');
+=======
+
+>>>>>>> ee8e8795d43110f8315ab01d91d42feb45a2f126
             // $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
             // $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
