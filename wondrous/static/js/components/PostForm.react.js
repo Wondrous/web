@@ -95,11 +95,7 @@ var PostForm = React.createClass({
 
         if(this.file){
             this.file = null;
-<<<<<<< HEAD
             $('#cropBox').cropper('destroy');
-=======
-
->>>>>>> ee8e8795d43110f8315ab01d91d42feb45a2f126
             // $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
             // $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
