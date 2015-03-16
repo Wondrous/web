@@ -143,25 +143,23 @@ var PostForm = React.createClass({
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if (isPictureModal) {
-            if(typeof this.file !=='undefined' && this.file!=null){
+            if (typeof this.file !=='undefined' && this.file != null){
                 // var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
                 var dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
-                WondrousActions.addProfilePicture(this.file,dataURL);
+                WondrousActions.addProfilePicture(this.file, dataURL);
             }
         } else {
-            var postSubject     = $('#postSubject').val();
-            var postText        = $('#postTextarea').val();
+            var postSubject = $('#postSubject').val();
+            var postText    = $('#postTextarea').val();
 
             var dataURL = null;
             if (typeof(this.file) !== 'undefined' && this.file) {
                 // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
                 var that = this;
                 dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
-
-
             }
-            WondrousActions.addNewPost(postSubject, postText, that.file, dataURL);
 
+            WondrousActions.addNewPost(postSubject, postText, that.file, dataURL);
         }
     },
 
@@ -174,9 +172,33 @@ var PostForm = React.createClass({
     handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
 
+        var canvasData = {
+            "left": -462.2145922746779,
+            "top": -109.99570815450636,
+            "width": 750,
+            "height": 390,
+        };
+
+        var cropBoxData = {
+            "left": 0,
+            "top": 0,
+            "width": 750,
+            "height": 390,
+        };
+
         $('#cropBox').cropper({
-            strict:false,
-            autoCropArea:1.0,
+            aspectRatio: "free",
+            strict: true,
+            dragCrop: false,
+            movable: false,
+            resizable: false,
+            zoomable: false,
+
+            built: function() {
+              $('#cropBox').cropper('setCanvasData', canvasData);
+              $('#cropBox').cropper('setCropBoxData', cropBoxData);
+            },
+
             crop: function(data) {
             // Output the result data for cropping image.
             }
