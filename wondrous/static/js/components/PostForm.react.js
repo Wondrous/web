@@ -91,7 +91,7 @@ var PostForm = React.createClass({
         var form = this.refs.postform.getDOMNode();
         $(form).slideDown().slideUp(200);
         $('#cropBox').cropper('destroy');
-        $('#cropBox').attr('src', "/static/pictures/500x500.gif");
+        $('#cropBox').attr('src', "/static/pictures/transparent.gif");
 
         if(this.file){
             this.file = null;
@@ -226,7 +226,8 @@ var PostForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <div id="crop-box-wrapper">
-                    {/*<img id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"/>*/}
+                    <img id="cropBox" ref="cropBox" src="/static/pictures/transparent.gif" />
+                    {/*<img id="cropBox" ref="cropBox" src="/static/pictures/transparent.gif"/>*/}
                 </div>
 
                 <span>{this.state.percent}% uploaded</span>
