@@ -2,6 +2,14 @@ var WondrousAPI = require("../utils/WondrousAPI");
 
 var WondrousActions = Reflux.createActions({
     // SECTION loading from server
+
+    // reporting
+    "toggleCommentReport": {},
+
+    "togglePostReport": {},
+
+    "sendReport": {},
+
     // register
     "register": {},
 
@@ -178,6 +186,31 @@ var WondrousActions = Reflux.createActions({
 
     "feedLoaded": {}
 
+});
+
+WondrousActions.sendReport.listen(function(type, item_id, reason, text){
+    var callback = function(err,res){
+        if(err!=null){
+
+        }else{
+
+        }
+    }
+    if (type=="comment"){
+        WondrousAPI.reportComment({
+            comment_id: item_id,
+            reason: reason,
+            text: text,
+            callback: callback
+        });
+    }else if (type=="post"){
+        WondrousAPI.reportPost({
+            post_id: item_id,
+            reason: reason,
+            text: text,
+            callback: callback
+        });
+    }
 });
 
 WondrousActions.registerCheck.listen(function(name, username, email, password) {

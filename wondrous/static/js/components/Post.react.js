@@ -32,6 +32,17 @@ var UserTitle = React.createClass({
     }
 });
 
+var ReportPanel = React.createClass({
+
+    render: function(){
+        return (
+            <div>
+                <button onClick={this.isMature}>report</button>
+            </div>
+        );
+    }
+});
+
 var Photo = React.createClass({
 
     render: function() {
@@ -86,6 +97,7 @@ var Post = React.createClass({
         return {comments: [], commentsVisible: false};
     },
 
+
     handleClick: function(evt) {
     	// add modal functionality
         if (!evt.metaKey){
@@ -96,7 +108,9 @@ var Post = React.createClass({
             WondrousActions.updatePost(this.props.data);
         }
     },
-
+    reportPost: function(e){
+        WondrousActions.togglePostReport();
+    },
     render: function() {
         if (typeof this.props.data === 'undefined'){
             return (<div></div>);
@@ -110,17 +124,19 @@ var Post = React.createClass({
             this.props.data.subject = repost.subject;
         }
 
-
         var thisText = '';
         if (typeof this.props.data.text!=='undefined'){
             thisText =this.props.data.text.split('\n');
         }
+
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post"  className="post-body round-3">
                     <div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
                         <UserTitle data={this.props.data} />
                     </div>
+                    {!is_it_mine?<button onClick={this.reportPost}>report</button>:null}
+
                     <div className="post-title">{this.props.data.subject}</div>
                     <a href={"/post/"+this.props.data.id} onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data}/>

@@ -265,7 +265,7 @@ def url_match(self, url_match=None, arg_type="str"):
 
     return p
 
-def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 'in', 
+def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 'in',
                                      'of', 'off', 'on', 'per', 'the', 'to', 'up', 'via'])):
     def _capitalize(word, punct=set(['"','\'','`','#'])):
         first_char = word[0]
@@ -274,26 +274,27 @@ def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 
         else:
             return word.capitalize()
 
-    NOCAP = set(["iCloud", "iMac", "iMacs", "iMovie", "iPad", "iPads", 
+    NOCAP = set(["iCloud", "iMac", "iMacs", "iMovie", "iPad", "iPads",
                  "iPhone", "iPhones", "iPhoto", "iPod", "iPod", "iTunes"])
 
     _cap = lambda w: w if w in NOCAP else _capitalize(w)
     word_list = re.split(' ', text.strip())
     title_fw, title_lw  = _cap(word_list[0]), _cap(word_list[-1])
     final = [title_fw]
-    
+
     for word in word_list[1:-1]:
         final.append(word if word in (exceptions|NOCAP) else _capitalize(word))
-    
+
     # Always capitalize last word
-    final.append(title_lw)
+    if len(final)!=len(word_list):
+        final.append(title_lw)
 
     return " ".join(final)
 
 def round_num(f):
 
     """
-        PURPOSE: To round up a floating point number if 
+        PURPOSE: To round up a floating point number if
         the decimal is >= 0.5, or round down if < 0.5
 
         NOTE: If the number provided is < 1, we return 1.
