@@ -74,7 +74,7 @@ var InfluencerBadge = React.createClass({
         styleAdjustmentsCheckmark = null;
 
         if (size == "small") {
-            styleAdjustmentsWrapper = { fontSize: 11, fontWeight: 400, padding: "2px 6px" };
+            styleAdjustmentsWrapper = { fontSize: 11, fontWeight: 400, padding: "2px 6px", borderWidth: 1 };
             styleAdjustmentsCheckmark = { marginLeft: 3, fontSize: 11 };
         }
 

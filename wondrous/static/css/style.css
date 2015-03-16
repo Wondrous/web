@@ -1028,7 +1028,8 @@ a:hover {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   -o-border-radius: 20px;
-  border-radius: 20px; }
+  border-radius: 20px;
+  border-bottom: 2px solid #868686; }
 
 .profile-badge-influencer--checkmark {
   position: relative;
