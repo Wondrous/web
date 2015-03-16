@@ -366,8 +366,14 @@ var PrivateProfile = React.createClass({
         })
     },
     render: function() {
-        var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
+        var ouuid = (typeof this.state.data.ouuid !== 'undefined') ? this.state.data.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+
+        var is_influencer = $.inArray(0, this.state.data.badges) != -1;
+        var wondrousScore = this.state.data.wondrous_score;
+        if (is_influencer && wondrousScore < 75) {
+            wondrousScore = 75;
+        }
 
         var classes = "profile-header-nav-item follow-button round-50 _requestBtn ";
         if (this.am_following) {
@@ -377,8 +383,6 @@ var PrivateProfile = React.createClass({
             var btnTitle = "Follow";
             classes += "not-following";
         }
-
-        var is_influencer = $.inArray(0, this.state.data.badges) != -1;
 
         return (
             <div>
@@ -392,7 +396,15 @@ var PrivateProfile = React.createClass({
 
                         <div className="profile-name">{this.props.user.name}</div>
                         <div className="profile-username">@{this.props.user.username}</div>
-                        <div style={{ marginTop: 20 }}>
+                    </div>
+                    <hr className="profile-hr" />
+                    <ul className="profile-header-nav">
+                        <ProfileBarBadge to={"wall"} name={"posts"} number={this.state.data.post_count} username={this.state.data.username} />
+                        <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
+                        <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
+                        <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
+
+                        <div>
                             <li className={classes} onClick={this.handleClick}>
                                 <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
                                 {!this.am_following ?
@@ -408,14 +420,12 @@ var PrivateProfile = React.createClass({
                                 }
                             </li>
                         </div>
-                    </div>
+                    </ul>
                 </div>
                 <div className="profile-content">
-                    <div style={{ textAlign: "center", margin: "80px 0 30px", color: "rgb(180,180,180)", fontWeight: 900 }}>
-                        This profile is private
-                        <div style={{ fontFamily: 'heydings_iconsregular', fontSize: 90, left: 1 }}>
-                            L
-                        </div>
+                    <div style={{ textAlign: "center", margin: "40px 0", color: "rgb(180,180,180)", fontWeight: 900, fontSize: 16 }}>
+                        <div>This profile is private</div>
+                        <div style={{ fontWeight: 400, fontSize: 14, margin: "10px 0" }}>You must be following this user to view, comment on, and like their posts</div>
                     </div>
                 </div>
             </div>

@@ -365,12 +365,13 @@ class AccountManager(BaseManager):
             return retval
 
         elif profile_user.is_private and not profile_user.is_banned and profile_user.is_active:
-            retval = {}
+            retval = follow_data
             retval.update({"username": profile_user.username})
             retval.update({"name": profile_user.ascii_name})
             retval.update({'is_private': True})
             retval.update({'id': profile_user.id})
             retval.update({'badges': profile_user.json(0)['badges']})
+            retval.update({'wondrous_score': profile_user.json(0)['wondrous_score']})
 
             # Add in profile picture to JSON
             picture_object = profile_user.picture_object
