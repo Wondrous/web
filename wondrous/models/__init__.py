@@ -66,6 +66,11 @@ from wondrous.models.user import (
     User,
 )
 
+from wondrous.models.reported import (
+    ReportedComment,
+    ReportedPost,
+)
+
 from wondrous.models.vote import (
     Vote
 )

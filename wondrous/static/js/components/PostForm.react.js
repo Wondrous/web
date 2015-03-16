@@ -1,11 +1,21 @@
 var WondrousAPI = require('../utils/WondrousAPI');
 var MouseWheel = require('kd-shim-jquery-mousewheel');
-var CropBox = require('jquery-cropbox');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousConstants = require('../constants/WondrousConstants');
 var hashtags = require('jquery-hashtags');
 var UserStore = require('../stores/UserStore');
 var UploadStore = require('../stores/UploadStore');
+
+function uri2blob(dataURI) {
+    var uriComponents = dataURI.split(',');
+    var byteString = atob(uriComponents[1]);
+    var mimeString = uriComponents[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++)
+        ia[i] = byteString.charCodeAt(i);
+    return new Blob([ab], { type: mimeString });
+}
 
 var PostForm = React.createClass({
     mixins: [Reflux.listenTo(UserStore, "onUserChange"), Reflux.listenTo(UploadStore, "onUploadChange")],
@@ -25,16 +35,7 @@ var PostForm = React.createClass({
             this.state.percent = 0;
         }
     },
-    handleCrop: function(e) {
-        $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
-        $(this.refs.cropBox.getDOMNode()).cropbox({
-            width:  750,
-            height: 390,
-        }).on('cropbox',function(e,results,img){
 
-        });
-
-    },
 
     readURL: function() {
         if (this.file) {
@@ -92,8 +93,9 @@ var PostForm = React.createClass({
 
         if(this.file){
             this.file = null;
-            $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
-            $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
+            $('#cropBox').cropper('destroy')
+            // $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
+            // $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
 
         // Clear the post textarea and the hashtag highlighter
@@ -142,7 +144,8 @@ var PostForm = React.createClass({
 
         if (isPictureModal) {
             if(typeof this.file !=='undefined' && this.file!=null){
-                var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+                // var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+                var dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
                 WondrousActions.addProfilePicture(this.file,dataURL);
             }
         } else {
@@ -151,10 +154,14 @@ var PostForm = React.createClass({
 
             var dataURL = null;
             if (typeof(this.file) !== 'undefined' && this.file) {
-                dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
-            }
+                // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+                var that = this;
+                dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
 
-            WondrousActions.addNewPost(postSubject, postText, this.file, dataURL);
+
+            }
+            WondrousActions.addNewPost(postSubject, postText, that.file, dataURL);
+
         }
     },
 
@@ -164,6 +171,25 @@ var PostForm = React.createClass({
         });
         this.forceUpdate();
     },
+    handleCrop: function(e) {
+        $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
+
+        $('#cropBox').cropper({
+            strict:false,
+            autoCropArea:1.0,
+            crop: function(data) {
+            // Output the result data for cropping image.
+            }
+        });
+
+        // $(this.refs.cropBox.getDOMNode()).cropbox({
+        //     width:  750,
+        //     height: 390,
+        // }).on('cropbox',function(e,results,img){
+        //
+        // });
+
+    },
 
     render: function() {
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
@@ -172,11 +198,12 @@ var PostForm = React.createClass({
             display: isPictureModal ? "none" : "block",
             backgroundColor : "rgb(255,255,255)"
         };
-
+        // onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
-                <img onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"
-                    style={{ "width": 750, "height": 390 }}/>
+                <div id="crop-box-wrapper" style={{ "width": 750, "height": 390 }}>
+                    <img id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"/>
+                </div>
 
                 <span>{this.state.percent}% uploaded</span>
                 {this.state.error ? <span>{this.state.error}% uploaded</span> : null}
@@ -236,6 +263,7 @@ var PostForm = React.createClass({
         if(!isPictureModal){
 
         }
+
     },
 
     onUserChange:function(userData){

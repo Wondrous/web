@@ -62,5 +62,5 @@ target/
 *node_modules*
 *bundle.js
 *bundle.min.js
-*.css
+*style.css
 *.out

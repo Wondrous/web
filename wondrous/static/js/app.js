@@ -5,6 +5,7 @@ window.imagesLoaded = require('imagesloaded');
 window.Masonry = require('masonry-layout');
 window.Reflux = require('reflux');
 window.moment = require('moment');
+window.cropper = require("cropper");
 
 var Routes = require('./components/WondrousApp.react')
 

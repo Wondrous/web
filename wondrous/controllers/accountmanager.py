@@ -332,12 +332,13 @@ class AccountManager(BaseManager):
         if profile_user and profile_user.id == user.id:
             retval = follow_data
             DBSession.refresh(profile_user)
-            
+
             retval.update(profile_user.json(1))
             retval.update({"name": profile_user.ascii_name})
             retval.update({"unseen_notifications": unseen_notification_count})
 
             cls.add_influencer(profile_user)  # QUESTION: What does this do here?
+                                                #ANSWER: adding an influencer badge 
 
             # Add in profile picture to JSON
             picture_object = profile_user.picture_object
@@ -361,7 +362,7 @@ class AccountManager(BaseManager):
             picture_object = profile_user.picture_object
             if picture_object:
                 retval.update({"ouuid": picture_object.ouuid})
-            
+
             return retval
 
         elif profile_user.is_private and not profile_user.is_banned and profile_user.is_active:

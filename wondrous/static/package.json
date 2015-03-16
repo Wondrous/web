@@ -18,7 +18,9 @@
     "reflux": "*",
     "superagent": "^0.21.0",
     "underscore": "^1.7.0",
-    "websocket": "^1.0.17"
+    "websocket": "^1.0.17",
+    "blueimp-canvas-to-blob":"*",
+    "cropper":"*"
   },
   "devDependencies": {
     "browserify": "~6.2.0",

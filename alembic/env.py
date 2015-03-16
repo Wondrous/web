@@ -15,6 +15,7 @@ from wondrous.models import (
     post,
     tag,
     user,
+    reported,
     vote,
     scores,
     badge
