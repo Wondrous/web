@@ -425,7 +425,7 @@ var PrivateProfile = React.createClass({
                 <div className="profile-content">
                     <div style={{ textAlign: "center", margin: "40px 0", color: "rgb(180,180,180)", fontWeight: 900, fontSize: 16 }}>
                         <div>This profile is private</div>
-                        <div style={{ fontWeight: 400, fontSize: 14, margin: "10px 0" }}>You must be following this user to view, comment on, and like their posts</div>
+                        <div style={{ fontWeight: 400, fontSize: 14, margin: "10px 0" }}>You must be following this user to view, like, and comment on their posts</div>
                     </div>
                 </div>
             </div>
