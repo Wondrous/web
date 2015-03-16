@@ -2370,7 +2370,8 @@ a:hover {
   box-shadow: -5px 0 9px -2px #bebebe; }
 
 .sidemenuOptions {
-  margin: 10px;
+  /*margin: 10px;*/
+  margin: 3px;
   margin-top: 15px;
   font-family: arial, helvetica, sans-serif;
   font-weight: 100; }
