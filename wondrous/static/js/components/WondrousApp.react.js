@@ -15,7 +15,8 @@ var Buffer = require('./Buffer.react');
 var Home = require('./Feed.react');
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
-var PostModal = require('./PostModal.react');
+var PostModal = require('./PostModal.react').PostModal;
+var ReportModal = require('./PostModal.react').ReportModal;
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Search = require('../components/Search.react');
@@ -59,6 +60,7 @@ var WondrousApp = React.createClass({
                     <RouteHandler />
                 </div>
                 <PostModal />
+                <ReportModal />
             </div>
         );
     },

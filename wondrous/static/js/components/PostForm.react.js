@@ -155,12 +155,9 @@ var PostForm = React.createClass({
             var dataURL = null;
             if (typeof(this.file) !== 'undefined' && this.file) {
                 // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
-                var that = this;
                 dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
-
-
             }
-            WondrousActions.addNewPost(postSubject, postText, that.file, dataURL);
+            WondrousActions.addNewPost(postSubject, postText, this.file, dataURL);
 
         }
     },

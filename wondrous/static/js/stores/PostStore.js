@@ -21,7 +21,9 @@ var PostStore = Reflux.createStore({
         this.paging = false;
         this.donePaging = false;
         this.loading = false;
+        this.reportType = null;
     },
+
     newPostLoad: function(post_id){
         this.unloadUser();
         if (typeof post_id !=='undefined'&&!this.loading){
@@ -32,6 +34,28 @@ var PostStore = Reflux.createStore({
             WondrousActions.loadPost(post_id);
             this.loadMoreComments();
         }
+    },
+
+    toggleCommentReport: function(){
+        if(this.reportType==null){
+            this.reportType = "comment";
+            $('body').addClass('modal-open');
+        }else{
+            this.reportType = null;
+            $('body').removeClass('modal-open');
+        }
+        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
+    },
+
+    togglePostReport: function(){
+        if(this.reportType==null){
+            this.reportType = "post";
+            $('body').addClass('modal-open');
+        }else{
+            this.reportType = null;
+            $('body').removeClass('modal-open');
+        }
+        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
     loadMoreComments: function(){

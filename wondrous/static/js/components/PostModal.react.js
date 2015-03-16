@@ -3,6 +3,7 @@ var WondrousActions = require('../actions/WondrousActions');
 var Post = require('./Post.react');
 var PostStore = require('../stores/PostStore');
 var UserStore = require('../stores/UserStore');
+var ReportConstants = require('../constants/ReportConstants');
 
 var Link = Router.Link;
 
@@ -68,7 +69,9 @@ var Comment = React.createClass({
     onDelete: function(){
         WondrousActions.deleteComment(this.props.data.id);
     },
-
+    reportComment: function(){
+        WondrousActions.toggleCommentReport();
+    },
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
@@ -104,7 +107,7 @@ var Comment = React.createClass({
 
                     {is_it_mine ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
-                    	: null}
+                    	: <button onClick={this.reportComment}>report</button>}
                 </div>
             </div>
         );
@@ -330,6 +333,54 @@ var Post = React.createClass({
 	}
 });
 
+var ReportingForm = React.createClass({
+    stopProp: function(e){
+        e.stopPropagation();
+    },
+    radioChange: function(e){
+        console.log("radio changed",$("input[name=reason]:checked").val());
+    },
+
+    report: function(e){
+        e.preventDefault();
+        var reason = -1;
+        switch($("input[name=reason]:checked").val()){
+            case "mature":
+                reason = ReportConstants.MATURE;
+                break;
+            case "uninteresting":
+                reason = ReportConstants.UNINTERESTING;
+                break;
+            case "copyright":
+                reason = ReportConstants.COPYRIGHT;
+                break;
+            case "spam":
+                reason = ReportConstants.SPAM;
+                break;
+        }
+        if(reason>-1){
+            var text = this.refs.comment.getDOMNode().value.trim();
+            console.log("reason",reason,"text",text);
+        }
+    },
+
+    render: function(){
+        return (
+            <div onClick={this.stopProp}>
+                <h1>Reporting content</h1>
+                <form onChange={this.radioChange} onSubmit={this.report}>
+                  <input type="radio" name="reason" value="mature" />Mature
+                  <input type="radio" name="reason" value="uninteresting" />Against my views
+                  <input type="radio" name="reason" value="copyright" />Copyright
+                  <input type="radio" name="reason" value="spam" />Spam
+                  <textarea ref="comment" placeholder="place write any additional comments here"></textarea>
+                  <button type="submit">Report</button>
+                </form>
+            </div>
+        );
+    }
+});
+
 var PostModal = React.createClass({
 	mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
 
@@ -351,6 +402,7 @@ var PostModal = React.createClass({
 	},
 
 	render: function() {
+
         if (typeof this.state.post === 'undefined'){
             return (<div></div>);
         }
@@ -363,9 +415,9 @@ var PostModal = React.createClass({
 					<div className="vertical-center">
 
 						<div className="modal-wrapper">
-							<div onClick={this.stopProp} className="modal round-5">
-								<Post data={this.state.post} comments={this.state.comments}/>
-							</div>
+                            <div onClick={this.stopProp} className="modal round-5">
+                                <Post data={this.state.post} comments={this.state.comments}/>
+                            </div>
 						</div>
 
 					</div>
@@ -376,4 +428,41 @@ var PostModal = React.createClass({
 	}
 });
 
-module.exports = PostModal;
+var ReportModal = React.createClass({
+    mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
+    onPostUpdate: function(sad){
+        this.forceUpdate();
+    },
+    handleClose: function(evt) {
+		WondrousActions.toggleCommentReport();
+	},
+
+    stopProp: function(evt) {
+		evt.preventDefault();
+		evt.stopPropagation();
+	},
+
+    render: function() {
+		divStyle = PostStore.reportType!=null? {display:"block"} : {display:"none"};
+        console.log("posttype",PostStore.reportType)
+		return (
+			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
+
+				<div className="vertical-center-wrapper">
+					<div className="vertical-center">
+
+						<div className="modal-wrapper">
+                            <div onClick={this.stopProp} className="modal round-5">
+                                <ReportingForm />
+                            </div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		);
+	}
+})
+
+module.exports = {PostModal:PostModal,ReportModal:ReportModal};
