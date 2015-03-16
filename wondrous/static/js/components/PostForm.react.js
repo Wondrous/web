@@ -93,7 +93,7 @@ var PostForm = React.createClass({
 
         if(this.file){
             this.file = null;
-            $('#cropBox').cropper('destroy')
+            $('#cropBox').cropper('destroy');
             // $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
             // $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
@@ -156,6 +156,7 @@ var PostForm = React.createClass({
             if (typeof(this.file) !== 'undefined' && this.file) {
                 // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
                 dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
+                console.log("URL:", dataURL);
             }
             WondrousActions.addNewPost(postSubject, postText, this.file, dataURL);
         }
@@ -167,6 +168,7 @@ var PostForm = React.createClass({
         });
         this.forceUpdate();
     },
+
     handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
 
@@ -221,8 +223,8 @@ var PostForm = React.createClass({
         // onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
-                <div id="crop-box-wrapper" style={{ "width": 750, "height": 390 }}>
-                    <img id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"/>
+                <div id="crop-box-wrapper">
+                    {/*<img id="cropBox" ref="cropBox" src="/static/pictures/500x500.gif"/>*/}
                 </div>
 
                 <span>{this.state.percent}% uploaded</span>

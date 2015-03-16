@@ -217,13 +217,14 @@
     width: 750px;
     font-family: arial, helvetica, sans-serif;
     font-size: 15px;
-    color: #f8f8f8;
+    color: rgb(150,150,150);
     text-align: center;
     padding: 50px 0px;
-    background-color:  rgb(191,191,191);
     cursor: pointer;
 
-    &:hover { background-color: rgb(181,181,181); }
+    &:hover {
+        color: rgb(125,125,125);
+    }
 }
 
 .upload-photo-icon {
