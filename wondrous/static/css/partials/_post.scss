@@ -6,10 +6,15 @@
     background-color: rgb(255,255,255);
     overflow: hidden;
 
-    -webkit-box-shadow: 0 1px 2px 0 rgb(159,159,159);
+/*    -webkit-box-shadow: 0 1px 2px 0 rgb(159,159,159);
        -moz-box-shadow: 0 1px 2px 0 rgb(159,159,159);
          -o-box-shadow: 0 1px 2px 0 rgb(159,159,159);
-            box-shadow: 0 1px 2px 0 rgb(159,159,159);
+            box-shadow: 0 1px 2px 0 rgb(159,159,159);*/
+
+    -webkit-box-shadow: 0 1px 5px 0 rgb(159,159,159);
+       -moz-box-shadow: 0 1px 5px 0 rgb(159,159,159);
+         -o-box-shadow: 0 1px 5px 0 rgb(159,159,159);
+            box-shadow: 0 1px 5px 0 rgb(159,159,159);
 
     &:hover {
         -webkit-transition: all 0.30s ease-in-out;
@@ -17,21 +22,27 @@
             -ms-transition: all 0.30s ease-in-out;
              -o-transition: all 0.30s ease-in-out;
 
-        -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
+/*        -webkit-box-shadow: 0 2px 3px rgb(100,100,100);
            -moz-box-shadow: 0 2px 3px rgb(100,100,100);
              -o-box-shadow: 0 2px 3px rgb(100,100,100);
-                box-shadow: 0 2px 3px rgb(100,100,100);
+                box-shadow: 0 2px 3px rgb(100,100,100);*/
     }
 }
 
 .post-content {
     background-color: rgb(255,255,255);
     padding: 16px 28px;
-    font-family: helvetica, arial, sans-serif;
     font-weight: normal;
-    font-size: 16px;
     color: rgb(41,41,41);
-    line-height: 1.3em;
+    letter-spacing: 0.01rem;
+
+/*    font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.35em;*/
+    
+    font-family: Georgia, "Helvetica Neue", helvetica, arial, sans-serif;
+    font-size: 19px;
+    line-height: 1.4em;
 }
 
 .post-content-text {
@@ -64,13 +75,7 @@
     color: rgb(251,251,251);
     background-color: rgb(221,221,221);
 
-    &:hover {
-        background-color: rgb(210,210,210);
-/*        background: -webkit-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-        background:   -moz-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-        background:     -o-linear-gradient(rgb(3,200,165), rgb(3,216,165));
-        background:        linear-gradient(rgb(3,200,165), rgb(3,216,165));*/
-    }
+    &:hover {background-color: rgb(210,210,210);}
 }
 
 .post-delete-btn {
@@ -81,9 +86,7 @@
     color: rgb(251,251,251);
     background-color: rgb(220,100,90);
 
-    &:hover {
-        background-color: rgb(240,110,90);
-    }
+    &:hover {background-color: rgb(240,110,90);}
 }
 
 .post-repost-btn {
@@ -666,9 +669,17 @@ $post-cover-photo-height: 390px;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.88);
     z-index: 100;
     overflow: auto;
+
+    /*background-color: rgba(0,0,0,0.88);*/
+    /*background-color: rgb(255,255,255);*/
+    background-color: rgba(255,255,255,0.92);
+}
+
+._blurmania {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
 }
 
 .modal-open{

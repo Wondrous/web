@@ -53,7 +53,6 @@ var Wall = React.createClass({
             <div>
                 {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
-                <div className="--backdrop"></div>
                 <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}
                 </div>
