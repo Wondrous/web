@@ -1735,6 +1735,24 @@ a:hover {
   .modal-open div {
     /*overflow-y:scroll;*/ }
 
+/* ------------------------------- */
+.content-report-header {
+  color: #c88282;
+  text-shadow: 0 1px 0 #a08282; }
+
+.content-report-input-wrapper {
+  margin: 0 5px;
+  font-weight: bold;
+  color: #555555; }
+
+.content-report-textarea {
+  height: 3.5em;
+  width: 400px;
+  resize: none;
+  border: 1px solid #c8c8c8;
+  margin-top: 10px;
+  padding: 4px; }
+
 /* ==== NEW POST================ */
 .autocomplete-selected {
   position: relative;

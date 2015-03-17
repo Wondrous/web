@@ -468,16 +468,28 @@ var ReportingForm = React.createClass({
     render: function(){
         return (
             <div onClick={this.stopProp}>
-                <h1>Reporting Content</h1>
-                {this.submitted?<h2>Thank you for your report!</h2>:
-                <form onChange={this.radioChange} onSubmit={this.report}>
-                  <input type="radio" name="reason" value="mature" />Mature
-                  <input type="radio" name="reason" value="uninteresting" />Against my views
-                  <input type="radio" name="reason" value="copyright" />Copyright
-                  <input type="radio" name="reason" value="spam" />Spam
-                  <textarea ref="comment" placeholder="place write any additional comments here"></textarea>
-                  <button type="submit">Report</button>
-                </form>
+                <h1 className="content-report-header">Reporting Content</h1>
+                {this.submitted ? 
+                    <h2>Thank you for your report!</h2>
+                    :
+                    <form onChange={this.radioChange} onSubmit={this.report}>
+                        <span className="content-report-input-wrapper">
+                            <input type="radio" name="reason" value="mature" />Mature
+                        </span>
+                        <span className="content-report-input-wrapper">
+                            <input type="radio" name="reason" value="uninteresting" />Against my views
+                        </span>
+                        <span className="content-report-input-wrapper">
+                            <input type="radio" name="reason" value="copyright" />Copyright
+                        </span>
+                        <span className="content-report-input-wrapper">
+                            <input type="radio" name="reason" value="spam" />Spam
+                        </span>
+                        <div>
+                            <textarea className="content-report-textarea" ref="comment" placeholder="Place write any additional comments here"></textarea>
+                        </div>
+                        <button type="submit">Report</button>
+                    </form>
                 }
             </div>
         );
