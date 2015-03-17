@@ -8,12 +8,16 @@
 */
 var SortedArraySet = require("collections/sorted-array-set");
 
-function FeedSet(currentArray,reverse){
+function FeedSet(currentArray,reverse,ordered){
     var r = reverse == true
-
+    var isOrdered = (typeof ordered === 'undefined')
     this.sortedSet = new SortedArraySet(currentArray,function(a,b){
         return a.id==b.id;
     }, function(a,b){
+        if(!isOrdered){
+            return;
+        }
+
         if (r){
             if (a.id<b.id){
                 return -1

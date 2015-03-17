@@ -289,9 +289,7 @@ var PostFooter = React.createClass({
     },
 
     likePost: function() {
-        if (checkLogin()) {
-            WondrousActions.closeCardModal();
-        } else {
+        if (!checkLogin()) {
             return;
         }
 
@@ -305,9 +303,7 @@ var PostFooter = React.createClass({
     },
 
     clickRepost: function() {
-        if (checkLogin()) {
-            WondrousActions.closeCardModal();
-        } else {
+        if (!checkLogin()) {
             return;
         }
         WondrousActions.repost(this.props.data.id);
@@ -363,7 +359,8 @@ var PostFooter = React.createClass({
 
 var Post = React.createClass({
     viewLikedUsers: function(){
-        WondrousActions.loadLikedUsers(this.props.data.id,0);
+        PostStore.loadMoreLikedUsers();
+        WondrousActions.openLikedUserModal();
     },
 	render: function() {
 		var repost = null;
@@ -381,6 +378,16 @@ var Post = React.createClass({
 
         console.log("PostRender:", this.props.data);
 		var thisText = linkify(this.props.data.text, false);
+        var likedUsers = [];
+        if (this.props.data.like_count < 10) {
+            PostStore.loadMoreLikedUsers();
+            likedUsers = PostStore.likedUsers.sortedSet.map(function(user,ind){
+                if (ind==this.like_count-1){
+                    return (<b>{user.name}</b>);
+                }
+                return (<b>{user.username+", "}</b>);
+            },this.props.data);
+        }
 
 		return (
 			<div ref="post"  className="post-body round-3" >
@@ -410,16 +417,16 @@ var Post = React.createClass({
 
                         <span onClick={this.viewLikedUsers} className="post-micro-data-super-analytics-item">
                             <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
-                            {this.props.data.like_count}
+                            {this.props.data.like_count<10?likedUsers:this.props.data.like_count}
+                            {this.props.data.like_count>0?" liked this":{}}
+
                         </span>
                     </div>
 
                     <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
                 </div>
 				<div className="post-content">
-					{
-						thisText
-					}
+					{thisText}
 				</div>
 
                 <hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
@@ -633,5 +640,79 @@ var SignupModal = React.createClass({
 	}
 });
 
+var LikedUserModal = React.createClass({
+    mixins:[Reflux.listenTo(ModalStore,"onModalChange"),Reflux.listenTo(PostStore,"onPostChange")],
+    handleClose: function(){
+        WondrousActions.closeLikedUserModal();
+    },
 
-module.exports = {PostModal:PostModal,ReportModal:ReportModal,SignupModal:SignupModal};
+    getInitialState: function(){
+        return {users:[]}
+    },
+
+    onModalChange: function(stuff) {
+        this.forceUpdate();
+    },
+
+    onPostChange: function(postUpdate) {
+        if(postUpdate.hasOwnProperty('likedUsers')){
+            this.setState({users:postUpdate.likedUsers})
+        }
+    },
+
+    stopProp: function(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+    },
+
+    loadMore: function(){
+        PostStore.loadMoreLikedUsers();
+    },
+    handleClick: function(evt){
+        ModalStore.clearModal();
+    },
+    render: function(){
+        divStyle = ModalStore.likedUserOpen?{display:"block"} : {display:"none"};
+
+        var users = this.state.users.map(function(user,ind){
+            return (
+                <Link to={'/'+user.username} onClick={this.handleClick} className="dropdown-a">
+                    <div className="dropdown-element dropdown-element-notification">
+                        <span className="notificationTextPosition">
+                            <img ref="usericon" className="post-thumb round-2" src={"http://mojorankdev.s3.amazonaws.com/"+user.ouuid} />
+                            <div className="notification-content">
+                                <div>
+                                    <b>{user.name}
+                                    </b>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </Link>
+            );
+        },this);
+
+		return (
+			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
+
+				<div className="vertical-center-wrapper">
+					<div className="vertical-center">
+						<div className="modal-wrapper">
+                            <div onClick={this.stopProp} className="modal round-5">
+                                <h5 className="notification-menu-header">Users Who liked this</h5>
+                                {users}
+                                {!PostStore.doneLikedUserPaging?<button onClick={this.loadMore}>Load More</button>:{}}
+                            </div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		);
+    }
+});
+
+
+
+module.exports = {PostModal:PostModal,ReportModal:ReportModal,SignupModal:SignupModal, LikedUserModal:LikedUserModal};

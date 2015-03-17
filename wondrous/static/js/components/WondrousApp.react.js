@@ -18,6 +18,7 @@ var LoggedOut = require('./Feed.react').LoggedOut;
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
 var PostModal = require('./PostModal.react').PostModal;
+var LikedUserModal = require('./PostModal.react').LikedUserModal;
 var ReportModal = require('./PostModal.react').ReportModal;
 var SignupModal = require('./PostModal.react').SignupModal;
 var Settings = require('../components/Settings.react');
@@ -65,6 +66,7 @@ var WondrousApp = React.createClass({
                 <PostModal />
                 <ReportModal />
                 <SignupModal />
+                <LikedUserModal />
             </div>
         );
     },

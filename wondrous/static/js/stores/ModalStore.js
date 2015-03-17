@@ -16,6 +16,7 @@ var ModalStore = Reflux.createStore({
         this.signupOpen = false;
         this.postFormOpen = false;
         this.cardOpen = false;
+        this.likedUserOpen = false;
 
         this.reportSubmitted = false;
     },
@@ -31,6 +32,22 @@ var ModalStore = Reflux.createStore({
     closeCardModal: function() {
         if (this.cardOpen != false) {
             this.cardOpen = false;
+            this.trigger(this);
+            $('body').removeClass('modal-open');
+        }
+    },
+
+    openLikedUserModal: function() {
+        if (this.likedUserOpen != true){
+            this.likedUserOpen = true;
+            $('body').addClass('modal-open');
+            this.trigger(this);
+        }
+    },
+
+    closeLikedUserModal: function() {
+        if (this.likedUserOpen != false) {
+            this.likedUserOpen = false;
             this.trigger(this);
             $('body').removeClass('modal-open');
         }
