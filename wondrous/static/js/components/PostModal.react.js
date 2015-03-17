@@ -8,6 +8,45 @@ var ReportConstants = require('../constants/ReportConstants');
 var LoggedOut = require('./Feed.react').LoggedOut;
 var Link = Router.Link;
 
+var linkify = function(rawText){
+    var textChunks = rawText.split('\n');
+    var handleClose = function(evt){
+        console.log("handle")
+        WondrousActions.clearModal();
+    }
+    return textChunks.map(function(segment,ind){
+        var tokens = segment.split(/(@\S*)|(#\S*)/g);
+        for (var i = 0; i < tokens.length; i += 1) {
+            if(typeof tokens[i]=='undefined'){
+                continue;
+            }
+
+            var tk = tokens[i];
+
+            var href = null;
+            if (tk.indexOf('@')>-1){
+                var temp = tk.replace('@','')
+                href = '/'+temp
+            }else if (tk.indexOf('#')>-1){
+                var temp = tk.replace('#','')
+                href = '/search/'+temp
+            }
+
+            if (href!=null){
+                tokens[i] = <Link onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
+            }
+        }
+
+        if (ind == textChunks.length - 1) {
+            return (<span>{tokens}</span>);
+        } else {
+            return (
+                <span>{tokens}<br /></span>
+            );
+        }
+    });
+}
+
 var UserTitle = React.createClass({
     repost: null,
     mixins: [ Router.Navigation ],
@@ -103,6 +142,7 @@ var Comment = React.createClass({
             createdAtDisplay = createdAt.format("h:mma");
         }
 
+        var textLinked = linkify(this.props.data.text)
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
@@ -115,7 +155,7 @@ var Comment = React.createClass({
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
 
-                    <span>{this.props.data.text}</span>
+                    <span>{textLinked}</span>
 
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
@@ -320,8 +360,8 @@ var Post = React.createClass({
 		}
 
         console.log("PostRender:", this.props.data);
+		var thisText = linkify(this.props.data.text);
 
-		var thisText = this.props.data.text.split('\n');
 		return (
 			<div ref="post"  className="post-body round-3" >
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
@@ -358,15 +398,7 @@ var Post = React.createClass({
                 </div>
 				<div className="post-content">
 					{
-						thisText.map(function(textChunk, idx) {
-							if (idx == thisText.length - 1) {
-								return textChunk;
-							} else {
-								return (
-									<span>{textChunk}<br /></span>
-								);
-							}
-						})
+						thisText
 					}
 				</div>
 
