@@ -2,6 +2,7 @@ var WondrousActions = require('../actions/WondrousActions');
 var WondrousConstants = require('../constants/WondrousConstants');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
+var SettingStore = require('../stores/SettingStore');
 var ps = require('PushStream');
 var FeedSet = require("../libs/FeedSet");
 var NotificationConstants = require('../constants/NotificationConstants');
@@ -18,7 +19,7 @@ var NotificationStore = Reflux.createStore({
             },2000);
 
         }else{
-            if (UserStore.sidebarOpen==true && UserStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS){
+            if (SettingStore.sidebarOpen==true && SettingStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS){
                 WondrousActions.setNotificationSeen();
             }else{
                 this.unseen++;
@@ -117,7 +118,7 @@ var NotificationStore = Reflux.createStore({
     },
 
     toggleNotifications: function(){
-        if (UserStore.sidebarOpen){
+        if (SettingStore.sidebarOpen){
             this.unseen = 0;
             document.title = "Wondrous"
 

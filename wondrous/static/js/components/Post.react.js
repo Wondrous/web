@@ -15,7 +15,7 @@ var UserTitle = React.createClass({
         }
         var hrefRepostPlaceholder = '';
         var name = this.props.data.name;
-        
+
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
             hrefRepostPlaceholder = '/' + this.repost.username;
@@ -23,7 +23,7 @@ var UserTitle = React.createClass({
 
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/' + this.props.data.username;
-        
+
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
@@ -32,17 +32,6 @@ var UserTitle = React.createClass({
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder}>{this.repost.name}</Link> : null}
                 </span>
-            </div>
-        );
-    }
-});
-
-var ReportPanel = React.createClass({
-
-    render: function() {
-        return (
-            <div>
-                <button onClick={this.isMature}>report</button>
             </div>
         );
     }

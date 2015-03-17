@@ -12,9 +12,6 @@ var UserStore = Reflux.createStore({
         this.loaded = false;
         this.loggedIn = false;
 
-        this.sidebarOpen = false;
-        this.sidebarType = null;
-        this.pageType = null;
         WondrousActions.auth();
     },
 
@@ -27,11 +24,7 @@ var UserStore = Reflux.createStore({
 
     unloadUser: function() {
         this.user = {};
-        this.loggedIn = false;
-        this.sidebarOpen = false;
 
-        this.sidebarType = null;
-        this.modalType = null;
         this.trigger({user:this.user});
     },
 
@@ -39,34 +32,9 @@ var UserStore = Reflux.createStore({
         this.loggedIn = false;
         this.loaded = true;
         this.trigger({user:this.user});
-    },
-
-    toggleSideBar:function() {
-        this.sidebarOpen = !this.sidebarOpen;
-        if(!this.sidebarOpen) {
-            this.sidebarType = null;
-        }
-    },
-
-    toggleSettings: function() {
-        this.sidebarType = WondrousConstants.SHOW_SETTINGS;
-        this.toggleSideBar();
-        this.trigger({sidebarType:this.sidebarType});
-    },
-
-    toggleNotifications: function() {
-        this.sidebarType = WondrousConstants.SHOW_NOTIFICATIONS;
-        this.toggleSideBar();
-        this.trigger({sidebarType:this.sidebarType});
-    },
-
-    wallLoaded: function() {
-        this.pageType = WondrousConstants.PROFILE_PAGE;
-    },
-
-    feedLoaded: function() {
-        this.pageType = WondrousConstants.FEED_PAGE;
     }
+
+
 
 });
 
