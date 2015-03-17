@@ -221,7 +221,7 @@ var PostForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <div id="crop-box-wrapper">
-                    <img id="cropBox" ref="cropBox" src="/static/pictures/transparent.gif" />
+                    <img id="cropBox" ref="cropBox" style={{ width: 750 }} src="/static/pictures/transparent.gif" />
                 </div>
 
                 <div className="new-post-progress-bar">
