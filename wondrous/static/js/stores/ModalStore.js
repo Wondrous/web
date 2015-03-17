@@ -21,7 +21,7 @@ var ModalStore = Reflux.createStore({
     openCardModal: function(){
         if (this.cardOpen!=true){
             this.cardOpen=true;
-            this.trigger();
+            this.trigger(this);
             $('body').addClass('modal-open');
         }
     },
@@ -29,7 +29,7 @@ var ModalStore = Reflux.createStore({
     closeCardModal: function(){
         if (this.cardOpen!=false){
             this.cardOpen=false;
-            this.trigger();
+            this.trigger(this);
             $('body').removeClass('modal-open');
         }
     },
@@ -37,13 +37,13 @@ var ModalStore = Reflux.createStore({
     togglePictureModal: function() {
         this.modalType = WondrousConstants.MODALTYPE_PICTURE;
         this.postFormOpen = !this.postFormOpen;
-        this.trigger();
+        this.trigger(this);
     },
 
     togglePostModal: function() {
         this.modalType = WondrousConstants.MODALTYPE_POST;
         this.postFormOpen = !this.postFormOpen;
-        this.trigger();
+        this.trigger(this);
     },
 
     toggleCommentReport: function(item_id){
@@ -53,9 +53,10 @@ var ModalStore = Reflux.createStore({
             $('body').addClass('modal-open');
         }else{
             this.reportType = null;
+            this.reportId = null;
             $('body').removeClass('modal-open');
         }
-        this.trigger();
+        this.trigger(this);
     },
 
     togglePostReport: function(item_id){
@@ -65,15 +66,16 @@ var ModalStore = Reflux.createStore({
             $('body').addClass('modal-open');
         }else{
             this.reportType = null;
+            this.reportId = null;
             $('body').removeClass('modal-open');
         }
-        this.trigger();
+        this.trigger(this);
     },
 
     closeSignupPrompt:function(){
         if (this.signupOpen==true){
             this.signupOpen=false;
-            this.trigger();
+            this.trigger(this);
             $('body').removeClass('modal-open');
         }
     },
@@ -81,7 +83,7 @@ var ModalStore = Reflux.createStore({
     openSignupPrompt: function(){
         if (this.signupOpen!=true){
             this.signupOpen=true;
-            this.trigger();
+            this.trigger(this);
             $('body').addClass('modal-open');
         }
     },
@@ -91,7 +93,7 @@ var ModalStore = Reflux.createStore({
             $('body').removeClass('modal-open');
         }
         this.unloadUser();
-        this.trigger();
+        this.trigger(this);
     }
 
 });

@@ -480,9 +480,9 @@ var PostModal = React.createClass({
 });
 
 var ReportModal = React.createClass({
-    mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
-    onPostUpdate: function(sad){
-        this.forceUpdate();
+    mixins:[ Reflux.connect(ModalStore,"data") ],
+    getInitialState: function(){
+        return {data:{reportType:null}}
     },
     handleClose: function(evt) {
 		WondrousActions.toggleCommentReport();
@@ -494,8 +494,7 @@ var ReportModal = React.createClass({
 	},
 
     render: function() {
-		divStyle = PostStore.reportType!=null? {display:"block"} : {display:"none"};
-
+		divStyle = this.state.data.reportType!=null? {display:"block"} : {display:"none"};
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
 
@@ -532,7 +531,6 @@ var SignupModal = React.createClass({
 
     render: function() {
 		divStyle = ModalStore.signupOpen?{display:"block"} : {display:"none"};
-        console.log(ModalStore.signupOpen);
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
 

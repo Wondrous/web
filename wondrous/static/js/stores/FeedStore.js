@@ -30,6 +30,10 @@ var FeedStore = Reflux.createStore({
         }
     },
 
+    updateUser: function(userData) {
+        this.unloadUser();
+    },
+
     unloadUser: function(){
         this.feed.reset();
         this.currentPage = 0;
