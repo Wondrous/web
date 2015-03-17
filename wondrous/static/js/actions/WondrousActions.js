@@ -484,7 +484,6 @@ WondrousActions.loadPost.listen(function(post_id,from_notification){
                 }
 
             }else{
-                console.error(err);
                 WondrousActions.loadPostError(err);
             }
         }

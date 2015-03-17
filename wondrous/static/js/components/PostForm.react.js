@@ -276,19 +276,9 @@ var PostForm = React.createClass({
     },
     onTextAreaChange: function(){
         var text = this.refs.postTextArea.getDOMNode().value;
-        var toHighlight = [];
+
         var mentions = text.match(/\s*@\s*(\w+)/g);
         var hashtags = text.match(/\s*#\s*(\w+)/g);
-        if (mentions!=null){
-            var t = text.replace(/\s*@\s*(\w+)/g,'<a href="http://twitter.com/#!/search/$1">$1</a>');
-            console.log(t);
-        }
-
-        if (hashtags!=null){
-
-        }
-
-        console.log(toHighlight);
 
     },
     componentDidMount: function () {
