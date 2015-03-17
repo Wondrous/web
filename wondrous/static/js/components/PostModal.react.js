@@ -8,32 +8,42 @@ var ReportConstants = require('../constants/ReportConstants');
 var LoggedOut = require('./Feed.react').LoggedOut;
 var Link = Router.Link;
 
-var linkify = function(rawText){
+var linkify = function(rawText, isSmall) {
     var textChunks = rawText.split('\n');
     var handleClose = function(evt){
         WondrousActions.clearModal();
     }
 
-    return textChunks.map(function(segment,ind){
+    return textChunks.map(function(segment, ind) {
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
-            if(typeof tokens[i]=='undefined'){
+            if(typeof tokens[i]=='undefined') {
                 continue;
             }
 
+            var isHashtag = false;
             var tk = tokens[i];
-
             var href = null;
-            if (tk.indexOf('@')>-1){
+            if (tk.indexOf('@') > -1) {
                 var temp = tk.replace('@','')
-                href = '/'+temp
-            }else if (tk.indexOf('#')>-1){
+                href = '/'+temp;
+                isHashtag = false;
+            } else if (tk.indexOf('#') > -1) {
                 var temp = tk.replace('#','')
-                href = '/search/'+temp
+                href = '/search/'+temp;
+                isHashtag = true;
             }
 
-            if (href!=null){
-                tokens[i] = <Link onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
+            var classes = "";
+            if (isHashtag) {
+                classes += "hashtagify ";
+                if (isSmall) {
+                    classes += "hashtagify--small";
+                }
+            }
+
+            if (href !== null){
+                tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
             }
         }
 
@@ -142,7 +152,7 @@ var Comment = React.createClass({
             createdAtDisplay = createdAt.format("h:mma");
         }
 
-        var textLinked = linkify(this.props.data.text)
+        var textLinked = linkify(this.props.data.text, true);
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
@@ -370,7 +380,7 @@ var Post = React.createClass({
 		}
 
         console.log("PostRender:", this.props.data);
-		var thisText = linkify(this.props.data.text);
+		var thisText = linkify(this.props.data.text, false);
 
 		return (
 			<div ref="post"  className="post-body round-3" >

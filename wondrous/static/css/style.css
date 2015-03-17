@@ -628,6 +628,29 @@ ul {
   font-size: 18px;
   padding: 20px 0 0 5%; }
 
+.hashtagify {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 16px;
+  color: #8c8c8c;
+  padding: 3px 5px;
+  background-color: #f7f7f7;
+  border: 1px solid #dbdbdb;
+  border-radius: 2px;
+  text-decoration: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .hashtagify:link, .hashtagify:visited {
+    color: #8c8c8c; }
+  .hashtagify:hover {
+    text-decoration: none;
+    border-color: #b9b9b9; }
+
+.hashtagify--small {
+  font-size: 14px;
+  padding: 0 4px; }
+
 /* ============================= */
 /* MASONRY --------------------- */
 /* ============================= */
