@@ -9,6 +9,8 @@ var WondrousActions = Reflux.createActions({
 
     "clearModal": {},
 
+    "togglePostLink": {},
+
     // reporting
     "toggleCommentReport": {},
 
