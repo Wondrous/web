@@ -127,6 +127,23 @@ class APIViews(BaseHandler):
                 )
         self.request.response.headerlist.extend(headers)
 
+    @api_login_required
+    @view_config(request_method="GET",route_name='api_post_liked_users',renderer='json')
+    def api_post_liked_users(self):
+
+        """
+            PURPOSE: Retrieves list of people who've liked this
+
+            USE: self.query_kwargs to provide all the required inputs.
+                post_id,page=0,per_page=15
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the referrer json
+        """
+
+        return PostManager.get_liked_users_json(**self.query_kwargs)
+
     @api_logout_required
     @view_config(request_method="POST",route_name='api_refer_register',renderer='json')
     def api_refer_register(self):
@@ -753,8 +770,7 @@ class APIViews(BaseHandler):
             key = shortuuid.uuid()
             retval.update({'auth':key})
             send_notification(-1,str(key)+":"+str(this_user.id))
-            if this_user.picture_object:
-                retval.update({"ouuid":this_user.picture_object.ouuid})
+
             return retval
 
         elif this_user and this_user.is_banned:
@@ -781,12 +797,17 @@ class APIViews(BaseHandler):
 
         # The data we need to validate
         error_message = None
-        uuid     = safe_in(self.query_kwargs.get('uuid'))
+        code     = safe_in(self.query_kwargs.get('code'))
         name     = safe_in(self.query_kwargs.get('name'))
         email    = safe_in(self.query_kwargs.get('email'))
         password = safe_in(self.query_kwargs.get('password'), strip=False)
         username = safe_in(Sanitize.strip_ampersand(self.query_kwargs.get('username')))
+        ref = None
 
+        if code:
+            ref = ReferrerManager.by_verification_code(code)
+            if ref.email != email:
+                return {'error': "please use the email you signed up for the waitlist"}
 
         # Check for presence
         if not name:
@@ -828,8 +849,12 @@ class APIViews(BaseHandler):
                                 username,
                                 password
                             )
-                # self._set_session_headers(new_user)
-                wondrous.controllers.email_controller.send_activation_link(new_user)
+                if ref:
+                    ref.used = True
+                    ref.verification_code = None
+                    self._set_session_headers(new_user)
+                else:
+                    wondrous.controllers.email_controller.send_activation_link(new_user)
                 return new_user.json()
             else:
                 return {'error':error_message}

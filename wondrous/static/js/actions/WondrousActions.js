@@ -11,6 +11,9 @@ var WondrousActions = Reflux.createActions({
 
     "togglePostLink": {},
 
+    // get liked users
+    "loadLikedUsers": {},
+
     // reporting
     "toggleCommentReport": {},
 
@@ -198,6 +201,16 @@ var WondrousActions = Reflux.createActions({
 
 });
 
+WondrousActions.loadLikedUsers.listen(function(postID,page){
+    WondrousAPI.getLikedUsers({
+        post_id:postID,
+        page:page,
+        callback: function(err,res){
+            console.log(res);
+        }
+    })
+});
+
 WondrousActions.sendReport.listen(function(type, item_id, reason, text){
     var callback = function(err,res){
         WondrousActions.reportReceived();
@@ -235,14 +248,13 @@ WondrousActions.registerCheck.listen(function(name, username, email, password) {
     });
 });
 
-WondrousActions.register.listen(function(name, username, email, password) {
-    console.log("register request");
-
+WondrousActions.register.listen(function(name, username, email, password, code) {
     WondrousAPI.register({
         name: name,
         email: email,
         username: username,
         password: password,
+        code:code,
         callback: function(err, res){
             if (err == null){
                 WondrousActions.updateUser(res);

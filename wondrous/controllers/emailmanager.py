@@ -27,6 +27,11 @@ def verify_verification_code(uuid):
     else:
         return False
 
+def generate_referral_verification(ref):
+    ref.verification_code = random = shortuuid.ShortUUID().random(length=20)
+    DBSession.add(ref)
+    return random
+
 def generate_verification_code(user):
 
     """
@@ -43,7 +48,7 @@ def generate_verification_code(user):
 class EmailManager:
     def __init__(self, aws_access_key, aws_secret_access_key, **kwargs):
         self.conn = boto.ses.connect_to_region('us-west-2', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_access_key)
-        
+
     def send_activation_link(self,user=None, email=None):
         if email:
             user = DBSession.query(User).filter_by(email=email).first() if not user else user
@@ -83,5 +88,12 @@ class EmailManager:
             logging.warn(e.message)
             return False
 
-    def send_waitlist_signup(self,ref_uuid,email):
-        pass
+    def send_waitlist_signup(self,ref):
+        code = generate_referral_verification(ref)
+        url = "https://wondrous.co/signup/"+code
+        try:
+            self.conn.send_email('hello@wondrous.co','Welcome to Wondrous',"You have invited N people!, welcome to wondrous!\n"+url,[ref.email])
+        except Exception, e:
+            logging.warn(e.message)
+            return False
+        return True

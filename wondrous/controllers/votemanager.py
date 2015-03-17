@@ -418,9 +418,7 @@ class VoteManager(BaseManager):
         retval = []
         for user in users:
             model_dict = user.json()
-            picture_object = user.picture_object
-            if picture_object:
-                model_dict.update({"ouuid": picture_object.ouuid})
+
             retval.append(model_dict)
         return retval
 
@@ -438,9 +436,7 @@ class VoteManager(BaseManager):
         retval = []
         for user in users:
             model_dict = user.json()
-            picture_object = user.picture_object
-            if picture_object:
-                model_dict.update({"ouuid": picture_object.ouuid})
+        
             retval.append(model_dict)
 
         return retval

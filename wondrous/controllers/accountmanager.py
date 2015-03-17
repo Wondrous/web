@@ -338,12 +338,10 @@ class AccountManager(BaseManager):
             retval.update({"unseen_notifications": unseen_notification_count})
 
             cls.add_influencer(profile_user)  # QUESTION: What does this do here?
-                                                #ANSWER: adding an influencer badge 
+                                                #ANSWER: adding an influencer badge
 
             # Add in profile picture to JSON
-            picture_object = profile_user.picture_object
-            if picture_object:
-                retval.update({"ouuid": picture_object.ouuid})
+
             if auth:
                 key = shortuuid.uuid()
                 retval.update({'auth':key})
@@ -358,10 +356,6 @@ class AccountManager(BaseManager):
             retval.update(profile_user.json(0))
             retval.update({"name": profile_user.ascii_name})
 
-            # Add in profile picture to JSON
-            picture_object = profile_user.picture_object
-            if picture_object:
-                retval.update({"ouuid": picture_object.ouuid})
 
             return retval
 
@@ -374,10 +368,6 @@ class AccountManager(BaseManager):
             retval.update({'badges': profile_user.json(0)['badges']})
             retval.update({'wondrous_score': profile_user.json(0)['wondrous_score']})
 
-            # Add in profile picture to JSON
-            picture_object = profile_user.picture_object
-            if picture_object:
-                retval.update({"ouuid": picture_object.ouuid})
 
             return retval
 

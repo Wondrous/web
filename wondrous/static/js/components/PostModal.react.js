@@ -330,7 +330,7 @@ var PostFooter = React.createClass({
                 <span onClick={WondrousActions.togglePostLink} className="post-footer-btn post-like-btn round-50" style={{ position: "relative", top: -13 }} title="Get link to this post">
                     <img src="/static/pictures/icons/link/link.png" className="post-delete-icon" />
                 </span>
-         
+
                 {PostStore.postLink != null ?
                     <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
                     : {}}
@@ -352,7 +352,9 @@ var PostFooter = React.createClass({
 });
 
 var Post = React.createClass({
-
+    viewLikedUsers: function(){
+        WondrousActions.loadLikedUsers(this.props.data.id,0);
+    },
 	render: function() {
 		var repost = null;
 		if (typeof this.props.data === 'undefined') {
@@ -396,7 +398,7 @@ var Post = React.createClass({
                             {this.props.data.comment_count}
                         </span>
 
-                        <span className="post-micro-data-super-analytics-item">
+                        <span onClick={this.viewLikedUsers} className="post-micro-data-super-analytics-item">
                             <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
                             {this.props.data.like_count}
                         </span>

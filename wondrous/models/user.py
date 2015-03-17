@@ -105,6 +105,9 @@ class User(Base, PasswordManager, BaseMixin):
     def json(self,level=0):
         retval = super(User,self).json(level)
         retval['badges'] = [badge.badge_type for badge in self.badges]
+        picture_object = self.picture_object
+        if picture_object:
+            retval.update({"ouuid": picture_object.ouuid})
         return retval
 
 

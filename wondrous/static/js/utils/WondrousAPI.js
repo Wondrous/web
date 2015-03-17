@@ -34,6 +34,23 @@ VoteAction = {
 };
 
 module.exports = {
+    // get the list of liked
+    // options are:
+    // callback
+    // post_id
+    // page
+    getLikedUsers: function(options){
+        var callback = options.callback;
+        var post_id = options.post_id;
+        var page = options.page;
+        var url = '/api/post/likes';
+
+        request.get(url).query({
+            page:page,
+            post_id:post_id
+        }).end(_callback(callback));
+    },
+
     // report a comment
     // options are:
     // callback
@@ -297,8 +314,6 @@ module.exports = {
         request.post(url).send({verification_code:verification_code, password:password}).end(_callback(callback));
     },
 
-
-
     // checks registration fields user account
     // options are:
     // name
@@ -312,6 +327,8 @@ module.exports = {
         var name = options.name;
         var email = options.email;
         var password = options.password;
+        var code = options.code;
+
         var url ='/api/auth/register';
 
         request.post(url)
@@ -319,6 +336,7 @@ module.exports = {
         .send({ username: username })
         .send({ email: email })
         .send({ password: password })
+        .send({ code: code })
         .end(_callback(callback))
     },
 

@@ -52,6 +52,12 @@ from wondrous.utilities.validation_utilities import ValidatePost
 from wondrous.utilities.notification_utilities import send_notification
 
 class PostManager(BaseManager):
+    @staticmethod
+    def get_liked_users_json(user,post_id,page=0,per_page=15):
+        users = DBSession.query(User).join(Vote,User.id==Vote.user_id).filter(Vote.vote_type==Vote.OBJECT).\
+            filter(Vote.status==Vote.LIKED).filter(Vote.subject_id==post_id).limit(per_page).\
+            offset(page).all()
+        return [user.json() for user in users]
 
     @staticmethod
     def report_comment(user,comment_id,reason,text=None):

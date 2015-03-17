@@ -71,6 +71,9 @@ def build_routes(config):
 
     config.add_route('api_get_post',                           '/api/post')             # GET
     config.add_route('api_post_vote',                          '/api/post/vote')        # POST
+    config.add_route('api_post_delete',                        '/api/post/delete')      # DELETE
+    config.add_route('api_post_comments',                      '/api/post/comment')     # GET
+    config.add_route('api_post_liked_users',                   '/api/post/likes')       # GET
 
     config.add_route('api_user_name',                          '/api/me/name')          # POST
     config.add_route('api_user_username',                      '/api/me/username')      # POST
@@ -94,13 +97,12 @@ def build_routes(config):
     config.add_route('api_new_post',                           '/api/wall/new')         # POST
     config.add_route('api_repost',                             '/api/wall/repost')      # POST
     config.add_route('api_user_feed',                          '/api/feed')             # GET
+
     config.add_route('api_user_notification',                  '/api/notification')     # GET
     config.add_route('api_seen_notification',                  '/api/notification/seen')     # POST
-    config.add_route('api_post_delete',                        '/api/post/delete')      # DELETE
 
     config.add_route('api_new_comment',                        '/api/comment/new')      # POST
     config.add_route('api_comment_delete',                     '/api/comment/delete')   # DELETE
-    config.add_route('api_post_comments',                      '/api/post/comment')     # GET
 
     # Waitlist Routes
     config.add_route('api_refer_register',                     '/api/refer')            # POST

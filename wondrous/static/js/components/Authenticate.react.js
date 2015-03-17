@@ -179,6 +179,7 @@ var Signup = React.createClass({
     good: true,
     mixins: [
         Router.Navigation,
+        Router.State,
         Reflux.listenTo(UserStore,'onUserUpdate'),
         Reflux.listenTo(LoginStore,'onLoginError')
     ],
@@ -213,11 +214,14 @@ var Signup = React.createClass({
         // Order matters: name, username, email, password.
         // Be sure to keep this updated with the associated
         // method in WondrousActions.js
+        var code = (typeof this.getParams().verification_code !== 'undefined')?this.getParams().verification_code:null;
+
         WondrousActions.register(
             this.refs.name.getDOMNode().value.trim(),
             this.refs.username.getDOMNode().value.trim(),
             this.refs.email.getDOMNode().value.trim(),
-            this.refs.password.getDOMNode().value
+            this.refs.password.getDOMNode().value,
+            code
         );
     },
     render: function() {
