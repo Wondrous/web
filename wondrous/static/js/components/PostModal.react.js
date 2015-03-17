@@ -223,10 +223,9 @@ var Comments = React.createClass({
                 <Comment key={comment.id} data={comment}/>
             );
         });
-
         return (
             <div>
-                {!PostStore.donePaging&&comments.length>0 ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
+                {!PostStore.doneCommentPaging&&comments.length>0 ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
                 {comments}
                 {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div> : null}
                 <form style={{ margin: "0 28px" }} >
