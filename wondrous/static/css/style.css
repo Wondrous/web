@@ -1258,6 +1258,20 @@ a:hover {
   top: 7px;
   margin-right: 2px; }
 
+.post-share-link-input {
+  position: relative;
+  top: -5px;
+  width: 300px;
+  font-size: 20px;
+  font-weight: 100;
+  padding: 4px 0 4px 6px;
+  margin-left: 5px;
+  border: none;
+  -webkit-box-shadow: inset 0 0px 3px #006aae;
+  -moz-box-shadow: inset 0 0px 3px #006aae;
+  -o-box-shadow: inset 0 0px 3px #006aae;
+  box-shadow: inset 0 0px 3px #006aae; }
+
 .no-top-border {
   -webkit-border-top-left-radius: 0;
   -moz-border-top-left-radius: 0;
