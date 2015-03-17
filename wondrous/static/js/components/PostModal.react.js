@@ -307,7 +307,7 @@ var PostFooter = React.createClass({
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         return (
             <div className="post-footer">
-                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50">
+                <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
                     {this.props.data.liked ?
                         <span>
                             <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" />
@@ -322,25 +322,30 @@ var PostFooter = React.createClass({
                 </span>
 
                 {!is_it_mine ?
-                    <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50">
+                    <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50" title="Repost this post">
                         <img src="/static/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
                     </span>
                     : null}
 
+                <span onClick={WondrousActions.togglePostLink} className="post-footer-btn post-like-btn round-50" style={{ position: "relative", top: -13 }} title="Get link to this post">
+                    <img src="/static/pictures/icons/link/link.png" className="post-delete-icon" />
+                </span>
+         
+                {PostStore.postLink != null ?
+                    <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
+                    : {}}
+
                 {!is_it_mine ?
-                    <span onClick={this.reportPost} className="post-footer-btn post-delete-btn round-50">
+                    <span onClick={this.reportPost} className="post-footer-btn post-delete-btn round-50" title="Report this post">
                         <span style={{ position: "relative", top: 10, fontFamily: "heydings_iconsregular", fontSize: 17  }} >f</span>
                     </span>
                     : null}
 
                 {is_it_mine ?
-                    <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50">
+                    <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50" title="Delete this post">
                         <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
                     </span>
                     : null}
-                    <span onClick={WondrousActions.togglePostLink}>Share</span>
-                {PostStore.postLink!=null?<input type='text' value={PostStore.postLink} readOnly/>:{}}
-
             </div>
         );
     }
@@ -517,8 +522,6 @@ var PostModal = React.createClass({
         if (typeof this.state.post === 'undefined') {
             return (<div></div>);
         }
-
-
 		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
 
 		return (
