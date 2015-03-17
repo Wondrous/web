@@ -22,8 +22,21 @@ var PostStore = Reflux.createStore({
         this.loading = false;
         this.reportType = null;
         this.reportId = null;
+
+        this.postLink = null;
     },
 
+    closeCardModal: function(){
+        this.postLink = null;
+    },
+    togglePostLink: function(){
+        if(this.postLink==null){
+            this.postLink = "https://"+window.location.host+'/post/'+this.post.id;
+        }else{
+            this.postLink=null;
+        }
+        this.trigger();
+    },
     newPostLoad: function(post_id){
         this.unloadUser();
         if (typeof post_id !=='undefined'&&!this.loading){

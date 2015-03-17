@@ -13,7 +13,7 @@ var linkify = function(rawText){
     var handleClose = function(evt){
         WondrousActions.clearModal();
     }
-    
+
     return textChunks.map(function(segment,ind){
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
@@ -338,6 +338,9 @@ var PostFooter = React.createClass({
                         <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
                     </span>
                     : null}
+                    <span onClick={WondrousActions.togglePostLink}>Share</span>
+                {PostStore.postLink!=null?<input type='text' value={PostStore.postLink} readOnly/>:{}}
+
             </div>
         );
     }
