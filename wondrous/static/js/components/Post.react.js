@@ -7,7 +7,7 @@ var Link = Router.Link;
 
 var UserTitle = React.createClass({
     repost: null,
-    mixins: [Router.Navigation],
+    mixins: [ Router.Navigation ],
 
     render: function() {
         if(typeof this.props.data === 'undefined'){
@@ -15,12 +15,15 @@ var UserTitle = React.createClass({
         }
         var hrefRepostPlaceholder = '';
         var name = this.props.data.name;
+        
         if (this.props.data.hasOwnProperty('repost')) {
             this.repost = this.props.data.repost;
             hrefRepostPlaceholder = '/' + this.repost.username;
         }
+
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/' + this.props.data.username;
+        
         return (
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
@@ -30,13 +33,13 @@ var UserTitle = React.createClass({
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder}>{this.repost.name}</Link> : null}
                 </span>
             </div>
-            );
+        );
     }
 });
 
 var ReportPanel = React.createClass({
 
-    render: function(){
+    render: function() {
         return (
             <div>
                 <button onClick={this.isMature}>report</button>
@@ -51,9 +54,11 @@ var Photo = React.createClass({
         if (this.props.data.hasOwnProperty('repost')) {
             this.props.data.ouuid = this.props.data.repost.ouuid;
         }
+
         photoStyle = {
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "url(/static/pictures/500x500.gif)",
         };
+
         return (
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                     <div className="post-subject-text nh">
@@ -88,6 +93,7 @@ var Photo = React.createClass({
                     </div>
             </div>);
     },
+
     componentDidMount: function() {
         // Nothing much happening here!!!
     }
@@ -111,14 +117,9 @@ var Post = React.createClass({
             WondrousActions.openCardModal();
         }
     },
-    reportPost: function(e){
-        if(!checkLogin()){
-            return;
-        }
-        WondrousActions.togglePostReport(this.props.data.id);
-    },
+
     render: function() {
-        if (typeof this.props.data === 'undefined'){
+        if (typeof this.props.data === 'undefined') {
             return (<div></div>);
         }
         var repost = null;
@@ -131,17 +132,16 @@ var Post = React.createClass({
         }
 
         var thisText = '';
-        if (typeof this.props.data.text!=='undefined'){
+        if (typeof this.props.data.text !== 'undefined') {
             thisText =this.props.data.text.split('\n');
         }
 
         return (
             <div ref="brick" className="masonry-brick">
-                <div ref="post"  className="post-body round-3">
+                <div ref="post" className="post-body round-3">
                     <div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
                         <UserTitle data={this.props.data} />
                     </div>
-                    {!is_it_mine?<button onClick={this.reportPost}>report</button>:null}
 
                     <div className="post-title">{this.props.data.subject}</div>
                     <a href={"/post/"+this.props.data.id} onClick={this.handleClick} id="slidePhoto">

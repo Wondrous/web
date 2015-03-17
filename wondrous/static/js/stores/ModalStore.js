@@ -4,11 +4,11 @@ var WondrousConstants = require('../constants/WondrousConstants');
 var ModalStore = Reflux.createStore({
     listenables: WondrousActions,
 
-    init:function(){
+    init: function() {
         this.unloadUser();
     },
 
-    unloadUser: function(){
+    unloadUser: function() {
         this.reportType = null;
         this.reportId = null;
         this.modalType = null;
@@ -18,17 +18,17 @@ var ModalStore = Reflux.createStore({
         this.cardOpen = false;
     },
 
-    openCardModal: function(){
-        if (this.cardOpen!=true){
-            this.cardOpen=true;
+    openCardModal: function() {
+        if (this.cardOpen != true){
+            this.cardOpen = true;
             this.trigger(this);
             $('body').addClass('modal-open');
         }
     },
 
-    closeCardModal: function(){
-        if (this.cardOpen!=false){
-            this.cardOpen=false;
+    closeCardModal: function() {
+        if (this.cardOpen != false) {
+            this.cardOpen = false;
             this.trigger(this);
             $('body').removeClass('modal-open');
         }
@@ -46,12 +46,12 @@ var ModalStore = Reflux.createStore({
         this.trigger(this);
     },
 
-    toggleCommentReport: function(item_id){
-        if(this.reportType==null){
+    toggleCommentReport: function(item_id) {
+        if (this.reportType == null) {
             this.reportType = "comment";
             this.reportId = item_id;
             $('body').addClass('modal-open');
-        }else{
+        } else {
             this.reportType = null;
             this.reportId = null;
             $('body').removeClass('modal-open');
@@ -59,12 +59,12 @@ var ModalStore = Reflux.createStore({
         this.trigger(this);
     },
 
-    togglePostReport: function(item_id){
-        if(this.reportType==null){
+    togglePostReport: function(item_id) {
+        if (this.reportType == null) {
             this.reportType = "post";
             this.reportId = item_id;
             $('body').addClass('modal-open');
-        }else{
+        } else {
             this.reportType = null;
             this.reportId = null;
             $('body').removeClass('modal-open');
@@ -72,30 +72,29 @@ var ModalStore = Reflux.createStore({
         this.trigger(this);
     },
 
-    closeSignupPrompt:function(){
-        if (this.signupOpen==true){
-            this.signupOpen=false;
+    closeSignupPrompt: function() {
+        if (this.signupOpen == true) {
+            this.signupOpen = false;
             this.trigger(this);
             $('body').removeClass('modal-open');
         }
     },
 
-    openSignupPrompt: function(){
-        if (this.signupOpen!=true){
-            this.signupOpen=true;
+    openSignupPrompt: function() {
+        if (this.signupOpen != true){
+            this.signupOpen = true;
             this.trigger(this);
             $('body').addClass('modal-open');
         }
     },
 
-    clearModal: function(){
-        while ($('body').hasClass('modal-open')){
+    clearModal: function() {
+        while ($('body').hasClass('modal-open')) {
             $('body').removeClass('modal-open');
         }
         this.unloadUser();
         this.trigger(this);
     }
-
 });
 
 

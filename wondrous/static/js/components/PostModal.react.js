@@ -6,17 +6,14 @@ var UserStore = require('../stores/UserStore');
 var ModalStore = require('../stores/ModalStore');
 var ReportConstants = require('../constants/ReportConstants');
 var LoggedOut = require('./Feed.react').LoggedOut;
-
 var Link = Router.Link;
-
-
 
 var UserTitle = React.createClass({
     repost: null,
-    mixins: [Router.Navigation],
+    mixins: [ Router.Navigation ],
 
     handleClick: function(evt) {
-        if (typeof this.props.data.username != 'undefined') {
+        if (typeof this.props.data.username !== 'undefined') {
             if(checkLogin()){
                 WondrousActions.closeCardModal();
             }else{
@@ -26,7 +23,7 @@ var UserTitle = React.createClass({
     },
 
     handleClickOnOwner: function(evt) {
-        if (typeof this.repost.username != 'undefined') {
+        if (typeof this.repost.username !== 'undefined') {
             if(checkLogin()){
                 WondrousActions.closeCardModal();
             }else{
@@ -66,35 +63,35 @@ var UserTitle = React.createClass({
 });
 
 var Comment = React.createClass({
-    mixins: [Router.Navigation],
+    mixins: [ Router.Navigation ],
 
     handleClick: function(evt) {
-        if (typeof this.props.data.username != 'undefined') {
-            if(checkLogin()){
+        if (typeof this.props.data.username !== 'undefined') {
+            if (checkLogin()) {
                 WondrousActions.closeCardModal();
-            }else{
+            } else {
                 evt.preventDefault();
             }
         }
     },
 
-    onDelete: function(){
+    onDelete: function() {
         WondrousActions.deleteComment(this.props.data.id);
     },
-    reportComment: function(){
-        if(!checkLogin()){
-            return;
-        }
+
+    reportComment: function() {
+        if (!checkLogin()) return;
         WondrousActions.toggleCommentReport(this.props.data.id);
     },
+
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
         var createdAt = moment(this.props.data.created_at);
-
         var mmtMidnight = moment().startOf('day');
         var createdAtDisplay = "";
+        
         if (createdAt.isBefore(mmtMidnight)) {
             var mmtYear = moment().startOf('year');
             if (createdAt.isBefore(mmtYear)) {
@@ -111,18 +108,21 @@ var Comment = React.createClass({
                 <div className="post-comment-image-wrapper round-2">
                     <img className="post-comment-img round-2" src={img_src} />
                 </div>
+                
                 <div className="post-comment-content">
                     <Link to={'/' + this.props.data.username} onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
+                    
                     <span>{this.props.data.text}</span>
 
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
                     {is_it_mine ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
-                    	: <button onClick={this.reportComment}>report</button>}
+                    	:
+                        <div className="post-comment-delete-btn" onClick={this.reportComment}>f</div>}
                 </div>
             </div>
         );
@@ -149,9 +149,7 @@ var Comments = React.createClass({
 
     onComment: function(evt){
         evt.preventDefault();
-        if(!checkLogin()){
-            return;
-        }
+        if (!checkLogin()) return;
         var text = this.refs.commentBox.getDOMNode().value.trim();
 
         //console.log(text,this.props.post_id);
@@ -192,9 +190,9 @@ var Comments = React.createClass({
 var Photo = React.createClass({
 
 	handleClose: function(evt){
-        if(checkLogin()){
+        if (checkLogin()) {
             WondrousActions.closeCardModal();
-        }else{
+        } else {
             evt.preventDefault();
         }
 	},
@@ -210,8 +208,8 @@ var Photo = React.createClass({
 
         return (
             <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
-
-            </div>);
+            </div>
+        );
     }
 });
 
@@ -222,42 +220,49 @@ var PostFooter = React.createClass({
         WondrousActions.deletePost(this.props.data.id);
     },
 
-    onLikeHandler: function(err,res){
-        if(err==null){
+    reportPost: function(e) {
+        if (!checkLogin()) return;
+        WondrousActions.togglePostReport(this.props.data.id);
+    },
+
+    onLikeHandler: function(err, res) {
+        if (err == null) {
             PostStore.post.liked = this.props.data.liked;
-            if(PostStore.post.liked){
+            if (PostStore.post.liked) {
                 PostStore.post.like_count++;
-            }else{
+            } else {
                 PostStore.post.like_count--;
             }
-
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
-        }else{
-
         }
     },
+
     likePost: function() {
-        if(checkLogin()){
+        if (checkLogin()) {
             WondrousActions.closeCardModal();
-        }else{
+        } else {
             return;
         }
+
         this.props.data.liked = !this.props.data.liked;
         this.forceUpdate();
+        
         WondrousAPI.toggleLike({
             post_id: this.props.data.id,
             callback: this.onLikeHandler,
         });
     },
+
     clickRepost: function() {
-        if(checkLogin()){
+        if (checkLogin()) {
             WondrousActions.closeCardModal();
-        }else{
+        } else {
             return;
         }
         WondrousActions.repost(this.props.data.id);
     },
+
     render: function(){
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         return (
@@ -282,6 +287,12 @@ var PostFooter = React.createClass({
                     </span>
                     : null}
 
+                {!is_it_mine ?
+                    <span onClick={this.reportPost} className="post-footer-btn post-delete-btn round-50">
+                        Report
+                    </span>
+                    : null}
+
                 {is_it_mine ?
                     <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50">
                         <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
@@ -293,15 +304,10 @@ var PostFooter = React.createClass({
 });
 
 var Post = React.createClass({
-    reportPost: function(e){
-        if(!checkLogin()){
-            return;
-        }
-        WondrousActions.togglePostReport(this.props.data.id);
-    },
+
 	render: function() {
 		var repost = null;
-		if (typeof this.props.data ==='undefined'){
+		if (typeof this.props.data === 'undefined') {
 			return (
 				<div></div>
 			);
@@ -321,11 +327,15 @@ var Post = React.createClass({
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
 					<UserTitle data={this.props.data} />
 				</div>
-                <button onClick={this.reportPost}>report</button>
-				<div className="post-title post-title-big" style={{ marginLeft: 28, marginRight: 28 }}>{this.props.data.subject}</div>
+
+				<div className="post-title post-title-big" style={{ marginLeft: 28, marginRight: 28 }}>
+                    {this.props.data.subject}
+                </div>
+
 				<div onClick={this.handleClick} id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
+
                 <div>
                     <div className="post-modal-micro-data-wrapper">
                         <span className="post-micro-data-super-analytics-item">
@@ -343,55 +353,64 @@ var Post = React.createClass({
                             {this.props.data.like_count}
                         </span>
                     </div>
+                    
                     <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
                 </div>
-				<div className="post-content" >
-						{
-							thisText.map(function(textChunk, idx) {
-								if (idx == thisText.length - 1) {
-									return textChunk;
-								} else {
-									return (
-										<span>{textChunk}<br /></span>
-									);
-								}
-							})
-						}
+				<div className="post-content">
+					{
+						thisText.map(function(textChunk, idx) {
+							if (idx == thisText.length - 1) {
+								return textChunk;
+							} else {
+								return (
+									<span>{textChunk}<br /></span>
+								);
+							}
+						})
+					}
 				</div>
-				<hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
+				
+                <hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
+                
                 <div className="post-comment-wrapper">
                     <Comments post_id={this.props.data.id} data={this.props.comments} />
                 </div>
-				<PostFooter data={this.props.data} />
+				
+                <PostFooter data={this.props.data} />
 			</div>
 		);
 	}
 });
 
 var ReportingForm = React.createClass({
-    submitted:false,
-    mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
-    onPostUpdate: function(postData){
-        if(typeof postData!=='undefined' && postData.hasOwnProperty('reported')){
+    submitted: false,
+    mixins: [ Reflux.listenTo(PostStore,"onPostUpdate") ],
+
+    onPostUpdate: function(postData) {
+        if (typeof postData !== 'undefined' && postData.hasOwnProperty('reported')) {
             this.submitted = true;
             var that = this;
+            
             setTimeout(function(){
                 that.submitted = false;
-            },500);
+            }, 500);
+
             this.forceUpdate();
         }
     },
+
     stopProp: function(e){
         e.stopPropagation();
     },
+
     radioChange: function(e){
-        console.log("radio changed",$("input[name=reason]:checked").val());
+        console.log("radio changed", $("input[name=reason]:checked").val());
     },
 
     report: function(e){
         e.preventDefault();
         var reason = -1;
-        switch($("input[name=reason]:checked").val()){
+        switch($("input[name=reason]:checked").val()) {
             case "mature":
                 reason = ReportConstants.MATURE;
                 break;
@@ -431,10 +450,15 @@ var ReportingForm = React.createClass({
 });
 
 var PostModal = React.createClass({
-	mixins:[ Reflux.listenTo(PostStore,"onPostUpdate"), Reflux.listenTo(ModalStore,"onModalChange") ],
+	mixins:[
+        Reflux.listenTo(PostStore,"onPostUpdate"),
+        Reflux.listenTo(ModalStore,"onModalChange")
+    ],
+
     onModalChange: function(){
         this.forceUpdate();
     },
+
 	onPostUpdate: function(postData) {
 		this.setState(postData);
 	},
@@ -453,8 +477,7 @@ var PostModal = React.createClass({
 	},
 
 	render: function() {
-
-        if (typeof this.state.post === 'undefined'){
+        if (typeof this.state.post === 'undefined') {
             return (<div></div>);
         }
 		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
@@ -481,9 +504,11 @@ var PostModal = React.createClass({
 
 var ReportModal = React.createClass({
     mixins:[ Reflux.connect(ModalStore,"data") ],
-    getInitialState: function(){
-        return {data:{reportType:null}}
+
+    getInitialState: function() {
+        return { data:{reportType: null} }
     },
+
     handleClose: function(evt) {
 		WondrousActions.toggleCommentReport();
 	},
@@ -517,9 +542,11 @@ var ReportModal = React.createClass({
 
 var SignupModal = React.createClass({
     mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],
-    onModalChange: function(){
+
+    onModalChange: function() {
         this.forceUpdate();
     },
+
     handleClose: function(evt) {
         WondrousActions.closeSignupPrompt();
 	},
