@@ -689,3 +689,24 @@ $post-cover-photo-height: 390px;
         /*overflow-y:scroll;*/
     }
 }
+
+/* ------------------------------- */
+
+.content-report-header {
+    color: rgb(200,130,130);
+}
+
+.content-report-input-wrapper {
+    margin: 0 5px; 
+    font-weight: bold;
+    color: rgb(85,85,85);
+}
+
+.content-report-textarea {
+    height: 3.5em;
+    width: 400px;
+    resize: none;
+    border: 1px solid rgb(200,200,200);
+    margin-top: 10px;
+    padding: 4px;
+}
