@@ -167,7 +167,6 @@ class PostManager(BaseManager):
 
     @classmethod
     def move_n_posts_into_feed(cls,from_user_id,to_user_id,n=5):
-        logging.warn(str(from_user_id)+' '+str(to_user_id))
         from_user = DBSession.query(User).get(from_user_id)
         to_user = DBSession.query(User).get(to_user_id)
         if from_user and to_user:
@@ -244,11 +243,11 @@ class PostManager(BaseManager):
         DBSession.flush()
 
         cls.notify_followers(new_post.id,user_id)
-
-        tags = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*#\s*(\w+)', text)))]
-        if len(tags)>0:
-            logging.warn("tags "+str(tags))
-            cls._process_tags(tags,new_post.id)
+        if text:
+            tags = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*#\s*(\w+)', text)))]
+            if len(tags)>0:
+                logging.warn("tags "+str(tags))
+                cls._process_tags(tags,new_post.id)
 
         cls._move_post_into_feeds(new_post.id, user_id)
         DBSession.flush()

@@ -11,9 +11,9 @@ var Link = Router.Link;
 var linkify = function(rawText){
     var textChunks = rawText.split('\n');
     var handleClose = function(evt){
-        console.log("handle")
         WondrousActions.clearModal();
     }
+    
     return textChunks.map(function(segment,ind){
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {

@@ -59,13 +59,16 @@ var WallStore = Reflux.createStore({
         for(var i = 0; i < wallItems.length; i++){
             this.wall.push(wallItems[i]);
         }
-        
+
         this.trigger(this.getWall());
     },
 
     addToWall: function(post){
-        this.wall.unshift(post);
-        this.trigger(this.getWall());
+        if (post.user_id==ProfileStore.user.id){
+            console.log("adding to wall")
+            this.wall.unshift(post);
+            this.trigger(this.getWall());
+        }
     },
 
     incrementPage: function(){
