@@ -43,8 +43,7 @@
   "browser": {
     "PushStream": "./js/vendor/pushstream.js",
     "jquery-hashtags": "./js/vendor/jquery.hashtags.js",
-    "jquery-cropbox": "./js/vendor/jquery.cropbox.js",
-    "jquery-overlay": "./js/vendor/jquery.overlay.js"
+    "jquery-cropbox": "./js/vendor/jquery.cropbox.js"
   },
   "scripts": {
     "start": "watchify -o js/bundle.js -v -d .",
