@@ -2023,7 +2023,11 @@ a:hover {
   color: white;
   text-align: center;
   cursor: pointer;
-  -webkit-user-select: none; }
+  -webkit-user-select: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
   .post-button:hover {
     background-color: #0078c8; }
   .post-button:active {
