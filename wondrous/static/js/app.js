@@ -6,7 +6,6 @@ window.Masonry = require('masonry-layout');
 window.Reflux = require('reflux');
 window.moment = require('moment');
 window.cropper = require("cropper");
-window.overlay = require("jquery-overlay");
 
 var Routes = require('./components/WondrousApp.react')
 
