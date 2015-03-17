@@ -3,7 +3,8 @@ var MouseWheel = require('kd-shim-jquery-mousewheel');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousConstants = require('../constants/WondrousConstants');
 var hashtags = require('jquery-hashtags');
-var UserStore = require('../stores/UserStore');
+var ModalStore = require('../stores/ModalStore');
+// var UserStore = require('../stores/UserStore');
 var UploadStore = require('../stores/UploadStore');
 
 function uri2blob(dataURI) {
@@ -18,7 +19,7 @@ function uri2blob(dataURI) {
 }
 
 var PostForm = React.createClass({
-    mixins: [Reflux.listenTo(UserStore, "onUserChange"), Reflux.listenTo(UploadStore, "onUploadChange")],
+    mixins: [Reflux.listenTo(ModalStore, "onModalChange"), Reflux.listenTo(UploadStore, "onUploadChange")],
     file: null,
 
     getInitialState: function() {
@@ -81,7 +82,7 @@ var PostForm = React.createClass({
     },
 
     handleCancel: function(e){
-        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if (!isPictureModal) {
             WondrousActions.togglePostModal();
@@ -131,7 +132,7 @@ var PostForm = React.createClass({
             console.error("upload file error", err);
         }
         this.handleCancel(null);
-        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if (isPictureModal) {
             setTimeout(this.updateProfile, 500);
@@ -141,8 +142,8 @@ var PostForm = React.createClass({
 
     },
 
-    handleSubmit:function(e) {
-        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+    handleSubmit:function(e){
+        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if (isPictureModal) {
             if (typeof this.file !=='undefined' && this.file != null){
@@ -206,17 +207,11 @@ var PostForm = React.createClass({
             }
         });
 
-        // $(this.refs.cropBox.getDOMNode()).cropbox({
-        //     width:  750,
-        //     height: 390,
-        // }).on('cropbox',function(e,results,img){
-        //
-        // });
 
     },
 
     render: function() {
-        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         var divStyle = {
             display: isPictureModal ? "none" : "block",
@@ -287,20 +282,16 @@ var PostForm = React.createClass({
         var hashtags = text.match(/\s*#\s*(\w+)/g);
     },
     componentDidMount: function () {
-        var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
         if(!isPictureModal){
 
         }
 
     },
-
-    onUserChange:function(userData){
-        if (userData.hasOwnProperty('modalType')){
-            this.forceUpdate();
-            if (UserStore.modalOpen){
-                var form = this.refs.postform.getDOMNode();
-                $(form).slideDown(200);
-            }
+    onModalChange: function(){
+        if (ModalStore.postFormOpen){
+            var form = this.refs.postform.getDOMNode();
+            $(form).slideDown(200);
         }
     }
 });

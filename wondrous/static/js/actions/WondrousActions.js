@@ -3,6 +3,12 @@ var WondrousAPI = require("../utils/WondrousAPI");
 var WondrousActions = Reflux.createActions({
     // SECTION loading from server
 
+    "closeSignupPrompt": {},
+
+    "openSignupPrompt": {},
+
+    "clearModal": {},
+
     // reporting
     "toggleCommentReport": {},
 

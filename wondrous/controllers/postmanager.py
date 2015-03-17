@@ -291,12 +291,21 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def get_by_id_json(cls,user,post_id):
+    def get_by_id_json(cls,post_id,user=None):
         post = Post.by_id(post_id)
         if post:
-            # logging.warn(str(post.json()))
+            if not user and post.user.is_private:
+                return {'error': 'User is private'}
+
+            if user and (post.user.is_private and not VoteManager.is_following(user.id,post.user_id)):
+                return {'error': 'User is private'}
+
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
+
+                if not user:
+                    return post_dict
+
                 if post_dict:
                     post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
 

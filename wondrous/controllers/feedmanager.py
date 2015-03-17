@@ -60,7 +60,21 @@ class FeedManager(BaseManager):
         pass
 
     @classmethod
-    def get_feed_posts_json(cls, user, feed_type, page=0):
+    def get_public_posts_json(cls):
+        posts = DBSession.query(Post).join(User,User.id==Post.user_id).filter(User.is_private==False).\
+            filter(Post.set_to_delete==None).filter(Post.is_active==True).filter(Post.is_hidden==False).\
+            order_by(desc(Post.view_count)).limit(20).offset(0)
+        data = []
+        for post in posts:
+            post_dict = post.json()
+            data.append(post_dict)
+        return data
+
+    @classmethod
+    def get_feed_posts_json(cls, feed_type, page=0, user = None):
+        if not user:
+            return cls.get_public_posts_json()
+
         page = int(page)
         feed_type = int(feed_type)
         if feed_type == cls.MAJORITY:

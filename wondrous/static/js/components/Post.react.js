@@ -1,6 +1,8 @@
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
+var checkLogin = require('../utils/Func').checkLogin;
+
 var Link = Router.Link;
 
 var UserTitle = React.createClass({
@@ -106,9 +108,13 @@ var Post = React.createClass({
                 WondrousActions.newPostLoad(this.props.data.id);
             }
             WondrousActions.updatePost(this.props.data);
+            WondrousActions.openCardModal();
         }
     },
     reportPost: function(e){
+        if(!checkLogin()){
+            return;
+        }
         WondrousActions.togglePostReport(this.props.data.id);
     },
     render: function() {

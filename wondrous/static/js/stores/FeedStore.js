@@ -15,10 +15,7 @@ var FeedStore = Reflux.createStore({
     },
 
     onUserChange: function(userData){
-        if(userData.hasOwnProperty('user')&&UserStore.loggedIn){
-
-            this.loadMore();
-        }
+        this.loadMore();
     },
 
     loadMore: function(){
@@ -26,6 +23,10 @@ var FeedStore = Reflux.createStore({
             this.paging = true;
             WondrousActions.loadFeed(this.currentPage);
             this.incrementPage();
+        }
+
+        if(UserStore.loaded&&!UserStore.loggedIn){
+            this.donePaging = true;
         }
     },
 

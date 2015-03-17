@@ -395,7 +395,6 @@ class APIViews(BaseHandler):
 
         return AccountManager.change_password_json(**self.query_kwargs)
 
-    @api_login_required
     @view_config(request_method="GET",route_name='api_user_feed', renderer='json')
     def api_user_feed(self):
 
@@ -502,7 +501,6 @@ class APIViews(BaseHandler):
         posts  = VoteManager.vote_json(**self.query_kwargs)
         return posts
 
-    @api_login_required
     @view_config(request_method="GET",route_name='api_get_post', renderer='json')
     def api_get_post(self):
 

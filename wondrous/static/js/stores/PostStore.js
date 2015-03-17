@@ -1,11 +1,8 @@
 var WondrousActions = require('../actions/WondrousActions');
-var PostStore = require('../stores/PostStore');
 var UserStore = require('../stores/UserStore');
 var FeedSet = require('../libs/FeedSet');
 
 var defaultUser = {username:''};
-
-
 
 var PostStore = Reflux.createStore({
     listenables: WondrousActions,
@@ -14,6 +11,7 @@ var PostStore = Reflux.createStore({
         this.unloadUser();
         this.listenTo(UserStore,"onUserChange");
     },
+
     unloadUser: function(){
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;
@@ -37,30 +35,6 @@ var PostStore = Reflux.createStore({
         }
     },
 
-    toggleCommentReport: function(item_id){
-        if(this.reportType==null){
-            this.reportType = "comment";
-            this.reportId = item_id;
-            $('body').addClass('modal-open');
-        }else{
-            this.reportType = null;
-            $('body').removeClass('modal-open');
-        }
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
-    },
-
-    togglePostReport: function(item_id){
-        if(this.reportType==null){
-            this.reportType = "post";
-            this.reportId = item_id;
-            $('body').addClass('modal-open');
-        }else{
-            this.reportType = null;
-            $('body').removeClass('modal-open');
-        }
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
-    },
-
     loadMoreComments: function(){
         if (typeof this.post.id !=='undefined' &&this.post.id>0&& !this.paging && !this.donePaging){
             this.paging = true;
@@ -70,7 +44,7 @@ var PostStore = Reflux.createStore({
         }
     },
     reportSubmitted: function(){
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet,reported:true});
+        this.trigger({post:this.post,comments:this.comments.sortedSet,reported:true});
     },
     loadCommentsError: function(err){
         this.paging = false;
@@ -85,21 +59,6 @@ var PostStore = Reflux.createStore({
         this.commentPage++;
     },
 
-    openCardModal: function(){
-        if (this.modalOpen!=true){
-            this.modalOpen=true;
-            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
-            $('body').addClass('modal-open');
-        }
-    },
-
-    closeCardModal: function(){
-        if (this.modalOpen!=false){
-            this.modalOpen=false;
-            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
-            $('body').removeClass('modal-open');
-        }
-    },
 
     onUserChange: function(userData){
 
@@ -110,7 +69,7 @@ var PostStore = Reflux.createStore({
         WondrousActions.updatePostOnWall();
         WondrousActions.updatePostOnFeed();
         this.loading = true;
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
+        this.trigger({post:this.post,comments:this.comments.sortedSet});
     },
 
     loadPostError: function(err){
@@ -125,7 +84,7 @@ var PostStore = Reflux.createStore({
             this.post.comment_count++;
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
-            this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
+            this.trigger({post:this.post,comments:this.comments.sortedSet});
         }
     },
 
@@ -141,12 +100,12 @@ var PostStore = Reflux.createStore({
         this.post.comment_count=this.comments.sortedSet.length;
         WondrousActions.updatePostOnWall();
         WondrousActions.updatePostOnFeed();
-        this.trigger({modalOpen: this.modalOpen, post: this.post, comments: this.comments.sortedSet});
+        this.trigger({post: this.post, comments: this.comments.sortedSet});
     },
 
     removeFromComment: function(comment_id){
         this.comments.delete(comment_id);
-        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
+        this.trigger({post:this.post,comments:this.comments.sortedSet});
     }
 
 });
