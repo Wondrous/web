@@ -368,6 +368,16 @@ var Post = React.createClass({
 
         console.log("PostRender:", this.props.data);
 		var thisText = linkify(this.props.data.text);
+        var likedUsers = [];
+        if (this.props.data.like_count<10){
+            PostStore.loadMoreLikedUsers();
+            likedUsers = PostStore.likedUsers.sortedSet.map(function(user,ind){
+                if (ind==this.like_count-1){
+                    return (<b>{user.name}</b>);
+                }
+                return (<b>{user.username+", "}</b>);
+            },this.props.data);
+        }
 
 		return (
 			<div ref="post"  className="post-body round-3" >
@@ -397,16 +407,16 @@ var Post = React.createClass({
 
                         <span onClick={this.viewLikedUsers} className="post-micro-data-super-analytics-item">
                             <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
-                            {this.props.data.like_count}
+                            {this.props.data.like_count<10?likedUsers:this.props.data.like_count}
+                            {this.props.data.like_count>0?" liked this":{}}
+
                         </span>
                     </div>
 
                     <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
                 </div>
 				<div className="post-content">
-					{
-						thisText
-					}
+					{thisText}
 				</div>
 
                 <hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
