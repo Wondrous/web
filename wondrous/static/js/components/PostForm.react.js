@@ -222,27 +222,26 @@ var PostForm = React.createClass({
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <div id="crop-box-wrapper">
                     <img id="cropBox" ref="cropBox" src="/static/pictures/transparent.gif" />
-                    {/*<img id="cropBox" ref="cropBox" src="/static/pictures/transparent.gif"/>*/}
                 </div>
 
                 <div className="new-post-progress-bar">
-                    <div className="new-post-progress-bar--juice" style={{ width: this.state.percent }}></div>
+                    <div className="new-post-progress-bar--juice" style={{ width: this.state.percent * 8 }}></div>
                 </div>
                 
                 {/* {this.state.error ? <span>{this.state.error}% uploaded</span> : null} */}
 
-                <div>
+                {/*<div>
                     <div onClick={this.toggleBackgroundDisplay} className={!this.state.isCover  ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Cover</div>
                     <div onClick={this.toggleBackgroundDisplay} className={this.state.isCover ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Fit-to-screen</div>
-                </div>
+                </div>*/}
 
-                <div className="new-post-element" style = {divStyle}>
+                <div className="new-post-element" style={divStyle}>
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
                         <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
                     </div>
                 </div>
 
-                <div className="new-post-element" style = {divStyle}>
+                <div className="new-post-element" style={divStyle}>
                     <div className="post-input-wrapper">
                         <div className="highlighter"></div>
                         <div className="typehead">

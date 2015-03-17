@@ -174,7 +174,7 @@
     margin-top: 20px;
     width: 100%;
     min-width: 250px;
-    background-color: rgb(234,234,234);
+    background-color: rgb(255,255,255);
     padding: 15px;
     z-index: 100;
 
@@ -238,7 +238,8 @@
 }
 
 .new-post-subject {
-    border: 1px solid rgb(210,210,210);
+    /*border: 1px solid rgb(210,210,210);*/
+    border: none;
 }
 
 .typehead {
@@ -268,7 +269,7 @@
         display: block;
         width: 100%;
         margin: 0 auto;
-        min-height: 4em !important;
+        min-height: 6em !important;
         resize: none !important;
         border: 0;
         outline: none;
