@@ -29,7 +29,7 @@ class FeedPostLink(Base, BaseMixin):
 
     feed_id = Column(BigInteger, ForeignKey('feed.id'))
     post_id = Column(BigInteger, ForeignKey('post.id'))
-
+    #TODO Ideally unique constraint, but too much work for everyone
 
 class Feed(Base, BaseMixin):
 

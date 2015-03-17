@@ -20,8 +20,6 @@ var PostStore = Reflux.createStore({
         this.paging = false;
         this.donePaging = false;
         this.loading = false;
-        this.reportType = null;
-        this.reportId = null;
 
         this.postLink = null;
     },
@@ -57,9 +55,7 @@ var PostStore = Reflux.createStore({
             this.incrementCommentPage();
         }
     },
-    reportSubmitted: function(){
-        this.trigger({post:this.post,comments:this.comments.sortedSet,reported:true});
-    },
+
     loadCommentsError: function(err){
         this.paging = false;
         this.trigger();

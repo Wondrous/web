@@ -16,6 +16,8 @@ var ModalStore = Reflux.createStore({
         this.signupOpen = false;
         this.postFormOpen = false;
         this.cardOpen = false;
+
+        this.reportSubmitted = false;
     },
 
     openCardModal: function() {
@@ -71,7 +73,12 @@ var ModalStore = Reflux.createStore({
         }
         this.trigger(this);
     },
-
+    reportReceived: function(){
+        this.reportSubmitted = true;
+        var that = this;
+        setTimeout(function(){that.reportSubmitted=false},1000);
+        this.trigger(this);
+    },
     closeSignupPrompt: function() {
         if (this.signupOpen == true) {
             this.signupOpen = false;

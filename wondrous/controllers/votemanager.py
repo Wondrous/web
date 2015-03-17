@@ -63,7 +63,7 @@ class VoteManager(BaseManager):
         subject_id   = long(subject_id)
         vote_type    = int(vote_type)
         action       = int(action)
-        
+
         # Translate action
         vote = None
 
@@ -108,7 +108,7 @@ class VoteManager(BaseManager):
 
     @classmethod
     def follow(cls, from_user_id, to_user_id):
-        
+
         """
             PURPOSE: This is a toggle method, follow -> unfollow, vice versa
 
@@ -167,7 +167,7 @@ class VoteManager(BaseManager):
                         status=status)
 
         # If we have a new follow, add posts to the feed...
-        if status == Vote.FOLLOWED:
+        if vote.status == Vote.FOLLOWED:
             wondrous.controllers.PostManager.move_n_posts_into_feed(vote.subject_id, vote.user_id)
 
         return vote

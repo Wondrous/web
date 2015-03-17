@@ -418,20 +418,10 @@ var Post = React.createClass({
 });
 
 var ReportingForm = React.createClass({
-    submitted: false,
-    mixins: [ Reflux.listenTo(PostStore,"onPostUpdate") ],
+    mixins: [ Reflux.listenTo(ModalStore,"onModalChange") ],
 
-    onPostUpdate: function(postData) {
-        if (typeof postData !== 'undefined' && postData.hasOwnProperty('reported')) {
-            this.submitted = true;
-            var that = this;
-
-            setTimeout(function(){
-                that.submitted = false;
-            }, 500);
-
-            this.forceUpdate();
-        }
+    onModalChange: function() {
+        this.forceUpdate();
     },
 
     stopProp: function(e){
@@ -439,7 +429,6 @@ var ReportingForm = React.createClass({
     },
 
     radioChange: function(e){
-        console.log("radio changed", $("input[name=reason]:checked").val());
     },
 
     report: function(e){
@@ -461,15 +450,16 @@ var ReportingForm = React.createClass({
         }
         if(reason>-1){
             var text = this.refs.comment.getDOMNode().value.trim();
-            WondrousActions.sendReport(PostStore.reportType, PostStore.reportId, reason, text);
+            WondrousActions.sendReport(ModalStore.reportType, ModalStore.reportId, reason, text);
         }
     },
 
     render: function(){
+
         return (
             <div onClick={this.stopProp}>
                 <h1 className="content-report-header">Reporting Content</h1>
-                {this.submitted ? 
+                {ModalStore.reportSubmitted==true ?
                     <h2>Thank you for your report!</h2>
                     :
                     <form onChange={this.radioChange} onSubmit={this.report}>
