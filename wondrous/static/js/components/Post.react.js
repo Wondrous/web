@@ -109,7 +109,7 @@ var Post = React.createClass({
         }
     },
     reportPost: function(e){
-        WondrousActions.togglePostReport();
+        WondrousActions.togglePostReport(this.props.data.id);
     },
     render: function() {
         if (typeof this.props.data === 'undefined'){

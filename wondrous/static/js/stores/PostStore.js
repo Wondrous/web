@@ -22,6 +22,7 @@ var PostStore = Reflux.createStore({
         this.donePaging = false;
         this.loading = false;
         this.reportType = null;
+        this.reportId = null;
     },
 
     newPostLoad: function(post_id){
@@ -36,9 +37,10 @@ var PostStore = Reflux.createStore({
         }
     },
 
-    toggleCommentReport: function(){
+    toggleCommentReport: function(item_id){
         if(this.reportType==null){
             this.reportType = "comment";
+            this.reportId = item_id;
             $('body').addClass('modal-open');
         }else{
             this.reportType = null;
@@ -47,9 +49,10 @@ var PostStore = Reflux.createStore({
         this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet});
     },
 
-    togglePostReport: function(){
+    togglePostReport: function(item_id){
         if(this.reportType==null){
             this.reportType = "post";
+            this.reportId = item_id;
             $('body').addClass('modal-open');
         }else{
             this.reportType = null;
@@ -66,7 +69,9 @@ var PostStore = Reflux.createStore({
             this.incrementCommentPage();
         }
     },
-
+    reportSubmitted: function(){
+        this.trigger({modalOpen:this.modalOpen,post:this.post,comments:this.comments.sortedSet,reported:true});
+    },
     loadCommentsError: function(err){
         this.paging = false;
         this.trigger();

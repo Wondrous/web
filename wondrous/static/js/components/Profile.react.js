@@ -266,7 +266,7 @@ var UserBar = React.createClass({
         this.is_private = ProfileStore.user.is_private;
         this.am_following = this.state.data.following == true;
         console.log("am following?",this.am_following);
-        
+
         var username = this.props.username;
         var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
@@ -290,7 +290,10 @@ var UserBar = React.createClass({
 
         return (
             <div className="profile-header">
-                <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
+                <div className="profile-photo-wrapper">
+                    <img className="profile-photo round-50" style={is_me ? {cursor: 'pointer'} : {}} onClick={this.handleClick} src={img_src} />
+                </div>
+
                 <div className="profile-header-content">
 
                     {is_influencer ?
@@ -438,7 +441,7 @@ var Profile = React.createClass({
         Router.State,
         Reflux.listenTo(ProfileStore,"onProfileChange")
     ],
-    
+
     onProfileChange: function(){
         if (!UserStore.loggedIn && UserStore.loaded) {
             this.transitionTo('/');

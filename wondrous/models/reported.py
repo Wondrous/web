@@ -37,18 +37,18 @@ class ReportedReason:
     ) = xrange(4)
 
 class ReportedPost(Base,BaseMixin):
-    post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False)
+    post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False, index=True)
     post = relationship("Post",backref="reports")
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     reason = Column(Integer, nullable=False)
     text = Column(Unicode, nullable=True)
 
     __table_args__ = (UniqueConstraint('user_id', 'post_id', name='user_reported_post'),)
 
 class ReportedComment(Base,BaseMixin):
-    comment_id = Column(BigInteger, ForeignKey('comment.id'), nullable=False)
+    comment_id = Column(BigInteger, ForeignKey('comment.id'), nullable=False, index=True)
     comment = relationship("Comment",backref="reports")
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     reason = Column(Integer, nullable=False)
     text = Column(Unicode, nullable=True)
 

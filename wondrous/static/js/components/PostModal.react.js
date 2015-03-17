@@ -70,7 +70,7 @@ var Comment = React.createClass({
         WondrousActions.deleteComment(this.props.data.id);
     },
     reportComment: function(){
-        WondrousActions.toggleCommentReport();
+        WondrousActions.toggleCommentReport(this.props.data.id);
     },
     render: function() {
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
@@ -334,6 +334,18 @@ var Post = React.createClass({
 });
 
 var ReportingForm = React.createClass({
+    submitted:false,
+    mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
+    onPostUpdate: function(postData){
+        if(postData.hasOwnProperty('reported')){
+            this.submitted = true;
+            var that = this;
+            setTimeout(function(){
+                that.submitted = false;
+            },500);
+            this.forceUpdate();
+        }
+    },
     stopProp: function(e){
         e.stopPropagation();
     },
@@ -360,14 +372,15 @@ var ReportingForm = React.createClass({
         }
         if(reason>-1){
             var text = this.refs.comment.getDOMNode().value.trim();
-            console.log("reason",reason,"text",text);
+            WondrousActions.sendReport(PostStore.reportType, PostStore.reportId, reason, text);
         }
     },
 
     render: function(){
         return (
             <div onClick={this.stopProp}>
-                <h1>Reporting content</h1>
+                <h1>Reporting Content</h1>
+                {this.submitted?<h2>Thank you for your report!</h2>:
                 <form onChange={this.radioChange} onSubmit={this.report}>
                   <input type="radio" name="reason" value="mature" />Mature
                   <input type="radio" name="reason" value="uninteresting" />Against my views
@@ -376,6 +389,7 @@ var ReportingForm = React.createClass({
                   <textarea ref="comment" placeholder="place write any additional comments here"></textarea>
                   <button type="submit">Report</button>
                 </form>
+                }
             </div>
         );
     }

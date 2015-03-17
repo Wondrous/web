@@ -56,25 +56,25 @@ class PostManager(BaseManager):
     @staticmethod
     def report_comment(user,comment_id,reason,text=None):
         user_id = user.id
-        
+
         try:
-            rc = ReportedComment(user_id = post_id, comment_id = comment_id, reason = reason, text = text)
+            rc = ReportedComment(user_id = user_id, comment_id = comment_id, reason = reason, text = text)
             DBSession.add(rc)
             DBSession.flush()
             return {"status": "comment reported"}
         except Exception, e:
-            return {"error": "already submitted"}
+            return {"error": "already submitted"+e.message}
 
     @staticmethod
     def report_post(user,post_id,reason,text=None):
         user_id = user.id
         try:
-            rp = ReportedPost(user_id = post_id, post_id = post_id, reason = reason, text = text)
+            rp = ReportedPost(user_id = user_id, post_id = post_id, reason = reason, text = text)
             DBSession.add(rp)
             DBSession.flush()
             return {"status": "post reported"}
         except Exception, e:
-            return {"error": "already submitted"}
+            return {"error": "already submitted"+e.message}
 
     @staticmethod
     def delete_comment_json(user,comment_id):

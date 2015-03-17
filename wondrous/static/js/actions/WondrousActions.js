@@ -10,6 +10,8 @@ var WondrousActions = Reflux.createActions({
 
     "sendReport": {},
 
+    "reportSubmitted": {},
+
     // register
     "register": {},
 
@@ -190,11 +192,7 @@ var WondrousActions = Reflux.createActions({
 
 WondrousActions.sendReport.listen(function(type, item_id, reason, text){
     var callback = function(err,res){
-        if(err!=null){
-
-        }else{
-
-        }
+        WondrousActions.reportSubmitted();
     }
     if (type=="comment"){
         WondrousAPI.reportComment({
