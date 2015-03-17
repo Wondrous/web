@@ -1805,32 +1805,22 @@ a:hover {
     font-size: 100%;
     height: 100%; } }
 
-.fileupload-process {
-  float: right;
-  display: none; }
-
-.progress {
+.new-post-progress-bar {
+  width: 100%;
+  position: relative;
+  height: 2px;
+  background-color: #f9f9f9;
+  margin: 10px 0;
   overflow: hidden;
-  height: 20px;
-  margin-bottom: 20px; }
-
-.progress-bar {
-  position: absolute;
-  top: 0;
-  height: 35px;
-  float: left;
-  width: 0;
-  font-size: 12px;
-  line-height: 20px;
-  color: #fff;
-  text-align: center;
   -webkit-transition: width .6s ease;
-  transition: width .6s ease;
-  z-index: 1; }
+  transition: width .6s ease; }
 
-.progress-bar-success {
-  background-color: #64b464;
-  cursor: default; }
+.new-post-progress-bar--juice {
+  position: absolute;
+  height: 2px;
+  width: 0;
+  left: 0;
+  background-color: #64c800; }
 
 #new-post-launch {
   position: relative;
@@ -1866,13 +1856,17 @@ a:hover {
     background-color: #646496; }
 
 .new-post-subject, .typehead {
+  font-family: Verdana, arial, helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: #2d2d2d;
+  text-align: left;
+  line-height: 1.2em;
+  letter-spacing: -1px;
   background-color: white;
   width: 100%;
   height: auto;
   outline: none;
-  resize: none;
-  font-size: 22px;
-  font-weight: bold;
   padding: 9px 10px 6px 10px; }
 
 .new-post-text {
@@ -1965,7 +1959,7 @@ a:hover {
   display: block;
   width: 100%;
   margin: 0 auto;
-  min-height: 48px !important;
+  min-height: 4em !important;
   resize: none !important;
   border: 0;
   outline: none;
@@ -1994,10 +1988,13 @@ a:hover {
   z-index: 2; }
 
 .highlighter, .post-input {
-  font-family: helvetica, arial, sans-serif;
-  font-size: 20px;
-  font-weight: 100;
-  line-height: 1.1em; }
+  font-family: Georgia, helvetica, arial, sans-serif;
+  font-size: 19px;
+  color: #292929;
+  font-weight: normal;
+  line-height: 1.4em;
+  letter-spacing: 0.01rem;
+  padding: 16px 6px; }
 
 .post-error-wrapper {
   position: relative;

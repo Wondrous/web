@@ -26,11 +26,13 @@ var PostForm = React.createClass({
     },
 
     onUploadChange: function(msg){
-        if(msg.hasOwnProperty('error')){
-            this.setState({error:msg.error});
-        }else if(msg.hasOwnProperty('percent')){
-            this.setState({percent:msg.percent});
-        }else if(msg.hasOwnProperty('completed')){
+        if (msg.hasOwnProperty('error')) {
+            this.setState({error: msg.error});
+        } else if (msg.hasOwnProperty('percent')) {
+        
+            this.setState({percent: msg.percent});
+        
+        } else if (msg.hasOwnProperty('completed')) {
             this.handleCancel();
             this.state.percent = 0;
         }
@@ -81,9 +83,9 @@ var PostForm = React.createClass({
     handleCancel: function(e){
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
-        if(!isPictureModal){
+        if (!isPictureModal) {
             WondrousActions.togglePostModal();
-        }else{
+        } else {
             WondrousActions.togglePictureModal();
         }
 
@@ -96,8 +98,6 @@ var PostForm = React.createClass({
         if(this.file){
             this.file = null;
             $('#cropBox').cropper('destroy');
-            // $(this.refs.cropBox.getDOMNode()).data('cropbox').remove();
-            // $(this.refs.cropBox.getDOMNode()).attr('src',"/static/pictures/500x500.gif");
         }
 
         // Clear the post textarea and the hashtag highlighter
@@ -133,15 +133,15 @@ var PostForm = React.createClass({
         this.handleCancel(null);
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
-        if(isPictureModal){
+        if (isPictureModal) {
             setTimeout(this.updateProfile, 500);
-        }else{
+        } else {
             setTimeout(this.addToFeeds, 500);
         }
 
     },
 
-    handleSubmit:function(e){
+    handleSubmit:function(e) {
         var isPictureModal = (UserStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         if (isPictureModal) {
@@ -230,8 +230,11 @@ var PostForm = React.createClass({
                     {/*<img id="cropBox" ref="cropBox" src="/static/pictures/transparent.gif"/>*/}
                 </div>
 
-                <span>{this.state.percent}% uploaded</span>
-                {this.state.error ? <span>{this.state.error}% uploaded</span> : null}
+                <div className="new-post-progress-bar">
+                    <div className="new-post-progress-bar--juice" style={{ width: this.state.percent }}></div>
+                </div>
+                
+                {/* {this.state.error ? <span>{this.state.error}% uploaded</span> : null} */}
 
                 <div>
                     <div onClick={this.toggleBackgroundDisplay} className={!this.state.isCover  ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Cover</div>
