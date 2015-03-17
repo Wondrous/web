@@ -12,11 +12,13 @@ var WallStore = require('../stores/WallStore');
 
 // Other components -- stitch them together
 var Buffer = require('./Buffer.react');
-var Home = require('./Feed.react');
+var Home = require('./Feed.react').Home;
+var LoggedOut = require('./Feed.react').LoggedOut;
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
 var PostModal = require('./PostModal.react').PostModal;
 var ReportModal = require('./PostModal.react').ReportModal;
+var SignupModal = require('./PostModal.react').SignupModal;
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Search = require('../components/Search.react');
@@ -61,6 +63,7 @@ var WondrousApp = React.createClass({
                 </div>
                 <PostModal />
                 <ReportModal />
+                <SignupModal />
             </div>
         );
     },

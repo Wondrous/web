@@ -11,11 +11,9 @@ var UserStore = Reflux.createStore({
         this.user = defaultUser;
         this.loaded = false;
         this.loggedIn = false;
-        this.modalOpen = false;
-        this.sidebarOpen = false;
 
+        this.sidebarOpen = false;
         this.sidebarType = null;
-        this.modalType = null;
         this.pageType = null;
         WondrousActions.auth();
     },
@@ -30,7 +28,6 @@ var UserStore = Reflux.createStore({
     unloadUser: function() {
         this.user = {};
         this.loggedIn = false;
-        this.modalOpen = false;
         this.sidebarOpen = false;
 
         this.sidebarType = null;
@@ -39,6 +36,7 @@ var UserStore = Reflux.createStore({
     },
 
     notLoggedIn: function() {
+        this.loggedIn = false;
         this.loaded = true;
         this.trigger({user:this.user});
     },
@@ -48,18 +46,6 @@ var UserStore = Reflux.createStore({
         if(!this.sidebarOpen) {
             this.sidebarType = null;
         }
-    },
-
-    togglePictureModal: function() {
-        this.modalType = WondrousConstants.MODALTYPE_PICTURE;
-        this.modalOpen = !this.modalOpen;
-        this.trigger({modalType:this.modalType});
-    },
-
-    togglePostModal: function() {
-        this.modalType = WondrousConstants.MODALTYPE_POST;
-        this.modalOpen = !this.modalOpen;
-        this.trigger({modalType:this.modalType});
     },
 
     toggleSettings: function() {

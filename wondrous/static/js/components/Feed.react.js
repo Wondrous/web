@@ -3,6 +3,8 @@ var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
 var MasonryMixin = require('../vendor/masonry.mixin');
+var checkLogin = require('../utils/Func').checkLogin;
+
 var Link = Router.Link;
 
 // Method to retrieve state from stores
@@ -25,12 +27,13 @@ var Home = React.createClass({
         this.forceUpdate();
     },
     render: function(){
-        if (!UserStore.loggedIn&&!UserStore.loaded){
+        if (!UserStore.loaded){
             return (<div></div>);
         }
+
         return (
             <div>
-            {UserStore.loggedIn ? <Feed />:<LoggedOut />}
+                <Feed />
             </div>
         );
     }
@@ -71,6 +74,10 @@ var Feed = React.createClass({
         WondrousActions.feedLoaded();
     },
 
+    promptSignup: function(){
+        checkLogin();
+    },
+
     render: function() {
         var posts = this.state.data.map(function(post, index) {
             return (
@@ -87,7 +94,8 @@ var Feed = React.createClass({
                         {posts}
                     </div>
                     <div>
-                    {!FeedStore.donePaging&&posts.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:null}
+                    {!FeedStore.donePaging&&posts.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:{}}
+                    {UserStore.loaded&&!UserStore.loggedIn?<a onClick={this.promptSignup}><h1>Load More</h1></a>:{}}
                     </div>
                 </div>
             </div>
@@ -96,7 +104,13 @@ var Feed = React.createClass({
 });
 
 var LoggedOut = React.createClass({
+    clearModals: function(){
+        WondrousActions.clearModal();
+    },
     render: function(){
+        var timeNow = new Date();
+
+        var openSignUp = timeNow>= new Date(2015,5,1,0,0,0);
         return (
             <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "maxWidth": "730px", "top": "10%"}}>
                 <img src="/static/pictures/p.logo.png" style={{"width": "350px", "height": "auto"}}/>
@@ -104,12 +118,13 @@ var LoggedOut = React.createClass({
                     Some amazing slogan goes here to fill up space on our temporary home page
                 </p>
                 <div style={{"padding": "40px 0"}}>
-                    <Link className="index-lo-big-link signup-big-link round-5" to="signup">Sign up</Link>
-                    <Link className="index-lo-big-link blue-big-link round-3" to="login">Log in</Link>
+                {openSignUp?<Link className="index-lo-big-link signup-big-link round-5" to="signup" onClick={this.clearModals}>Sign up</Link>:
+                <Link className="index-lo-big-link signup-big-link round-5" to="landingBare" onClick={this.clearModals}>Join the line!</Link>}
+                    <Link className="index-lo-big-link blue-big-link round-3" to="login" onClick={this.clearModals}>Log in</Link>
                 </div>
             </div>
         );
     }
 })
 
-module.exports = Home;
+module.exports = {Home:Home,LoggedOut:LoggedOut};

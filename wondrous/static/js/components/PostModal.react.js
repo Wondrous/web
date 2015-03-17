@@ -1,11 +1,15 @@
 var WondrousAPI = require('../utils/WondrousAPI');
+var checkLogin = require('../utils/Func').checkLogin;
 var WondrousActions = require('../actions/WondrousActions');
-var Post = require('./Post.react');
 var PostStore = require('../stores/PostStore');
 var UserStore = require('../stores/UserStore');
+var ModalStore = require('../stores/ModalStore');
 var ReportConstants = require('../constants/ReportConstants');
+var LoggedOut = require('./Feed.react').LoggedOut;
 
 var Link = Router.Link;
+
+
 
 var UserTitle = React.createClass({
     repost: null,
@@ -13,15 +17,21 @@ var UserTitle = React.createClass({
 
     handleClick: function(evt) {
         if (typeof this.props.data.username != 'undefined') {
-            WondrousActions.closeCardModal();
-            // this.transitionTo('/' + this.props.data.username);
+            if(checkLogin()){
+                WondrousActions.closeCardModal();
+            }else{
+                evt.preventDefault();
+            }
         }
     },
 
     handleClickOnOwner: function(evt) {
         if (typeof this.repost.username != 'undefined') {
-            WondrousActions.closeCardModal();
-            // this.transitionTo('/' + this.repost.username);
+            if(checkLogin()){
+                WondrousActions.closeCardModal();
+            }else{
+                evt.preventDefault();
+            }
         }
     },
 
@@ -59,10 +69,12 @@ var Comment = React.createClass({
     mixins: [Router.Navigation],
 
     handleClick: function(evt) {
-        evt.preventDefault();
         if (typeof this.props.data.username != 'undefined') {
-            WondrousActions.closeCardModal();
-            this.transitionTo('/' + this.props.data.username);
+            if(checkLogin()){
+                WondrousActions.closeCardModal();
+            }else{
+                evt.preventDefault();
+            }
         }
     },
 
@@ -70,6 +82,9 @@ var Comment = React.createClass({
         WondrousActions.deleteComment(this.props.data.id);
     },
     reportComment: function(){
+        if(!checkLogin()){
+            return;
+        }
         WondrousActions.toggleCommentReport(this.props.data.id);
     },
     render: function() {
@@ -97,10 +112,10 @@ var Comment = React.createClass({
                     <img className="post-comment-img round-2" src={img_src} />
                 </div>
                 <div className="post-comment-content">
-                    <a onClick={this.handleClick} className="post-comment-un">
+                    <Link to={'/' + this.props.data.username} onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
-                    </a>
+                    </Link>
                     <span>{this.props.data.text}</span>
 
                     <div className="post-comment-date">{createdAtDisplay}</div>
@@ -134,6 +149,9 @@ var Comments = React.createClass({
 
     onComment: function(evt){
         evt.preventDefault();
+        if(!checkLogin()){
+            return;
+        }
         var text = this.refs.commentBox.getDOMNode().value.trim();
 
         //console.log(text,this.props.post_id);
@@ -174,7 +192,11 @@ var Comments = React.createClass({
 var Photo = React.createClass({
 
 	handleClose: function(evt){
-		WondrousActions.closeCardModal();
+        if(checkLogin()){
+            WondrousActions.closeCardModal();
+        }else{
+            evt.preventDefault();
+        }
 	},
 
     render: function() {
@@ -190,9 +212,6 @@ var Photo = React.createClass({
             <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
 
             </div>);
-    },
-    componentDidMount: function() {
-        // Nothing much happening here!!!
     }
 });
 
@@ -219,6 +238,11 @@ var PostFooter = React.createClass({
         }
     },
     likePost: function() {
+        if(checkLogin()){
+            WondrousActions.closeCardModal();
+        }else{
+            return;
+        }
         this.props.data.liked = !this.props.data.liked;
         this.forceUpdate();
         WondrousAPI.toggleLike({
@@ -227,7 +251,12 @@ var PostFooter = React.createClass({
         });
     },
     clickRepost: function() {
-        WondrousActions.repost(this.props.data.id) ;
+        if(checkLogin()){
+            WondrousActions.closeCardModal();
+        }else{
+            return;
+        }
+        WondrousActions.repost(this.props.data.id);
     },
     render: function(){
         var is_it_mine = (this.props.data.username === UserStore.user.username);
@@ -264,7 +293,12 @@ var PostFooter = React.createClass({
 });
 
 var Post = React.createClass({
-
+    reportPost: function(e){
+        if(!checkLogin()){
+            return;
+        }
+        WondrousActions.togglePostReport(this.props.data.id);
+    },
 	render: function() {
 		var repost = null;
 		if (typeof this.props.data ==='undefined'){
@@ -287,6 +321,7 @@ var Post = React.createClass({
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
 					<UserTitle data={this.props.data} />
 				</div>
+                <button onClick={this.reportPost}>report</button>
 				<div className="post-title post-title-big" style={{ marginLeft: 28, marginRight: 28 }}>{this.props.data.subject}</div>
 				<div onClick={this.handleClick} id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
@@ -337,7 +372,7 @@ var ReportingForm = React.createClass({
     submitted:false,
     mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
     onPostUpdate: function(postData){
-        if(postData.hasOwnProperty('reported')){
+        if(typeof postData!=='undefined' && postData.hasOwnProperty('reported')){
             this.submitted = true;
             var that = this;
             setTimeout(function(){
@@ -396,8 +431,10 @@ var ReportingForm = React.createClass({
 });
 
 var PostModal = React.createClass({
-	mixins:[ Reflux.listenTo(PostStore,"onPostUpdate") ],
-
+	mixins:[ Reflux.listenTo(PostStore,"onPostUpdate"), Reflux.listenTo(ModalStore,"onModalChange") ],
+    onModalChange: function(){
+        this.forceUpdate();
+    },
 	onPostUpdate: function(postData) {
 		this.setState(postData);
 	},
@@ -420,7 +457,7 @@ var PostModal = React.createClass({
         if (typeof this.state.post === 'undefined'){
             return (<div></div>);
         }
-		divStyle = this.state.modalOpen ? {display:"block"} : {display:"none"};
+		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
 
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
@@ -458,7 +495,7 @@ var ReportModal = React.createClass({
 
     render: function() {
 		divStyle = PostStore.reportType!=null? {display:"block"} : {display:"none"};
-        console.log("posttype",PostStore.reportType)
+
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
 
@@ -477,6 +514,44 @@ var ReportModal = React.createClass({
 			</div>
 		);
 	}
-})
+});
 
-module.exports = {PostModal:PostModal,ReportModal:ReportModal};
+var SignupModal = React.createClass({
+    mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],
+    onModalChange: function(){
+        this.forceUpdate();
+    },
+    handleClose: function(evt) {
+        WondrousActions.closeSignupPrompt();
+	},
+
+    stopProp: function(evt) {
+		evt.preventDefault();
+		evt.stopPropagation();
+	},
+
+    render: function() {
+		divStyle = ModalStore.signupOpen?{display:"block"} : {display:"none"};
+        console.log(ModalStore.signupOpen);
+		return (
+			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
+
+				<div className="vertical-center-wrapper">
+					<div className="vertical-center">
+
+						<div className="modal-wrapper">
+                            <div onClick={this.stopProp} className="modal round-5">
+                                <LoggedOut/>
+                            </div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		);
+	}
+});
+
+
+module.exports = {PostModal:PostModal,ReportModal:ReportModal,SignupModal:SignupModal};
