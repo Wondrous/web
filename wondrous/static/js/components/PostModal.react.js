@@ -91,7 +91,7 @@ var Comment = React.createClass({
         var createdAt = moment(this.props.data.created_at);
         var mmtMidnight = moment().startOf('day');
         var createdAtDisplay = "";
-        
+
         if (createdAt.isBefore(mmtMidnight)) {
             var mmtYear = moment().startOf('year');
             if (createdAt.isBefore(mmtYear)) {
@@ -108,13 +108,13 @@ var Comment = React.createClass({
                 <div className="post-comment-image-wrapper round-2">
                     <img className="post-comment-img round-2" src={img_src} />
                 </div>
-                
+
                 <div className="post-comment-content">
                     <Link to={'/' + this.props.data.username} onClick={this.handleClick} className="post-comment-un">
                         {this.props.data.name}
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
-                    
+
                     <span>{this.props.data.text}</span>
 
                     <div className="post-comment-date">{createdAtDisplay}</div>
@@ -247,7 +247,7 @@ var PostFooter = React.createClass({
 
         this.props.data.liked = !this.props.data.liked;
         this.forceUpdate();
-        
+
         WondrousAPI.toggleLike({
             post_id: this.props.data.id,
             callback: this.onLikeHandler,
@@ -353,7 +353,7 @@ var Post = React.createClass({
                             {this.props.data.like_count}
                         </span>
                     </div>
-                    
+
                     <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
                 </div>
 				<div className="post-content">
@@ -369,13 +369,13 @@ var Post = React.createClass({
 						})
 					}
 				</div>
-				
+
                 <hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
-                
+
                 <div className="post-comment-wrapper">
                     <Comments post_id={this.props.data.id} data={this.props.comments} />
                 </div>
-				
+
                 <PostFooter data={this.props.data} />
 			</div>
 		);
@@ -390,7 +390,7 @@ var ReportingForm = React.createClass({
         if (typeof postData !== 'undefined' && postData.hasOwnProperty('reported')) {
             this.submitted = true;
             var that = this;
-            
+
             setTimeout(function(){
                 that.submitted = false;
             }, 500);
@@ -480,6 +480,8 @@ var PostModal = React.createClass({
         if (typeof this.state.post === 'undefined') {
             return (<div></div>);
         }
+
+
 		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
 
 		return (
@@ -490,7 +492,8 @@ var PostModal = React.createClass({
 
 						<div className="modal-wrapper">
                             <div onClick={this.stopProp} className="modal round-5">
-                                <Post data={this.state.post} comments={this.state.comments}/>
+                                {PostStore.postError!=null?PostStore.postError:
+                                <Post data={this.state.post} comments={this.state.comments}/>}
                             </div>
 						</div>
 
