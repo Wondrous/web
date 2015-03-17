@@ -289,7 +289,7 @@ var PostFooter = React.createClass({
 
                 {!is_it_mine ?
                     <span onClick={this.reportPost} className="post-footer-btn post-delete-btn round-50">
-                        Report
+                        <span style={{ position: "relative", top: 10, fontFamily: "heydings_iconsregular", fontSize: 17  }} >f</span>
                     </span>
                     : null}
 
