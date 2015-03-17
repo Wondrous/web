@@ -15,10 +15,18 @@ var PostStore = Reflux.createStore({
     unloadUser: function(){
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;
+        this.userPage = 0;
+
         this.comments = new FeedSet(null,true);
+        this.likedUsers = new FeedSet(null,true,false);
         this.postError = null;
-        this.paging = false;
-        this.donePaging = false;
+
+        this.commentPaging = false;
+        this.doneCommentPaging = false;
+
+        this.likedUserPaging = false;
+        this.doneLikedUserPaging = false;
+
         this.loading = false;
 
         this.postLink = null;
@@ -48,16 +56,24 @@ var PostStore = Reflux.createStore({
     },
 
     loadMoreComments: function(){
-        if (typeof this.post.id !=='undefined' &&this.post.id>0&& !this.paging && !this.donePaging){
-            this.paging = true;
+        if (typeof this.post.id !=='undefined' &&this.post.id!=-1&& !this.commentPaging && !this.doneCommentPaging){
+            this.commentPaging = true;
             WondrousActions.loadComments(this.post.id,this.commentPage);
             console.log("loading comments",this.post.id,this.commentPage);
             this.incrementCommentPage();
         }
     },
 
+    loadMoreLikedUsers: function(){
+        if (typeof this.post.id !=='undefined' &&this.post.id!=-1&& !this.likedUserPaging && !this.doneLikedUserPaging){
+            this.likedUserPaging = true;
+            WondrousActions.loadLikedUsers(this.post.id,this.userPage);
+            this.userPage++;
+        }
+    },
+
     loadCommentsError: function(err){
-        this.paging = false;
+        this.commentPaging = false;
         this.trigger();
     },
 
@@ -85,7 +101,7 @@ var PostStore = Reflux.createStore({
     loadPostError: function(err){
         this.comments.reset();
         this.loading = false;
-        this.paging = false;
+        this.commentPaging = false;
         this.postError = err.error;
         this.trigger({post:this.post,comments:this.comments.sortedSet});
     },
@@ -99,11 +115,22 @@ var PostStore = Reflux.createStore({
             this.trigger({post:this.post,comments:this.comments.sortedSet});
         }
     },
+    updateLikedUsers: function(users){
+        this.likedUserPaging = false;
+        if (users.length<15){
+            this.doneLikedUserPaging = true;
+        }
+
+        users.map(function(user,index){
+            this.push(user);
+        }, this.likedUsers);
+        this.trigger({post: this.post, comments: this.comments.sortedSet, likedUsers:this.likedUsers.sortedSet});
+    },
 
     updateComments: function(comments) {
-        this.paging = false;
+        this.commentPaging = false;
         if (comments.length < 10) {
-            this.donePaging = true;
+            this.doneCommentPaging = true;
         }
 
         comments.map(function(comment,index){

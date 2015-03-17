@@ -14,6 +14,12 @@ var WondrousActions = Reflux.createActions({
     // get liked users
     "loadLikedUsers": {},
 
+    "updateLikedUsers": {},
+
+    "openLikedUserModal": {},
+
+    "closeLikedUserModal": {},
+
     // reporting
     "toggleCommentReport": {},
 
@@ -206,7 +212,9 @@ WondrousActions.loadLikedUsers.listen(function(postID,page){
         post_id:postID,
         page:page,
         callback: function(err,res){
-            console.log(res);
+            if(err==null){
+                WondrousActions.updateLikedUsers(res)
+            }
         }
     })
 });

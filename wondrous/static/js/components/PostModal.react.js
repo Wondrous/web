@@ -279,9 +279,7 @@ var PostFooter = React.createClass({
     },
 
     likePost: function() {
-        if (checkLogin()) {
-            WondrousActions.closeCardModal();
-        } else {
+        if (!checkLogin()) {
             return;
         }
 
@@ -295,9 +293,7 @@ var PostFooter = React.createClass({
     },
 
     clickRepost: function() {
-        if (checkLogin()) {
-            WondrousActions.closeCardModal();
-        } else {
+        if (!checkLogin()) {
             return;
         }
         WondrousActions.repost(this.props.data.id);
@@ -353,7 +349,8 @@ var PostFooter = React.createClass({
 
 var Post = React.createClass({
     viewLikedUsers: function(){
-        WondrousActions.loadLikedUsers(this.props.data.id,0);
+        PostStore.loadMoreLikedUsers();
+        WondrousActions.openLikedUserModal();
     },
 	render: function() {
 		var repost = null;
@@ -623,5 +620,79 @@ var SignupModal = React.createClass({
 	}
 });
 
+var LikedUserModal = React.createClass({
+    mixins:[Reflux.listenTo(ModalStore,"onModalChange"),Reflux.listenTo(PostStore,"onPostChange")],
+    handleClose: function(){
+        WondrousActions.closeLikedUserModal();
+    },
 
-module.exports = {PostModal:PostModal,ReportModal:ReportModal,SignupModal:SignupModal};
+    getInitialState: function(){
+        return {users:[]}
+    },
+
+    onModalChange: function(stuff) {
+        this.forceUpdate();
+    },
+
+    onPostChange: function(postUpdate) {
+        if(postUpdate.hasOwnProperty('likedUsers')){
+            this.setState({users:postUpdate.likedUsers})
+        }
+    },
+
+    stopProp: function(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+    },
+
+    loadMore: function(){
+        PostStore.loadMoreLikedUsers();
+    },
+    handleClick: function(evt){
+        ModalStore.clearModal();
+    },
+    render: function(){
+        divStyle = ModalStore.likedUserOpen?{display:"block"} : {display:"none"};
+
+        var users = this.state.users.map(function(user,ind){
+            return (
+                <Link to={'/'+user.username} onClick={this.handleClick} className="dropdown-a">
+                    <div className="dropdown-element dropdown-element-notification">
+                        <span className="notificationTextPosition">
+                            <img ref="usericon" className="post-thumb round-2" src={"http://mojorankdev.s3.amazonaws.com/"+user.ouuid} />
+                            <div className="notification-content">
+                                <div>
+                                    <b>{user.name}
+                                    </b>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </Link>
+            );
+        },this);
+
+		return (
+			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
+
+				<div className="vertical-center-wrapper">
+					<div className="vertical-center">
+						<div className="modal-wrapper">
+                            <div onClick={this.stopProp} className="modal round-5">
+                                <h5 className="notification-menu-header">Users Who liked this</h5>
+                                {users}
+                                {!PostStore.doneLikedUserPaging?<button onClick={this.loadMore}>Load More</button>:{}}
+                            </div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		);
+    }
+});
+
+
+
+module.exports = {PostModal:PostModal,ReportModal:ReportModal,SignupModal:SignupModal, LikedUserModal:LikedUserModal};
