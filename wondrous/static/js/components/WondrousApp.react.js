@@ -9,6 +9,7 @@ var FeedStore = require('../stores/FeedStore');
 var ProfileStore = require('../stores/ProfileStore');
 var UserStore = require('../stores/UserStore');
 var WallStore = require('../stores/WallStore');
+var SettingStore = require('../stores/SettingStore');
 
 // Other components -- stitch them together
 var Buffer = require('./Buffer.react');
@@ -40,9 +41,9 @@ var WondrousApp = React.createClass({
         var s = $(document).scrollTop();
         var scrolled = (s+2*h) > document.body.offsetHeight;
         if (scrolled){
-            if(UserStore.pageType == WondrousConstants.PROFILE_PAGE){
+            if(SettingStore.pageType == WondrousConstants.PROFILE_PAGE){
                 WallStore.loadMore();
-            }else if(UserStore.pageType == WondrousConstants.FEED_PAGE){
+            }else if(SettingStore.pageType == WondrousConstants.FEED_PAGE){
                 FeedStore.loadMore();
             }
         }

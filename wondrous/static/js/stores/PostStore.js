@@ -16,6 +16,7 @@ var PostStore = Reflux.createStore({
         this.post = {subject:'',text:'',id:-1};
         this.commentPage = 0;
         this.comments = new FeedSet(null,true);
+        this.postError = null;
         this.paging = false;
         this.donePaging = false;
         this.loading = false;
@@ -76,6 +77,8 @@ var PostStore = Reflux.createStore({
         this.comments.reset();
         this.loading = false;
         this.paging = false;
+        this.postError = err.error;
+        this.trigger({post:this.post,comments:this.comments.sortedSet});
     },
 
     addToComments: function(comment){

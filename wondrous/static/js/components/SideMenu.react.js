@@ -1,3 +1,4 @@
+var SettingStore = require('../stores/SettingStore');
 var UserStore = require('../stores/UserStore');
 var NotificationStore = require('../stores/NotificationStore');
 var WondrousConstants = require('../constants/WondrousConstants');
@@ -165,7 +166,7 @@ var NotificationsBar = React.createClass({
 });
 
 var SideMenu = React.createClass({
-    mixins: [Reflux.listenTo(UserStore, "onChange")],
+    mixins: [Reflux.listenTo(SettingStore, "onSettingChange")],
     getInitialState: function() {
         return {data:UserStore.sidebarOpen};
     },
@@ -179,20 +180,20 @@ var SideMenu = React.createClass({
     },
     render: function(){
         var displayStyle = {
-            display: UserStore.sidebarOpen ? "block" : "none"
+            display: SettingStore.sidebarOpen ? "block" : "none"
         };
 
         return(
             <div ref="noteContainer" className="sidemenu" style={displayStyle}>
                 <div className="sidemenuOptions _open_bmo">
-                    {UserStore.sidebarType==WondrousConstants.SHOW_SETTINGS ? <SettingsBar/>: ''}
-                    {UserStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS ? <NotificationsBar/>: ''}
+                    {SettingStore.sidebarType==WondrousConstants.SHOW_SETTINGS ? <SettingsBar/>: ''}
+                    {SettingStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS ? <NotificationsBar/>: ''}
                 </div>
             </div>
         );
     },
 
-    onChange: function(){
+    onSettingChange: function(){
         this.forceUpdate();
     }
 })

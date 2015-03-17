@@ -2,7 +2,6 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var MouseWheel = require('kd-shim-jquery-mousewheel');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousConstants = require('../constants/WondrousConstants');
-var hashtags = require('jquery-hashtags');
 var ModalStore = require('../stores/ModalStore');
 // var UserStore = require('../stores/UserStore');
 var UploadStore = require('../stores/UploadStore');
@@ -30,9 +29,9 @@ var PostForm = React.createClass({
         if (msg.hasOwnProperty('error')) {
             this.setState({error: msg.error});
         } else if (msg.hasOwnProperty('percent')) {
-        
+
             this.setState({percent: msg.percent});
-        
+
         } else if (msg.hasOwnProperty('completed')) {
             this.handleCancel();
             this.state.percent = 0;
@@ -227,7 +226,7 @@ var PostForm = React.createClass({
                 <div className="new-post-progress-bar">
                     <div className="new-post-progress-bar--juice" style={{ width: this.state.percent * 8 }}></div>
                 </div>
-                
+
                 {/* {this.state.error ? <span>{this.state.error}% uploaded</span> : null} */}
 
                 {/*<div>
@@ -277,10 +276,23 @@ var PostForm = React.createClass({
     },
     onTextAreaChange: function(){
         var text = this.refs.postTextArea.getDOMNode().value;
+        var toHighlight = [];
         var mentions = text.match(/\s*@\s*(\w+)/g);
         var hashtags = text.match(/\s*#\s*(\w+)/g);
+        if (mentions!=null){
+            var t = text.replace(/\s*@\s*(\w+)/g,'<a href="http://twitter.com/#!/search/$1">$1</a>');
+            console.log(t);
+        }
+
+        if (hashtags!=null){
+
+        }
+
+        console.log(toHighlight);
+
     },
     componentDidMount: function () {
+
         var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
         if(!isPictureModal){
 
