@@ -85,7 +85,7 @@ var Feed = React.createClass({
                 <Post key={post.id} data={post}/>
             );
         });
-        console.log(posts);
+
         return (
             <div className="grid-padding">
                 <div ref="scrollBox">

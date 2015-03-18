@@ -16,10 +16,7 @@ var Home = require('./Feed.react').Home;
 var LoggedOut = require('./Feed.react').LoggedOut;
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./Profile.react');
-var PostModal = require('./PostModal.react').PostModal;
-var LikedUserModal = require('./PostModal.react').LikedUserModal;
-var ReportModal = require('./PostModal.react').ReportModal;
-var SignupModal = require('./PostModal.react').SignupModal;
+var ModalContainer = require('./ModalContainer.react');
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Search = require('../components/Search.react');
@@ -62,10 +59,7 @@ var WondrousApp = React.createClass({
                 <div className="main-content">
                     <RouteHandler />
                 </div>
-                <PostModal />
-                <ReportModal />
-                <SignupModal />
-                <LikedUserModal />
+                <ModalContainer />
             </div>
         );
     },
