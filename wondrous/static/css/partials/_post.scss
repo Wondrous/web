@@ -699,6 +699,7 @@ $post-cover-photo-height: 390px;
 ._blurmania {
     -webkit-filter: blur(5px);
     filter: blur(5px);
+    -webkit-transform: translate3d(0, 0, 0); /* Force hardware accleration */
 }
 
 .modal-open{

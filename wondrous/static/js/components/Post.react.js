@@ -104,6 +104,7 @@ var Post = React.createClass({
             }
             WondrousActions.updatePost(this.props.data);
             WondrousActions.openCardModal();
+            // $('.masonry-brick').toggleClass('_blurmania');
         }
     },
 

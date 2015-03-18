@@ -242,6 +242,7 @@ var Photo = React.createClass({
 
 	handleClose: function(evt){
         if (checkLogin()) {
+            // $('.masonry-brick').removeClass('_blurmania');
             WondrousActions.closeCardModal();
         } else {
             evt.preventDefault();
@@ -548,6 +549,7 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt) {
+        // $('.masonry-brick').removeClass('_blurmania');
 		WondrousActions.closeCardModal();
 	},
 
