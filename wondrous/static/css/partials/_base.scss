@@ -246,3 +246,8 @@ ul {
     font-size: 14px;
     padding: 0 4px;
 }
+
+.atmentionify {
+    &:link {color: rgb(0,100,170);}
+    &:visited {color: rgb(0,100,170);}
+}

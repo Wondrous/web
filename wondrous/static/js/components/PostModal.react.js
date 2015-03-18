@@ -40,6 +40,8 @@ var linkify = function(rawText, isSmall) {
                 if (isSmall) {
                     classes += "hashtagify--small";
                 }
+            } else {
+                classes += "atmentionify ";
             }
 
             if (href !== null){

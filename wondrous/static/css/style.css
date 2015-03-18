@@ -651,6 +651,11 @@ ul {
   font-size: 14px;
   padding: 0 4px; }
 
+.atmentionify:link {
+  color: #0064aa; }
+.atmentionify:visited {
+  color: #0064aa; }
+
 /* ============================= */
 /* MASONRY --------------------- */
 /* ============================= */
