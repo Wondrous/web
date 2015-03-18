@@ -11,9 +11,8 @@ var WallStore = require('../stores/WallStore');
 var SettingStore = require('../stores/SettingStore');
 
 // Other components -- stitch them together
-var Buffer = require('./Buffer.react');
-var Home = require('./Feed.react').Home;
-var LoggedOut = require('./Feed.react').LoggedOut;
+var Home = require('./Home/Home.react');
+var LoggedOut = require('./Home/LoggedOut.react');
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./ProfileRoute.react');
 var ModalContainer = require('./ModalContainer.react');
