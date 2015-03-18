@@ -45,14 +45,14 @@ var linkify = function(rawText, isSmall) {
                 classes += "atmentionify ";
             }
 
-            if (href !== null){
+            if (href !== null) {
                 tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
-            }else {
+            } else {
                 var text = tokens[i].replace(' ',', ,')
-                var links = text.split(',').map(function(word,ind){
-                    if(word.match(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)!=null){
-                        return (<a onClick={handleClose} href={word}>{word}</a>);
-                    }else{
+                var links = text.split(',').map(function(word, ind) {
+                    if (word.match(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)!=null) {
+                        return (<a className="atmentionify"  onClick={handleClose} href={word}>{word}</a>);
+                    } else {
                         return (<span>{word}</span>);
                     }
                 });
