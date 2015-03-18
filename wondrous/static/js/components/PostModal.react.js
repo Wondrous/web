@@ -63,9 +63,9 @@ var UserTitle = React.createClass({
 
     handleClick: function(evt) {
         if (typeof this.props.data.username !== 'undefined') {
-            if(checkLogin()){
+            if (checkLogin()) {
                 WondrousActions.closeCardModal();
-            }else{
+            } else {
                 evt.preventDefault();
             }
         }
@@ -358,10 +358,23 @@ var PostFooter = React.createClass({
 });
 
 var Post = React.createClass({
-    viewLikedUsers: function(){
+    mixins: [ Router.Navigation ],
+
+    viewLikedUsers: function() {
         PostStore.loadMoreLikedUsers();
         WondrousActions.openLikedUserModal();
     },
+
+    handleUsernameClick: function(evt) {
+        if (typeof this.props.data.username !== 'undefined') {
+            if (checkLogin()) {
+                WondrousActions.closeCardModal();
+            } else {
+                evt.preventDefault();
+            }
+        }
+    },
+
 	render: function() {
 		var repost = null;
 		if (typeof this.props.data === 'undefined') {
@@ -376,17 +389,22 @@ var Post = React.createClass({
 			this.props.data.subject = repost.subject;
 		}
 
-        console.log("PostRender:", this.props.data);
 		var thisText = linkify(this.props.data.text, false);
         var likedUsers = [];
         if (this.props.data.like_count < 10) {
+            this.props.data.handleUsernameClick = this.handleUsernameClick;
             PostStore.loadMoreLikedUsers();
-            likedUsers = PostStore.likedUsers.sortedSet.map(function(user,ind){
-                if (ind==this.like_count-1){
-                    return (<b>{user.name}</b>);
-                }
-                return (<b>{user.username+", "}</b>);
-            },this.props.data);
+
+            if (this.props.data.like_count == 0) {
+                likedUsers = 0; 
+            } else {
+                likedUsers = PostStore.likedUsers.sortedSet.map(function(user, ind) {
+                    if (ind == this.like_count-1) {
+                        return (<Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
+                    }
+                    return (<span><Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>, </span>);
+                }, this.props.data);
+            }
         }
 
 		return (
@@ -415,10 +433,10 @@ var Post = React.createClass({
                             {this.props.data.comment_count}
                         </span>
 
-                        <span onClick={this.viewLikedUsers} className="post-micro-data-super-analytics-item">
+                        <span onClick={this.props.data.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item">
                             <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
-                            {this.props.data.like_count<10?likedUsers:this.props.data.like_count}
-                            {this.props.data.like_count>0?" liked this":{}}
+                            {this.props.data.like_count < 10 ? likedUsers : this.props.data.like_count}
+                            {this.props.data.like_count > 0 ? " liked this" : {}}
 
                         </span>
                     </div>

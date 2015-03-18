@@ -66,7 +66,7 @@ var Notification = React.createClass({
         console.log("reason is",note);
         if (reason == NotificationConstants.LIKED || reason == NotificationConstants.REPOSTED || reason == NotificationConstants.COMMENTED || reason == NotificationConstants.MENTIONED) {
             WondrousActions.newPostLoad(note.subject_id);
-        }else{
+        } else {
             var url = "/"+note.from_user_username;
             this.transitionTo(url);
         }
