@@ -216,7 +216,7 @@ var Comments = React.createClass({
     loadMoreComments: function(){
         PostStore.loadMoreComments();
     },
-
+    
     render: function() {
         var comments = this.props.data.map(function(comment, index) {
             return (
