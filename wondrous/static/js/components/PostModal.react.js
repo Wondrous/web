@@ -15,12 +15,11 @@ var linkify = function(rawText, isSmall) {
     }
 
     return textChunks.map(function(segment, ind) {
-        var tokens = segment.split(/(@\S*)|(#\S*)/gi);
+        var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
             if(typeof tokens[i]=='undefined') {
                 continue;
             }
-
 
             var isHashtag = false;
             var tk = tokens[i];
@@ -28,6 +27,7 @@ var linkify = function(rawText, isSmall) {
             if (tk.indexOf('@') > -1) {
                 var temp = tk.replace('@','')
                 href = '/'+temp;
+
                 isHashtag = false;
             } else if (tk.indexOf('#') > -1) {
                 var temp = tk.replace('#','')
@@ -42,18 +42,17 @@ var linkify = function(rawText, isSmall) {
                     classes += "hashtagify--small";
                 }
             } else {
-                classes += "atmentionify ";
+                classes += "linkify ";
             }
 
             if (href !== null) {
                 tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
-            } else {
-                var text = tokens[i].replace(' ',', ,')
-                var links = text.split(',').map(function(word, ind) {
-                    if (word.match(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)!=null) {
-                        return (<a className="atmentionify"  onClick={handleClose} href={word}>{word}</a>);
-                    } else {
-                        return (<span>{word}</span>);
+            }else {
+                var links = tokens[i].split(' ').map(function(word,ind){
+                    if(word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
+                        return (<span><a className="linkify" onClick={handleClose} href={word}>{word}</a> </span>);
+                    }else{
+                        return (<span>{word+' '}</span>);
                     }
                 });
 

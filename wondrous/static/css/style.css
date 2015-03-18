@@ -651,9 +651,9 @@ ul {
   font-size: 14px;
   padding: 0 4px; }
 
-.atmentionify:link {
+.linkify:link {
   color: #0064aa; }
-.atmentionify:visited {
+.linkify:visited {
   color: #0064aa; }
 
 /* ============================= */
