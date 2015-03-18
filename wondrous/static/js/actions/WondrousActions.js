@@ -557,6 +557,20 @@ WondrousActions.searchForPosts.listen(function(search,page){
     });
 });
 
+WondrousActions.searchForTags.listen(function(search,page){
+    WondrousAPI.searchForTags({
+        search:search,
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateSearchPosts(res);
+            }else{
+                WondrousActions.searchError(err);
+            }
+        }
+    });
+});
+
 WondrousActions.loadComments.listen(function(post_id,page){
     WondrousAPI.getPostComments({
         page: page,

@@ -23,7 +23,7 @@ var WallStore = Reflux.createStore({
     },
 
     newProfile: function(username){
-        if (typeof username!=='undefined'){
+        if (typeof username!=='undefined' && username!==this.username){
             this.currentPage = 0;
         }
 

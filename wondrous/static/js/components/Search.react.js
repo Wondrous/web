@@ -35,7 +35,7 @@ var UserIcon = React.createClass({
 var Search = React.createClass({
     mixins: [Router.State, Reflux.listenTo(SearchStore,'onSearchChange')],
     componentWillMount: function(){
-        WondrousActions.newSearch(this.getParams().search);
+        WondrousActions.newSearch(this.getParams().search,false);
     },
     componentWillUnmount: function(){
         //TODO probably a better way to organize this..
@@ -50,7 +50,6 @@ var Search = React.createClass({
         }
 
         if(searchData.hasOwnProperty("users")) {
-            console.log("names",searchData);
             this.setState({users:searchData.users})
         }
 
@@ -59,8 +58,16 @@ var Search = React.createClass({
         }
     },
     render: function(){
-        console.log("props",this.props);
+        var pathArray = window.location.pathname.split( '/' );
+        var isTagSearch = pathArray[1] === 'tags';
+        var searchTerm = this.getParams().search.replace('%20',' ');
+        if (isTagSearch){
+            searchTerm = searchTerm.split(' ').map(function(word,ind){
+                return '#'+word+' '
+            }).join().replace(',','');
+        }
         var posts = this.state.posts.map(function(post, index) {
+            console.log("post",post);
             return (
                 <Post key={post.id} data={post} />
             );
@@ -75,8 +82,24 @@ var Search = React.createClass({
         return (
             <div className="search-result">
                 {this.state.error ? this.state.error : this.state.error}
-                <ul>{users}</ul>
-                <div>{posts}</div>
+                {isTagSearch?
+                <div>
+                    <h1>Tag Search results for {searchTerm}</h1>
+                    <h1>Posts go here</h1>
+                    <div>{posts}</div>
+                    {!SearchStore.doneSearchingPost&&SearchStore.posts.length>0?<Button>Load More Posts</Button>:null}
+                </div>:
+                <div>
+                    <h1>Search results for {searchTerm}</h1>
+                    <h1>Users go here</h1>
+                    <ul>{users}</ul>
+                    {!SearchStore.doneSearchingPost&&SearchStore.users.length>0?<Button>Load More Users</Button>:null}
+
+                    <h1>Posts go here</h1>
+                    <div>{posts}</div>
+                    {!SearchStore.doneSearchingPost&&SearchStore.posts.length>0?<Button>Load More Posts</Button>:null}
+                </div>
+                }
             </div>
         );
     }

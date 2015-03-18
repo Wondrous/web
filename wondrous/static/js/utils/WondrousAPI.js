@@ -612,6 +612,18 @@ module.exports = {
         request.get(url).query({search:search,page:page}).end(_callback(callback));
     },
 
+    //search posts by tags
+    // callback
+    // search term
+    // page
+    searchForTags: function(options){
+        var url = "/api/search/tags";
+        var search = encodeURIComponent(options.search);
+        var page = options.page;
+        var callback = options.callback;
+        request.get(url).query({search:search,page:page}).end(_callback(callback));
+    },
+
     setNotificationSeen:function(options){
         var url = '/api/notification/seen';
         var callback = options.callback;

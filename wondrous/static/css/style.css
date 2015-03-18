@@ -2387,6 +2387,11 @@ a:hover {
   width: 30px; }
 
 /* ==== SEARCH =================== */
+.search-result {
+  margin-left: 10%;
+  margin-top: 5%;
+  width: 80%; }
+
 .search-results-wrapper {
   position: absolute;
   width: 500px;

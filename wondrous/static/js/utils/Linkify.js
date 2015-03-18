@@ -23,7 +23,7 @@ var Linkify = function(rawText, isSmall) {
                 isHashtag = false;
             } else if (tk.indexOf('#') > -1) {
                 var temp = tk.replace('#','')
-                href = '/search/'+temp;
+                href = '/tags/'+temp;
                 isHashtag = true;
             }
 
@@ -64,4 +64,4 @@ var Linkify = function(rawText, isSmall) {
 }
 
 
-module.exports = Linkify; 
+module.exports = Linkify;

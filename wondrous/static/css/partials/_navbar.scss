@@ -56,7 +56,7 @@
     font-family: helvetica, arial, sans-serif;
     font-size: 15px;
     line-height: 17px;
-    
+
     &:focus {
         outline: none;
         background-color: rgb(228,228,228);
@@ -72,7 +72,7 @@
     height: 41px;
     width: 30px;
     cursor: pointer;
-    
+
     &:hover {background-color: rgb(234,234,234);}
     &:active {background-color: rgb(230,230,230);}
 }
@@ -102,7 +102,7 @@
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-    
+
     &:link {text-decoration: none;}
     &:hover {background-color: rgb(234,234,234); text-decoration: none;}
     &:active {background-color: rgb(230,230,230);}
@@ -117,7 +117,11 @@
 }
 
 /* ==== SEARCH =================== */
-
+.search-result{
+    margin-left: 10%;
+    margin-top: 5%;
+    width:80%;
+}
 .search-results-wrapper {
     position: absolute;
     width: 500px;

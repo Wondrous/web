@@ -47,12 +47,12 @@ class FeedManager(BaseManager):
         feed_id = user.feed.id
         posts = cls.get_majority_posts(feed_id,page)
         data = []
+        like_dict = VoteManager.get_likes_dict(user.id,posts)
         for post in posts:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
-                if post_dict:
-                    post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
-                    data.append(post_dict)
+                post_dict.update({'liked':like_dict[post.id]})
+                data.append(post_dict)
         return data
 
     @classmethod
@@ -113,10 +113,11 @@ class FeedManager(BaseManager):
             posts = cls.get_wall_posts(page=page, user_id=profile_user.id)
 
         data = []
+        like_dict = VoteManager.get_likes_dict(user.id,posts)
+
         for post in posts:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
-                if post_dict:
-                    post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
-                    data.append(post_dict)
+                post_dict.update({'liked':like_dict[post.id]})
+                data.append(post_dict)
         return data

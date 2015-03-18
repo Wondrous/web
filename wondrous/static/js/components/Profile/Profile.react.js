@@ -23,7 +23,7 @@ var Profile = React.createClass({
             }
         }
     },
-
+    
     render: function () {
         var username = this.getParams().username;
 

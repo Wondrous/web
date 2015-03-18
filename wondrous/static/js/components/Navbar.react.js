@@ -8,8 +8,17 @@ var SearchBox = React.createClass({
     handleSearch: function(evt){
         evt.preventDefault();
         var search = this.refs.query.getDOMNode().value.trim();
-        this.transitionTo("search",{search:search});
-        WondrousActions.newSearch(search);
+
+        if (search.indexOf("#") > -1){
+            // going to be a tag search
+            search = search.replace('#','');
+            this.transitionTo("tags",{search:search});
+            WondrousActions.newSearch(search,true);
+        }else{
+            this.transitionTo("search",{search:search});
+            WondrousActions.newSearch(search,false);
+        }
+
     },
     render: function() {
         return (

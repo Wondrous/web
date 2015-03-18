@@ -697,6 +697,16 @@ class APIViews(BaseHandler):
         return SearchManager.post_search_json(**self.query_kwargs)
 
     @api_login_required
+    @view_config(request_method='GET', route_name='api_search_tags', renderer='json')
+    def api_search_tags(self):
+
+        """
+            TODO
+        """
+
+        return SearchManager.tag_search_json(**self.query_kwargs)
+
+    @api_login_required
     @view_config(request_method='POST', route_name='api_seen_notification', renderer='json')
     def api_seen_notification(self):
 

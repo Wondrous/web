@@ -74,6 +74,7 @@ var Routes = (
         <Route name="signupEarly" path="/signup/:verification_code" handler={Signup}/>
         <Route name="resetRequest" path="/reset_request/:page" handler={ResetPassword}/>
         <Route name="search" path="/search/:search" handler={Search} ignoreScrollBehavior/>
+        <Route name="tags" path="/tags/:search" handler={Search} ignoreScrollBehavior/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
         <Route name="activate" path="/activate/:verification" handler={Verification}/>
         <Route name="passwordReset" path="/reset/:verification" handler={ResetPassword}/>
