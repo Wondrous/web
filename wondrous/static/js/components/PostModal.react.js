@@ -438,7 +438,7 @@ var Post = React.createClass({
 				</div>
 
                 <div>
-                    <div className="post-modal-micro-data-wrapper">
+                    <div className="post-modal-micro-data-wrapper" style={{ maxWidth: "60%" }}>
                         <span className="post-micro-data-super-analytics-item">
                             <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.props.data.view_count}
@@ -449,10 +449,10 @@ var Post = React.createClass({
                             {this.props.data.comment_count}
                         </span>
 
-                        <span onClick={this.props.data.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item">
+                        <span onClick={this.props.data.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block" }}>
                             <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
-                            {this.props.data.like_count < 10 ? likedUsers : this.props.data.like_count}
-                            {this.props.data.like_count > 0 ? " liked this" : {}}
+                            {this.props.data.like_count <= 10 ? likedUsers : this.props.data.like_count}
+                            {this.props.data.like_count > 10 ? " likes" : {}}
                         </span>
                     </div>
 
