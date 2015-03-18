@@ -1,5 +1,6 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var PostStore = require('../../stores/PostStore');
+var UserStore = require('../../stores/UserStore');
 var checkLogin = require('../../utils/Func').checkLogin;
 
 var Comment = React.createClass({

@@ -20,11 +20,11 @@ var ModalContainer = require('./ModalContainer.react');
 var Settings = require('../components/Settings.react');
 var SideMenu = require('../components/SideMenu.react');
 var Search = require('../components/Search.react');
-var Login = require('../components/Authenticate.react').Login;
-var Signup = require('../components/Authenticate.react').Signup;
-var ResetPage = require('../components/Authenticate.react').ResetPage;
-var VerificationPage = require('../components/Authenticate.react').VerificationPage;
-var PasswordResetPage = require('../components/Authenticate.react').PasswordResetPage;
+var Login = require('../components/Authentication/Login.react');
+var Signup = require('../components/Authentication/Signup.react');
+var ResetPassword = require('../components/Authentication/ResetPassword.react');
+var Verification = require('../components/Authentication/Verification.react');
+var ResetPassword = require('../components/Authentication/ResetPassword.react');
 var LandingApp = require('./Landing.react');
 
 var WondrousConstants = require('../constants/WondrousConstants');
@@ -73,11 +73,11 @@ var Routes = (
         <Route name="login" path="/login" handler={Login}/>
         <Route name="signup" path="/signup" handler={Signup}/>
         <Route name="signupEarly" path="/signup/:verification_code" handler={Signup}/>
-        <Route name="resetRequest" path="/reset_request/:page" handler={ResetPage}/>
+        <Route name="resetRequest" path="/reset_request/:page" handler={ResetPassword}/>
         <Route name="search" path="/search/:search" handler={Search} ignoreScrollBehavior/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
-        <Route name="activate" path="/activate/:verification" handler={VerificationPage}/>
-        <Route name="passwordReset" path="/reset/:verification" handler={PasswordResetPage}/>
+        <Route name="activate" path="/activate/:verification" handler={Verification}/>
+        <Route name="passwordReset" path="/reset/:verification" handler={ResetPassword}/>
         <Route name="settings" path="/settings" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>
