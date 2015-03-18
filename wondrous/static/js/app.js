@@ -7,6 +7,9 @@ window.Masonry = require('masonry-layout');
 window.Reflux = require('reflux');
 window.moment = require('moment');
 window.cropper = require("cropper");
+window.RouteHandler = Router.RouteHandler;
+window.DefaultRoute = Router.DefaultRoute;
+window.Route = Router.Route;
 
 var Routes = require('./components/WondrousApp.react')
 

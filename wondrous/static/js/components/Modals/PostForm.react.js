@@ -1,10 +1,8 @@
-var WondrousAPI = require('../utils/WondrousAPI');
-var MouseWheel = require('kd-shim-jquery-mousewheel');
-var WondrousActions = require('../actions/WondrousActions');
-var WondrousConstants = require('../constants/WondrousConstants');
-var ModalStore = require('../stores/ModalStore');
-// var UserStore = require('../stores/UserStore');
-var UploadStore = require('../stores/UploadStore');
+var WondrousAPI = require('../../utils/WondrousAPI');
+var WondrousActions = require('../../actions/WondrousActions');
+var WondrousConstants = require('../../constants/WondrousConstants');
+var ModalStore = require('../../stores/ModalStore');
+var UploadStore = require('../../stores/UploadStore');
 
 function uri2blob(dataURI) {
     var uriComponents = dataURI.split(',');

@@ -22,17 +22,17 @@ var FeedStore = Reflux.createStore({
         if(!this.paging&&!this.donePaging){
             this.paging = true;
             WondrousActions.loadFeed(this.currentPage);
-            this.incrementPage();
+            this.currentPage++;
         }
 
         if(UserStore.loaded&&!UserStore.loggedIn){
             this.donePaging = true;
         }
     },
-
-    updateUser: function(userData) {
-        this.unloadUser();
-    },
+    //
+    // updateUser: function(userData) {
+    //     this.unloadUser();
+    // },
 
     unloadUser: function(){
         this.feed.reset();
@@ -56,10 +56,6 @@ var FeedStore = Reflux.createStore({
     addToFeed: function(post){
         this.feed.unshift(post);
         this.trigger(this.getFeed());
-    },
-
-    incrementPage: function(){
-        this.currentPage++;
     },
 
     getFeed: function(){

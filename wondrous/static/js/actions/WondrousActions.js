@@ -308,7 +308,7 @@ WondrousActions.loadNotifications.listen(function(page){
 });
 
 WondrousActions.loadWall.listen(function(username,page){
-    console.log('loading wall for:',username);
+    console.log('loading wall for:',username,page);
     WondrousAPI.getWallPosts({
         username:username,
         page: page,
@@ -323,7 +323,7 @@ WondrousActions.loadWall.listen(function(username,page){
 });
 
 WondrousActions.loadFeed.listen(function(page){
-    console.log("loading feed");
+    console.log("loading feed",page);
     WondrousAPI.getMajorityFeed({
         page: page,
         callback: function(err,res){
