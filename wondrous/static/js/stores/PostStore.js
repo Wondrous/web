@@ -35,6 +35,7 @@ var PostStore = Reflux.createStore({
     closeCardModal: function(){
         this.postLink = null;
     },
+
     togglePostLink: function(){
         if(this.postLink==null){
             this.postLink = "https://"+window.location.host+'/post/'+this.post.id;
@@ -43,6 +44,7 @@ var PostStore = Reflux.createStore({
         }
         this.trigger();
     },
+
     newPostLoad: function(post_id){
         this.unloadUser();
         if (typeof post_id !=='undefined'&&!this.loading){
@@ -107,7 +109,7 @@ var PostStore = Reflux.createStore({
     },
 
     addToComments: function(comment){
-        if(this.post.id == comment.post_id){
+        if(this.post.id == comment.post_id) {
             this.comments.push(comment);
             this.post.comment_count++;
             WondrousActions.updatePostOnWall();
@@ -117,11 +119,11 @@ var PostStore = Reflux.createStore({
     },
     updateLikedUsers: function(users){
         this.likedUserPaging = false;
-        if (users.length<15){
+        if (users.length < 15) {
             this.doneLikedUserPaging = true;
         }
 
-        users.map(function(user,index){
+        users.map(function(user, index) {
             this.push(user);
         }, this.likedUsers);
         this.trigger({post: this.post, comments: this.comments.sortedSet, likedUsers:this.likedUsers.sortedSet});
@@ -148,6 +150,5 @@ var PostStore = Reflux.createStore({
     }
 
 });
-
 
 module.exports = PostStore;

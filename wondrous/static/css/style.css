@@ -1726,6 +1726,11 @@ a:hover {
   color: #323232;
   font-weight: normal; }
 
+.post-not-found-error {
+  font-size: 30px;
+  font-weight: bold;
+  color: #828282; }
+
 .pseudo-bg-img {
   display: block;
   position: relative;

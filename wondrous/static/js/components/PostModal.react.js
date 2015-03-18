@@ -585,8 +585,11 @@ var PostModal = React.createClass({
 
 						<div className="modal-wrapper">
                             <div onClick={this.stopProp} className="modal round-5">
-                                {PostStore.postError!=null?PostStore.postError:
-                                <Post data={this.state.post} comments={this.state.comments}/>}
+                                {PostStore.postError !== null ?
+                                    <span className="post-not-found-error">{PostStore.postError}</span>
+                                    :
+                                    <Post data={this.state.post} comments={this.state.comments}/>
+                                }
                             </div>
 						</div>
 
