@@ -74,7 +74,6 @@ var linkify = function(rawText, isSmall) {
 
 var UserTitle = React.createClass({
     repost: null,
-    mixins: [ Router.Navigation ],
 
     handleClick: function(evt) {
         if (typeof this.props.data.username !== 'undefined') {

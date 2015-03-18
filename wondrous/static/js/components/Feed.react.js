@@ -1,5 +1,4 @@
 var Post = require('./Post/Post.react');
-var Test = require('./Post/Test.react');
 
 var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
