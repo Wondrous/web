@@ -77,9 +77,6 @@ var UserTitle = React.createClass({
     mixins: [ Router.Navigation ],
 
     handleClick: function(evt) {
-        if (evt.metaKey){
-            return true;
-        }
         if (typeof this.props.data.username !== 'undefined') {
             if (checkLogin()) {
                 WondrousActions.closeCardModal();
@@ -90,9 +87,6 @@ var UserTitle = React.createClass({
     },
 
     handleClickOnOwner: function(evt) {
-        if (evt.metaKey){
-            return true;
-        }
         if (typeof this.repost.username !== 'undefined') {
             if(checkLogin()){
                 WondrousActions.closeCardModal();
@@ -121,7 +115,7 @@ var UserTitle = React.createClass({
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow" style={this.repost ? {top:0} : null}>
-                    <Link to={hrefPlaceholder}>
+                    <Link onClick={this.handleClick} to={hrefPlaceholder}>
                         {name} (@{un})
                     </Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
@@ -439,7 +433,7 @@ var Post = React.createClass({
                     {this.props.data.subject}
                 </div>
 
-				<div onClick={this.handleClick} id="slidePhoto">
+				<div id="slidePhoto">
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
 
@@ -568,13 +562,11 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt) {
-        // $('.masonry-brick').removeClass('_blurmania');
-		WondrousActions.closeCardModal();
-	},
-
-	stopProp: function(evt) {
-		evt.preventDefault();
-		evt.stopPropagation();
+        if (evt.target==this.refs.closeContainer.getDOMNode()){
+            WondrousActions.closeCardModal();
+            evt.preventDefault();
+            evt.stopPropagation();
+        }
 	},
 
 	render: function() {
@@ -587,10 +579,10 @@ var PostModal = React.createClass({
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
 
 				<div className="vertical-center-wrapper">
-					<div className="vertical-center">
+					<div ref="closeContainer" className="vertical-center">
 
 						<div className="modal-wrapper">
-                            <div onClick={this.stopProp} className="modal round-5">
+                            <div className="modal round-5">
                                 {PostStore.postError !== null ?
                                     <span className="post-not-found-error">{PostStore.postError}</span>
                                     :
