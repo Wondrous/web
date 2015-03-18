@@ -15,11 +15,12 @@ var linkify = function(rawText, isSmall) {
     }
 
     return textChunks.map(function(segment, ind) {
-        var tokens = segment.split(/(@\S*)|(#\S*)/g);
+        var tokens = segment.split(/(@\S*)|(#\S*)/gi);
         for (var i = 0; i < tokens.length; i += 1) {
             if(typeof tokens[i]=='undefined') {
                 continue;
             }
+
 
             var isHashtag = false;
             var tk = tokens[i];
@@ -46,7 +47,19 @@ var linkify = function(rawText, isSmall) {
 
             if (href !== null){
                 tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
+            }else {
+                var text = tokens[i].replace(' ',', ,')
+                var links = text.split(',').map(function(word,ind){
+                    if(word.match(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)!=null){
+                        return (<a onClick={handleClose} href={word}>{word}</a>);
+                    }else{
+                        return (<span>{word}</span>);
+                    }
+                });
+
+                tokens[i] = <span>{links}</span>
             }
+
         }
 
         if (ind == textChunks.length - 1) {
@@ -218,7 +231,7 @@ var Comments = React.createClass({
     loadMoreComments: function(){
         PostStore.loadMoreComments();
     },
-    
+
     render: function() {
         var comments = this.props.data.map(function(comment, index) {
             return (
@@ -398,7 +411,7 @@ var Post = React.createClass({
             PostStore.loadMoreLikedUsers();
 
             if (this.props.data.like_count == 0) {
-                likedUsers = "Be the first to like this"; 
+                likedUsers = "Be the first to like this";
             } else {
                 likedUsers = PostStore.likedUsers.sortedSet.map(function(user, ind) {
                     var thisUsernameLink = (<Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
