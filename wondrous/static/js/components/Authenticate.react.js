@@ -2,7 +2,6 @@ var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
 var LoginStore = require('../stores/LoginStore');
-var Link = Router.Link;
 
 var PasswordResetPage = React.createClass({
     mixins: [Router.State, Router.Navigation],

@@ -6,12 +6,13 @@ var UserStore = require('../stores/UserStore');
 var ModalStore = require('../stores/ModalStore');
 var ReportConstants = require('../constants/ReportConstants');
 var LoggedOut = require('./Feed.react').LoggedOut;
-var Link = Router.Link;
 
 var linkify = function(rawText, isSmall) {
     var textChunks = rawText.split('\n');
     var handleClose = function(evt){
-        WondrousActions.clearModal();
+        if(!evt.metaKey){
+            WondrousActions.clearModal();
+        }
     }
 
     return textChunks.map(function(segment, ind) {
@@ -46,26 +47,26 @@ var linkify = function(rawText, isSmall) {
             }
 
             if (href !== null) {
-                tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
+                tokens[i] = <Link key={i} className={classes} onClick={handleClose} to={href}>{tokens[i]}</Link>;
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if(word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
-                        return (<span><a className="linkify" href="javascript:" onClick={function(evt){return window.open(word)}} target="_blank">{word}</a> </span>);
+                        return (<span key={ind}><a className="linkify" href="javascript:" onClick={function(evt){return window.open(word)}} target="_blank">{word}</a> </span>);
                     }else{
-                        return (<span>{word+' '}</span>);
+                        return (<span key={ind}>{word+' '}</span>);
                     }
                 });
 
-                tokens[i] = <span>{links}</span>
+                tokens[i] = <span key={i}>{links}</span>
             }
 
         }
 
         if (ind == textChunks.length - 1) {
-            return (<span>{tokens}</span>);
+            return (<span key={ind}>{tokens}</span>);
         } else {
             return (
-                <span>{tokens}<br /></span>
+                <span key={ind}>{tokens}<br /></span>
             );
         }
     });
@@ -76,6 +77,9 @@ var UserTitle = React.createClass({
     mixins: [ Router.Navigation ],
 
     handleClick: function(evt) {
+        if (evt.metaKey){
+            return true;
+        }
         if (typeof this.props.data.username !== 'undefined') {
             if (checkLogin()) {
                 WondrousActions.closeCardModal();
@@ -86,6 +90,9 @@ var UserTitle = React.createClass({
     },
 
     handleClickOnOwner: function(evt) {
+        if (evt.metaKey){
+            return true;
+        }
         if (typeof this.repost.username !== 'undefined') {
             if(checkLogin()){
                 WondrousActions.closeCardModal();
@@ -114,7 +121,7 @@ var UserTitle = React.createClass({
             <div>
                 <img ref="usericon" className="post-thumb round-50" src={img_src}/>
                 <span className="post-identifier ellipsis-overflow" style={this.repost ? {top:0} : null}>
-                    <Link to={hrefPlaceholder} onClick={this.handleClick}>
+                    <Link to={hrefPlaceholder}>
                         {name} (@{un})
                     </Link>
                     {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
@@ -413,7 +420,7 @@ var Post = React.createClass({
                 likedUsers = "Be the first to like this";
             } else {
                 likedUsers = PostStore.likedUsers.sortedSet.map(function(user, ind) {
-                    var thisUsernameLink = (<Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
+                    var thisUsernameLink = (<Link key={ind} className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
                     if (ind == this.like_count-1) {
                         return (thisUsernameLink);
                     }
@@ -712,7 +719,7 @@ var LikedUserModal = React.createClass({
 
         var users = this.state.users.map(function(user,ind){
             return (
-                <Link to={'/'+user.username} onClick={this.handleClick} className="dropdown-a">
+                <Link key={ind} to={'/'+user.username} onClick={this.handleClick} className="dropdown-a">
                     <div className="dropdown-element dropdown-element-notification">
                         <span className="notificationTextPosition">
                             <img ref="usericon" className="post-thumb round-2" src={"http://mojorankdev.s3.amazonaws.com/"+user.ouuid} />

@@ -1,5 +1,6 @@
 window.React = require('react');
 window.Router = require('react-router');
+window.Link = Router.Link;
 window.$ = window.jQuery = require('jquery');
 window.imagesLoaded = require('imagesloaded');
 window.Masonry = require('masonry-layout');

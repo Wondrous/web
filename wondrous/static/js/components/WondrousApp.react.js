@@ -1,5 +1,4 @@
 var DefaultRoute = require('react-router').DefaultRoute;
-var Link = require('react-router').Link;
 var React = require('react');
 var Route = require('react-router').Route;
 var RouteHandler = require('react-router').RouteHandler;

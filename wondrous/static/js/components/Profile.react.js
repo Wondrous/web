@@ -8,7 +8,6 @@ var ProfileStore = require('../stores/ProfileStore');
 var RouteHandler = require('react-router').RouteHandler;
 var DefaultRoute = require('react-router').DefaultRoute;
 var Route = require('react-router').Route;
-var Link = Router.Link;
 var MasonryMixin = require('../vendor/masonry.mixin');
 
 var WondrousAPI = require('../utils/WondrousAPI');
@@ -36,7 +35,7 @@ var Wall = React.createClass({
     showNewPost: function(e) {
         WondrousActions.togglePostModal();
     },
-    
+
     render: function() {
         var am_following = ProfileStore.user.following;
         var is_private = ProfileStore.user.is_private;

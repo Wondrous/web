@@ -101,6 +101,10 @@ var WondrousActions = Reflux.createActions({
 
     "searchForPosts": {},
 
+    "searchForTags": {},
+
+    "searchCompleted": {},
+
     // SECTION UI/UX consideration
     // might have problem logging in
     "loginError": {},

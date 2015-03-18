@@ -3,8 +3,6 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var UserStore = require('../stores/UserStore');
 var checkLogin = require('../utils/Func').checkLogin;
 
-var Link = Router.Link;
-
 var UserTitle = React.createClass({
     repost: null,
     mixins: [ Router.Navigation ],

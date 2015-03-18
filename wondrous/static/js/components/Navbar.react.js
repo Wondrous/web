@@ -3,9 +3,6 @@ var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
 var NotificationStore = require('../stores/NotificationStore');
 
-var Link = Router.Link;
-
-
 var SearchBox = React.createClass({
     mixins: [Router.Navigation],
     handleSearch: function(evt){

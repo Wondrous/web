@@ -5,7 +5,6 @@ var WondrousConstants = require('../constants/WondrousConstants');
 var NotificationConstants = require('../constants/NotificationConstants');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
-var Link = Router.Link;
 
 var SettingsBar = React.createClass({
     mixins: [Router.Navigation],

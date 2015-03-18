@@ -5,8 +5,6 @@ var WondrousActions = require('../actions/WondrousActions');
 var MasonryMixin = require('../vendor/masonry.mixin');
 var checkLogin = require('../utils/Func').checkLogin;
 
-var Link = Router.Link;
-
 // Method to retrieve state from stores
 function getFeedState() {
     var data = FeedStore.getFeed();
