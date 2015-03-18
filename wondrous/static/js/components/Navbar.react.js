@@ -72,7 +72,10 @@ var SettingsGear = React.createClass({
 });
 
 var ProfileLink = React.createClass({
-    mixins: [ Router.Navigation ],
+    mixins: [ Router.Navigation, Reflux.listenTo(UserStore,'onUserUpdate') ],
+    onUserUpdate: function(){
+        this.forceUpdate();
+    },
     handleClick:function(evt) {
         evt.preventDefault();
         if (typeof this.props.user.username != 'undefined') {
@@ -80,33 +83,22 @@ var ProfileLink = React.createClass({
         }
     },
     render: function () {
-        var img_src = (typeof this.props.user.ouuid !== 'undefined')? "http://mojorankdev.s3.amazonaws.com/"+this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
-        var hrefPlaceholder = "/" + this.props.user.username;
+        var img_src = (typeof UserStore.user.ouuid !== 'undefined')? "http://mojorankdev.s3.amazonaws.com/"+UserStore.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        var hrefPlaceholder = "/" + UserStore.user.username;
         return (
             <Link id="linkToProfile" to={hrefPlaceholder}  className="general-text banner-user-name">
                 <img className="banner-user-img round-3"
                     src={img_src}/>
-                {this.props.user.name}
+                {UserStore.user.name}
             </Link>);
     }
 });
-
-// Method to retrieve state from stores
-function getUserState() {
-    var data = UserStore.user;
-    data.loggedin = UserStore.loggedIn;
-    return data;
-}
 
 var Navbar = React.createClass({
     mixins: [
         Router.Navigation,
         Reflux.listenTo(UserStore,'onUserUpdate')
     ],
-    getInitialState: function() {
-        return getUserState();
-    },
-
     render: function () {
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "top-banner" : "top-banner banner-lo"}>
@@ -114,16 +106,16 @@ var Navbar = React.createClass({
                     <img src="/static/pictures/p.icon_50x50.png" className="banner-logo" />
                 </Link>
                 { UserStore.loggedIn ? <SearchBox /> : null}
-                { UserStore.loggedIn ? <SettingsGear user={this.state}/> : null}
-                { UserStore.loggedIn ? <ProfileLink user={this.state} /> : null}
+                { UserStore.loggedIn ? <SettingsGear/> : null}
+                { UserStore.loggedIn ? <ProfileLink /> : null}
                 { UserStore.loggedIn ? <NotificationBox /> : null}
             </div>
             );
     },
 
     // Method to setState based upon Store changes
-    onUserUpdate: function(userData) {
-        this.setState(getUserState());
+    onUserUpdate: function() {
+        this.forceUpdate();
     }
 
 });
