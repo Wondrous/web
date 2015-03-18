@@ -280,7 +280,6 @@ class AccountManager(BaseManager):
                 profile_user = User.by_kwargs(username=username).first()
         elif user_id:
             if user_id == user.id:
-                logging.warn('myself')
                 profile_user = user
             else:
                 profile_user = User.by_id(user_id)

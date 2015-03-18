@@ -38,7 +38,8 @@ def send_notification(channel,message):
     except Exception, e:
         logging.warn(e)
         try:
-            logging.info("Notification server connected")
-            c.connect()
+            c.reconnect()
+            logging.info("Notification server reconnected")
+            c.publish(CHANNEL_NOTIFICATION,package)
         except Exception, e:
             logging.warn(e)
