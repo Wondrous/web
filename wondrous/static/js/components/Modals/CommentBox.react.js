@@ -2,6 +2,7 @@ var WondrousActions = require('../../actions/WondrousActions');
 var PostStore = require('../../stores/PostStore');
 var UserStore = require('../../stores/UserStore');
 var checkLogin = require('../../utils/Func').checkLogin;
+var linkify = require('../../utils/Linkify');
 
 var Comment = React.createClass({
     handleClick: function(evt) {
