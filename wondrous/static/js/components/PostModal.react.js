@@ -400,10 +400,11 @@ var Post = React.createClass({
                 likedUsers = 0; 
             } else {
                 likedUsers = PostStore.likedUsers.sortedSet.map(function(user, ind) {
+                    var thisUsernameLink = (<Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
                     if (ind == this.like_count-1) {
-                        return (<Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
+                        return (thisUsernameLink);
                     }
-                    return (<span><Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>, </span>);
+                    return (<span>{thisUsernameLink}, </span>);
                 }, this.props.data);
             }
         }
@@ -438,7 +439,6 @@ var Post = React.createClass({
                             <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
                             {this.props.data.like_count < 10 ? likedUsers : this.props.data.like_count}
                             {this.props.data.like_count > 0 ? " liked this" : {}}
-
                         </span>
                     </div>
 
