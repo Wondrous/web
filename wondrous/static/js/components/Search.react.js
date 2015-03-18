@@ -1,5 +1,5 @@
 var SearchStore = require("../stores/SearchStore");
-var Post = require("../components/Post.react");
+var Post = require("../components/Post/Post.react");
 var UserStore = require("../stores/UserStore");
 var WondrousActions = require("../actions/WondrousActions");
 
@@ -38,7 +38,7 @@ var Search = React.createClass({
         WondrousActions.newSearch(this.getParams().search);
     },
     componentWillUnmount: function(){
-        //TODO probably a better way to organize this.. 
+        //TODO probably a better way to organize this..
         $("#query").val('');
     },
     getInitialState: function() {

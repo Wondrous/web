@@ -1,4 +1,6 @@
-var Post = require('./Post.react');
+var Post = require('./Post/Post.react');
+var Test = require('./Post/Test.react');
+
 var FeedStore = require('../stores/FeedStore');
 var UserStore = require('../stores/UserStore');
 var WondrousActions = require('../actions/WondrousActions');
@@ -59,6 +61,7 @@ var Feed = React.createClass({
     },
 
     onFeedUpdate: function(posts){
+
         this.setState({data:posts})
     },
 
@@ -77,11 +80,13 @@ var Feed = React.createClass({
     },
 
     render: function() {
+
         var posts = this.state.data.map(function(post, index) {
             return (
                 <Post key={post.id} data={post}/>
             );
         });
+        console.log(posts);
         return (
             <div className="grid-padding">
                 <div ref="scrollBox">

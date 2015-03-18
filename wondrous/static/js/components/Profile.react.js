@@ -1,4 +1,4 @@
-var Post = require('./Post.react');
+var Post = require('./Post/Post.react');
 var PostForm = require('./PostForm.react');
 var UserStore = require('../stores/UserStore');
 var WallStore = require('../stores/WallStore');

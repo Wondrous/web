@@ -1,4 +1,4 @@
-var Post = require('./post.react');
+var Post = require('./Post/post.react');
 var WondrousAPI = require('../utils/WondrousAPI');
 
 var sp1 = {
