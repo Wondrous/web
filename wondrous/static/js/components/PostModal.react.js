@@ -27,7 +27,6 @@ var linkify = function(rawText, isSmall) {
             if (tk.indexOf('@') > -1) {
                 var temp = tk.replace('@','')
                 href = '/'+temp;
-                console.log("tokens",tokens);
 
                 isHashtag = false;
             } else if (tk.indexOf('#') > -1) {
@@ -49,12 +48,11 @@ var linkify = function(rawText, isSmall) {
             if (href !== null){
                 tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
             }else {
-                var text = tokens[i].replace(' ',', ,')
-                var links = text.split(',').map(function(word,ind){
+                var links = tokens[i].split(' ').map(function(word,ind){
                     if(word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
-                        return (<a onClick={handleClose} href={word}>{word}</a>);
+                        return (<span><a onClick={handleClose} href={word}>{word}</a> </span>);
                     }else{
-                        return (<span>{word}</span>);
+                        return (<span>{word+' '}</span>);
                     }
                 });
 
