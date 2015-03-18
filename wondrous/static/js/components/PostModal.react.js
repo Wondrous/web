@@ -14,6 +14,10 @@ var linkify = function(rawText, isSmall) {
         WondrousActions.clearModal();
     }
 
+    var handleNewTab = function(url){
+        console.log(url)
+    }
+
     return textChunks.map(function(segment, ind) {
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
@@ -50,7 +54,7 @@ var linkify = function(rawText, isSmall) {
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if(word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
-                        return (<span><a onClick={handleClose} href={word}>{word}</a> </span>);
+                        return (<span><a href="javascript:" onClick={function(evt){return window.open(word)}} target="_blank">{word}</a> </span>);
                     }else{
                         return (<span>{word+' '}</span>);
                     }
@@ -691,7 +695,7 @@ var LikedUserModal = React.createClass({
     },
 
     onPostChange: function(postUpdate) {
-        if(postUpdate.hasOwnProperty('likedUsers')){
+        if(typeof postUpdate!=='undefined' && postUpdate.hasOwnProperty('likedUsers')){
             this.setState({users:postUpdate.likedUsers})
         }
     },
