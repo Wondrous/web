@@ -397,7 +397,7 @@ var Post = React.createClass({
             PostStore.loadMoreLikedUsers();
 
             if (this.props.data.like_count == 0) {
-                likedUsers = 0; 
+                likedUsers = "Be the first to like this"; 
             } else {
                 likedUsers = PostStore.likedUsers.sortedSet.map(function(user, ind) {
                     var thisUsernameLink = (<Link className="post-like-username" onClick={this.handleUsernameClick} to={"/"+user.username} title={user.name+" (@"+user.username+") liked this post"}>{user.name}</Link>);
