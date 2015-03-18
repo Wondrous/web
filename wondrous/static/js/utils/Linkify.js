@@ -5,7 +5,7 @@ var Linkify = function(rawText, isSmall) {
             WondrousActions.clearModal();
         }
     }
-
+    console.log("linkify")
     return textChunks.map(function(segment, ind) {
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
@@ -41,7 +41,7 @@ var Linkify = function(rawText, isSmall) {
                 tokens[i] = <Link key={i} className={classes} onClick={handleClose} to={href}>{tokens[i]}</Link>;
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
-                    if(word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
+                    if(word.indexOf('.')>-1&&word.indexOf("..")==-1&&word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
                         return (<span key={ind}><a className="linkify" href="javascript:" onClick={function(evt){return window.open(word)}} target="_blank">{word}</a> </span>);
                     }else{
                         return (<span key={ind}>{word+' '}</span>);
