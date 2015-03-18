@@ -36,6 +36,7 @@ var Wall = React.createClass({
     showNewPost: function(e) {
         WondrousActions.togglePostModal();
     },
+    
     render: function() {
         var am_following = ProfileStore.user.following;
         var is_private = ProfileStore.user.is_private;

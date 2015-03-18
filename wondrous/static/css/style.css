@@ -629,7 +629,7 @@ ul {
   padding: 20px 0 0 5%; }
 
 .hashtagify {
-  font-family: helvetica, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-size: 16px;
   color: #8c8c8c;
   padding: 3px 5px;
@@ -650,6 +650,11 @@ ul {
 .hashtagify--small {
   font-size: 14px;
   padding: 0 4px; }
+
+.atmentionify:link {
+  color: #0064aa; }
+.atmentionify:visited {
+  color: #0064aa; }
 
 /* ============================= */
 /* MASONRY --------------------- */
@@ -1295,6 +1300,10 @@ a:hover {
   -o-box-shadow: inset 0 0px 3px #006aae;
   box-shadow: inset 0 0px 3px #006aae; }
 
+.post-like-username {
+  color: #0064aa !important;
+  font-weight: bold; }
+
 .no-top-border {
   -webkit-border-top-left-radius: 0;
   -moz-border-top-left-radius: 0;
@@ -1765,7 +1774,9 @@ a:hover {
 
 ._blurmania {
   -webkit-filter: blur(5px);
-  filter: blur(5px); }
+  filter: blur(5px);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* Force hardware accleration */ }
 
 .modal-open {
   overflow: hidden; }
