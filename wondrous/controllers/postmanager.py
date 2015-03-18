@@ -67,9 +67,9 @@ class PostManager(BaseManager):
             rc = ReportedComment(user_id = user_id, comment_id = comment_id, reason = reason, text = text)
             DBSession.add(rc)
             DBSession.flush()
-            return {"status": "comment reported"}
+            return {"status": "Comment reported"}
         except Exception, e:
-            return {"error": "already submitted"+e.message}
+            return {"error": "Already submitted"+e.message}
 
     @staticmethod
     def report_post(user,post_id,reason,text=None):
@@ -78,9 +78,9 @@ class PostManager(BaseManager):
             rp = ReportedPost(user_id = user_id, post_id = post_id, reason = reason, text = text)
             DBSession.add(rp)
             DBSession.flush()
-            return {"status": "post reported"}
+            return {"status": "Post reported"}
         except Exception, e:
-            return {"error": "already submitted"+e.message}
+            return {"error": "Already submitted"+e.message}
 
     @staticmethod
     def delete_comment_json(user,comment_id):
@@ -92,7 +92,7 @@ class PostManager(BaseManager):
                 DBSession.flush()
                 return {'status': True}
         else:
-            return {'error': 'failed to delete comment'}
+            return {'error': 'Failed to delete comment'}
 
     @staticmethod
     def get_comments_json(user, post_id, page=0, per_page=10):
@@ -118,7 +118,7 @@ class PostManager(BaseManager):
     def new_comment_json(cls,user,post_id,text):
         p = Post.query.get(post_id)
         if not p:
-            return {'error': 'post not found'}
+            return {'error': "We're sorry, this post was not found :("}
 
         # am i following them?
         am_following = VoteManager.is_following(user.id,p.user_id)
@@ -144,7 +144,7 @@ class PostManager(BaseManager):
 
             return retval
         else:
-            return {'error':'bad permission'}
+            return {'error': 'Bad permission'}
 
     @staticmethod
     def send_mentions(post,user,text):
@@ -262,7 +262,7 @@ class PostManager(BaseManager):
     @classmethod
     def repost_json(cls, user, post_id, text=None):
         if not user:
-            return {'error': 'insufficient data'}
+            return {'error': 'Insufficient data'}
         post = PostManager.add(user.id, None, text, repost_id=post_id)
         data = post.json()
 
@@ -278,7 +278,7 @@ class PostManager(BaseManager):
     @classmethod
     def post_json(cls, user, subject, text, file_type=None):
         if not user or not subject or not text:
-            return {'error': 'insufficient data'}
+            return {'error': 'Insufficient data'}
 
         post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type)
         object = post.object
@@ -299,10 +299,10 @@ class PostManager(BaseManager):
         post = Post.by_id(post_id)
         if post:
             if not user and post.user.is_private:
-                return {'error': 'User is private'}
+                return {'error': 'This user is private'}
 
             if user and (post.user.is_private and not VoteManager.is_following(user.id,post.user_id)):
-                return {'error': 'User is private'}
+                return {'error': 'This user is private'}
 
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
@@ -317,17 +317,17 @@ class PostManager(BaseManager):
 
                 if not pv:
                     pv = PostView(post_id=post.id, user_id=user.id)
-                    DBSession.query(Post).filter(Post.id==post.id).update({'view_count':Post.view_count+1})
+                    DBSession.query(Post).filter(Post.id==post.id).update({'view_count': Post.view_count+1})
                     DBSession.add(pv)
                 elif pv.count < 10:
-                    DBSession.query(Post).filter(Post.id==post.id).update({'view_count':Post.view_count+1})
-                    DBSession.query(PostView).filter(PostView.id==pv.id).update({'count':PostView.count+1})
+                    DBSession.query(Post).filter(Post.id==post.id).update({'view_count': Post.view_count+1})
+                    DBSession.query(PostView).filter(PostView.id==pv.id).update({'count': PostView.count+1})
 
                 return post_dict
             else:
-                return {'error':'post not found'}
+                return {'error': "We're sorry, this post was not found :("}
         else:
-            return {'error':'post not found'}
+            return {'error': "We're sorry, this post was not found :("}
 
     @classmethod
     def delete_post_json(cls, user, post_id):
@@ -339,7 +339,7 @@ class PostManager(BaseManager):
             post.is_active = False
             return {"id": post.id}
         else:
-            return {"error": "insufficient data"}
+            return {"error": "Insufficient data"}
 
     @classmethod
     def deactivate_by_userid(cls,user_id):
