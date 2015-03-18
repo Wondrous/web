@@ -14,10 +14,6 @@ var linkify = function(rawText, isSmall) {
         WondrousActions.clearModal();
     }
 
-    var handleNewTab = function(url){
-        console.log(url)
-    }
-
     return textChunks.map(function(segment, ind) {
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
@@ -46,15 +42,15 @@ var linkify = function(rawText, isSmall) {
                     classes += "hashtagify--small";
                 }
             } else {
-                classes += "atmentionify ";
+                classes += "linkify ";
             }
 
-            if (href !== null){
+            if (href !== null) {
                 tokens[i] = <Link className={classes} onClick={handleClose} to={'/'+href}>{tokens[i]}</Link>;
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if(word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
-                        return (<span><a href="javascript:" onClick={function(evt){return window.open(word)}} target="_blank">{word}</a> </span>);
+                        return (<span><a className="linkify" href="javascript:" onClick={function(evt){return window.open(word)}} target="_blank">{word}</a> </span>);
                     }else{
                         return (<span>{word+' '}</span>);
                     }
