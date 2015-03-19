@@ -39,13 +39,19 @@ var Wall = React.createClass({
         var is_me = username === UserStore.user.username;
         return (
             <div>
-                {is_me ? <div onClick={this.showNewPost} id="new-post-launch" className="round-2">Make a new post</div> : null}
+                {is_me ?
+                    <div onClick={this.showNewPost} id="new-post-launch" className="round-50">
+                        <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
+                    </div>
+                    : null}
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}
                 </div>
                 <div>
-                {!WallStore.donePaging&&posts.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:null}
+                {!WallStore.donePaging && posts.length > 0 ?
+                    <img className="loading-wheel" src="/static/pictures/p.loading.gif"/>
+                    : null}
                 </div>
             </div>
         );
