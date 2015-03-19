@@ -37,16 +37,14 @@ var NotificationBox = React.createClass({
     first:true,
     unseen:0,
     mixins: [Reflux.listenTo(NotificationStore, 'onNotificationUpdate')],
-    componentDidMount: function(){
-        $(this.refs.noteCount.getDOMNode()).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', this.removeAnimation);
-    },
-    removeAnimation: function(){
-        $(this.refs.noteCount.getDOMNode()).removeClass('animated flash');
-    },
+
     onNotificationUpdate: function(){
         if (this.unseen!=NotificationStore.unseen){
-            $(this.refs.noteCount.getDOMNode()).removeClass('animated flash');
-            $(this.refs.noteCount.getDOMNode()).addClass('animated flash');
+            var con = $(this.refs.noteCount.getDOMNode());
+            con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                $(this).removeClass('animated flash');
+            });
+            con.addClass('animated flash');
             this.unseen = NotificationStore.unseen || 0;
             if (this.unseen==0){
                 document.title = "Wondrous";

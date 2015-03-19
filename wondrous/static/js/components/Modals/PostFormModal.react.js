@@ -10,6 +10,14 @@ var PostFormModal = React.createClass({
 
     onModalChange: function(){
         this.forceUpdate();
+		if (ModalStore.postFormOpen){
+			var con = $(this.refs.modalWrapper.getDOMNode());
+			con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+				$(this).removeClass("animated fadeIn");
+			});
+
+			con.addClass("animated fadeIn");
+		}
     },
 
 	handleClose: function(evt) {
@@ -36,7 +44,7 @@ var PostFormModal = React.createClass({
 					<div ref="closeContainer" className="vertical-center">
 
 						<div className="modal-wrapper">
-                            <div className="modal round-5">
+                            <div className="modal round-5" ref="modalWrapper">
                                 <PostForm />
                             </div>
 						</div>

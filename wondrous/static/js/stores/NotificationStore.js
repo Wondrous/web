@@ -11,8 +11,8 @@ var NotificationStore = Reflux.createStore({
     listenables: WondrousActions,
     // pushstream stuff
     onmessage: function(note,id,channel){
+        console.log("received something",note)
         if(note.reason===NotificationConstants.FEED){
-            console.log("received something")
             setTimeout(function(){
                 console.log("loading",note.subject_id);
                 WondrousActions.loadPost(note.subject_id,true);
