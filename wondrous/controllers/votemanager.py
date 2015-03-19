@@ -361,6 +361,15 @@ class VoteManager(BaseManager):
         return Vote.by_kwargs(**kw).count()
 
     @staticmethod
+    def get_likes_dict(from_user_id,posts):
+        post_ids = [post.id for post in posts]
+        retval = defaultdict(lambda: False)
+        for vote in DBSession.query(Vote).filter(Vote.subject_id.in_(post_ids)).\
+            filter(Vote.vote_type==Vote.OBJECT).filter(Vote.user_id==from_user_id).all():
+            retval[vote.subject_id]=True
+        return retval
+
+    @staticmethod
     def is_liking(from_user_id,post_id):
         vote = Vote.by_kwargs(user_id=from_user_id, subject_id=post_id, vote_type=Vote.OBJECT).first()
         if not vote:
