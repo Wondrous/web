@@ -36,6 +36,7 @@ var WallStore = Reflux.createStore({
 
     loadMore: function(username){
         if (typeof username !=='undefined'){
+            this.unloadUser();
             this.username = username;
         }
 

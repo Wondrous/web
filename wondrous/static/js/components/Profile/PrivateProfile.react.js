@@ -39,11 +39,8 @@ var PrivateProfile = React.createClass({
         var ouuid = (typeof this.state.data.ouuid !== 'undefined') ? this.state.data.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
 
-        var is_influencer = $.inArray(0, this.state.data.badges) != -1;
+        var is_influencer = (this.state.data.wondrous_score>=75);
         var wondrousScore = this.state.data.wondrous_score;
-        if (is_influencer && wondrousScore < 75) {
-            wondrousScore = 75;
-        }
 
         var classes = "profile-header-nav-item follow-button round-50 _requestBtn ";
         if (this.am_following) {

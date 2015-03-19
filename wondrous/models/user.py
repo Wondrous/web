@@ -76,8 +76,8 @@ class User(Base, PasswordManager, BaseMixin):
     picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
 
     #Wondrous score
-    base_score = Column(Integer, default=0)
-    wondrous_score = Column(Integer, default=0)
+    base_score = Column(Integer, default=0, nullable=False)
+    wondrous_score = Column(Integer, default=0, nullable=False)
     last_calculated = Column(DateTime, default=datetime.now)
 
     def __init__(self, *args, **kwargs):
@@ -105,7 +105,6 @@ class User(Base, PasswordManager, BaseMixin):
 
     def json(self,level=0):
         retval = super(User,self).json(level)
-        retval['badges'] = [badge.badge_type for badge in self.badges]
         picture_object = self.picture_object
         if picture_object:
             retval.update({"ouuid": picture_object.ouuid})

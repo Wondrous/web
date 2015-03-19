@@ -104,13 +104,13 @@ class AccountManager(BaseManager):
             return u.is_private
         return True
 
-    @classmethod
-    def add_badge_benefits(cls,user):
-        scores = 0
-        for badge in user.badges:
-            if badge.badge_type == Badge.INFLUENCER:
-                scores += 0 #75
-        return scores
+    # @classmethod
+    # def add_badge_benefits(cls,user):
+    #     scores = 0
+    #     for badge in user.badges:
+    #         if badge.badge_type == Badge.INFLUENCER:
+    #             scores += 0 #75
+    #     return scores
 
     @classmethod
     def calculate_wondrous_score(cls,user):
@@ -159,7 +159,7 @@ class AccountManager(BaseManager):
                 follower_count, following_count, post_count, like_count, view_count, comment_count = ret
 
                 wondrous_score = float(view_count*5 + like_count*5 + follower_count*5 + comment_count*1 + post_count*1 + following_count*1)
-                wondrous_score /= 100.0
+                wondrous_score /= 1000.0
 
                 # logging.warn(wondrous_score)
                 # logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
@@ -193,8 +193,7 @@ class AccountManager(BaseManager):
                 #               instance, they could be a verified user with a score of 73 (for a short while).
                 # ------------------------------------------------------------------------------------------
                 # wondrous_score += cls.add_badge_benefits(user)
-                wondrous_score = round_num(wondrous_score)
-
+                wondrous_score = round_num(wondrous_score)+user.base_score
             return wondrous_score
         return None
 
@@ -294,6 +293,7 @@ class AccountManager(BaseManager):
         if score:
             profile_user.last_calculated = datetime.now()
             profile_user.wondrous_score = score
+            DBSession.flush()
 
         try:
             ret = DBSession.execute("""Select
@@ -339,7 +339,7 @@ class AccountManager(BaseManager):
             retval.update({"name": profile_user.ascii_name})
             retval.update({"unseen_notifications": unseen_notification_count})
 
-            cls.add_influencer(profile_user)  # QUESTION: What does this do here?
+            # cls.add_influencer(profile_user)  # QUESTION: What does this do here?
                                                 #ANSWER: adding an influencer badge
 
             # Add in profile picture to JSON
@@ -367,7 +367,6 @@ class AccountManager(BaseManager):
             retval.update({"name": profile_user.ascii_name})
             retval.update({'is_private': True})
             retval.update({'id': profile_user.id})
-            retval.update({'badges': profile_user.json(0)['badges']})
             retval.update({'wondrous_score': profile_user.json(0)['wondrous_score']})
 
 
