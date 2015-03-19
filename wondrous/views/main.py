@@ -79,6 +79,7 @@ class IndexHandler(BaseHandler):
     @view_config(renderer='/index-html.jinja2', route_name='index_handler')
     @view_config(renderer='/index-html.jinja2', route_name='index_handler1')
     @view_config(renderer='/index-html.jinja2', route_name='index_handler2')
+    @view_config(renderer='/index-html.jinja2', route_name='index_handler3')
     def index(self):
 
         """

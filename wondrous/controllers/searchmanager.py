@@ -15,7 +15,8 @@ from wondrous.models import (
     Object,
     Post,
     User,
-    Tag
+    Tag,
+    Vote
 )
 from wondrous.controllers.votemanager import VoteManager
 
@@ -34,29 +35,34 @@ class SearchManager:
 
     @staticmethod
     def post_search_json(user,search,page):
-        posts = DBSession.query(Post).join(Object,Post.object_id==Object.id).\
+        ret = DBSession.query(Post,Vote).\
+            join(Object,Post.object_id==Object.id).\
+            outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
             filter(or_(Object.subject.ilike("%{q}%".format(q=search)),Object.text.ilike("%{q}%".format(q=search)))).\
-            filter(Post.set_to_delete==None).offset(page*15).limit(15).all()
-
+            filter(Post.set_to_delete==None).\
+            offset(page*15).limit(15).all()
         retval = []
-        like_dict = VoteManager.get_likes_dict(user.id,posts)
-        for post in posts:
+        for post, vote in ret:
             data = post.json()
-            data.update({'liked':like_dict[post.id]})
+            data.update({'liked':vote!=None})
             retval.append(data)
         return retval
 
     @staticmethod
     def tag_search_json(user,search,page):
         tags = [tag for tag in search.split(' ') if len(tag)]
-        posts = DBSession.query(Post).join(Tag, Tag.post_id==Post.id).join(User, User.id==Post.user_id).filter(Post.set_to_delete==None).\
-            filter(User.is_private==False).filter(Tag.tag_name.in_(tags)).offset(page*15).limit(15).all()
+        ret = DBSession.query(Post,Vote).\
+            join(Tag, Tag.post_id==Post.id).\
+            join(User, User.id==Post.user_id).\
+            outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
+            filter(Post.set_to_delete==None).\
+            filter(User.is_private==False).\
+            filter(Tag.tag_name.in_(tags)).\
+            offset(page*15).limit(15).all()
 
         retval = []
-        like_dict = VoteManager.get_likes_dict(user.id,posts)
-        for post in posts:
+        for post, vote in ret:
             data = post.json()
-            data.update({'liked':like_dict[post.id]})
+            data.update({'liked':vote!=None})
             retval.append(data)
-        print "retval",posts
         return retval

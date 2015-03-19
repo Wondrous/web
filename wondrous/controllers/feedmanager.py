@@ -19,24 +19,11 @@ from wondrous.models import (
     Post,
     DBSession,
     User,
+    Vote
 )
 
 class FeedManager(BaseManager):
     MAJORITY, PRIORITY = range(2)
-
-    @staticmethod
-    def get_feed_posts(user_id):
-        feed = Feed.by_kwargs(user_id=user_id).first()
-        if feed:
-            return [feed.post for feed in FeedPostLink.by_kwargs(feed_id=feed.id).all()]
-
-    @classmethod
-    def get_majority_posts(cls, feed_id, page=0, per_page=15):
-
-        posts = Post.query.join(FeedPostLink, Post.id==FeedPostLink.post_id).filter(Post.set_to_delete==None).filter(FeedPostLink.feed_id==feed_id).\
-            order_by(desc(FeedPostLink.post_id)).filter(Post.is_active==True).distinct().limit(per_page).offset(page*per_page).all()
-        return posts
-
 
     @classmethod
     def get_majority_posts_json(cls, user, page=0):
@@ -45,13 +32,18 @@ class FeedManager(BaseManager):
             return []
         page = int(page)
         feed_id = user.feed.id
-        posts = cls.get_majority_posts(feed_id,page)
+        retval = DBSession.query(Post, Vote).\
+            join(FeedPostLink, (FeedPostLink.post_id==Post.id)&(FeedPostLink.feed_id==feed_id)).\
+            outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
+            filter(Post.set_to_delete==None).\
+            order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
+
         data = []
-        like_dict = VoteManager.get_likes_dict(user.id,posts)
-        for post in posts:
+
+        for post, vote in retval:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
-                post_dict.update({'liked':like_dict[post.id]})
+                post_dict.update({'liked':vote!=None})
                 data.append(post_dict)
         return data
 
@@ -63,7 +55,7 @@ class FeedManager(BaseManager):
     def get_public_posts_json(cls):
         posts = DBSession.query(Post).join(User,User.id==Post.user_id).filter(User.is_private==False).\
             filter(Post.set_to_delete==None).filter(Post.is_active==True).filter(Post.is_hidden==False).\
-            order_by(desc(Post.view_count)).limit(20).offset(0)
+            order_by(desc(Post.view_count)).limit(20).offset(0).all()
         data = []
         for post in posts:
             post_dict = post.json()
@@ -83,12 +75,6 @@ class FeedManager(BaseManager):
             return cls.get_priority_posts_json(user,page)
 
     @classmethod
-    def get_wall_posts(cls, page=0, per_page=15, **kwargs):
-        page = int(page)
-        posts = DBSession.query(Post).order_by(desc(Post.created_at)).filter_by(**kwargs).filter_by(set_to_delete=None).limit(per_page).offset(page*per_page).all()
-        return posts
-
-    @classmethod
     def get_wall_posts_json(cls, user, user_id=None, username=None, page=0):
         page = int(page)
         if (not user_id and not username) or user==None:
@@ -97,7 +83,6 @@ class FeedManager(BaseManager):
             profile_user = User.by_id(user_id)
         elif username:
             profile_user = User.by_kwargs(username=username).first()
-
 
         if not profile_user:
             return []
@@ -110,14 +95,17 @@ class FeedManager(BaseManager):
             (profile_user.is_private and not profile_user.is_banned and profile_user.is_active and profile_user \
             and VoteManager.is_following(profile_user.id,profile_user.id)):
 
-            posts = cls.get_wall_posts(page=page, user_id=profile_user.id)
+            retval = DBSession.query(Post,Vote).\
+                outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
+                filter(Post.user_id==profile_user.id).\
+                filter(Post.set_to_delete==None).\
+                order_by(desc(Post.created_at)).limit(15).offset(page*15).all()
 
         data = []
         like_dict = VoteManager.get_likes_dict(user.id,posts)
-
-        for post in posts:
+        for post, vote in retval:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
-                post_dict.update({'liked':like_dict[post.id]})
+                post_dict.update({'liked':vote!=None})
                 data.append(post_dict)
         return data

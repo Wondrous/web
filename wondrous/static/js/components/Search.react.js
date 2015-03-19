@@ -33,9 +33,15 @@ var UserIcon = React.createClass({
 
 
 var Search = React.createClass({
-    mixins: [Router.State, Reflux.listenTo(SearchStore,'onSearchChange')],
-    componentWillMount: function(){
-        WondrousActions.newSearch(this.getParams().search,false);
+    mixins: [Router.State, Router.Navigation, Reflux.listenTo(SearchStore,'onSearchChange')],
+    componentDidMount: function(){
+        if (typeof this.getParams().search!=='undefined'){
+            var pathArray = window.location.pathname.split( '/' );
+            var isTagSearch = pathArray[1] === 'tags';
+            WondrousActions.newSearch(this.getParams().search,isTagSearch);
+        }else{
+            this.transitionTo('/');
+        }
     },
     componentWillUnmount: function(){
         //TODO probably a better way to organize this..
@@ -58,6 +64,10 @@ var Search = React.createClass({
         }
     },
     render: function(){
+        if (typeof this.getParams().search==='undefined'){
+            return (<div></div>);
+        }
+
         var pathArray = window.location.pathname.split( '/' );
         var isTagSearch = pathArray[1] === 'tags';
         var searchTerm = this.getParams().search.replace('%20',' ');
