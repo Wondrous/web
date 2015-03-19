@@ -621,7 +621,7 @@ module.exports = {
         var search = encodeURIComponent(options.search);
         var page = options.page;
         var callback = options.callback;
-        request.get(url).query({search:search,page:page}).end(_callback(callback));
+        request.get(url).query({search: search, page: page}).end(_callback(callback));
     },
 
     setNotificationSeen:function(options){
