@@ -102,7 +102,6 @@ class FeedManager(BaseManager):
                 order_by(desc(Post.created_at)).limit(15).offset(page*15).all()
 
         data = []
-        like_dict = VoteManager.get_likes_dict(user.id,posts)
         for post, vote in retval:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
