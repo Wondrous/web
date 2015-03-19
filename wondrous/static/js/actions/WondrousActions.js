@@ -355,6 +355,7 @@ WondrousActions.logout.listen(function(){
         callback: function(err,res){
             if (err == null){
                 WondrousActions.unloadUser();
+                WondrousActions.notLoggedIn();
             }else{
                 console.error(err);
             }
