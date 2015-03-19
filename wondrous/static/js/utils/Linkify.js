@@ -1,3 +1,5 @@
+var WondrousActions = require('../actions/WondrousActions');
+
 var Linkify = function(rawText, isSmall) {
     var textChunks = rawText.split('\n');
     var handleClose = function(evt){
@@ -38,7 +40,7 @@ var Linkify = function(rawText, isSmall) {
             }
 
             if (href !== null) {
-                tokens[i] = <Link key={i} className={classes} onClick={handleClose} to={href}>{tokens[i]}</Link>;
+                tokens[i] = <Link key={i} className={classes} to={href} onClick={handleClose} >{tokens[i]}</Link>;
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if(word.indexOf('.')>-1&&word.indexOf("..")==-1&&word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
