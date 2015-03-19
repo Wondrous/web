@@ -1896,8 +1896,8 @@ a:hover {
 #new-post-launch {
   position: relative;
   display: block;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin: 20px auto 10px auto;
   padding: 10px;
   font-weight: 100;
@@ -1915,8 +1915,8 @@ a:hover {
   position: relative;
   top: 0;
   left: -3px;
-  height: 60px;
-  width: 60px; }
+  height: 50px;
+  width: 50px; }
 
 .new-post {
   position: relative;
