@@ -30,7 +30,7 @@ var Feed = React.createClass({
 
     getInitialState: function() {
         this.checkForParams();
-        return {data: FeedStore.getFeed(), paging: false};
+        return {data: FeedStore.feed.sortedSet};
     },
 
     onFeedUpdate: function(posts){
@@ -70,7 +70,7 @@ var Feed = React.createClass({
                         {posts}
                     </div>
                     <div>
-                    {!FeedStore.donePaging&&posts.length>0?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:{}}
+                    {!FeedStore.donePaging&&posts.length>0&&UserStore.loggedIn?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:{}}
                     {UserStore.loaded&&!UserStore.loggedIn?<a onClick={this.promptSignup}><h1>Load More</h1></a>:{}}
                     </div>
                 </div>

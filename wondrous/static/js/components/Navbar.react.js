@@ -2,6 +2,7 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
 var NotificationStore = require('../stores/NotificationStore');
+var checkLogin = require('../utils/Func').checkLogin;
 
 var SearchBox = React.createClass({
     mixins: [Router.Navigation],
@@ -81,10 +82,8 @@ var SettingsGear = React.createClass({
 });
 
 var ProfileLink = React.createClass({
-    mixins: [ Router.Navigation, Reflux.listenTo(UserStore,'onUserUpdate') ],
-    onUserUpdate: function(){
-        this.forceUpdate();
-    },
+    mixins: [ Router.Navigation ],
+
     handleClick:function(evt) {
         evt.preventDefault();
         if (typeof this.props.user.username != 'undefined') {
@@ -118,6 +117,7 @@ var Navbar = React.createClass({
                 { UserStore.loggedIn ? <SettingsGear/> : null}
                 { UserStore.loggedIn ? <ProfileLink /> : null}
                 { UserStore.loggedIn ? <NotificationBox /> : null}
+                { !UserStore.loggedIn ? <span onClick={checkLogin} className="general-text banner-user-name">LOGIN</span> : null}
             </div>
             );
     },

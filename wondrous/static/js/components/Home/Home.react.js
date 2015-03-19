@@ -7,10 +7,6 @@ var Home = React.createClass({
         this.forceUpdate();
     },
     render: function(){
-        if (!UserStore.loaded){
-            return (<div></div>);
-        }
-
         return (
             <div>
                 <Feed />

@@ -24,7 +24,7 @@ var UserStore = Reflux.createStore({
 
     unloadUser: function() {
         this.user = {};
-
+        WondrousActions.auth();
         this.trigger({user:this.user});
     },
 
