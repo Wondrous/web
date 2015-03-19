@@ -33,10 +33,10 @@ class Comment(Base,BaseMixin):
         to comments left on Objects,
     """
 
-    post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False)
+    post_id = Column(BigInteger, ForeignKey('post.id'), nullable=False, index=True)
     post = relationship("Post",backref="comments")
 
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     text = Column(Unicode, nullable=False)
     # anonymous = Column(Boolean, nullable=False, default=True)
     active = Column(Boolean, nullable=False, default=True)

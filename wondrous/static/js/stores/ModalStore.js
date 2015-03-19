@@ -24,16 +24,16 @@ var ModalStore = Reflux.createStore({
     openCardModal: function() {
         if (this.cardOpen != true){
             this.cardOpen = true;
-            this.trigger(this);
             $('body').addClass('modal-open');
+            this.trigger();
         }
     },
 
     closeCardModal: function() {
         if (this.cardOpen != false) {
             this.cardOpen = false;
-            this.trigger(this);
             $('body').removeClass('modal-open');
+            this.trigger();
         }
     },
 
@@ -41,28 +41,38 @@ var ModalStore = Reflux.createStore({
         if (this.likedUserOpen != true){
             this.likedUserOpen = true;
             $('body').addClass('modal-open');
-            this.trigger(this);
+            this.trigger();
         }
     },
 
     closeLikedUserModal: function() {
         if (this.likedUserOpen != false) {
             this.likedUserOpen = false;
-            this.trigger(this);
             $('body').removeClass('modal-open');
+            this.trigger();
+        }
+    },
+    toggleModal: function(){
+        if($('body').hasClass('modal-open')){
+            this.modalType = null;
+            $('body').removeClass('modal-open');
+        }else{
+            $('body').addClass('modal-open');
         }
     },
 
     togglePictureModal: function() {
         this.modalType = WondrousConstants.MODALTYPE_PICTURE;
         this.postFormOpen = !this.postFormOpen;
-        this.trigger(this);
+        this.toggleModal();
+        this.trigger();
     },
 
     togglePostModal: function() {
         this.modalType = WondrousConstants.MODALTYPE_POST;
         this.postFormOpen = !this.postFormOpen;
-        this.trigger(this);
+        this.toggleModal();
+        this.trigger();
     },
 
     toggleCommentReport: function(item_id) {
@@ -75,7 +85,7 @@ var ModalStore = Reflux.createStore({
             this.reportId = null;
             $('body').removeClass('modal-open');
         }
-        this.trigger(this);
+        this.trigger();
     },
 
     togglePostReport: function(item_id) {
@@ -88,18 +98,18 @@ var ModalStore = Reflux.createStore({
             this.reportId = null;
             $('body').removeClass('modal-open');
         }
-        this.trigger(this);
+        this.trigger();
     },
     reportReceived: function(){
         this.reportSubmitted = true;
         var that = this;
         setTimeout(function(){that.reportSubmitted=false},1000);
-        this.trigger(this);
+        this.trigger();
     },
     closeSignupPrompt: function() {
         if (this.signupOpen == true) {
             this.signupOpen = false;
-            this.trigger(this);
+            this.trigger();
             $('body').removeClass('modal-open');
         }
     },
@@ -107,7 +117,7 @@ var ModalStore = Reflux.createStore({
     openSignupPrompt: function() {
         if (this.signupOpen != true){
             this.signupOpen = true;
-            this.trigger(this);
+            this.trigger();
             $('body').addClass('modal-open');
         }
     },
@@ -117,7 +127,7 @@ var ModalStore = Reflux.createStore({
             $('body').removeClass('modal-open');
         }
         this.unloadUser();
-        this.trigger(this);
+        this.trigger();
     }
 });
 

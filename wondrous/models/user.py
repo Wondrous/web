@@ -76,6 +76,7 @@ class User(Base, PasswordManager, BaseMixin):
     picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
 
     #Wondrous score
+    base_score = Column(Integer, default=0)
     wondrous_score = Column(Integer, default=0)
     last_calculated = Column(DateTime, default=datetime.now)
 

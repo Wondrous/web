@@ -27,8 +27,8 @@ class FeedPostLink(Base, BaseMixin):
         between an object and its post(s)
     """
 
-    feed_id = Column(BigInteger, ForeignKey('feed.id'))
-    post_id = Column(BigInteger, ForeignKey('post.id'))
+    feed_id = Column(BigInteger, ForeignKey('feed.id'), index=True)
+    post_id = Column(BigInteger, ForeignKey('post.id'), index=True)
     #TODO Ideally unique constraint, but too much work for everyone
 
 class Feed(Base, BaseMixin):
@@ -38,5 +38,5 @@ class Feed(Base, BaseMixin):
         the primary (Majority) feed
     """
 
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     feed_post_links = relationship("FeedPostLink", backref="feed")

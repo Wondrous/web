@@ -36,12 +36,12 @@ from wondrous.models.modelmixins import BaseMixin
 class Notification(Base, BaseMixin):
     COMMENTED, UPDATED, LIKED, FOLLOWED, FOLLOW_REQUEST, FOLLOW_ACCEPTED, REPOSTED, FEED, MENTIONED = range(9)
 
-    subject_id = Column(BigInteger)
+    subject_id = Column(BigInteger, index=True)
 
-    from_user_id = Column(BigInteger, ForeignKey('user.id'))  # nul=True -> System notification
+    from_user_id = Column(BigInteger, ForeignKey('user.id'), index=True)  # nul=True -> System notification
     from_user = relationship("User", foreign_keys=from_user_id, lazy='joined')
 
-    to_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    to_user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     to_user = relationship("User", foreign_keys=to_user_id, lazy='joined',)
 
     notification = Column(Unicode, nullable=False)

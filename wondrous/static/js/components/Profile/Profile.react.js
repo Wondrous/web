@@ -23,7 +23,7 @@ var Profile = React.createClass({
             }
         }
     },
-    
+
     render: function () {
         var username = this.getParams().username;
 
@@ -51,7 +51,6 @@ var Profile = React.createClass({
                     <div>
                         <UserBar username={username}/>
                         <div className="cover profile-content">
-                            <PostForm />
                             <RouteHandler />
                         </div>
                     </div>

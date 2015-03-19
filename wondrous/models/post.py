@@ -38,7 +38,7 @@ class Post(Base, BaseMixin):
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     user = relationship('User', foreign_keys=user_id, backref="posts")
 
-    object_id = Column(BigInteger, ForeignKey('object.id'))
+    object_id = Column(BigInteger, ForeignKey('object.id'), index= True)
     object = relationship('Object', lazy='joined', backref=backref("post", uselist=False))
 
     is_active = Column(Boolean, default=True)  # If you want to hide something from your wall

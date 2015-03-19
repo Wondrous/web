@@ -16,7 +16,7 @@ function uri2blob(dataURI) {
 }
 
 var PostForm = React.createClass({
-    mixins: [Reflux.listenTo(ModalStore, "onModalChange"), Reflux.listenTo(UploadStore, "onUploadChange")],
+    mixins: [Reflux.listenTo(UploadStore, "onUploadChange")],
     file: null,
 
     getInitialState: function() {
@@ -88,8 +88,6 @@ var PostForm = React.createClass({
         }
 
         // Fade out the post form
-        var form = this.refs.postform.getDOMNode();
-        $(form).slideDown().slideUp(200);
         $('#cropBox').cropper('destroy');
         $('#cropBox').attr('src', "/static/pictures/transparent.gif");
 
@@ -280,17 +278,9 @@ var PostForm = React.createClass({
 
     },
     componentDidMount: function () {
-
         var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
         if(!isPictureModal){
 
-        }
-
-    },
-    onModalChange: function(){
-        if (ModalStore.postFormOpen){
-            var form = this.refs.postform.getDOMNode();
-            $(form).slideDown(200);
         }
     }
 });

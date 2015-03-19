@@ -10,6 +10,7 @@
 
 from collections import defaultdict
 from unidecode import unidecode
+from datetime import datetime
 
 from pyramid.view import view_config
 from pyramid.security import forget
@@ -813,6 +814,9 @@ class APIViews(BaseHandler):
         password = safe_in(self.query_kwargs.get('password'), strip=False)
         username = safe_in(Sanitize.strip_ampersand(self.query_kwargs.get('username')))
         ref = None
+
+        # if not code and (datetime.now()<datetime(year=2015,month=6,day=1)):
+        #     return {'error':'registration not open yet!'}
 
         if code:
             ref = ReferrerManager.by_verification_code(code)

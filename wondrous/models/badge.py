@@ -34,7 +34,7 @@ class Badge(Base,BaseMixin):
         Defines the table which holds all data pertaining
         to comments left on Objects,
     """
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     user = relationship('User', foreign_keys=user_id, backref="badges")
     badge_type = Column(Integer, nullable=False)
     is_public = Column(Boolean, default=True)

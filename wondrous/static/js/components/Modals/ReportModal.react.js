@@ -73,7 +73,10 @@ var ReportingForm = React.createClass({
 
 
 var ReportModal = React.createClass({
-    mixins:[ Reflux.connect(ModalStore,"data") ],
+    mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],
+    onModalChange: function(){
+        this.forceUpdate();
+    },
 
     getInitialState: function() {
         return { data:{reportType: null} }
@@ -89,7 +92,7 @@ var ReportModal = React.createClass({
 	},
 
     render: function() {
-		divStyle = this.state.data.reportType!=null? {display:"block"} : {display:"none"};
+		divStyle = ModalStore.reportType!=null? {display:"block"} : {display:"none"};
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
 
