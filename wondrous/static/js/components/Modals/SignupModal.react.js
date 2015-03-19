@@ -1,5 +1,5 @@
 var ModalStore = require('../../stores/ModalStore');
-var LoggedOut = require('../Feed.react').LoggedOut;
+var LoggedOut = require('../Home/LoggedOut.react');
 
 var SignupModal = React.createClass({
     mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],

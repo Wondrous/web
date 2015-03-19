@@ -5,7 +5,7 @@ var Linkify = function(rawText, isSmall) {
             WondrousActions.clearModal();
         }
     }
-    console.log("linkify")
+
     return textChunks.map(function(segment, ind) {
         var tokens = segment.split(/(@\S*)|(#\S*)/g);
         for (var i = 0; i < tokens.length; i += 1) {
