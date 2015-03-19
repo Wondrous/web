@@ -120,7 +120,7 @@ class PostManager(BaseManager):
         if not p:
             return {'error': "We're sorry, this post was not found :("}
 
-        # am i following them?
+        # TODO room for perform enhancement - 2 roundtrips currently
         am_following = VoteManager.is_following(user.id,p.user_id)
         is_private = AccountManager.is_private(p.user_id)
         if am_following or not is_private:
@@ -296,7 +296,13 @@ class PostManager(BaseManager):
 
     @classmethod
     def get_by_id_json(cls,post_id,user=None):
-        post = Post.by_id(post_id)
+        if user:
+            post, voted = DBSession.query(Post, Vote).\
+                    outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
+                    filter(Post.id==post_id).first()
+        else:
+            post = Post.by_id(post_id)
+
         if post:
             if not user and post.user.is_private:
                 return {'error': 'This user is private'}
@@ -310,8 +316,7 @@ class PostManager(BaseManager):
                 if not user:
                     return post_dict
 
-                if post_dict:
-                    post_dict.update({'liked':VoteManager.is_liking(user.id,post.id)})
+                post_dict.update({'liked':voted!=None})
 
                 pv = DBSession.query(PostView).filter_by(post_id=post.id, user_id=user.id).first()
 

@@ -7,15 +7,20 @@ var FeedSet = require('../libs/FeedSet');
 var FeedStore = Reflux.createStore({
     listenables: WondrousActions,
     init:function(){
+        this.username = null
         this.feed = new FeedSet(null);
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
-        this.listenTo(UserStore,this.onUserChange);
     },
-
-    onUserChange: function(userData){
-        this.loadMore();
+    updateUser: function(userData) {
+        if(userData.hasOwnProperty('username') && userData.username!==this.username){
+            this.username = userData.username;
+            this.currentPage = 0;
+            this.donePaging = false;
+            this.paging = false;
+            this.loadMore();
+        }
     },
 
     loadMore: function(){
@@ -29,16 +34,15 @@ var FeedStore = Reflux.createStore({
             this.donePaging = true;
         }
     },
-    //
-    // updateUser: function(userData) {
-    //     this.unloadUser();
-    // },
 
     unloadUser: function(){
+        this.username
         this.feed.reset();
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
+        this.loadMore();
+        this.trigger(this.feed.sortedSet);
     },
 
     updateFeed: function(feedItems){
@@ -50,26 +54,22 @@ var FeedStore = Reflux.createStore({
             this.feed.push(feedItems[i]);
         }
         console.log("feed is now",this.feed.sortedSet.length);
-        this.trigger(this.getFeed());
+        this.trigger(this.feed.sortedSet);
     },
 
     addToFeed: function(post){
         this.feed.unshift(post);
-        this.trigger(this.getFeed());
-    },
-
-    getFeed: function(){
-        return this.feed.sortedSet;
+        this.trigger(this.feed.sortedSet);
     },
 
     removeFromFeed: function(post_id){
         this.feed.delete(post_id);
-        this.trigger(this.getFeed());
+        this.trigger(this.feed.sortedSet);
     },
 
     updatePostOnFeed: function(){
         var key = this.feed.update(PostStore.post);
-        this.trigger(this.getFeed());
+        this.trigger(this.feed.sortedSet);
     }
 
 });

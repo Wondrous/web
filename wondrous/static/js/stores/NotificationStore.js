@@ -83,6 +83,7 @@ var NotificationStore = Reflux.createStore({
         }
     },
     establishConnection: function(userData){
+        if(this.subscribed) return;
         try {
             this.pushstream.addChannel(userData.user.auth);
             this.pushstream.connect();
@@ -98,7 +99,7 @@ var NotificationStore = Reflux.createStore({
     },
     onUserChange: function(userData){
         if(userData.hasOwnProperty('user')){
-            if(UserStore.loggedIn&&!this.subscribed && userData.user.hasOwnProperty('auth')){
+            if(UserStore.loggedIn&&userData.user.hasOwnProperty('auth')){
                 var that = this;
                 setTimeout(function(){
                     that.establishConnection(userData);
