@@ -148,7 +148,7 @@ class AccountManager(BaseManager):
                     (select count(*)
                     from comment
                     join post
-                    on  post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
+                    on post.user_id=:user_id and comment.post_id = post.id and post.set_to_delete is Null) as comment_count""",{'user_id':user.id})
 
             except Exception, e:
                 logging.warn(e)

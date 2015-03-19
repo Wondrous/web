@@ -2,6 +2,7 @@ var Post = require('../Post/Post.react');
 
 var FeedStore = require('../../stores/FeedStore');
 var UserStore = require('../../stores/UserStore');
+var ModalStore = require('../../stores/ModalStore');
 var WondrousActions = require('../../actions/WondrousActions');
 var MasonryMixin = require('../../vendor/masonry.mixin');
 var checkLogin = require('../../utils/Func').checkLogin;
@@ -13,28 +14,36 @@ var masonryOptions = {
 };
 
 var Feed = React.createClass({
+    post_id: null,
     mixins: [
         MasonryMixin('masonryContainer', masonryOptions),
         Reflux.listenTo(FeedStore,'onFeedUpdate'),
         Reflux.listenTo(UserStore,'onUserUpdate'),
-        Router.State
+        Reflux.listenTo(ModalStore,'onModalUpdate'),
+        Router.State,
+        Router.Navigation
     ],
 
     checkForParams: function(){
-        var post_id = this.getParams().post_id;
-        if (typeof post_id !== 'undefined'){
-            WondrousActions.newPostLoad(post_id);
+        this.post_id = (typeof this.getParams().post_id !=='undefined')?this.getParams().post_id:null;
+        if (typeof this.post_id !== 'undefined' && this.post_id!=null){
+            WondrousActions.newPostLoad(this.post_id);
         }
     },
-
 
     getInitialState: function() {
         this.checkForParams();
         return {data: FeedStore.feed.sortedSet};
     },
 
-    onFeedUpdate: function(posts){
+    onModalUpdate: function(){
+        if(!ModalStore.cardOpen&&this.post_id!=null){
+            this.post_id=null;
+            this.transitionTo('/');
+        }
+    },
 
+    onFeedUpdate: function(posts){
         this.setState({data:posts})
     },
 
@@ -53,7 +62,6 @@ var Feed = React.createClass({
     },
 
     render: function() {
-
         var posts = this.state.data.map(function(post, index) {
             return (
                 <Post key={post.id} data={post}/>

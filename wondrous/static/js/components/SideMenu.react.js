@@ -169,13 +169,16 @@ var SideMenu = React.createClass({
     getInitialState: function() {
         return {data:UserStore.sidebarOpen};
     },
-    onSideScroll: function(){
+    onSideScroll: function(evt){
         if($(this.refs.noteContainer.getDOMNode()).scrollTop() + $(this.refs.noteContainer.getDOMNode()).innerHeight()+25 >= $(this.refs.noteContainer.getDOMNode())[0].scrollHeight) {
             NotificationStore.loadMore();
         }
     },
     componentDidMount: function(){
         $(this.refs.noteContainer.getDOMNode()).scroll(this.onSideScroll);
+        if($(this.refs.noteContainer.getDOMNode()).scrollTop() + $(this.refs.noteContainer.getDOMNode()).innerHeight()+25>=$(this.refs.noteContainer.getDOMNode())[0].scrollHeight){
+            NotificationStore.loadMore();
+        }
     },
     render: function(){
         var displayStyle = {

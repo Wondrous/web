@@ -48,10 +48,8 @@ var PostFormModal = React.createClass({
                                 <PostForm />
                             </div>
 						</div>
-
 					</div>
 				</div>
-
 			</div>
 		);
 	}

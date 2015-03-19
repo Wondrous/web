@@ -60,7 +60,7 @@ var Comment = React.createClass({
 
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
-                    {is_it_mine ?
+                    {is_it_mine || PostStore.post.user_id==UserStore.user.id ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
                     	:
                         <div className="post-comment-delete-btn" onClick={this.reportComment}>f</div>}
@@ -104,6 +104,7 @@ var CommentBox = React.createClass({
     },
 
     render: function() {
+
         var comments = this.props.data.map(function(comment, index) {
             return (
                 <Comment key={comment.id} data={comment}/>
