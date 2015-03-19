@@ -118,7 +118,7 @@ var Navbar = React.createClass({
                 { UserStore.loggedIn ? <SettingsGear/> : null}
                 { UserStore.loggedIn ? <ProfileLink /> : null}
                 { UserStore.loggedIn ? <NotificationBox /> : null}
-                { !UserStore.loggedIn ? <span onClick={checkLogin} className="general-text banner-user-name">New Post</span> : <span onClick={this.newPost} className="general-text banner-user-name">New Post</span>}
+                { !UserStore.loggedIn ? <span onClick={checkLogin} className="general-text banner-user-name">Login</span> : <span onClick={this.newPost} className="general-text banner-user-name">New Post</span>}
             </div>
             );
     },
