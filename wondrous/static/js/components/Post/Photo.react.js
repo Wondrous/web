@@ -7,7 +7,7 @@ var Photo = React.createClass({
         }
 
         photoStyle = {
-            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : "url(/static/pictures/500x500.gif)",
+            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
         };
 
         return (
@@ -17,6 +17,7 @@ var Photo = React.createClass({
                             <StatusBar data={this.props.data}/>
                         </div>
                     </div>
+                    {!this.props.data.ouuid ?this.props.data.text:null}
             </div>);
     }
 

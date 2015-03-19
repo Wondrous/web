@@ -241,7 +241,7 @@ var PostForm = React.createClass({
                         <div className="highlighter"></div>
                         <div className="typehead">
                             <textarea id="postTextarea" onChange={this.onTextAreaChange} ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
-                            style={{ overflow: "hidden", wordWrap: "break-word", resize: "none", height: 48 }}></textarea>
+                            style={{ overflow: "y-scroll", wordWrap: "break-word", resize: "none", height: 48 }}></textarea>
                         </div>
                     </div>
                 </div>
