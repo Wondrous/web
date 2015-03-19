@@ -186,7 +186,7 @@ var WondrousActions = Reflux.createActions({
 
     "updateSearchPosts": {},
 
-    "newSearch":{},
+    "newSearch": {},
 
     "searchError": {},
 
@@ -213,10 +213,10 @@ var WondrousActions = Reflux.createActions({
 
 WondrousActions.loadLikedUsers.listen(function(postID,page){
     WondrousAPI.getLikedUsers({
-        post_id:postID,
-        page:page,
+        post_id: postID,
+        page: page,
         callback: function(err,res){
-            if(err==null){
+            if(err == null) {
                 WondrousActions.updateLikedUsers(res)
             }
         }

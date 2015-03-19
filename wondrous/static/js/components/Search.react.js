@@ -33,23 +33,31 @@ var UserIcon = React.createClass({
 
 
 var Search = React.createClass({
-    mixins: [Router.State, Router.Navigation, Reflux.listenTo(SearchStore,'onSearchChange')],
+    mixins: [
+        Router.State,
+        Router.Navigation,
+        Reflux.listenTo(SearchStore, 'onSearchChange')
+    ],
+    
     componentDidMount: function(){
         if (typeof this.getParams().search!=='undefined'){
             var pathArray = window.location.pathname.split( '/' );
             var isTagSearch = pathArray[1] === 'tags';
-            WondrousActions.newSearch(this.getParams().search,isTagSearch);
+            WondrousActions.newSearch(this.getParams().search, isTagSearch);
         }else{
             this.transitionTo('/');
         }
     },
+
     componentWillUnmount: function(){
         //TODO probably a better way to organize this..
         $("#query").val('');
     },
+
     getInitialState: function() {
-        return {users:[],posts:[],error:null}
+        return {users:[], posts:[], error:null}
     },
+
     onSearchChange: function(searchData){
         if(searchData.hasOwnProperty("error")) {
             this.setState({error:searchData.error})
@@ -64,20 +72,23 @@ var Search = React.createClass({
         }
     },
     render: function(){
-        if (typeof this.getParams().search==='undefined'){
+        if (typeof this.getParams().search === 'undefined') {
             return (<div></div>);
         }
 
         var pathArray = window.location.pathname.split( '/' );
         var isTagSearch = pathArray[1] === 'tags';
         var searchTerm = this.getParams().search.replace('%20',' ');
-        if (isTagSearch){
-            searchTerm = searchTerm.split(' ').map(function(word,ind){
+        
+        if (isTagSearch) {
+            searchTerm = searchTerm.split(' ').map(function(word, ind) {
                 return '#'+word+' '
             }).join().replace(',','');
         }
+
+        console.log("STATE: ",this.state);
         var posts = this.state.posts.map(function(post, index) {
-            console.log("post",post);
+            console.log("post", post);
             return (
                 <Post key={post.id} data={post} />
             );
@@ -90,25 +101,26 @@ var Search = React.createClass({
         });
 
         return (
-            <div className="search-result">
+            <div className="grid-padding">
                 {this.state.error ? this.state.error : this.state.error}
-                {isTagSearch?
-                <div>
-                    <h1>Tag Search results for {searchTerm}</h1>
-                    <h1>Posts go here</h1>
-                    <div>{posts}</div>
-                    {!SearchStore.doneSearchingPost&&SearchStore.posts.length>0?<Button>Load More Posts</Button>:null}
-                </div>:
-                <div>
-                    <h1>Search results for {searchTerm}</h1>
-                    <h1>Users go here</h1>
-                    <ul>{users}</ul>
-                    {!SearchStore.doneSearchingPost&&SearchStore.users.length>0?<Button>Load More Users</Button>:null}
+                {isTagSearch ?
+                    <div>
+                        <h1>Tag Search results for {searchTerm}</h1>
+                        <h1>Posts go here</h1>
+                        <div className="masonry">{posts}</div>
+                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ? <Button>Load More Posts</Button> : null}
+                    </div>
+                    :
+                    <div>
+                        <h1>Search results for {searchTerm}</h1>
+                        <h1>Users go here</h1>
+                        <ul>{users}</ul>
+                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ? <Button>Load More Users</Button> : null}
 
-                    <h1>Posts go here</h1>
-                    <div>{posts}</div>
-                    {!SearchStore.doneSearchingPost&&SearchStore.posts.length>0?<Button>Load More Posts</Button>:null}
-                </div>
+                        <h1>Posts go here</h1>
+                        <div className="masonry">{posts}</div>
+                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ? <Button>Load More Posts</Button> : null}
+                    </div>
                 }
             </div>
         );
