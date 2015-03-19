@@ -7,28 +7,31 @@ var PostFormModal = React.createClass({
 	mixins:[
         Reflux.listenTo(ModalStore,"onModalChange")
     ],
-
+	componentDidMount: function(){
+		var con = $(this.refs.modalWrapper.getDOMNode());
+		con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+			$(this).removeClass("animated fadeIn");
+		});
+	},
     onModalChange: function(){
         this.forceUpdate();
 		if (ModalStore.postFormOpen){
 			var con = $(this.refs.modalWrapper.getDOMNode());
-			con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-				$(this).removeClass("animated fadeIn");
-			});
-
 			con.addClass("animated fadeIn");
 		}
     },
 
 	handleClose: function(evt) {
         if (evt.target==this.refs.closeContainer.getDOMNode()){
+			var con = $(this.refs.modalWrapper.getDOMNode());
 			var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
-	        if (!isPictureModal) {
-	            WondrousActions.togglePostModal();
-	        } else {
-	            WondrousActions.togglePictureModal();
-	        }
+			if (!isPictureModal) {
+				WondrousActions.togglePostModal();
+			} else {
+				WondrousActions.togglePictureModal();
+			}
+
             evt.preventDefault();
             evt.stopPropagation();
         }

@@ -105,6 +105,9 @@ var Navbar = React.createClass({
         Router.Navigation,
         Reflux.listenTo(UserStore,'onUserUpdate')
     ],
+    newPost: function(){
+        WondrousActions.togglePostModal();
+    },
     render: function () {
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "top-banner" : "top-banner banner-lo"}>
@@ -115,7 +118,7 @@ var Navbar = React.createClass({
                 { UserStore.loggedIn ? <SettingsGear/> : null}
                 { UserStore.loggedIn ? <ProfileLink /> : null}
                 { UserStore.loggedIn ? <NotificationBox /> : null}
-                { !UserStore.loggedIn ? <span onClick={checkLogin} className="general-text banner-user-name">LOGIN</span> : null}
+                { !UserStore.loggedIn ? <span onClick={checkLogin} className="general-text banner-user-name">New Post</span> : <span onClick={this.newPost} className="general-text banner-user-name">New Post</span>}
             </div>
             );
     },

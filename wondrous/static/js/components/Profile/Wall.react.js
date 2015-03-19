@@ -20,10 +20,6 @@ var Wall = React.createClass({
         return {data:WallStore.getWall()};
     },
 
-    showNewPost: function(e) {
-        WondrousActions.togglePostModal();
-    },
-
     render: function() {
         var am_following = ProfileStore.user.following;
         var is_private = ProfileStore.user.is_private;
@@ -37,13 +33,15 @@ var Wall = React.createClass({
         });
         var username = this.getParams().username;
         var is_me = username === UserStore.user.username;
+        // {is_me ?
+        //     <div onClick={this.showNewPost} id="new-post-launch" className="round-50">
+        //         <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
+        //     </div>
+        //     : null
+        // }
         return (
             <div>
-                {is_me ?
-                    <div onClick={this.showNewPost} id="new-post-launch" className="round-50">
-                        <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
-                    </div>
-                    : null}
+
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}

@@ -169,6 +169,7 @@ var PostForm = React.createClass({
 
     handleCrop: function(e) {
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
+        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         var canvasData = {
             "left": -462.2145922746779,
