@@ -85,10 +85,17 @@ class FeedManager(BaseManager):
             return cls.get_priority_posts_json(user,page)
 
     @classmethod
-    def get_wall_posts_json(cls, user, user_id=None, username=None, page=0):
+    def get_wall_posts_json(cls, user=None, user_id=None, username=None, page=0):
         page = int(page)
-        if (not user_id and not username) or user==None:
+
+        if (not user_id and not username):
             return []
+
+        if user:
+            my_user_id = user.id
+        else:
+            my_user_id = -1
+
         if user_id:
             profile_user = User.by_id(user_id)
         elif username:
@@ -103,10 +110,10 @@ class FeedManager(BaseManager):
         # If the profile_user is public, we dont need to check for relationship, else do
         # If we are logged in and the profile_user happens to be private, we have to check for relationship
         # TODO this logic gate is not necessary, as we can now check is_private and all relationship data via
-        # on sql call 
+        # on sql call
         if (not profile_user.is_private and not profile_user.is_banned and profile_user.is_active) or \
             (profile_user.is_private and not profile_user.is_banned and profile_user.is_active and profile_user \
-            and VoteManager.is_following(user.id,profile_user.id)):
+            and VoteManager.is_following(my_user_id,profile_user.id)):
             v1 = aliased(Vote)
 
             # based on
@@ -128,18 +135,17 @@ class FeedManager(BaseManager):
             retval = DBSession.query(Post,Vote).\
                 join(User, (User.id==Post.user_id)|(User.id==Post.owner_id)).\
                 join(v1, (Post.owner_id==None)|((Post.owner_id==User.id)&(User.is_private==False)) |\
-                    ( (v1.user_id==user.id) & (v1.vote_type==Vote.USER) \
+                    ( (v1.user_id==my_user_id) & (v1.vote_type==Vote.USER) \
                         & ((v1.subject_id == Post.owner_id)) &\
                          ((v1.status==Vote.FOLLOWED) | (v1.status==Vote.TOPFRIEND)) )).\
-                outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
+                outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==my_user_id)&(Vote.status==Vote.LIKED)).\
                 filter(Post.user_id==profile_user.id).\
                 filter(Post.set_to_delete==None).\
                 order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
 
-        data = []
-        for post, vote in retval:
-            if not post.is_hidden and post.is_active and not post.set_to_delete:
-                post_dict = post.json()
-                post_dict.update({'liked':vote!=None})
-                data.append(post_dict)
-        return data
+            for post, vote in retval:
+                if not post.is_hidden and post.is_active and not post.set_to_delete:
+                    post_dict = post.json()
+                    post_dict.update({'liked':vote!=None})
+                    posts.append(post_dict)
+        return posts

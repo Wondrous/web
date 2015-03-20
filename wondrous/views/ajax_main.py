@@ -217,7 +217,6 @@ class APIViews(BaseHandler):
         posts  = VoteManager.get_following_json(**self.query_kwargs)
         return posts
 
-    @api_login_required
     @view_config(request_method="GET",route_name='api_user_info', renderer='json')
     def api_user_info(self):
 
@@ -340,11 +339,10 @@ class APIViews(BaseHandler):
             approve all pending follow requests
         """
 
-        current_user = self.request.user 
+        current_user = self.request.user
         current_user.is_private = not current_user.is_private
         return {'is_private': current_user.is_private}
 
-    @api_login_required
     @view_config(request_method="GET",route_name='api_user_wall', renderer='json')
     def api_user_wall(self):
 

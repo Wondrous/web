@@ -407,13 +407,22 @@ class VoteManager(BaseManager):
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
 
     @classmethod
-    def get_followers_json(cls, user, username = None, user_id = None, page = 0):
+    def get_followers_json(cls, user=None, username = None, user_id = None, page = 0):
         u = User.by_kwargs(username=username).first()
         if u:
             user_id = u.id
         if not user_id:
             return {'error':'bad user info'}
 
+        if user:
+            my_user_id = user.id
+        else:
+            my_user_id = -1
+
+        am_following = VoteManager.is_following(my_user_id,user_id)
+        if not am_following and u.is_private:
+            return []
+            
         users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).all()
 
@@ -425,12 +434,21 @@ class VoteManager(BaseManager):
         return retval
 
     @classmethod
-    def get_following_json(cls, user, username = None, user_id = None, page = 0):
+    def get_following_json(cls, user=None, username = None, user_id = None, page = 0):
         u = User.by_kwargs(username=username).first()
         if u:
             user_id = u.id
         if not user_id:
             return {'error':'bad user info'}
+
+        if user:
+            my_user_id = user.id
+        else:
+            my_user_id = -1
+
+        am_following = VoteManager.is_following(my_user_id,user_id)
+        if not am_following and u.is_private:
+            return []
 
         users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()

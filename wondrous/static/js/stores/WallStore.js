@@ -31,7 +31,6 @@ var WallStore = Reflux.createStore({
         this.paging = false;
         this.username = username;
         this.wall.reset();
-
     },
 
     loadMore: function(username){

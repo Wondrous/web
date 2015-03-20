@@ -389,6 +389,7 @@ WondrousActions.loadProfile.listen(function(username){
             if (err == null){
                 WondrousActions.updateProfile(res);
             }else{
+                console.error("profile err",err)
                 WondrousActions.profileError(err);
             }
         }

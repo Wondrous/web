@@ -270,23 +270,62 @@ class AccountManager(BaseManager):
 
         return data
 
+    @staticmethod
+    def _sql_query_user_data(profile_user_id,user_id):
+        script = """Select
+            (select count(*)
+            from vote
+            where vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as follower_count,
+
+            (select count(*)
+            from vote
+            where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
+
+            (select count(*)
+            from vote
+            where vote.user_id=:my_user_id and vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as am_following,
+
+            (select count(*)
+            from post
+            where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+
+            (select count(*)
+            from notification
+            where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
+            """
+
+        try:
+            ret = DBSession.execute(script, {'user_id': profile_user_id, 'my_user_id': user_id})
+
+            return ret
+        except Exception, e:
+            return None
+
     @classmethod
-    def get_json_by_username(cls, user, user_id=None, username=None, auth=False):
+    def get_json_by_username(cls, user=None, user_id=None, username=None, auth=False):
         if not user_id and not username:
             return {'error': 'no users found!'}
 
-        if username:
-            if username==user.username:
-                profile_user = user
-            else:
+        if user:
+            my_user_id = user
+            if username:
+                if username==user.username:
+                    profile_user = user
+                else:
+                    profile_user = User.by_kwargs(username=username).first()
+            elif user_id:
+                if user_id == user.id:
+                    profile_user = user
+                else:
+                    profile_user = User.by_id(user_id)
+            if not profile_user:
+                return {'error': 'no users found!'}
+        else:
+            my_user_id = -1
+            if username:
                 profile_user = User.by_kwargs(username=username).first()
-        elif user_id:
-            if user_id == user.id:
-                profile_user = user
-            else:
+            elif user_id:
                 profile_user = User.by_id(user_id)
-        if not profile_user:
-            return {'error': 'no users found!'}
 
         #TODO combine the two sql calls
         score = cls.calculate_wondrous_score(profile_user)
@@ -295,33 +334,17 @@ class AccountManager(BaseManager):
             profile_user.wondrous_score = score
             DBSession.flush()
 
-        try:
-            ret = DBSession.execute("""Select
-                (select count(*)
-                from vote
-                where vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as follower_count,
+        ret = cls._sql_query_user_data(profile_user.id,my_user_id)
 
-                (select count(*)
-                from vote
-                where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
+        if not ret:
+            return {'error':'No user found'}
 
-                (select count(*)
-                from vote
-                where vote.user_id=:my_user_id and vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as am_following,
-
-                (select count(*)
-                from post
-                where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
-
-                (select count(*)
-                from notification
-                where notification.to_user_id=:user_id and notification.is_seen = false) as unseen_count
-                """, {'user_id': profile_user.id, 'my_user_id': user.id})
-        except Exception, e:
-            return {'error': 'no users found!'}
         ret = ret.fetchall()[0]
-
-        follower_count, following_count, am_following, post_count, unseen_notification_count = ret
+        if my_user_id:
+            follower_count, following_count, am_following, post_count, unseen_notification_count = ret
+        else:
+            follower_count, following_count, post_count, unseen_notification_count = ret
+            am_following = False
 
         follow_data = {
             "following_count" : following_count,
@@ -331,7 +354,7 @@ class AccountManager(BaseManager):
         }
 
         # Am I querying for myself?
-        if profile_user and profile_user.id == user.id:
+        if profile_user and profile_user.id == my_user_id:
             retval = follow_data
             DBSession.refresh(profile_user)
 
@@ -340,8 +363,6 @@ class AccountManager(BaseManager):
 
             # cls.add_influencer(profile_user)  # QUESTION: What does this do here?
                                                 #ANSWER: adding an influencer badge
-
-            # Add in profile picture to JSON
 
             if auth:
                 key = shortuuid.uuid()
@@ -365,8 +386,6 @@ class AccountManager(BaseManager):
             retval.update({'is_private': True})
             retval.update({'id': profile_user.id})
             retval.update({'wondrous_score': profile_user.json(0)['wondrous_score']})
-
-
             return retval
 
         return {'error':'no users found!'}

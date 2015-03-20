@@ -14,16 +14,12 @@ var Profile = React.createClass({
     ],
 
     onProfileChange: function(){
-        if (!UserStore.loggedIn && UserStore.loaded) {
-            this.transitionTo('/');
-        } else {
-            var username = this.getParams().username;
-            if (ProfileStore.user.username === username){
-                this.forceUpdate();
-            }
+        var username = this.getParams().username;
+        if (ProfileStore.user.username === username){
+            this.forceUpdate();
         }
     },
-    
+
     render: function () {
         var username = this.getParams().username;
 
