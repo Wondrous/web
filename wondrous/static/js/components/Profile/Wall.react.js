@@ -12,12 +12,22 @@ var masonryOptions = {
 };
 
 var Wall = React.createClass({
-    mixins: [MasonryMixin('masonryContainer', masonryOptions), Router.State, Reflux.connect(WallStore,"data")],
+    mixins: [
+        MasonryMixin('masonryContainer', masonryOptions),
+        Router.State,
+        Reflux.connect(WallStore,"data")
+    ],
+    
     componentDidMount: function(){
         WondrousActions.wallLoaded();
     },
+
     getInitialState: function() {
         return {data:WallStore.getWall()};
+    },
+
+    newPost: function(){
+        WondrousActions.togglePostModal();
     },
 
     render: function() {
@@ -33,14 +43,15 @@ var Wall = React.createClass({
         });
         var username = this.getParams().username;
         var is_me = username === UserStore.user.username;
-        // {is_me ?
-        //     <div onClick={this.showNewPost} id="new-post-launch" className="round-50">
-        //         <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
-        //     </div>
-        //     : null
-        // }
+
         return (
             <div>
+                {is_me ?
+                    <div onClick={this.newPost} id="new-post-launch" className="round-50">
+                        <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
+                    </div>
+                    : null
+                }
 
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="grid-sizer" style={{  display: "none" }}></div>
