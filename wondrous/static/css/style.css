@@ -1138,6 +1138,18 @@ a:hover {
   font-weight: normal;
   cursor: pointer; }
 
+.profile-about--edit-prompt {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 65%;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .profile-about--edit-prompt:hover {
+    color: #a0a0a0; }
+
 .profile-about-textarea {
   resize: none;
   width: 100%;

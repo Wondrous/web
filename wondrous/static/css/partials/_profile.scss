@@ -226,6 +226,22 @@
     cursor: pointer;
 }
 
+.profile-about--edit-prompt {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 65%;
+
+    -webkit-transition: all 0.3s ease-in-out;
+       -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+         -o-transition: all 0.3s ease-in-out;
+
+    &:hover {
+        color: rgb(160,160,160);
+    }
+}
+
 .profile-about-textarea {
     resize: none;
     width: 100%;

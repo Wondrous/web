@@ -104,6 +104,7 @@ var UserBar = React.createClass({
 
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
+
                     {this.state.editing ?
                         <form onSubmit={this.onSubmitDescription}>
                             <textarea className="profile-about-textarea profile-about--font" ref="descriptionBox" placeholder="Tell us something about yourself!">
@@ -112,10 +113,18 @@ var UserBar = React.createClass({
                             <div><input className="post-comment-btn" type="submit" value="Save" /></div>
                         </form>
                         :
-                        <div className="profile-about profile-about--font" onClick={this.onEdit} style={is_me ? {cursor: 'pointer'} : {}}>
-                            {this.state.data.description}
-                            {is_me ? <span className="profile-about--edit">Edit</span> : null}
-                        </div>
+                        <span>
+                            {this.state.data.description.length > 0 ?
+                                <div className="profile-about profile-about--font" onClick={this.onEdit} style={is_me ? {cursor: 'pointer'} : {}}>
+                                    {this.state.data.description}
+                                    {is_me ? <span className="profile-about--edit">Edit</span> : null}
+                                </div>
+                                :
+                                <span>
+                                    {is_me ? <div className="profile-about--edit profile-about--edit-prompt" onClick={this.onEdit}>Add a description about yourself</div> : null}
+                                </span>
+                            }
+                        </span>
                     }
                 </div>
                 <hr className="profile-hr" />
