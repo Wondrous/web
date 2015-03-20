@@ -205,6 +205,7 @@
 .profile-about {
     margin: 20px auto;
     max-width: 65%;
+    border: 1px solid rgb(255,255,255);
 }
 
 .profile-about--font {
@@ -216,7 +217,6 @@
 
 .profile-about--edit {
     position: absolute;
-    display: none;
     padding-left: 5px;
     color: rgb(134,134,134);
     font-family: helvetica, arial, sans-serif;
@@ -231,7 +231,7 @@
     max-width: 65%;
     margin: 20px auto 0;
     text-align: center;
-    border: 1px solid rgb(234,224,224);
+    border: 1px solid rgb(224,224,224);
     outline: none;
 }
 

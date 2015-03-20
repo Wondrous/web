@@ -1119,7 +1119,8 @@ a:hover {
 
 .profile-about {
   margin: 20px auto;
-  max-width: 65%; }
+  max-width: 65%;
+  border: 1px solid white; }
 
 .profile-about--font {
   font-family: helvetica, arial, sans-serif;
@@ -1142,7 +1143,7 @@ a:hover {
   max-width: 65%;
   margin: 20px auto 0;
   text-align: center;
-  border: 1px solid #eae0e0;
+  border: 1px solid #e0e0e0;
   outline: none; }
 
 .user-itemizer {
