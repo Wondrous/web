@@ -6,7 +6,7 @@ var checkLogin = require('../utils/Func').checkLogin;
 
 var SearchBox = React.createClass({
     mixins: [Router.Navigation],
-    
+
     handleSearch: function(evt){
         evt.preventDefault();
         var search = this.refs.query.getDOMNode().value.trim();
@@ -138,7 +138,7 @@ var Navbar = React.createClass({
                 </Link>
                 {UserStore.loggedIn ?
                     <span>
-                        <SearchBox /> 
+                        <SearchBox />
                         <div className="navbar-right">
                             <NewPostIcon />
                             <ProfileLink />

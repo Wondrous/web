@@ -280,11 +280,15 @@ class AccountManager(BaseManager):
             (select count(*)
             from vote
             where vote.user_id=:user_id and (vote.status=6 or vote.status=7)) as following_count,
-
+            """
+        if user_id:
+            script += """
             (select count(*)
             from vote
             where vote.user_id=:my_user_id and vote.subject_id=:user_id and (vote.status=6 or vote.status=7)) as am_following,
+            """
 
+        script+="""
             (select count(*)
             from post
             where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
@@ -295,10 +299,13 @@ class AccountManager(BaseManager):
             """
 
         try:
-            ret = DBSession.execute(script, {'user_id': profile_user_id, 'my_user_id': user_id})
-
+            if user_id:
+                ret = DBSession.execute(script, {'user_id': profile_user_id, 'my_user_id': user_id})
+            else:
+                ret = DBSession.execute(script, {'user_id': profile_user_id})
             return ret
         except Exception, e:
+            print e
             return None
 
     @classmethod
@@ -307,7 +314,7 @@ class AccountManager(BaseManager):
             return {'error': 'no users found!'}
 
         if user:
-            my_user_id = user
+            my_user_id = user.id
             if username:
                 if username==user.username:
                     profile_user = user
@@ -321,7 +328,7 @@ class AccountManager(BaseManager):
             if not profile_user:
                 return {'error': 'no users found!'}
         else:
-            my_user_id = -1
+            my_user_id = None
             if username:
                 profile_user = User.by_kwargs(username=username).first()
             elif user_id:
@@ -335,7 +342,6 @@ class AccountManager(BaseManager):
             DBSession.flush()
 
         ret = cls._sql_query_user_data(profile_user.id,my_user_id)
-
         if not ret:
             return {'error':'No user found'}
 
