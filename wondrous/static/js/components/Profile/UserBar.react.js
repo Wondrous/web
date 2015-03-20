@@ -1,4 +1,5 @@
 var WondrousActions = require('../../actions/WondrousActions');
+var WondrousAPI = require('../../utils/WondrousAPI');
 var ProfileStore = require('../../stores/ProfileStore');
 var UserStore = require('../../stores/UserStore');
 var ProfileBarBadge = require('./ProfileBarBadge.react');
@@ -20,8 +21,7 @@ var UserBar = React.createClass({
     },
 
     getInitialState: function() {
-        console.log(ProfileStore.user);
-        return {data: ProfileStore.user};
+        return {data: ProfileStore.user, editing:false};
     },
 
     handleData: function(err, data) {
@@ -50,6 +50,24 @@ var UserBar = React.createClass({
         }
     },
 
+    onEdit: function(){
+        var is_me = this.props.username === UserStore.user.username;
+        this.setState({data: ProfileStore.user, editing:is_me});
+    },
+    onSubmitDescription: function(evt){
+        evt.preventDefault();
+        var description = this.refs.descriptionBox.getDOMNode().value;
+        var that = this;
+        WondrousAPI.changeDescription({
+            description: description,
+            callback:function(err,res){
+                if(err==null){
+                    ProfileStore.user.description = description;
+                    that.setState({data: ProfileStore.user, editing:false});
+                }
+            }
+        })
+    },
     render: function() {
         this.is_private = ProfileStore.user.is_private;
         this.am_following = this.state.data.following == true;
@@ -86,7 +104,10 @@ var UserBar = React.createClass({
 
                     <div className="profile-name">{this.state.data.name}</div>
                     <div className="profile-username">@{this.state.data.username}</div>
-
+                    {this.state.editing?<form style={{ marginLeft: "25%", width:"50%" }} onSubmit={this.onSubmitDescription}>
+                        <textarea className="comment-textarea" ref="descriptionBox" placeholder="Share your description">{this.state.data.description.length>0?this.state.data.description:null}</textarea>
+                        <input className="post-comment-btn" type="submit" value="Submit" />
+                    </form>:<div onClick={this.onEdit}>CLICK ME TO CHANGE DESCRIPTION: {this.state.data.description}</div>}
                 </div>
                 <hr className="profile-hr" />
                 <ul className="profile-header-nav">

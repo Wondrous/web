@@ -83,7 +83,7 @@ class User(Base, PasswordManager, BaseMixin):
     last_calculated = Column(DateTime, default=datetime.now)
 
     # description
-    description = Column(Unicode, nullable=False, default="") 
+    description = Column(Unicode, nullable=False, default="")
 
     def __init__(self, *args, **kwargs):
         super(User,self).__init__(*args, **kwargs)
@@ -97,9 +97,9 @@ class User(Base, PasswordManager, BaseMixin):
         """
 
         if not ascii:
-            base = cls.query.filter(cls.name.ilike("%{q}%".format(q=key)))
+            base = cls.query.filter((cls.name.ilike("%{q}%".format(q=key)))|(cls.description.ilike("%{q}%".format(q=key))))
         elif ascii:
-            base = cls.query.filter(cls.name.ilike("%{q}%".format(q=key)))
+            base = cls.query.filter((cls.ascii_name.ilike("%{q}%".format(q=key)))|(cls.description.ilike("%{q}%".format(q=key))))
 
         return base.filter(cls.is_active==True).\
                     filter(cls.is_banned==False).limit(num)  # ascii_name
