@@ -5,9 +5,9 @@ var Profile = require('./Profile/Profile.react');
 
 var ProfileRoute = (
     <Route name="user" path="/:username" handler={Profile} ignoreScrollBehavior>
-        <Route name="wall" path="/:username/wall" handler={Wall}  />
-        <Route name="followers" path="/:username/followers" handler={Follower}  />
-        <Route name="following" path="/:username/following" handler={Following}  />
+        <Route name="wall"  handler={Wall}  />
+        <Route name="followers"  handler={Follower}  />
+        <Route name="following"  handler={Following}  />
         <DefaultRoute handler={Wall} />
     </Route>
 );
