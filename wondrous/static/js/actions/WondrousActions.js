@@ -496,7 +496,7 @@ WondrousActions.repost.listen(function(post_id){
                 WondrousActions.addToFeed(res);
                 WondrousActions.addToWall(res);
             }else{
-                WondrousActions.uploadError(err);
+                console.error(err);
             }
         }
     });

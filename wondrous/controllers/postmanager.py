@@ -216,8 +216,15 @@ class PostManager(BaseManager):
         """
 
         if repost_id:
+            # only allow the user to do that if he/she hasn't done it before
             old_post = Post.by_id(repost_id)
             new_post = Post(user_id=user_id, repost_id=repost_id)
+
+            o_id = old_post.repost_id if old_post.repost_id else repost_id
+            print "reposting",o_id, user_id
+            p = Post.by_kwargs(repost_id=o_id,user_id=user_id,set_to_delete=None).first()
+            if p:
+                return {'error':'You have already reposted this item!'}
 
             if old_post.repost_id:
                 # this is a repost of there must exists an original
@@ -264,7 +271,12 @@ class PostManager(BaseManager):
         if not user:
             return {'error': 'Insufficient data'}
         post = PostManager.add(user.id, None, text, repost_id=post_id)
-        data = post.json()
+        try:
+            data = post.json()
+        except Exception, e:
+            return post
+            # return an error
+
 
         # Notify if needed
         new_notification = NotificationManager.add(
