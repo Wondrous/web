@@ -12,6 +12,7 @@ var FeedStore = Reflux.createStore({
         this.currentPage = 0;
         this.donePaging = false;
         this.paging = false;
+        this.hasNewPosts = false;
     },
     updateUser: function(userData) {
         if(userData.hasOwnProperty('username') && userData.username!==this.username){
@@ -22,7 +23,15 @@ var FeedStore = Reflux.createStore({
             this.loadMore();
         }
     },
-
+    newFeedItems: function(){
+        this.hasNewPosts = true;
+        this.trigger(this.feed.sortedSet);
+    },
+    
+    loadNewest: function(){
+        this.hasNewPosts = false;
+        WondrousActions.loadNewFeedItems();
+    },
     loadMore: function(){
         if(!this.paging&&!this.donePaging){
             this.paging = true;

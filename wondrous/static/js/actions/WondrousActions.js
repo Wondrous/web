@@ -3,6 +3,10 @@ var WondrousAPI = require("../utils/WondrousAPI");
 var WondrousActions = Reflux.createActions({
     // SECTION loading from server
 
+    "newFeedItems": {},
+
+    "loadNewFeedItems": {},
+
     "closeSignupPrompt": {},
 
     "openSignupPrompt": {},
@@ -326,6 +330,20 @@ WondrousActions.loadFeed.listen(function(page){
     console.log("loading feed",page);
     WondrousAPI.getMajorityFeed({
         page: page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateFeed(res);
+            }else{
+                console.error(err);
+            }
+        }
+    });
+});
+
+WondrousActions.loadNewFeedItems.listen(function(){
+    console.log("loading newest feed items");
+    WondrousAPI.getMajorityFeed({
+        page: 0,
         callback: function(err,res){
             if (err == null){
                 WondrousActions.updateFeed(res);

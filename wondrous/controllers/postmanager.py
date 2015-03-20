@@ -225,7 +225,7 @@ class PostManager(BaseManager):
                 new_post.owner_id = old_post.owner_id
             else:
                 new_post.original_id = repost_id
-                new_post.owner_id = old_post.owner_id
+                new_post.owner_id = old_post.user_id
 
         else:
             # take it apart

@@ -13,11 +13,11 @@ var NotificationStore = Reflux.createStore({
     onmessage: function(note,id,channel){
         console.log("received something",note)
         if(note.reason===NotificationConstants.FEED){
-            setTimeout(function(){
-                console.log("loading",note.subject_id);
-                WondrousActions.loadPost(note.subject_id,true);
-            },2000);
+            // setTimeout(function(){
+                // WondrousActions.loadPost(note.subject_id,true);
+            // },2000);
 
+            WondrousActions.newFeedItems();
         }else{
             if (SettingStore.sidebarOpen==true && SettingStore.sidebarType==WondrousConstants.SHOW_NOTIFICATIONS){
                 WondrousActions.setNotificationSeen();
