@@ -11,14 +11,14 @@ var PostFormModal = React.createClass({
 	componentDidMount: function(){
 		var con = $(this.refs.modalWrapper.getDOMNode());
 		con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-			$(this).removeClass("animated fadeIn");
+			$(this).removeClass("animated bounceInDown");
 		});
 	},
     onModalChange: function(){
         this.forceUpdate();
 		if (ModalStore.postFormOpen){
 			var con = $(this.refs.modalWrapper.getDOMNode());
-			con.addClass("animated fadeIn");
+			con.addClass("animated bounceInDown");
 		}
     },
 
@@ -40,8 +40,8 @@ var PostFormModal = React.createClass({
 		divStyle = ModalStore.postFormOpen ? {display:"block"} : {display:"none"};
 
 		return (
-			<ModalWrapper ref="modalWrapper" handleClose={this.handleClose} divStyle={divStyle}>
-                <PostForm />
+			<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+                <PostForm ref="modalWrapper"/>
             </ModalWrapper>
 		);
 	}
