@@ -81,6 +81,7 @@ def build_routes(config):
     config.add_route('api_user_deactivate',                    '/api/me/deactivate')    # POST
     config.add_route('api_user_password',                      '/api/me/password')      # POST
     config.add_route('api_user_picture',                       '/api/me/picture')       # POST
+    config.add_route('api_user_description',                       '/api/me/description')       # POST
     config.add_route('api_user_me',                            '/api/me')               # GET
 
     config.add_route('api_verify_user',                        '/api/me/verify')        # POST

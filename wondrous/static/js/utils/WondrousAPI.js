@@ -37,6 +37,20 @@ module.exports = {
     // get the list of liked
     // options are:
     // callback
+    // description
+    changeDescription: function(options){
+        var callback = options.callback;
+        var description = options.description;
+        var url = '/api/me/description';
+
+        request.post(url).send({
+            description:description
+        }).end(_callback(callback));
+    },
+
+    // get the list of liked
+    // options are:
+    // callback
     // post_id
     // page
     getLikedUsers: function(options){

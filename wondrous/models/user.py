@@ -50,6 +50,8 @@ class User(Base, PasswordManager, BaseMixin):
     """
 
     name = Column(Unicode, nullable=False)
+    name_changed_date = Column(DateTime, default=datetime.now())
+
     ascii_name = Column(Unicode, nullable=False)
     username = Column(Unicode, nullable=True, unique=True)  # nullable=True for FBAuth users
     email = Column(Unicode, nullable=False)
@@ -75,10 +77,13 @@ class User(Base, PasswordManager, BaseMixin):
     feed = relationship("Feed", uselist=False, backref="user")
     picture_object = relationship('Object',lazy='joined', backref=backref("user", uselist=False))
 
-    #Wondrous score
+    # Wondrous score
     base_score = Column(Integer, default=0, nullable=False)
     wondrous_score = Column(Integer, default=0, nullable=False)
     last_calculated = Column(DateTime, default=datetime.now)
+
+    # description
+    description = Column(Unicode, nullable=False, default="") 
 
     def __init__(self, *args, **kwargs):
         super(User,self).__init__(*args, **kwargs)
@@ -105,6 +110,8 @@ class User(Base, PasswordManager, BaseMixin):
 
     def json(self,level=0):
         retval = super(User,self).json(level)
+        retval.update({"name": self.ascii_name})
+
         picture_object = self.picture_object
         if picture_object:
             retval.update({"ouuid": picture_object.ouuid})

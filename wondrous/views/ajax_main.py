@@ -230,7 +230,7 @@ class APIViews(BaseHandler):
 
             PARAMS: (None)
 
-            RETURNS: The JSON of the user+user model if valid else {}
+            RETURNS: The JSON of the user+user model if valid else {error: "x"}
         """
 
         return AccountManager.get_json_by_username(**self.query_kwargs)
@@ -248,7 +248,7 @@ class APIViews(BaseHandler):
 
             PARAMS: (None)
 
-            RETURNS: The JSON of the user+user model if valid else {}
+            RETURNS: The JSON of the user+user model if valid else {error: "x"}
         """
 
         user = self.query_kwargs['user']
@@ -305,10 +305,27 @@ class APIViews(BaseHandler):
 
             PARAMS: (None)
 
-            RETURNS: The JSON of the user+user model if valid else {}
+            RETURNS: The JSON of the user+user model if valid else {error: "x"}
         """
 
         return AccountManager.upload_picture_json(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_user_description', renderer='json')
+    def api_user_description(self):
+
+        """
+            PURPOSE: Changes profile picture
+
+            USE: self.query_kwargs to provide all the required inputs.
+                file_type
+
+            PARAMS: (None)
+
+            RETURNS: The JSON of the user+user model if valid else {error: "x"}
+        """
+
+        return AccountManager.change_description_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="POST", route_name='api_user_visibility_toggle', renderer='json')
@@ -323,7 +340,7 @@ class APIViews(BaseHandler):
             approve all pending follow requests
         """
 
-        current_
+        current_user = self.request.user 
         current_user.is_private = not current_user.is_private
         return {'is_private': current_user.is_private}
 
@@ -575,7 +592,7 @@ class APIViews(BaseHandler):
 
         error_message = None
         try:
-            _s_valid_n, len_err_fn = Sanitize.length_check(self.query_kwargs['name'], min_length=1, max_length=30)
+            _s_valid_n, len_err_n = Sanitize.length_check(self.query_kwargs['name'], min_length=1, max_length=30)
             _s_valid_pw, len_err_pw = Sanitize.length_check(self.query_kwargs['password'], min_length=6, max_length=255)
             _s_valid_em = Sanitize.is_valid_email(self.query_kwargs['email'])
             _s_em_taken = User.by_kwargs(email=self.query_kwargs['email']).first()
@@ -587,7 +604,7 @@ class APIViews(BaseHandler):
 
         # Check for validity
         if not _s_valid_n:
-            error_message = "Your name is {err}".format(err=len_err_fn)
+            error_message = "Your name is {err}".format(err=len_err_n)
         elif not _s_valid_em:
             error_message = "Please enter a valid email address"
         elif _s_em_taken:
@@ -834,7 +851,7 @@ class APIViews(BaseHandler):
             error_message = "Please enter a username."
 
         if not error_message:
-            _s_valid_n, len_err_fn = Sanitize.length_check(name, min_length=1, max_length=30)
+            _s_valid_n, len_err_n = Sanitize.length_check(name, min_length=1, max_length=30)
             _s_valid_pw, len_err_pw = Sanitize.length_check(password, min_length=6, max_length=255)
             _s_valid_em = Sanitize.is_valid_email(email)
             _s_em_taken = User.by_kwargs(email=email).first()
@@ -843,7 +860,7 @@ class APIViews(BaseHandler):
 
             # Check for validity
             if not _s_valid_n:
-                error_message = "Your name is {err}".format(err=len_err_fn)
+                error_message = "Your name is {err}".format(err=len_err_n)
             elif not _s_valid_em:
                 error_message = "Please enter a valid email address"
             elif _s_em_taken:

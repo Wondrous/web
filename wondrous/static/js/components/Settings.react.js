@@ -3,11 +3,15 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 
 var NameChange = React.createClass({
+    getInitialState: function(){
+        return {'error':null};
+    },
     handleData: function(err, res) {
         if (err == null) {
+            this.setState({error:null});
             WondrousActions.updateUser(res);
         } else {
-
+            this.setState({error:err.error});
         }
     },
 
@@ -34,22 +38,29 @@ var NameChange = React.createClass({
                         <input type="submit" value="Save changes"/>
                     </form>
                 </div>
+                <div>
+                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                </div>
             </div>
         );
     }
 });
 
 var UsernameChange = React.createClass({
+    getInitialState: function(){
+        return {'error':null};
+    },
     handleData: function(err, res){
         if (err == null) {
+            this.setState({error:null});
             WondrousActions.updateUser(res);
         } else {
-
+            this.setState({error:err.error});
         }
     },
-    checkUsername: function() {
-        console.log("should check if username is good:", this.refs.username.getDOMNode().value);
-    },
+    // checkUsername: function() {
+    //     console.log("should check if username is good:", this.refs.username.getDOMNode().value);
+    // },
     handleSubmit: function(evt) {
         evt.preventDefault();
         WondrousAPI.changeUsername({
@@ -66,9 +77,12 @@ var UsernameChange = React.createClass({
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        @<input type="text" ref="username" className="basic-input" onChange={this.checkUsername} placeholder="Username"/>
+                        @<input type="text" ref="username" className="basic-input" placeholder="Username"/>
                         <input type="submit" value="Save changes"/>
                     </form>
+                </div>
+                <div>
+                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
                 </div>
             </div>
         );
@@ -76,17 +90,21 @@ var UsernameChange = React.createClass({
 });
 
 var PasswordChange = React.createClass({
+    getInitialState: function(){
+        return {'error':null};
+    },
     handleData: function(err, res) {
         if (err == null) {
-            console.log("pass changed",res);
+            this.setState({error:null});
             WondrousActions.updateUser(res);
         } else {
-
+            this.setState({error:err.error});
         }
     },
     handleSubmit: function(evt) {
         evt.preventDefault();
         if (this.refs.new_password.getDOMNode().value !== this.refs.new_password_confirm.getDOMNode().value) {
+            this.setState({error:"passwords do not match!"});
             return;
         }
         WondrousAPI.changePassword({
@@ -109,18 +127,25 @@ var PasswordChange = React.createClass({
                         <div><input type="submit" value="Save changes"/></div>
                     </form>
                 </div>
+                <div>
+                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                </div>
             </div>
         );
     }
 });
 
 var VisibilityChange = React.createClass({
+    getInitialState: function(){
+        return {'error':null};
+    },
     handleData: function(err,res){
         if (!err) {
+            this.setState({error:null});
             this.props.user.is_private = res.is_private;
             this.forceUpdate();
         } else {
-            console.error('err', err)
+            this.setState({error:err.error});
         }
     },
     toggleVisibility: function(){
@@ -138,6 +163,9 @@ var VisibilityChange = React.createClass({
                 <div>
                     Posts are private
                     <button onClick={this.toggleVisibility} className="privacy-toggle">{is_private?"on":"off"}</button>
+                </div>
+                <div>
+                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
                 </div>
             </div>
         );

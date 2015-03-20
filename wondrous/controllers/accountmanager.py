@@ -336,7 +336,6 @@ class AccountManager(BaseManager):
             DBSession.refresh(profile_user)
 
             retval.update(profile_user.json(1))
-            retval.update({"name": profile_user.ascii_name})
             retval.update({"unseen_notifications": unseen_notification_count})
 
             # cls.add_influencer(profile_user)  # QUESTION: What does this do here?
@@ -356,8 +355,6 @@ class AccountManager(BaseManager):
 
             retval = follow_data
             retval.update(profile_user.json(0))
-            retval.update({"name": profile_user.ascii_name})
-
 
             return retval
 
@@ -395,6 +392,12 @@ class AccountManager(BaseManager):
 
     @classmethod
     def change_password_json(cls, user, old_password, new_password):
+        if old_password == new_password:
+            return {'error': 'new password must be different'}
+
+        _s_valid_pw, _ = Sanitize.length_check(new_password, min_length=6, max_length=255)
+        if not _s_valid_pw:
+            return {'error':'new password must be at least 6 characters long'}
 
         if user and user.validate_password(old_password.encode('utf-8')):
             user.password = new_password
@@ -406,7 +409,22 @@ class AccountManager(BaseManager):
 
     @classmethod
     def change_name_json(cls, user, name):
+        if user.name==name:
+            return {'error':'name is already {0}'.format(name)}
+
+        changed_date = user.name_changed_date
+        if changed_date and datetime.now()-changed_date<timedelta(days=60):
+            return {'error': "Name already changed within the last 60 days"}
+
+        _s_valid_n, _ = Sanitize.length_check(name, min_length=1, max_length=30)
+        if not _s_valid_n:
+            return {'error': "Make sure your name is between 1 and 30 characters"}
+
         data = cls.change_profile_json(user,'name',name)
+        if 'error' in data.keys():
+            return data
+
+        user.name_changed_date = datetime.now()
         data.update(cls.change_profile_json(user,'ascii_name',unicode(name)))
 
         retval = user.json(1)
@@ -415,10 +433,32 @@ class AccountManager(BaseManager):
 
     @classmethod
     def change_username_json(cls, user, username):
+        if user.username == username:
+            return {'error': 'New username cannot be the same'}
+
+        _s_valid_un = Sanitize.is_valid_username(username)
+        if not _s_valid_un:
+            return {'error': 'invalid user name, please use only letters and numbers and at least 5 characters long'}
+
+        u = User.by_kwargs(username=username.lower()).first()
+        if u:
+            return {'error': 'username already taken'}
         data = cls.change_profile_json(user,'username',username)
+        if 'error' in data.keys():
+            return data
+
         retval = user.json(1)
         retval.update(data)
         return retval
+
+    @staticmethod
+    def change_description_json(user, description):
+        user.description = description
+        try:
+            DBSession.flush()
+            return user.json(1)
+        except Exception, e:
+            return {'error',e.message}
 
     @classmethod
     def change_profile_json(cls, user, field, new_value):
