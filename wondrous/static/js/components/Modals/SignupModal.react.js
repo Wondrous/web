@@ -1,6 +1,7 @@
 var ModalStore = require('../../stores/ModalStore');
 var LoggedOut = require('../Home/LoggedOut.react');
 var WondrousActions = require('../../actions/WondrousActions');
+var ModalWrapper = require('./ModalWrapper.react');
 
 var SignupModal = React.createClass({
     mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],
@@ -13,29 +14,12 @@ var SignupModal = React.createClass({
         WondrousActions.closeSignupPrompt();
 	},
 
-    stopProp: function(evt) {
-		evt.preventDefault();
-		evt.stopPropagation();
-	},
-
     render: function() {
 		divStyle = ModalStore.signupOpen?{display:"block"} : {display:"none"};
 		return (
-			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
-
-				<div className="vertical-center-wrapper">
-					<div className="vertical-center">
-
-						<div className="modal-wrapper">
-                            <div onClick={this.stopProp} className="modal round-5">
-                                <LoggedOut/>
-                            </div>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
+            <ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+                <LoggedOut/>
+            </ModalWrapper>
 		);
 	}
 });

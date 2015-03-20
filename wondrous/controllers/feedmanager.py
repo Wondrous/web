@@ -102,9 +102,11 @@ class FeedManager(BaseManager):
 
         # If the profile_user is public, we dont need to check for relationship, else do
         # If we are logged in and the profile_user happens to be private, we have to check for relationship
+        # TODO this logic gate is not necessary, as we can now check is_private and all relationship data via
+        # on sql call 
         if (not profile_user.is_private and not profile_user.is_banned and profile_user.is_active) or \
             (profile_user.is_private and not profile_user.is_banned and profile_user.is_active and profile_user \
-            and VoteManager.is_following(profile_user.id,profile_user.id)):
+            and VoteManager.is_following(user.id,profile_user.id)):
             v1 = aliased(Vote)
 
             # based on

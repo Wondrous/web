@@ -1,16 +1,13 @@
 var ReportConstants = require('../../constants/ReportConstants');
 var WondrousActions = require('../../actions/WondrousActions');
 var ModalStore = require('../../stores/ModalStore');
+var ModalWrapper = require('./ModalWrapper.react');
 
 var ReportingForm = React.createClass({
     mixins: [ Reflux.listenTo(ModalStore,"onModalChange") ],
 
     onModalChange: function() {
         this.forceUpdate();
-    },
-
-    stopProp: function(e){
-        e.stopPropagation();
     },
 
     radioChange: function(e){
@@ -94,21 +91,9 @@ var ReportModal = React.createClass({
     render: function() {
 		divStyle = ModalStore.reportType!=null? {display:"block"} : {display:"none"};
 		return (
-			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
-
-				<div className="vertical-center-wrapper">
-					<div className="vertical-center">
-
-						<div className="modal-wrapper">
-                            <div onClick={this.stopProp} className="modal round-5">
-                                <ReportingForm />
-                            </div>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
+            <ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+                <ReportingForm />
+            </ModalWrapper>
 		);
 	}
 });

@@ -1,6 +1,7 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var ModalStore = require('../../stores/ModalStore');
 var PostStore = require('../../stores/PostStore');
+var ModalWrapper = require('./ModalWrapper.react');
 
 var LikedUserModal = React.createClass({
     mixins:[Reflux.listenTo(ModalStore,"onModalChange"),Reflux.listenTo(PostStore,"onPostChange")],
@@ -55,22 +56,11 @@ var LikedUserModal = React.createClass({
         },this);
 
 		return (
-			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
-
-				<div className="vertical-center-wrapper">
-					<div className="vertical-center">
-						<div className="modal-wrapper">
-                            <div onClick={this.stopProp} className="modal round-5">
-                                <h5 className="notification-menu-header">Users Who liked this</h5>
-                                {users}
-                                {!PostStore.doneLikedUserPaging?<button onClick={this.loadMore}>Load More</button>:{}}
-                            </div>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
+            <ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+                <h5 className="notification-menu-header">Users Who liked this</h5>
+                {users}
+                {!PostStore.doneLikedUserPaging?<button onClick={this.loadMore}>Load More</button>:{}}
+            </ModalWrapper>
 		);
     }
 });

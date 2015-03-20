@@ -4,8 +4,11 @@ var UserStore = require('../../stores/UserStore');
 var ModalStore = require('../../stores/ModalStore');
 var ReportConstants = require('../../constants/ReportConstants');
 var Post = require('./Post.react');
+var ModalWrapper = require('./ModalWrapper.react');
 
 var linkify = require('../../utils/Linkify');
+
+
 
 var PostModal = React.createClass({
 	mixins:[
@@ -26,11 +29,10 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt) {
-        if (evt.target==this.refs.closeContainer.getDOMNode()){
-            WondrousActions.closeCardModal();
-            evt.preventDefault();
-            evt.stopPropagation();
-        }
+		// handled only by children
+		WondrousActions.closeCardModal();
+		evt.preventDefault();
+		evt.stopPropagation();
 	},
 
 	render: function() {
@@ -40,25 +42,13 @@ var PostModal = React.createClass({
 		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
 
 		return (
-			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
-
-				<div className="vertical-center-wrapper">
-					<div ref="closeContainer" className="vertical-center">
-
-						<div className="modal-wrapper">
-                            <div className="modal round-5">
-                                {PostStore.postError !== null ?
-                                    <span className="post-not-found-error">{PostStore.postError}</span>
-                                    :
-                                    <Post data={this.state.post} comments={this.state.comments}/>
-                                }
-                            </div>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
+				<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+                    {PostStore.postError !== null ?
+                        <span className="post-not-found-error">{PostStore.postError}</span>
+                        :
+                        <Post data={this.state.post} comments={this.state.comments}/>
+                    }
+                </ModalWrapper>
 		);
 	}
 });

@@ -2,6 +2,7 @@ var WondrousActions = require('../../actions/WondrousActions');
 var ModalStore = require('../../stores/ModalStore');
 var WondrousConstants = require('../../constants/WondrousConstants');
 var PostForm = require('./PostForm.react');
+var ModalWrapper = require('./ModalWrapper.react');
 
 var PostFormModal = React.createClass({
 	mixins:[
@@ -22,38 +23,26 @@ var PostFormModal = React.createClass({
     },
 
 	handleClose: function(evt) {
-        if (evt.target==this.refs.closeContainer.getDOMNode()){
-			var con = $(this.refs.modalWrapper.getDOMNode());
-			var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+		var con = $(this.refs.modalWrapper.getDOMNode());
+		var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
-			if (!isPictureModal) {
-				WondrousActions.togglePostModal();
-			} else {
-				WondrousActions.togglePictureModal();
-			}
+		if (!isPictureModal) {
+			WondrousActions.togglePostModal();
+		} else {
+			WondrousActions.togglePictureModal();
+		}
 
-            evt.preventDefault();
-            evt.stopPropagation();
-        }
+        evt.preventDefault();
+        evt.stopPropagation();
 	},
 
 	render: function() {
 		divStyle = ModalStore.postFormOpen ? {display:"block"} : {display:"none"};
 
 		return (
-			<div onClick={this.handleClose} className="_dimmer" style={divStyle}>
-
-				<div className="vertical-center-wrapper">
-					<div ref="closeContainer" className="vertical-center">
-
-						<div className="modal-wrapper">
-                            <div className="modal round-5" ref="modalWrapper">
-                                <PostForm />
-                            </div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<ModalWrapper ref="modalWrapper" handleClose={this.handleClose} divStyle={divStyle}>
+                <PostForm />
+            </ModalWrapper>
 		);
 	}
 });
