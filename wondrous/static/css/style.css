@@ -1118,14 +1118,16 @@ a:hover {
   box-shadow: 0 1px 2px #3d3d3d; }
 
 .profile-about {
-  margin: 20px auto 20px auto;
-  max-width: 65%;
+  margin: 20px auto;
+  max-width: 65%; }
+
+.profile-about--font {
   font-family: helvetica, arial, sans-serif;
   font-weight: 100;
   font-size: 16px;
   color: #646464; }
 
-.profile-about-edit {
+.profile-about--edit {
   position: absolute;
   padding-left: 5px;
   color: #868686;
@@ -1133,6 +1135,15 @@ a:hover {
   font-size: 13px;
   font-weight: normal;
   cursor: pointer; }
+
+.profile-about-textarea {
+  resize: none;
+  width: 100%;
+  max-width: 65%;
+  margin: 20px auto 0;
+  text-align: center;
+  border: 1px solid #eae0e0;
+  outline: none; }
 
 .user-itemizer {
   padding: 25px 35px;
