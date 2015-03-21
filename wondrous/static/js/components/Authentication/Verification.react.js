@@ -2,7 +2,7 @@ var WondrousActions = require('../../actions/WondrousActions');
 var WondrousAPI = require('../../utils/WondrousAPI');
 
 var Verification = React.createClass({
-    mixins: [Router.State, Router.Navigation],
+    mixins: [Router.Navigation, Router.State],
     getInitialState: function(){
         return {error:null};
     },

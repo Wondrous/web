@@ -36,7 +36,7 @@ from wondrous.utilities.validation_utilities import (
 )
 import shortuuid
 from datetime import datetime, timedelta
-from sqlalchemy import func, distinct, or_, case
+from sqlalchemy import func, distinct, or_, case, func
 from sqlalchemy.orm import aliased
 
 from wondrous.utilities.general_utilities import round_num
@@ -310,16 +310,18 @@ class AccountManager(BaseManager):
 
     @classmethod
     def get_json_by_username(cls, user=None, user_id=None, username=None, auth=False):
+
         if not user_id and not username:
             return {'error': 'no users found!'}
 
         if user:
             my_user_id = user.id
             if username:
-                if username==user.username:
+                username = username.lower()
+                if username==user.username.lower():
                     profile_user = user
                 else:
-                    profile_user = User.by_kwargs(username=username).first()
+                    profile_user = DBSession.query(User).filter(func.lower(User.username)==username).first()
             elif user_id:
                 if user_id == user.id:
                     profile_user = user
@@ -330,7 +332,8 @@ class AccountManager(BaseManager):
         else:
             my_user_id = None
             if username:
-                profile_user = User.by_kwargs(username=username).first()
+                username = username.lower()
+                profile_user = DBSession.query(User).filter(func.lower(User.username)==username).first()
             elif user_id:
                 profile_user = User.by_id(user_id)
 

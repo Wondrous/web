@@ -2,7 +2,9 @@ var WondrousAPI = require('../../utils/WondrousAPI');
 var UserStore = require('../../stores/UserStore');
 
 var PasswordReset = React.createClass({
-    mixins: [Router.State, Router.Navigation],
+    mixins: [Router.Navigation,
+        Router.State
+],
     getInitialState: function(){
         return {error:null};
     },

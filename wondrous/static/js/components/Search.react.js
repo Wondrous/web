@@ -34,11 +34,11 @@ var UserIcon = React.createClass({
 
 var Search = React.createClass({
     mixins: [
-        Router.State,
         Router.Navigation,
+        Router.State,
         Reflux.listenTo(SearchStore, 'onSearchChange')
     ],
-    
+
     componentDidMount: function(){
         if (typeof this.getParams().search!=='undefined'){
             var pathArray = window.location.pathname.split( '/' );
@@ -79,7 +79,7 @@ var Search = React.createClass({
         var pathArray = window.location.pathname.split( '/' );
         var isTagSearch = pathArray[1] === 'tags';
         var searchTerm = this.getParams().search.replace('%20',' ');
-        
+
         if (isTagSearch) {
             searchTerm = searchTerm.split(' ').map(function(word, ind) {
                 return '#'+word+' '

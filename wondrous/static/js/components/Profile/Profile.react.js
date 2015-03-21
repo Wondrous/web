@@ -15,7 +15,7 @@ var Profile = React.createClass({
 
     onProfileChange: function(){
         var username = this.getParams().username;
-        if (ProfileStore.user.username === username){
+        if (ProfileStore.user.username.toLowerCase() === username.toLowerCase()){
             this.forceUpdate();
         }
     },
@@ -23,7 +23,7 @@ var Profile = React.createClass({
     render: function () {
         var username = this.getParams().username;
 
-        if(ProfileStore.user.username !== username){
+        if(ProfileStore.user.username.toLowerCase() !== username.toLowerCase()){
             WondrousActions.newProfile(username);
             WondrousActions.loadProfile(username);
             WallStore.loadMore(username);

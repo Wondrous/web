@@ -28,6 +28,7 @@
     "envify": "~3.0.0",
     "jest-cli": "~0.1.17",
     "react": "^0.12.0",
+    "react-router": "^0.12.x",
     "reactify": "^0.15",
     "uglify-js": "~2.4.15",
     "watchify": "~2.1.0",

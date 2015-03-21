@@ -4,7 +4,6 @@ var UserIcon = require('./UserIcon.react');
 
 var Follower = React.createClass({
     mixins: [
-        Router.State,
         Router.Navigation,
         Reflux.listenTo(ProfileStore,"onProfileChange")
     ],

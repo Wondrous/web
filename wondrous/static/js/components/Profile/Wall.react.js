@@ -14,10 +14,10 @@ var masonryOptions = {
 var Wall = React.createClass({
     mixins: [
         MasonryMixin('masonryContainer', masonryOptions),
-        Router.State,
-        Reflux.connect(WallStore,"data")
+        Reflux.connect(WallStore,"data"),
+        Router.State
     ],
-    
+
     componentDidMount: function(){
         WondrousActions.wallLoaded();
     },

@@ -79,7 +79,7 @@ var LandingApp = React.createClass({
     referrer_info: {},
     mixins: [
         Router.Navigation,
-        Router.State,
+        Router.State
     ],
 
     handleData: function(err, res) {

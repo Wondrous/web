@@ -3,7 +3,7 @@ var ProfileStore = require('../../stores/ProfileStore');
 var UserIcon = require('./UserIcon.react');
 
 var Following = React.createClass({
-    mixins: [ Router.State, Router.Navigation, Reflux.listenTo(ProfileStore,"onProfileChange") ],
+    mixins: [ Router.Navigation, Reflux.listenTo(ProfileStore,"onProfileChange") ],
     onProfileChange: function(profileData){
         if (profileData.hasOwnProperty('following')){
             this.setState({data:profileData.following});

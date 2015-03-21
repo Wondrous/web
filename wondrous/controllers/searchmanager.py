@@ -8,7 +8,7 @@
 # CONTROLLERS/SEARCHMANAGER.PY
 #
 
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 from wondrous.models import (
     DBSession,
@@ -50,14 +50,14 @@ class SearchManager:
 
     @staticmethod
     def tag_search_json(user,search,page):
-        tags = [tag for tag in search.split(' ') if len(tag)]
+        tags = [tag.lower() for tag in search.split(' ') if len(tag)]
         ret = DBSession.query(Post,Vote).\
             join(Tag, Tag.post_id==Post.id).\
             join(User, User.id==Post.user_id).\
             outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
             filter(Post.set_to_delete==None).\
             filter(User.is_private==False).\
-            filter(Tag.tag_name.in_(tags)).\
+            filter(func.lower(Tag.tag_name).in_(tags)).\
             offset(page*15).limit(15).all()
 
         retval = []

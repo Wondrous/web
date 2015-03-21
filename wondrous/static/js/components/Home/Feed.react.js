@@ -20,8 +20,8 @@ var Feed = React.createClass({
         Reflux.listenTo(FeedStore,'onFeedUpdate'),
         Reflux.listenTo(UserStore,'onUserUpdate'),
         Reflux.listenTo(ModalStore,'onModalUpdate'),
-        Router.State,
-        Router.Navigation
+        Router.Navigation,
+        Router.State
     ],
 
     checkForParams: function(){

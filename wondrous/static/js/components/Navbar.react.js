@@ -131,7 +131,12 @@ var Navbar = React.createClass({
     ],
 
     render: function() {
+        if(!UserStore.loaded){
+            return (<div></div>);
+        }
+
         return (
+
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
                 <Link to="/" style={{ color: "rgb(234,234,234)" }}>
                     <img src="/static/pictures/p.icon_50x50.png" className="navbar-logo" />
