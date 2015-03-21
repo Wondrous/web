@@ -1,59 +1,9 @@
 // tag
 
-.upvoted-tab {
-    position: relative;
-    display: inline-block;
-    margin-top: 30px;
-    margin-bottom: 0;
-    padding: 5px 25px;
-    background-color: rgb(201,201,201);
-    font-family: arial, helvetica, sans-serif;
-    font-size: 15px;
-    font-weight: normal;
-    color: rgb(44,44,44);
+.search-header {
+    background-color: white;
+    padding: 50px 5%;
 
-    &:link { color: rgb(44,44,44); text-decoration: none; }
-    &:visited { color: rgb(44,44,44); }
-    &:hover {
-        color: rgb(251,251,251);
-        background-color: rgb(100,100,200);
-    }
-}
-
-.upvoted-tab-active {
-    color: rgb(251,251,251) !important;
-    font-weight: bold;
-    background-color: rgb(100,100,200);
-}
-
-.upvoted-tag-body {
-    position: relative;
-    width: 100%;
-    display: block;
-    margin: 15px auto;
-    text-align: left;
-    background-color: rgb(255,255,255);
-    font-family: 'code_boldregular';
-    font-size: 26px;
-    color: rgb(44,44,44);
-
-    &:link {text-decoration: none; color: rgb(44,44,44);}
-    &:hover {
-        text-decoration: underline;
-        background-color: rgb(245,245,245);
-    }
-}
- 
-
-.js-title {
-    position: absolute;
-    display: none;
-    left: 0;
-    top: 120%;
-    padding: 5px;
-    background-color: rgb(44,44,44);
-    color: rgb(251,251,251);
-    font-size: 12px;
-    z-index: 2;
-    cursor: default;
+    font-size: 40px;
+    font-weight: 100;
 }

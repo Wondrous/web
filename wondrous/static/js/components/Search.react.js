@@ -110,47 +110,66 @@ var Search = React.createClass({
         });
 
         return (
-            <div className="grid-padding">
+            <span>
                 {this.state.error ? this.state.error : this.state.error}
                 {isTagSearch ?
                     <div>
-                        <h1>Tag Search results for {searchTerm}</h1>
-                        
-                        <h1>Users go here</h1>
-                        <ul>{users}</ul>
-                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
-                            <Button>Load More Users</Button>
-                            : null}
+                        <h1 className="search-header">
+                            Posts with <b>{searchTerm}</b>
+                        </h1>
+    
+                        <div className="grid-padding">                    
+                            {users.length > 0 ?
+                                <span>
+                                    <h2>Users go here</h2>
+                                    <ul>{users}</ul>
+                                    {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                                        <Button>Load More Users</Button>
+                                        : null}
+                                </span>
+                                : null}
 
-                        <h1>Posts go here</h1>
-                        <div className="masonry" ref="masonryContainer">
-                            <div className="grid-sizer" style={{"display": "none"}}></div>
-                            {posts}
+                            {posts.length > 0 ?
+                                <span>
+                                    <h2>Posts go here</h2>
+                                    <div className="masonry" ref="masonryContainer">
+                                        <div className="grid-sizer" style={{"display": "none"}}></div>
+                                        {posts}
+                                    </div>
+                                    {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                                        <Button>Load More Posts</Button>
+                                        : null}
+                                </span>
+                                :
+                                <span>
+                                    <h2>Sorry, no posts were found :(</h2>
+                                </span>}
                         </div>
-                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
-                            <Button>Load More Posts</Button>
-                            : null}
                     </div>
                     :
                     <div>
-                        <h1>Search results for {searchTerm}</h1>
-                        <h1>Users go here</h1>
-                        <ul>{users}</ul>
-                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
-                            <Button>Load More Users</Button>
-                            : null}
+                        <h1 className="search-header">
+                            Search results for <b>{searchTerm}</b>
+                        </h1>
+                        <div className="grid-padding">
+                            <h2>Users go here</h2>
+                            <ul>{users}</ul>
+                            {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                                <Button>Load More Users</Button>
+                                : null}
 
-                        <h1>Posts go here</h1>
-                        <div className="masonry" ref="masonryContainer">
-                            <div className="grid-sizer" style={{"display": "none"}}></div>
-                            {posts}
+                            <h2>Posts go here</h2>
+                            <div className="masonry" ref="masonryContainer">
+                                <div className="grid-sizer" style={{"display": "none"}}></div>
+                                {posts}
+                            </div>
+                            {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                                <Button>Load More Posts</Button>
+                                : null}
                         </div>
-                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
-                            <Button>Load More Posts</Button>
-                            : null}
                     </div>
                 }
-            </div>
+            </span>
         );
     }
 });
