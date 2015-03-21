@@ -211,6 +211,8 @@ var WondrousActions = Reflux.createActions({
 
     "wallLoaded": {},
 
+    "searchLoaded": {},
+
     "feedLoaded": {}
 
 });

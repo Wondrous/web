@@ -44,6 +44,7 @@ var Search = React.createClass({
             var pathArray = window.location.pathname.split( '/' );
             var isTagSearch = pathArray[1] === 'tags';
             WondrousActions.newSearch(this.getParams().search, isTagSearch);
+            WondrousActions.searchLoaded();
         }else{
             this.transitionTo('/');
         }

@@ -43,6 +43,10 @@ var SettingStore = Reflux.createStore({
 
     feedLoaded: function() {
         this.pageType = WondrousConstants.FEED_PAGE;
+    },
+
+    searchLoaded: function(){
+        this.pageType = WondrousConstants.SEARCH_PAGE;
     }
 
 });
