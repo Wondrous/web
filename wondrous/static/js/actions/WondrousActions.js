@@ -450,7 +450,7 @@ WondrousActions.uploadFile.listen(function(blob,post_data,file_type){
     });
 });
 
-WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob){
+WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob,height,width){
     var uploadData = {
         subject: subject,
         text: text
@@ -458,6 +458,10 @@ WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob){
 
     if (file_to_upload){
         uploadData.file_type = file_to_upload.type
+        if ((typeof height !=='undefined') && (typeof width !=='undefined')){
+            uploadData.height = parseInt(height);
+            uploadData.width = parseInt(width);
+        }
     }
 
     WondrousAPI.newPost({
@@ -470,7 +474,6 @@ WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob){
                     WondrousActions.uploadComplete();
                     setTimeout(WondrousActions.addToFeed,200,res);
                     setTimeout(WondrousActions.addToWall,200,res);
-
                 }
             }else{
                 WondrousActions.uploadError(err);

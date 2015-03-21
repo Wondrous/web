@@ -200,7 +200,7 @@ class PostManager(BaseManager):
             DBSession.add(new_tag)
 
     @classmethod
-    def add(cls, user_id, subject, text, repost_id=None, file_type=None):
+    def add(cls, user_id, subject, text, repost_id=None, file_type=None, height=None, width=None):
 
         """
             PURPOSE: the purpose of the this method is to allow users to post and
@@ -248,6 +248,14 @@ class PostManager(BaseManager):
             if file_type:
                 new_object.ouuid = str(new_object.id)+'-'+unicode(uuid.uuid4()).lower()
                 new_object.mime_type = file_type
+
+                try:
+                    if height and width:
+                        new_object.height = int(height)
+                        new_object.width = int(width)
+                except Exception, e:
+                    new_object.height = None
+                    new_object.width = None
 
             new_post.object_id = new_object.id
 

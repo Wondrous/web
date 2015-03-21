@@ -18,6 +18,8 @@ function uri2blob(dataURI) {
 var PostForm = React.createClass({
     mixins: [Reflux.listenTo(UploadStore, "onUploadChange")],
     file: null,
+    height: 0,
+    width:0,
 
     getInitialState: function() {
         return {percent: 0, error: null, isCover: true};
@@ -168,6 +170,11 @@ var PostForm = React.createClass({
     },
 
     handleCrop: function(e) {
+        var tempImg = new Image();
+        tempImg.src = e.target.result;
+        this.width = tempImg.width;
+        this.height = tempImg.height;
+
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
         var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 

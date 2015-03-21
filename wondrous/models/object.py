@@ -15,7 +15,8 @@ from sqlalchemy import (
     ForeignKey,
     or_,
     Unicode,
-    DateTime
+    DateTime,
+    Integer
 )
 
 from sqlalchemy.orm import relationship
@@ -39,12 +40,14 @@ class Object(Base, BaseMixin):
         objects are simply the goods carried by posts (the containing structure)
     """
 
-    # user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     subject = Column(Unicode, default=None, nullable=True)
     text = Column(Unicode, default=None)
     mime_type = Column(Unicode, nullable=True)
     ouuid = Column(Unicode, nullable=True)
-    # comments = relationship("Comment",cascade="delete")
+
+    height = Column(Integer, nullable=True)
+    width = Column(Integer, nullable=True)
+
     set_to_delete = Column(DateTime, nullable=True)
 
     @classmethod

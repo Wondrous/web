@@ -83,7 +83,7 @@ class User(Base, PasswordManager, BaseMixin):
     last_calculated = Column(DateTime, default=datetime.now)
 
     # description
-    description = Column(Unicode, nullable=False, default="")
+    description = Column(Unicode, nullable=False, default=unicode(""))
     tags = relationship("UserTag", backref="user", lazy='joined')
 
     def __init__(self, *args, **kwargs):
