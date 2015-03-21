@@ -3,7 +3,7 @@ var checkLogin = require('../../utils/Func').checkLogin;
 
 var Photo = React.createClass({
 
-	handleClose: function(evt){
+	handleClose: function(evt) {
         if (checkLogin()) {
             WondrousActions.closeCardModal();
         } else {
