@@ -93,13 +93,18 @@ class Post(Base, BaseMixin):
         if post and post.obj.user_id == current_user_id:
             post.is_hidden = False if post.is_hidden else True
 
-    def json(self,level=0):
+    def json(self,level=0,getOwner=False):
         post_dict = super(Post,self).json(level)
         if self.object:
             post_dict.update(self.object.json())
 
         post_dict.update({"name": self.user.ascii_name})
-        post_dict.update({"username": self.user.username})
+
+        if getOwner and self.owner:
+            post_dict.update({"username": self.owner.username})
+        else:
+            post_dict.update({"username": self.user.username})
+
         post_dict.update({"view_count": self.view_count})
         post_dict.update({"comment_count": len(self.comments)})
         picture_object = self.user.picture_object
@@ -109,7 +114,7 @@ class Post(Base, BaseMixin):
 
         if self.original:
             # Syntactic sugar, yum
-            original_post = self.original.json()
+            original_post = self.original.json(getOwner=True)
             post_dict.update({"repost": original_post})
 
         return post_dict

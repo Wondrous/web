@@ -54,6 +54,7 @@ var PostStore = Reflux.createStore({
             WondrousActions.openCardModal();
             WondrousActions.loadPost(post_id);
             this.loadMoreComments();
+
         }
     },
 

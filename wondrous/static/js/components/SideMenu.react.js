@@ -62,7 +62,6 @@ var Notification = React.createClass({
     handleClick: function(){
         note = this.props.data;
         var reason = note.reason;
-        console.log("reason is",note);
         if (reason == NotificationConstants.LIKED || reason == NotificationConstants.REPOSTED || reason == NotificationConstants.COMMENTED || reason == NotificationConstants.MENTIONED) {
             WondrousActions.newPostLoad(note.subject_id);
         } else {

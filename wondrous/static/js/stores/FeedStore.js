@@ -27,7 +27,7 @@ var FeedStore = Reflux.createStore({
         this.hasNewPosts = true;
         this.trigger(this.feed.sortedSet);
     },
-    
+
     loadNewest: function(){
         this.hasNewPosts = false;
         WondrousActions.loadNewFeedItems();

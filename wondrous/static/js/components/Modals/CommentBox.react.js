@@ -118,15 +118,15 @@ var CommentBox = React.createClass({
                         Load more comments
                     </button>
                     : null}
-                
+
                 {comments}
-                
+
                 {comments.length == 0 ?
                     <div className="post-no-comments">
                         Be the first to share your thoughts!
                     </div>
                     : null}
-                
+
                 <form style={{ margin: "0 28px" }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>

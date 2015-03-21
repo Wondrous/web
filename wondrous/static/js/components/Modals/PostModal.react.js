@@ -39,6 +39,7 @@ var PostModal = React.createClass({
         if (typeof this.state.post === 'undefined') {
             return (<div></div>);
         }
+
 		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
 
 		return (

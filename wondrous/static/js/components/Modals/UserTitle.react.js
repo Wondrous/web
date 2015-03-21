@@ -27,9 +27,11 @@ var UserTitle = React.createClass({
 
     render: function() {
         this.repost = null;
-        if (typeof this.props.data === 'undefined') {
+
+        if (typeof this.props.data === 'undefined' || this.props.data.subject.length==0) {
             return (<div></div>);
         }
+
         var name = this.props.data.name;
         var un = this.props.data.username;
         var hrefRepostPlaceholder = '';
@@ -37,6 +39,7 @@ var UserTitle = React.createClass({
             this.repost = this.props.data.repost;
             hrefRepostPlaceholder = '/'+this.repost.username;
         }
+
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined' ) ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/'+this.props.data.username;
 

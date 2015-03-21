@@ -525,17 +525,12 @@ WondrousActions.deletePost.listen(function(post_id){
     });
 });
 
-WondrousActions.loadPost.listen(function(post_id,from_notification){
+WondrousActions.loadPost.listen(function(post_id){
     WondrousAPI.getPost({
         post_id:post_id,
         callback: function(err,res){
             if (err == null){
-                if(from_notification==true){
-                    WondrousActions.addToFeed(res);
-                }else{
-                    WondrousActions.updatePost(res);
-                }
-
+                WondrousActions.updatePost(res);
             }else{
                 WondrousActions.loadPostError(err);
             }

@@ -18,9 +18,10 @@ var Post = React.createClass({
     },
 
     render: function() {
-        if (typeof this.props.data === 'undefined') {
+        if (typeof this.props.data === 'undefined' || typeof this.props.data.username === 'undefined') {
             return (<div></div>);
         }
+
         var repost = null;
         var is_it_mine = this.props.data.username === UserStore.user.username;
 
@@ -29,6 +30,7 @@ var Post = React.createClass({
             this.props.data.text = repost.text;
             this.props.data.subject = repost.subject;
         }
+
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post" className="post-body round-3">

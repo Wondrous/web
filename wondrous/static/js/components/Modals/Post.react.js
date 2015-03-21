@@ -25,7 +25,7 @@ var Post = React.createClass({
 
 	render: function() {
 		var repost = null;
-		if (typeof this.props.data === 'undefined') {
+		if (typeof this.props.data === 'undefined' || this.props.data.subject==0) {
 			return (
 				<div></div>
 			);
