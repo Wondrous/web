@@ -28,12 +28,11 @@ var SearchStore = Reflux.createStore({
         this.unloadUser();
 
         if (tag){
-            this.searchingPost = true;
-
+            this.searchingPost = this.searchingUser = true;
+            WondrousActions.searchForUserTags(term,this.currentUserPage);
             WondrousActions.searchForTags(term,this.currentPostPage);
         }else{
             this.searchingPost = this.searchingUser = true;
-
             WondrousActions.searchForUsers(term,this.currentUserPage);
             WondrousActions.searchForPosts(term,this.currentPostPage);
         }

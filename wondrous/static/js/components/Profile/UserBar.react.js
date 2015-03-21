@@ -4,6 +4,7 @@ var ProfileStore = require('../../stores/ProfileStore');
 var UserStore = require('../../stores/UserStore');
 var ProfileBarBadge = require('./ProfileBarBadge.react');
 var InfluencerBadge = require('./InfluencerBadge.react');
+var linkify = require('../../utils/Linkify');
 
 var UserBar = React.createClass({
     mixins: [
@@ -119,7 +120,7 @@ var UserBar = React.createClass({
                         <span>
                             {this.state.data.description.length > 0 ?
                                 <div className="profile-about profile-about--font" onClick={this.onEdit} style={is_me ? {cursor: 'pointer'} : {}}>
-                                    {this.state.data.description}
+                                    {linkify(this.state.data.description)}
                                     {is_me ? <span className="profile-about--edit">Edit</span> : null}
                                 </div>
                                 :

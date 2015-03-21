@@ -107,6 +107,11 @@ var Search = React.createClass({
                 {isTagSearch ?
                     <div>
                         <h1>Tag Search results for {searchTerm}</h1>
+                        
+                        <h1>Users go here</h1>
+                        <ul>{users}</ul>
+                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ? <Button>Load More Users</Button> : null}
+
                         <h1>Posts go here</h1>
                         <div className="masonry">{posts}</div>
                         {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ? <Button>Load More Posts</Button> : null}

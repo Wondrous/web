@@ -8,7 +8,7 @@
 # CONTROLLERS/ACCOUNTMANAGER.PY
 #
 
-import uuid, logging
+import uuid, logging, re
 
 from datetime import datetime
 
@@ -21,7 +21,8 @@ from wondrous.models import (
     Badge,
     Post,
     Comment,
-    Notification
+    Notification,
+    UserTag
 )
 import transaction
 
@@ -480,8 +481,19 @@ class AccountManager(BaseManager):
         return retval
 
     @staticmethod
-    def change_description_json(user, description):
+    def _process_tags(tags, user):
+        # Add the tags
+        for t in tags:
+            new_tag = UserTag(tag_name=t,user_id=user.id)
+            DBSession.add(new_tag)
+
+    @classmethod
+    def change_description_json(cls,user, description):
         user.description = description
+        [DBSession.delete(tag) for tag in user.tags]
+        tags = [re.sub(r'\W+', '', tag) for tag in list(set(re.findall('\s*#\s*(\w+)', description)))]
+        if len(tags)>0:
+            cls._process_tags(tags,user)
         try:
             DBSession.flush()
             return user.json(1)

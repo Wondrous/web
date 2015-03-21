@@ -107,6 +107,8 @@ var WondrousActions = Reflux.createActions({
 
     "searchForTags": {},
 
+    "searchForUserTags": {},
+
     "searchCompleted": {},
 
     // SECTION UI/UX consideration
@@ -586,6 +588,20 @@ WondrousActions.searchForTags.listen(function(search,page){
         callback: function(err,res){
             if (err == null){
                 WondrousActions.updateSearchPosts(res);
+            }else{
+                WondrousActions.searchError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.searchForUserTags.listen(function(search,page){
+    WondrousAPI.searchForUserTags({
+        search:search,
+        page:page,
+        callback: function(err,res){
+            if (err == null){
+                WondrousActions.updateSearchUsers(res);
             }else{
                 WondrousActions.searchError(err);
             }
