@@ -143,6 +143,9 @@ var Search = React.createClass({
                                 :
                                 <span>
                                     <h2>Sorry, no posts were found :(</h2>
+                                    <div className="masonry" ref="masonryContainer">
+                                        <div className="grid-sizer" style={{"display": "none"}}></div>
+                                    </div>
                                 </span>}
                         </div>
                     </div>
