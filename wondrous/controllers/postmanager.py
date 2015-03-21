@@ -148,7 +148,7 @@ class PostManager(BaseManager):
 
     @staticmethod
     def send_mentions(post,user,text):
-        usernames = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
+        usernames = [re.sub(r'\W+', '', un) for un in list(set(re.findall('\s*@\s*(\w+)', text)))]
         if len(usernames)>0:
             for user_id in DBSession.query(User.id).filter(func.lower(User.username).in_(usernames)).distinct():
                 u_id = user_id[0]
@@ -256,7 +256,7 @@ class PostManager(BaseManager):
 
         cls.notify_followers(new_post.id,user_id)
         if text:
-            tags = [re.sub(r'\W+', '', un.lower()) for un in list(set(re.findall('\s*#\s*(\w+)', text)))]
+            tags = [re.sub(r'\W+', '', tag) for tag in list(set(re.findall('\s*#\s*(\w+)', text)))]
             if len(tags)>0:
                 logging.warn("tags "+str(tags))
                 cls._process_tags(tags,new_post.id)

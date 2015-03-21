@@ -16,6 +16,7 @@ from wondrous.models import (
     Post,
     User,
     Tag,
+    UserTag,
     Vote
 )
 from wondrous.controllers.votemanager import VoteManager
@@ -45,6 +46,21 @@ class SearchManager:
         for post, vote in ret:
             data = post.json()
             data.update({'liked':vote!=None})
+            retval.append(data)
+        return retval
+
+    @staticmethod
+    def user_tag_search_json(user,search,page):
+        tags = [tag.lower() for tag in search.split(' ') if len(tag)]
+        users = DBSession.query(User).\
+                join(UserTag, Tag.user_id==User.id).\
+                filter(User.is_private==False).\
+                filter(func.lower(User.tag_name).in_(tags)).\
+                offset(page*15).limit(15).all()
+
+        retval = []
+        for u in users:
+            data = u.json()
             retval.append(data)
         return retval
 

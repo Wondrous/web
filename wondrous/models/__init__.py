@@ -59,6 +59,7 @@ from wondrous.models.badge import (
 
 from wondrous.models.tag import (
     Tag,
+    UserTag
 )
 
 from wondrous.models.user import (

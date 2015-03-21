@@ -29,3 +29,9 @@ class Tag(Base,BaseMixin):
 	@classmethod
 	def by_name_like(cls, key, num=50):
 		return cls.query.filter(cls.tag_name.ilike("%{q}%".format(q=key))).limit(num)
+
+class UserTag(Base, BaseMixin):
+	tag_name = Column(Unicode, nullable=False)
+	user_id = Column(BigInteger, ForeignKey('user.id'), index=True)
+
+	

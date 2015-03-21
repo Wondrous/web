@@ -84,6 +84,7 @@ class User(Base, PasswordManager, BaseMixin):
 
     # description
     description = Column(Unicode, nullable=False, default="")
+    tags = relationship("UserTag", backref="user", lazy='joined')
 
     def __init__(self, *args, **kwargs):
         super(User,self).__init__(*args, **kwargs)
