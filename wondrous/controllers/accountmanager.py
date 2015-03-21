@@ -8,7 +8,7 @@
 # CONTROLLERS/ACCOUNTMANAGER.PY
 #
 
-import uuid, logging
+import uuid, logging, re
 
 from datetime import datetime
 
@@ -487,8 +487,8 @@ class AccountManager(BaseManager):
             new_tag = UserTag(tag_name=t,user_id=user.id)
             DBSession.add(new_tag)
 
-    @staticmethod
-    def change_description_json(user, description):
+    @classmethod
+    def change_description_json(cls,user, description):
         user.description = description
         [DBSession.delete(tag) for tag in user.tags]
         tags = [re.sub(r'\W+', '', tag) for tag in list(set(re.findall('\s*#\s*(\w+)', description)))]
