@@ -6,7 +6,7 @@ var Trending = React.createClass({
         BoxStore.loadMoreTrends();
     },
     getInitialState: function(){
-        return {tags:[]}
+        return {tags:BoxStore.trending}
     },
 
     onBoxChange: function(){
