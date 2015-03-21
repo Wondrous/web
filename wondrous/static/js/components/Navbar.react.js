@@ -7,18 +7,18 @@ var checkLogin = require('../utils/Func').checkLogin;
 var SearchBox = React.createClass({
     mixins: [Router.Navigation],
 
-    handleSearch: function(evt){
+    handleSearch: function(evt) {
         evt.preventDefault();
         var search = this.refs.query.getDOMNode().value.trim();
 
-        if (search.indexOf("#") > -1){
+        if (search.indexOf("#") > -1) {
             // going to be a tag search
-            search = search.replace('#','');
-            this.transitionTo("tags",{search:search});
-            WondrousActions.newSearch(search,true);
+            search = search.replace('#', '');
+            this.transitionTo("tags",{search: search});
+            WondrousActions.newSearch(search, true);
         }else{
-            this.transitionTo("search",{search:search});
-            WondrousActions.newSearch(search,false);
+            this.transitionTo("search",{search: search});
+            WondrousActions.newSearch(search, false);
         }
 
     },
@@ -43,14 +43,14 @@ var NotificationBox = React.createClass({
     onNotificationUpdate: function(){
         if (this.unseen!=NotificationStore.unseen){
             var con = $(this.refs.noteCount.getDOMNode());
-            con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+            con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
                 $(this).removeClass('animated flash');
             });
             con.addClass('animated flash');
             this.unseen = NotificationStore.unseen || 0;
-            if (this.unseen==0){
+            if (this.unseen == 0) {
                 document.title = "Wondrous";
-            }else{
+            } else {
                 document.title = "Wondrous ("+String(this.unseen)+")";
             }
             this.forceUpdate();
@@ -90,16 +90,16 @@ var ProfileLink = React.createClass({
 
     handleClick: function(evt) {
         evt.preventDefault();
-        if (typeof this.props.user.username != 'undefined') {
+        if (typeof this.props.user.username !== 'undefined') {
             this.transitionTo('/' + this.props.user.username);
         }
     },
 
     render: function () {
-        var img_src = (typeof UserStore.user.ouuid !== 'undefined')? "http://mojorankdev.s3.amazonaws.com/"+UserStore.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof UserStore.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+UserStore.user.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + UserStore.user.username;
         return (
-            <Link id="linkToProfile" to={hrefPlaceholder}  className="navbar-btn round-2">
+            <Link id="linkToProfile" to={hrefPlaceholder} className="navbar-btn round-2">
                 <span className="navbar-user">
                     <img className="navbar-avatar round-50" src={img_src}/>
                 </span>
@@ -151,9 +151,11 @@ var Navbar = React.createClass({
                             <SettingsGear/>
                         </div>
                     </span>
-                : null}
+                    : null}
 
-                { !UserStore.loggedIn ? <span onClick={checkLogin} className="navbar-btn">Login</span> : null }
+                { !UserStore.loggedIn ?
+                    <span onClick={checkLogin} className="navbar-btn">Login</span>
+                    : null }
             </div>
             );
     },

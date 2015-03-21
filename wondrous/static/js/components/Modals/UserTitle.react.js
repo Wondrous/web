@@ -17,9 +17,9 @@ var UserTitle = React.createClass({
 
     handleClickOnOwner: function(evt) {
         if (typeof this.repost.username !== 'undefined') {
-            if(checkLogin()){
+            if (checkLogin()) {
                 WondrousActions.closeCardModal();
-            }else{
+            } else {
                 evt.preventDefault();
             }
         }
@@ -27,7 +27,7 @@ var UserTitle = React.createClass({
 
     render: function() {
         this.repost = null;
-        if(typeof this.props.data === 'undefined'){
+        if (typeof this.props.data === 'undefined') {
             return (<div></div>);
         }
         var name = this.props.data.name;
@@ -51,7 +51,7 @@ var UserTitle = React.createClass({
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder} onClick={this.handleClickOnOwner}>{this.repost.name} (@{this.repost.username})</Link> : null}
                 </span>
             </div>
-            );
+        );
     }
 });
 

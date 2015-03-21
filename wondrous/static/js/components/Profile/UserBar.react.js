@@ -15,7 +15,7 @@ var UserBar = React.createClass({
     am_following: ProfileStore.user.following,
     is_private: ProfileStore.user.is_private,
 
-    onProfileChange: function(profileData){
+    onProfileChange: function(profileData) {
         this.setState({
             data: ProfileStore.user
         });
@@ -51,7 +51,7 @@ var UserBar = React.createClass({
         }
     },
 
-    onEdit: function(){
+    onEdit: function() {
         var is_me = this.props.username === UserStore.user.username;
         this.setState({data: ProfileStore.user, editing:is_me});
     },
@@ -61,24 +61,27 @@ var UserBar = React.createClass({
         var that = this;
         WondrousAPI.changeDescription({
             description: description,
-            callback:function(err,res){
-                if(err==null){
+            callback:function(err, res) {
+                if (err === null) {
                     ProfileStore.user.description = description;
-                    that.setState({data: ProfileStore.user, editing:false});
+                    that.setState({
+                        data: ProfileStore.user,
+                        editing: false
+                    });
                 }
             }
         })
     },
     render: function() {
         this.is_private = ProfileStore.user.is_private;
-        this.am_following = this.state.data.following == true;
+        this.am_following = this.state.data.following === true;
 
         var username = this.props.username;
         var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
         var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var classes = "profile-header-nav-item follow-button round-50 ";
-        var is_influencer = (this.state.data.wondrous_score>=75);
+        var is_influencer = (this.state.data.wondrous_score >= 75);
 
         // This is temporary...sorta
         var wondrousScore = this.state.data.wondrous_score;

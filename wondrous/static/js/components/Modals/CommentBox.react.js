@@ -63,7 +63,8 @@ var Comment = React.createClass({
                     {is_it_mine || PostStore.post.user_id==UserStore.user.id ?
                     	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
                     	:
-                        <div className="post-comment-delete-btn" onClick={this.reportComment}>f</div>}
+                        <div className="post-comment-delete-btn" onClick={this.reportComment}>f</div>
+                    }
                 </div>
             </div>
         );
@@ -83,7 +84,7 @@ var Comment = React.createClass({
 });
 
 var CommentBox = React.createClass({
-    onComment: function(evt){
+    onComment: function(evt) {
         evt.preventDefault();
         if (!checkLogin()) return;
         var text = this.refs.commentBox.getDOMNode().value.trim();
@@ -99,7 +100,7 @@ var CommentBox = React.createClass({
         }
     },
 
-    loadMoreComments: function(){
+    loadMoreComments: function() {
         PostStore.loadMoreComments();
     },
 
@@ -112,9 +113,20 @@ var CommentBox = React.createClass({
         });
         return (
             <div>
-                {!PostStore.doneCommentPaging&&comments.length>0 ? <button className="post-comment-load-more" onClick={this.loadMoreComments}>Load more comments</button> : null}
+                {!PostStore.doneCommentPaging && comments.length > 0 ?
+                    <button className="post-comment-load-more" onClick={this.loadMoreComments}>
+                        Load more comments
+                    </button>
+                    : null}
+                
                 {comments}
-                {comments.length == 0 ? <div className="post-no-comments">Be the first to share your thoughts!</div> : null}
+                
+                {comments.length == 0 ?
+                    <div className="post-no-comments">
+                        Be the first to share your thoughts!
+                    </div>
+                    : null}
+                
                 <form style={{ margin: "0 28px" }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
                     <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>

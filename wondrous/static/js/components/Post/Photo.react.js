@@ -12,12 +12,11 @@ var Photo = React.createClass({
 
         return (
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
-                    <div className="post-subject-text nh">
-                        <div className="post-subject-wrapper">
-                            <StatusBar data={this.props.data}/>
-                        </div>
+                <div className="post-subject-text nh">
+                    <div className="post-subject-wrapper">
+                        <StatusBar data={this.props.data}/>
                     </div>
-                    {!this.props.data.ouuid ?this.props.data.text:null}
+                </div>
             </div>);
     }
 

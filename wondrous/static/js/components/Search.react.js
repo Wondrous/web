@@ -2,6 +2,13 @@ var SearchStore = require("../stores/SearchStore");
 var Post = require("../components/Post/Post.react");
 var UserStore = require("../stores/UserStore");
 var WondrousActions = require("../actions/WondrousActions");
+var MasonryMixin = require('../vendor/masonry.mixin');
+
+var masonryOptions = {
+    transitionDuration: 0,
+    itemSelector: ".masonry-brick",
+    columnWidth: ".grid-sizer"
+};
 
 var UserIcon = React.createClass({
     mixins: [ Router.Navigation ],
@@ -34,6 +41,7 @@ var UserIcon = React.createClass({
 
 var Search = React.createClass({
     mixins: [
+        MasonryMixin('masonryContainer', masonryOptions),
         Router.Navigation,
         Router.State,
         Reflux.listenTo(SearchStore, 'onSearchChange')
@@ -110,22 +118,36 @@ var Search = React.createClass({
                         
                         <h1>Users go here</h1>
                         <ul>{users}</ul>
-                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ? <Button>Load More Users</Button> : null}
+                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                            <Button>Load More Users</Button>
+                            : null}
 
                         <h1>Posts go here</h1>
-                        <div className="masonry">{posts}</div>
-                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ? <Button>Load More Posts</Button> : null}
+                        <div className="masonry" ref="masonryContainer">
+                            <div className="grid-sizer" style={{"display": "none"}}></div>
+                            {posts}
+                        </div>
+                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                            <Button>Load More Posts</Button>
+                            : null}
                     </div>
                     :
                     <div>
                         <h1>Search results for {searchTerm}</h1>
                         <h1>Users go here</h1>
                         <ul>{users}</ul>
-                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ? <Button>Load More Users</Button> : null}
+                        {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                            <Button>Load More Users</Button>
+                            : null}
 
                         <h1>Posts go here</h1>
-                        <div className="masonry">{posts}</div>
-                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ? <Button>Load More Posts</Button> : null}
+                        <div className="masonry" ref="masonryContainer">
+                            <div className="grid-sizer" style={{"display": "none"}}></div>
+                            {posts}
+                        </div>
+                        {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                            <Button>Load More Posts</Button>
+                            : null}
                     </div>
                 }
             </div>
