@@ -37,7 +37,7 @@ class FeedManager(BaseManager):
             join(FeedPostLink, (FeedPostLink.post_id==Post.id)&(FeedPostLink.feed_id==feed_id)).\
             join(User, (User.id==Post.user_id)|(User.id==Post.owner_id)).\
             join(v1, (Post.owner_id==None)|((Post.owner_id==User.id)&(User.is_private==False)) |\
-                ( (v1.user_id==user.id) & (v1.vote_type==Vote.USER) \
+                ( (v1.user_id==user.id) \
                     & ((v1.subject_id == Post.owner_id)) &\
                      ((v1.status==Vote.FOLLOWED) | (v1.status==Vote.TOPFRIEND)) )).\
             outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
@@ -135,7 +135,7 @@ class FeedManager(BaseManager):
             retval = DBSession.query(Post,Vote).\
                 join(User, (User.id==Post.user_id)|(User.id==Post.owner_id)).\
                 join(v1, (Post.owner_id==None)|((Post.owner_id==User.id)&(User.is_private==False)) |\
-                    ( (v1.user_id==my_user_id) & (v1.vote_type==Vote.USER) \
+                    ( (v1.user_id==my_user_id) \
                         & ((v1.subject_id == Post.owner_id)) &\
                          ((v1.status==Vote.FOLLOWED) | (v1.status==Vote.TOPFRIEND)) )).\
                 outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==my_user_id)&(Vote.status==Vote.LIKED)).\

@@ -129,6 +129,23 @@ class APIViews(BaseHandler):
         self.request.response.headerlist.extend(headers)
 
     @api_login_required
+    @view_config(request_method="GET",route_name='api_global_trending',renderer='json')
+    def api_global_trending(self):
+
+        """
+            PURPOSE: Retrieves global trends
+
+            USE: self.query_kwargs to provide all the required inputs.
+                post_id,page=0,per_page=10
+
+            PARAMS: (None)
+
+            RETURNS: The JSON array of the tags
+        """
+
+        return TagManager.get_trending_tags_json(**self.query_kwargs)
+
+    @api_login_required
     @view_config(request_method="GET",route_name='api_post_liked_users',renderer='json')
     def api_post_liked_users(self):
 

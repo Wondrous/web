@@ -115,6 +115,8 @@ def build_routes(config):
     config.add_route('api_search_tags',                        '/api/search/tags')      # GET
     config.add_route('api_search_user_tags',                   '/api/search/users')      # GET
 
+    config.add_route('api_global_trending',                    '/api/trending')      # GET
+
     # Reported Comment/Post
     config.add_route('api_report_post',                         '/api/report/post')      # POST
     config.add_route('api_report_comment',                      '/api/report/comment')      # POST

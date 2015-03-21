@@ -397,13 +397,13 @@ class VoteManager(BaseManager):
     @classmethod
     def get_follower_count(cls,user_id):
 
-        return cls.get_count(DBSession.query(Vote).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
+        return cls.get_count(DBSession.query(Vote).filter(Vote.subject_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
 
     @classmethod
     def get_following_count(cls,user_id):
 
-        return cls.get_count(DBSession.query(Vote).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
+        return cls.get_count(DBSession.query(Vote).filter(Vote.user_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)))
 
     @classmethod
@@ -422,8 +422,8 @@ class VoteManager(BaseManager):
         am_following = VoteManager.is_following(my_user_id,user_id)
         if not am_following and u.is_private:
             return []
-            
-        users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.vote_type==Vote.USER).filter(Vote.subject_id==user_id).\
+
+        users = User.query.join(Vote, User.id==Vote.user_id).filter(Vote.subject_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).all()
 
         retval = []
@@ -450,7 +450,7 @@ class VoteManager(BaseManager):
         if not am_following and u.is_private:
             return []
 
-        users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.vote_type==Vote.USER).filter(Vote.user_id==user_id).\
+        users = User.query.join(Vote, User.id==Vote.subject_id).filter(Vote.user_id==user_id).\
             filter(or_(Vote.status == Vote.FOLLOWED,Vote.status == Vote.TOPFRIEND)).limit(15).offset(page*15).all()
 
         retval = []

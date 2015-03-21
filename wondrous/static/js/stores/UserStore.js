@@ -19,7 +19,7 @@ var UserStore = Reflux.createStore({
         this.user = userData;
         this.loggedIn = true;
         this.loaded = true;
-        console.log("am i logged",userData);
+        WondrousActions.loadTrending(0);
         this.trigger({user:this.user});
     },
 

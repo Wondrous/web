@@ -3,6 +3,10 @@ var WondrousAPI = require("../utils/WondrousAPI");
 var WondrousActions = Reflux.createActions({
     // SECTION loading from server
 
+    "loadTrending": {},
+
+    "updateTrending": {},
+
     "newFeedItems": {},
 
     "loadNewFeedItems": {},
@@ -217,6 +221,17 @@ var WondrousActions = Reflux.createActions({
 
     "feedLoaded": {}
 
+});
+
+WondrousActions.loadTrending.listen(function(page){
+    WondrousAPI.loadTrending({
+        page: page,
+        callback: function(err,res){
+            if(err == null) {
+                WondrousActions.updateTrending(res);
+            }
+        }
+    })
 });
 
 WondrousActions.loadLikedUsers.listen(function(postID,page){

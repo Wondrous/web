@@ -38,6 +38,20 @@ module.exports = {
     // options are:
     // callback
     // description
+    loadTrending: function(options){
+        var callback = options.callback;
+        var page = options.page;
+        var url = '/api/trending';
+
+        request.get(url).query({
+            page:page
+        }).end(_callback(callback));
+    },
+
+    // get the list of liked
+    // options are:
+    // callback
+    // description
     changeDescription: function(options){
         var callback = options.callback;
         var description = options.description;

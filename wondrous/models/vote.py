@@ -17,6 +17,7 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import Index
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import backref
@@ -40,7 +41,7 @@ class Vote(Base, BaseMixin):
     """
 
     (OBJECT, USER) = xrange(2)
-    
+
     (UNLIKED,       # 0
      LIKED,         # 1
      BOOKMARKED,    # 2
@@ -53,9 +54,10 @@ class Vote(Base, BaseMixin):
 
     vote_type = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
-    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
+    user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False)
     user = relationship("User", backref=backref("votes"))
     subject_id = Column(BigInteger, index=True)
+    __table_args__ = (Index('vote_index', "status", "user_id", "subject_id"), )
 
     def get_subject(self):
         if self.vote_type==0:

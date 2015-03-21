@@ -38,10 +38,88 @@ var UserIcon = React.createClass({
     }
 });
 
+var MasonryWrapper = React.createClass({
+    mixins: [MasonryMixin('masonryContainer', masonryOptions)],
+    render: function(){
+        return (
+            <div className="masonry" ref="masonryContainer">
+                <div className="grid-sizer" style={{"display": "none"}}></div>
+                {this.props.children}
+            </div>
+        );
+    }
+})
+var TagSearch = React.createClass({
+    render: function(){
+        return (
+            <div>
+                <h1 className="search-header">
+                    Posts with <b>{this.props.searchTerm}</b>
+                </h1>
+
+                <div className="grid-padding">
+                    {this.props.users.length > 0 ?
+                        <span>
+                            <h2 className="search-header-sub">Users</h2>
+                            <ul>{this.props.users}</ul>
+                            {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                                <Button>Load More Users</Button>
+                                : null}
+                        </span>
+                        : null}
+
+                    {this.props.posts.length > 0 ?
+                        <span>
+                            <h2 className="search-header-sub">Posts</h2>
+                            <MasonryWrapper>
+                                {this.props.posts}
+                            </MasonryWrapper>
+                            {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                                <Button>Load More Posts</Button>
+                                : null}
+                        </span>
+                        :null}
+                    {this.props.posts.length == 0 && !SearchStore.searchingPost?
+                        <span>
+                            <h2>Sorry, no posts were found :(</h2>
+                        </span>
+                        :null}
+                </div>
+            </div>
+        );
+    }
+});
+
+var KWSearch = React.createClass({
+    render: function(){
+        return (
+            <div>
+                <h1 className="search-header">
+                    Search results for <b>{this.props.searchTerm}</b>
+                </h1>
+                <div className="grid-padding">
+                    <h2 className="search-header-sub">Users</h2>
+                    <ul>{this.props.users}</ul>
+                    {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                        <Button>Load More Users</Button>
+                        : null}
+
+                    <h2 className="search-header-sub">Posts</h2>
+                    <MasonryWrapper>
+                        {this.props.posts}
+                    </MasonryWrapper>
+
+                    {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                        <Button>Load More Posts</Button>
+                        : null}
+                </div>
+            </div>
+        );
+    }
+});
 
 var Search = React.createClass({
     mixins: [
-        MasonryMixin('masonryContainer', masonryOptions),
         Router.Navigation,
         Router.State,
         Reflux.listenTo(SearchStore, 'onSearchChange')
@@ -113,64 +191,9 @@ var Search = React.createClass({
             <span>
                 {this.state.error ? this.state.error : this.state.error}
                 {isTagSearch ?
-                    <div>
-                        <h1 className="search-header">
-                            Posts with <b>{searchTerm}</b>
-                        </h1>
-    
-                        <div className="grid-padding">                    
-                            {users.length > 0 ?
-                                <span>
-                                    <h2 className="search-header-sub">Users</h2>
-                                    <ul>{users}</ul>
-                                    {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
-                                        <Button>Load More Users</Button>
-                                        : null}
-                                </span>
-                                : null}
-
-                            {posts.length > 0 ?
-                                <span>
-                                    <h2 className="search-header-sub">Posts</h2>
-                                    <div className="masonry" ref="masonryContainer">
-                                        <div className="grid-sizer" style={{"display": "none"}}></div>
-                                        {posts}
-                                    </div>
-                                    {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
-                                        <Button>Load More Posts</Button>
-                                        : null}
-                                </span>
-                                :
-                                <span>
-                                    <h2>Sorry, no posts were found :(</h2>
-                                    <div className="masonry" ref="masonryContainer">
-                                        <div className="grid-sizer" style={{"display": "none"}}></div>
-                                    </div>
-                                </span>}
-                        </div>
-                    </div>
+                    <TagSearch users={users} posts={posts} searchTerm={searchTerm}/>
                     :
-                    <div>
-                        <h1 className="search-header">
-                            Search results for <b>{searchTerm}</b>
-                        </h1>
-                        <div className="grid-padding">
-                            <h2 className="search-header-sub">Users</h2>
-                            <ul>{users}</ul>
-                            {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
-                                <Button>Load More Users</Button>
-                                : null}
-
-                            <h2 className="search-header-sub">Posts</h2>
-                            <div className="masonry" ref="masonryContainer">
-                                <div className="grid-sizer" style={{"display": "none"}}></div>
-                                {posts}
-                            </div>
-                            {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
-                                <Button>Load More Posts</Button>
-                                : null}
-                        </div>
-                    </div>
+                    <KWSearch users={users} posts={posts} searchTerm={searchTerm}/>
                 }
             </span>
         );

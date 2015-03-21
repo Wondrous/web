@@ -54,7 +54,7 @@ from wondrous.utilities.notification_utilities import send_notification
 class PostManager(BaseManager):
     @staticmethod
     def get_liked_users_json(user,post_id,page=0,per_page=15):
-        users = DBSession.query(User).join(Vote,User.id==Vote.user_id).filter(Vote.vote_type==Vote.OBJECT).\
+        users = DBSession.query(User).join(Vote,User.id==Vote.user_id).\
             filter(Vote.status==Vote.LIKED).filter(Vote.subject_id==post_id).limit(per_page).\
             offset(page).all()
         return [user.json() for user in users]
@@ -100,8 +100,10 @@ class PostManager(BaseManager):
         exists = DBSession.query(Post).filter(Post.id==post_id).filter(Post.set_to_delete==None).first()
         if not exists:
             return retval
-        for comment_user, comment in DBSession.query(User, Comment).filter(Comment.post_id==post_id).\
-            filter(Comment.user_id==User.id).order_by(desc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
+        for comment_user, comment in DBSession.query(User, Comment).\
+            filter(Comment.post_id==post_id).\
+            filter(Comment.user_id==User.id).\
+            order_by(desc(Comment.created_at)).offset(page*per_page).limit(per_page).all():
 
             data = comment_user.json()
             if comment_user.picture_object:
