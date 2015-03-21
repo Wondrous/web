@@ -38,9 +38,11 @@ class SearchManager:
     def post_search_json(user,search,page):
         ret = DBSession.query(Post,Vote).\
             join(Object,Post.object_id==Object.id).\
+            join(User, User.id==Post.user_id).\
             outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
             filter(or_(Object.subject.ilike("%{q}%".format(q=search)),Object.text.ilike("%{q}%".format(q=search)))).\
             filter(Post.set_to_delete==None).\
+            filter(User.is_private==False).\
             offset(page*15).limit(15).all()
         retval = []
         for post, vote in ret:

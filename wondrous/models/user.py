@@ -103,7 +103,7 @@ class User(Base, PasswordManager, BaseMixin):
             base = cls.query.filter((cls.ascii_name.ilike("%{q}%".format(q=key)))|(cls.description.ilike("%{q}%".format(q=key))))
 
         return base.filter(cls.is_active==True).\
-                    filter(cls.is_banned==False).limit(num)  # ascii_name
+                    filter(cls.is_banned==False).filter(cls.is_private==False).limit(num)  # ascii_name
 
     @classmethod
     def get_all_banned_users(cls):

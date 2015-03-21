@@ -8,12 +8,14 @@ var PostFormModal = React.createClass({
 	mixins:[
         Reflux.listenTo(ModalStore,"onModalChange")
     ],
+
 	componentDidMount: function(){
 		var con = $(this.refs.modalWrapper.getDOMNode());
 		con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
 			$(this).removeClass("animated bounceInDown");
 		});
 	},
+
     onModalChange: function(){
         this.forceUpdate();
 		if (ModalStore.postFormOpen){
