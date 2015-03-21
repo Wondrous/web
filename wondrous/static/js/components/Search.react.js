@@ -121,7 +121,7 @@ var Search = React.createClass({
                         <div className="grid-padding">                    
                             {users.length > 0 ?
                                 <span>
-                                    <h2>Users go here</h2>
+                                    <h2 className="search-header-sub">Users</h2>
                                     <ul>{users}</ul>
                                     {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
                                         <Button>Load More Users</Button>
@@ -131,7 +131,7 @@ var Search = React.createClass({
 
                             {posts.length > 0 ?
                                 <span>
-                                    <h2>Posts go here</h2>
+                                    <h2 className="search-header-sub">Posts</h2>
                                     <div className="masonry" ref="masonryContainer">
                                         <div className="grid-sizer" style={{"display": "none"}}></div>
                                         {posts}
@@ -152,13 +152,13 @@ var Search = React.createClass({
                             Search results for <b>{searchTerm}</b>
                         </h1>
                         <div className="grid-padding">
-                            <h2>Users go here</h2>
+                            <h2 className="search-header-sub">Users</h2>
                             <ul>{users}</ul>
                             {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
                                 <Button>Load More Users</Button>
                                 : null}
 
-                            <h2>Posts go here</h2>
+                            <h2 className="search-header-sub">Posts</h2>
                             <div className="masonry" ref="masonryContainer">
                                 <div className="grid-sizer" style={{"display": "none"}}></div>
                                 {posts}

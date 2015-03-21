@@ -2880,6 +2880,12 @@ svg {
   font-size: 40px;
   font-weight: 100; }
 
+.search-header-sub {
+  color: #aaaaaa;
+  font-weight: bold;
+  font-size: 17px;
+  border-bottom: 1px solid #e6e6e6; }
+
 /* === POPUP BOX ============== */
 .popup-box {
   position: fixed;
