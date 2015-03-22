@@ -44,7 +44,6 @@ var PostForm = React.createClass({
         }
     },
 
-
     readURL: function() {
         if (this.file) {
             $('#postUploadBtn').hide();
@@ -150,7 +149,6 @@ var PostForm = React.createClass({
 
         if (isPictureModal) {
             if (typeof this.file !=='undefined' && this.file != null){
-                // var dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
                 var dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
                 WondrousActions.addProfilePicture(this.file, dataURL);
             }
@@ -186,11 +184,10 @@ var PostForm = React.createClass({
         this.setState({
             isCover: !this.state.isCover
         });
-        this.forceUpdate();
-    
+
         $("div#crop-box-wrapper").toggleClass("fit-to-screen-wrapper");
         $("img#cropBox").toggleClass("fit-to-screen").toggleClass("cropper-hidden");
-        $("div.cropper-container").toggleClass("cropper-hidden");
+
     },
 
     handleCrop: function(e) {
@@ -216,6 +213,8 @@ var PostForm = React.createClass({
             "height": 390,
         };
 
+        var that = this;
+
         $('#cropBox').cropper({
             aspectRatio: "free",
             strict: true,
@@ -227,10 +226,16 @@ var PostForm = React.createClass({
             built: function() {
               $('#cropBox').cropper('setCanvasData', canvasData);
               $('#cropBox').cropper('setCropBoxData', cropBoxData);
+              if(that.state.isCover){
+                  $("div.cropper-container").addClass("cropper-hidden");
+              }else{
+                  $("div.cropper-container").toggleClass("cropper-hidden");
+              }
             },
 
             crop: function(data) {
             // Output the result data for cropping image.
+
             }
         });
     },
