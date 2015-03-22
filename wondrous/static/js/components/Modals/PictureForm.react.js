@@ -152,10 +152,10 @@ var PictureForm = React.createClass({
         var that = this;
 
         $('#cropPictureBox').cropper({
-            aspectRatio: "free",
+            aspectRatio: 1,
             strict: true,
             dragCrop: false,
-            movable: false,
+            movable: true,
             resizable: false,
             zoomable: false,
 
@@ -176,7 +176,7 @@ var PictureForm = React.createClass({
         // onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 430 }}>
-                <div id="crop-box-wrapper picture-wrapper">
+                <div id="crop-box-wrapper" className="picture-wrapper">
                     <img id="cropPictureBox" ref="cropPictureBox" style={{ width: 400 }} src="/static/pictures/transparent.gif" />
                 </div>
 
