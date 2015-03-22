@@ -58,7 +58,6 @@ var NotificationStore = Reflux.createStore({
     init:function(){
         this.unloadUser();
         this.listenTo(UserStore,this.onUserChange);
-        window.onbeforeunload = this.handleUnload;
     },
 
     unloadUser: function(){

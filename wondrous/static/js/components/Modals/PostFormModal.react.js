@@ -28,8 +28,10 @@ var PostFormModal = React.createClass({
 		var con = $(this.refs.modalWrapper.getDOMNode());
 		WondrousActions.togglePostModal();
 
-        evt.preventDefault();
-        evt.stopPropagation();
+		if(typeof evt!=='undefined'){
+			evt.preventDefault();
+			evt.stopPropagation();
+		}
 	},
 
 	render: function() {
