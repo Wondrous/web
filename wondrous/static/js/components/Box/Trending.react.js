@@ -16,13 +16,15 @@ var Trending = React.createClass({
 
     render: function() {
         var tags = this.state.tags.map(function(tag, ind) {
-            return (
-                <li className="trending-li" key={tag.tag_name}>
-                    <Link className="hashtagify trending-a" to={'/tags/'+tag.tag_name}>
-                        #{tag.tag_name}
-                    </Link>
-                </li>
-            );
+            if (ind < 10) {
+                return (
+                    <li className="trending-li" key={tag.tag_name}>
+                        <Link className="hashtagify trending-a" to={'/tags/'+tag.tag_name}>
+                            #{tag.tag_name}
+                        </Link>
+                    </li>
+                );
+            }
         });
 
         return (
