@@ -1,4 +1,5 @@
 var Trending = require('./Trending.react');
+var UserBox = require('./UserBox.react');
 
 DiscoveryBox = React.createClass({
 
@@ -6,6 +7,7 @@ DiscoveryBox = React.createClass({
         return (
         	<div>
                 <Trending/>
+                <UserBox/>
             </div>
     	);
     }
