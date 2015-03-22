@@ -3,7 +3,6 @@ var BoxStore = require('../../stores/BoxStore');
 var Trending = React.createClass({
     mixins: [Reflux.listenTo(BoxStore,"onBoxChange")],
     componentDidMount: function(){
-        BoxStore.loadMoreTrends();
     },
     getInitialState: function(){
         return {tags:BoxStore.trending}
