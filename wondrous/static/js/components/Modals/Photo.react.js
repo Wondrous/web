@@ -33,6 +33,7 @@ var Photo = React.createClass({
             maxHeight: MAX_HEIGHT,
             margin: "0 auto",
             display: "block",
+            cursor: "pointer",
         };
 
         // We need both of these for backwards comptibility
