@@ -12,6 +12,7 @@ from wondrous.controllers.basemanager import BaseManager
 
 from wondrous.models import (
     DBSession,
+    Post,
     Tag,
 )
 
@@ -42,10 +43,12 @@ class TagManager(BaseManager):
 
 
     @staticmethod
-    def get_trending_tags_json(user, time=timedelta(hours=60),per_page=10,page=0):
+    def get_trending_tags_json(user, time=timedelta(hours=6000),per_page=10,page=0):
         earliest = datetime.now()-time
         retval = []
         for count, tag_name in DBSession.query(func.count(func.lower(Tag.tag_name)), func.lower(Tag.tag_name)).\
+            join(Post, Post.id==Tag.post_id).\
+            filter(Post.set_to_delete==None).\
             filter(Tag.created_at>earliest).\
             group_by(func.lower(Tag.tag_name)).\
             order_by(desc(func.count(func.lower(Tag.tag_name)))).\
