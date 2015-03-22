@@ -155,7 +155,7 @@ var PictureForm = React.createClass({
             aspectRatio: 1,
             strict: true,
             dragCrop: false,
-            movable: true,
+            movable: false,
             resizable: false,
             zoomable: false,
 
