@@ -22,8 +22,6 @@ var Post = React.createClass({
             return (<div></div>);
         }
 
-        // console.log("DATA::", this.props.data);
-
         var repost = null;
         var is_it_mine = this.props.data.username === UserStore.user.username;
 
@@ -40,7 +38,7 @@ var Post = React.createClass({
                         <UserTitle data={this.props.data} />
                     </div>
 
-                    <div className="post-title">{this.props.data.subject}</div>
+                    {/*<div className="post-title">{this.props.data.subject}</div>*/}
                     <a href={"/post/"+this.props.data.id} onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data}/>
                     </a>

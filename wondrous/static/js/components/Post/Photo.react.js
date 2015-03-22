@@ -19,7 +19,8 @@ var Photo = React.createClass({
                         <StatusBar data={this.props.data}/>
                     </div>
                 </div>
-            </div>);
+            </div>
+        );
     }
 
 });

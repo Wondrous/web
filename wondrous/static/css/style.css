@@ -1415,8 +1415,11 @@ a:hover {
     vertical-align: bottom; }
 
 .post-subject-text {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 23px;
+  font-family: 'arial black', arial, helvetica, sans-serif;
+  letter-spacing: -1px;
+  line-height: 1.1em;
+  font-weight: 900;
   text-align: left;
   color: #fbfbfb;
   cursor: pointer; }
@@ -1424,14 +1427,13 @@ a:hover {
 .post-subject-wrapper {
   position: absolute;
   background-color: #292929;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.6);
   width: 100%;
-  bottom: 0;
-  padding: 0; }
+  bottom: 10%; }
 
 .post-subject-text-position {
   position: relative;
-  padding: 0 3% 2px; }
+  padding: 10px; }
 
 .post-title {
   font-family: Verdana, arial, helvetica, sans-serif;
@@ -1451,6 +1453,7 @@ a:hover {
   /*display: inline-block;*/
   margin: 0 4px;
   top: -2px;
+  font-family: helvetica, arial, sans-serif;
   font-size: 12px;
   font-weight: normal; }
 
