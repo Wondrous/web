@@ -263,13 +263,13 @@ var PostForm = React.createClass({
 
                 {/* {this.state.error ? <span>{this.state.error}% uploaded</span> : null} */}
 
-                <div className="new-post-element" style={divStyle}>
+                <div className="new-post-element">
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
                         <input id="postSubject" className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False"/>
                     </div>
                 </div>
 
-                <div className="new-post-element" style={divStyle}>
+                <div className="new-post-element">
                     <div className="post-input-wrapper">
                         <div className="highlighter"></div>
                         <div className="typehead">
