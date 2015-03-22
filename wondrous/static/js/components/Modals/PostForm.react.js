@@ -52,6 +52,12 @@ var PostForm = React.createClass({
             reader.onload = this.handleCrop;
             reader.readAsDataURL(this.file);
         }
+
+        if (this.state.isCover) {
+            $("div.cropper-container").removeClass("cropper-hidden");
+        } else {
+            $("div.cropper-container").addClass("cropper-hidden");
+        }
     },
 
     handleDrop: function(e){
@@ -176,6 +182,7 @@ var PostForm = React.createClass({
                 postText,
                 this.file,
                 dataURL,
+                this.state.isCover,
                 imgHeight,
                 imgWidth
             );
