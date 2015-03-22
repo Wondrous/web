@@ -33,15 +33,17 @@ var PictureForm = React.createClass({
     },
 
     onUploadChange: function(msg){
-        if (msg.hasOwnProperty('error')) {
-            this.setState({error: msg.error});
-        } else if (msg.hasOwnProperty('percent')) {
+        if(ModalStore.pictureFormOpen){
+            if (msg.hasOwnProperty('error')) {
+                this.setState({error: msg.error});
+            } else if (msg.hasOwnProperty('percent')) {
 
-            this.setState({percent: msg.percent});
+                this.setState({percent: msg.percent});
 
-        } else if (msg.hasOwnProperty('completed')) {
-            this.handleCancel();
-            this.state.percent = 0;
+            } else if (msg.hasOwnProperty('completed')) {
+                this.handlePictureCancel(null);
+                this.state.percent = 0;
+            }
         }
     },
 
@@ -86,37 +88,20 @@ var PictureForm = React.createClass({
         });
     },
 
-    handleCancel: function(e){
+    handlePictureCancel: function(e){
         this.loaded = false;
         WondrousActions.togglePictureModal();
 
         // Fade out the post form
-        $('#cropBox').cropper('destroy');
-        $('#cropBox').attr('src', "/static/pictures/transparent.gif");
+        $('#cropPictureBox').cropper('destroy');
+        $('#cropPictureBox').attr('src', "/static/pictures/transparent.gif");
 
         if(this.file){
             this.file = null;
-            $('#cropBox').cropper('destroy');
+            $('#cropPictureBox').cropper('destroy');
         }
 
-        // Clear the post textarea and the hashtag highlighter
-        $(".highlighter").empty();
-        $("#postTextarea").val('');
-        $("#postSubject").val('');
-
-        // Reset any post error messages
-        $(".post-error").empty();
-        $('.post-error-wrapper').hide();
-
-        // Remove anything that pertains to file uploads
-        $('.objectFileID').empty();
-
-        $('.post-dialogue-progress').hide();
         $('#pictureUploadBtn').show();
-
-        // Remove hashtags and the hashtag preview
-        $('.hashtag').val('');
-        $('#post-hashtags').empty();
     },
 
     onProgress: function(percentage) {
@@ -129,20 +114,17 @@ var PictureForm = React.createClass({
         } else {
             console.error("upload file error", err);
         }
-        this.handleCancel(null);
+        this.handlePictureCancel(null);
         setTimeout(this.updateProfile, 500);
-
-
     },
 
     handleSubmit:function(e){
         this.loaded = false;
 
         if (typeof this.file !=='undefined' && this.file != null){
-            var dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
+            var dataURL = uri2blob($('#cropPictureBox').cropper("getCroppedCanvas").toDataURL());
             WondrousActions.addProfilePicture(this.file, dataURL);
         }
-
     },
 
     handleCrop: function(e) {
@@ -151,7 +133,7 @@ var PictureForm = React.createClass({
         this.width = tempImg.width;
         this.height = tempImg.height;
 
-        // $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
+        $(this.refs.cropPictureBox.getDOMNode()).attr('src', e.target.result);
 
         var canvasData = {
             "width": 400,
@@ -167,7 +149,7 @@ var PictureForm = React.createClass({
 
         var that = this;
 
-        $('#cropBox').cropper({
+        $('#cropPictureBox').cropper({
             aspectRatio: "free",
             strict: true,
             dragCrop: false,
@@ -176,8 +158,8 @@ var PictureForm = React.createClass({
             zoomable: false,
 
             built: function() {
-              $('#cropBox').cropper('setCanvasData', canvasData);
-              $('#cropBox').cropper('setCropBoxData', cropBoxData);
+              $('#cropPictureBox').cropper('setCanvasData', canvasData);
+              $('#cropPictureBox').cropper('setCropBoxData', cropBoxData);
               that.loaded = true;
             },
 
@@ -193,7 +175,7 @@ var PictureForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 430 }}>
                 <div id="crop-box-wrapper picture-wrapper">
-                    <img id="cropBox" ref="cropBox" style={{ width: 400 }} src="/static/pictures/transparent.gif" />
+                    <img id="cropPictureBox" ref="cropPictureBox" style={{ width: 400 }} src="/static/pictures/transparent.gif" />
                 </div>
 
                 <div className="new-post-progress-bar">
@@ -221,7 +203,7 @@ var PictureForm = React.createClass({
                 </div>
 
                 <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
-                <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
+                <div onClick={this.handlePictureCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
             </div>
         );
     }
