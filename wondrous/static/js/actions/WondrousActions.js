@@ -475,10 +475,10 @@ WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob,is_c
     if (file_to_upload){
         uploadData.file_type = file_to_upload.type
 
-        if ((typeof height !=='undefined') && (typeof width !=='undefined') && (typeof is_cover!=='undefined')) {
+        if ((typeof height !=='undefined') && (typeof width !=='undefined')) {
             uploadData.height = parseInt(height);
             uploadData.width = parseInt(width);
-            uploadData.is_cover = is_cover==true;
+            uploadData.is_cover = (is_cover==='undefined' || is_cover==false) ? false :true;
         }
     }
 
