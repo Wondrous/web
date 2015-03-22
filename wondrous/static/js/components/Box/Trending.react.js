@@ -17,16 +17,17 @@ var Trending = React.createClass({
     render: function() {
         var tags = this.state.tags.map(function(tag, ind) {
             return (
-                <li key={tag.tag_name}>
-                    <Link to={'/tags/'+tag.tag_name}>
-                        {tag.tag_name} count: {tag.count}
+                <li className="trending-li" key={tag.tag_name}>
+                    <Link className="hashtagify trending-a" to={'/tags/'+tag.tag_name}>
+                        #{tag.tag_name}
                     </Link>
                 </li>
             );
         });
 
         return (
-            <ul>
+            <ul className="trending-ul round-3">
+                <li className="trending-li-header">Trending #tags</li>
                 {tags}
             </ul>
         );
