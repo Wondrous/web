@@ -185,8 +185,15 @@ class AccountManager(BaseManager):
                 return None
 
             ret = ret.fetchall()[0]
+            row_list = []
+            for i in range(len(ret)):
+                if ret[i]:
+                    row_list.append(ret[i])
+                else:
+                    row_list.append(0)
+            # print row_list
             if ret:
-                follower_count, following_count, post_count, like_count, view_count, comment_count = ret
+                follower_count, following_count, post_count, like_count, view_count, comment_count = row_list
 
                 wondrous_score = float(view_count*5 + like_count*5 + follower_count*5 + comment_count*1 + post_count*1 + following_count*1)
                 wondrous_score /= 1000.0
