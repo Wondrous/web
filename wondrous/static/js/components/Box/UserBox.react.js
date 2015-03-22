@@ -72,7 +72,9 @@ var UserBox = React.createClass({
 
         return (
             <ul className="trending-ul round-3">
-                <li className="trending-li-header">Users who you might like</li>
+                <li className="trending-li-header" style={{ border: "none" }}>
+                    Users who you might like
+                </li>
                 {users}
             </ul>
         );
