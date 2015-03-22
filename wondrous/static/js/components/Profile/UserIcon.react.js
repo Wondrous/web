@@ -7,7 +7,7 @@ var UserIcon = React.createClass({
         WallStore.loadMore(this.props.user.username);
     },
     render: function() {
-        var is_influencer = (this.props.user.badges>=75);
+        var is_influencer = (this.props.user.wondrous_score >= 75);
         var hrefPlaceholder = "/" + this.props.user.username;
         return (
             <li onClick={this.loadWall} className="user-itemizer">
