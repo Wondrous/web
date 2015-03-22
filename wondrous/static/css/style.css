@@ -1410,6 +1410,9 @@ a:hover {
   text-shadow: 0 2px 10px #2c2c2c;
   cursor: pointer; }
 
+#slidePhoto {
+  cursor: pointer; }
+
 .post-thumb {
   position: relative;
   display: inline-block;
