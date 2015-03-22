@@ -1427,7 +1427,7 @@ a:hover {
 .post-subject-wrapper {
   position: absolute;
   background-color: #292929;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.45);
   width: 100%;
   bottom: 10%; }
 
@@ -1436,7 +1436,7 @@ a:hover {
   padding: 10px; }
 
 .post-title {
-  font-family: Verdana, arial, helvetica, sans-serif;
+  font-family: 'arial black', Verdana, arial, helvetica, sans-serif;
   font-size: 24px;
   font-weight: 900;
   color: #2d2d2d;
@@ -1450,7 +1450,6 @@ a:hover {
 
 .post-micro-data-super-analytics-item {
   position: relative;
-  /*display: inline-block;*/
   margin: 0 4px;
   top: -2px;
   font-family: helvetica, arial, sans-serif;
@@ -1459,8 +1458,7 @@ a:hover {
 
 .post-modal-micro-data-wrapper {
   position: relative;
-  margin: 4px 25px;
-  /*border-bottom: 1px solid rgb(234,234,234);*/ }
+  margin: 4px 25px; }
 
 .post-see-more {
   position: relative;
