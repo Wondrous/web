@@ -43,16 +43,15 @@ class TagManager(BaseManager):
 
 
     @staticmethod
-    def get_trending_tags_json(user, time=timedelta(hours=6000),per_page=10,page=0):
+    def get_trending_tags_json(user, time=timedelta(hours=6000), per_page=10, page=0):
         earliest = datetime.now()-time
         retval = []
         for count, tag_name in DBSession.query(func.count(func.lower(Tag.tag_name)), func.lower(Tag.tag_name)).\
-            join(Post, Post.id==Tag.post_id).\
-            filter(Post.set_to_delete==None).\
-            filter(Tag.created_at>earliest).\
+            join(Post, Post.id == Tag.post_id).\
+            filter(Post.set_to_delete == None).\
+            filter(Tag.created_at > earliest).\
             group_by(func.lower(Tag.tag_name)).\
             order_by(desc(func.count(func.lower(Tag.tag_name)))).\
             limit(per_page).offset(per_page*page).all():
-            retval.append({"tag_name":tag_name,"count":count})
-        # print retval
+            retval.append({"tag_name": tag_name,"count": count})
         return retval

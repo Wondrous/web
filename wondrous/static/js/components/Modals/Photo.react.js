@@ -1,15 +1,4 @@
-var WondrousActions = require('../../actions/WondrousActions');
-var checkLogin = require('../../utils/Func').checkLogin;
-
 var Photo = React.createClass({
-
-	handleClose: function(evt) {
-        if (checkLogin()) {
-            WondrousActions.closeCardModal();
-        } else {
-            evt.preventDefault();
-        }
-	},
 
     render: function() {
         if (this.props.data.hasOwnProperty('repost')) {
@@ -30,27 +19,44 @@ var Photo = React.createClass({
 		// 	height = 390;
 		// }
 
+        var isCover = this.props.data.is_cover;
         var MAX_HEIGHT = 550;
         var MAX_WIDTH  = 750;
 
-        height = height > MAX_HEIGHT ? MAX_HEIGHT : height;
-        width = width > MAX_WIDTH ? MAX_WIDTH : width;
-
+        // Must check for height and width to keep backwards comptibility
+        // Some older photos don't have HxW, so they return null for these,
+        // in which case auto won't work.
         photoStyle = {
-            backgroundImage: this.props.data.ouuid!=null ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
-            height: height && !this.props.is_cover ? height : 390,
-            width: width && !this.props.is_cover ? width : 750,
-            maxWidth: 750,
-            maxHeight: 550,
+            height: height && !isCover ? "auto" : 390,
+            width: width && !isCover ? "auto" : 750,
+            maxWidth: MAX_WIDTH,
+            maxHeight: MAX_HEIGHT,
             margin: "0 auto",
+            display: "block",
         };
 
+        // We need both of these for backwards comptibility
+        // so we don't break posts with cover photos that
+        // have is_cover = null.
+        if (isCover === true || isCover === null) {
+            photoStyle['backgroundImage'] = this.props.data.ouuid!=null ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null;
+            return (
+                <div className="_postImg" onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <img className="_postImg" onClick={this.handleClose} src={"http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid} style={photoStyle} />
+                </div>
+            );
+        }
+    },
 
-		console.log(this.props.data);
-        return (
-            <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
-            </div>
-        );
+    componentDidMount: function() {
+        $('._postImg').on('dragstart', function(event) {
+            event.preventDefault();
+        });
     }
 });
 

@@ -8,6 +8,15 @@ var PostFooter = require('./PostFooter.react');
 var checkLogin = require('../../utils/Func').checkLogin;
 
 var Post = React.createClass({
+
+    handleClose: function(evt) {
+        if (checkLogin()) {
+            WondrousActions.closeCardModal();
+        } else {
+            evt.preventDefault();
+        }
+    },
+
     viewLikedUsers: function() {
         PostStore.loadMoreLikedUsers();
         WondrousActions.openLikedUserModal();
@@ -66,7 +75,7 @@ var Post = React.createClass({
                     {this.props.data.subject}
                 </div>
 
-				<div id="slidePhoto">
+				<div id="slidePhoto" onClick={this.handleClose} >
 					<Photo ref="photo" data={this.props.data}/>
 				</div>
 
