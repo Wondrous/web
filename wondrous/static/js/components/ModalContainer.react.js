@@ -3,6 +3,7 @@ var SignupModal = require('./Modals/SignupModal.react');
 var PostModal = require('./Modals/PostModal.react');
 var LikedUserModal = require('./Modals/LikedUserModal.react');
 var PostFormModal = require('./Modals/PostFormModal.react');
+var PictureFormModal = require('./Modals/PictureFormModal.react');
 
 var ModalContainer = React.createClass({
     // WARNING: ordering does matter!
@@ -11,6 +12,7 @@ var ModalContainer = React.createClass({
             <div>
                 <PostModal/>
                 <PostFormModal/>
+                <PictureFormModal/>
                 <SignupModal/>
                 <LikedUserModal/>
                 <ReportModal/>

@@ -15,6 +15,7 @@ var ModalStore = Reflux.createStore({
 
         this.signupOpen = false;
         this.postFormOpen = false;
+        this.pictureFormOpen = false;
         this.cardOpen = false;
         this.likedUserOpen = false;
 
@@ -62,14 +63,12 @@ var ModalStore = Reflux.createStore({
     },
 
     togglePictureModal: function() {
-        this.modalType = WondrousConstants.MODALTYPE_PICTURE;
-        this.postFormOpen = !this.postFormOpen;
+        this.pictureFormOpen = !this.pictureFormOpen;
         this.toggleModal();
         this.trigger();
     },
 
     togglePostModal: function() {
-        this.modalType = WondrousConstants.MODALTYPE_POST;
         this.postFormOpen = !this.postFormOpen;
         this.toggleModal();
         this.trigger();

@@ -91,13 +91,9 @@ var PostForm = React.createClass({
     },
 
     handleCancel: function(e){
-        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
         this.loaded = false;
-        if (!isPictureModal) {
-            WondrousActions.togglePostModal();
-        } else {
-            WondrousActions.togglePictureModal();
-        }
+        WondrousActions.togglePostModal();
+
 
         // Fade out the post form
         $('#cropBox').cropper('destroy');
@@ -139,49 +135,35 @@ var PostForm = React.createClass({
             console.error("upload file error", err);
         }
         this.handleCancel(null);
-        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+        setTimeout(this.addToFeeds, 500);
 
-        if (isPictureModal) {
-            setTimeout(this.updateProfile, 500);
-        } else {
-            setTimeout(this.addToFeeds, 500);
-        }
 
     },
 
     handleSubmit:function(e){
         this.loaded = false;
-        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
+        var postSubject = $('#postSubject').val();
+        var postText    = $('#postTextarea').val();
 
-        if (isPictureModal) {
-            if (typeof this.file !=='undefined' && this.file != null){
-                var dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
-                WondrousActions.addProfilePicture(this.file, dataURL);
+        var dataURL = null;
+        if (typeof(this.file) !== 'undefined' && this.file) {
+            // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
+            if (this.state.isCover) {
+                dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
+            } else {
+                dataURL = uri2blob($('#cropBox').attr("src"));
             }
-        } else {
-            var postSubject = $('#postSubject').val();
-            var postText    = $('#postTextarea').val();
-
-            var dataURL = null;
-            if (typeof(this.file) !== 'undefined' && this.file) {
-                // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
-                if (this.state.isCover) {
-                    dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
-                } else {
-                    dataURL = uri2blob($('#cropBox').attr("src"));
-                }
-            }
-
-            WondrousActions.addNewPost(
-                postSubject,
-                postText,
-                this.file,
-                dataURL,
-                this.state.isCover,
-                this.height,
-                this.width
-            );
         }
+
+        WondrousActions.addNewPost(
+            postSubject,
+            postText,
+            this.file,
+            dataURL,
+            this.state.isCover,
+            this.height,
+            this.width
+        );
     },
 
     toggleBackgroundDisplay: function() {
@@ -212,7 +194,6 @@ var PostForm = React.createClass({
         this.height = tempImg.height;
 
         $(this.refs.cropBox.getDOMNode()).attr('src', e.target.result);
-        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
 
         var canvasData = {
             "left": -462.2145922746779,
@@ -261,12 +242,6 @@ var PostForm = React.createClass({
     },
 
     render: function() {
-        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
-
-        var divStyle = {
-            display: isPictureModal ? "none" : "block",
-            backgroundColor : "rgb(255,255,255)"
-        };
 
         var optionClass = "post-form-bg-display-option";
         var optionActiveClass = optionClass + " post-form-bg-display-option--active";
@@ -324,7 +299,7 @@ var PostForm = React.createClass({
                     <span className="post-error"></span>
                 </div>
 
-                <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">{isPictureModal?"Upload":"Share"}</div>
+                <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
                 <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
             </div>
         );
@@ -335,12 +310,6 @@ var PostForm = React.createClass({
         var mentions = text.match(/\s*@\s*(\w+)/g);
         var hashtags = text.match(/\s*#\s*(\w+)/g);
 
-    },
-    componentDidMount: function () {
-        var isPictureModal = (ModalStore.modalType == WondrousConstants.MODALTYPE_PICTURE);
-        if(!isPictureModal){
-
-        }
     }
 });
 

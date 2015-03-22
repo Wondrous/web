@@ -5,12 +5,18 @@ var ModalWrapper = React.createClass({
 		}
 	},
 
+
 	render: function() {
+		var className = "modal-wrapper";
+		if  (typeof this.props.isPicture!=='undefined' && this.props.isPicture==true){
+			className += " modal-picture"
+		}
+
 		return (
 			<div onClick={this.handleClose} className="_dimmer" style={this.props.divStyle}>
 				<div className="vertical-center-wrapper">
 					<div ref="closeContainer" className="vertical-center">
-						<div className="modal-wrapper">
+						<div className={className}>
                             <div className="modal round-5">
 								{this.props.children}
 							</div>
