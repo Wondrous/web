@@ -19,10 +19,16 @@ var PostForm = React.createClass({
     mixins: [Reflux.listenTo(UploadStore, "onUploadChange")],
     file: null,
     height: 0,
-    width:0,
+    width: 0,
 
     getInitialState: function() {
-        return {percent: 0, error: null, isCover: true};
+        return {
+            percent: 0,
+            error: null,
+            isCover: true,
+            imgHeight: null,
+            imgWidth: null,
+        };
     },
 
     onUploadChange: function(msg){
@@ -155,10 +161,24 @@ var PostForm = React.createClass({
             var dataURL = null;
             if (typeof(this.file) !== 'undefined' && this.file) {
                 // dataURL = $(this.refs.cropBox.getDOMNode()).data('cropbox').getBlob();
-                dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
-                console.log("URL:", dataURL);
+                if (this.state.isCover) {
+                    dataURL = uri2blob($('#cropBox').cropper("getCroppedCanvas").toDataURL());
+                } else {
+                    dataURL = uri2blob($('#cropBox').attr("src"));
+                }
             }
-            WondrousActions.addNewPost(postSubject, postText, this.file, dataURL);
+
+            var imgHeight = !this.state.isCover ? this.height : null;
+            var imgWidth = !this.state.isCover ? this.width : null;
+
+            WondrousActions.addNewPost(
+                postSubject,
+                postText,
+                this.file,
+                dataURL,
+                imgHeight,
+                imgWidth
+            );
         }
     },
 
@@ -167,6 +187,10 @@ var PostForm = React.createClass({
             isCover: !this.state.isCover
         });
         this.forceUpdate();
+    
+        $("div#crop-box-wrapper").toggleClass("fit-to-screen-wrapper");
+        $("img#cropBox").toggleClass("fit-to-screen").toggleClass("cropper-hidden");
+        $("div.cropper-container").toggleClass("cropper-hidden");
     },
 
     handleCrop: function(e) {
@@ -209,8 +233,6 @@ var PostForm = React.createClass({
             // Output the result data for cropping image.
             }
         });
-
-
     },
 
     render: function() {
@@ -220,6 +242,10 @@ var PostForm = React.createClass({
             display: isPictureModal ? "none" : "block",
             backgroundColor : "rgb(255,255,255)"
         };
+
+        var optionClass = "post-form-bg-display-option";
+        var optionActiveClass = optionClass + " post-form-bg-display-option--active";
+
         // onDrop={this.handleDrop} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
@@ -227,16 +253,16 @@ var PostForm = React.createClass({
                     <img id="cropBox" ref="cropBox" style={{ width: 750 }} src="/static/pictures/transparent.gif" />
                 </div>
 
+                <div>
+                    <div onClick={this.toggleBackgroundDisplay} className={!this.state.isCover ? optionClass : optionActiveClass}>Cover</div>
+                    <div onClick={this.toggleBackgroundDisplay} className={this.state.isCover  ? optionClass : optionActiveClass}>Fit-to-screen</div>
+                </div>
+
                 <div className="new-post-progress-bar">
                     <div className="new-post-progress-bar--juice" style={{ width: this.state.percent * 8 }}></div>
                 </div>
 
                 {/* {this.state.error ? <span>{this.state.error}% uploaded</span> : null} */}
-
-                {/*<div>
-                    <div onClick={this.toggleBackgroundDisplay} className={!this.state.isCover  ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Cover</div>
-                    <div onClick={this.toggleBackgroundDisplay} className={this.state.isCover ? "post-form-bg-display-option" : "post-form-bg-display-option post-form-bg-display-option--active"}>Fit-to-screen</div>
-                </div>*/}
 
                 <div className="new-post-element" style={divStyle}>
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>

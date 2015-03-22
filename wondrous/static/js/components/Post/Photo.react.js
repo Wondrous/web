@@ -8,6 +8,7 @@ var Photo = React.createClass({
 
         photoStyle = {
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
+            height: this.props.data.height
         };
 
         return (

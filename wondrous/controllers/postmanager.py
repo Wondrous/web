@@ -298,11 +298,19 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def post_json(cls, user, subject, text, file_type=None):
+    def post_json(cls, user, subject, text, file_type=None, height=None, width=None):
         if not user or not subject or not text:
             return {'error': 'Insufficient data'}
 
-        post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type)
+        post = PostManager.add(
+                    user.id,
+                    subject,
+                    text,
+                    repost_id=None,
+                    file_type=file_type,
+                    height=height,
+                    width=width
+                )
         object = post.object
 
         data = {}

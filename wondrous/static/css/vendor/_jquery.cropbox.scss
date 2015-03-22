@@ -95,26 +95,6 @@
 	text-align:center;
 }
 
-/* Overrides for Fit-To-Screen display */
-.cropFrame-FTS {
-	width: 750px;
-	/* height: <dynamically inject this>; */
-	text-align: center;
-	background-color: rgb(20,20,20);
-}
-
-.cropImage-FTS {
-	position: relative;
-	cursor: auto;
-	width: auto !important;
-	top: 0;
-	left: 0;
-}
-
-.cropControls-FTS {
-	display: none;
-}
-
 /*--------------------------------------*/
 
 #crop-box-wrapper {
@@ -128,4 +108,22 @@
 	   -moz-box-shadow: inset 0 0px 5px rgb(150,150,150);
 	     -o-box-shadow: inset 0 0px 5px rgb(150,150,150);
 			box-shadow: inset 0 0px 5px rgb(150,150,150);
+}
+
+/* Overrides to acheive FTS and cover */
+div#crop-box-wrapper.fit-to-screen-wrapper {
+	height: auto;
+	/*padding: 20px 0;*/
+	background-color: rgb(20,20,20);
+}
+
+img#cropBox.fit-to-screen {
+	position: relative;
+	top: 0;
+	display: block !important;
+	margin: 0 auto;
+	max-width: 750px;
+	max-height: 600px;
+	height: auto !important;
+	width: auto !important;
 }
