@@ -202,7 +202,7 @@ class PostManager(BaseManager):
             DBSession.add(new_tag)
 
     @classmethod
-    def add(cls, user_id, subject, text, repost_id=None, file_type=None, height=None, width=None):
+    def add(cls, user_id, subject, text, repost_id=None, file_type=None, is_cover = None, height=None, width=None):
 
         """
             PURPOSE: the purpose of the this method is to allow users to post and
@@ -255,9 +255,11 @@ class PostManager(BaseManager):
                     if height and width:
                         new_object.height = int(height)
                         new_object.width = int(width)
+                        new_object.is_cover = is_cover if not None else True
                 except Exception, e:
                     new_object.height = None
                     new_object.width = None
+                    new_object.is_cover = None
 
             new_post.object_id = new_object.id
 
@@ -298,11 +300,11 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def post_json(cls, user, subject, text, file_type=None):
+    def post_json(cls, user, subject, text, file_type=None, is_cover=None, height=None, width=None):
         if not user or not subject or not text:
             return {'error': 'Insufficient data'}
 
-        post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type)
+        post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type,is_cover=is_cover, height=height, width=width)
         object = post.object
 
         data = {}

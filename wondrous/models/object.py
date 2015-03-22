@@ -47,6 +47,7 @@ class Object(Base, BaseMixin):
 
     height = Column(Integer, nullable=True)
     width = Column(Integer, nullable=True)
+    is_cover = Column(Boolean, nullable=True)
 
     set_to_delete = Column(DateTime, nullable=True)
 
