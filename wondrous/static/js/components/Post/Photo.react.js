@@ -6,9 +6,14 @@ var Photo = React.createClass({
             this.props.data.ouuid = this.props.data.repost.ouuid;
         }
 
+        var height = this.props.data.height;
+        if(this.props.data.height>750&&this.props.data.width>1000){
+            height/=2;
+        }
         photoStyle = {
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
-            height: this.props.data.height
+            backgroundPosition: "center",
+            height: height
         };
 
         return (
