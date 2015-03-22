@@ -11,12 +11,32 @@ var UserIcon = React.createClass({
         }
     },
     render: function() {
+
+        var userItemizerStyleOverrides = {
+            padding: "10px 5px",
+            borderTop: "1px solid rgb(240,240,240)",
+        }
+
+        var avatarStyleOverrides = {
+            overflow: "visible",
+        }
+
+        var profilePhotoStyleOverrides = {
+            height: 40,
+            width: 40,
+            verticalAlign: "middle",
+        }
+
+        var userItemizerDataStyleOverrides = {
+            fontSize: 13,
+        }
+
         return (
-            <li className="user-itemizer">
-                <a className="avatar" onClick={this.handleClick}>
-                    <img className="profile-photo-med round-50" src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
+            <li className="user-itemizer" style={userItemizerStyleOverrides}>
+                <a className="avatar" style={avatarStyleOverrides} onClick={this.handleClick}>
+                    <img className="profile-photo-med round-50" style={profilePhotoStyleOverrides} src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
                 </a>
-                <div className="user-itemizer-data">
+                <div className="user-itemizer-data" style={userItemizerDataStyleOverrides}>
                     <a className="user-itemizer-data-name" onClick={this.handleClick} >{ this.props.user.name }</a>
                     <div className="user-itemizer-data-desc">
                         @{ this.props.user.username }
@@ -48,7 +68,7 @@ var UserBox = React.createClass({
 
         return (
             <ul className="trending-ul round-3">
-                <li className="trending-li-header">UserBox #tags</li>
+                <li className="trending-li-header">Users who you might like</li>
                 {users}
             </ul>
         );

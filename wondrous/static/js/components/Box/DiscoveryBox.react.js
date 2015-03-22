@@ -7,6 +7,7 @@ DiscoveryBox = React.createClass({
         return (
         	<div>
                 <Trending/>
+                <div style={{ height: 15 }}></div>
                 <UserBox/>
             </div>
     	);
