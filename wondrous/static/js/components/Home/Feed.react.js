@@ -6,6 +6,7 @@ var ModalStore = require('../../stores/ModalStore');
 var WondrousActions = require('../../actions/WondrousActions');
 var MasonryMixin = require('../../vendor/masonry.mixin');
 var checkLogin = require('../../utils/Func').checkLogin;
+var DiscoveryBox = require('../Box/DiscoveryBox.react');
 
 var masonryOptions = {
     transitionDuration: 0,
@@ -63,9 +64,17 @@ var Feed = React.createClass({
 
     render: function() {
         var posts = this.state.data.map(function(post, index) {
-            return (
-                <Post key={post.id} data={post}/>
-            );
+            if (index != 2) {
+                return (
+                    <Post key={post.id} data={post}/>
+                );
+            } else {
+                return (
+                    <div ref="brick" className="masonry-brick">
+                        <DiscoveryBox />
+                    </div>
+                );
+            }
         });
 
         return (

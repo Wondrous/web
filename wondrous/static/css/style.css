@@ -699,6 +699,14 @@ body {
   margin: 20px auto;
   width: 40px; }
 
+/* --- Trending Box --- */
+.trending-ul {
+  padding: 10px;
+  background-color: white; }
+
+.trending-li {
+  padding: 5px 0; }
+
 a:link {
   text-decoration: none; }
 
