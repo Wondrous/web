@@ -181,13 +181,20 @@ var PostForm = React.createClass({
     },
 
     toggleBackgroundDisplay: function() {
+        $("div#crop-box-wrapper").toggleClass("fit-to-screen-wrapper");
+        $("img#cropBox").toggleClass("fit-to-screen").toggleClass("cropper-hidden");
+        console.log($("div.cropper-container").hasClass("cropper-hidden"))
+        if(!this.state.isCover && $("div.cropper-container").hasClass("cropper-hidden")){
+
+            $("div.cropper-container").removeClass("cropper-hidden");
+        }else if(!$("div.cropper-container").hasClass("cropper-hidden")){
+            
+            $("div.cropper-container").addClass("cropper-hidden");
+        }
+
         this.setState({
             isCover: !this.state.isCover
         });
-
-        $("div#crop-box-wrapper").toggleClass("fit-to-screen-wrapper");
-        $("img#cropBox").toggleClass("fit-to-screen").toggleClass("cropper-hidden");
-
     },
 
     handleCrop: function(e) {
@@ -226,10 +233,12 @@ var PostForm = React.createClass({
             built: function() {
               $('#cropBox').cropper('setCanvasData', canvasData);
               $('#cropBox').cropper('setCropBoxData', cropBoxData);
-              if(that.state.isCover){
+              if(!that.state.isCover && !$("div.cropper-container").hasClass("cropper-hidden")){
+
                   $("div.cropper-container").addClass("cropper-hidden");
-              }else{
-                  $("div.cropper-container").toggleClass("cropper-hidden");
+              }else if($("div.cropper-container").hasClass("cropper-hidden")){
+                  
+                  $("div.cropper-container").removeClass("cropper-hidden");
               }
             },
 

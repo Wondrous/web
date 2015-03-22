@@ -22,7 +22,7 @@ var Photo = React.createClass({
             width: this.props.data.width ? this.props.data.width : 750,
             margin: "0 auto",
         };
-
+		console.log(this.props.data);
         return (
             <div onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
             </div>
