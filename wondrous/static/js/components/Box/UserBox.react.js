@@ -29,6 +29,10 @@ var UserIcon = React.createClass({
 
         var userItemizerDataStyleOverrides = {
             fontSize: 13,
+            maxWidth: 190,
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
         }
 
         return (
