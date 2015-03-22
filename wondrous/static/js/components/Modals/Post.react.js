@@ -66,7 +66,7 @@ var Post = React.createClass({
         }
 
 		return (
-			<div ref="post"  className="post-body round-3" >
+			<div ref="post"  className="post-body post-body--nohover round-3" >
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
 					<UserTitle data={this.props.data} />
 				</div>

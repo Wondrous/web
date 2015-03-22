@@ -84,7 +84,11 @@ var Feed = React.createClass({
             <div className="grid-padding">
                 <div ref="scrollBox">
                     <h1 className="tmp-feed-h1">Majority Feed</h1>
-                    {FeedStore.hasNewPosts?<button onClick={FeedStore.loadNewest}>LOAD NEW POSTS</button>:null}
+                    {FeedStore.hasNewPosts ? 
+                        <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
+                            Load new posts
+                        </button>
+                        : null}
                     <div className="masonry" ref="masonryContainer" id="asyncPosts">
                         <div className="backdrop"></div>
                         <div className="grid-sizer" style={{"display": "none"}}></div>

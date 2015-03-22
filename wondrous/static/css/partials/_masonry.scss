@@ -62,17 +62,32 @@ $num-cols: $masonry-width / 3;
 
 .trending-li {
     padding: 7px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .trending-li-header {
     font-family: helvetica, arial, sans-serif;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 13px;
     color: rgb(141,141,141);
     border-bottom: 1px solid rgb(244,244,244);
     padding-bottom: 4px;
     margin-bottom: 6px;
 }
 
-.trending-a {
+.load-new-posts-btn {
+    width: 70%;
+    display: block;
+    margin: 0 auto;
+    background-color: rgb(255,255,255);
+    border: none;
+    border-bottom: 2px solid rgb(0,226,174);
+
+    font-family: helvetica, arial, sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    color: rgb(150,150,150);
+    padding: 7px 0;
 }
