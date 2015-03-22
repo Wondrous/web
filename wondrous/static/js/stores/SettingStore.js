@@ -1,5 +1,7 @@
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousConstants = require('../constants/WondrousConstants');
+var NotificationStore = require('./NotificationStore');
+var ModalStore = require('./ModalStore');
 
 var SettingStore = Reflux.createStore({
     listenables: WondrousActions,
@@ -8,6 +10,21 @@ var SettingStore = Reflux.createStore({
         this.sidebarOpen = false;
         this.sidebarType = null;
         this.pageType = null;
+
+        window.onbeforeunload = this.handleBeforeUnload;
+        window.onUnload = this.handleUnload
+    },
+
+    handleUnload: function(){
+        if(NotificationStore.subscribed){
+            NotificationStore.pushstream.disconnect();
+        }
+    },
+
+    handleBeforeUnload: function(){
+        if(ModalStore.postFormOpen||ModalStore.pictureFormOpen){
+            return "Are you sure you want to leave?"
+        }
     },
 
     unloadUser: function(){
