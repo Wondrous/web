@@ -27,8 +27,6 @@ var PostForm = React.createClass({
             percent: 0,
             error: null,
             isCover: true,
-            imgHeight: null,
-            imgWidth: null,
         };
     },
 
@@ -174,17 +172,14 @@ var PostForm = React.createClass({
                 }
             }
 
-            var imgHeight = !this.state.isCover ? this.height : null;
-            var imgWidth = !this.state.isCover ? this.width : null;
-
             WondrousActions.addNewPost(
                 postSubject,
                 postText,
                 this.file,
                 dataURL,
                 this.state.isCover,
-                imgHeight,
-                imgWidth
+                this.height,
+                this.width
             );
         }
     },
@@ -192,7 +187,7 @@ var PostForm = React.createClass({
     toggleBackgroundDisplay: function() {
         // $("div#crop-box-wrapper").toggleClass("fit-to-screen-wrapper");
         // $("img#cropBox").toggleClass("fit-to-screen").toggleClass("cropper-hidden");
-        if(this.loaded){
+        if (this.loaded) {
             // console.log("state is",!this.state.isCover,"has",$("div.cropper-container").hasClass("cropper-hidden"))
             if(!this.state.isCover&&$("div.cropper-container").hasClass("cropper-hidden")){
                 $("div.cropper-container").removeClass("cropper-hidden");
@@ -244,17 +239,18 @@ var PostForm = React.createClass({
             zoomable: false,
 
             built: function() {
-              $('#cropBox').cropper('setCanvasData', canvasData);
-              $('#cropBox').cropper('setCropBoxData', cropBoxData);
-              that.loaded = true;
-              if(!that.state.isCover&&!$("div.cropper-container").hasClass("cropper-hidden")){
-                  $("div.cropper-container").addClass("cropper-hidden");
-                  $("div#crop-box-wrapper").addClass("fit-to-screen-wrapper");
-                  $("img#cropBox").addClass("fit-to-screen").removeClass("cropper-hidden");
-              }else if($("div.cropper-container").hasClass("cropper-hidden")){
-                  $("div.cropper-container").removeClass("cropper-hidden");
-                  $("div#crop-box-wrapper").removeClass("fit-to-screen-wrapper");
-                  $("img#cropBox").removeClass("fit-to-screen").addClass("cropper-hidden");              }
+                $('#cropBox').cropper('setCanvasData', canvasData);
+                $('#cropBox').cropper('setCropBoxData', cropBoxData);
+                that.loaded = true;
+                if (!that.state.isCover && !$("div.cropper-container").hasClass("cropper-hidden")) {
+                    $("div.cropper-container").addClass("cropper-hidden");
+                    $("div#crop-box-wrapper").addClass("fit-to-screen-wrapper");
+                    $("img#cropBox").addClass("fit-to-screen").removeClass("cropper-hidden");
+                } else if ($("div.cropper-container").hasClass("cropper-hidden")) {
+                    $("div.cropper-container").removeClass("cropper-hidden");
+                    $("div#crop-box-wrapper").removeClass("fit-to-screen-wrapper");
+                    $("img#cropBox").removeClass("fit-to-screen").addClass("cropper-hidden");
+                }
             },
 
             crop: function(data) {

@@ -6,10 +6,20 @@ var Photo = React.createClass({
             this.props.data.ouuid = this.props.data.repost.ouuid;
         }
 
+        var height = this.props.data.height;
+        var width = this.props.data.width;
+        if (width && !this.props.data.is_cover && height) {
+            var scale = 1;
+            if (width > 750) scale = width / 750;
+            height /= scale;
+        } else {
+            height = 390;
+        }
+
         photoStyle = {
             backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
-            height: this.props.data.height * Math.abs(this.props.data.height / this.props.data.width),
-            maxHeight: 700,
+            height: height,
+            maxHeight: 600,
         };
 
         return (

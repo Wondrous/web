@@ -18,23 +18,30 @@ var Photo = React.createClass({
 
 		var height = this.props.data.height;
 		var width = this.props.data.width;
-		if(width&&!this.props.data.is_cover&&height){
-			var scale = 1;
-			if(width>750){
-				scale = width/750;
-			}
+		// if(width && !this.props.data.is_cover && height) {
+		// 	var scale = 1;
+		// 	if (width > 750) {
+		// 		scale = width / 750;
+		// 	}
+		// 	width /= scale;
+		// 	height /= scale;
+		// } else {
+		// 	width = 750;
+		// 	height = 390;
+		// }
 
-			width/=scale;
-			height/=scale;
-		}else{
-			width = 750;
-			height = 390;
-		}
+        var MAX_HEIGHT = 550;
+        var MAX_WIDTH  = 750;
+
+        height = height > MAX_HEIGHT ? MAX_HEIGHT : height;
+        width = width > MAX_WIDTH ? MAX_WIDTH : width;
 
         photoStyle = {
             backgroundImage: this.props.data.ouuid!=null ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
-            height: height,
-            width: width,
+            height: height && !this.props.is_cover ? height : 390,
+            width: width && !this.props.is_cover ? width : 750,
+            maxWidth: 750,
+            maxHeight: 550,
             margin: "0 auto",
         };
 
