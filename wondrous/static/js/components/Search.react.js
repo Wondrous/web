@@ -3,40 +3,13 @@ var Post = require("../components/Post/Post.react");
 var UserStore = require("../stores/UserStore");
 var WondrousActions = require("../actions/WondrousActions");
 var MasonryMixin = require('../vendor/masonry.mixin');
+var UserIcon = require('./Profile/UserIcon.react');
 
 var masonryOptions = {
     transitionDuration: 0,
     itemSelector: ".masonry-brick",
     columnWidth: ".grid-sizer"
 };
-
-var UserIcon = React.createClass({
-    mixins: [ Router.Navigation ],
-
-    handleClick: function(evt) {
-        evt.preventDefault();
-        if (typeof this.props.user.username != 'undefined') {
-            this.transitionTo('/' + this.props.user.username);
-
-        }
-    },
-    render: function() {
-        var is_me = this.props.user.username === UserStore.user.username;
-        return (
-            <li className="user-itemizer">
-                <a className="avatar" onClick={this.handleClick}>
-                    <img className="profile-photo-med round-50" src={(typeof this.props.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/" + this.props.user.ouuid:"/static/pictures/defaults/p.default-profile-picture.jpg"} />
-                </a>
-                <div className="user-itemizer-data">
-                    <a className="user-itemizer-data-name" onClick={this.handleClick} >{ this.props.user.name }</a>
-                    <div className="user-itemizer-data-desc">
-                        @{ this.props.user.username }
-                    </div>
-                </div>
-            </li>
-        );
-    }
-});
 
 var MasonryWrapper = React.createClass({
     mixins: [MasonryMixin('masonryContainer', masonryOptions)],
