@@ -3,9 +3,11 @@ var Trending = require('./Trending.react');
 DiscoveryBox = React.createClass({
 
     render: function(){
-        return (<div>
+        return (
+        	<div>
                 <Trending/>
-            </div>);
+            </div>
+    	);
     }
 });
 
