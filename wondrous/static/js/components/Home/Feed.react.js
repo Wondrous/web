@@ -70,9 +70,12 @@ var Feed = React.createClass({
                 );
             } else {
                 return (
-                    <div ref="brick" className="masonry-brick">
-                        <DiscoveryBox />
-                    </div>
+                    <span>
+                        <div ref="brick" className="masonry-brick">
+                            <DiscoveryBox />
+                        </div>
+                        <Post key={post.id} data={post}/>
+                    </span>
                 );
             }
         });
