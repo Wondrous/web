@@ -37,7 +37,7 @@ var PostFormModal = React.createClass({
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
-                <PostForm ref="modalWrapper"/>
+                <PostForm ref="modalWrapper" handleClose={this.handleClose}/>
             </ModalWrapper>
 		);
 	}

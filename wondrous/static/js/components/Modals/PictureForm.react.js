@@ -90,7 +90,7 @@ var PictureForm = React.createClass({
 
     handlePictureCancel: function(e){
         this.loaded = false;
-        WondrousActions.togglePictureModal();
+        this.props.handleClose(e);
 
         // Fade out the post form
         $('#cropPictureBox').cropper('destroy');
@@ -136,6 +136,8 @@ var PictureForm = React.createClass({
         $(this.refs.cropPictureBox.getDOMNode()).attr('src', e.target.result);
 
         var canvasData = {
+            "left": -462.2145922746779,
+            "top": -109.99570815450636,
             "width": 400,
             "height": 400,
         };

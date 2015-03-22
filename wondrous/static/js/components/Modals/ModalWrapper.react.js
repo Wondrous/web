@@ -5,6 +5,9 @@ var ModalWrapper = React.createClass({
 		}
 	},
 
+	stopProp: function(evt){
+		evt.stopPropagation();
+	},
 
 	render: function() {
 		var className = "modal-wrapper";
@@ -13,7 +16,7 @@ var ModalWrapper = React.createClass({
 		}
 
 		return (
-			<div onClick={this.handleClose} className="_dimmer" style={this.props.divStyle}>
+			<div onMouseDown={this.handleClose} className="_dimmer" style={this.props.divStyle}>
 				<div className="vertical-center-wrapper">
 					<div ref="closeContainer" className="vertical-center">
 						<div className={className}>

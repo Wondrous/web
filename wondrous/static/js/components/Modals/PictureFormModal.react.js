@@ -38,7 +38,7 @@ var PictureFormModal = React.createClass({
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} isPicture={true} divStyle={divStyle}>
-                <PictureForm ref="modalWrapper"/>
+                <PictureForm ref="modalWrapper" handleClose={this.handleClose}/>
             </ModalWrapper>
 		);
 	}

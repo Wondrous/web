@@ -94,7 +94,7 @@ var PostForm = React.createClass({
 
     handlePostCancel: function(e){
         this.loaded = false;
-        WondrousActions.togglePostModal();
+        this.props.handleClose(e);
 
         // Fade out the post form
         $('#cropBox').cropper('destroy');
