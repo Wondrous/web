@@ -706,7 +706,8 @@ body {
 /* --- Trending Box --- */
 .trending-ul {
   padding: 10px;
-  background-color: white; }
+  background-color: white;
+  border-top: 2px solid #c8c8c8; }
 
 .trending-li {
   padding: 7px 0; }
