@@ -27,6 +27,7 @@ var Trending = React.createClass({
 
         return (
             <ul className="trending-ul round-3">
+                <li className="trending-li-header">Trending #tags</li>
                 {tags}
             </ul>
         );

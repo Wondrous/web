@@ -709,7 +709,16 @@ body {
   background-color: white; }
 
 .trending-li {
-  padding: 5px 0; }
+  padding: 7px 0; }
+
+.trending-li-header {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  color: #8d8d8d;
+  border-bottom: 1px solid #f4f4f4;
+  padding-bottom: 4px;
+  margin-bottom: 6px; }
 
 a:link {
   text-decoration: none; }

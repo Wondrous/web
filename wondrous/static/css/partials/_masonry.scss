@@ -60,7 +60,17 @@ $num-cols: $masonry-width / 3;
 }
 
 .trending-li {
-    padding: 5px 0;
+    padding: 7px 0;
+}
+
+.trending-li-header {
+    font-family: helvetica, arial, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    color: rgb(141,141,141);
+    border-bottom: 1px solid rgb(244,244,244);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .trending-a {
