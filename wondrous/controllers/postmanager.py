@@ -202,7 +202,7 @@ class PostManager(BaseManager):
             DBSession.add(new_tag)
 
     @classmethod
-    def add(cls, user_id, subject, text, repost_id=None, file_type=None, is_cover = None, height=None, width=None):
+    def add(cls, user_id, subject, text, repost_id=None, file_type=None, is_cover=None, height=None, width=None):
 
         """
             PURPOSE: the purpose of the this method is to allow users to post and

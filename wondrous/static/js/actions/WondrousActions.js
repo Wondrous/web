@@ -472,14 +472,10 @@ WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob,is_c
         text: text
     };
 
-    console.log("Height: ", height);
-    console.log("Width: ", width);
-
     if (file_to_upload){
         uploadData.file_type = file_to_upload.type
 
-        if ((typeof height !=='undefined') && (typeof width !=='undefined') && (typeof is_cover!=='undefined')){
-
+        if ((typeof height !=='undefined') && (typeof width !=='undefined') && (typeof is_cover!=='undefined')) {
             uploadData.height = parseInt(height);
             uploadData.width = parseInt(width);
             uploadData.is_cover = is_cover==true;
