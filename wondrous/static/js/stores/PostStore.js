@@ -92,7 +92,9 @@ var PostStore = Reflux.createStore({
     onUserChange: function(userData){
 
     },
-
+    updatePostOnModal: function(){
+        this.trigger({post:this.post,comments:this.comments.sortedSet});
+    },
     updatePost: function(postData){
         this.post = postData;
         WondrousActions.updatePostOnWall();

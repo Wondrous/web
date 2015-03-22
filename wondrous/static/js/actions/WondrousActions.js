@@ -212,6 +212,7 @@ var WondrousActions = Reflux.createActions({
     "updatePostOnWall": {},
 
     "updatePostOnFeed": {},
+    "updatePostOnModal": {},
 
     "loadPostError": {},
 

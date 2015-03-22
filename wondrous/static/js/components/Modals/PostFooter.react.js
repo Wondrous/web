@@ -26,6 +26,7 @@ var PostFooter = React.createClass({
             }
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
+            WondrousActions.updatePostOnModal();
         }
     },
 
@@ -35,6 +36,12 @@ var PostFooter = React.createClass({
         }
 
         this.props.data.liked = !this.props.data.liked;
+        if(this.props.data.liked){
+            PostStore.likedUsers.push(UserStore.user);
+        }else{
+            PostStore.likedUsers.delete(UserStore.user);
+        }
+
         this.forceUpdate();
 
         WondrousAPI.toggleLike({
