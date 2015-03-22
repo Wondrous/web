@@ -22,6 +22,8 @@ var Post = React.createClass({
             return (<div></div>);
         }
 
+        console.log("DATA::", this.props.data);
+
         var repost = null;
         var is_it_mine = this.props.data.username === UserStore.user.username;
 

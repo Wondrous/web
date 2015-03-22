@@ -420,13 +420,24 @@
     position: relative;
     display: inline-block;
     padding: 4px 13px;
-    margin: 5px;
+    margin: 5px 0;
     font-size: 14px;
-    background-color: rgb(245,245,245);
-    border: 2px solid rgb(245,245,245);
+    background-color: rgb(255,255,255);
+    border-bottom: 2px solid rgb(245,245,245);
     cursor: pointer;
+
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
 }
 
 .post-form-bg-display-option--active {
-    border-color: rgb(0,100,200);
+    border-color: rgb(0,206,100); 
+    background-color: rgb(248,248,248);
+
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
 }

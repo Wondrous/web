@@ -305,6 +305,7 @@ class PostManager(BaseManager):
             return {'error': 'Insufficient data'}
 
         post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type,is_cover=is_cover, height=height, width=width)
+
         object = post.object
 
         data = {}
