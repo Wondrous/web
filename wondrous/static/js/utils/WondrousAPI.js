@@ -34,10 +34,24 @@ VoteAction = {
 };
 
 module.exports = {
-    // get the list of liked
+    // get the user discovery
     // options are:
     // callback
     // description
+    loadSuggestedUsers: function(options){
+        var callback = options.callback;
+        var page = options.page;
+        var url = '/api/users';
+
+        request.get(url).query({
+            page:page
+        }).end(_callback(callback));
+    },
+
+    // get the list of liked
+    // options are:
+    // callback
+    // page
     loadTrending: function(options){
         var callback = options.callback;
         var page = options.page;

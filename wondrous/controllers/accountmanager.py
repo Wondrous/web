@@ -81,6 +81,35 @@ class AccountManager(BaseManager):
             return None
 
     @staticmethod
+    def get_suggested_users_json(user,per_page=20,page=0):
+        p = re.compile('(\s*#\s*(\w+))|(\s*@\s*(\w+))')
+
+        description = user.description
+        d_tags = [tag.lower() for tag in p.sub('',description).split(' ') if len(tag)>2]
+        tags = [tag.tag_name.lower() for tag in user.tags]
+        tags += d_tags
+
+        users = DBSession.query(User).\
+            join(Vote, (Vote.user_id==user.id)&(Vote.subject_id!=User.id)).\
+            join(UserTag, (func.lower(UserTag.tag_name).in_(tags))&(UserTag.user_id==User.id)).\
+            filter(User.is_private==False).\
+            filter(User.id!=user.id).\
+            limit(per_page).offset(page*per_page).all()
+
+        if len(users)<20 and page==0:
+            replace = 20-len(users)
+
+            users+=DBSession.query(User).\
+                join(Vote, (Vote.user_id==user.id)&(Vote.subject_id!=User.id)).\
+                filter(User.is_private==False).\
+                order_by(func.random()).\
+                limit(replace).all()
+
+        retval = [user.json() for user in users]
+        # print [user['username'] for user in retval]
+        return retval
+
+    @staticmethod
     def request_verify(email):
         user = DBSession.query(User).filter_by(email=email).first()
         if user and not user.verified:

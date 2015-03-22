@@ -13,12 +13,20 @@ var BoxStore = Reflux.createStore({
 
     updateUser: function(userData) {
         this.loadMoreTrends();
+        this.loadMoreUsers();
     },
 
     loadMoreTrends: function(){
         if(!this.trendingLoad && !this.trendingLoadDone){
             WondrousActions.loadTrending(this.trendingPage);
             this.trendingPage++;
+        }
+    },
+
+    loadMoreUsers: function(){
+        if(!this.userLoad && !this.userLoadDone){
+            WondrousActions.loadSuggestedUsers(this.userPage);
+            this.userPage++;
         }
     },
 
@@ -31,6 +39,15 @@ var BoxStore = Reflux.createStore({
         }, function(obj){
             return obj.tag_name
         });
+
+        this.userPage = 0;
+        this.userLoad = false;
+        this.userLoadDone = false;
+        this.users = new Set(null, function(a,b){
+            return a.username === b.username
+        }, function(obj){
+            return obj.username
+        });
     },
 
     updateTrending: function(trending_tags){
@@ -40,6 +57,16 @@ var BoxStore = Reflux.createStore({
         trending_tags.map(function(tag,ind){
             this.add(tag);
         },this.trending);
+        this.trigger();
+    },
+
+    updateSuggestedUsers: function(suggestedUsers){
+        this.userLoadDone = suggestedUsers.length<10;
+        this.userLoad = false;
+
+        suggestedUsers.map(function(user,ind){
+            this.add(user);
+        },this.users);
         this.trigger();
     }
 });

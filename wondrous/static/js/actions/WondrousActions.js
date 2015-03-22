@@ -4,8 +4,10 @@ var WondrousActions = Reflux.createActions({
     // SECTION loading from server
 
     "loadTrending": {},
+    "loadSuggestedUsers": {},
 
     "updateTrending": {},
+    "updateSuggestedUsers": {},
 
     "newFeedItems": {},
 
@@ -229,6 +231,17 @@ WondrousActions.loadTrending.listen(function(page){
         callback: function(err,res){
             if(err == null) {
                 WondrousActions.updateTrending(res);
+            }
+        }
+    })
+});
+
+WondrousActions.loadSuggestedUsers.listen(function(page){
+    WondrousAPI.loadSuggestedUsers({
+        page: page,
+        callback: function(err,res){
+            if(err == null) {
+                WondrousActions.updateSuggestedUsers(res);
             }
         }
     })
