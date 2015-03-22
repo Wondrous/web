@@ -204,7 +204,7 @@ var PictureForm = React.createClass({
                     <span className="post-error"></span>
                 </div>
 
-                <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
+                <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Upload</div>
                 <div onClick={this.handlePictureCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
             </div>
         );
