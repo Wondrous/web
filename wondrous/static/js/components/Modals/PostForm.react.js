@@ -31,15 +31,17 @@ var PostForm = React.createClass({
     },
 
     onUploadChange: function(msg){
-        if (msg.hasOwnProperty('error')) {
-            this.setState({error: msg.error});
-        } else if (msg.hasOwnProperty('percent')) {
+        if(ModalStore.postFormOpen){
+            if (msg.hasOwnProperty('error')) {
+                this.setState({error: msg.error});
+            } else if (msg.hasOwnProperty('percent')) {
 
-            this.setState({percent: msg.percent});
+                this.setState({percent: msg.percent});
 
-        } else if (msg.hasOwnProperty('completed')) {
-            this.handleCancel();
-            this.state.percent = 0;
+            } else if (msg.hasOwnProperty('completed')) {
+                this.handlePostCancel();
+                this.state.percent = 0;
+            }
         }
     },
 
@@ -90,10 +92,9 @@ var PostForm = React.createClass({
         });
     },
 
-    handleCancel: function(e){
+    handlePostCancel: function(e){
         this.loaded = false;
         WondrousActions.togglePostModal();
-
 
         // Fade out the post form
         $('#cropBox').cropper('destroy');
@@ -134,10 +135,8 @@ var PostForm = React.createClass({
         } else {
             console.error("upload file error", err);
         }
-        this.handleCancel(null);
+        this.handlePostCancel(null);
         setTimeout(this.addToFeeds, 500);
-
-
     },
 
     handleSubmit:function(e){
@@ -300,7 +299,7 @@ var PostForm = React.createClass({
                 </div>
 
                 <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
-                <div onClick={this.handleCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
+                <div onClick={this.handlePostCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
             </div>
         );
     },
