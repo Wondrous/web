@@ -20,6 +20,8 @@ var Photo = React.createClass({
             backgroundImage: this.props.data.ouuid!=null ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
             height: this.props.data.height && !this.props.is_cover ? this.props.data.height : 390,
             width: this.props.data.width && !this.props.is_cover ? this.props.data.width : 750,
+            maxWidth: 750,
+            maxHeight: 600,
             margin: "0 auto",
         };
 		console.log(this.props.data);
