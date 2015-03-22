@@ -240,7 +240,7 @@ $post-cover-photo-height: 390px;
 .post-subject-wrapper {
     position: absolute;
     background-color: rgb(41,41,41);
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0,0,0,0.45);
     width: 100%;
     bottom: 10%;
 }
@@ -275,7 +275,6 @@ $post-cover-photo-height: 390px;
 
 .post-micro-data-super-analytics-item {
     position: relative;
-    /*display: inline-block;*/
     margin: 0 4px;
     top: -2px;
     font-family: helvetica, arial, sans-serif;
@@ -286,7 +285,6 @@ $post-cover-photo-height: 390px;
 .post-modal-micro-data-wrapper {
     position: relative;
     margin: 4px 25px;
-    /*border-bottom: 1px solid rgb(234,234,234);*/
 }
 
 .post-see-more {
