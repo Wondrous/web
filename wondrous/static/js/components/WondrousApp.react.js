@@ -22,6 +22,7 @@ var Search = require('../components/Search.react');
 var Login = require('../components/Authentication/Login.react');
 var Signup = require('../components/Authentication/Signup.react');
 var ResetPassword = require('../components/Authentication/ResetPassword.react');
+var PasswordReset = require('../components/Authentication/PasswordReset.react');
 var Verification = require('../components/Authentication/Verification.react');
 var ResetPassword = require('../components/Authentication/ResetPassword.react');
 var LandingApp = require('./Landing.react');
@@ -77,7 +78,7 @@ var Routes = (
         <Route name="tags" path="/tags/:search?" handler={Search} ignoreScrollBehavior/>
         <Route name="post" path="/post/:post_id" handler={Home}/>
         <Route name="activate" path="/activate/:verification" handler={Verification}/>
-        <Route name="passwordReset" path="/reset/:verification" handler={ResetPassword}/>
+        <Route name="passwordReset" path="/reset/:verification" handler={PasswordReset}/>
         <Route name="settings" path="/settings" handler={Settings}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>

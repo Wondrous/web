@@ -145,15 +145,12 @@ class VoteManager(BaseManager):
                               subject_id=to_user_id,
                               vote_type=Vote.USER).first()
 
-        # If we toggle from follow to unfollow, don't send a notification.
-        # Thus, the vote.status is currently follow, but it will change to unfollow.
-        if vote.status != Vote.FOLLOWED:
-            # Notify if needed
-            # TODO: Don't send notification for an unfollow
-            NotificationManager.add(from_user_id=from_user_id,
-                                    to_user_id=to_user_id,
-                                    subject_id=from_user_id,
-                                    reason=reason)
+        # # If we toggle from follow to unfollow, don't send a notification.
+        # # Thus, the vote.status is currently follow, but it will change to unfollow.
+        # if vote and vote.status != Vote.FOLLOWED:
+        #     # Notify if needed
+        #     # TODO: Don't send notification for an unfollow
+        #
 
         # If we have a vote, it's not pending, and we're not blocked...
         if vote and (vote.status != Vote.PENDING) and not cls.is_blocked_by(from_user_id, to_user_id):
@@ -171,7 +168,10 @@ class VoteManager(BaseManager):
         # If we have a new follow, add posts to the feed...
         if vote.status == Vote.FOLLOWED:
             wondrous.controllers.PostManager.move_n_posts_into_feed(vote.subject_id, vote.user_id)
-
+            NotificationManager.add(from_user_id=from_user_id,
+                                    to_user_id=to_user_id,
+                                    subject_id=from_user_id,
+                                    reason=reason)
         return vote
 
     @classmethod

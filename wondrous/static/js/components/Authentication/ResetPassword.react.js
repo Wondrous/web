@@ -45,7 +45,8 @@ var ResetPassword = React.createClass({
         })
     },
     render: function(){
-        var page = this.getParams().page;
+        var page = this.getParams().page
+
         if(UserStore.loggedIn || typeof page === 'undefined'){
             return (
                 <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
