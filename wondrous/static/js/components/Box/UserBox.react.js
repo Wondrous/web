@@ -67,7 +67,7 @@ var UserBox = React.createClass({
 
     render: function() {
         var users = this.state.users.map(function(user, ind) {
-            return ( <UserIcon user={user}/> );
+            return ( <UserIcon user={user} key={user.id}/> );
         });
 
         return (

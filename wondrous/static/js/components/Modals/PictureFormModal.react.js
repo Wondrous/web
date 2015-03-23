@@ -28,9 +28,10 @@ var PictureFormModal = React.createClass({
 		var con = $(this.refs.modalWrapper.getDOMNode());
         WondrousActions.togglePictureModal();
 
-
-        evt.preventDefault();
-        evt.stopPropagation();
+		if (typeof evt !== 'undefined'){
+			evt.preventDefault();
+	        evt.stopPropagation();
+		}    
 	},
 
 	render: function() {

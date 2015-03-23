@@ -76,9 +76,12 @@ class SearchManager:
                 join(Vote, (User.is_private==False) |\
                     ( (Vote.user_id==user.id) \
                         & ((Vote.subject_id == User.id)) &\
-                         ((Vote.status==Vote.FOLLOWED) | (Vote.status==Vote.TOPFRIEND)) )).\
-                filter(func.lower(UserTag.tag_name).in_(tags)).\
-                offset(page*15).limit(15).all()
+                         ((Vote.status==Vote.FOLLOWED) | (Vote.status==Vote.TOPFRIEND)) ))
+
+        if len(tags)>0:
+            users = users.filter(func.lower(UserTag.tag_name).in_(tags))
+
+        users = users.offset(page*15).limit(15).all()
 
         retval = []
         for u in users:
