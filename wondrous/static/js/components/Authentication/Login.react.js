@@ -36,25 +36,25 @@ var Login = React.createClass({
         }
 
         return (
-            <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "10%"}}>
-                <h1 style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Log in</h1>
+            <div className="loggedout-wrapper">
+                <h1 className="loggedout-header">Log in</h1>
                 <form onSubmit={this.onLogin}>
                     <div>
-                        <input id="focusInput" className="input-basic round-3" type="text" ref="user_identification" name="user_identification" placeholder="Email or username" />
+                        <input className="input-basic round-3" type="text" ref="user_identification" name="user_identification" placeholder="Email or username" />
                     </div>
                     <div>
                         <input className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password" />
                     </div>
-                    <div style={{"fontWeight": "300","color": "rgb(220,100,100)","margin": "5px"}}>
-
+                    <div className="loggedout-error">
+                        {error}
                     </div>
-                    <Link to="/reset_request/password">forgot password</Link>
 
                     <div>
-                        <input className="input-basic round-3" type="submit" name="login_button" value="Log in!" />
+                        <input className="input-basic loggedout-login-btn round-15" type="submit" name="login_button" value="Log in!" />
                     </div>
+
+                    <Link style={{ fontSize: 14, color: "rgb(170,170,170)" }} to="/reset_request/password">forgot password</Link>
                 </form>
-                {error}
                 <div className="login-accept-terms" style={{"textAlign": "center","margin": "10px auto","width": "300px"}}>
                     By clicking the above button and logging in to Wondrous, you have reviewed and accepted our Privacy Policy and Terms of Service
                 </div>

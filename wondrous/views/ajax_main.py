@@ -848,7 +848,7 @@ class APIViews(BaseHandler):
         elif this_user and not this_user.verified:
             return {'error': 'verification'}
         else:
-            return {'error': 'Sorry, incorrect username/email or passwrd. Please try again.'}
+            return {'error': 'Sorry, incorrect username/email or password. Please try again.'}
 
     @api_logout_required
     @view_config(renderer='json',route_name='api_register')

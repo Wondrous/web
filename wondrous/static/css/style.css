@@ -504,12 +504,13 @@ ul {
   font-size: 17px;
   color: #292929;
   font-weight: 100;
-  padding: 10px 10px;
+  padding: 10px;
   margin: 3px;
-  border: 3px solid #e6e6e6;
+  border: none;
+  border-bottom: 3px solid #e0e0e0;
   outline: none; }
   .input-basic:focus {
-    border: 3px solid; }
+    border-bottom-color: #00e2ae; }
 
 .lo-html {
   height: 100%; }
@@ -1184,12 +1185,18 @@ a:hover {
 
 .profile-about--edit {
   position: absolute;
-  padding-left: 5px;
+  margin-left: 5px;
   color: #b4b4b4;
   font-family: helvetica, arial, sans-serif;
   font-size: 13px;
   font-weight: normal;
-  cursor: pointer; }
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .profile-about--edit:hover {
+    text-decoration: underline; }
 
 .profile-about--edit-prompt {
   position: relative;
@@ -2783,123 +2790,159 @@ a:hover {
   .tutorial-finish-btn:active {
     background-color: #6464be; }
 
+/*
 .big-lo-logo-a:hover {
-  text-decoration: none; }
+    text-decoration: none;
+}
 
 .lo-slogan {
-  font-size: 23px;
-  font-family: helvetica, arial, sans-serif;
-  color: gainsboro;
-  font-weight: 100; }
+    font-size: 23px;
+    font-family: helvetica, arial, sans-serif;
+    color: rgb(220,220,220);
+    font-weight: 100;
+}
 
 .lo-input-box {
-  position: relative;
-  display: block;
-  margin: 0 auto;
-  padding: 15px;
-  width: 380px;
-  top: 35%;
-  text-align: left;
-  background-color: #fbfbfb;
-  background-color: rgba(251, 251, 251, 0.73);
-  border: 1px solid #c9c9c9; }
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    padding: 15px;
+    width: 380px;
+    top: 35%;
+    text-align: left;
+    background-color: rgb(251,251,251);
+    background-color: rgba(251,251,251, 0.73);
+    border: 1px solid rgb(201,201,201);
+}
 
 .lo-prompt {
-  position: relative;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 20px;
-  font-weight: bold;
-  color: #333333;
-  text-align: center;
-  margin: 10px; }
+    position: relative;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(51,51,51);
+    text-align: center;
+    margin: 10px;
+}
 
 .lo-mini-prompt {
-  position: relative;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 15px;
-  font-weight: normal;
-  color: #333333;
-  margin: 10px;
-  text-align: left;
-  font-style: italic; }
+    position: relative;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    color: rgb(51,51,51);
+    margin: 10px;
+    text-align: left;
+    font-style: italic;
+}
 
 .lo-email-input {
-  position: relative;
-  margin: 10px auto;
-  padding: 10px 10px 8px 10px;
-  width: 94%;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 17px;
-  font-weight: normal;
-  outline: none;
-  border: 1px solid #dddddd; }
-  .lo-email-input:focus {
-    border: 1px solid #75a9f9; }
+    position: relative;
+    margin: 10px auto;
+    padding: 10px 10px 8px 10px;
+    width: 94%;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 17px;
+    font-weight: normal;
+    outline: none;
+    border: 1px solid rgb(221,221,221);
+    
+    &:focus {border: 1px solid rgb(117,169,249);}
+}
 
 .lo-submit {
-  position: relative;
-  padding: 8px 10px;
-  color: #fbfbfb;
-  border: 1px solid #008200;
-  background-color: #0064fa; }
-  .lo-submit:hover {
-    background-color: #006eff; }
-  .lo-submit:active {
-    background-color: #0064eb; }
-  .lo-submit:focus {
-    outline: none; }
+    position: relative;
+    padding: 8px 10px;
+
+    color: rgb(251,251,251);
+    border: 1px solid rgb(0,130,0);
+    background-color: rgb(0,100,250);
+    
+    &:hover { background-color: rgb(0,110,255); }
+    &:active { background-color: rgb(0,100,235); }
+    &:focus { outline: none; }
+}
 
 .lo-login-link:link {
-  position: relative;
-  left: 15px;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 15px;
-  font-weight: normal;
-  color: #333333;
-  text-decoration: none; }
-  .lo-login-link:link:visited {
-    color: #333333; }
-  .lo-login-link:link:hover {
-    text-decoration: underline; }
+    position: relative;
+    left: 15px;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    color: rgb(51,51,51);
+    text-decoration: none;
+    
+    &:visited { color: rgb(51,51,51); }
+    &:hover { text-decoration: underline; }
+}
 
 .login-error-message {
-  display: none;
-  margin-top: 10px;
-  font-family: helvetica, arial, sans-serif;
-  font-size: 15px;
-  color: #c80000;
-  font-weight: normal; }
-
+    display: none;
+    margin-top: 10px;
+    font-family: helvetica, arial, sans-serif;
+    font-size: 15px;
+    color: rgb(200,0,0);
+    font-weight: normal;
+}*/
 /* === AUTH LO ========================= */
+/*
 .auth-error-small {
-  font-family: arial, helvetica, sans-serif;
-  font-size: 16px;
-  color: #fbfbfb;
-  text-align: left;
-  background-color: #dc6464;
-  border: 1px solid #646464;
-  padding: 10px; }
+    font-family: arial, helvetica, sans-serif;
+    font-size: 16px;
+    color: rgb(251,251,251);
+    text-align: left;
+    background-color: rgb(220,100,100);
+    border: 1px solid rgb(100,100,100);
+    padding: 10px;
+}
 
 .auth-success-big {
-  font-family: arial, helvetica, sans-serif;
-  font-size: 23px;
-  color: #009600;
-  font-weight: bold;
-  text-align: center; }
+    font-family: arial, helvetica, sans-serif;
+    font-size: 23px;
+    color: rgb(0,150,0);
+    font-weight: bold;
+    text-align: center;
+}
 
 #usernameCheck {
-  font-size: 15px;
-  margin-top: 17px;
-  margin-left: 5px; }
-
-.s-un-s {
-  color: #649664 !important; }
-
-.s-un-e {
-  color: #c86464 !important; }
+    font-size: 15px;
+    margin-top: 17px;
+    margin-left: 5px;
+}
+.s-un-s {color: rgb(100,150,100) !important;}
+.s-un-e {color: rgb(200,100,100) !important;}
 
 .input-basic:focus, .banner-lo, .signup-big-link {
-  border-color: #00e2ae; }
+    border-color: rgb(0,226,174);
+}*/
+/* ---- Logged-out pages ---- */
+.loggedout-wrapper {
+  position: relative;
+  margin: 0 auto;
+  text-align: center; }
+
+.loggedout-header {
+  font-family: helvetica, arial, sans-serif;
+  color: #515151;
+  font-weight: 100;
+  position: relative;
+  display: block;
+  margin-top: 100px; }
+
+.loggedout-login-btn {
+  background-color: #00e2ae;
+  border: none;
+  padding: 6px 20px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #fefefe; }
+  .loggedout-login-btn:hover {
+    background-color: #00d8ae; }
+
+.loggedout-error {
+  font-weight: 300;
+  color: #dc6464;
+  margin: 5px; }
 
 /* ---- Logged-out Signup Modal Prompt ---- */
 .loggedout-modal-signup-wrapper {

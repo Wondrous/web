@@ -54,28 +54,32 @@ var ResetPassword = React.createClass({
                 </div>);
         }
 
-        if(page==='password'){
+        if (page === 'password') {
             return (
-                <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
-                    <h1 ref="header" style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>So... you forgot something important ;)</h1>
+                <div className="loggedout-wrapper">
+                    <h1 ref="header" className="loggedout-header">So you forgot something important ;)</h1>
                     <form onSubmit={this.onPasswordReset}>
-                    <input id="focusInput" className="input-basic round-3" type="email" ref="email" placeholder="Email" />
-                        <input className="input-basic round-3" type="submit" ref="signup_button" value="Send Password Reset"/>
+                        <input className="input-basic round-3" type="email" ref="email" placeholder="Email" />
+                        <input className="input-basic loggedout-login-btn round-3" type="submit" ref="signup_button" value="Send Password Reset"/>
+                        <div className="loggedout-error">
+                            {this.state.error ? this.state.error : null}
+                        </div>
                     </form>
-                    {this.state.error?this.state.error:null}
                 </div>
             );
-        }else if(page==='activate'){
+        } else if (page === 'activate') {
             return (
-                    <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "top": "5%"}}>
-                        <h1 ref="header" style={{"fontFamily": "courier","color": "rgb(71,71,71)"}}>Need to activate your account?</h1>
-                        <form onSubmit={this.onRequestActivation}>
-                        <input id="focusInput" className="input-basic round-3" type="email" ref="email" placeholder="Email" />
-                            <input className="input-basic round-3" type="submit" ref="signup_button" value="Send verification email"/>
-                        </form>
-                        {this.state.error?this.state.error:null}
-                    </div>
-                );
+                <div className="loggedout-wrapper">
+                    <h1 ref="header" className="loggedout-header">Need to activate your account?</h1>
+                    <form onSubmit={this.onRequestActivation}>
+                        <input className="input-basic round-3" type="email" ref="email" placeholder="Email" />
+                        <input className="input-basic loggedout-login-btn round-3" type="submit" ref="signup_button" value="Send verification email"/>
+                        <div className="loggedout-error">
+                            {this.state.error ? this.state.error : null}
+                        </div>
+                    </form>
+                </div>
+            );
         }
     }
 });

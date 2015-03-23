@@ -1,4 +1,4 @@
-
+/*
 .big-lo-logo-a:hover {
     text-decoration: none;
 }
@@ -91,10 +91,10 @@
     font-size: 15px;
     color: rgb(200,0,0);
     font-weight: normal;
-}
+}*/
 
 /* === AUTH LO ========================= */
-
+/*
 .auth-error-small {
     font-family: arial, helvetica, sans-serif;
     font-size: 16px;
@@ -123,6 +123,42 @@
 
 .input-basic:focus, .banner-lo, .signup-big-link {
     border-color: rgb(0,226,174);
+}*/
+
+/* ---- Logged-out pages ---- */
+
+.loggedout-wrapper {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.loggedout-header {
+    font-family: helvetica, arial, sans-serif;
+    color: rgb(81,81,81);
+    font-weight: 100;
+    position: relative;
+    display: block;
+    margin-top: 100px;
+}
+
+.loggedout-login-btn {
+    background-color: rgb(0,226,174);
+    border: none;
+    padding: 6px 20px;
+    font-size: 15px;
+    font-weight: 900;
+    color: rgb(254,254,254);
+
+    &:hover {
+        background-color: rgb(0,216,174);
+    }
+}
+
+.loggedout-error {
+    font-weight: 300;
+    color: rgb(220,100,100);
+    margin: 5px;
 }
 
 /* ---- Logged-out Signup Modal Prompt ---- */
