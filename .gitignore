@@ -64,3 +64,5 @@ target/
 *bundle.min.js
 *style.css
 *.out
+
+*.csv
