@@ -54,15 +54,29 @@ var ResetPassword = React.createClass({
                 </div>);
         }
 
+        formStyles = {
+            margin: "0 auto",
+            width: 530,
+            textAlign: "left",
+        }
+
+        inputStyles = {
+            width: "80%",
+        }
+
         if (page === 'password') {
             return (
                 <div className="loggedout-wrapper">
                     <h1 ref="header" className="loggedout-header">So you forgot something important ;)</h1>
-                    <form onSubmit={this.onPasswordReset}>
-                        <input className="input-basic round-3" type="email" ref="email" placeholder="Email" />
-                        <input className="input-basic loggedout-login-btn round-3" type="submit" ref="signup_button" value="Send Password Reset"/>
+                    <form style={formStyles} onSubmit={this.onPasswordReset}>
+                        <div>
+                            <input className="input-basic round-3" style={inputStyles} type="email" ref="email" placeholder="Email" />
+                        </div>
                         <div className="loggedout-error">
                             {this.state.error ? this.state.error : null}
+                        </div>
+                        <div>
+                            <input className="input-basic loggedout-login-btn round-15" type="submit" ref="signup_button" value="Send Password Reset"/>
                         </div>
                     </form>
                 </div>
@@ -71,11 +85,15 @@ var ResetPassword = React.createClass({
             return (
                 <div className="loggedout-wrapper">
                     <h1 ref="header" className="loggedout-header">Need to activate your account?</h1>
-                    <form onSubmit={this.onRequestActivation}>
-                        <input className="input-basic round-3" type="email" ref="email" placeholder="Email" />
-                        <input className="input-basic loggedout-login-btn round-3" type="submit" ref="signup_button" value="Send verification email"/>
+                    <form style={formStyles} onSubmit={this.onRequestActivation}>
+                        <div>
+                            <input className="input-basic round-3" style={inputStyles} type="email" ref="email" placeholder="Email" />
+                        </div>
                         <div className="loggedout-error">
                             {this.state.error ? this.state.error : null}
+                        </div>
+                        <div>
+                            <input className="input-basic loggedout-login-btn round-15" type="submit" ref="signup_button" value="Send verification email"/>
                         </div>
                     </form>
                 </div>

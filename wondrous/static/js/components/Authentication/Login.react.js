@@ -53,7 +53,9 @@ var Login = React.createClass({
                         <input className="input-basic loggedout-login-btn round-15" type="submit" name="login_button" value="Log in!" />
                     </div>
 
-                    <Link style={{ fontSize: 14, color: "rgb(170,170,170)" }} to="/reset_request/password">forgot password</Link>
+                    <Link style={{ fontSize: 14, color: "rgb(170,170,170)", display: "block", marginTop: 10 }} to="/reset_request/password">
+                        Forgot Password
+                    </Link>
                 </form>
                 <div className="login-accept-terms" style={{"textAlign": "center","margin": "10px auto","width": "300px"}}>
                     By clicking the above button and logging in to Wondrous, you have reviewed and accepted our Privacy Policy and Terms of Service
