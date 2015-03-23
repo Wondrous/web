@@ -97,7 +97,7 @@ var CommentBox = React.createClass({
             this.refs.commentBox.getDOMNode().blur();
         } else {
             // Send out a friendly error: "Please add some text!"
-            this.refs.commentBox.getDOMNode().placeholder = 'you need to say something!';
+            this.refs.commentBox.getDOMNode().placeholder = 'Nothing to say?';
         }
     },
 

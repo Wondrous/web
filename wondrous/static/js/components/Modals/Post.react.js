@@ -92,7 +92,18 @@ var Post = React.createClass({
                         </span>
 
                         <span onClick={this.props.data.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block", paddingLeft: 2 }}>
-                            <img src={this.props.data.liked ? "/static/pictures/icons/like/heart_red.svg" : "/static/pictures/icons/like/heart_gray_shadow.svg"} className="post-general-icon post-like-icon" />
+                           {this.props.data.liked ?
+                                <span>
+                                    <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" />
+                                    <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
+                                </span>
+                                :
+                                <span>
+                                    <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
+                                    <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" />
+                                </span>
+                            }
+
                             {this.props.data.like_count <= 10 ? likedUsers : this.props.data.like_count}
                             {this.props.data.like_count > 10 ? " likes" : {}}
                         </span>
