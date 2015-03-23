@@ -54,21 +54,21 @@ var ResetPassword = React.createClass({
                 </div>);
         }
 
-        formStyles = {
+        var wrapperStyles = {
             margin: "0 auto",
             width: 530,
             textAlign: "left",
         }
 
-        inputStyles = {
+        var inputStyles = {
             width: "80%",
         }
 
         if (page === 'password') {
             return (
-                <div className="loggedout-wrapper">
+                <div className="loggedout-wrapper" style={wrapperStyles}>
                     <h1 ref="header" className="loggedout-header">So you forgot something important ;)</h1>
-                    <form style={formStyles} onSubmit={this.onPasswordReset}>
+                    <form onSubmit={this.onPasswordReset}>
                         <div>
                             <input className="input-basic round-3" style={inputStyles} type="email" ref="email" placeholder="Email" />
                         </div>
@@ -83,9 +83,9 @@ var ResetPassword = React.createClass({
             );
         } else if (page === 'activate') {
             return (
-                <div className="loggedout-wrapper">
+                <div className="loggedout-wrapper" style={wrapperStyles}>
                     <h1 ref="header" className="loggedout-header">Need to activate your account?</h1>
-                    <form style={formStyles} onSubmit={this.onRequestActivation}>
+                    <form onSubmit={this.onRequestActivation}>
                         <div>
                             <input className="input-basic round-3" style={inputStyles} type="email" ref="email" placeholder="Email" />
                         </div>
