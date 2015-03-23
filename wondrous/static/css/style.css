@@ -2885,6 +2885,75 @@ a:hover {
 .input-basic:focus, .banner-lo, .signup-big-link {
   border-color: #00e2ae; }
 
+/* ---- Logged-out Signup Modal Prompt ---- */
+.loggedout-modal-signup-wrapper {
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  width: 80%;
+  max-width: 730px;
+  top: 10%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px 10px; }
+
+.loggedout-modal-signup-logo {
+  width: 200px;
+  height: auto;
+  margin: 20px 0 10px; }
+
+.loggedout-modal-signup-prompt {
+  font-family: helvetica, arial, sans-serif;
+  color: #8c8c8c;
+  font-size: 20px;
+  font-weight: 100;
+  text-align: left;
+  width: 90%;
+  margin: 20px auto 30px; }
+
+.loggedout-modal-signup-input {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  padding: 3px 5px;
+  font-size: 35px;
+  font-weight: 100;
+  color: #3d3d3d;
+  width: 100%;
+  border: none;
+  border-bottom: 3px solid #eaeaea;
+  outline: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .loggedout-modal-signup-input:focus {
+    border-bottom-color: #00e2ae; }
+
+.loggedout-modal-signup-submit {
+  position: relative;
+  display: block;
+  margin: 8px 0 0;
+  border: none;
+  background-color: #eaeaea;
+  padding: 6px 22px;
+  color: #787878;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .loggedout-modal-signup-submit:hover {
+    background-color: #f1f1f1; }
+
+.loggedout-modal-signup-footer {
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  color: #8c8c8c;
+  border-top: 1px solid #f4f4f4;
+  margin-top: 30px;
+  padding: 10px 30px 0; }
+
 /* ==== INFO ====================== */
 .basic-input {
   margin: 10px 0;

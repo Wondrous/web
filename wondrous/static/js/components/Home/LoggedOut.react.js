@@ -9,15 +9,24 @@ var LoggedOut = React.createClass({
 
         var openSignUp = timeNow>= new Date(2015,5,1,0,0,0);
         return (
-            <div style={{"position": "relative", "margin": "0 auto", "textAlign": "center", "width": "80%", "maxWidth": "730px", "top": "10%"}}>
-                <img src="/static/pictures/p.logo.png" style={{"width": "350px", "height": "auto"}}/>
-                <p style={{"fontFamily": "helvetica, arial, sans-serif","color": "rgb(71,71,71)","fontSize": "20px","fontWeight": "100","width": "75%","margin": "20px auto"}}>
-                    Some amazing slogan goes here to fill up space on our temporary home page
+            <div className="loggedout-modal-signup-wrapper">
+                
+                <img src="/static/pictures/p.logo.png" className="loggedout-modal-signup-logo" />
+                <p className="loggedout-modal-signup-prompt">
+                    Wondrous hasn't launched yet, but right now you can join the waitlist to get early access!
                 </p>
-                <div style={{"padding": "40px 0"}}>
-                {openSignUp?<Link className="index-lo-big-link signup-big-link round-5" to="signup" onClick={this.clearModals}>Sign up</Link>:
-                <Link className="index-lo-big-link signup-big-link round-5" to="landingBare" onClick={this.clearModals}>Join the line!</Link>}
-                    <Link className="index-lo-big-link blue-big-link round-3" to="login" onClick={this.clearModals}>Log in</Link>
+                {openSignUp ?
+                    <Link className="index-lo-big-link signup-big-link round-5" to="signup" onClick={this.clearModals}>
+                       Sign up
+                    </Link>
+                    :
+                    <div style={{ width: "90%", margin: "0 auto" }} >
+                        <input type="text" spellCheck={"false"} placeholder="Enter your email" className="loggedout-modal-signup-input" />
+                        <button className="loggedout-modal-signup-submit">Join</button>
+                    </div>
+                }
+                <div className="loggedout-modal-signup-footer">
+                    For the lucky few: <Link to="login" onClick={this.clearModals}>Log in</Link>
                 </div>
             </div>
         );

@@ -15,7 +15,10 @@ var SignupModal = React.createClass({
 	},
 
     render: function() {
-		divStyle = ModalStore.signupOpen?{display:"block"} : {display:"none"};
+		var divStyle = {
+            display : ModalStore.signupOpen ? "block" : "none",
+            backgroundColor: "rgba(55,55,55,0.75)",
+        };
 		return (
             <ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
                 <LoggedOut/>

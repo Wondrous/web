@@ -124,3 +124,83 @@
 .input-basic:focus, .banner-lo, .signup-big-link {
     border-color: rgb(0,226,174);
 }
+
+/* ---- Logged-out Signup Modal Prompt ---- */
+
+.loggedout-modal-signup-wrapper {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+    width: 80%;
+    max-width: 730px;
+    top: 10%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px 10px;
+}
+
+.loggedout-modal-signup-logo {
+    width: 200px;
+    height: auto;
+    margin: 20px 0 10px;
+}
+
+.loggedout-modal-signup-prompt {
+    font-family: helvetica, arial, sans-serif;
+    color: rgb(140,140,140);
+    font-size: 20px;
+    font-weight: 100;
+    text-align: left;
+    width: 90%;
+    margin: 20px auto 30px;
+}
+
+.loggedout-modal-signup-input {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    padding: 3px 5px;
+    font-size: 35px;
+    font-weight: 100;
+    color: rgb(61,61,61);
+    width: 100%;
+    border: none;
+    border-bottom: 3px solid rgb(234,234,234);
+    outline: none;
+
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
+
+    &:focus {
+        border-bottom-color: rgb(0,226,174);
+    }
+}
+
+.loggedout-modal-signup-submit {
+    position: relative;
+    display: block;
+    margin: 8px 0 0;
+    border: none;
+    background-color: rgb(234,234,234);
+    padding: 6px 22px;
+    color: rgb(120,120,120);
+
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
+
+    &:hover { background-color: rgb(241,241,241); };
+}
+
+.loggedout-modal-signup-footer {
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    color: rgb(140,140,140);
+    border-top: 1px solid rgb(244,244,244);
+    margin-top: 30px;
+    padding: 10px 30px 0;
+}
