@@ -55,6 +55,7 @@ var UserBar = React.createClass({
         var is_me = this.props.username === UserStore.user.username;
         this.setState({data: ProfileStore.user, editing:is_me});
     },
+
     onSubmitDescription: function(evt){
         evt.preventDefault();
         var description = this.refs.descriptionBox.getDOMNode().value;
@@ -72,6 +73,7 @@ var UserBar = React.createClass({
             }
         })
     },
+
     render: function() {
         this.is_private = ProfileStore.user.is_private;
         this.am_following = this.state.data.following === true;
@@ -120,7 +122,7 @@ var UserBar = React.createClass({
                         <span>
                             {this.state.data.description.length > 0 ?
                                 <div className="profile-about profile-about--font" style={is_me ? {cursor: 'pointer'} : {}}>
-                                    {linkify(this.state.data.description, true)}
+                                    {linkify(this.state.data.description, "hashtagify--medium")}
                                     {is_me ? <span className="profile-about--edit" onClick={this.onEdit}>Edit</span> : null}
                                 </div>
                                 :

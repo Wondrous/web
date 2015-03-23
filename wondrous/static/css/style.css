@@ -644,8 +644,11 @@ ul {
   padding: 3px 5px;
   background-color: #f7f7f7;
   border: 1px solid #dbdbdb;
-  border-radius: 2px;
   text-decoration: none;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
@@ -656,9 +659,20 @@ ul {
     text-decoration: none;
     border-color: #b9b9b9; }
 
+.hashtagify--medium {
+  padding: 1px 3px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px; }
+
 .hashtagify--small {
   font-size: 14px;
-  padding: 0 4px; }
+  padding: 0 4px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px; }
 
 .linkify:link {
   color: #0064aa; }
@@ -1070,9 +1084,9 @@ a:hover {
 .profile-header-nav-link {
   padding: 0;
   font-size: 23px;
-  color: #5b5b83 !important;
+  color: #646464 !important;
   font-family: helvetica, arial, sans-serif;
-  font-weight: 100; }
+  font-weight: 900; }
   .profile-header-nav-link:link {
     text-decoration: none; }
   .profile-header-nav-link:visited {
@@ -1156,13 +1170,15 @@ a:hover {
 
 .profile-about {
   margin: 20px auto;
-  max-width: 65%;
+  max-width: 60%;
   border: 1px solid white; }
 
 .profile-about--font {
   font-family: helvetica, arial, sans-serif;
-  font-weight: 400;
-  font-size: 16px;
+  /*    font-weight: 400;
+    font-size: 16px;*/
+  font-weight: 100;
+  font-size: 19px;
   color: #646464;
   line-height: 1.3em; }
 
@@ -1179,7 +1195,7 @@ a:hover {
   position: relative;
   margin: 0 auto;
   margin-top: 10px;
-  width: 65%;
+  width: 60%;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
@@ -1190,7 +1206,7 @@ a:hover {
 .profile-about-textarea {
   resize: none;
   width: 100%;
-  max-width: 65%;
+  max-width: 60%;
   margin: 20px auto 0;
   text-align: center;
   border: 1px solid #e0e0e0;

@@ -1,6 +1,6 @@
 var WondrousActions = require('../actions/WondrousActions');
 
-var Linkify = function(rawText, isSmall) {
+var Linkify = function(rawText, hashtagOverrideClass) {
     var textChunks = rawText.split('\n');
     var handleClose = function(evt){
         if(!evt.metaKey){
@@ -32,8 +32,8 @@ var Linkify = function(rawText, isSmall) {
             var classes = "";
             if (isHashtag) {
                 classes += "hashtagify ";
-                if (isSmall) {
-                    classes += "hashtagify--small";
+                if (hashtagOverrideClass) {
+                    classes += hashtagOverrideClass;
                 }
             } else {
                 classes += "linkify ";

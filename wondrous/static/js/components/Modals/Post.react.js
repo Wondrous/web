@@ -46,7 +46,7 @@ var Post = React.createClass({
 			this.props.data.subject = repost.subject;
 		}
 
-		var thisText = linkify(this.props.data.text, false);
+		var thisText = linkify(this.props.data.text, null);
         var likedUsers = [];
         if (this.props.data.like_count < 10) {
             this.props.data.handleUsernameClick = this.handleUsernameClick;

@@ -43,7 +43,7 @@ var Comment = React.createClass({
             createdAtDisplay = createdAt.format("h:mma");
         }
 
-        var textLinked = linkify(this.props.data.text, true);
+        var textLinked = linkify(this.props.data.text, "hashtagify--small");
         return (
             <div className="post-comment">
                 <div className="post-comment-image-wrapper round-2">
