@@ -2937,7 +2937,10 @@ a:hover {
   border: none;
   background-color: #eaeaea;
   padding: 6px 22px;
+  font-family: arial, helvetica, sans-serif;
   color: #787878;
+  font-weight: 400;
+  outline: none;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
