@@ -114,13 +114,13 @@ var NotificationStore = Reflux.createStore({
     },
 
     toggleNotifications: function(){
-        if (SettingStore.sidebarOpen){
+        // if (SettingStore.sidebarOpen){
             this.unseen = 0;
             document.title = "Wondrous"
 
             WondrousActions.setNotificationSeen();
             this.trigger();
-        }
+        // }
     },
     updateNotification: function(feedItems){
         if (feedItems.length<15){
