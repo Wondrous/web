@@ -17,7 +17,11 @@ var sp1 = {
     text: "Share your thoughts and epress yourself. Have some fun!",
     user_id: 1,
     user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
-    username: "john"
+    username: "john",
+    view_count: 66666,
+    like_count:666,
+    comment_count:666,
+    liked:true
 };
 
 var sp2 = {
@@ -36,7 +40,11 @@ var sp2 = {
     text: "Tell your stories with your followers!",
     user_id: 1,
     user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
-    username: "tim"
+    username: "tim",
+    view_count: 66666,
+    like_count:666,
+    comment_count:666,
+    liked:true
 };
 
 var sp3 = {
@@ -55,7 +63,11 @@ var sp3 = {
     text: "Turn yourself into a brand.",
     user_id: 1,
     user_ouuid: "30-876a34a9-8ffd-4b4a-9acb-dc2125fcc205",
-    username: "zman0225"
+    username: "zman0225",
+    view_count: 66666,
+    like_count:666,
+    comment_count:666,
+    liked:true
 };
 
 

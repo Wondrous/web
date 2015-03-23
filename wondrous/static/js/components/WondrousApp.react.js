@@ -30,6 +30,7 @@ var LandingApp = require('./Landing.react');
 var WondrousConstants = require('../constants/WondrousConstants');
 var WondrousActions = require('../actions/WondrousActions');
 
+var checkLogin = require('../utils/Func').checkLogin;
 
 var WondrousApp = React.createClass({
     checkWindowScroll: function(){
@@ -39,7 +40,9 @@ var WondrousApp = React.createClass({
         var scrolled = (s+2*h) > document.body.offsetHeight;
         if (scrolled){
             if(SettingStore.pageType == WondrousConstants.PROFILE_PAGE){
-                WallStore.loadMore();
+                if(UserStore.loggedIn&&UserStore.loaded){
+                    WallStore.loadMore();
+                }
             }else if(SettingStore.pageType == WondrousConstants.FEED_PAGE){
                 FeedStore.loadMore();
             }

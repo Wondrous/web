@@ -4,6 +4,7 @@ var WondrousActions = require('../../actions/WondrousActions');
 var ProfileStore = require('../../stores/ProfileStore');
 var UserStore = require('../../stores/UserStore');
 var Post = require('../Post/Post.react');
+var checkLogin = require('../../utils/Func').checkLogin;
 
 var masonryOptions = {
     transitionDuration: 0,
@@ -44,6 +45,13 @@ var Wall = React.createClass({
         var username = this.getParams().username;
         var is_me = username === UserStore.user.username;
 
+        var bottomBar = null;
+        if(!UserStore.loggedIn&&UserStore.loaded){
+            bottomBar = <div onClick={checkLogin}>Sign Up for more</div>
+        }else if(!WallStore.donePaging && posts.length > 0){
+            bottomBar = <img className="loading-wheel" src="/static/pictures/p.loading.gif"/>;
+        }
+
         return (
             <div>
                 {is_me ?
@@ -58,9 +66,7 @@ var Wall = React.createClass({
                     {posts}
                 </div>
                 <div>
-                {!WallStore.donePaging && posts.length > 0 ?
-                    <img className="loading-wheel" src="/static/pictures/p.loading.gif"/>
-                    : null}
+                {bottomBar}
                 </div>
             </div>
         );
