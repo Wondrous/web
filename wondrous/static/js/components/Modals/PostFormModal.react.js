@@ -1,5 +1,6 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var ModalStore = require('../../stores/ModalStore');
+var UserStore = require('../../stores/UserStore');
 var WondrousConstants = require('../../constants/WondrousConstants');
 var PostForm = require('./PostForm.react');
 var ModalWrapper = require('./ModalWrapper.react');

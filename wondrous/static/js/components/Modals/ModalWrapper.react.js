@@ -1,3 +1,5 @@
+var UserStore = require('../../stores/UserStore');
+
 var ModalWrapper = React.createClass({
 	handleClose: function(evt){
 		if (evt.target==this.refs.closeContainer.getDOMNode()){

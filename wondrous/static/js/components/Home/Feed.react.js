@@ -63,6 +63,12 @@ var Feed = React.createClass({
     },
 
     render: function() {
+        if (!UserStore.loggedIn&&UserStore.loaded){
+            return (<div className="masonry" ref="masonryContainer" id="asyncPosts">
+                <div className="backdrop"></div>
+                <div className="grid-sizer" style={{"display": "none"}}></div>
+            </div>);
+        }
         var posts = this.state.data.map(function(post, index) {
             if (index != 2) {
                 return (
@@ -84,7 +90,7 @@ var Feed = React.createClass({
             <div className="grid-padding">
                 <div ref="scrollBox">
                     <h1 className="tmp-feed-h1">Majority Feed</h1>
-                    {FeedStore.hasNewPosts ? 
+                    {FeedStore.hasNewPosts ?
                         <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
                             Load new posts
                         </button>

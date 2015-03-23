@@ -73,7 +73,8 @@ class FeedManager(BaseManager):
     @classmethod
     def get_feed_posts_json(cls, feed_type, page=0, user = None):
         if not user:
-            return cls.get_public_posts_json()
+            return []
+            # return cls.get_public_posts_json()
 
         page = int(page)
         feed_type = int(feed_type)

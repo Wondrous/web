@@ -1,6 +1,7 @@
 var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
+var ModalStore = require('../stores/ModalStore');
 var NotificationStore = require('../stores/NotificationStore');
 var checkLogin = require('../utils/Func').checkLogin;
 
@@ -138,7 +139,7 @@ var Navbar = React.createClass({
         return (
 
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
-                <Link to="/" style={{ color: "rgb(234,234,234)" }}>
+                <Link to="/" onClick={ModalStore.clearModal} style={{ color: "rgb(234,234,234)" }}>
                     <img src="/static/pictures/p.icon_50x50.png" className="navbar-logo" />
                 </Link>
                 {UserStore.loggedIn ?

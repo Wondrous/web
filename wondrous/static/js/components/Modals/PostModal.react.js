@@ -13,7 +13,8 @@ var linkify = require('../../utils/Linkify');
 var PostModal = React.createClass({
 	mixins:[
         Reflux.listenTo(PostStore,"onPostUpdate"),
-        Reflux.listenTo(ModalStore,"onModalChange")
+        Reflux.listenTo(ModalStore,"onModalChange"),
+		Router.State
     ],
 
     onModalChange: function(){
@@ -29,6 +30,10 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt) {
+		if(!UserStore.loggedIn&UserStore.loaded&(typeof this.getParams().post_id !=='undefined'))
+		{
+			return;
+		}
 		// handled only by children
 		WondrousActions.closeCardModal();
 		evt.preventDefault();
