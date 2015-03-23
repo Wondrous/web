@@ -121,8 +121,8 @@ var UserBar = React.createClass({
                         :
                         <span>
                             {this.state.data.description.length > 0 ?
-                                <div className="profile-about profile-about--font" style={is_me ? {cursor: 'pointer'} : {}}>
-                                    {linkify(this.state.data.description, "hashtagify--medium")}
+                                <div className="profile-about profile-about--font">
+                                    {linkify(this.state.data.description, "hashtagify--medium hashtagify--ghost")}
                                     {is_me ? <span className="profile-about--edit" onClick={this.onEdit}>Edit</span> : null}
                                 </div>
                                 :

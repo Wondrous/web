@@ -675,6 +675,13 @@ ul {
   -o-border-radius: 1px;
   border-radius: 1px; }
 
+.hashtagify--ghost {
+  background-color: transparent;
+  border: none;
+  font-weight: 900; }
+  .hashtagify--ghost:hover {
+    color: #6e6e78; }
+
 .linkify:link {
   color: #0064aa; }
 .linkify:visited {

@@ -272,6 +272,16 @@ ul {
             border-radius: 1px;
 }
 
+.hashtagify--ghost {
+    background-color: transparent;
+    border: none;
+    font-weight: 900;
+
+    &:hover {
+        color: rgb(110,110,120);
+    }
+}
+
 .linkify {
     &:link {color: rgb(0,100,170);}
     &:visited {color: rgb(0,100,170);}
