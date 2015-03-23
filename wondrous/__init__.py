@@ -42,6 +42,7 @@ def main_app(global_config, **settings):
 
     """ This function returns a Pyramid WSGI application. """
     settings['app_root'] = abspath(dirname(dirname(__file__)))
+
     initialize_sql(settings)
     config = Configurator(settings=settings)
     config = build_routes(config)  # URL map on routes.py
@@ -53,6 +54,7 @@ def main_app(global_config, **settings):
     config.set_authorization_policy(authz_policy)   # Needed becasue I have an Authentication policy
 
     config.add_request_method(AuthHelper.get_user, 'user', reify=True)  # GLOBAL USER OBJECT
+
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('pyramid_jinja2')
     config.add_jinja2_search_path("wondrous:templates")

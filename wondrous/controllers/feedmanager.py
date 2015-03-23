@@ -36,11 +36,9 @@ class FeedManager(BaseManager):
         retval = DBSession.query(Post, Vote).\
             join(FeedPostLink, (FeedPostLink.post_id==Post.id)&(FeedPostLink.feed_id==feed_id)).\
             join(User, (User.id==Post.user_id)|(User.id==Post.owner_id)).\
-            join(v1, (Post.owner_id==None)|((Post.owner_id==User.id)&(User.is_private==False)) |\
-                ( (v1.user_id==user.id) \
-                    & ((v1.subject_id == Post.owner_id)) &\
-                     ((v1.status==Vote.FOLLOWED) | (v1.status==Vote.TOPFRIEND)) )).\
             outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
+            outerjoin(v1, (((Post.owner_id==v1.subject_id )|(Post.user_id==v1.subject_id))&((v1.status==6) or (v1.status==7)))).\
+            filter((User.is_private==False)|(v1.user_id==user.id)).\
             filter(Post.set_to_delete==None).\
             order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
 
@@ -109,11 +107,8 @@ class FeedManager(BaseManager):
 
         # If the profile_user is public, we dont need to check for relationship, else do
         # If we are logged in and the profile_user happens to be private, we have to check for relationship
-        # TODO this logic gate is not necessary, as we can now check is_private and all relationship data via
-        # on sql call
         if (not profile_user.is_private and not profile_user.is_banned and profile_user.is_active) or \
-            (profile_user.is_private and not profile_user.is_banned and profile_user.is_active and profile_user \
-            and VoteManager.is_following(my_user_id,profile_user.id)):
+            (profile_user.is_private and not profile_user.is_banned and profile_user.is_active and profile_user):
             v1 = aliased(Vote)
 
             # based on
@@ -134,12 +129,10 @@ class FeedManager(BaseManager):
 
             retval = DBSession.query(Post,Vote).\
                 join(User, (User.id==Post.user_id)|(User.id==Post.owner_id)).\
-                join(v1, (Post.owner_id==None)|((Post.owner_id==User.id)&(User.is_private==False)) |\
-                    ( (v1.user_id==my_user_id) \
-                        & ((v1.subject_id == Post.owner_id)) &\
-                         ((v1.status==Vote.FOLLOWED) | (v1.status==Vote.TOPFRIEND)) )).\
                 outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==my_user_id)&(Vote.status==Vote.LIKED)).\
+                outerjoin(v1, (((Post.owner_id==v1.subject_id )|(Post.user_id==v1.subject_id))&((v1.status==6) or (v1.status==7)))).\
                 filter(Post.user_id==profile_user.id).\
+                filter((User.is_private==False)|(v1.user_id==user.id)).\
                 filter(Post.set_to_delete==None).\
                 order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
 
