@@ -4,6 +4,8 @@ var UserStore = require('../../stores/UserStore');
 var checkLogin = require('../../utils/Func').checkLogin;
 var linkify = require('../../utils/Linkify');
 
+var dateToString = require('../../utils/Func').dateToString;
+
 var Comment = React.createClass({
     handleClick: function(evt) {
         if (typeof this.props.data.username !== 'undefined') {
@@ -28,20 +30,9 @@ var Comment = React.createClass({
         var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
-        var createdAt = moment(this.props.data.created_at);
-        var mmtMidnight = moment().startOf('day');
-        var createdAtDisplay = "";
 
-        if (createdAt.isBefore(mmtMidnight)) {
-            var mmtYear = moment().startOf('year');
-            if (createdAt.isBefore(mmtYear)) {
-                createdAtDisplay = createdAt.format("h:mma, MMM wo 'GG");
-            } else {
-                createdAtDisplay = createdAt.format("h:mma, MMM wo");
-            }
-        } else {
-            createdAtDisplay = createdAt.format("h:mma");
-        }
+        var createdAtDisplay = dateToString(this.props.data.created_at);
+
 
         var textLinked = linkify(this.props.data.text, "hashtagify--small");
         return (

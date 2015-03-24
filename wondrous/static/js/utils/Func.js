@@ -55,5 +55,25 @@ module.exports = {
 
             }
         });
+    },
+
+    dateToString: function(raw){
+        var createdAt = moment(raw);
+        var mmtMidnight = moment().startOf('day');
+        var createdAtDisplay = "";
+
+        if (createdAt.isBefore(mmtMidnight)) {
+            var mmtYear = moment().startOf('year');
+            if (createdAt.isBefore(mmtYear)) {
+                createdAtDisplay = createdAt.format("h:mma, MMM Do 'GG");
+            } else {
+                createdAtDisplay = createdAt.format("h:mma, MMM Do");
+            }
+        } else {
+            createdAtDisplay = createdAt.format("h:mma");
+        }
+
+        return createdAtDisplay;
     }
+
 }
