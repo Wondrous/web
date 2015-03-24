@@ -809,10 +809,10 @@ a:hover {
   border: 1px solid #eaeaea !important;
   padding: 25px 0 !important;
   cursor: pointer;
-  -webkit-box-shadow: 0 0px 3px #505050;
-  -moz-box-shadow: 0 0px 3px #505050;
-  -o-box-shadow: 0 0px 3px #505050;
-  box-shadow: 0 0px 3px #505050; }
+  -webkit-box-shadow: 0 0px 2px #505050;
+  -moz-box-shadow: 0 0px 2px #505050;
+  -o-box-shadow: 0 0px 2px #505050;
+  box-shadow: 0 0px 2px #505050; }
 
 .follow-button > .profile-header-nav-title {
   text-transform: uppercase;
@@ -840,10 +840,10 @@ a:hover {
 
 .is-following {
   border-color: #1bc922 !important;
-  -webkit-box-shadow: 0 0px 7px #c8c8c8;
-  -moz-box-shadow: 0 0px 7px #c8c8c8;
-  -o-box-shadow: 0 0px 7px #c8c8c8;
-  box-shadow: 0 0px 7px #c8c8c8; }
+  -webkit-box-shadow: 0 0px 3px #c8c8c8;
+  -moz-box-shadow: 0 0px 3px #c8c8c8;
+  -o-box-shadow: 0 0px 3px #c8c8c8;
+  box-shadow: 0 0px 3px #c8c8c8; }
 
 .not-following {
   -webkit-transition: all 0.3s ease-in-out;
@@ -2463,55 +2463,6 @@ a:hover {
   font-size: 13px;
   margin-top: 4px; }
 
-/*.thumb-img-sm {
-    height: 30px;
-    width: 30px;
-}*/
-/*.thumb-img-med {
-    height: 80px;
-    width: 80px;
-}*/
-/*.banner-more-options {
-    position: relative;
-    left: 0;
-    float: right;
-    margin-right: 3%;
-    top: 4px;
-    height: 41px;
-    width: 30px;
-    cursor: pointer;
-
-    &:hover {background-color: rgb(234,234,234);}
-    &:active {background-color: rgb(230,230,230);}
-}*/
-/*.banner-user-name {
-    position: relative;
-    left: 0;
-    float: right;
-    right: 48px;
-    top: 4px;
-    padding-top: 13px;
-    padding-bottom: 12px;
-    padding-left: 43px;
-    padding-right: 10px;
-    max-width: 150px;
-    cursor: pointer;
-    text-decoration: none;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-
-    &:link {text-decoration: none;}
-    &:hover {background-color: rgb(234,234,234); text-decoration: none;}
-    &:active {background-color: rgb(230,230,230);}
-}*/
-/*.banner-user-img {
-    position: absolute;
-    top: 5px;
-    left: 3px;
-    height: 30px;
-    width: 30px;
-}*/
 /* ==== SEARCH =================== */
 .search-result {
   margin-left: 10%;
@@ -2691,6 +2642,10 @@ a:hover {
   left: -3px;
   height: 30px;
   width: 30px; }
+
+.navbar-login-btn {
+  color: #6e6e6e;
+  padding: 0px 13px; }
 
 .sidemenu {
   position: fixed;
