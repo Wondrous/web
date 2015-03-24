@@ -13,10 +13,12 @@ var masonryOptions = {
 };
 
 var Wall = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     mixins: [
         MasonryMixin('masonryContainer', masonryOptions),
-        Reflux.connect(WallStore,"data"),
-        Router.State
+        Reflux.connect(WallStore,"data")
     ],
 
     componentDidMount: function(){
@@ -42,7 +44,7 @@ var Wall = React.createClass({
                 <Post key={post.id} data={post} />
             );
         });
-        var username = this.getParams().username;
+        var username = this.context.router.getCurrentParams().username;
         var is_me = username === UserStore.user.username;
 
         var bottomBar = null;

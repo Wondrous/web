@@ -3,11 +3,12 @@ var LoginStore = require('../../stores/LoginStore');
 var WondrousActions = require('../../actions/WondrousActions');
 
 var Signup = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     err: null,
     good: true,
     mixins: [
-        Router.Navigation,
-        Router.State,
         Reflux.listenTo(UserStore,'onUserUpdate'),
         Reflux.listenTo(LoginStore,'onLoginError')
     ],
@@ -34,7 +35,7 @@ var Signup = React.createClass({
     },
     onUserUpdate: function(userData){
         if(UserStore.loggedIn){
-            this.transitionTo('/');
+            this.context.router.transitionTo('/');
         }
     },
     onRegister: function(evt){
@@ -42,7 +43,7 @@ var Signup = React.createClass({
         // Order matters: name, username, email, password.
         // Be sure to keep this updated with the associated
         // method in WondrousActions.js
-        var code = (typeof this.getParams().verification_code !== 'undefined')?this.getParams().verification_code:null;
+        var code = (typeof this.context.router.getCurrentParams().verification_code !== 'undefined')?this.context.router.getCurrentParams().verification_code:null;
 
         WondrousActions.register(
             this.refs.name.getDOMNode().value.trim(),

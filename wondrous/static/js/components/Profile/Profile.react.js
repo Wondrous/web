@@ -7,21 +7,22 @@ var UserBar = require('./UserBar.react');
 var PrivateProfile = require('./PrivateProfile.react');
 
 var Profile = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     mixins: [
-        Router.Navigation,
-        Router.State,
         Reflux.listenTo(ProfileStore,"onProfileChange")
     ],
 
     onProfileChange: function(){
-        var username = this.getParams().username;
+        var username = this.context.router.getCurrentParams().username;
         if (ProfileStore.user.username.toLowerCase() === username.toLowerCase()){
             this.forceUpdate();
         }
     },
 
     render: function () {
-        var username = this.getParams().username;
+        var username = this.context.router.getCurrentParams().username;
 
         if(ProfileStore.user.username.toLowerCase() !== username.toLowerCase()){
             WondrousActions.newProfile(username);

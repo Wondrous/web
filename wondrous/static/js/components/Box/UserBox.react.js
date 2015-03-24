@@ -1,12 +1,13 @@
 var BoxStore = require('../../stores/BoxStore');
 
 var UserIcon = React.createClass({
-    mixins: [ Router.Navigation ],
-
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     handleClick: function(evt) {
         evt.preventDefault();
         if (typeof this.props.user.username != 'undefined') {
-            this.transitionTo('/' + this.props.user.username);
+            this.context.router.transitionTo('/' + this.props.user.username);
 
         }
     },

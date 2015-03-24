@@ -7,8 +7,10 @@ var InfluencerBadge = require('./InfluencerBadge.react');
 var linkify = require('../../utils/Linkify');
 
 var UserBar = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     mixins: [
-        Router.Navigation,
         Reflux.listenTo(ProfileStore, 'onProfileChange')
     ],
 

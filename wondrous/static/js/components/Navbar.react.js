@@ -6,8 +6,9 @@ var NotificationStore = require('../stores/NotificationStore');
 var checkLogin = require('../utils/Func').checkLogin;
 
 var SearchBox = React.createClass({
-    mixins: [Router.Navigation],
-
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     handleSearch: function(evt) {
         evt.preventDefault();
         var search = this.refs.query.getDOMNode().value.trim();
@@ -15,10 +16,10 @@ var SearchBox = React.createClass({
         if (search.indexOf("#") > -1) {
             // going to be a tag search
             search = search.replace('#', '');
-            this.transitionTo("tags",{search: search});
+            this.context.router.transitionTo("tags",{search: search});
             WondrousActions.newSearch(search, true);
         }else{
-            this.transitionTo("search",{search: search});
+            this.context.router.transitionTo("search",{search: search});
             WondrousActions.newSearch(search, false);
         }
 
@@ -87,12 +88,13 @@ var SettingsGear = React.createClass({
 });
 
 var ProfileLink = React.createClass({
-    mixins: [ Router.Navigation ],
-
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     handleClick: function(evt) {
         evt.preventDefault();
         if (typeof this.props.user.username !== 'undefined') {
-            this.transitionTo('/' + this.props.user.username);
+            this.context.router.transitionTo('/' + this.props.user.username);
         }
     },
 
@@ -126,8 +128,10 @@ var NewPostIcon = React.createClass({
 });
 
 var Navbar = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     mixins: [
-        Router.Navigation,
         Reflux.listenTo(UserStore,'onUserUpdate')
     ],
 

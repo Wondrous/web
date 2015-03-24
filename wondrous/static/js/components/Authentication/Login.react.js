@@ -3,8 +3,10 @@ var LoginStore = require('../../stores/LoginStore');
 var WondrousActions = require('../../actions/WondrousActions');
 
 var Login = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     mixins: [
-        Router.Navigation,
         Reflux.listenTo(UserStore,'onUserUpdate'),
         Reflux.listenTo(LoginStore,'onLoginError')
     ],
@@ -13,7 +15,7 @@ var Login = React.createClass({
     },
     onUserUpdate: function(userData){
         if(UserStore.loggedIn){
-            this.transitionTo('/');
+            this.context.router.transitionTo('/');
             WondrousActions.auth();
         }
     },

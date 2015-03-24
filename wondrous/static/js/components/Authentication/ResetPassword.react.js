@@ -2,7 +2,10 @@ var UserStore = require('../../stores/UserStore');
 var WondrousAPI = require('../../utils/WondrousAPI');
 
 var ResetPassword = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.listenTo(UserStore,'onUserUpdate')],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
+    mixins: [Reflux.listenTo(UserStore,'onUserUpdate')],
     onUserUpdate: function(){
         if(UserStore.loggedIn){
             this.forceUpdate();
@@ -45,7 +48,7 @@ var ResetPassword = React.createClass({
         })
     },
     render: function(){
-        var page = this.getParams().page
+        var page = this.context.router.getCurrentParams().page
 
         if(UserStore.loggedIn || typeof page === 'undefined'){
             return (

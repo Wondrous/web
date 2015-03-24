@@ -2,16 +2,16 @@ var WondrousAPI = require('../../utils/WondrousAPI');
 var UserStore = require('../../stores/UserStore');
 
 var PasswordReset = React.createClass({
-    mixins: [Router.Navigation,
-        Router.State
-],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     getInitialState: function(){
         return {error:null};
     },
     onPasswordReset: function(err,res){
         if(err==null){
             this.refs.passwordConfirm.getDOMNode().value = this.refs.password.getDOMNode().value = '';
-            this.transitionTo('/login');
+            this.context.router.transitionTo('/login');
         }else{
             this.setState({error:err.error});
         }
@@ -23,7 +23,7 @@ var PasswordReset = React.createClass({
         if (this.refs.password.getDOMNode().value!==this.refs.passwordConfirm.getDOMNode().value){
             this.setState({error:'your passwords do not match :('})
         }else{
-            var verification = this.getParams().verification;
+            var verification = this.context.router.getCurrentParams().verification;
             if (typeof verification !== 'undefined'){
                 WondrousAPI.passwordReset({
                     verification_code:verification,

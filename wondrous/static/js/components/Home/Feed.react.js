@@ -16,17 +16,18 @@ var masonryOptions = {
 
 var Feed = React.createClass({
     post_id: null,
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     mixins: [
         MasonryMixin('masonryContainer', masonryOptions),
         Reflux.listenTo(FeedStore,'onFeedUpdate'),
         Reflux.listenTo(UserStore,'onUserUpdate'),
-        Reflux.listenTo(ModalStore,'onModalUpdate'),
-        Router.Navigation,
-        Router.State
+        Reflux.listenTo(ModalStore,'onModalUpdate')
     ],
 
     checkForParams: function(){
-        this.post_id = (typeof this.getParams().post_id !=='undefined')?this.getParams().post_id:null;
+        this.post_id = (typeof this.context.router.getCurrentParams().post_id !=='undefined')?this.context.router.getCurrentParams().post_id:null;
         if (typeof this.post_id !== 'undefined' && this.post_id!=null){
             WondrousActions.newPostLoad(this.post_id);
         }
@@ -40,7 +41,7 @@ var Feed = React.createClass({
     onModalUpdate: function(){
         if(!ModalStore.cardOpen&&this.post_id!=null){
             this.post_id=null;
-            this.transitionTo('/');
+            this.context.router.transitionTo('/');
         }
     },
 

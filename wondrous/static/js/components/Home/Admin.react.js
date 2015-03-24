@@ -5,9 +5,11 @@ var LandingApp = require('../Landing.react');
 var WondrousAPI = require('../../utils/WondrousAPI');
 
 var Admin = React.createClass({
-    mixins: [ Router.Navigation ],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     transition: function(){
-        this.replaceWith('/');
+        this.context.router.replaceWith('/');
     },
     componentDidMount: function(){
         WondrousAPI.admin_auth({

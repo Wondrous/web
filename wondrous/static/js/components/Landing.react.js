@@ -89,14 +89,12 @@ var SignedUp = React.createClass({
 var LandingApp = React.createClass({
     registered: false,
     referrer_info: {},
-    mixins: [
-        Router.Navigation,
-        Router.State
-    ],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
 
     handleData: function(err, res) {
         if (err == null) {
-            console.log("asd", res);
             this.registered = true;
             this.referrer_info = res;
             this.forceUpdate();
@@ -108,7 +106,7 @@ var LandingApp = React.createClass({
 
     formSubmit: function(evt) {
         evt.preventDefault();
-        var ref_uuid = this.getParams().ref_uuid;
+        var ref_uuid = this.context.router.getCurrentParams().ref_uuid;
         if (typeof ref_uuid === 'undefined') {
             ref_uuid = null;
         }
@@ -124,7 +122,7 @@ var LandingApp = React.createClass({
     getProgress:function() {
         WondrousAPI.getReferrerProgress({
             callback: this.handleData,
-            uuid: this.getParams().uuid
+            uuid: this.context.router.getCurrentParams().uuid
         });
     },
 

@@ -7,10 +7,12 @@ var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
 
 var SettingsBar = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     onLogout: function(){
         WondrousActions.logout();
-        this.transitionTo('/');
+        this.context.router.transitionTo('/');
     },
     render: function(){
         return (
@@ -44,8 +46,9 @@ var SettingsBar = React.createClass({
 
 
 var Notification = React.createClass({
-    mixins: [ Router.Navigation ],
-
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     handleAcceptData:function(err,res){
         if(err==null){
             console.log("accepted! ",res);
@@ -66,7 +69,7 @@ var Notification = React.createClass({
             WondrousActions.newPostLoad(note.subject_id);
         } else {
             var url = "/"+note.from_user_username;
-            this.transitionTo(url);
+            this.context.router.transitionTo(url);
         }
     },
     generateContent: function(reason){

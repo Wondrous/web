@@ -11,10 +11,12 @@ var linkify = require('../../utils/Linkify');
 
 
 var PostModal = React.createClass({
+	contextTypes: {
+        router: React.PropTypes.func
+    },
 	mixins:[
         Reflux.listenTo(PostStore,"onPostUpdate"),
-        Reflux.listenTo(ModalStore,"onModalChange"),
-		Router.State
+        Reflux.listenTo(ModalStore,"onModalChange")
     ],
 
     onModalChange: function(){

@@ -1,7 +1,8 @@
 var UserTitle = React.createClass({
     repost: null,
-    mixins: [ Router.Navigation ],
-
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     render: function() {
         if(typeof this.props.data === 'undefined'){
             return (<div></div>);

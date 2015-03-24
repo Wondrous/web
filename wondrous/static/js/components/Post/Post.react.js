@@ -6,7 +6,9 @@ var Photo = require('./Photo.react');
 var UserTitle = require('./UserTitle.react');
 
 var Post = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     handleClick: function(evt) {
         if (!evt.metaKey){
             evt.preventDefault();

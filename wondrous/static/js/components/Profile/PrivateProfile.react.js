@@ -5,8 +5,11 @@ var InfluencerBadge = require('./InfluencerBadge.react');
 var WondrousAPI = require('../../utils/WondrousAPI');
 
 var PrivateProfile = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
+
     mixins: [
-        Router.Navigation,
         Reflux.listenTo(ProfileStore, 'onProfileChange')
     ],
     am_following: ProfileStore.user.following,

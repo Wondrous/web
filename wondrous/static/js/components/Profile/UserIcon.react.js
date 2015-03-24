@@ -2,7 +2,9 @@ var InfluencerBadge = require('./InfluencerBadge.react');
 var WallStore = require('../../Stores/WallStore');
 
 var UserIcon = React.createClass({
-    mixins: [ Router.Navigation ],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     loadWall: function(evt){
         WallStore.loadMore(this.props.user.username);
     },

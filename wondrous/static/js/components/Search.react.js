@@ -92,20 +92,22 @@ var KWSearch = React.createClass({
 });
 
 var Search = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
+
     mixins: [
-        Router.Navigation,
-        Router.State,
         Reflux.listenTo(SearchStore, 'onSearchChange')
     ],
 
     componentDidMount: function(){
-        if (typeof this.getParams().search!=='undefined'){
+        if (typeof this.context.router.getCurrentParams().search!=='undefined'){
             var pathArray = window.location.pathname.split( '/' );
             var isTagSearch = pathArray[1] === 'tags';
-            WondrousActions.newSearch(this.getParams().search, isTagSearch);
+            WondrousActions.newSearch(this.context.router.getCurrentParams().search, isTagSearch);
             WondrousActions.searchLoaded();
         }else{
-            this.transitionTo('/');
+            this.context.router.transitionTo('/');
         }
     },
 
@@ -132,13 +134,13 @@ var Search = React.createClass({
         }
     },
     render: function(){
-        if (typeof this.getParams().search === 'undefined') {
+        if (typeof this.context.router.getCurrentParams().search === 'undefined') {
             return (<div></div>);
         }
 
         var pathArray = window.location.pathname.split( '/' );
         var isTagSearch = pathArray[1] === 'tags';
-        var searchTerm = this.getParams().search.replace('%20',' ');
+        var searchTerm = this.context.router.getCurrentParams().search.replace('%20',' ');
 
         if (isTagSearch) {
             searchTerm = searchTerm.split(' ').map(function(word, ind) {

@@ -3,8 +3,11 @@ var ProfileStore = require('../../stores/ProfileStore');
 var UserIcon = require('./UserIcon.react');
 
 var Follower = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.func
+    },
+
     mixins: [
-        Router.Navigation,
         Reflux.listenTo(ProfileStore,"onProfileChange")
     ],
     am_following: ProfileStore.user.following,
@@ -24,7 +27,7 @@ var Follower = React.createClass({
     },
 
     handleClick: function(username) {
-        return this.transitionTo('/' + username)
+        return this.context.router.transitionTo('/' + username)
     },
     render: function(){
         this.am_following = ProfileStore.user.following;
