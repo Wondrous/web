@@ -137,7 +137,6 @@ var Navbar = React.createClass({
         }
 
         return (
-
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
                 <Link to="/" onClick={ModalStore.clearModal} style={{ color: "rgb(234,234,234)" }}>
                     <img src="/static/pictures/p.icon_50x50.png" className="navbar-logo" />
@@ -154,14 +153,13 @@ var Navbar = React.createClass({
                     </span>
                     : null}
 
-                { !UserStore.loggedIn ?
+                {!UserStore.loggedIn ?
                     <div className="navbar-right">
-
-                    <span onClick={checkLogin} className="navbar-btn">Login</span>
+                        <span onClick={checkLogin} className="navbar-btn navbar-login-btn round-15">Login</span>
                     </div>
-                    : null }
+                    : null}
             </div>
-            );
+        );
     },
 
     // Method to setState based upon Store changes
