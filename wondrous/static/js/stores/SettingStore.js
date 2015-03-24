@@ -10,6 +10,7 @@ var SettingStore = Reflux.createStore({
         this.sidebarOpen = false;
         this.sidebarType = null;
         this.pageType = null;
+        this.uploading = false;
 
         window.onbeforeunload = this.handleBeforeUnload;
         window.onUnload = this.handleUnload
@@ -22,7 +23,7 @@ var SettingStore = Reflux.createStore({
     },
 
     handleBeforeUnload: function(){
-        if(ModalStore.postFormOpen||ModalStore.pictureFormOpen){
+        if(ModalStore.postFormOpen||ModalStore.pictureFormOpen||this.uploading){
             return "Are you sure you want to leave?"
         }
     },
@@ -31,6 +32,7 @@ var SettingStore = Reflux.createStore({
         this.sidebarOpen = false;
         this.sidebarType = null;
         this.pageType = null;
+        this.uploading = false;
         this.trigger();
     },
 

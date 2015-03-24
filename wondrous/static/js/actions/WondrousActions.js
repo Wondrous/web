@@ -478,6 +478,9 @@ WondrousActions.uploadFile.listen(function(blobs, post_data, file_type) {
                 } else if (post_data.hasOwnProperty('is_private')) {
                     WondrousActions.updateUser(post_data);
                 }
+
+                var SettingStore = require("../stores/SettingStore");
+                SettingStore.uploading = false;
                 WondrousActions.uploadComplete();
             } else {
                 WondrousActions.uploadError(err);
@@ -509,6 +512,10 @@ WondrousActions.addNewPost.listen(function(subject, text, file_to_upload, blobs,
         callback: function(err, res) {
             if (err == null){
                 if (file_to_upload !== null) {
+                    WondrousActions.uploadComplete();
+                    res.uploadingImg = blobs.dataURL;
+                    setTimeout(WondrousActions.addToFeed, 200, res);
+                    setTimeout(WondrousActions.addToWall, 200, res);
                     WondrousActions.uploadFile(blobs, res, file_to_upload.type);
                 } else if (res.hasOwnProperty('object_id')) {
                     WondrousActions.uploadComplete();
@@ -522,7 +529,7 @@ WondrousActions.addNewPost.listen(function(subject, text, file_to_upload, blobs,
     });
 });
 
-WondrousActions.newEditPost.listen(function(subject, text, file_to_upload, blob, is_cover, height, width, post_id) {
+WondrousActions.newEditPost.listen(function(subject, text, file_to_upload, blobs, is_cover, height, width, post_id) {
 
     var uploadData = {
         subject: subject,
@@ -544,7 +551,12 @@ WondrousActions.newEditPost.listen(function(subject, text, file_to_upload, blob,
         callback: function(err, res) {
             if (err === null) {
                 if (file_to_upload !== null) {
-                    WondrousActions.uploadFile(blob, res, file_to_upload.type);
+                    WondrousActions.uploadComplete();
+                    var temp = res;
+                    temp.uploadingImg = blobs.dataURL;
+                    WondrousActions.updatePostOnModal(temp);
+                    WondrousActions.updatePostOnWall(temp);
+                    WondrousActions.uploadFile(blobs, res, file_to_upload.type);
                 } else if (res.hasOwnProperty('object_id')) {
                     WondrousActions.uploadComplete();
                     WondrousActions.updatePostOnFeed(res);

@@ -82,6 +82,7 @@ var PictureForm = React.createClass({
         if (typeof PostFormStore.file !=='undefined' && PostFormStore.file != null){
             WondrousActions.addProfilePicture(PostFormStore.file,
                 {
+                    "dataURL":$(this.refs.cropPictureBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL(),
                     "fullsize":uri2blob($(this.refs.cropPictureBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL()),
                     "150x150":uri2blob($(this.refs.cropPictureBox.getDOMNode()).cropper("getCroppedCanvas",{width:150,height:150}).toDataURL()),
                     "75x75":uri2blob($(this.refs.cropPictureBox.getDOMNode()).cropper("getCroppedCanvas",{width:75,height:75}).toDataURL()),

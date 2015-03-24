@@ -2,10 +2,71 @@ var WondrousAPI = require('../../utils/WondrousAPI');
 var WondrousActions = require('../../actions/WondrousActions');
 var WondrousConstants = require('../../constants/WondrousConstants');
 var ModalStore = require('../../stores/ModalStore');
+var SettingStore = require('../../stores/SettingStore');
 var PostFormStore = require('../../stores/PostFormStore');
 
 var uri2blob = require('../../utils/Func').uri2blob;
 var buildCropper = require('../../utils/Func').buildCropper;
+
+function resample_hermite(canvas, W, H, W2, H2){
+	var time1 = Date.now();
+	W2 = Math.round(W2);
+	H2 = Math.round(H2);
+	var img = canvas.getContext("2d").getImageData(0, 0, W, H);
+	var img2 = canvas.getContext("2d").getImageData(0, 0, W2, H2);
+	var data = img.data;
+	var data2 = img2.data;
+	var ratio_w = W / W2;
+	var ratio_h = H / H2;
+	var ratio_w_half = Math.ceil(ratio_w/2);
+	var ratio_h_half = Math.ceil(ratio_h/2);
+
+	for(var j = 0; j < H2; j++){
+		for(var i = 0; i < W2; i++){
+			var x2 = (i + j*W2) * 4;
+			var weight = 0;
+			var weights = 0;
+			var weights_alpha = 0;
+			var gx_r = gx_g = gx_b = gx_a = 0;
+			var center_y = (j + 0.5) * ratio_h;
+			for(var yy = Math.floor(j * ratio_h); yy < (j + 1) * ratio_h; yy++){
+				var dy = Math.abs(center_y - (yy + 0.5)) / ratio_h_half;
+				var center_x = (i + 0.5) * ratio_w;
+				var w0 = dy*dy //pre-calc part of w
+				for(var xx = Math.floor(i * ratio_w); xx < (i + 1) * ratio_w; xx++){
+					var dx = Math.abs(center_x - (xx + 0.5)) / ratio_w_half;
+					var w = Math.sqrt(w0 + dx*dx);
+					if(w >= -1 && w <= 1){
+						//hermite filter
+						weight = 2 * w*w*w - 3*w*w + 1;
+						if(weight > 0){
+							dx = 4*(xx + yy*W);
+							//alpha
+							gx_a += weight * data[dx + 3];
+							weights_alpha += weight;
+							//colors
+							if(data[dx + 3] < 255)
+								weight = weight * data[dx + 3] / 250;
+							gx_r += weight * data[dx];
+							gx_g += weight * data[dx + 1];
+							gx_b += weight * data[dx + 2];
+							weights += weight;
+							}
+						}
+					}
+				}
+			data2[x2]     = gx_r / weights;
+			data2[x2 + 1] = gx_g / weights;
+			data2[x2 + 2] = gx_b / weights;
+			data2[x2 + 3] = gx_a / weights_alpha;
+			}
+		}
+	console.log("hermite = "+(Math.round(Date.now() - time1)/1000)+" s");
+	canvas.getContext("2d").clearRect(0, 0, Math.max(W, W2), Math.max(H, H2));
+    canvas.width = W2;
+    canvas.height = H2;
+	canvas.getContext("2d").putImageData(img2, 0, 0);
+}
 
 function resizeImage(url, callback) {
     var sourceImage = new Image();
@@ -16,17 +77,17 @@ function resizeImage(url, callback) {
 
         var height = this.height;
         var width = this.width;
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(sourceImage, 0, 0);
+
         var scale = 1;
         if (width > 750) scale = width / 750;
         height /= scale;
         width /= scale;
 
-        canvas.width = width;
-        canvas.height = height;
-
         // Scale and draw the source image to the canvas
-        canvas.getContext("2d").drawImage(sourceImage, 0, 0, width, height);
-
+        resample_hermite(canvas,this.width,this.height, width, height);
         // Convert the canvas to a data URL in PNG format
         callback(canvas.toDataURL());
     }
@@ -91,6 +152,8 @@ var PostForm = React.createClass({
 
     handlePostCancel: function(e){
         PostFormStore.unloadUser();
+        $(this.refs.buttons.getDOMNode()).show();
+
         this.loaded = false;
         this.props.handleClose(e);
 
@@ -155,25 +218,43 @@ var PostForm = React.createClass({
     },
 
     handleSubmit:function(e){
+
+        if(SettingStore.uploading){
+            this.state.error="already uploading something else"
+            this.forceUpdate();
+            return;
+        }
+
         var postSubject = $('#postSubject').val();
         var postText    = $('#postTextarea').val();
 
-
+        $(this.refs.buttons.getDOMNode()).hide();
+        SettingStore.uploading = true;
         if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
+            var dataURL = null;
+            var dataBlob = null;
+
             if (this.state.isCover) {
-                var dataURL = uri2blob($(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL());
-                var medium = uri2blob($(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas",{width:750,heihgt:390}).toDataURL());
-                var blobs = {"fullsize": dataURL,"medium":medium}
-                this._submitData(postSubject,postText,blobs);
+                dataURL = $(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL()
+                dataBlob = uri2blob(dataURL);
             } else {
-                var that = this;
-                var dataURL = uri2blob($(this.refs.fsBox.getDOMNode()).attr("src"));
-                resizeImage($(this.refs.fsBox.getDOMNode()).attr("src"),function(mediumDataURL){
-                    var blobs = {"fullsize": dataURL,"medium": uri2blob(mediumDataURL)}
-                    that._submitData(postSubject,postText,blobs);
-                });
+                dataURL = $(this.refs.fsBox.getDOMNode()).attr("src");
+                dataBlob = uri2blob(dataURL);
             }
+
+            var that = this;
+            resizeImage(dataURL,function(mediumDataURL){
+                var blobs = {"fullsize": dataBlob,"medium":uri2blob(mediumDataURL), "dataURL":mediumDataURL}
+                that._submitData(postSubject,postText,blobs);
+            });
+        }else{
+            WondrousActions.addNewPost(
+                postSubject,
+                postText,
+                null
+            );
         }
+
     },
 
     render: function() {
@@ -201,7 +282,7 @@ var PostForm = React.createClass({
                     <div className="new-post-progress-bar--juice" style={{ width: this.state.percent * 8 }}></div>
                 </div>
 
-                {/* {this.state.error ? <span>{this.state.error}% uploaded</span> : null} */}
+                {this.state.error ? <span>{this.state.error}</span> : null} 
 
                 <div className="new-post-element">
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
@@ -236,8 +317,11 @@ var PostForm = React.createClass({
                     <span className="post-error"></span>
                 </div>
 
-                <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
-                <div onClick={this.handlePostCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
+                <div ref="buttons">
+                    <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
+                    <div onClick={this.handlePostCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
+                </div>
+
             </div>
         );
     },

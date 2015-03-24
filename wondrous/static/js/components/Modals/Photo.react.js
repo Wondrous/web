@@ -37,11 +37,24 @@ var Photo = React.createClass({
             display: "block",
         };
 
+        var backgroundImage = null;
+        var imgSrc = null;
+        var isStillUploading = this.props.data.hasOwnProperty("uploadingImg");
+        if(this.props.data.ouuid){
+            if(isStillUploading){
+                backgroundImage = "url(" +this.props.data.uploadingImg+")"
+                imgSrc = this.props.data.uploadingImg;
+            }else{
+                backgroundImage = "url(" +URLGenerator.generateMedium(this.props.data.ouuid) +")";
+                imgSrc = URLGenerator.generateMedium(this.props.data.ouuid);
+            }
+        }
+
         // We need both of these for backwards comptibility
         // so we don't break posts with cover photos that
         // have is_cover = null.
         if (isCover === true || isCover === null) {
-            photoStyle['backgroundImage'] = this.props.data.ouuid!=null ? "url("+URLGenerator.generateMedium(this.props.data.ouuid)+")" : null;
+            photoStyle['backgroundImage'] = backgroundImage;
             return (
                 <div className="_postImg" onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                 </div>
@@ -49,7 +62,7 @@ var Photo = React.createClass({
         } else {
             return (
                 <div>
-                    <img className="_postImg" onClick={this.handleClose} src={URLGenerator.generateMedium(this.props.data.ouuid)} style={photoStyle} />
+                    <img className="_postImg" onClick={this.handleClose} src={imgSrc} style={photoStyle} />
                 </div>
             );
         }

@@ -84,7 +84,10 @@ var WallStore = Reflux.createStore({
         this.trigger(this.getWall());
     },
 
-    updatePostOnWall: function(){
+    updatePostOnWall: function(res){
+        if(typeof res !=='undefined'){
+            PostStore.post = res; 
+        }
         var key = this.wall.update(PostStore.post);
         this.trigger(this.getWall());
     }

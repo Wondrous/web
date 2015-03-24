@@ -41,7 +41,7 @@ var PostFormStore = Reflux.createStore({
         this.mime_type = post.mime_type;
         this.post_id = post.id;
 
-        this.url = URLGenerator.generateOriginal(post.ouuid);
+        this.url = URLGenerator.generateMedium(post.ouuid);
         this.trigger({url:this.url});
     },
 
