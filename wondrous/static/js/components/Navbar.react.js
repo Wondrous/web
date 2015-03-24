@@ -155,7 +155,10 @@ var Navbar = React.createClass({
                     : null}
 
                 { !UserStore.loggedIn ?
+                    <div className="navbar-right">
+
                     <span onClick={checkLogin} className="navbar-btn">Login</span>
+                    </div>
                     : null }
             </div>
             );
