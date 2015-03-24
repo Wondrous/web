@@ -38,7 +38,8 @@ var Wall = React.createClass({
         var is_private = ProfileStore.user.is_private;
         var is_visible = am_following || is_private;
         is_visible = is_visible === true;
-        // console.log("rendering post",this.state.data);
+
+        console.log("rendering post",this.state.data);
         var posts = this.state.data.map(function(post,index){
             return(
                 <Post key={post.id} data={post} />

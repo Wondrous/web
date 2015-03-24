@@ -8,6 +8,9 @@ var URLGenerator = require('../../utils/URLGenerator');
 var dateToString = require('../../utils/Func').dateToString;
 
 var Comment = React.createClass({
+    getInitialState: function(){
+        return {editting:false}
+    },
     handleClick: function(evt) {
         if (typeof this.props.data.username !== 'undefined') {
             if (checkLogin()) {
@@ -25,6 +28,10 @@ var Comment = React.createClass({
     reportComment: function() {
         if (!checkLogin()) return;
         WondrousActions.toggleCommentReport(this.props.data.id);
+    },
+
+    onEdit: function(evt){
+        this.setState({editting:true})
     },
 
     render: function() {
@@ -47,9 +54,9 @@ var Comment = React.createClass({
                         {this.props.data.name}
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
-
+                    
                     <span>{textLinked}</span>
-
+                    <button onEdit={this.onEdit}>EDIT</button>
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
                     {is_it_mine || PostStore.post.user_id==UserStore.user.id ?

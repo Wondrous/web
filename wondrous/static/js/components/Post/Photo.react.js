@@ -7,12 +7,15 @@ var Photo = React.createClass({
     mixins: [
         Reflux.listenTo(PostFormStore, 'onPostFormChange')
     ],
+
     getInitialState: function(){
         return {percent:0};
     },
+
     onPostFormChange: function(msg){
         if (msg.hasOwnProperty('percent')&&this.props.data.hasOwnProperty("uploadingImg")) {
             this.setState({percent: msg.percent});
+            console.log(msg.percent);
         } else if (msg.hasOwnProperty('completed')) {
             delete this.props.data.uploadingImg;
             this.setState({percent: 0});
@@ -41,6 +44,7 @@ var Photo = React.createClass({
 
         var backgroundImage = null
         var isStillUploading = this.props.data.hasOwnProperty("uploadingImg");
+    
         if(this.props.data.ouuid){
             if(isStillUploading){
                 backgroundImage = "url(" +this.props.data.uploadingImg+")"
