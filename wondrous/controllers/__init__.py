@@ -16,5 +16,7 @@ from wondrous.controllers.feedmanager import FeedManager
 from wondrous.controllers.tagmanager import TagManager
 from wondrous.controllers.searchmanager import SearchManager
 from wondrous.controllers.emailmanager import EmailManager
+from wondrous.controllers.adminmanager import AdminManager
 
-email_controller = None 
+
+email_controller = None
