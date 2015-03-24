@@ -50,7 +50,7 @@ var Photo = React.createClass({
                 backgroundImage = "url(" +this.props.data.uploadingImg+")"
 
             }else{
-                backgroundImage = "url(" +URLGenerator.generateMedium(this.props.data.ouuid) +")";
+                backgroundImage = "url(" +URLGenerator.generateOriginal(this.props.data.ouuid) +")";
             }
         }
 
