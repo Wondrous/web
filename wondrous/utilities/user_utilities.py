@@ -10,7 +10,6 @@
 
 from pyramid.security import unauthenticated_userid
 
-from wondrous.models.admin import AdminManager
 from wondrous.models.feed import Feed
 from wondrous.models.user import User
 

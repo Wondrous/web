@@ -25,7 +25,7 @@ Base.query = DBSession.query_property(Query)  # Setup the SQLAlchemy database en
 engine = None
 
 from wondrous.models.admin import (
-    Admin,
+    AdminTag,
 )
 
 from wondrous.models.comment import (

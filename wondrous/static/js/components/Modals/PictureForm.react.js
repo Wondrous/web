@@ -2,57 +2,35 @@ var WondrousAPI = require('../../utils/WondrousAPI');
 var WondrousActions = require('../../actions/WondrousActions');
 var WondrousConstants = require('../../constants/WondrousConstants');
 var ModalStore = require('../../stores/ModalStore');
-var UploadStore = require('../../stores/UploadStore');
+var PostFormStore = require('../../stores/PostFormStore');
 
-function uri2blob(dataURI) {
-    var uriComponents = dataURI.split(',');
-    var byteString = atob(uriComponents[1]);
-    var mimeString = uriComponents[0].split(':')[1].split(';')[0];
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++)
-        ia[i] = byteString.charCodeAt(i);
-    return new Blob([ab], { type: mimeString });
-}
+var uri2blob = require('../../utils/Func').uri2blob;
+var buildCropper = require('../../utils/Func').buildCropper;
 
 var PictureForm = React.createClass({
-    mixins: [Reflux.listenTo(UploadStore, "onUploadChange")],
-    file: null,
-    height: 0,
-    width: 0,
+    mixins: [Reflux.listenTo(PostFormStore, 'onPostFormChange')],
 
     getInitialState: function() {
         return {
-            loaded:false,
             percent: 0,
-            error: null,
-            isCover: true,
-            imgHeight: null,
-            imgWidth: null,
+            error: null
         };
     },
 
-    onUploadChange: function(msg){
+    onPostFormChange: function(msg){
         if(ModalStore.pictureFormOpen){
             if (msg.hasOwnProperty('error')) {
                 this.setState({error: msg.error});
             } else if (msg.hasOwnProperty('percent')) {
-
                 this.setState({percent: msg.percent});
-
             } else if (msg.hasOwnProperty('completed')) {
                 this.handlePictureCancel(null);
                 this.state.percent = 0;
+            }else if (msg.hasOwnProperty('dataURL')){
+                $(this.refs.cropPictureBox.getDOMNode()).attr('src', msg.dataURL);
+                buildCropper(this.refs.cropPictureBox.getDOMNode(), false);
+                this.setState({loaded:PostFormStore.loaded});
             }
-        }
-    },
-
-    readURL: function() {
-        if (this.file) {
-            $('#pictureUploadBtn').hide();
-            var reader = new FileReader();
-            reader.onload = this.handleCrop;
-            reader.readAsDataURL(this.file);
         }
     },
 
@@ -69,39 +47,21 @@ var PictureForm = React.createClass({
             files = e.target.files;
         }
 
-        this.file = files[0];
-        this.readURL();
-    },
-
-    onDragLeave: function(e) {
-        this.setState({
-          isDragActive: false
-        });
-    },
-
-    onDragOver: function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "copy";
-
-        this.setState({
-          isDragActive: true
-        });
+        PostFormStore.loadFile(files[0]);
+        if (files[0]){
+            $(this.refs.pictureUploadBtn.getDOMNode()).hide();
+        }
     },
 
     handlePictureCancel: function(e){
+        PostFormStore.unloadUser();
         this.loaded = false;
         this.props.handleClose(e);
 
         // Fade out the post form
-        $('#cropPictureBox').cropper('destroy');
-        $('#cropPictureBox').attr('src', "/static/pictures/transparent.gif");
-
-        if(this.file){
-            this.file = null;
-            $('#cropPictureBox').cropper('destroy');
-        }
-
-        $('#pictureUploadBtn').show();
+        $(this.refs.cropPictureBox.getDOMNode()).cropper('destroy');
+        $(this.refs.cropPictureBox.getDOMNode()).attr('src', "/static/pictures/transparent.gif");
+        $(this.refs.pictureUploadBtn.getDOMNode()).show();
     },
 
     onProgress: function(percentage) {
@@ -119,57 +79,10 @@ var PictureForm = React.createClass({
     },
 
     handleSubmit:function(e){
-        this.loaded = false;
-
-        if (typeof this.file !=='undefined' && this.file != null){
-            var dataURL = uri2blob($('#cropPictureBox').cropper("getCroppedCanvas").toDataURL());
-            WondrousActions.addProfilePicture(this.file, dataURL);
+        if (typeof PostFormStore.file !=='undefined' && PostFormStore.file != null){
+            var dataURL = uri2blob($(this.refs.cropPictureBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL());
+            WondrousActions.addProfilePicture(PostFormStore.file, dataURL);
         }
-    },
-
-    handleCrop: function(e) {
-        var tempImg = new Image();
-        tempImg.src = e.target.result;
-        this.width = tempImg.width;
-        this.height = tempImg.height;
-
-        $(this.refs.cropPictureBox.getDOMNode()).attr('src', e.target.result);
-
-        var canvasData = {
-            "left": -462.2145922746779,
-            "top": -109.99570815450636,
-            "width": 400,
-            "height": 400,
-        };
-
-        var cropBoxData = {
-            "left": 0,
-            "top": 0,
-            "width": 400,
-            "height": 400,
-        };
-
-        var that = this;
-
-        $('#cropPictureBox').cropper({
-            aspectRatio: 1,
-            strict: true,
-            dragCrop: false,
-            movable: false,
-            resizable: false,
-            zoomable: false,
-
-            built: function() {
-              $('#cropPictureBox').cropper('setCanvasData', canvasData);
-              $('#cropPictureBox').cropper('setCropBoxData', cropBoxData);
-              that.loaded = true;
-            },
-
-            crop: function(data) {
-            // Output the result data for cropping image.
-
-            }
-        });
     },
 
     render: function() {
@@ -186,7 +99,7 @@ var PictureForm = React.createClass({
 
 
                 <div id="post-hashtags"></div>
-                <div id="pictureUploadBtn" className="upload-button fileinput-button upload-photo">
+                <div ref="pictureUploadBtn" className="upload-button fileinput-button upload-photo">
                     Upload a photo
                     <div className="upload-photo-icon">
                         I
@@ -206,6 +119,7 @@ var PictureForm = React.createClass({
 
                 <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Upload</div>
                 <div onClick={this.handlePictureCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
+                {PostFormStore.loaded?<input id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>:null}
             </div>
         );
     }

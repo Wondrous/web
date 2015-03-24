@@ -202,6 +202,29 @@ class PostManager(BaseManager):
             DBSession.add(new_tag)
 
     @classmethod
+    def newObject(cls,subject,text,file_type=None,height=None,width=None,is_cover=None):
+        new_object = Object(subject=subject, text=text)
+
+        DBSession.add(new_object)
+        DBSession.flush()
+
+        if file_type:
+            new_object.ouuid = str(new_object.id)+'-'+unicode(uuid.uuid4()).lower()
+            new_object.mime_type = file_type
+
+            try:
+                if height and width:
+                    new_object.height = int(height)
+                    new_object.width = int(width)
+                    new_object.is_cover = is_cover if not None else True
+            except Exception, e:
+                new_object.height = None
+                new_object.width = None
+                new_object.is_cover = None
+
+        return new_object
+
+    @classmethod
     def add(cls, user_id, subject, text, repost_id=None, file_type=None, is_cover=None, height=None, width=None):
 
         """
@@ -242,24 +265,7 @@ class PostManager(BaseManager):
 
             text = ValidatePost.sanitize_post_text(text)
             new_post = Post(user_id=user_id)
-            new_object = Object(subject=subject, text=text)
-
-            DBSession.add(new_object)
-            DBSession.flush()
-
-            if file_type:
-                new_object.ouuid = str(new_object.id)+'-'+unicode(uuid.uuid4()).lower()
-                new_object.mime_type = file_type
-
-                try:
-                    if height and width:
-                        new_object.height = int(height)
-                        new_object.width = int(width)
-                        new_object.is_cover = is_cover if not None else True
-                except Exception, e:
-                    new_object.height = None
-                    new_object.width = None
-                    new_object.is_cover = None
+            new_object = cls.newObject(subject,text,file_type,height,width,is_cover)
 
             new_post.object_id = new_object.id
 
@@ -270,7 +276,6 @@ class PostManager(BaseManager):
         if text:
             tags = [re.sub(r'\W+', '', tag) for tag in list(set(re.findall('\s*#\s*(\w+)', text)))]
             if len(tags)>0:
-                logging.warn("tags "+str(tags))
                 cls._process_tags(tags,new_post.id)
 
         cls._move_post_into_feeds(new_post.id, user_id)
@@ -300,9 +305,42 @@ class PostManager(BaseManager):
         return data
 
     @classmethod
-    def post_json(cls, user, subject, text, file_type=None, is_cover=None, height=None, width=None):
+    def edit_post_json(cls,user,subject,text,post_id,file_type=None, is_cover=None, height=None, width=None):
+        post = DBSession.query(Post).filter((Post.id==post_id)&(Post.user_id==user.id)).first()
+        retval = {}
+        if post:
+            obj = post.object
+            obj.set_to_delete = datetime.now()
+
+            obj = cls.newObject(subject,text,file_type,height,width,is_cover)
+            post.object_id = obj.id
+            DBSession.add(post)
+
+            for tag in post.tags:
+                DBSession.delete(tag)
+
+            tags = [re.sub(r'\W+', '', tag) for tag in list(set(re.findall('\s*#\s*(\w+)', text)))]
+            if len(tags)>0:
+                cls._process_tags(tags,post.id)
+
+            retval.update(UploadManager.sign_upload_request(obj.ouuid, obj.mime_type))
+
+            DBSession.flush()
+            DBSession.refresh(post)
+            retval.update(post.json())
+            return retval
+        else:
+            return {'error':"Invalid post_id or user_id"}
+
+    @classmethod
+    def post_json(cls, user, subject, text, file_type=None, is_cover=None, height=None, width=None, post_id=None):
         if not user or not subject or not text:
             return {'error': 'Insufficient data'}
+
+        if post_id:
+            print "edit"
+            # this is an edit
+            return cls.edit_post_json(user,subject, text, post_id, file_type, is_cover, height, width)
 
         post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type,is_cover=is_cover, height=height, width=width)
 

@@ -6,12 +6,15 @@ var Photo = require('./Photo.react');
 var UserTitle = require('./UserTitle.react');
 
 var Post = React.createClass({
+    mixins: [Router.Navigation],
     handleClick: function(evt) {
         if (!evt.metaKey){
             evt.preventDefault();
+
             if (typeof this.props.data.id !=='undefined'){
                 WondrousActions.newPostLoad(this.props.data.id);
             }
+
             WondrousActions.updatePost(this.props.data);
             WondrousActions.openCardModal();
         }

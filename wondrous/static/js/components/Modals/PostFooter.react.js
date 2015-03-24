@@ -11,6 +11,11 @@ var PostFooter = React.createClass({
         WondrousActions.deletePost(this.props.data.id);
     },
 
+    editPost: function(){
+        WondrousActions.togglePostModal();
+        WondrousActions.editPost(this.props.data);
+    },
+
     reportPost: function(e) {
         if (!checkLogin()) return;
         WondrousActions.togglePostReport(this.props.data.id);
@@ -59,6 +64,7 @@ var PostFooter = React.createClass({
 
     render: function(){
         var is_it_mine = (this.props.data.username === UserStore.user.username);
+        var original_mine = is_it_mine&&(this.props.data.repost==null);
         return (
             <div className="post-footer">
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
@@ -100,6 +106,11 @@ var PostFooter = React.createClass({
                         <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
                     </span>
                     : null}
+
+                {original_mine?<span onClick={this.editPost} className="post-footer-btn post-delete-btn round-50" title="Delete this post">
+                        EDIT THIS!!!!!
+                </span>
+                : null}
             </div>
         );
     }

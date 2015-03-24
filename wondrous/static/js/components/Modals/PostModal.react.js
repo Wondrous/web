@@ -30,12 +30,10 @@ var PostModal = React.createClass({
 	},
 
 	handleClose: function(evt) {
-		if(!UserStore.loggedIn&UserStore.loaded&(typeof this.getParams().post_id !=='undefined'))
-		{
-			return;
-		}
-		// handled only by children
+
 		WondrousActions.closeCardModal();
+
+		// handled only by children
 		evt.preventDefault();
 		evt.stopPropagation();
 	},

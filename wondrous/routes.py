@@ -115,12 +115,18 @@ def build_routes(config):
     config.add_route('api_search_tags',                        '/api/search/tags')      # GET
     config.add_route('api_search_user_tags',                   '/api/search/users')      # GET
 
-    config.add_route('api_global_trending',                    '/api/trending')      # GET
-    config.add_route('api_user_discover',                    '/api/users')      # GET
+    config.add_route('api_global_trending',                     '/api/trending')      # GET
+    config.add_route('api_user_discover',                       '/api/users')      # GET
 
     # Reported Comment/Post
     config.add_route('api_report_post',                         '/api/report/post')      # POST
     config.add_route('api_report_comment',                      '/api/report/comment')      # POST
+
+    # ADMIN
+    config.add_route('api_admin_auth',                          '/api/admin/auth')          # POST
+    config.add_route('api_admin_query',                         '/api/admin/execute_query') # POST
+    config.add_route('api_admin_reported_comment',              '/api/admin/reported_comments') # GET
+    config.add_route('api_admin_reported_post',                 '/api/admin/reported_posts') # GET
 
     # INDEX
     config.add_route('index_handler1',                          '/{a}')

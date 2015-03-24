@@ -1,7 +1,7 @@
 var WondrousAPI = require("../utils/WondrousAPI");
 
 var WondrousActions = Reflux.createActions({
-    // SECTION loading from server
+    "editPost": {},
 
     "loadTrending": {},
     "loadSuggestedUsers": {},
@@ -58,6 +58,8 @@ var WondrousActions = Reflux.createActions({
 
     // submits new post
     "addNewPost": {},
+
+    "newEditPost": {},
 
     "newPostLoad": {},
 
@@ -467,6 +469,10 @@ WondrousActions.uploadFile.listen(function(blob,post_data,file_type){
                 if (post_data.hasOwnProperty('object_id')){
                     setTimeout(WondrousActions.addToFeed,200,post_data);
                     setTimeout(WondrousActions.addToWall,200,post_data);
+                    setTimeout(WondrousActions.updatePostOnModal,50,post_data);
+                    setTimeout(WondrousActions.updatePostOnWall,300,post_data);
+                    setTimeout(WondrousActions.updatePostOnFeed,300,post_data);
+
                 }else if(post_data.hasOwnProperty('is_private')){
                     WondrousActions.updateUser(post_data);
                 }
@@ -506,6 +512,43 @@ WondrousActions.addNewPost.listen(function(subject,text,file_to_upload,blob,is_c
                     WondrousActions.uploadComplete();
                     setTimeout(WondrousActions.addToFeed,200,res);
                     setTimeout(WondrousActions.addToWall,200,res);
+                }
+            }else{
+                WondrousActions.uploadError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.newEditPost.listen(function(subject,text,file_to_upload,blob,is_cover,height,width,post_id){
+
+    var uploadData = {
+        subject: subject,
+        text: text,
+        post_id:post_id
+    };
+
+    if (file_to_upload){
+        uploadData.file_type = file_to_upload.type
+
+        if ((typeof height !=='undefined') && (typeof width !=='undefined')) {
+            uploadData.height = parseInt(height);
+            uploadData.width = parseInt(width);
+            uploadData.is_cover = (is_cover==='undefined' || is_cover==false) ? false :true;
+        }
+    }
+
+    WondrousAPI.newPost({
+        uploadData:uploadData,
+        callback: function(err,res){
+            if (err == null){
+                if(file_to_upload!=null){
+                    WondrousActions.uploadFile(blob,res,file_to_upload.type);
+                }else if(res.hasOwnProperty('object_id')){
+                    WondrousActions.uploadComplete();
+                    WondrousActions.updatePostOnFeed(res);
+                    setTimeout(WondrousActions.updatePostOnWall,200,res);
+                    setTimeout(WondrousActions.updatePostOnModal,200,res);
                 }
             }else{
                 WondrousActions.uploadError(err);
