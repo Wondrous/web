@@ -61,9 +61,11 @@ var PostFormStore = Reflux.createStore({
         this.trigger({dataURL:this.dataURL});
     },
 
-    toggleBackgroundDisplay: function(){
+    toggleBackgroundDisplay: function() {
+        console.log(this.isCover);
         this.isCover = !this.isCover;
         this.trigger({isCover:this.isCover});
+        console.log(this.isCover);
     },
 
     uploadComplete: function(status){
