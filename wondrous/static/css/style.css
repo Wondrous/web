@@ -2230,7 +2230,7 @@ a:hover {
   left: 0;
   padding: 5px 7px;
   width: 70px;
-  background-color: #0064c8;
+  background-color: #00e2ae;
   color: white;
   text-align: center;
   cursor: pointer;
@@ -2240,9 +2240,9 @@ a:hover {
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out; }
   .post-button:hover {
-    background-color: #0078c8; }
+    background-color: #00ecae; }
   .post-button:active {
-    background-color: #0064c8; }
+    background-color: #00dcae; }
 
 .cancel-post-button {
   margin-left: 4px;
@@ -2336,14 +2336,16 @@ a:hover {
   color: #fbfbfb;
   padding: 6px 16px;
   border-radius: 2px;
-  background-color: #0064aa;
-  outline: none; }
+  background-color: #00e2ae;
+  outline: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
   .post-comment-btn:hover {
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    background-color: #006eb4; }
+    background-color: #00ecae; }
+  .post-comment-btn:active {
+    background-color: #00dcae; }
 
 .post-comment-wrapper {
   padding: 17px;
