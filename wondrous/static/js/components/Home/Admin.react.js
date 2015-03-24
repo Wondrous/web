@@ -18,30 +18,12 @@ var Admin = React.createClass({
             }
         });
     },
-    onResult: function(err,res){
-        console.log(err,res);
-        if(err==null){
-            this.refs.result.getDOMNode().value=res.result;
-        }else{
-            this.refs.result.getDOMNode().value=err.error;
-        }
-    },
-
-    onQuery: function(e){
-        this.refs.result.getDOMNode().value='';
-        WondrousAPI.admin_query({
-            text: this.refs.query.getDOMNode().value.trim(),
-            callback: this.onResult
-        })
-    },
 
     render: function(){
 
         return (
             <div style={{paddingTop:"100px"}}>
-                <textarea style={{width:"500px", height:"300px"}} ref="query"></textarea>
-                <button onClick={this.onQuery}>Query</button>
-                <textarea style={{width:"500px", height:"300px"}} ref="result"></textarea>
+
             </div>
         );
     }

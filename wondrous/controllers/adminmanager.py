@@ -51,15 +51,3 @@ class AdminManager:
     @staticmethod
     def reported_comment_json(user):
         pass
-
-    @staticmethod
-    def sql_query_json(user,text):
-        try:
-            ret = DBSession.execute(text)
-        except Exception, e:
-            return {'error',e.message}
-
-        if not ret:
-            return {'result':'zero rows'}
-        ret = ret.fetchall()[0]
-        return {'result':str(ret)}

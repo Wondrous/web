@@ -34,18 +34,6 @@ VoteAction = {
 };
 
 module.exports = {
-    // submit sql query
-    // options are:
-    // callback
-    // text
-    admin_query: function(options){
-        var callback = options.callback;
-        var text = options.text;
-        var url = '/api/admin/execute_query';
-        console.log(text);
-
-        request.post(url).send({text:text}).end(_callback(callback));
-    },
 
     // get the user admin authentication
     // options are:

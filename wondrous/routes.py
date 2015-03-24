@@ -126,7 +126,6 @@ def build_routes(config):
 
     # ADMIN
     config.add_route('api_admin_auth',                          '/api/admin/auth')          # GET
-    config.add_route('api_admin_query',                         '/api/admin/execute_query') # POST
     config.add_route('api_admin_reported_comment',              '/api/admin/reported_comments') # GET
     config.add_route('api_admin_reported_post',                 '/api/admin/reported_posts') # GET
 
