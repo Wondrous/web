@@ -28,6 +28,11 @@ var PostFormStore = Reflux.createStore({
         this.post_id = null;
     },
 
+    useUrl: function(url){
+        this.url = url;
+        this.trigger({url:this.url});
+    },
+
     editPost: function(post,imgDOM){
         this.subject = post.subject;
         this.text = post.text;
@@ -56,7 +61,6 @@ var PostFormStore = Reflux.createStore({
     },
 
     toggleBackgroundDisplay: function(){
-
         this.isCover = !this.isCover;
         this.trigger({isCover:this.isCover});
     },

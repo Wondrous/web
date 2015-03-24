@@ -283,7 +283,9 @@ class AccountManager(BaseManager):
         # TODO DELETE OLD PHOTO -- picture_object.ouuid
         picture_object.ouuid = str(picture_object.id)+'-'+unicode(uuid.uuid4()).lower()
         picture_object.mime_type = file_type
-        data = UploadManager.sign_upload_request(picture_object.ouuid, picture_object.mime_type)
+
+        file_names = ["%s"%(picture_object.ouuid),"%s-dim150x150"%(picture_object.ouuid),"%s-dim75x75"%(picture_object.ouuid),"%s-dim45x45"%(picture_object.ouuid)]
+        data = UploadManager.sign_upload_request(file_names, picture_object.mime_type)
         data.update(user.json())
         data.update({"ouuid":picture_object.ouuid})
 

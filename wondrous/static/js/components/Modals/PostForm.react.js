@@ -7,6 +7,33 @@ var PostFormStore = require('../../stores/PostFormStore');
 var uri2blob = require('../../utils/Func').uri2blob;
 var buildCropper = require('../../utils/Func').buildCropper;
 
+function resizeImage(url, callback) {
+    var sourceImage = new Image();
+
+    sourceImage.onload = function() {
+        // Create a canvas with the desired dimensions
+        var canvas = document.createElement("canvas");
+
+        var height = this.height;
+        var width = this.width;
+        var scale = 1;
+        if (width > 750) scale = width / 750;
+        height /= scale;
+        width /= scale;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Scale and draw the source image to the canvas
+        canvas.getContext("2d").drawImage(sourceImage, 0, 0, width, height);
+
+        // Convert the canvas to a data URL in PNG format
+        callback(canvas.toDataURL());
+    }
+
+    sourceImage.src = url;
+}
+
 var PostForm = React.createClass({
     mixins: [
         Reflux.listenTo(PostFormStore, 'onPostFormChange')
@@ -102,25 +129,13 @@ var PostForm = React.createClass({
         setTimeout(this.addToFeeds, 500);
     },
 
-    handleSubmit:function(e){
-        var postSubject = $('#postSubject').val();
-        var postText    = $('#postTextarea').val();
-
-        var dataURL = null;
-        if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
-            if (this.state.isCover) {
-                dataURL = uri2blob($(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL());
-            } else {
-                dataURL = uri2blob($(this.refs.fsBox.getDOMNode()).attr("src"));
-            }
-        }
-
+    _submitData: function(postSubject,postText,blobs){
         if (PostFormStore.post_id==null){
             WondrousActions.addNewPost(
                 postSubject,
                 postText,
                 PostFormStore.file,
-                dataURL,
+                blobs,
                 this.state.isCover,
                 PostFormStore.height,
                 PostFormStore.width
@@ -130,12 +145,34 @@ var PostForm = React.createClass({
                 postSubject,
                 postText,
                 PostFormStore.file,
-                dataURL,
+                blobs,
                 this.state.isCover,
                 PostFormStore.height,
                 PostFormStore.width,
                 PostFormStore.post_id
             );
+        }
+    },
+
+    handleSubmit:function(e){
+        var postSubject = $('#postSubject').val();
+        var postText    = $('#postTextarea').val();
+
+
+        if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
+            if (this.state.isCover) {
+                var dataURL = uri2blob($(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL());
+                var medium = uri2blob($(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas",{width:750,heihgt:390}).toDataURL());
+                var blobs = {"fullsize": dataURL,"medium":medium}
+                this._submitData(postSubject,postText,blobs);
+            } else {
+                var that = this;
+                var dataURL = uri2blob($(this.refs.fsBox.getDOMNode()).attr("src"));
+                resizeImage($(this.refs.fsBox.getDOMNode()).attr("src"),function(mediumDataURL){
+                    var blobs = {"fullsize": dataURL,"medium": uri2blob(mediumDataURL)}
+                    that._submitData(postSubject,postText,blobs);
+                });
+            }
         }
     },
 

@@ -33,6 +33,66 @@ VoteAction = {
     TOPFRIEND: 7
 };
 
+function count(obj) {
+
+    if (obj.__count__ !== undefined) { // Old FF
+        return obj.__count__;
+    }
+
+    if (Object.keys) { // ES5
+        return Object.keys(obj).length;
+    }
+
+    // Everything else:
+
+    var c = 0, p;
+    for (p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            c += 1;
+        }
+    }
+
+    return c;
+
+}
+
+var _send_xhr_data = function(ctr,url,blob,onProgress,onComplete,file_type){
+    var xhr = new XMLHttpRequest();
+
+    if (xhr.withCredentials !== null) {
+        xhr.open('PUT', url, true);
+    } else if (typeof XDomainRequest !== "undefined") {
+        xhr = new XDomainRequest();
+        xhr.open('PUT', url);
+    } else {
+        xhr = null;
+    }
+
+    if (!xhr) {
+        this.onError('CORS not supported');
+    } else {
+        xhr.onload = function() {
+        if (xhr.status !== 200) {
+            console.error("upload incomplete!");
+        }else{
+            onComplete(true);
+        }
+        };
+        xhr.onerror = function() {
+            console.log("errror!!!! CORS");
+        };
+        xhr.upload.onprogress = function(e) {
+          if (e.lengthComputable) {
+            var progress = Math.round((e.loaded / e.total) * 100);
+            if (onProgress) onProgress(ctr,progress);
+          }
+        };
+      }
+      xhr.setRequestHeader('Content-Type', file_type);
+      xhr.setRequestHeader('x-amz-acl', 'public-read');
+      xhr.send(blob);
+}
+
 module.exports = {
 
     // get the user admin authentication
@@ -695,6 +755,8 @@ module.exports = {
         request.post(url).end(_callback(callback));
     },
 
+
+
     // Upload file to s3
     // options:
     // callback(err,json_res)
@@ -703,54 +765,64 @@ module.exports = {
     // post_data // the returned json object data from newPost
     // onProgress(int) //optional
     uploadFile: function(options){
-        if(!options.hasOwnProperty('blob')||!options.hasOwnProperty('post_data')||!options.hasOwnProperty('file_type')){
+        if(!options.hasOwnProperty('blobs')||!options.hasOwnProperty('post_data')||!options.hasOwnProperty('file_type')){
             if (callback) callback({error:"not enough"},null);
         }
 
         var callback = options.callback;
         var post_data = options.post_data;
-        var blob = options.blob;
+        var blobs = options.blobs;
         var onProgress = options.onProgress;
         var file_type = options.file_type;
 
-        if (post_data.hasOwnProperty('signed_request')){
-            var xhr = new XMLHttpRequest();
-            var url = post_data['signed_request'];
+        var signed_urls = post_data.signed_requests;
 
-            if (xhr.withCredentials !== null) {
-                xhr.open('PUT', url, true);
-            } else if (typeof XDomainRequest !== "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open('PUT', url);
-            } else {
-                xhr = null;
+        var file_count = count(signed_urls);
+
+        var percentages = [];
+
+        for(var i = 0; i < file_count; i++) {
+            percentages.push(0)
+        }
+
+        var onAggregateProgress = function(i,percentage){
+            percentages[i]=percentage;
+            var sum = percentages.reduce(function(a,b){
+                return a+b;
+            }, 0);
+            onProgress(sum/file_count);
+        }
+
+        var files_uploaded = 0;
+        var onComplete = function(val){
+            files_uploaded++;
+            if (files_uploaded==file_count){
+                if(callback) callback(null,{"result":"uploaded"});
             }
+        }
 
-            if (!xhr) {
-                this.onError('CORS not supported');
-            } else {
-                xhr.onload = function() {
-                if (xhr.status === 200) {
-                    if(callback) callback(null,xhr);
-                } else {
-                    console.error("upload incomplete!");
+        if (post_data.hasOwnProperty('signed_requests')){
+            var ctr = 0;
+            for (var name in signed_urls){
+                var signed_url = signed_urls[name]
+                var blob = null;
+
+                if(name.indexOf('150x150')>-1){
+                    blob = blobs['150x150']
+                }else if(name.indexOf('75x75')>-1){
+                    blob = blobs['75x75']
+                }else if (name.indexOf('45x45')>-1){
+                    blob = blobs['45x45']
+                }else if (name.indexOf('-med')>-1){
+                    blob = blobs['medium']
+                }else {
+                    blob = blobs['fullsize']
                 }
-                };
-                xhr.onerror = function() {
-                    console.log("errror!!!! CORS");
-                };
-                xhr.upload.onprogress = function(e) {
-                  if (e.lengthComputable) {
-                    var progress = Math.round((e.loaded / e.total) * 100);
-                    if (onProgress) onProgress(progress);
-                  }
-                };
-              }
-              xhr.setRequestHeader('Content-Type', file_type);
-              xhr.setRequestHeader('x-amz-acl', 'public-read');
-              xhr.send(blob);
+                _send_xhr_data(ctr,signed_url,blob,onAggregateProgress,onComplete,file_type);
+                ctr++;
+            }
         }else{
-            if (callback) callback(null,{error:"no signed_request"});
+            if (callback) callback(null,{error:"no signed_requests"});
         }
     }
 }

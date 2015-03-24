@@ -20,7 +20,7 @@ var WondrousActions = Reflux.createActions({
     "clearModal": {},
 
     "togglePostLink": {},
-    
+
     "toggleMoreOptions": {},
 
     // get liked users
@@ -461,9 +461,9 @@ WondrousActions.loadFollowing.listen(function(username,page){
     });
 });
 
-WondrousActions.uploadFile.listen(function(blob, post_data, file_type) {
+WondrousActions.uploadFile.listen(function(blobs, post_data, file_type) {
     WondrousAPI.uploadFile({
-        blob: blob,
+        blobs: blobs,
         post_data: post_data,
         file_type: file_type,
         callback:function(err, res) {
@@ -487,7 +487,7 @@ WondrousActions.uploadFile.listen(function(blob, post_data, file_type) {
     });
 });
 
-WondrousActions.addNewPost.listen(function(subject, text, file_to_upload, blob, is_cover, height, width) {
+WondrousActions.addNewPost.listen(function(subject, text, file_to_upload, blobs, is_cover, height, width) {
 
     var uploadData = {
         subject: subject,
@@ -509,7 +509,7 @@ WondrousActions.addNewPost.listen(function(subject, text, file_to_upload, blob, 
         callback: function(err, res) {
             if (err == null){
                 if (file_to_upload !== null) {
-                    WondrousActions.uploadFile(blob, res, file_to_upload.type);
+                    WondrousActions.uploadFile(blobs, res, file_to_upload.type);
                 } else if (res.hasOwnProperty('object_id')) {
                     WondrousActions.uploadComplete();
                     setTimeout(WondrousActions.addToFeed, 200, res);
@@ -558,12 +558,12 @@ WondrousActions.newEditPost.listen(function(subject, text, file_to_upload, blob,
     });
 });
 
-WondrousActions.addProfilePicture.listen(function(file_to_upload, blob) {
+WondrousActions.addProfilePicture.listen(function(file_to_upload, blobs) {
     WondrousAPI.changePicture({
         file_type: file_to_upload.type,
         callback: function(err, res) {
             if (err === null) {
-                WondrousActions.uploadFile(blob, res, file_to_upload.type);
+                WondrousActions.uploadFile(blobs, res, file_to_upload.type);
             } else {
                 WondrousActions.uploadError(err);
             }

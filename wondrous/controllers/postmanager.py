@@ -323,7 +323,8 @@ class PostManager(BaseManager):
             if len(tags)>0:
                 cls._process_tags(tags,post.id)
 
-            retval.update(UploadManager.sign_upload_request(obj.ouuid, obj.mime_type))
+            file_names = ["%s"%(obj.ouuid),"%s-med"%(obj.ouuid)]
+            retval.update(UploadManager.sign_upload_request(file_names, obj.mime_type))
 
             DBSession.flush()
             DBSession.refresh(post)
@@ -344,12 +345,13 @@ class PostManager(BaseManager):
 
         post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type,is_cover=is_cover, height=height, width=width)
 
-        object = post.object
+        obj = post.object
 
         data = {}
 
         if file_type:
-            data.update(UploadManager.sign_upload_request(object.ouuid, object.mime_type))
+            file_names = ["%s"%(obj.ouuid),"%s-med"%(obj.ouuid)]
+            data.update(UploadManager.sign_upload_request(file_names, obj.mime_type))
 
         # For now, let's not allow @mentions in the post subject,
         # let's keep them to comments and the post-text

@@ -29,7 +29,7 @@ from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
 class UploadManager:
     @staticmethod
-    def sign_upload_request(ouuid, mime_type):
+    def sign_upload_request(names, mime_type):
 
         """
             Signs the upload request with our AWS credientials,
@@ -39,24 +39,18 @@ class UploadManager:
         AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
         AWS_SECRET_KEY = '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'
         AWS_S3_BUCKET  = 'mojorankdev'
+        signed_requests = {}
+        urls = {}
+        for name in names:
+            expires = int(time.time()+10)
+            amz_headers = 'x-amz-acl:public-read'
+            put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, name)
+            signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+            signature = urllib.quote_plus(signature.strip())
+            urls[name] = url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, name)
+            signed_requests[name] = '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature)
 
-        # Generate the timeframe for uploading
-        expires = int(time.time()+10)
-        amz_headers = 'x-amz-acl:public-read'
-
-        # Generate the PUT request that the js will use
-        put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, ouuid)
-
-        # Generate the signature with which the request can be signed:
-        signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-        # Remove surrounding whitespace and quote special characters:
-        signature = urllib.quote_plus(signature.strip())
-
-        # Build the URL of the file in anticipation of its imminent upload:
-        url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, ouuid)
-
-        return {'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
-                'url': url}
+        return {'signed_requests': signed_requests,'urls': urls}
 
 class PasswordManager(object):
 
@@ -617,7 +611,7 @@ class ValidatePost(object):
             return None, "Please post some text, add a link, or upload a delicious file of your choosing!"
 
 class ValidateLink(object):
-    
+
     @staticmethod
     def sanitize_post_link(post_link):
 
