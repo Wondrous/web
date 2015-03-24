@@ -17,6 +17,8 @@ TAKEN_PATHS = set([
     "activate",
     "ajax",
     "api",
+    "admin",
+    "wondrous",
     "auth",
     "info",
     "landing",
@@ -123,7 +125,7 @@ def build_routes(config):
     config.add_route('api_report_comment',                      '/api/report/comment')      # POST
 
     # ADMIN
-    config.add_route('api_admin_auth',                          '/api/admin/auth')          # POST
+    config.add_route('api_admin_auth',                          '/api/admin/auth')          # GET
     config.add_route('api_admin_query',                         '/api/admin/execute_query') # POST
     config.add_route('api_admin_reported_comment',              '/api/admin/reported_comments') # GET
     config.add_route('api_admin_reported_post',                 '/api/admin/reported_posts') # GET

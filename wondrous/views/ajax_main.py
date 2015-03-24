@@ -33,6 +33,7 @@ from wondrous.models.user import (
 import wondrous.controllers
 from wondrous.controllers import (
     AccountManager,
+    AdminManager,
     FeedManager,
     NotificationManager,
     PostManager,
@@ -127,6 +128,70 @@ class APIViews(BaseHandler):
                     max_age=MAX_AGE,
                 )
         self.request.response.headerlist.extend(headers)
+
+    @api_login_required
+    @view_config(request_method="GET",route_name='api_admin_auth',renderer='json')
+    def api_admin_auth(self):
+
+        """
+            PURPOSE: Retrieves admin permission
+
+            USE: self.query_kwargs to provide all the required inputs.
+
+            PARAMS: (None)
+
+            RETURNS: the tag if available else error
+        """
+
+        return AdminManager.auth_json(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="GET",route_name='api_admin_reported_comment',renderer='json')
+    def api_admin_reported_comment(self):
+
+        """
+            PURPOSE: Retrieves admin permission
+
+            USE: self.query_kwargs to provide all the required inputs.
+
+            PARAMS: (None)
+
+            RETURNS: the tag if available else error
+        """
+
+        return AdminManager.reported_comment_json(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="GET",route_name='api_admin_reported_post',renderer='json')
+    def api_admin_reported_post(self):
+
+        """
+            PURPOSE: Retrieves admin permission
+
+            USE: self.query_kwargs to provide all the required inputs.
+
+            PARAMS: (None)
+
+            RETURNS: the tag if available else error
+        """
+
+        return AdminManager.reported_post_json(**self.query_kwargs)
+
+    @api_login_required
+    @view_config(request_method="POST",route_name='api_admin_query',renderer='json')
+    def api_admin_query(self):
+
+        """
+            PURPOSE: Retrieves admin permission
+
+            USE: self.query_kwargs to provide all the required inputs.
+
+            PARAMS: (None)
+
+            RETURNS: the tag if available else error
+        """
+
+        return AdminManager.sql_query_json(**self.query_kwargs)
 
     @api_login_required
     @view_config(request_method="GET",route_name='api_global_trending',renderer='json')

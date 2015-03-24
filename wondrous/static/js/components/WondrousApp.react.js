@@ -12,6 +12,7 @@ var SettingStore = require('../stores/SettingStore');
 
 // Other components -- stitch them together
 var Home = require('./Home/Home.react');
+var Admin = require('./Home/Admin.react');
 var LoggedOut = require('./Home/LoggedOut.react');
 var Navbar = require('./Navbar.react');
 var ProfileRoute = require('./ProfileRoute.react');
@@ -83,6 +84,7 @@ var Routes = (
         <Route name="activate" path="/activate/:verification" handler={Verification}/>
         <Route name="passwordReset" path="/reset/:verification" handler={PasswordReset}/>
         <Route name="settings" path="/settings" handler={Settings}/>
+        <Route name="admin" path="/admin" handler={Admin}/>
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>
     </Route>
