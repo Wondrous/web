@@ -4,6 +4,7 @@ var UserStore = require('../stores/UserStore');
 var ModalStore = require('../stores/ModalStore');
 var NotificationStore = require('../stores/NotificationStore');
 var checkLogin = require('../utils/Func').checkLogin;
+var URLGenerator = require('../utils/URLGenerator');
 
 var SearchBox = React.createClass({
     contextTypes: {
@@ -99,7 +100,7 @@ var ProfileLink = React.createClass({
     },
 
     render: function () {
-        var img_src = (typeof UserStore.user.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+UserStore.user.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof UserStore.user.ouuid !== 'undefined') ? URLGenerator.generate45(UserStore.user.ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + UserStore.user.username;
         return (
             <Link id="linkToProfile" to={hrefPlaceholder} className="navbar-btn round-2">

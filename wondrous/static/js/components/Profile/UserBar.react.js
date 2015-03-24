@@ -6,6 +6,8 @@ var ProfileBarBadge = require('./ProfileBarBadge.react');
 var InfluencerBadge = require('./InfluencerBadge.react');
 var linkify = require('../../utils/Linkify');
 
+var URLGenerator = require('../../utils/URLGenerator');
+
 var UserBar = React.createClass({
     contextTypes: {
         router: React.PropTypes.func
@@ -82,8 +84,8 @@ var UserBar = React.createClass({
 
         var username = this.props.username;
         var is_me = username === UserStore.user.username;
-        var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : false;
-        var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : null;
+        var img_src = ouuid ? URLGenerator.generate150(ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
         var classes = "profile-header-nav-item follow-button round-50 ";
         var is_influencer = (this.state.data.wondrous_score >= 75);
 

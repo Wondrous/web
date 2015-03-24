@@ -1,4 +1,5 @@
 var StatusBar = require('./StatusBar.react');
+var URLGenerator = require('../../utils/URLGenerator');
 
 var Photo = React.createClass({
     render: function() {
@@ -17,7 +18,7 @@ var Photo = React.createClass({
         }
 
         photoStyle = {
-            backgroundImage: this.props.data.ouuid ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null,
+            backgroundImage: this.props.data.ouuid ? "url(" + URLGenerator.generateMedium(this.props.data.ouuid)+")" : null,
             height: height,
             maxHeight: 600,
         };

@@ -2,6 +2,7 @@ var WondrousActions = require('../../actions/WondrousActions');
 var ModalStore = require('../../stores/ModalStore');
 var PostStore = require('../../stores/PostStore');
 var ModalWrapper = require('./ModalWrapper.react');
+var URLGenerator = require('../../utils/URLGenerator');
 
 var LikedUserModal = React.createClass({
     mixins:[Reflux.listenTo(ModalStore,"onModalChange"),Reflux.listenTo(PostStore,"onPostChange")],
@@ -42,7 +43,7 @@ var LikedUserModal = React.createClass({
                 <Link key={ind} to={'/'+user.username} onClick={this.handleClick} className="dropdown-a">
                     <div className="dropdown-element dropdown-element-notification">
                         <span className="notificationTextPosition">
-                            <img ref="usericon" className="post-thumb round-2" src={"http://mojorankdev.s3.amazonaws.com/"+user.ouuid} />
+                            <img ref="usericon" className="post-thumb round-2" src={URLGenerator.generate75(user.ouuid)} />
                             <div className="notification-content">
                                 <div>
                                     <b>{user.name}

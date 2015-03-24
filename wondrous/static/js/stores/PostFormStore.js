@@ -1,6 +1,7 @@
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
 var WondrousAPI = require('../utils/WondrousAPI');
+var URLGenerator = require('../utils/URLGenerator');
 
 var defaultUser = {username:''};
 
@@ -40,7 +41,7 @@ var PostFormStore = Reflux.createStore({
         this.mime_type = post.mime_type;
         this.post_id = post.id;
 
-        this.url = "http://mojorankdev.s3.amazonaws.com/"+post.ouuid;
+        this.url = URLGenerator.generateOriginal(post.ouuid);
         this.trigger({url:this.url});
     },
 

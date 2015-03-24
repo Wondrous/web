@@ -1,3 +1,5 @@
+var URLGenerator = require("../../utils/URLGenerator");
+
 var Photo = React.createClass({
 
     render: function() {
@@ -39,7 +41,7 @@ var Photo = React.createClass({
         // so we don't break posts with cover photos that
         // have is_cover = null.
         if (isCover === true || isCover === null) {
-            photoStyle['backgroundImage'] = this.props.data.ouuid!=null ? "url(http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid+")" : null;
+            photoStyle['backgroundImage'] = this.props.data.ouuid!=null ? "url("+URLGenerator.generateMedium(this.props.data.ouuid)+")" : null;
             return (
                 <div className="_postImg" onClick={this.handleClose} ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                 </div>
@@ -47,7 +49,7 @@ var Photo = React.createClass({
         } else {
             return (
                 <div>
-                    <img className="_postImg" onClick={this.handleClose} src={"http://mojorankdev.s3.amazonaws.com/" + this.props.data.ouuid} style={photoStyle} />
+                    <img className="_postImg" onClick={this.handleClose} src={URLGenerator.generateMedium(this.props.data.ouuid)} style={photoStyle} />
                 </div>
             );
         }

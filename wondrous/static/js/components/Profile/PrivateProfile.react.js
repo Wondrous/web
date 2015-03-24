@@ -41,7 +41,7 @@ var PrivateProfile = React.createClass({
     },
     render: function() {
         var ouuid = (typeof this.state.data.ouuid !== 'undefined') ? this.state.data.ouuid : false;
-        var img_src = ouuid ? "http://mojorankdev.s3.amazonaws.com/"+ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = ouuid ? URLGenerator.generate150(ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         var is_influencer = (this.state.data.wondrous_score>=75);
         var wondrousScore = this.state.data.wondrous_score;

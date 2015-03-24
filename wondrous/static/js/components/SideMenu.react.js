@@ -5,6 +5,7 @@ var WondrousConstants = require('../constants/WondrousConstants');
 var NotificationConstants = require('../constants/NotificationConstants');
 var WondrousActions = require('../actions/WondrousActions');
 var WondrousAPI = require('../utils/WondrousAPI');
+var URLGenerator = require('../utils/URLGenerator');
 
 var SettingsBar = React.createClass({
     contextTypes: {
@@ -104,7 +105,7 @@ var Notification = React.createClass({
         var url = "/" + note.from_user_username;
 
         // TODO: Get sender's profile pic
-        var profilePic = note.from_user_ouuid ? "http://mojorankdev.s3.amazonaws.com/"+note.from_user_ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var profilePic = note.from_user_ouuid ? URLGenerator.generate45(note.from_user_ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
         // var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
 
         var notificationTitle = "@" + note.from_user_username;

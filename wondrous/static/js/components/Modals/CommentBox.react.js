@@ -3,6 +3,7 @@ var PostStore = require('../../stores/PostStore');
 var UserStore = require('../../stores/UserStore');
 var checkLogin = require('../../utils/Func').checkLogin;
 var linkify = require('../../utils/Linkify');
+var URLGenerator = require('../../utils/URLGenerator');
 
 var dateToString = require('../../utils/Func').dateToString;
 
@@ -27,7 +28,7 @@ var Comment = React.createClass({
     },
 
     render: function() {
-        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? "http://mojorankdev.s3.amazonaws.com/"+this.props.data.ouuid : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? URLGenerator.generate75(this.props.data.ouuid): "/static/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
 
