@@ -554,8 +554,9 @@ WondrousActions.newEditPost.listen(function(subject, text, file_to_upload, blobs
                     WondrousActions.uploadComplete();
                     var temp = res;
                     temp.uploadingImg = blobs.dataURL;
-                    WondrousActions.updatePostOnModal(temp);
                     WondrousActions.updatePostOnWall(temp);
+                    WondrousActions.updatePostOnFeed(temp);
+
                     WondrousActions.uploadFile(blobs, res, file_to_upload.type);
                 } else if (res.hasOwnProperty('object_id')) {
                     WondrousActions.uploadComplete();

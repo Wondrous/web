@@ -140,9 +140,10 @@ var Navbar = React.createClass({
         if(!UserStore.loaded){
             return (<div></div>);
         }
-
+        // TODO this a tag is out of bounds
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
+
                 <Link to="/" onClick={ModalStore.clearModal} style={{ color: "rgb(234,234,234)" }}>
                     <img src="/static/pictures/p.icon_50x50.png" className="navbar-logo" />
                 </Link>
