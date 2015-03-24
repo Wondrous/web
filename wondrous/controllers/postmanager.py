@@ -117,7 +117,25 @@ class PostManager(BaseManager):
         return DBSession.query(Post).filter_by(user_id=user_id).filter_by(set_to_delete=None).count()
 
     @classmethod
-    def new_comment_json(cls,user,post_id,text):
+    def edit_comment_json(cls,user,text,comment_id=None):
+        c = DBSession.query(Comment).filter(Comment.user_id==user.id).\
+            filter(Comment.id==comment_id).first()
+        c.text = text 
+        DBSession.add(c)
+        DBSession.flush()
+
+        retval= user.json()
+        if user.picture_object:
+            retval.update(user.picture_object.json())
+        retval.update(c.json())
+        return retval
+
+    @classmethod
+    def comment_json(cls,user,text,post_id=None,comment_id=None):
+
+        if comment_id:
+            return cls.edit_comment_json(user,text,comment_id)
+
         p = Post.query.get(post_id)
         if not p:
             return {'error': "We're sorry, this post was not found :("}

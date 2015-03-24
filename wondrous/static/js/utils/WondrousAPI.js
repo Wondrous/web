@@ -316,11 +316,12 @@ module.exports = {
     // callback
     commentOnPost: function(options){
         var text = options.text;
-        var post_id = options.post_id;
+        var post_id = options.post_id || null;
+        var comment_id = options.comment_id || null;
         var callback = options.callback;
 
         var url = '/api/comment/new';
-        request.post(url).send({text:text,post_id:post_id}).end(_callback(callback));
+        request.post(url).send({text:text,post_id:post_id, comment_id:comment_id}).end(_callback(callback));
     },
 
 

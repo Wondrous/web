@@ -31,7 +31,12 @@ var Comment = React.createClass({
     },
 
     onEdit: function(evt){
-        this.setState({editting:true})
+        this.setState({editting:true});
+    },
+    onEditSubmit: function(evt){
+        this.props.data.text = this.refs.editCommentText.getDOMNode().value.trim();
+        WondrousActions.editComment(this.props.data.id,this.props.data.text);
+        this.setState({editting:false});
     },
 
     render: function() {
@@ -55,8 +60,11 @@ var Comment = React.createClass({
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
 
-                    <span>{textLinked}</span>
-                    {is_it_mine?<button onEdit={this.onEdit}>EDIT</button>:null}
+                    <span>{!this.state.editting?textLinked:<div>
+                            <textarea ref="editCommentText">{this.props.data.text}</textarea>
+                            <button onClick={this.onEditSubmit}>submit</button></div>
+                            }</span>
+                    {is_it_mine&&!this.state.editting?<button onClick={this.onEdit}>EDIT</button>:null}
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
                     {is_it_mine || PostStore.post.user_id==UserStore.user.id ?

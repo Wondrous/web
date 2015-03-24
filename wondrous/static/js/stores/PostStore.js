@@ -106,6 +106,12 @@ var PostStore = Reflux.createStore({
         this.trigger({ post: this.post, comments: this.comments.sortedSet });
     },
 
+    updateComment: function(comment){
+        console.log(comment);
+        this.comments.update(comment);
+        this.trigger({ post: this.post, comments: this.comments.sortedSet });
+    },
+
     updatePost: function(postData) {
         this.post = postData;
         WondrousActions.updatePostOnWall();

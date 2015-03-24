@@ -74,6 +74,8 @@ var WondrousActions = Reflux.createActions({
     "deleteComment": {},
 
     "addNewComment": {},
+    "editComment": {},
+    "updateComment": {},
 
     "setNotificationSeen":{},
 
@@ -716,6 +718,20 @@ WondrousActions.addNewComment.listen(function(post_id, text) {
         callback: function(err, res) {
             if (err === null) {
                 WondrousActions.addToComments(res);
+            } else {
+                WondrousActions.commentError(err);
+            }
+        }
+    });
+});
+
+WondrousActions.editComment.listen(function(comment_id, text) {
+    WondrousAPI.commentOnPost({
+        comment_id: comment_id,
+        text: text,
+        callback: function(err, res) {
+            if (err === null) {
+                WondrousActions.updateComment(res);
             } else {
                 WondrousActions.commentError(err);
             }
