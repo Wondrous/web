@@ -194,8 +194,6 @@ var LandingApp = React.createClass({
                 </div>
                 <div className="masonry landing-masonry">
                     <Post data={sp1}/>
-                    <Post data={sp2}/>
-                    <Post data={sp3}/>
                 </div>
                 <div className="landing-wrapper-2">
                     <div style={{ paddingBottom: 50 }}>
