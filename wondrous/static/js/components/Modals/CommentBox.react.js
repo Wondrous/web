@@ -54,9 +54,9 @@ var Comment = React.createClass({
                         {this.props.data.name}
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
-                    
+
                     <span>{textLinked}</span>
-                    <button onEdit={this.onEdit}>EDIT</button>
+                    {is_it_mine?<button onEdit={this.onEdit}>EDIT</button>:null}
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
                     {is_it_mine || PostStore.post.user_id==UserStore.user.id ?
