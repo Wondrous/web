@@ -136,11 +136,12 @@ class PostManager(BaseManager):
             retval.update(new_comment.json())
 
             # Notify if needed
-            new_notification = NotificationManager.add(
-                                from_user_id=user.id,
-                                to_user_id=p.user_id,
-                                subject_id=post_id,
-                                reason=Notification.COMMENTED)
+            NotificationManager.add(
+                from_user_id=user.id,
+                to_user_id=p.user_id,
+                subject_id=post_id,
+                reason=Notification.COMMENTED,
+            )
 
             cls.send_mentions(p, user, text)
 

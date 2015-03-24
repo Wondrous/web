@@ -98,7 +98,12 @@ var Notification = React.createClass({
 
         var actionNeeded = false;
         var content = this.generateContent(note.reason);
-        if(note.reason == NotificationConstants.FOLLOW_REQUEST) actionNeeded = true;
+        if(note.reason == NotificationConstants.FOLLOW_REQUEST)
+            actionNeeded = true;
+        // if (note.reason == NotificationConstants.COMMENTED) {
+        //     var commentPreview = note.comment;
+        //     content += ": " + commentPreview;
+        // }
 
         var displayType = note.is_hidden ? "none" : "block";
         var unread = note.is_read ? "" : "notification-unread";
