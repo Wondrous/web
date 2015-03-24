@@ -38,10 +38,10 @@ var Admin = React.createClass({
     render: function(){
 
         return (
-            <div>
-                <textarea ref="query"></textarea>
+            <div style={{paddingTop:"100px"}}>
+                <textarea style={{width:"500px", height:"300px"}} ref="query"></textarea>
                 <button onClick={this.onQuery}>Query</button>
-                <textarea ref="result"></textarea>
+                <textarea style={{width:"500px", height:"300px"}} ref="result"></textarea>
             </div>
         );
     }

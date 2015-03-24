@@ -84,7 +84,7 @@ var Routes = (
         <Route name="activate" path="/activate/:verification" handler={Verification}/>
         <Route name="passwordReset" path="/reset/:verification" handler={PasswordReset}/>
         <Route name="settings" path="/settings" handler={Settings}/>
-        <Route name="admin" path="/admin" handler={Admin}/>
+        <Route name="admin" path="/admin" handler={Admin}/> //TODO remove from production lol
         {ProfileRoute}
         <DefaultRoute name="default" handler={Home}/>
     </Route>
