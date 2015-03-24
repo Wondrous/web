@@ -40,13 +40,13 @@ var Photo = React.createClass({
         var backgroundImage = null;
         var imgSrc = null;
         var isStillUploading = this.props.data.hasOwnProperty("uploadingImg");
-        if(this.props.data.ouuid){
-            if(isStillUploading){
+        if(this.props.data.ouuid) {
+            if(isStillUploading) {
                 backgroundImage = "url(" +this.props.data.uploadingImg+")"
                 imgSrc = this.props.data.uploadingImg;
-            }else{
+            } else {
                 backgroundImage = "url(" +URLGenerator.generateMedium(this.props.data.ouuid) +")";
-                imgSrc = URLGenerator.generateMedium(this.props.data.ouuid);
+                imgSrc = URLGenerator.generateOriginal(this.props.data.ouuid);
             }
         }
 
