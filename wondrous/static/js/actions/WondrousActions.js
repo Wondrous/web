@@ -20,6 +20,8 @@ var WondrousActions = Reflux.createActions({
     "clearModal": {},
 
     "togglePostLink": {},
+    
+    "toggleMoreOptions": {},
 
     // get liked users
     "loadLikedUsers": {},

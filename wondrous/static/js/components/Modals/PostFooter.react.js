@@ -95,22 +95,32 @@ var PostFooter = React.createClass({
                     <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
                     : {}}
 
-                {!is_it_mine ?
-                    <span onClick={this.reportPost} className="post-footer-btn post-delete-btn round-50" title="Report this post">
-                        <span style={{ position: "relative", top: 10, fontFamily: "heydings_iconsregular", fontSize: 17  }} >f</span>
-                    </span>
-                    : null}
-
-                {is_it_mine ?
-                    <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50" title="Delete this post">
-                        <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
-                    </span>
-                    : null}
-
-                {original_mine?<span onClick={this.editPost} className="post-footer-btn post-delete-btn round-50" title="Delete this post">
-                        EDIT THIS!!!!!
+                <span onClick={WondrousActions.toggleMoreOptions} className="post-footer-btn post-options-btn round-50 nh" title="See more options">
+                    •••
                 </span>
-                : null}
+
+                {PostStore.moreOptions ?
+                    <span className="post-options-wrapper round-3">
+                        {!is_it_mine ?
+                            <span onClick={this.reportPost} className="post-footer-btn post-delete-btn round-50" style={{ margin: 0 }} title="Report this post">
+                                <span style={{ position: "relative", top: 10, fontFamily: "heydings_iconsregular", fontSize: 17  }} >f</span>
+                            </span>
+                            : null}
+
+                    
+                        {is_it_mine ?
+                            <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50" style={{ margin: "0 5px" }} title="Delete this post">
+                                <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
+                            </span>
+                            : null}
+
+                        {original_mine ?
+                            <span onClick={this.editPost} className="post-footer-btn post-like-btn post-edit-btn round-50" style={{ margin: "0 5px" }} title="Edit this post">
+                                Edit
+                            </span>
+                            : null}
+                    </span>
+                    : null}
             </div>
         );
     }
