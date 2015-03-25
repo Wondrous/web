@@ -163,9 +163,19 @@ var Navbar = React.createClass({
                     <span>
                         <SearchBox />
                         <div className="navbar-right">
-                            {this.state.percent>0?<span className="navbar-btn navbar-login-btn round-15"><progress value={this.state.percent} max="100"></progress></span>:null}
+                            {this.state.percent > 0 ?
+                                <span className="navbar-btn navbar-login-btn round-15">
+                                    <progress value={this.state.percent} max="100"></progress>
+                                </span>
+                                : null}
 
-                            <NewPostIcon />
+                            {/*
+                                // Leaving this out for now.
+                                // Want to experiment with keeping
+                                // the epicenter of posting content 
+                                // to the profile.
+                                <NewPostIcon />
+                            */}
                             <ProfileLink />
                             <NotificationBox />
                             <SettingsGear/>
