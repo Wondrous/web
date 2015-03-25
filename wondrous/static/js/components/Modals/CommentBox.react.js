@@ -79,7 +79,8 @@ var Comment = React.createClass({
                             <button className="post-comment-btn post-comment-btn--save-edits round-2" onClick={this.onEditSubmit}>Save</button>
                         </div>
                     }
-                    
+
+
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
                     {is_it_mine || PostStore.post.user_id==UserStore.user.id ?

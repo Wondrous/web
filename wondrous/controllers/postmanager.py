@@ -120,7 +120,7 @@ class PostManager(BaseManager):
     def edit_comment_json(cls,user,text,comment_id=None):
         c = DBSession.query(Comment).filter(Comment.user_id==user.id).\
             filter(Comment.id==comment_id).first()
-        c.text = text 
+        c.text = text
         DBSession.add(c)
         DBSession.flush()
 
@@ -221,7 +221,7 @@ class PostManager(BaseManager):
             DBSession.add(new_tag)
 
     @classmethod
-    def newObject(cls,subject,text,file_type=None,height=None,width=None,is_cover=None):
+    def create_new_object(cls,subject,text,file_type=None,height=None,width=None,is_cover=None):
         new_object = Object(subject=subject, text=text)
 
         DBSession.add(new_object)
@@ -284,7 +284,7 @@ class PostManager(BaseManager):
 
             text = ValidatePost.sanitize_post_text(text)
             new_post = Post(user_id=user_id)
-            new_object = cls.newObject(subject,text,file_type,height,width,is_cover)
+            new_object = cls.create_new_object(subject,text,file_type,height,width,is_cover)
 
             new_post.object_id = new_object.id
 
@@ -329,9 +329,13 @@ class PostManager(BaseManager):
         retval = {}
         if post:
             obj = post.object
+            ouuid = obj.ouuid
             obj.set_to_delete = datetime.now()
 
-            obj = cls.newObject(subject,text,file_type,height,width,is_cover)
+            obj = cls.create_new_object(subject,text,file_type,height,width,is_cover)
+            if not file_type:
+                obj.ouuid = ouuid
+
             post.object_id = obj.id
             DBSession.add(post)
 
@@ -342,8 +346,9 @@ class PostManager(BaseManager):
             if len(tags)>0:
                 cls._process_tags(tags,post.id)
 
-            file_names = ["%s"%(obj.ouuid),"%s-med"%(obj.ouuid)]
-            retval.update(UploadManager.sign_upload_request(file_names, obj.mime_type))
+            if file_type:
+                file_names = ["%s"%(obj.ouuid),"%s-med"%(obj.ouuid)]
+                retval.update(UploadManager.sign_upload_request(file_names, obj.mime_type))
 
             DBSession.flush()
             DBSession.refresh(post)

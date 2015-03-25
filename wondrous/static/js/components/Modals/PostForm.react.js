@@ -248,11 +248,11 @@ var PostForm = React.createClass({
                 that._submitData(postSubject,postText,blobs);
             });
         }else{
-            WondrousActions.addNewPost(
-                postSubject,
+			this._submitData(
+				postSubject,
                 postText,
-                null
-            );
+				null
+			);
         }
 
     },
@@ -282,7 +282,7 @@ var PostForm = React.createClass({
                     <div className="new-post-progress-bar--juice" style={{ width: this.state.percent * 8 }}></div>
                 </div>
 
-                {this.state.error ? <span>{this.state.error}</span> : null} 
+                {this.state.error ? <span>{this.state.error}</span> : null}
 
                 <div className="new-post-element">
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
