@@ -41,7 +41,7 @@ class Post(Base, BaseMixin):
     user = relationship('User', foreign_keys=user_id, backref="posts")
 
     recipient_id = Column(BigInteger, ForeignKey('user.id'), nullable=True, index=True)
-    recipient = relationship('User', foreign_keys=user_id, backref="posts")
+    recipient = relationship('User', foreign_keys=user_id, backref="wallposts")
 
     object_id = Column(BigInteger, ForeignKey('object.id'), index= True)
     object = relationship('Object', lazy='joined', backref=backref("post", uselist=False))
