@@ -2367,7 +2367,6 @@ a:hover {
   font-size: 14px;
   color: #fbfbfb;
   padding: 6px 16px;
-  border-radius: 2px;
   background-color: #00e2ae;
   outline: none;
   -webkit-transition: all 0.3s ease-in-out;
@@ -2378,6 +2377,10 @@ a:hover {
     background-color: #00ecae; }
   .post-comment-btn:active {
     background-color: #00dcae; }
+
+.post-comment-btn--save-edits {
+  padding: 5px 16px;
+  font-size: 13px; }
 
 .post-comment-wrapper {
   padding: 17px;

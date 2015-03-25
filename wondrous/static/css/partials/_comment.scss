@@ -36,7 +36,6 @@
     font-size: 14px;
     color: rgb(251,251,251);
     padding: 6px 16px;
-    border-radius: 2px;
     background-color: rgb(0,226,174);
     outline: none;
 
@@ -47,6 +46,11 @@
 
     &:hover { background-color: rgb(0,236,174); }
     &:active { background-color:rgb(0,220,174); }
+}
+
+.post-comment-btn--save-edits {
+    padding: 5px 16px;
+    font-size: 13px;
 }
 
 .post-comment-wrapper {

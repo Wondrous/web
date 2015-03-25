@@ -30,15 +30,22 @@ var Comment = React.createClass({
         WondrousActions.toggleCommentReport(this.props.data.id);
     },
 
-    onEdit: function(evt){
+    onEdit: function(evt) {
         evt.preventDefault();
-        this.setState({editting:true});
+        this.setState({editting: true});
+
+        // This doesn't work...but it needs to.
+        // var textArea = this.refs.editCommentText.getDOMNode();
+        // var txt = this.refs.commentText.getDOMNode();
+        // var h = txt.height();
+        // textArea.css("height", h);
     },
-    onEditSubmit: function(evt){
+
+    onEditSubmit: function(evt) {
         evt.preventDefault();
         this.props.data.text = this.refs.editCommentText.getDOMNode().value.trim();
-        WondrousActions.editComment(this.props.data.id,this.props.data.text);
-        this.setState({editting:false});
+        WondrousActions.editComment(this.props.data.id, this.props.data.text);
+        this.setState({editting: false});
     },
 
     render: function() {
@@ -62,18 +69,30 @@ var Comment = React.createClass({
                         <span style={{ fontWeight: 100 }}> (@{this.props.data.username})</span>
                     </Link>
 
-                    <span>{!this.state.editting?textLinked:<div>
-                            <textarea ref="editCommentText">{this.props.data.text}</textarea>
-                            <button onClick={this.onEditSubmit}>submit</button></div>
-                            }</span>
-                    {is_it_mine&&!this.state.editting?<button onClick={this.onEdit}>EDIT</button>:null}
+                    {!this.state.editting ?
+                        <span ref="commentText">{textLinked}</span>
+                        :
+                        <div>
+                            <textarea className="comment-textarea" ref="editCommentText">
+                                {this.props.data.text}
+                            </textarea>
+                            <button className="post-comment-btn post-comment-btn--save-edits round-2" onClick={this.onEditSubmit}>Save</button>
+                        </div>
+                    }
+                    
                     <div className="post-comment-date">{createdAtDisplay}</div>
 
                     {is_it_mine || PostStore.post.user_id==UserStore.user.id ?
-                    	<div className="post-comment-delete-btn" onClick={this.onDelete}>X</div>
+                    	<div className="post-comment-delete-btn" onClick={this.onDelete} title="Delete your comment">X</div>
                     	:
-                        <div className="post-comment-delete-btn" onClick={this.reportComment}>f</div>
+                        <div className="post-comment-delete-btn" onClick={this.reportComment} title="Report this comment">f</div>
                     }
+
+                    {is_it_mine &&! this.state.editting ?
+                        <div>
+                            <img onClick={this.onEdit} className="post-comment-delete-btn" style={{ height: 15, width: 15, right: 30, top: 1 }} src="/static/pictures/icons/edit/edit.png?v=2" title="Edit your comment" />
+                        </div>
+                        : null}
                 </div>
             </div>
         );
@@ -139,7 +158,7 @@ var CommentBox = React.createClass({
 
                 <form style={{ margin: "0 28px" }} >
                     <textarea className="comment-textarea" ref="commentBox" placeholder="Share your thoughts!"></textarea>
-                    <input className="post-comment-btn" type="submit" value="Share" onClick={this.onComment}/>
+                    <input className="post-comment-btn round-2" type="submit" value="Share" onClick={this.onComment}/>
                 </form>
             </div>);
     }
