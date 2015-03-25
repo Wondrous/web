@@ -23,6 +23,15 @@ var Photo = React.createClass({
         }
     },
 
+    componentDidMount: function(){
+        if(SettingStore.uploading&&PostFormStore.percent>90){
+            if(this.props.data.hasOwnProperty("uploadingImg")){
+                delete this.props.data.uploadingImg;
+                this.forceUpdate();
+            }
+        }
+    },
+
     render: function() {
         if (this.props.data.hasOwnProperty('repost')) {
             this.props.data.ouuid = this.props.data.repost.ouuid;
@@ -44,7 +53,7 @@ var Photo = React.createClass({
 
         var backgroundImage = null
         var isStillUploading = this.props.data.hasOwnProperty("uploadingImg");
-    
+
         if(this.props.data.ouuid){
             if(isStillUploading){
                 backgroundImage = "url(" +this.props.data.uploadingImg+")"
