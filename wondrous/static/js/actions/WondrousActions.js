@@ -578,6 +578,7 @@ WondrousActions.addProfilePicture.listen(function(file_to_upload, blobs) {
         file_type: file_to_upload.type,
         callback: function(err, res) {
             if (err === null) {
+                WondrousActions.clearModal();
                 WondrousActions.uploadFile(blobs, res, file_to_upload.type);
             } else {
                 WondrousActions.uploadError(err);

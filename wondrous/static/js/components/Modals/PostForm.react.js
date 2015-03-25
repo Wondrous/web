@@ -77,17 +77,19 @@ function resizeImage(url, callback) {
 
         var height = this.height;
         var width = this.width;
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext("2d").drawImage(sourceImage, 0, 0);
+
 
         var scale = 1;
-        if (width > 750) scale = width / 750;
+        if (width > 1000) scale = width / 1000;
         height /= scale;
         width /= scale;
 
+		canvas.width = width;
+		canvas.height = height;
+		canvas.getContext("2d").drawImage(sourceImage, 0, 0, width, height);
+
         // Scale and draw the source image to the canvas
-        resample_hermite(canvas,this.width,this.height, width, height);
+        // resample_hermite(canvas,this.width,this.height, width, height);
         // Convert the canvas to a data URL in PNG format
         callback(canvas.toDataURL());
     }
@@ -106,6 +108,7 @@ var PostForm = React.createClass({
             percent: 0,
             error: null,
             isCover: true,
+			submitted: false
         };
     },
 
@@ -152,9 +155,8 @@ var PostForm = React.createClass({
 
     handlePostCancel: function(e){
         PostFormStore.unloadUser();
-        $(this.refs.buttons.getDOMNode()).show();
 
-        this.loaded = false;
+        this.state.loaded = this.state.submitted = false;
         this.props.handleClose(e);
 
         // Fade out the post form
@@ -218,17 +220,16 @@ var PostForm = React.createClass({
     },
 
     handleSubmit:function(e){
-
         if(SettingStore.uploading){
             this.state.error="already uploading something else"
             this.forceUpdate();
             return;
         }
+		this.setState({submitted:true});
 
         var postSubject = $('#postSubject').val();
         var postText    = $('#postTextarea').val();
 
-        $(this.refs.buttons.getDOMNode()).hide();
         SettingStore.uploading = PostFormStore.file!=null;
         if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
             var dataURL = null;
@@ -261,7 +262,7 @@ var PostForm = React.createClass({
 
         var optionClass = "post-form-bg-display-option";
         var optionActiveClass = optionClass + " post-form-bg-display-option--active";
-
+		var buttonStyle = {'display':!this.state.submitted?"block":"none"}
         // onDrop={this.onFileSelect} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
@@ -317,7 +318,7 @@ var PostForm = React.createClass({
                     <span className="post-error"></span>
                 </div>
 
-                <div ref="buttons">
+                <div ref="buttons" style={buttonStyle}>
                     <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Share</div>
                     <div onClick={this.handlePostCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
                 </div>
