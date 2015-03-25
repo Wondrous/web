@@ -229,7 +229,7 @@ var PostForm = React.createClass({
         var postText    = $('#postTextarea').val();
 
         $(this.refs.buttons.getDOMNode()).hide();
-        SettingStore.uploading = true;
+        SettingStore.uploading = PostFormStore.file!=null;
         if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
             var dataURL = null;
             var dataBlob = null;

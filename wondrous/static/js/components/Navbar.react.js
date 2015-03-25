@@ -2,6 +2,7 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
 var ModalStore = require('../stores/ModalStore');
+var PostFormStore = require('../stores/PostFormStore');
 var NotificationStore = require('../stores/NotificationStore');
 var checkLogin = require('../utils/Func').checkLogin;
 var URLGenerator = require('../utils/URLGenerator');
@@ -133,17 +134,28 @@ var Navbar = React.createClass({
         router: React.PropTypes.func
     },
     mixins: [
+        Reflux.listenTo(PostFormStore,"onPostFormUpdate"),
         Reflux.listenTo(UserStore,'onUserUpdate')
     ],
+
+    getInitialState: function(){
+        return {percent:0}
+    },
+
+    onPostFormUpdate: function(msg) {
+        if (msg.hasOwnProperty('percent')) {
+            this.setState({percent: msg.percent});
+        } else if (msg.hasOwnProperty('completed')) {
+            this.setState({percent: 0});
+        }
+    },
 
     render: function() {
         if(!UserStore.loaded){
             return (<div></div>);
         }
-        // TODO this a tag is out of bounds
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
-
                 <Link to="/" onClick={ModalStore.clearModal} style={{ color: "rgb(234,234,234)" }}>
                     <img src="/static/pictures/p.icon_50x50.png" className="navbar-logo" />
                 </Link>
@@ -151,14 +163,15 @@ var Navbar = React.createClass({
                     <span>
                         <SearchBox />
                         <div className="navbar-right">
-                            {/*<NewPostIcon />*/}
+                            {this.state.percent>0?<span className="navbar-btn navbar-login-btn round-15"><progress value={this.state.percent} max="100"></progress></span>:null}
+
+                            <NewPostIcon />
                             <ProfileLink />
                             <NotificationBox />
                             <SettingsGear/>
                         </div>
                     </span>
                     : null}
-
                 {!UserStore.loggedIn ?
                     <div className="navbar-right">
                         <span onClick={checkLogin} className="navbar-btn navbar-login-btn round-15">Login</span>
@@ -172,7 +185,6 @@ var Navbar = React.createClass({
     onUserUpdate: function() {
         this.forceUpdate();
     }
-
 });
 
 module.exports = Navbar;

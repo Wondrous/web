@@ -265,8 +265,12 @@ def url_match(self, url_match=None, arg_type="str"):
 
     return p
 
+# TODO let's not comform this on the backend, words like CNN would get demolished by this
+# rule.
 def title_case(text, exceptions=set(['a', 'an', 'at', 'but', 'by', 'for', 'is', 'in',
                                      'of', 'off', 'on', 'per', 'the', 'to', 'up', 'via'])):
+    return text
+    
     def _capitalize(word, punct=set(['"','\'','`','#'])):
         first_char = word[0]
         if first_char in punct:
