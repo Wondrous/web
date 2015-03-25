@@ -17,6 +17,8 @@ from sqlalchemy import (
     DateTime,
     desc,
     ForeignKey,
+    Unicode,
+    Text
 )
 
 from sqlalchemy.orm import (
@@ -38,6 +40,9 @@ class Post(Base, BaseMixin):
     user_id = Column(BigInteger, ForeignKey('user.id'), nullable=False, index=True)
     user = relationship('User', foreign_keys=user_id, backref="posts")
 
+    recipient_id = Column(BigInteger, ForeignKey('user.id'), nullable=True, index=True)
+    recipient = relationship('User', foreign_keys=user_id, backref="posts")
+
     object_id = Column(BigInteger, ForeignKey('object.id'), index= True)
     object = relationship('Object', lazy='joined', backref=backref("post", uselist=False))
 
@@ -46,6 +51,7 @@ class Post(Base, BaseMixin):
 
     feed_post_links = relationship("FeedPostLink", backref="post")
 
+    text = Column(Unicode, default=None)
     tags = relationship("Tag", backref="post", lazy='joined')
 
     # repost section
