@@ -31,9 +31,11 @@ var Comment = React.createClass({
     },
 
     onEdit: function(evt){
+        evt.preventDefault();
         this.setState({editting:true});
     },
     onEditSubmit: function(evt){
+        evt.preventDefault();
         this.props.data.text = this.refs.editCommentText.getDOMNode().value.trim();
         WondrousActions.editComment(this.props.data.id,this.props.data.text);
         this.setState({editting:false});
