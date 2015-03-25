@@ -151,7 +151,7 @@ var Navbar = React.createClass({
                     <span>
                         <SearchBox />
                         <div className="navbar-right">
-                            <NewPostIcon />
+                            {/*<NewPostIcon />*/}
                             <ProfileLink />
                             <NotificationBox />
                             <SettingsGear/>

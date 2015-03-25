@@ -1541,13 +1541,13 @@ a:hover {
 .post-subject-wrapper {
   position: absolute;
   background-color: #292929;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 0.55);
   width: 100%;
   bottom: 10%; }
 
 .post-subject-text-position {
   position: relative;
-  padding: 10px; }
+  padding: 10px 10px 0; }
 
 .post-title {
   font-family: 'arial black', Verdana, arial, helvetica, sans-serif;
