@@ -90,7 +90,7 @@ var Feed = React.createClass({
         return (
             <div className="grid-padding">
                 <div ref="scrollBox">
-                    <h1 className="tmp-feed-h1">Home Feed</h1>
+                    {/*<h1 className="tmp-feed-h1">Home Feed</h1>*/}
                     {FeedStore.hasNewPosts ?
                         <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
                             Load new posts
