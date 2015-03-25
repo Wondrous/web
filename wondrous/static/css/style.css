@@ -477,7 +477,7 @@ ul {
 
 .grid-padding, .profile-content {
   /*max-width: 1000px;*/
-  max-width: 900px; }
+  max-width: 950px; }
 
 #body-mask {
   position: fixed;
@@ -1541,7 +1541,7 @@ a:hover {
 .post-subject-wrapper {
   position: absolute;
   background-color: #292929;
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: rgba(0, 0, 0, 0.575);
   width: 100%;
   bottom: 10%; }
 
