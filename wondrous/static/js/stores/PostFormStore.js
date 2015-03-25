@@ -25,7 +25,6 @@ var PostFormStore = Reflux.createStore({
         this.error = null;
         this.height = 0;
         this.width = 0;
-
         this.post_id = null;
     },
 
@@ -69,10 +68,12 @@ var PostFormStore = Reflux.createStore({
     },
 
     uploadComplete: function(status){
+        this.percent = 0;
         this.trigger({completed:status});
     },
 
     uploadProgress: function(percent){
+        this.percent = percent;
         this.trigger({percent:percent});
     },
 
