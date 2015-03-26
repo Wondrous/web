@@ -10,7 +10,7 @@ if [ ! -d "$PYRAMIDENV" ]; then
 fi
 
 if [ ! -f "$PYRAMIDENV/updated" -o $BASEDIR/requirements.txt -nt $PYRAMIDENV/updated ]; then
-    pip install -r $BASEDIR/requirements.txt -E $PYRAMIDENV
+    pip install -r $BASEDIR/requirements.txt -e $PYRAMIDENV
     touch $PYRAMIDENV/updated
     echo "Requirements installed."
 fi
