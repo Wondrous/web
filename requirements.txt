@@ -1,15 +1,11 @@
-grequests
 psycopg2
-pyramid_storage
 bcrypt
 boto
 alembic
 paste
-Pillow
-python-magic
 unidecode
 sphinx
 redis
-service_identity
-raven==5.0.0
+# raven==5.0.0
 shortuuid
+supervisord
