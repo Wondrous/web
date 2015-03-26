@@ -27,7 +27,7 @@ from wondrous.models.modelmixins import BaseMixin
 
 
 class AdminTag(Base, BaseMixin):
-    (SUPER_ADMIN, ADMIN) = range(2) # NO IDEA WHAT THIS IS
+    (SUPER_ADMIN, ADMIN) = range(2) 
     user_id = Column(BigInteger, ForeignKey('user.id'), index=True)
     user = relationship('User', uselist=False, backref="user")
     level = Column(Integer, nullable=False)
