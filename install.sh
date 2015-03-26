@@ -2,7 +2,7 @@
 
 BASEDIR=`dirname $0`
 
-PYRAMIDENV = BASEDIR/../pyramidenv
+PYRAMIDENV = `dirname $0`/../pyramidenv
 
 if [ ! -d "$PYRAMIDENV" ]; then
     virtualenv -q $PYRAMIDENV --no-site-packages
