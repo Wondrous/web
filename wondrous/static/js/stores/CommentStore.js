@@ -60,7 +60,6 @@ var CommentStore = Reflux.createStore({
     addToComments: function(comment) {
         if(this.post_id == comment.post_id) {
             this.comments.push(comment);
-            this.post.comment_count++;
             WondrousActions.updatePostOnWall();
             WondrousActions.updatePostOnFeed();
             this.trigger({ comments: this.comments.sortedSet });
@@ -76,7 +75,6 @@ var CommentStore = Reflux.createStore({
         comments.map(function(comment,index) {
             this.push(comment);
         }, this.comments);
-        this.post.comment_count = this.comments.sortedSet.length;
         WondrousActions.updatePostOnWall();
         WondrousActions.updatePostOnFeed();
         this.trigger({ comments: this.comments.sortedSet });

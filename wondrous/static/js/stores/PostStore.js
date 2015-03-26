@@ -1,4 +1,5 @@
 var WondrousActions = require('../actions/WondrousActions');
+var CommentStore = require('./CommentStore');
 var FeedSet = require('../libs/FeedSet');
 
 var PostStore = Reflux.createStore({
@@ -6,6 +7,12 @@ var PostStore = Reflux.createStore({
 
     init: function() {
         this.unloadUser();
+        this.listenTo(CommentStore,this.onCommentChange);
+    },
+
+    onCommentChange: function(comments){
+        this.post.comment_count = comments.comments.length;
+        this.trigger(this.getPostState());
     },
 
     unloadUser: function() {
