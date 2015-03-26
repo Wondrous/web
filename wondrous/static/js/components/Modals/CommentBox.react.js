@@ -1,6 +1,7 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var PostStore = require('../../stores/PostStore');
 var UserStore = require('../../stores/UserStore');
+var CommentStore = require('../../stores/CommentStore');
 var checkLogin = require('../../utils/Func').checkLogin;
 var linkify = require('../../utils/Linkify');
 var URLGenerator = require('../../utils/URLGenerator');
@@ -8,6 +9,7 @@ var URLGenerator = require('../../utils/URLGenerator');
 var dateToString = require('../../utils/Func').dateToString;
 
 var Comment = React.createClass({
+
     getInitialState: function(){
         return {editting:false}
     },
@@ -113,6 +115,10 @@ var Comment = React.createClass({
 });
 
 var CommentBox = React.createClass({
+    mixins: [Reflux.connect(CommentStore)],
+    getInitialState: function(){
+        return {comments:CommentStore.comments.sortedSet};
+    },
     onComment: function(evt) {
         evt.preventDefault();
         if (!checkLogin()) return;
@@ -121,7 +127,7 @@ var CommentBox = React.createClass({
         //console.log(text,this.props.post_id);
 
         if (text.length > 0) {
-            WondrousActions.addNewComment(this.props.post_id,text);
+            WondrousActions.addNewComment(CommentStore.post_id,text);
             this.refs.commentBox.getDOMNode().value = '';
             this.refs.commentBox.getDOMNode().blur();
         } else {
@@ -135,12 +141,12 @@ var CommentBox = React.createClass({
     },
 
     render: function() {
-
-        var comments = this.props.data.map(function(comment, index) {
+        var comments = this.state.comments.map(function(comment, index) {
             return (
                 <Comment key={comment.id} data={comment}/>
             );
         });
+
         return (
             <div>
                 {!PostStore.doneCommentPaging && comments.length > 0 ?

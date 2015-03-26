@@ -99,13 +99,12 @@ function resizeImage(url, callback) {
 
 var PostForm = React.createClass({
     mixins: [
-        Reflux.listenTo(PostFormStore, 'onPostFormChange')
+        Reflux.listenTo(PostFormStore, 'onPostFormChange'),
     ],
 
     getInitialState: function() {
         return {
             loaded:false,
-            percent: 0,
             error: null,
             isCover: true,
 			submitted: false
@@ -116,11 +115,6 @@ var PostForm = React.createClass({
         if(ModalStore.postFormOpen){
             if (msg.hasOwnProperty('error')) {
                 this.setState({error: msg.error});
-            } else if (msg.hasOwnProperty('percent')) {
-                this.setState({percent: msg.percent});
-            } else if (msg.hasOwnProperty('completed')) {
-                this.handlePostCancel();
-                this.state.percent = 0;
             } else if (msg.hasOwnProperty('isCover')){
                 this.setState(msg);
             } else if (msg.hasOwnProperty('dataURL')){
@@ -314,9 +308,9 @@ var PostForm = React.createClass({
                     <input id="fileuploadPostImage" onChange={this.onFileSelect} type="file" name="files[]"/>
                 </div>
 
-                <div id="progress" className="small-red-bar fileinput-button progress post-dialogue-progress">
+                {/*}<div id="progress" className="small-red-bar fileinput-button progress post-dialogue-progress">
                     <div className="progress-bar progress-bar-success" style={{"textAlign": "center"}}></div>
-                </div>
+                </div>*/}
 
                 <div id="post-upload-file"  className="files" style={{ postion: "relative", marginLeft: 5, fontSize: 14 }}></div>
 

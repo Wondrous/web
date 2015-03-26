@@ -139,10 +139,12 @@ var WondrousActions = Reflux.createActions({
     "toggleNotifications": {},
 
     // toggles the picture upload form
-    "togglePictureModal": {},
+    "openPictureModal": {},
+    "closePictureModal": {},
 
     // toggles the post upload form
-    "togglePostModal": {},
+    "openPostModal": {},
+    "closePostModal": {},
 
     // adding new info to feed
     "addToFeed": {},

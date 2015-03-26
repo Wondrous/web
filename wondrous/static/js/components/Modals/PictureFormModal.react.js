@@ -6,9 +6,11 @@ var ModalWrapper = require('./ModalWrapper.react');
 
 var PictureFormModal = React.createClass({
 	mixins:[
-        Reflux.listenTo(ModalStore,"onModalChange")
+        Reflux.connect(ModalStore)
     ],
-
+	getInitialState: function(){
+		return {pictureFormOpen:false}
+	},
 	componentDidMount: function(){
 		var con = $(this.refs.modalWrapper.getDOMNode());
 		con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
@@ -16,17 +18,16 @@ var PictureFormModal = React.createClass({
 		});
 	},
 
-    onModalChange: function(){
-        this.forceUpdate();
-		if (ModalStore.pictureFormOpen){
+	componentDidUpdate: function(){
+		if (this.state.pictureFormOpen){
 			var con = $(this.refs.modalWrapper.getDOMNode());
 			con.addClass("animated bounceInDown");
 		}
-    },
+	},
 
 	handleClose: function(evt) {
 		var con = $(this.refs.modalWrapper.getDOMNode());
-        WondrousActions.togglePictureModal();
+        WondrousActions.closePictureModal();
 
 		if (typeof evt !== 'undefined' && evt){
 			evt.preventDefault();
@@ -35,7 +36,7 @@ var PictureFormModal = React.createClass({
 	},
 
 	render: function() {
-		divStyle = ModalStore.pictureFormOpen ? {display:"block"} : {display:"none"};
+		divStyle = this.state.pictureFormOpen ? {display:"block"} : {display:"none"};
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} isPicture={true} divStyle={divStyle}>
@@ -44,7 +45,5 @@ var PictureFormModal = React.createClass({
 		);
 	}
 });
-
-
 
 module.exports = PictureFormModal;

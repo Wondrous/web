@@ -29,10 +29,6 @@ var Wall = React.createClass({
         return {data:WallStore.getWall()};
     },
 
-    newPost: function(){
-        WondrousActions.togglePostModal();
-    },
-
     render: function() {
         var am_following = ProfileStore.user.following;
         var is_private = ProfileStore.user.is_private;
@@ -58,7 +54,7 @@ var Wall = React.createClass({
         return (
             <div>
                 {is_me ?
-                    <div onClick={this.newPost} id="new-post-launch" className="round-50">
+                    <div onClick={function(e){WondrousActions.openPostModal();}} id="new-post-launch" className="round-50">
                         <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
                     </div>
                     : null

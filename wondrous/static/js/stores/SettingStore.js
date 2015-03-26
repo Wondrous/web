@@ -24,7 +24,7 @@ var SettingStore = Reflux.createStore({
 
     handleBeforeUnload: function(){
         if(ModalStore.postFormOpen||ModalStore.pictureFormOpen||this.uploading){
-            return "Are you sure you want to leave?"
+            return "You might be uploading something."
         }
     },
 

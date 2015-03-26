@@ -8,6 +8,10 @@ var PostFooter = require('./PostFooter.react');
 var checkLogin = require('../../utils/Func').checkLogin;
 
 var Post = React.createClass({
+    mixins: [Reflux.connect(PostStore)],
+    getInitialState: function(){
+        return PostStore.getPostState();
+    },
 
     handleClose: function(evt) {
         if (checkLogin()) {
@@ -23,7 +27,7 @@ var Post = React.createClass({
     },
 
     handleUsernameClick: function(evt) {
-        if (typeof this.props.data.username !== 'undefined') {
+        if (typeof this.state.post.username !== 'undefined') {
             if (checkLogin()) {
                 WondrousActions.closeCardModal();
             } else {
@@ -34,25 +38,25 @@ var Post = React.createClass({
 
 	render: function() {
 		var repost = null;
-		if (typeof this.props.data === 'undefined' || this.props.data.subject==0) {
+		if (typeof this.state.post === 'undefined' || this.state.post.subject==0) {
 			return (
 				<div></div>
 			);
 		}
 
-		if (this.props.data.hasOwnProperty('repost')) {
-			repost = this.props.data.repost;
-			this.props.data.text = repost.text;
-			this.props.data.subject = repost.subject;
+		if (this.state.post.hasOwnProperty('repost')) {
+			repost = this.state.post.repost;
+			this.state.post.text = repost.text;
+			this.state.post.subject = repost.subject;
 		}
 
-		var thisText = linkify(this.props.data.text, null);
+		var thisText = linkify(this.state.post.text, null);
         var likedUsers = [];
-        if (this.props.data.like_count < 10) {
-            this.props.data.handleUsernameClick = this.handleUsernameClick;
+        if (this.state.post.like_count < 10) {
+            this.state.post.handleUsernameClick = this.handleUsernameClick;
             PostStore.loadMoreLikedUsers();
 
-            if (this.props.data.like_count == 0) {
+            if (this.state.post.like_count == 0) {
                 likedUsers = "Be the first to like this";
             } else {
                 likedUsers = PostStore.likedUsers.sortedSet.map(function(user, ind) {
@@ -61,38 +65,38 @@ var Post = React.createClass({
                         return (thisUsernameLink);
                     }
                     return (<span>{thisUsernameLink}, </span>);
-                }, this.props.data);
+                }, this.state.post);
             }
         }
 
 		return (
 			<div ref="post"  className="post-body post-body--nohover round-3" >
 				<div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
-					<UserTitle data={this.props.data} />
+					<UserTitle data={this.state.post} />
 				</div>
 
 				<div className="post-title post-title-big" style={{ marginLeft: 28, marginRight: 28 }}>
-                    {this.props.data.subject}
+                    {this.state.post.subject}
                 </div>
 
 				<div id="slidePhoto" onClick={this.handleClose} >
-					<Photo ref="photo" data={this.props.data}/>
+					<Photo ref="photo" data={this.state.post}/>
 				</div>
 
                 <div>
                     <div className="post-modal-micro-data-wrapper" style={{ maxWidth: "60%" }}>
                         <span className="post-micro-data-super-analytics-item">
                             <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
-                            {this.props.data.view_count}
+                            {this.state.post.view_count}
                         </span>
 
                         <span className="post-micro-data-super-analytics-item">
                             <img src="/static/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-view-icon" />
-                            {this.props.data.comment_count}
+                            {this.state.post.comment_count}
                         </span>
 
-                        <span onClick={this.props.data.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block", paddingLeft: 2 }}>
-                           {this.props.data.liked ?
+                        <span onClick={this.state.post.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block", paddingLeft: 2 }}>
+                           {this.state.post.liked ?
                                 <span>
                                     <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" />
                                     <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
@@ -104,8 +108,8 @@ var Post = React.createClass({
                                 </span>
                             }
 
-                            {this.props.data.like_count <= 10 ? likedUsers : this.props.data.like_count}
-                            {this.props.data.like_count > 10 ? " likes" : {}}
+                            {this.state.post.like_count <= 10 ? likedUsers : this.state.post.like_count}
+                            {this.state.post.like_count > 10 ? " likes" : {}}
                         </span>
                     </div>
 
@@ -118,10 +122,10 @@ var Post = React.createClass({
                 <hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
 
                 <div className="post-comment-wrapper">
-                    <CommentBox post_id={this.props.data.id} data={this.props.comments} />
+                    <CommentBox post_id={this.state.post.id} />
                 </div>
 
-                <PostFooter data={this.props.data} />
+                <PostFooter data={this.state.post} />
 			</div>
 		);
 	}

@@ -1,38 +1,19 @@
 var StatusBar = require('./StatusBar.react');
 var URLGenerator = require('../../utils/URLGenerator');
-var PostFormStore = require('../../stores/PostFormStore');
+var UploadStore = require('../../stores/UploadStore');
 var SettingStore = require('../../stores/SettingStore');
 
 var Photo = React.createClass({
     mixins: [
-        Reflux.listenTo(PostFormStore, 'onPostFormChange')
+        Reflux.connect(UploadStore)
     ],
 
     getInitialState: function(){
-        return {percent:0};
-    },
-
-    onPostFormChange: function(msg){
-        if (msg.hasOwnProperty('percent')&&this.props.data.hasOwnProperty("uploadingImg")) {
-            this.setState({percent: msg.percent});
-            console.log(msg.percent);
-        } else if (msg.hasOwnProperty('completed')) {
-            delete this.props.data.uploadingImg;
-            this.setState({percent: 0});
-            //TODO hackish
-        }
-    },
-
-    componentDidMount: function(){
-        if(SettingStore.uploading&&PostFormStore.percent>90){
-            if(this.props.data.hasOwnProperty("uploadingImg")){
-                delete this.props.data.uploadingImg;
-                this.forceUpdate();
-            }
-        }
+        return {percent:0,error:null,completed:false};
     },
 
     render: function() {
+
         if (this.props.data.hasOwnProperty('repost')) {
             this.props.data.ouuid = this.props.data.repost.ouuid;
         }
@@ -47,19 +28,14 @@ var Photo = React.createClass({
             height = 390;
         }
 
-        if(this.props.data.hasOwnProperty("uploadingImg")){
-
-        }
-
         var backgroundImage = null
-        var isStillUploading = this.props.data.hasOwnProperty("uploadingImg");
+        var isStillUploading = this.props.data.hasOwnProperty("uploadingImg")&&!this.state.completed&&this.state.percent!=0;
 
         if(this.props.data.ouuid){
             if(isStillUploading){
                 backgroundImage = "url(" +this.props.data.uploadingImg+")"
-
             }else{
-                backgroundImage = "url(" +URLGenerator.generateOriginal(this.props.data.ouuid) +")";
+                backgroundImage = "url(" +URLGenerator.generateMedium(this.props.data.ouuid) +")";
             }
         }
 
@@ -74,7 +50,6 @@ var Photo = React.createClass({
                 <div className="post-subject-text nh">
                     <div className="post-subject-wrapper">
                         {isStillUploading?this.state.percent+"% uploaded":<StatusBar data={this.props.data}/>}
-
                     </div>
                 </div>
             </div>

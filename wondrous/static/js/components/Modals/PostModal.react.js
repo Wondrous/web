@@ -1,6 +1,5 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var PostStore = require('../../stores/PostStore');
-var UserStore = require('../../stores/UserStore');
 var ModalStore = require('../../stores/ModalStore');
 var ReportConstants = require('../../constants/ReportConstants');
 var Post = require('./Post.react');
@@ -14,25 +13,16 @@ var PostModal = React.createClass({
 	contextTypes: {
         router: React.PropTypes.func
     },
+
 	mixins:[
-        Reflux.listenTo(PostStore,"onPostUpdate"),
-        Reflux.listenTo(ModalStore,"onModalChange")
+        Reflux.connect(ModalStore)
     ],
 
-    onModalChange: function(){
-        this.forceUpdate();
-    },
-
-	onPostUpdate: function(postData) {
-		this.setState(postData);
-	},
-
 	getInitialState: function() {
-		return UserStore;
+		return {cardOpen:false};
 	},
 
 	handleClose: function(evt) {
-
 		WondrousActions.closeCardModal();
 
 		// handled only by children
@@ -41,18 +31,14 @@ var PostModal = React.createClass({
 	},
 
 	render: function() {
-        if (typeof this.state.post === 'undefined') {
-            return (<div></div>);
-        }
-
-		divStyle = ModalStore.cardOpen ? {display:"block"} : {display:"none"};
+		divStyle = this.state.cardOpen ? {display:"block"} : {display:"none"};
 
 		return (
 				<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
                     {PostStore.postError !== null ?
                         <span className="post-not-found-error">{PostStore.postError}</span>
                         :
-                        <Post data={this.state.post} comments={this.state.comments}/>
+                        <Post/>
                     }
                 </ModalWrapper>
 		);

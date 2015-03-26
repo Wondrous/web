@@ -51,7 +51,7 @@ var UserBar = React.createClass({
     handleClick: function() {
         var is_me = this.props.username === UserStore.user.username;
         if (is_me) {
-            WondrousActions.togglePictureModal();
+            WondrousActions.openPictureModal();
         }
     },
 
