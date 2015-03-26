@@ -220,6 +220,15 @@ var PostForm = React.createClass({
     },
 
     handleSubmit:function(e){
+		var postSubject = $('#postSubject').val();
+		var postText    = $('#postTextarea').val();
+
+		if (postSubject.length==0||postText.length==0){
+			this.state.error="Please fill in a subject and write some text";
+            this.forceUpdate();
+            return;
+		}
+
         if(SettingStore.uploading){
             this.state.error="already uploading something else"
             this.forceUpdate();
@@ -227,8 +236,6 @@ var PostForm = React.createClass({
         }
 		this.setState({submitted:true});
 
-        var postSubject = $('#postSubject').val();
-        var postText    = $('#postTextarea').val();
 
         SettingStore.uploading = PostFormStore.file!=null;
         if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
@@ -255,7 +262,6 @@ var PostForm = React.createClass({
 				null
 			);
         }
-
     },
 
     render: function() {
@@ -329,7 +335,13 @@ var PostForm = React.createClass({
 
     onChange: function(ref){
         return function(e){
-            var val = $(e.target).val();
+			var val = $(e.target).val();
+			if (ref==='postTextArea'){
+				PostFormStore.text = val;
+			}else{
+				PostFormStore.subject = val;
+			}
+
             this.props.value = val;
             this.forceUpdate();
         }
