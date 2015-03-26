@@ -28,7 +28,7 @@ var PostFormModal = React.createClass({
 			evt.stopPropagation();
 		}
 	},
-	
+
 	componentDidUpdate: function(){
 		if (this.state.postFormOpen){
 			var con = $(this.refs.modalWrapper.getDOMNode());
@@ -42,7 +42,7 @@ var PostFormModal = React.createClass({
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
-                <PostForm ref="modalWrapper" handleClose={this.handleClose}/>
+                <PostForm ref="modalWrapper" />
             </ModalWrapper>
 		);
 	}

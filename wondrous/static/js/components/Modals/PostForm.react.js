@@ -148,11 +148,10 @@ var PostForm = React.createClass({
     },
 
     handlePostCancel: function(e){
-        PostFormStore.unloadUser();
+		WondrousActions.closePostModal();
 
         this.state.loaded = this.state.submitted = false;
-        this.props.handleClose(e);
-
+		console.log(this.state.submitted);
         // Fade out the post form
         $(this.refs.cropBox.getDOMNode()).cropper('destroy');
         $(this.refs.cropBox.getDOMNode()).attr('src', "/static/pictures/transparent.gif");
@@ -174,20 +173,6 @@ var PostForm = React.createClass({
         $(this.refs.postUploadBtn.getDOMNode()).show();
     },
 
-    onProgress: function(percentage) {
-        console.log("upload percentage", percentage);
-    },
-
-    onFileUploadComplete: function(err, res) {
-        if (err == null) {
-            console.log("file uploaded!", res);
-        } else {
-            console.error("upload file error", err);
-        }
-        this.handlePostCancel(null);
-        setTimeout(this.addToFeeds, 500);
-    },
-
     _submitData: function(postSubject,postText,blobs){
         if (PostFormStore.post_id==null){
             WondrousActions.addNewPost(
@@ -195,7 +180,7 @@ var PostForm = React.createClass({
                 postText,
                 PostFormStore.file,
                 blobs,
-                this.state.isCover,
+                PostFormStore.isCover,
                 PostFormStore.height,
                 PostFormStore.width
             );
@@ -205,7 +190,7 @@ var PostForm = React.createClass({
                 postText,
                 PostFormStore.file,
                 blobs,
-                this.state.isCover,
+                PostFormStore.isCover,
                 PostFormStore.height,
                 PostFormStore.width,
                 PostFormStore.post_id
@@ -228,15 +213,13 @@ var PostForm = React.createClass({
             this.forceUpdate();
             return;
         }
-		this.setState({submitted:true});
-
 
         SettingStore.uploading = PostFormStore.file!=null;
         if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
             var dataURL = null;
             var dataBlob = null;
 
-            if (this.state.isCover) {
+            if (PostFormStore.isCover) {
                 dataURL = $(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL()
                 dataBlob = uri2blob(dataURL);
             } else {
@@ -256,6 +239,8 @@ var PostForm = React.createClass({
 				null
 			);
         }
+
+		this.handlePostCancel();
     },
 
     render: function() {
@@ -263,19 +248,20 @@ var PostForm = React.createClass({
         var optionClass = "post-form-bg-display-option";
         var optionActiveClass = optionClass + " post-form-bg-display-option--active";
 		var buttonStyle = {'display':!this.state.submitted?"block":"none"}
+
         // onDrop={this.onFileSelect} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
-                <div id="full-screen-wrapper" className="fit-to-screen-wrapper" style={{display:this.state.isCover?"none":"block"}}>
+                <div id="full-screen-wrapper" className="fit-to-screen-wrapper" style={{display:PostFormStore.isCover?"none":"block"}}>
                     <img id="fsBox" ref="fsBox" className="fit-to-screen" style={{ width: 750 }} src="/static/pictures/transparent.gif" />
                 </div>
-                <div id="crop-box-wrapper" style={{display:this.state.isCover?"block":"none"}}>
+                <div id="crop-box-wrapper" style={{display:PostFormStore.isCover?"block":"none"}}>
                     <img id="cropBox" ref="cropBox" style={{ width: 750 }} src="/static/pictures/transparent.gif" />
                 </div>
 
                 <div>
-                    <div onClick={PostFormStore.toggleBackgroundDisplay} className={!this.state.isCover ? optionClass : optionActiveClass}>Cover</div>
-                    <div onClick={PostFormStore.toggleBackgroundDisplay} className={this.state.isCover  ? optionClass : optionActiveClass}>Fit-to-screen</div>
+                    <div onClick={PostFormStore.toggleBackgroundDisplay} className={!PostFormStore.isCover ? optionClass : optionActiveClass}>Cover</div>
+                    <div onClick={PostFormStore.toggleBackgroundDisplay} className={PostFormStore.isCover  ? optionClass : optionActiveClass}>Fit-to-screen</div>
                     {PostFormStore.loaded?<input onChange={this.onFileSelect} className="fileuploadPostImage" type="file" name="files[]"/>:null}
                 </div>
 

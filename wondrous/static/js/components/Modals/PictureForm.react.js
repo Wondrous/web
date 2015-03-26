@@ -64,20 +64,6 @@ var PictureForm = React.createClass({
         $(this.refs.pictureUploadBtn.getDOMNode()).show();
     },
 
-    onProgress: function(percentage) {
-        console.log("upload percentage", percentage);
-    },
-
-    onFileUploadComplete: function(err, res) {
-        if (err == null) {
-            console.log("file uploaded!", res);
-        } else {
-            console.error("upload file error", err);
-        }
-        this.handlePictureCancel(null);
-        setTimeout(this.updateProfile, 500);
-    },
-
     handleSubmit:function(e){
         if (typeof PostFormStore.file !=='undefined' && PostFormStore.file != null){
             WondrousActions.addProfilePicture(PostFormStore.file,

@@ -28,6 +28,9 @@ var PostFormStore = Reflux.createStore({
         this.post_id = null;
     },
 
+    uploadComplete: function(){
+        this.unloadUser();
+    },
     useUrl: function(url){
         this.url = url;
         this.trigger({url:this.url});
