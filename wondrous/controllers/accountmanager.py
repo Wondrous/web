@@ -81,7 +81,7 @@ class AccountManager(BaseManager):
             return None
 
     @staticmethod
-    def get_suggested_users_json(user,per_page=20,page=0):
+    def get_suggested_users_json(user, per_page=6, page=0):
         p = re.compile('(\s*#\s*(\w+))|(\s*@\s*(\w+))')
 
         description = user.description
@@ -96,10 +96,10 @@ class AccountManager(BaseManager):
             filter(User.id!=user.id).\
             limit(per_page).offset(page*per_page).all()
 
-        if len(users)<20 and page==0:
-            replace = 20-len(users)
+        if len(users) <= per_page and page == 0:
+            replace = per_page - len(users)
 
-            users+=DBSession.query(User).\
+            users += DBSession.query(User).\
                 join(Vote, (Vote.user_id==user.id)&(Vote.subject_id!=User.id)).\
                 filter(User.is_private==False).\
                 order_by(func.random()).\
