@@ -2,17 +2,21 @@ from pynats import *
 import json
 
 CHANNEL_NOTIFICATION = "notification"
-DEFAULT_URI = 'nats://104.236.251.250:4222'
 
-c = Connection(url=DEFAULT_URI,verbose=False)
+connection = None
 import logging
-global CONNECTED
 
-try:
-    logging.info("Notification server connected")
-    c.connect()
-except Exception, e:
-    logging.warn(e)
+
+def initialize_message_queue(message_queue_url,**kw):
+    global connection
+    connection = Connection(url=message_queue_url,verbose=False)
+    print message_queue_url
+    try:
+        logging.info("Notification server connected")
+        connection.connect()
+    except Exception, e:
+        logging.warn(e)
+
 
 def send_notification(channel,message):
     """
@@ -33,13 +37,13 @@ def send_notification(channel,message):
     package = json.dumps(data)
 
     try:
-        c.publish(CHANNEL_NOTIFICATION,package)
+        connection.publish(CHANNEL_NOTIFICATION,package)
         logging.warn("sent"+str(package))
     except Exception, e:
         logging.warn(e)
         try:
-            c.reconnect()
+            connection.reconnect()
             logging.info("Notification server reconnected")
-            c.publish(CHANNEL_NOTIFICATION,package)
+            connection.publish(CHANNEL_NOTIFICATION,package)
         except Exception, e:
             logging.warn(e)
