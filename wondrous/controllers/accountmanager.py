@@ -90,17 +90,17 @@ class AccountManager(BaseManager):
         tags += d_tags
 
         users = DBSession.query(User).\
-            join(Vote, (Vote.user_id==user.id)&(Vote.subject_id!=User.id)).\
-            join(UserTag, (func.lower(UserTag.tag_name).in_(tags))&(UserTag.user_id==User.id)).\
-            filter(User.is_private==False).\
-            filter(User.id!=user.id).\
-            limit(per_page).offset(page*per_page).all()
+            join(Vote, (Vote.user_id == user.id) & (Vote.subject_id != User.id)).\
+            join(UserTag, (func.lower(UserTag.tag_name).in_(tags)) & (UserTag.user_id == User.id)).\
+            filter(User.is_private == False).\
+            filter(User.id != user.id).\
+            limit(per_page).offset(page * per_page).all()
 
-        if len(users) <= per_page and page == 0:
+        if len(users) < per_page and page == 0:
             replace = per_page - len(users)
 
             users += DBSession.query(User).\
-                join(Vote, (Vote.user_id==user.id)&(Vote.subject_id!=User.id)).\
+                join(Vote, (Vote.user_id==user.id) & (Vote.subject_id != User.id)).\
                 filter(User.is_private==False).\
                 order_by(func.random()).\
                 limit(replace).all()
