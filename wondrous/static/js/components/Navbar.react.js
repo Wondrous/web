@@ -2,7 +2,7 @@ var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
 var UserStore = require('../stores/UserStore');
 var ModalStore = require('../stores/ModalStore');
-var PostFormStore = require('../stores/PostFormStore');
+var UploadStore = require('../stores/UploadStore');
 var NotificationStore = require('../stores/NotificationStore');
 var checkLogin = require('../utils/Func').checkLogin;
 var URLGenerator = require('../utils/URLGenerator');
@@ -116,7 +116,7 @@ var ProfileLink = React.createClass({
 var NewPostIcon = React.createClass({
 
     newPost: function() {
-        WondrousActions.togglePostModal();
+        WondrousActions.openPostModal();
     },
 
     render: function() {
@@ -134,20 +134,12 @@ var Navbar = React.createClass({
         router: React.PropTypes.func
     },
     mixins: [
-        Reflux.listenTo(PostFormStore,"onPostFormUpdate"),
+        Reflux.connect(UploadStore),
         Reflux.listenTo(UserStore,'onUserUpdate')
     ],
 
     getInitialState: function(){
-        return {percent:0}
-    },
-
-    onPostFormUpdate: function(msg) {
-        if (msg.hasOwnProperty('percent')) {
-            this.setState({percent: msg.percent});
-        } else if (msg.hasOwnProperty('completed')) {
-            this.setState({percent: 0});
-        }
+        return {percent:0,error:null,completed:false}
     },
 
     render: function() {

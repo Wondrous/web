@@ -28,6 +28,9 @@ var PostFormStore = Reflux.createStore({
         this.post_id = null;
     },
 
+    uploadComplete: function(){
+        this.unloadUser();
+    },
     useUrl: function(url){
         this.url = url;
         this.trigger({url:this.url});
@@ -61,26 +64,9 @@ var PostFormStore = Reflux.createStore({
     },
 
     toggleBackgroundDisplay: function() {
-        // console.log(this.isCover);
         this.isCover = !this.isCover;
         this.trigger({isCover:this.isCover});
-        // console.log(this.isCover);
-    },
-
-    uploadComplete: function(status){
-        this.percent = 0;
-        this.trigger({completed:status});
-    },
-
-    uploadProgress: function(percent){
-        this.percent = percent;
-        this.trigger({percent:percent});
-    },
-
-    uploadError: function(error){
-        this.trigger({error:error});
     }
-
 });
 
 module.exports = PostFormStore;

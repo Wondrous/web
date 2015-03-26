@@ -139,10 +139,12 @@ var WondrousActions = Reflux.createActions({
     "toggleNotifications": {},
 
     // toggles the picture upload form
-    "togglePictureModal": {},
+    "openPictureModal": {},
+    "closePictureModal": {},
 
     // toggles the post upload form
-    "togglePostModal": {},
+    "openPostModal": {},
+    "closePostModal": {},
 
     // adding new info to feed
     "addToFeed": {},
@@ -195,9 +197,6 @@ var WondrousActions = Reflux.createActions({
 
     // upload error
     "uploadError": {},
-
-    // upload complete
-    "uploadComplete": {},
 
     // search stuff
     "updateSearchUsers": {},
@@ -514,8 +513,8 @@ WondrousActions.addNewPost.listen(function(subject, text, file_to_upload, blobs,
         callback: function(err, res) {
             if (err == null){
                 if (file_to_upload !== null) {
-                    WondrousActions.uploadComplete();
                     res.uploadingImg = blobs.dataURL;
+                    WondrousActions.closePostModal();
                     setTimeout(WondrousActions.addToFeed, 200, res);
                     setTimeout(WondrousActions.addToWall, 200, res);
                     WondrousActions.uploadFile(blobs, res, file_to_upload.type);
@@ -553,9 +552,9 @@ WondrousActions.newEditPost.listen(function(subject, text, file_to_upload, blobs
         callback: function(err, res) {
             if (err === null) {
                 if (file_to_upload !== null) {
-                    WondrousActions.uploadComplete();
                     var temp = res;
                     temp.uploadingImg = blobs.dataURL;
+                    WondrousActions.closePostModal();
                     WondrousActions.updatePostOnWall(temp);
                     WondrousActions.updatePostOnFeed(temp);
 

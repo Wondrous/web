@@ -12,7 +12,7 @@ var PostFooter = React.createClass({
     },
 
     editPost: function(){
-        WondrousActions.togglePostModal();
+        WondrousActions.openPostModal();
         WondrousActions.editPost(this.props.data);
     },
 
@@ -107,7 +107,7 @@ var PostFooter = React.createClass({
                             </span>
                             : null}
 
-                    
+
                         {is_it_mine ?
                             <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50" style={{ margin: "0 5px" }} title="Delete this post">
                                 <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />

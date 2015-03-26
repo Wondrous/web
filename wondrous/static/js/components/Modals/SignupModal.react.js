@@ -4,23 +4,20 @@ var WondrousActions = require('../../actions/WondrousActions');
 var ModalWrapper = require('./ModalWrapper.react');
 
 var SignupModal = React.createClass({
-    mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],
-
-    onModalChange: function() {
-        this.forceUpdate();
+    mixins:[ Reflux.connect(ModalStore) ],
+    getInitialState: function(){
+        return {signupOpen:false}
     },
-
-    handleClose: function(evt) {
-        WondrousActions.closeSignupPrompt();
-	},
 
     render: function() {
 		var divStyle = {
-            display : ModalStore.signupOpen ? "block" : "none",
+            display : this.state.signupOpen ? "block" : "none",
             backgroundColor: "rgba(55,55,55,0.75)",
         };
 		return (
-            <ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+            <ModalWrapper handleClose={function(evt) {
+                WondrousActions.closeSignupPrompt();
+        	}} divStyle={divStyle}>
                 <LoggedOut/>
             </ModalWrapper>
 		);

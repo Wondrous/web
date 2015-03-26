@@ -4,15 +4,10 @@ var ModalStore = require('../../stores/ModalStore');
 var ModalWrapper = require('./ModalWrapper.react');
 
 var ReportingForm = React.createClass({
-    mixins: [ Reflux.listenTo(ModalStore,"onModalChange") ],
-
-    onModalChange: function() {
-        this.forceUpdate();
+    mixins: [ Reflux.connect(ModalStore) ],
+    getInitialState: function(){
+        return {reportSubmitted:false, reportId:null}
     },
-
-    radioChange: function(e){
-    },
-
     report: function(e){
         e.preventDefault();
         var reason = -1;
@@ -32,7 +27,7 @@ var ReportingForm = React.createClass({
         }
         if(reason>-1){
             var text = this.refs.comment.getDOMNode().value.trim();
-            WondrousActions.sendReport(ModalStore.reportType, ModalStore.reportId, reason, text);
+            WondrousActions.sendReport(this.state.reportType, this.state.reportId, reason, text);
         }
     },
 
@@ -44,7 +39,7 @@ var ReportingForm = React.createClass({
                 {ModalStore.reportSubmitted==true ?
                     <h2>Thank you for your report!</h2>
                     :
-                    <form onChange={this.radioChange} onSubmit={this.report}>
+                    <form onSubmit={this.report}>
                         <span className="content-report-input-wrapper">
                             <input type="radio" name="reason" value="mature" />Mature
                         </span>
@@ -70,18 +65,11 @@ var ReportingForm = React.createClass({
 
 
 var ReportModal = React.createClass({
-    mixins:[ Reflux.listenTo(ModalStore,"onModalChange") ],
-    onModalChange: function(){
-        this.forceUpdate();
-    },
+    mixins: [ Reflux.connect(ModalStore) ],
 
     getInitialState: function() {
-        return { data:{reportType: null} }
+        return {reportType: null}
     },
-
-    handleClose: function(evt) {
-		WondrousActions.toggleCommentReport();
-	},
 
     stopProp: function(evt) {
 		evt.preventDefault();
@@ -89,9 +77,9 @@ var ReportModal = React.createClass({
 	},
 
     render: function() {
-		divStyle = ModalStore.reportType!=null? {display:"block"} : {display:"none"};
+		divStyle = this.state.reportType!=null? {display:"block"} : {display:"none"};
 		return (
-            <ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
+            <ModalWrapper handleClose={function(e){WondrousActions.toggleCommentReport();}} divStyle={divStyle}>
                 <ReportingForm />
             </ModalWrapper>
 		);

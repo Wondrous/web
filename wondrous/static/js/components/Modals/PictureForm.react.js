@@ -3,17 +3,22 @@ var WondrousActions = require('../../actions/WondrousActions');
 var WondrousConstants = require('../../constants/WondrousConstants');
 var ModalStore = require('../../stores/ModalStore');
 var PostFormStore = require('../../stores/PostFormStore');
+var UploadStore = require('../../stores/UploadStore');
 
 var uri2blob = require('../../utils/Func').uri2blob;
 var buildCropper = require('../../utils/Func').buildCropper;
 
 var PictureForm = React.createClass({
-    mixins: [Reflux.listenTo(PostFormStore, 'onPostFormChange')],
+    mixins: [
+        Reflux.listenTo(PostFormStore, 'onPostFormChange'),
+        Reflux.connect(UploadStore)
+    ],
 
     getInitialState: function() {
         return {
             percent: 0,
-            error: null
+            error: null,
+            completed:false
         };
     },
 
@@ -21,12 +26,7 @@ var PictureForm = React.createClass({
         if(ModalStore.pictureFormOpen){
             if (msg.hasOwnProperty('error')) {
                 this.setState({error: msg.error});
-            } else if (msg.hasOwnProperty('percent')) {
-                this.setState({percent: msg.percent});
-            } else if (msg.hasOwnProperty('completed')) {
-                this.handlePictureCancel(null);
-                this.state.percent = 0;
-            }else if (msg.hasOwnProperty('dataURL')){
+            } else if (msg.hasOwnProperty('dataURL')){
                 $(this.refs.cropPictureBox.getDOMNode()).attr('src', msg.dataURL);
                 buildCropper(this.refs.cropPictureBox.getDOMNode(), false);
                 this.setState({loaded:PostFormStore.loaded});
@@ -62,20 +62,6 @@ var PictureForm = React.createClass({
         $(this.refs.cropPictureBox.getDOMNode()).cropper('destroy');
         $(this.refs.cropPictureBox.getDOMNode()).attr('src', "/static/pictures/transparent.gif");
         $(this.refs.pictureUploadBtn.getDOMNode()).show();
-    },
-
-    onProgress: function(percentage) {
-        console.log("upload percentage", percentage);
-    },
-
-    onFileUploadComplete: function(err, res) {
-        if (err == null) {
-            console.log("file uploaded!", res);
-        } else {
-            console.error("upload file error", err);
-        }
-        this.handlePictureCancel(null);
-        setTimeout(this.updateProfile, 500);
     },
 
     handleSubmit:function(e){
