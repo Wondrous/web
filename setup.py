@@ -43,7 +43,6 @@ setup(name='wondrous',
       entry_points="""\
       [paste.app_factory]
       main = wondrous:main_app
-      admin = wondrous:admin_app
       [console_scripts]
       initialize_wondrous_db = wondrous.scripts.initializedb:main
       """,
