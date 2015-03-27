@@ -149,7 +149,7 @@ var CommentBox = React.createClass({
 
         return (
             <div>
-                {!PostStore.doneCommentPaging && comments.length > 0 ?
+                {!CommentStore.doneCommentPaging && comments.length > 0 ?
                     <button className="post-comment-load-more" onClick={this.loadMoreComments}>
                         Load more comments
                     </button>
