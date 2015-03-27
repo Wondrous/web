@@ -400,7 +400,7 @@ td, th {
   text-align: center; }
 
 /*--------------------------------------*/
-#crop-box-wrapper {
+#crop-box-wrapper, #full-screen-wrapper {
   width: 750px;
   height: 390px;
   position: relative;
@@ -416,12 +416,11 @@ td, th {
   height: 400px !important; }
 
 /* Overrides to acheive FTS and cover */
-div#crop-box-wrapper.fit-to-screen-wrapper {
-  height: auto;
-  /*padding: 20px 0;*/
-  background-color: #141414; }
+.fit-to-screen-wrapper {
+  height: auto !important;
+  background-color: white !important; }
 
-img#cropBox.fit-to-screen {
+.fit-to-screen {
   position: relative;
   top: 0;
   display: block !important;
@@ -1536,7 +1535,8 @@ a:hover {
   font-weight: 900;
   text-align: left;
   color: #fbfbfb;
-  cursor: pointer; }
+  cursor: pointer;
+  word-break: break-word; }
 
 .post-subject-wrapper {
   position: absolute;
