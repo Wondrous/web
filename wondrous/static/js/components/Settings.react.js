@@ -29,7 +29,7 @@ var NameChange = React.createClass({
                 <div className="info-settings-item-header">
                     <b>Change Name:</b> {name}
                 </div>
-                <div>
+                <div className="info-settings-item-content">
                     <div className="info-settings-item-body-desc">
                         Note: You can only change your name a very limited number of times.
                     </div>
@@ -75,7 +75,7 @@ var UsernameChange = React.createClass({
                 <div className="info-settings-item-header">
                     <b>Change Username:</b> @{username}, www.wondrous.co/<b>{username}</b>
                 </div>
-                <div>
+                <div className="info-settings-item-content">
                     <form onSubmit={this.handleSubmit}>
                         @<input type="text" ref="username" className="basic-input" placeholder="Username"/>
                         <input type="submit" value="Save changes"/>
@@ -119,16 +119,16 @@ var PasswordChange = React.createClass({
                 <div className="info-settings-item-header">
                     <b>Change password</b>
                 </div>
-                <div>
+                <div className="info-settings-item-content">
                     <form onSubmit={this.handleSubmit}>
                         <div><input type="password" ref="old_password" className="basic-input" placeholder="Current password"/></div>
                         <div><input type="password" ref="new_password" className="basic-input" placeholder="New password"/></div>
                         <div><input type="password" ref="new_password_confirm" className="basic-input" placeholder="Confirm new password"/></div>
+                        <div className="loggedout-error">
+                            {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                        </div>
                         <div><input type="submit" value="Save changes"/></div>
                     </form>
-                </div>
-                <div>
-                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
                 </div>
             </div>
         );
@@ -160,7 +160,7 @@ var VisibilityChange = React.createClass({
                 <div className="info-settings-item-header">
                     <b>Profile visibility</b>
                 </div>
-                <div>
+                <div className="info-settings-item-content">
                     Posts are private
                     <button onClick={this.toggleVisibility} className="privacy-toggle">{is_private?"on":"off"}</button>
                 </div>
@@ -182,7 +182,7 @@ var ActiveChange = React.createClass({
                 <div className="info-settings-item-header">
                     <b>Deactivate my account</b>
                 </div>
-                <div>
+                <div className="info-settings-item-content">
                     <a onClick={this.handleDeletion}>I would like to delete my account</a>
                 </div>
             </div>
@@ -198,10 +198,12 @@ function getUserState() {
 
 var Settings = React.createClass({
     mixins: [Reflux.listenTo(UserStore,"onUserChange")],
+    
     getInitialState: function() {
         return getUserState();
     },
-    render:function() {
+
+    render: function() {
         return (
             <div className="info-content" style={{"paddingTop": "10px"}}>
                 <h1 className="info-h1">Account Settings</h1>
@@ -217,11 +219,21 @@ var Settings = React.createClass({
             </div>
         );
     },
-    onUserChange:function(userData) {
+
+    onUserChange: function(userData) {
 
         if(userData.hasOwnProperty('user')){
             this.setState(getUserState());
         }
+    },
+
+    componentDidMount: function() {
+        var SPEED = 175;
+        $(document).on("click", ".info-settings-item-header", function() {
+            var thisItemContent = $(this).siblings(".info-settings-item-content");
+            $(".info-settings-item-content").not(thisItemContent).slideUp(SPEED);
+            thisItemContent.slideToggle(SPEED);
+        });
     }
 });
 
