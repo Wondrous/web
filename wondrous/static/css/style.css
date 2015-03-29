@@ -3065,7 +3065,8 @@ a:hover {
   font-size: 14px;
   font-style: italic;
   font-weight: normal;
-  color: #474747; }
+  color: #474747;
+  padding: 10px 5px; }
 
 .privacy-toggle {
   background: #ccc;
