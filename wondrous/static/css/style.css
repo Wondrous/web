@@ -1014,6 +1014,29 @@ a:hover {
 .footer-link {
   padding: 5px 25px; }
 
+/* ------------- */
+.footer-links {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  left: 50%;
+  margin-left: -165px; }
+
+.social-media-link {
+  font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+  font-size: 19px;
+  color: #fbfbfb !important;
+  padding: 0 10px; }
+
+.social-media-link:link {
+  text-decoration: none; }
+
+.social-media-link:visted {
+  color: #fbfbfb; }
+
+.social-media-link:hover {
+  text-decoration: underline; }
+
 .info-content {
   padding: 0 5% 0 5%; }
 

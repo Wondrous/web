@@ -157,6 +157,8 @@ var LandingApp = React.createClass({
     },
     componentDidMount:function() {
         $('.top-banner').hide();
+        $('.main-content').removeClass("main-content");
+        $(".navbar").css("background-color", "rgb(255,255,255)");
 
         var is_progress = this.context.router.getCurrentRoutes()[1].name==="progress";
         if (is_progress) {
@@ -176,74 +178,26 @@ var LandingApp = React.createClass({
         var bigHeading = "Wondrous helps you create, share, & discuss your interests like never before."
         return (
             <div>
-                <div className="landing-wrapper-1">
+                <div className="landing-wrapper-1" style={{ height: "100%", top: 0, paddingTop: 50 }} >
                     <div>
-                        <img className="landing-main-logo" src="/static/pictures/p.logo.png" />
+                        <img className="landing-main-logo" style={{ width: 300 }} src="/static/pictures/p.logo.png" />
                     </div>
+                    <h1 className="landing-big-heading">{bigHeading}</h1>
+                    {/*
                     {!this.registered ?
                         <form onSubmit={this.formSubmit}>
-                            <h1 className="landing-big-heading">{bigHeading}</h1>
-
                             <input className="landing-input round-5" ref="email" type="email" spellCheck="off" placeholder="Enter your email!" />
                             <button className="landing-btn round-5" >Sign up</button>
 
                         </form>
                         : <SignedUp data={this.referrer_info} />}
-                </div>
-                <div className="masonry landing-masonry">
-                    <Post data={sp1}/>
-                </div>
-                <div className="landing-wrapper-2">
-                    <div style={{ paddingBottom: 50 }}>
-                        <h2 className="landing-med-heading">Use Wondrous However You Like</h2>
+                    */}
 
-                        <div>
-                            <div className="landing-feature">
-                                <img className="landing-feature-img round-50" src="/static/pictures/landing/clock2.png" />
-                                <h2 className="landing-feature-h2">Read and write meaningful content in just minutes</h2>
-                            </div>
-
-                            <div className="landing-feature">
-                                <div className="landing-feature-img round-50">
-                                    <span style={{ position: "relative", fontSize: 60, color: "rgb(255,255,255)", top: 25, fontFamily: "geosanslight", fontSize: 160 }}>
-                                        ?
-                                    </span>
-                                </div>
-                                <h2 className="landing-feature-h2">Can you answer the question of the day?</h2>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div className="landing-feature">
-                                <img className="landing-feature-img round-50" src="/static/pictures/landing/trend-line.png" />
-                                <h2 className="landing-feature-h2">Join the conversation on trending topics</h2>
-                            </div>
-
-                            <div className="landing-feature">
-                                <div className="landing-feature-img round-50">
-                                    <span style={{ position: "relative", fontSize: 60, color: "rgb(255,255,255)", top: 25, fontFamily: "geosanslight", fontSize: 150 }}>
-                                        99
-                                    </span>
-                                </div>
-                                <h2 className="landing-feature-h2">Become a Wondrous influencer</h2>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div className="landing-wrapper-3">
-                    <h2 className="landing-med-heading">Would you like to join Wondrous?</h2>
-                    <input className="landing-input landing-input-override round-5" ref="email1" type="email" placeholder="Enter your email!" />
-                    <button className="landing-btn landing-btn-override round-5" onClick={this.formSubmit}>Sign up</button>
-                </div>
-
-                <div className="landing-wrapper-4">
-                    <div className="footer-link-wrapper">
-                        <span className="footer-link">Contact Us</span>
-                        <span className="footer-link">Team</span>
-                        <span className="footer-link">Become an influencer</span>
-                        <span className="footer-link">Invite your friends</span>
+                    <div className="footer-links">
+                        <a className="social-media-link" href="http://www.facebook.com/WondrousApp">Facebook</a>
+                        <a className="social-media-link" href="http://www.instagram.com/Wondrous.co">Instagram</a>
+                        <a className="social-media-link" href="http://www.twitter.com/wondrous_co">Twitter</a>
+                        <a className="social-media-link" href="http://www.pinterest.com/wondrous_co">Pinterest</a>
                     </div>
                 </div>
             </div>
