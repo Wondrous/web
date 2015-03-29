@@ -8,4 +8,4 @@ sphinx
 redis
 # raven==5.0.0
 shortuuid
-supervisord
+supervisor
