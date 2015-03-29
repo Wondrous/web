@@ -63,7 +63,7 @@ var Wall = React.createClass({
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}
-                    {posts.length == 0 ?
+                    {WallStore.loaded && posts.length == 0 ?
                         <div className="no-data-to-display">
                             {is_me ?
                                 "You haven't posted anything yet"
