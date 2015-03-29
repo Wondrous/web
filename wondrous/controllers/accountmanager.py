@@ -351,7 +351,7 @@ class AccountManager(BaseManager):
     def get_json_by_username(cls, user=None, user_id=None, username=None, auth=False):
 
         if not user_id and not username:
-            return {'error': 'no users found!'}
+            return {'error': 'No users found!'}
 
         if user:
             my_user_id = user.id
@@ -367,7 +367,7 @@ class AccountManager(BaseManager):
                 else:
                     profile_user = User.by_id(user_id)
             if not profile_user:
-                return {'error': 'no users found!'}
+                return {'error': 'No users found!'}
         else:
             my_user_id = None
             if username:
@@ -385,7 +385,7 @@ class AccountManager(BaseManager):
 
         ret = cls._sql_query_user_data(profile_user.id,my_user_id)
         if not ret:
-            return {'error':'No user found'}
+            return {'error': 'No user found'}
 
         ret = ret.fetchall()[0]
         if my_user_id:
@@ -415,7 +415,7 @@ class AccountManager(BaseManager):
             if auth:
                 key = shortuuid.uuid()
                 retval.update({'auth':key})
-                send_notification(-1,str(key)+":"+str(profile_user.id))
+                send_notification(-1, str(key)+":"+str(profile_user.id))
             return retval
 
         # If the profile_user is public or I am following
@@ -436,7 +436,7 @@ class AccountManager(BaseManager):
             retval.update({'wondrous_score': profile_user.json(0)['wondrous_score']})
             return retval
 
-        return {'error':'no users found!'}
+        return {'error':'No users found!'}
 
     @classmethod
     def deactivate_json(cls, user, password):
@@ -446,7 +446,7 @@ class AccountManager(BaseManager):
             user.is_active = False
             PostManager.deactivate_by_userid(user.id)
             return {'status': 'deactivated'}
-        return {'error': 'deactivation failed'}
+        return {'error': 'Oh no! Your account deactivation has failed'}
 
     @classmethod
     def delete_json(cls, user, password):
@@ -455,16 +455,16 @@ class AccountManager(BaseManager):
             user.set_to_delete = datetime.now()
             cls.deactivate_json(user,password)
             return {'status': 'set to delete in x days'}
-        return {'error': 'deletion failed'}
+        return {'error': 'Oh no! Your account deletion has failed'}
 
     @classmethod
     def change_password_json(cls, user, old_password, new_password):
         if old_password == new_password:
-            return {'error': 'new password must be different'}
+            return {'error': 'Your new password must be different than your old one'}
 
         _s_valid_pw, _ = Sanitize.length_check(new_password, min_length=6, max_length=255)
         if not _s_valid_pw:
-            return {'error':'new password must be at least 6 characters long'}
+            return {'error':'Your new password must be at least 6 characters long'}
 
         if user and user.validate_password(old_password.encode('utf-8')):
             user.password = new_password
@@ -472,16 +472,16 @@ class AccountManager(BaseManager):
 
             retval = user.json(1)
             return retval
-        return {"error": "password change failed"}
+        return {"error": "Oh oh, your password change has failed"}
 
     @classmethod
     def change_name_json(cls, user, name):
         if user.name==name:
-            return {'error':'name is already {0}'.format(name)}
+            return {'error':'Your name is already {0}!'.format(name)}
 
         changed_date = user.name_changed_date
         if changed_date and datetime.now()-changed_date<timedelta(days=60):
-            return {'error': "Name already changed within the last 60 days"}
+            return {'error': "You've already changed your name within the last 60 days"}
 
         _s_valid_n, _ = Sanitize.length_check(name, min_length=1, max_length=30)
         if not _s_valid_n:
@@ -501,15 +501,15 @@ class AccountManager(BaseManager):
     @classmethod
     def change_username_json(cls, user, username):
         if user.username == username:
-            return {'error': 'New username cannot be the same'}
+            return {'error': "New username cannot be the same"}
 
         _s_valid_un = Sanitize.is_valid_username(username)
         if not _s_valid_un:
-            return {'error': 'invalid user name, please use only letters and numbers and at least 5 characters long'}
+            return {'error': "This username isn't valid. Please use only letters, numbers, and underscores, and not all numbers"}
 
         u = User.by_kwargs(username=username.lower()).first()
         if u:
-            return {'error': 'username already taken'}
+            return {'error': 'Sorry, this username is already taken'}
         data = cls.change_profile_json(user,'username',username)
         if 'error' in data.keys():
             return data
@@ -536,7 +536,7 @@ class AccountManager(BaseManager):
             DBSession.flush()
             return user.json(1)
         except Exception, e:
-            return {'error',e.message}
+            return {'error', e.message}
 
     @classmethod
     def change_profile_json(cls, user, field, new_value):

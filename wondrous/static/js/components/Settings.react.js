@@ -40,9 +40,9 @@ var NameChange = React.createClass({
                         <input type="submit" value="Save changes" />
                     </form>
                 </div>
-                <div>
+                <div className="loggedout-error">
                     {this.state.error !== null ?
-                        <b>Error: {this.state.error}</b>
+                        <b>{this.state.error}</b>
                         : null}
                 </div>
             </div>
@@ -88,13 +88,15 @@ var UsernameChange = React.createClass({
                     </div>
                     <form onSubmit={this.handleSubmit}>
                         @<input type="text" ref="username" className="input-basic" placeholder="Username"/>
+
+                        <div className="loggedout-error">
+                            {this.state.error !== null ?
+                                <b>{this.state.error}</b>
+                                : null}
+                        </div>
+
                         <input type="submit" value="Save changes" />
                     </form>
-                </div>
-                <div>
-                    {this.state.error !== null ?
-                        <b>Error: {this.state.error}</b>
-                        : null}
                 </div>
             </div>
         );
@@ -139,11 +141,13 @@ var PasswordChange = React.createClass({
                         <div><input type="password" ref="old_password" className="input-basic" placeholder="Current password"/></div>
                         <div><input type="password" ref="new_password" className="input-basic" placeholder="New password"/></div>
                         <div><input type="password" ref="new_password_confirm" className="input-basic" placeholder="Confirm new password"/></div>
+                        
                         <div className="loggedout-error">
                             {this.state.error !== null ?
-                                <b>Error: {this.state.error}</b>
+                                <b>{this.state.error}</b>
                                 : null}
                         </div>
+                        
                         <div><input type="submit" value="Save changes"/></div>
                     </form>
                 </div>
@@ -188,11 +192,11 @@ var VisibilityChange = React.createClass({
                 <div className="info-settings-item-content">
                     Profile is private
                     <button onClick={this.toggleVisibility} className={classes}>{is_private ? "On" : "Off"}</button>
-                </div>
-                <div>
-                    {this.state.error !=null ?
-                        <b>Error: {this.state.error}</b>
-                        : null}
+                    <div className="loggedout-error">
+                        {this.state.error !=null ?
+                            <b>Error: {this.state.error}</b>
+                            : null}
+                    </div>
                 </div>
             </div>
         );
