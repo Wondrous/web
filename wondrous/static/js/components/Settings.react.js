@@ -37,13 +37,15 @@ var NameChange = React.createClass({
                     </div>
                     <form onSubmit={this.handleSubmit}>
                         <input type="text" ref="name" className="input-basic" placeholder={name}/>
-                        <input type="submit" value="Save changes" />
+                        
+                        <div className="loggedout-error">
+                            {this.state.error !== null ?
+                                <b>{this.state.error}</b>
+                                : null}
+                        </div>
+
+                        <input className="info-settings-submit" type="submit" value="Save changes" />
                     </form>
-                </div>
-                <div className="loggedout-error">
-                    {this.state.error !== null ?
-                        <b>{this.state.error}</b>
-                        : null}
                 </div>
             </div>
         );
@@ -95,7 +97,7 @@ var UsernameChange = React.createClass({
                                 : null}
                         </div>
 
-                        <input type="submit" value="Save changes" />
+                        <input className="info-settings-submit" type="submit" value="Save changes" />
                     </form>
                 </div>
             </div>
@@ -148,7 +150,7 @@ var PasswordChange = React.createClass({
                                 : null}
                         </div>
                         
-                        <div><input type="submit" value="Save changes"/></div>
+                        <div><input className="info-settings-submit" type="submit" value="Save changes"/></div>
                     </form>
                 </div>
             </div>
@@ -194,7 +196,7 @@ var VisibilityChange = React.createClass({
                     <button onClick={this.toggleVisibility} className={classes}>{is_private ? "On" : "Off"}</button>
                     <div className="loggedout-error">
                         {this.state.error !=null ?
-                            <b>Error: {this.state.error}</b>
+                            <b>{this.state.error}</b>
                             : null}
                     </div>
                 </div>

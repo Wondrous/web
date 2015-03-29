@@ -3084,6 +3084,24 @@ a:hover {
   border-bottom: solid 2px #eaeaea;
   border-right: solid 2px #eaeaea; }
 
+.info-settings-submit {
+  position: relative;
+  display: block;
+  margin: 8px 0 0;
+  border: none;
+  background-color: #e1e1e1;
+  padding: 6px 22px;
+  font-family: arial, helvetica, sans-serif;
+  color: #787878;
+  font-weight: 400;
+  outline: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out; }
+  .info-settings-submit:hover {
+    background-color: #e4e4e4; }
+
 svg {
   position: relative;
   display: block;

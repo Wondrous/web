@@ -69,3 +69,23 @@
     border-bottom:solid 2px  #eaeaea;
     border-right: solid 2px #eaeaea;
 }
+
+.info-settings-submit {
+    position: relative;
+    display: block;
+    margin: 8px 0 0;
+    border: none;
+    background-color: rgb(225,225,225);
+    padding: 6px 22px;
+    font-family: arial, helvetica, sans-serif;
+    color: rgb(120,120,120);
+    font-weight: 400;
+    outline: none;
+
+    -webkit-transition: all 0.30s ease-in-out;
+       -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+         -o-transition: all 0.30s ease-in-out;
+
+    &:hover { background-color: rgb(228,228,228); };
+}
