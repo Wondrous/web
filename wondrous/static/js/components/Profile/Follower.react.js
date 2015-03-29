@@ -46,7 +46,7 @@ var Follower = React.createClass({
         return (
             <ul className="item-ul">
                 {followers}
-                {followers.length == 0 ?
+                {ProfileStore.loaded && followers.length == 0 ?
                     <div className="no-data-to-display">
                         {is_me ?
                             "You don't have any followers yet"

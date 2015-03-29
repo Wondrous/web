@@ -65,10 +65,12 @@ var Feed = React.createClass({
 
     render: function() {
         if (!UserStore.loggedIn && UserStore.loaded){
-            return (<div className="masonry" ref="masonryContainer" id="asyncPosts">
-                <div className="backdrop"></div>
-                <div className="grid-sizer" style={{"display": "none"}}></div>
-            </div>);
+            return (
+                <div className="masonry" ref="masonryContainer" id="asyncPosts">
+                    <div className="backdrop"></div>
+                    <div className="grid-sizer" style={{"display": "none"}}></div>
+                </div>
+            );
         }
     
         var posts = this.state.data.map(function(post, index) {
@@ -98,7 +100,7 @@ var Feed = React.createClass({
                         </button>
                         : null}
 
-                    {posts.length < 3 ?
+                    {FeedStore.loaded && posts.length < 3 ?
                         <div style={{ paddingTop: 20 }}>
                             <DiscoveryBox />
                             {posts.length == 0 ?

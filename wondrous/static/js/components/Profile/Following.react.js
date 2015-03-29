@@ -37,11 +37,11 @@ var Following = React.createClass({
                 <UserIcon key={user.id} user={user} />
             );
         });
-        
+
         return (
             <ul className="item-ul">
                 {following}
-                {following.length == 0 ?
+                {ProfileStore.loaded && following.length == 0 ?
                     <span>
                         {is_me ?
                             <UserBox />
