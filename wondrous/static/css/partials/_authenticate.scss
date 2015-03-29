@@ -243,3 +243,11 @@
     margin-top: 30px;
     padding: 10px 30px 0;
 }
+
+.loggedout-modal-signup-footer-link {
+    color: rgb(140,140,140);
+    &:link,
+    &:visited {
+        color: rgb(140,140,140);
+    }
+}

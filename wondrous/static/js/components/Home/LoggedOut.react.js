@@ -26,7 +26,7 @@ var LoggedOut = React.createClass({
                     </div>
                 }
                 <div className="loggedout-modal-signup-footer">
-                    For the lucky few: <Link to="login" onClick={this.clearModals}>Log in</Link>
+                    For the lucky few: <Link className="loggedout-modal-signup-footer-link" to="login" onClick={this.clearModals}>Log in</Link>
                 </div>
             </div>
         );

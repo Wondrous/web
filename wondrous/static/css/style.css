@@ -3279,6 +3279,11 @@ a:hover {
   margin-top: 30px;
   padding: 10px 30px 0; }
 
+.loggedout-modal-signup-footer-link {
+  color: #8c8c8c; }
+  .loggedout-modal-signup-footer-link:link, .loggedout-modal-signup-footer-link:visited {
+    color: #8c8c8c; }
+
 /* ==== INFO ====================== */
 .basic-input {
   margin: 10px 0;
