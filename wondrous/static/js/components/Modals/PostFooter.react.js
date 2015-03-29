@@ -66,7 +66,7 @@ var PostFooter = React.createClass({
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         var original_mine = is_it_mine&&(this.props.data.repost==null);
         return (
-            <div className="post-footer">
+            <div className="post-footer" style={{ paddingBottom: 0 }}>
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
                     {this.props.data.liked ?
                         <span>

@@ -57,10 +57,15 @@
     padding: 17px;
     background-color: rgb(251,251,251);
     
-    -webkit-box-shadow: inset 0 1px 2px rgb(151,151,151);
+/*    -webkit-box-shadow: inset 0 1px 2px rgb(151,151,151);
        -moz-box-shadow: inset 0 1px 2px rgb(151,151,151);
          -o-box-shadow: inset 0 1px 2px rgb(151,151,151);
-            box-shadow: inset 0 1px 2px rgb(151,151,151);
+            box-shadow: inset 0 1px 2px rgb(151,151,151);*/
+
+    -webkit-box-shadow: inset 0 1px 0px rgb(234,234,234);
+       -moz-box-shadow: inset 0 1px 0px rgb(234,234,234);
+         -o-box-shadow: inset 0 1px 0px rgb(234,234,234);
+            box-shadow: inset 0 1px 0px rgb(234,234,234); 
 }
 
 .post-no-comments {

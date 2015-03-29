@@ -119,13 +119,13 @@ var Post = React.createClass({
 					{thisText}
 				</div>
 
-                <hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />
+                <PostFooter data={this.state.post} />
+
+                {/*<hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />*/}
 
                 <div className="post-comment-wrapper">
                     <CommentBox post_id={this.state.post.id} />
                 </div>
-
-                <PostFooter data={this.state.post} />
 			</div>
 		);
 	}
