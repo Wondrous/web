@@ -637,6 +637,13 @@ ul {
   font-size: 18px;
   padding: 20px 0 0 5%; }
 
+.no-data-to-display {
+  font-size: 20px;
+  color: #aaaaaa;
+  font-weight: 900;
+  text-align: center;
+  padding: 40px 0; }
+
 .hashtagify {
   font-family: arial, helvetica, sans-serif;
   font-size: 16px;

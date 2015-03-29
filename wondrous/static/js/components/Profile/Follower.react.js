@@ -1,5 +1,6 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var ProfileStore = require('../../stores/ProfileStore');
+var UserStore = require('../../stores/UserStore');
 var UserIcon = require('./UserIcon.react');
 
 var Follower = React.createClass({
@@ -32,6 +33,8 @@ var Follower = React.createClass({
     render: function(){
         this.am_following = ProfileStore.user.following;
         this.is_private = ProfileStore.user.is_private;
+        var username = this.context.router.getCurrentParams().username;
+        var is_me = username === UserStore.user.username;
         var is_visible = this.am_following || this.is_private;
         var handle = this.handleClick;
         var followers = this.state.data.map(function(user, index){
@@ -43,6 +46,15 @@ var Follower = React.createClass({
         return (
             <ul className="item-ul">
                 {followers}
+                {followers.length == 0 ?
+                    <div className="no-data-to-display">
+                        {is_me ?
+                            "You don't have any followers yet"
+                            :
+                            "This user doesn't have any followers yet"
+                        }
+                    </div>
+                    : null}
             </ul>
         );
     },

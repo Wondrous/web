@@ -64,12 +64,13 @@ var Feed = React.createClass({
     },
 
     render: function() {
-        if (!UserStore.loggedIn&&UserStore.loaded){
+        if (!UserStore.loggedIn && UserStore.loaded){
             return (<div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="backdrop"></div>
                 <div className="grid-sizer" style={{"display": "none"}}></div>
             </div>);
         }
+    
         var posts = this.state.data.map(function(post, index) {
             if (index != 2) {
                 return (
@@ -96,6 +97,18 @@ var Feed = React.createClass({
                             Load new posts
                         </button>
                         : null}
+
+                    {posts.length < 3 ?
+                        <div style={{ paddingTop: 20 }}>
+                            <DiscoveryBox />
+                            {posts.length == 0 ?
+                                <div className="no-data-to-display">
+                                    There are no posts in your feed yet
+                                </div>
+                                : null }
+                        </div>
+                        : null}
+
                     <div className="masonry" ref="masonryContainer" id="asyncPosts">
                         <div className="backdrop"></div>
                         <div className="grid-sizer" style={{"display": "none"}}></div>
