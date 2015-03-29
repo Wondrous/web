@@ -121,7 +121,7 @@ var NewPostIcon = React.createClass({
 
     render: function() {
         return (
-            <span onClick={this.newPost} className="navbar-btn navbar-newpost-wrapper round-2" style={{ paddingLeft: 25 }}>
+            <span onClick={this.newPost} className="navbar-btn navbar-newpost-wrapper round-2" style={{ paddingLeft: 25 }} title="Create a new post on your wall">
                 <img className="post-general-icon navbar-newpost-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
                 <span className="navbar-btn-text">New Post</span>
             </span>

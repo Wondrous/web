@@ -54,7 +54,7 @@ var Wall = React.createClass({
         return (
             <div>
                 {is_me ?
-                    <div onClick={function(e){WondrousActions.openPostModal();}} id="new-post-launch" className="round-50">
+                    <div onClick={function(e){WondrousActions.openPostModal();}} id="new-post-launch" className="round-50" title="Create a new post on your wall">
                         <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
                     </div>
                     : null
