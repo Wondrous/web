@@ -147,7 +147,7 @@ class _RegexCheck(object):
                 - No special characters (e.g., !, @, $, #, %, ^, &, etc.)
         """
 
-        pattern = u'^[^\^!@#$%&*(){}[\]<>=+_–.,;:\"~`¡™£¢∞§¶•ªº≠«π∑®†˚∆©ƒ∂ßΩ≈√∫µ≤≥÷…€‹›‡·±ˇˆ∏»◊¯¿\\\\0-9]+$'
+        pattern = GLOBAL_CONFIGURATIONS["NAME_REGEX"]
         return True if str_to_check and re.match(pattern, str_to_check, re.IGNORECASE) else False
 
     @staticmethod
@@ -175,7 +175,7 @@ class _RegexCheck(object):
                 -The email ends with a period(s) preceeding the @ sign
         """
 
-        pattern = '[^@]+@[^@]+\.[^@]+'
+        pattern = GLOBAL_CONFIGURATIONS["EMAIL_REGEX"]
         return True if str_to_check and re.match(pattern, str_to_check.lower()) else False
 
     @staticmethod
@@ -195,15 +195,11 @@ class _RegexCheck(object):
                 - Can NOT be all digits 0-9
                 - No special characters and no periods
                 - No spaces
-                - A maximum length of 15 characters
-
-            WARNING: This does NOT return False if:
-                -Only numbers or only letters (e.g., 345 or abc)
-                -Multiple periods (e.g., b.o.b.s.m.i.t.h)
+                - A maximum length of 30 characters
         """
 
-        pattern_username   = '^[a-zA-Z0-9_]{1,15}$'
-        pattern_all_digits = '^([0-9])+$'
+        pattern_username   = GLOBAL_CONFIGURATIONS["USERNAME_REGEX"][0]
+        pattern_all_digits = GLOBAL_CONFIGURATIONS["USERNAME_REGEX"][1]
 
         # Make sure username is valid and, specifically, is not all digits
         username = re.match(pattern_username, str_to_check, re.IGNORECASE)
@@ -329,7 +325,7 @@ class Sanitize(object):
 
     @staticmethod
     def strip_ampersand(username):
-        pattern_ampersand  = '^([@＠])+$'
+        pattern_ampersand  = GLOBAL_CONFIGURATIONS["AMPERSAND_REGEX"]
 
         # Test first character for an @
         if username and re.match(pattern_ampersand, username[0], re.IGNORECASE):
@@ -677,6 +673,6 @@ class ValidateLink(object):
 #print ValidateLink.get_content_type(link)
 # print ValidationHelper.valid_tag("#123123123123123123123123123123123123123123123123123123")
 
-#print _RegexCheck.link(None)
+# print _RegexCheck.link(None)
 # un = "SpaceX"
 # print _RegexCheck.username(un)

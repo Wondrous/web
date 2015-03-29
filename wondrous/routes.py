@@ -18,7 +18,6 @@ TAKEN_PATHS = set([
     "ajax",
     "api",
     "admin",
-    "wondrous",
     "auth",
     "info",
     "landing",
