@@ -17,7 +17,20 @@
     font-size: 15px;
     font-weight: 100;
 
-    &:hover { background-color: rgb(234,234,234); }
+    &:hover {
+        /*background-color: rgb(234,234,234);*/
+        -webkit-box-shadow: -2px 0px 0px rgb(0,226,174);
+           -moz-box-shadow: -2px 0px 0px rgb(0,226,174);
+             -o-box-shadow: -2px 0px 0px rgb(0,226,174);
+                box-shadow: -2px 0px 0px rgb(0,226,174);
+    }
+}
+
+.info-settings-item.open {
+    -webkit-box-shadow: -2px 0px 0px rgb(0,226,174);
+       -moz-box-shadow: -2px 0px 0px rgb(0,226,174);
+         -o-box-shadow: -2px 0px 0px rgb(0,226,174);
+            box-shadow: -2px 0px 0px rgb(0,226,174);
 }
 
 .info-settings-item-header {

@@ -3040,7 +3040,17 @@ a:hover {
   font-size: 15px;
   font-weight: 100; }
   .info-settings-item:hover {
-    background-color: #eaeaea; }
+    /*background-color: rgb(234,234,234);*/
+    -webkit-box-shadow: -2px 0px 0px #00e2ae;
+    -moz-box-shadow: -2px 0px 0px #00e2ae;
+    -o-box-shadow: -2px 0px 0px #00e2ae;
+    box-shadow: -2px 0px 0px #00e2ae; }
+
+.info-settings-item.open {
+  -webkit-box-shadow: -2px 0px 0px #00e2ae;
+  -moz-box-shadow: -2px 0px 0px #00e2ae;
+  -o-box-shadow: -2px 0px 0px #00e2ae;
+  box-shadow: -2px 0px 0px #00e2ae; }
 
 .info-settings-item-header {
   width: 70%;

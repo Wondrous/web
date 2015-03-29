@@ -6,23 +6,25 @@ var NameChange = React.createClass({
     getInitialState: function(){
         return {'error':null};
     },
+
     handleData: function(err, res) {
-        if (err == null) {
+        if (err === null) {
             this.setState({error:null});
             WondrousActions.updateUser(res);
         } else {
-            this.setState({error:err.error});
+            this.setState({error: err.error});
         }
     },
 
-    handleSubmit: function(evt){
+    handleSubmit: function(evt) {
         evt.preventDefault();
         WondrousAPI.changeName({
             callback: this.handleData,
             name: this.refs.name.getDOMNode().value,
         });
     },
-    render:function(){
+
+    render: function() {
         var name = this.props.user.name;
         return (
             <div className="info-settings-item">
@@ -34,12 +36,14 @@ var NameChange = React.createClass({
                         Note: You can only change your name a very limited number of times.
                     </div>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" ref="name" className="basic-input" placeholder={name}/>
-                        <input type="submit" value="Save changes"/>
+                        <input type="text" ref="name" className="input-basic" placeholder={name}/>
+                        <input type="submit" value="Save changes" />
                     </form>
                 </div>
                 <div>
-                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                    {this.state.error !== null ?
+                        <b>Error: {this.state.error}</b>
+                        : null}
                 </div>
             </div>
         );
@@ -47,17 +51,19 @@ var NameChange = React.createClass({
 });
 
 var UsernameChange = React.createClass({
-    getInitialState: function(){
-        return {'error':null};
+    getInitialState: function() {
+        return {'error': null};
     },
-    handleData: function(err, res){
-        if (err == null) {
-            this.setState({error:null});
+
+    handleData: function(err, res) {
+        if (err === null) {
+            this.setState({error: null});
             WondrousActions.updateUser(res);
         } else {
             this.setState({error:err.error});
         }
     },
+
     // checkUsername: function() {
     //     console.log("should check if username is good:", this.refs.username.getDOMNode().value);
     // },
@@ -68,6 +74,7 @@ var UsernameChange = React.createClass({
             username: this.refs.username.getDOMNode().value
         });
     },
+
     render:function() {
         var username = this.props.user.username;
         return (
@@ -76,13 +83,18 @@ var UsernameChange = React.createClass({
                     <b>Change Username:</b> @{username}, www.wondrous.co/<b>{username}</b>
                 </div>
                 <div className="info-settings-item-content">
+                    <div className="info-settings-item-body-desc">
+                        Note: If you change your username, all @mentions to your previous username will no longer direct people to your profile
+                    </div>
                     <form onSubmit={this.handleSubmit}>
-                        @<input type="text" ref="username" className="basic-input" placeholder="Username"/>
-                        <input type="submit" value="Save changes"/>
+                        @<input type="text" ref="username" className="input-basic" placeholder="Username"/>
+                        <input type="submit" value="Save changes" />
                     </form>
                 </div>
                 <div>
-                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                    {this.state.error !== null ?
+                        <b>Error: {this.state.error}</b>
+                        : null}
                 </div>
             </div>
         );
@@ -90,21 +102,23 @@ var UsernameChange = React.createClass({
 });
 
 var PasswordChange = React.createClass({
-    getInitialState: function(){
-        return {'error':null};
+    getInitialState: function() {
+        return {'error': null};
     },
+
     handleData: function(err, res) {
-        if (err == null) {
-            this.setState({error:null});
+        if (err === null) {
+            this.setState({error: null});
             WondrousActions.updateUser(res);
         } else {
             this.setState({error:err.error});
         }
     },
+
     handleSubmit: function(evt) {
         evt.preventDefault();
         if (this.refs.new_password.getDOMNode().value !== this.refs.new_password_confirm.getDOMNode().value) {
-            this.setState({error:"passwords do not match!"});
+            this.setState({error: "These passwords do not match!"});
             return;
         }
         WondrousAPI.changePassword({
@@ -113,6 +127,7 @@ var PasswordChange = React.createClass({
             new_password: this.refs.new_password.getDOMNode().value
         });
     },
+
     render:function() {
         return (
             <div className="info-settings-item">
@@ -121,11 +136,13 @@ var PasswordChange = React.createClass({
                 </div>
                 <div className="info-settings-item-content">
                     <form onSubmit={this.handleSubmit}>
-                        <div><input type="password" ref="old_password" className="basic-input" placeholder="Current password"/></div>
-                        <div><input type="password" ref="new_password" className="basic-input" placeholder="New password"/></div>
-                        <div><input type="password" ref="new_password_confirm" className="basic-input" placeholder="Confirm new password"/></div>
+                        <div><input type="password" ref="old_password" className="input-basic" placeholder="Current password"/></div>
+                        <div><input type="password" ref="new_password" className="input-basic" placeholder="New password"/></div>
+                        <div><input type="password" ref="new_password_confirm" className="input-basic" placeholder="Confirm new password"/></div>
                         <div className="loggedout-error">
-                            {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                            {this.state.error !== null ?
+                                <b>Error: {this.state.error}</b>
+                                : null}
                         </div>
                         <div><input type="submit" value="Save changes"/></div>
                     </form>
@@ -139,33 +156,43 @@ var VisibilityChange = React.createClass({
     getInitialState: function(){
         return {'error':null};
     },
+
     handleData: function(err,res){
         if (!err) {
-            this.setState({error:null});
+            this.setState({error: null});
             this.props.user.is_private = res.is_private;
             this.forceUpdate();
         } else {
-            this.setState({error:err.error});
+            this.setState({error: err.error});
         }
     },
+
     toggleVisibility: function(){
         WondrousAPI.toggleVisibility({
-            callback:this.handleData
+            callback: this.handleData
         })
     },
+
     render: function() {
         var is_private = this.props.user.is_private;
+        var classes = "privacy-toggle";
+        if (is_private) {
+            classes += " down";
+        }
+
         return (
             <div className="info-settings-item">
                 <div className="info-settings-item-header">
                     <b>Profile visibility</b>
                 </div>
                 <div className="info-settings-item-content">
-                    Posts are private
-                    <button onClick={this.toggleVisibility} className="privacy-toggle">{is_private?"on":"off"}</button>
+                    Profile is private
+                    <button onClick={this.toggleVisibility} className={classes}>{is_private ? "On" : "Off"}</button>
                 </div>
                 <div>
-                    {this.state.error!=null?<b>Error: {this.state.error}</b>:null}
+                    {this.state.error !=null ?
+                        <b>Error: {this.state.error}</b>
+                        : null}
                 </div>
             </div>
         );
@@ -176,6 +203,7 @@ var ActiveChange = React.createClass({
     handleDeletion: function() {
 
     },
+
     render:function() {
         return (
             <div className="info-settings-item">
@@ -232,7 +260,10 @@ var Settings = React.createClass({
         $(document).on("click", ".info-settings-item-header", function() {
             var thisItemContent = $(this).siblings(".info-settings-item-content");
             $(".info-settings-item-content").not(thisItemContent).slideUp(SPEED);
+            $(".info-settings-item-content").not(thisItemContent).parent(".info-settings-item").removeClass("open");
+
             thisItemContent.slideToggle(SPEED);
+            $(this).parent(".info-settings-item").toggleClass("open");
         });
     }
 });
