@@ -27,13 +27,13 @@ var TagSearch = React.createClass({
         return (
             <div>
                 <h1 className="search-header">
-                    Posts with <b>{this.props.searchTerm}</b>
+                    Posts+Users with <b>{this.props.searchTerm}</b>
                 </h1>
 
                 <div className="grid-padding">
+                    <h2 className="search-header-sub">Users</h2>
                     {this.props.users.length > 0 ?
                         <span>
-                            <h2 className="search-header-sub">Users</h2>
                             <ul>{this.props.users}</ul>
                             {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
                                 <Button>Load More Users</Button>
@@ -41,9 +41,15 @@ var TagSearch = React.createClass({
                         </span>
                         : null}
 
+                    {this.props.users.length == 0 && !SearchStore.searchingPost?
+                        <span>
+                            <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no users were found</h2>
+                        </span>
+                        : null}
+
+                    <h2 className="search-header-sub">Posts</h2>
                     {this.props.posts.length > 0 ?
                         <span>
-                            <h2 className="search-header-sub">Posts</h2>
                             <MasonryWrapper>
                                 {this.props.posts}
                             </MasonryWrapper>
@@ -51,12 +57,13 @@ var TagSearch = React.createClass({
                                 <Button>Load More Posts</Button>
                                 : null}
                         </span>
-                        :null}
+                        : null}
+
                     {this.props.posts.length == 0 && !SearchStore.searchingPost?
                         <span>
-                            <h2>Sorry, no posts were found :(</h2>
+                            <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no posts were found</h2>
                         </span>
-                        :null}
+                        : null}
                 </div>
             </div>
         );
@@ -77,6 +84,12 @@ var KWSearch = React.createClass({
                         <Button>Load More Users</Button>
                         : null}
 
+                    {this.props.users.length == 0 && !SearchStore.searchingPost ?
+                        <span>
+                            <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no users were found</h2>
+                        </span>
+                        : null}
+
                     <h2 className="search-header-sub">Posts</h2>
                     <MasonryWrapper>
                         {this.props.posts}
@@ -84,6 +97,12 @@ var KWSearch = React.createClass({
 
                     {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
                         <Button>Load More Posts</Button>
+                        : null}
+
+                    {this.props.posts.length == 0 && !SearchStore.searchingPost ?
+                        <span>
+                            <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no posts were found</h2>
+                        </span>
                         : null}
                 </div>
             </div>
