@@ -47,7 +47,7 @@ from wondrous.models import (
     # Vote,
 )
 
-from wondrous.utilities.validation_utilities import UploadManager
+import wondrous.utilities.validation_utilities as UploadManager
 from wondrous.utilities.validation_utilities import ValidatePost
 from wondrous.utilities.notification_utilities import send_notification
 

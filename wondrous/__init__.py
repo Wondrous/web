@@ -25,6 +25,7 @@ from wondrous.admin_routes import build_admin_routes
 
 from wondrous.utilities.user_utilities import AuthHelper
 from wondrous.utilities.notification_utilities import initialize_message_queue
+from wondrous.utilities.validation_utilities import initialize_s3
 
 import wondrous.controllers
 from wondrous.controllers import (
@@ -46,6 +47,7 @@ def main_app(global_config, **settings):
 
     initialize_sql(settings)
     initialize_message_queue(**settings)
+    initialize_s3(**settings)
     config = Configurator(settings=settings)
     config = build_routes(config)  # URL map on routes.py
 

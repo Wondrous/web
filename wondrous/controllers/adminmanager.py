@@ -21,7 +21,6 @@ import transaction
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
 
-from wondrous.utilities.validation_utilities import UploadManager
 from wondrous.utilities.notification_utilities import send_notification
 from wondrous.utilities.validation_utilities import (
     Sanitize

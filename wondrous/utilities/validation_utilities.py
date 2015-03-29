@@ -26,31 +26,34 @@ from urlparse import urlparse
 from wondrous.routes import TAKEN_PATHS
 from wondrous.utilities.global_config import GLOBAL_CONFIGURATIONS
 
+AWS_ACCESS_KEY = AWS_SECRET_KEY = AWS_S3_BUCKET = None
 
-class UploadManager:
-    @staticmethod
-    def sign_upload_request(names, mime_type):
+def initialize_s3(aws_access_key, aws_secret_access_key, aws_bucket, **kw):
+    global AWS_ACCESS_KEY
+    global AWS_SECRET_KEY
+    global AWS_S3_BUCKET
+    AWS_S3_BUCKET = aws_bucket
+    AWS_SECRET_KEY = aws_secret_access_key
+    AWS_ACCESS_KEY = aws_access_key
 
-        """
-            Signs the upload request with our AWS credientials,
-            returns the signed request url and the url of the content
-        """
+def sign_upload_request(names, mime_type):
+    """
+        Signs the upload request with our AWS credientials,
+        returns the signed request url and the url of the content
+    """
 
-        AWS_ACCESS_KEY = 'AKIAJEZN45GB7GPFKF4A'
-        AWS_SECRET_KEY = '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'
-        AWS_S3_BUCKET  = 'mojorankdev'
-        signed_requests = {}
-        urls = {}
-        for name in names:
-            expires = int(time.time()+10)
-            amz_headers = 'x-amz-acl:public-read'
-            put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, name)
-            signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-            signature = urllib.quote_plus(signature.strip())
-            urls[name] = url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, name)
-            signed_requests[name] = '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature)
+    signed_requests = {}
+    urls = {}
+    for name in names:
+        expires = int(time.time()+10)
+        amz_headers = 'x-amz-acl:public-read'
+        put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, AWS_S3_BUCKET, name)
+        signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+        signature = urllib.quote_plus(signature.strip())
+        urls[name] = url = 'https://%s.s3.amazonaws.com/%s' % (AWS_S3_BUCKET, name)
+        signed_requests[name] = '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature)
 
-        return {'signed_requests': signed_requests,'urls': urls}
+    return {'signed_requests': signed_requests,'urls': urls}
 
 class PasswordManager(object):
 

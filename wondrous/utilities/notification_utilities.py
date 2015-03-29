@@ -10,10 +10,9 @@ import logging
 def initialize_message_queue(message_queue_url,**kw):
     global connection
     connection = Connection(url=message_queue_url,verbose=False)
-    print message_queue_url
     try:
-        logging.info("Notification server connected")
         connection.connect()
+        logging.info("Notification server connected")
     except Exception, e:
         logging.warn(e)
 
