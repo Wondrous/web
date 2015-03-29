@@ -160,14 +160,7 @@ var Navbar = React.createClass({
                                     <progress value={this.state.percent} max="100"></progress>
                                 </span>
                                 : null}
-
-                            {/*
-                                // Leaving this out for now.
-                                // Want to experiment with keeping
-                                // the epicenter of posting content 
-                                // to the profile.
                                 <NewPostIcon />
-                            */}
                             <ProfileLink />
                             <NotificationBox />
                             <SettingsGear/>
