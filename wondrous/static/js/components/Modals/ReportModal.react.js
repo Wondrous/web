@@ -41,16 +41,20 @@ var ReportingForm = React.createClass({
                     :
                     <form onSubmit={this.report}>
                         <span className="content-report-input-wrapper">
-                            <input type="radio" name="reason" value="mature" />Mature
+                            <input id="reportForMature" type="radio" name="reason" value="mature" />
+                            <label className="content-report-label" htmlFor="reportForMature">Mature</label>
                         </span>
                         <span className="content-report-input-wrapper">
-                            <input type="radio" name="reason" value="uninteresting" />Against my views
+                            <input id="reportForUninteresting" type="radio" name="reason" value="uninteresting" />
+                            <label className="content-report-label" htmlFor="reportForUninteresting">Against my views</label>
                         </span>
                         <span className="content-report-input-wrapper">
-                            <input type="radio" name="reason" value="copyright" />Copyright
+                            <input id="reportForCopyright" type="radio" name="reason" value="copyright" />
+                            <label className="content-report-label" htmlFor="reportForCopyright">Copyright</label>
                         </span>
                         <span className="content-report-input-wrapper">
-                            <input type="radio" name="reason" value="spam" />Spam
+                            <input id="reportForSpam" type="radio" name="reason" value="spam" />
+                            <label className="content-report-label" htmlFor="reportForSpam">Spam</label>
                         </span>
                         <div>
                             <textarea className="content-report-textarea" ref="comment" placeholder="Place write any additional comments here"></textarea>

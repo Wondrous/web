@@ -43,10 +43,12 @@ var Follower = React.createClass({
             );
         });
 
+        var noData = followers.length == 0;
+
         return (
             <ul className="item-ul">
                 {followers}
-                {ProfileStore.loaded && followers.length == 0 ?
+                {noData ?
                     <div className="no-data-to-display">
                         {is_me ?
                             "You don't have any followers yet"

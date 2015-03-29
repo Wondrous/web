@@ -35,7 +35,6 @@ var Wall = React.createClass({
         var is_visible = am_following || is_private;
         is_visible = is_visible === true;
 
-        console.log("rendering post",this.state.data);
         var posts = this.state.data.map(function(post,index){
             return(
                 <Post key={post.id} data={post} />
@@ -43,6 +42,7 @@ var Wall = React.createClass({
         });
         var username = this.context.router.getCurrentParams().username;
         var is_me = username === UserStore.user.username;
+        var noData = posts.length == 0;
 
         var bottomBar = null;
         if(!UserStore.loggedIn&&UserStore.loaded){
@@ -63,7 +63,7 @@ var Wall = React.createClass({
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                 <div className="grid-sizer" style={{  display: "none" }}></div>
                     {posts}
-                    {WallStore.loaded && posts.length == 0 ?
+                    {noData ?
                         <div className="no-data-to-display">
                             {is_me ?
                                 "You haven't posted anything yet"

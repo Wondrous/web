@@ -38,10 +38,12 @@ var Following = React.createClass({
             );
         });
 
+        noData = following.length == 0;
+
         return (
             <ul className="item-ul">
                 {following}
-                {ProfileStore.loaded && following.length == 0 ?
+                {noData ?
                     <span>
                         {is_me ?
                             <UserBox />
