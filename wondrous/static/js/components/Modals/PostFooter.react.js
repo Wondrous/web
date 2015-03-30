@@ -96,7 +96,7 @@ var PostFooter = React.createClass({
                     : {}}
 
                 <span onClick={WondrousActions.toggleMoreOptions} className="post-footer-btn post-options-btn round-50 nh" title="See more options">
-                    •••
+                    {'\u2022\u2022\u2022'}
                 </span>
 
                 {PostStore.moreOptions ?
