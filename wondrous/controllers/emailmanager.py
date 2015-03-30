@@ -55,8 +55,19 @@ class EmailManager:
         if user:
             code = generate_verification_code(user)
             url = "https://wondrous.co/activate/"+code
+            content = """
+            Dear Friend,
+
+            Please find the verification email link below:
+
+            {0}
+
+            Thank you very much for joining Wondrous, we're excited to have you aboard!
+
+            Enjoy,
+            John, Tim, Zi, & Nick""".format(url)
             try:
-                self.conn.send_email('hello@wondrous.co','Wondrous Verification Email',url,[user.email])
+                self.conn.send_email('hello@wondrous.co','Wondrous Verification Email',content,[user.email])
             except Exception, e:
                 logging.warn(e.message)
                 return False

@@ -72,7 +72,7 @@ var Feed = React.createClass({
                 </div>
             );
         }
-    
+
         var posts = this.state.data.map(function(post, index) {
             if (index != 2) {
                 return (
@@ -89,6 +89,16 @@ var Feed = React.createClass({
                 );
             }
         });
+
+        if (posts.length<3){
+            posts.push((
+                <span>
+                    <div ref="brick" className="masonry-brick">
+                        <DiscoveryBox />
+                    </div>
+                </span>
+            ));
+        }
 
         return (
             <div className="grid-padding">
