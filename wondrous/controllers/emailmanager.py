@@ -56,16 +56,27 @@ class EmailManager:
             code = generate_verification_code(user)
             url = "https://wondrous.co/activate/"+code
             content = """
-            Dear Friend,
+Hey Friend,
+Welcome to Wondrous, your next generation expression platform.
 
-            Please find the verification email link below:
+We couldn't be more excited jacked up to invite you to be one of the first users on our ever-evolving baby/child/alien from another planet.
 
-            {0}
+The best part about it all? You decide how Wondrous will be used. Do you want to share funny memes? Start meaningful discussions? Show off your art? Repackage and distribute your blog content?
 
-            Thank you very much for joining Wondrous, we're excited to have you aboard!
+Wondrous gives you the ability to do it all & more in an incredibly simple-to-use experience.
 
-            Enjoy,
-            John, Tim, Zi, & Nick""".format(url)
+**One thing to remember, "With great power (being one of the first on Wondrous), comes great responsibility." -Spiderman's grandpa or something?
+
+We're looking to you, yes YOU, for feedback on the general experience. What you love, what you hate, what you love and hate, all at the same time.
+
+Please shoot any feedback you have to {0}, and we'll be sure to send over some annoying surveys that we hope a certain % of you fill out, so we can continue to water this plant we call Wondrous.
+
+Here is your verification link: {1}
+
+With so much curiosity and even more love,
+
+The Wondrous Team
+(@John + @Tim + @Zi + @Nick) """.format("hello@wondrous.co",url)
             try:
                 self.conn.send_email('hello@wondrous.co','Wondrous Verification Email',content,[user.email])
             except Exception, e:
