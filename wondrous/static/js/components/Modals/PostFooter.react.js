@@ -95,8 +95,8 @@ var PostFooter = React.createClass({
                     <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
                     : {}}
 
-                <span onClick={WondrousActions.toggleMoreOptions} className="post-footer-btn post-options-btn round-50 nh" title="See more options">
-                    {'\u2022\u2022\u2022'}
+                <span onClick={WondrousActions.toggleMoreOptions} className="post-footer-btn post-options-btn round-50 nh" style={{ paddingTop: 2 }} title="See more options">
+                    +
                 </span>
 
                 {PostStore.moreOptions ?
