@@ -77,6 +77,10 @@ var TagSearch = React.createClass({
                         </span>
                         : null}
                     */}
+
+                    {this.props.posts.length == 0 && this.props.users.length == 0 && !SearchStore.searchingPost ?
+                        <h2 style={{ color: "rgb(100,100,100)", fontSize: 18 }}>Sorry, no results were found</h2>
+                        : null}
                 </div>
             </div>
         );
@@ -128,6 +132,10 @@ var KWSearch = React.createClass({
                         </span>
                         : null}
                     */}
+
+                    {this.props.posts.length == 0 && this.props.users.length == 0 && !SearchStore.searchingPost ?
+                        <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no results were found</h2>
+                        : null}
                 </div>
             </div>
         );
