@@ -11,7 +11,7 @@ var LoggedOut = React.createClass({
         return (
             <div className="loggedout-modal-signup-wrapper">
                 
-                <img src="/static/pictures/p.logo.png" className="loggedout-modal-signup-logo" />
+                <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.logo.png" className="loggedout-modal-signup-logo" />
                 <p className="loggedout-modal-signup-prompt">
                     Wondrous hasn't launched yet, but right now you can join the waitlist to get early access!
                 </p>

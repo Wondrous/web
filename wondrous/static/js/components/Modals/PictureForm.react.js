@@ -60,7 +60,7 @@ var PictureForm = React.createClass({
 
         // Fade out the post form
         $(this.refs.cropPictureBox.getDOMNode()).cropper('destroy');
-        $(this.refs.cropPictureBox.getDOMNode()).attr('src', "/static/pictures/transparent.gif");
+        $(this.refs.cropPictureBox.getDOMNode()).attr('src', "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif");
         $(this.refs.pictureUploadBtn.getDOMNode()).show();
     },
 
@@ -83,7 +83,7 @@ var PictureForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 430 }}>
                 <div id="crop-box-wrapper" className="picture-wrapper">
-                    <img id="cropPictureBox" ref="cropPictureBox" style={{ width: 400 }} src="/static/pictures/transparent.gif" />
+                    <img id="cropPictureBox" ref="cropPictureBox" style={{ width: 400 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif" />
                 </div>
 
                 <div className="new-post-progress-bar">

@@ -35,7 +35,7 @@ from wondrous.models import (
 from wondrous.models.modelmixins import BaseMixin
 from wondrous.utilities.validation_utilities import PasswordManager
 
-DEFAULT_PROFILE_PICTURE_PATH = "/static/pictures/defaults/p.default-profile-picture.jpg"
+DEFAULT_PROFILE_PICTURE_PATH = "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg"
 
 
 class User(Base, PasswordManager, BaseMixin):

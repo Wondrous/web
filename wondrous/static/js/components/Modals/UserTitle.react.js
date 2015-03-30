@@ -40,7 +40,7 @@ var UserTitle = React.createClass({
             hrefRepostPlaceholder = '/'+this.repost.username;
         }
 
-        var img_src = (typeof this.props.data.user_ouuid !== 'undefined' ) ? URLGenerator.generate45(this.props.data.user_ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof this.props.data.user_ouuid !== 'undefined' ) ? URLGenerator.generate45(this.props.data.user_ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/'+this.props.data.username;
 
         return (
@@ -50,7 +50,7 @@ var UserTitle = React.createClass({
                     <Link onClick={this.handleClick} to={hrefPlaceholder}>
                         {name} (@{un})
                     </Link>
-                    {this.repost ? <img src="/static/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
+                    {this.repost ? <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/repost/repost_gray_shadow.svg" className="post-general-icon" style={{height: 22, width: 22, top: 7}} /> : null}
                     {this.repost ? <Link className="recipient" to={hrefRepostPlaceholder} onClick={this.handleClickOnOwner}>{this.repost.name} (@{this.repost.username})</Link> : null}
                 </span>
             </div>

@@ -433,15 +433,15 @@ td, th {
 /* ====== FONTS ============================ */
 @font-face {
   font-family: 'heydings_iconsregular';
-  src: url('fonts/heydings/heydings_icons-webfont.eot');
-  src: url('fonts/heydings/heydings_icons-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/heydings/heydings_icons-webfont.woff') format('woff'), url('fonts/heydings/heydings_icons-webfont.ttf') format('truetype'), url('fonts/heydings/heydings_icons-webfont.svg#heydings_iconsregular') format('svg');
+  src: url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/heydings/heydings_icons-webfont.eot');
+  src: url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/heydings/heydings_icons-webfont.eot?#iefix') format('embedded-opentype'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/heydings/heydings_icons-webfont.woff') format('woff'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/heydings/heydings_icons-webfont.ttf') format('truetype'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/heydings/heydings_icons-webfont.svg#heydings_iconsregular') format('svg');
   font-weight: normal;
   font-style: normal; }
 
 @font-face {
   font-family: 'geosanslightregular';
-  src: url('fonts/geosanslight/geosanslight-webfont.eot');
-  src: url('fonts/geosanslight/geosanslight-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geosanslight/geosanslight-webfont.woff2') format('woff2'), url('fonts/geosanslight/geosanslight-webfont.woff') format('woff'), url('fonts/geosanslight/geosanslight-webfont.ttf') format('truetype'), url('fonts/geosanslight/geosanslight-webfont.svg#geosanslightregular') format('svg');
+  src: url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/geosanslight/geosanslight-webfont.eot');
+  src: url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/geosanslight/geosanslight-webfont.eot?#iefix') format('embedded-opentype'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/geosanslight/geosanslight-webfont.woff2') format('woff2'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/geosanslight/geosanslight-webfont.woff') format('woff'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/geosanslight/geosanslight-webfont.ttf') format('truetype'), url('https://s3-us-west-2.amazonaws.com/wondrousstatic/fonts/geosanslight/geosanslight-webfont.svg#geosanslightregular') format('svg');
   font-weight: normal;
   font-style: normal; }
 
@@ -2322,7 +2322,7 @@ a:hover {
   display: none; }
 
 .tag-bg {
-  background-image: url(/static/pictures/p.tag-bg.png);
+  background-image: url(https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.tag-bg.png);
   background-repeat: repeat; }
 
 .post-form-bg-display-option {

@@ -178,7 +178,7 @@ var LandingApp = React.createClass({
             <div>
                 <div className="landing-wrapper-1">
                     <div>
-                        <img className="landing-main-logo" src="/static/pictures/p.logo.png" />
+                        <img className="landing-main-logo" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.logo.png" />
                     </div>
                     {!this.registered ?
                         <form onSubmit={this.formSubmit}>
@@ -199,7 +199,7 @@ var LandingApp = React.createClass({
 
                         <div>
                             <div className="landing-feature">
-                                <img className="landing-feature-img round-50" src="/static/pictures/landing/clock2.png" />
+                                <img className="landing-feature-img round-50" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/landing/clock2.png" />
                                 <h2 className="landing-feature-h2">Read and write meaningful content in just minutes</h2>
                             </div>
 
@@ -215,7 +215,7 @@ var LandingApp = React.createClass({
 
                         <div>
                             <div className="landing-feature">
-                                <img className="landing-feature-img round-50" src="/static/pictures/landing/trend-line.png" />
+                                <img className="landing-feature-img round-50" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/landing/trend-line.png" />
                                 <h2 className="landing-feature-h2">Join the conversation on trending topics</h2>
                             </div>
 

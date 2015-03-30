@@ -70,25 +70,25 @@ var PostFooter = React.createClass({
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
                     {this.props.data.liked ?
                         <span>
-                            <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" />
-                            <img src="/static/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
+                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" />
+                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
                         </span>
                         :
                         <span>
-                            <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
-                            <img src="/static/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" />
+                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon postHeartIcon" style={{ display: "none" }} />
+                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_white.svg" className="post-general-icon postHeartIcon" />
                         </span>
                     }
                 </span>
 
                 {!is_it_mine ?
                     <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50" title="Repost this post">
-                        <img src="/static/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
+                        <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
                     </span>
                     : null}
 
                 <span onClick={WondrousActions.togglePostLink} className="post-footer-btn post-like-btn round-50" style={{ position: "relative", top: -13 }} title="Get link to this post">
-                    <img src="/static/pictures/icons/link/link.png" className="post-delete-icon" />
+                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/link/link.png" className="post-delete-icon" />
                 </span>
 
                 {PostStore.postLink != null ?
@@ -110,7 +110,7 @@ var PostFooter = React.createClass({
 
                         {is_it_mine ?
                             <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50" style={{ margin: "0 5px" }} title="Delete this post">
-                                <img src="/static/pictures/icons/delete/trash.png" className="post-delete-icon" />
+                                <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/delete/trash.png" className="post-delete-icon" />
                             </span>
                             : null}
 

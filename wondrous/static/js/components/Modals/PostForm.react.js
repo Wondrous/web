@@ -100,8 +100,8 @@ var PostForm = React.createClass({
 		console.log(this.state.submitted);
         // Fade out the post form
         $(this.refs.cropBox.getDOMNode()).cropper('destroy');
-        $(this.refs.cropBox.getDOMNode()).attr('src', "/static/pictures/transparent.gif");
-        $(this.refs.fsBox.getDOMNode()).attr('src', "/static/pictures/transparent.gif");
+        $(this.refs.cropBox.getDOMNode()).attr('src', "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif");
+        $(this.refs.fsBox.getDOMNode()).attr('src', "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif");
 
         if(this.file){
             this.file = null;
@@ -199,10 +199,10 @@ var PostForm = React.createClass({
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <div id="full-screen-wrapper" className="fit-to-screen-wrapper" style={{display:PostFormStore.isCover?"none":"block"}}>
-                    <img id="fsBox" ref="fsBox" className="fit-to-screen" style={{ width: 750 }} src="/static/pictures/transparent.gif" />
+                    <img id="fsBox" ref="fsBox" className="fit-to-screen" style={{ width: 750 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif" />
                 </div>
                 <div id="crop-box-wrapper" style={{display:PostFormStore.isCover?"block":"none"}}>
-                    <img id="cropBox" ref="cropBox" style={{ width: 750 }} src="/static/pictures/transparent.gif" />
+                    <img id="cropBox" ref="cropBox" style={{ width: 750 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif" />
                 </div>
 
                 <div>

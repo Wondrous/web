@@ -86,25 +86,25 @@ var Post = React.createClass({
                 <div>
                     <div className="post-modal-micro-data-wrapper" style={{ maxWidth: "60%" }}>
                         <span className="post-micro-data-super-analytics-item">
-                            <img src="/static/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
+                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.state.post.view_count}
                         </span>
 
                         <span className="post-micro-data-super-analytics-item">
-                            <img src="/static/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-view-icon" />
+                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.state.post.comment_count}
                         </span>
 
                         <span onClick={this.state.post.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block", paddingLeft: 2 }}>
                            {this.state.post.liked ?
                                 <span>
-                                    <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" />
-                                    <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
+                                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" />
+                                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
                                 </span>
                                 :
                                 <span>
-                                    <img src="/static/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
-                                    <img src="/static/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" />
+                                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" style={{ display: "none" }} />
+                                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_gray_shadow.svg" className="post-general-icon post-like-icon" />
                                 </span>
                             }
 

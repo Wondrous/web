@@ -101,7 +101,7 @@ var ProfileLink = React.createClass({
     },
 
     render: function () {
-        var img_src = (typeof UserStore.user.ouuid !== 'undefined') ? URLGenerator.generate45(UserStore.user.ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof UserStore.user.ouuid !== 'undefined') ? URLGenerator.generate45(UserStore.user.ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + UserStore.user.username;
         return (
             <Link id="linkToProfile" to={hrefPlaceholder} className="navbar-btn round-2">
@@ -122,7 +122,7 @@ var NewPostIcon = React.createClass({
     render: function() {
         return (
             <span onClick={this.newPost} className="navbar-btn navbar-newpost-wrapper round-2" style={{ paddingLeft: 25 }} title="Create a new post on your wall">
-                <img className="post-general-icon navbar-newpost-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
+                <img className="post-general-icon navbar-newpost-icon" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/newpost/newpost_white.svg" />
                 <span className="navbar-btn-text">New Post</span>
             </span>
         );
@@ -149,7 +149,7 @@ var Navbar = React.createClass({
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
                 <Link to="/" onClick={ModalStore.clearModal} style={{ color: "rgb(234,234,234)" }}>
-                    <img src="/static/pictures/p.icon_50x50.png" className="navbar-logo" />
+                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.icon_50x50.png" className="navbar-logo" />
                 </Link>
                 {UserStore.loggedIn ?
                     <span>

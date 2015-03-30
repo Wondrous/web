@@ -41,7 +41,7 @@ var PrivateProfile = React.createClass({
     },
     render: function() {
         var ouuid = (typeof this.state.data.ouuid !== 'undefined') ? this.state.data.ouuid : false;
-        var img_src = ouuid ? URLGenerator.generate150(ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = ouuid ? URLGenerator.generate150(ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
 
         var is_influencer = (this.state.data.wondrous_score>=75);
         var wondrousScore = this.state.data.wondrous_score;
@@ -81,12 +81,12 @@ var PrivateProfile = React.createClass({
                                 {!this.am_following ?
                                     <span className="_rmPending">
                                         <span className="follow-button-plus">+</span>
-                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                         :
                                     <span className="_rmPending">
                                         <span style={{ display: "none"}} className="follow-button-plus">+</span>
-                                        <img className="follow-button-checkmark" src="/static/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                        <img className="follow-button-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                 }
                             </li>
