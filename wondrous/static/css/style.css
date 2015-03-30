@@ -1014,6 +1014,29 @@ a:hover {
 .footer-link {
   padding: 5px 25px; }
 
+/* ------------- */
+.footer-links {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  left: 50%;
+  margin-left: -165px; }
+
+.social-media-link {
+  font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+  font-size: 19px;
+  color: #fbfbfb !important;
+  padding: 0 10px; }
+
+.social-media-link:link {
+  text-decoration: none; }
+
+.social-media-link:visted {
+  color: #fbfbfb; }
+
+.social-media-link:hover {
+  text-decoration: underline; }
+
 .info-content {
   padding: 0 5% 0 5%; }
 
@@ -3255,6 +3278,11 @@ a:hover {
   border-top: 1px solid #f4f4f4;
   margin-top: 30px;
   padding: 10px 30px 0; }
+
+.loggedout-modal-signup-footer-link {
+  color: #8c8c8c; }
+  .loggedout-modal-signup-footer-link:link, .loggedout-modal-signup-footer-link:visited {
+    color: #8c8c8c; }
 
 /* ==== INFO ====================== */
 .basic-input {

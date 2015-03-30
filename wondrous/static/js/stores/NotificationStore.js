@@ -46,8 +46,8 @@ var NotificationStore = Reflux.createStore({
         this.pushstream  = new PushStream({
             host:"wondrous.co",
             modes: 'websocket',
-            useJSONP:true,
-            useSSL: true
+            useSSL: true,
+            useJSONP: true
         });
 
         // this.pushstream  = new PushStream({

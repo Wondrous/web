@@ -175,3 +175,26 @@
 .footer-link {
     padding: 5px 25px;
 }
+
+/* ------------- */
+
+.footer-links {
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+    left: 50%;
+    margin-left: -165px;
+}
+
+.social-media-link {
+    font-family: 'geosanslightregular', helvetica, arial, sans-serif;
+    font-size: 19px;
+    color: rgb(251,251,251) !important;
+    padding: 0 10px;
+} .social-media-link:link {
+    text-decoration: none;
+} .social-media-link:visted {
+    color: rgb(251,251,251);
+} .social-media-link:hover {
+    text-decoration: underline;
+}

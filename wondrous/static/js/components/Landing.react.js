@@ -157,6 +157,8 @@ var LandingApp = React.createClass({
     },
     componentDidMount:function() {
         $('.top-banner').hide();
+        $('.main-content').removeClass("main-content");
+        $(".navbar").css("background-color", "rgb(255,255,255)");
 
         var is_progress = this.context.router.getCurrentRoutes()[1].name==="progress";
         if (is_progress) {
@@ -176,14 +178,14 @@ var LandingApp = React.createClass({
         var bigHeading = "Wondrous helps you create, share, & discuss your interests like never before."
         return (
             <div>
-                <div className="landing-wrapper-1">
+                <div className="landing-wrapper-1" style={{ height: "100%", top: 0, paddingTop: 50 }} >
                     <div>
-                        <img className="landing-main-logo" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.logo.png" />
+                        <img className="landing-main-logo" style={{ width: 300 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.logo.png" />
                     </div>
+                    <h1 className="landing-big-heading">{bigHeading}</h1>
+                    {/*
                     {!this.registered ?
                         <form onSubmit={this.formSubmit}>
-                            <h1 className="landing-big-heading">{bigHeading}</h1>
-
                             <input className="landing-input round-5" ref="email" type="email" spellCheck="off" placeholder="Enter your email!" />
                             <button className="landing-btn round-5" >Sign up</button>
 
@@ -237,13 +239,13 @@ var LandingApp = React.createClass({
                     <input className="landing-input landing-input-override round-5" ref="email1" type="email" placeholder="Enter your email!" />
                     <button className="landing-btn landing-btn-override round-5" onClick={this.formSubmit}>Sign up</button>
                 </div>
+                    */}
 
-                <div className="landing-wrapper-4">
-                    <div className="footer-link-wrapper">
-                        <span className="footer-link">Contact Us</span>
-                        <span className="footer-link">Team</span>
-                        <span className="footer-link">Become an influencer</span>
-                        <span className="footer-link">Invite your friends</span>
+                    <div className="footer-links">
+                        <a className="social-media-link" href="http://www.facebook.com/WondrousApp">Facebook</a>
+                        <a className="social-media-link" href="http://www.instagram.com/Wondrous.co">Instagram</a>
+                        <a className="social-media-link" href="http://www.twitter.com/wondrous_co">Twitter</a>
+                        <a className="social-media-link" href="http://www.pinterest.com/wondrous_co">Pinterest</a>
                     </div>
                 </div>
             </div>

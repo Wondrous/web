@@ -51,6 +51,15 @@ var Signup = React.createClass({
             this.refs.password.getDOMNode().value,
             code
         );
+
+        if(typeof code==='undefined' || code===null){
+            this.err = "Please check your email for the verification link";
+            this.refs.name.getDOMNode().value = '';
+            this.refs.username.getDOMNode().value = '';
+            this.refs.email.getDOMNode().value = '';
+            this.refs.password.getDOMNode().value = '';
+            this.forceUpdate();
+        }
     },
     render: function() {
         return (
@@ -60,16 +69,16 @@ var Signup = React.createClass({
                     <div>
                         <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="name" maxLength="30"/>
                     </div>
-                    
+
                     <div>
                         <input onChange={this.changeHandler} id="usernameInput" className="input-basic round-3" type="text" name="username" ref="username" placeholder="Username" maxLength="15"/>
                         <span style={{"position":"absolute"}} ></span>
                     </div>
-                    
+
                     <div>
                         <input onChange={this.changeHandler} className="input-basic round-3" type="text" name="email" ref="email" placeholder="Email"/>
                     </div>
-                    
+
                     <div>
                         <input onChange={this.changeHandler} className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password"/>
                     </div>
@@ -77,7 +86,7 @@ var Signup = React.createClass({
                     <div className="loggedout-error">
                         {this.err}
                     </div>
-                    
+
                     <div>
                         {!this.good ?
                             <input onChange={this.changeHandler} className="input-basic loggedout-login-btn round-15" type="submit" name="signup_button" ref="signup_button" value="Join Wondrous!" disabled/>
