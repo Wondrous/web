@@ -51,7 +51,7 @@ var Comment = React.createClass({
     },
 
     render: function() {
-        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? URLGenerator.generate75(this.props.data.ouuid): "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var img_src = (typeof this.props.data.ouuid !== 'undefined') ? URLGenerator.generate75(this.props.data.ouuid): "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = "/" + this.props.data.username;
         var is_it_mine = (this.props.data.user_id == UserStore.user.id);
 
@@ -93,7 +93,7 @@ var Comment = React.createClass({
 
                     {is_it_mine &&! this.state.editting ?
                         <div>
-                            <img onClick={this.onEdit} className="post-comment-delete-btn" style={{ height: 15, width: 15, right: 30, top: 1 }} src="/static/pictures/icons/edit/edit.png?v=2" title="Edit your comment" />
+                            <img onClick={this.onEdit} className="post-comment-delete-btn" style={{ height: 15, width: 15, right: 30, top: 1 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/edit/edit.png?v=2" title="Edit your comment" />
                         </div>
                         : null}
                 </div>

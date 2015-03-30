@@ -40,7 +40,7 @@ var UserIcon = React.createClass({
         return (
             <li className="user-itemizer" style={userItemizerStyleOverrides}>
                 <a className="avatar" style={avatarStyleOverrides} onClick={this.handleClick}>
-                    <img className="profile-photo-med round-50" style={profilePhotoStyleOverrides} src={(typeof this.props.user.ouuid !== 'undefined') ? URLGenerator.generate75(this.props.user.ouuid):"/static/pictures/defaults/p.default-profile-picture.jpg"} />
+                    <img className="profile-photo-med round-50" style={profilePhotoStyleOverrides} src={(typeof this.props.user.ouuid !== 'undefined') ? URLGenerator.generate75(this.props.user.ouuid):"https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg"} />
                 </a>
                 <div className="user-itemizer-data" style={userItemizerDataStyleOverrides}>
                     <a className="user-itemizer-data-name" onClick={this.handleClick} >{ this.props.user.name }</a>

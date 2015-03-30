@@ -117,7 +117,7 @@ var Feed = React.createClass({
                         {posts}
                     </div>
                     <div>
-                    {!FeedStore.donePaging&&posts.length>0&&UserStore.loggedIn?<img className="loading-wheel" src="/static/pictures/p.loading.gif"/>:{}}
+                    {!FeedStore.donePaging&&posts.length>0&&UserStore.loggedIn?<img className="loading-wheel" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.loading.gif"/>:{}}
                     {UserStore.loaded&&!UserStore.loggedIn?<a onClick={this.promptSignup}><h1>Load More</h1></a>:{}}
                     </div>
                 </div>

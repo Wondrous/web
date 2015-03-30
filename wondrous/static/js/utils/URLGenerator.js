@@ -1,5 +1,5 @@
 
-var BASEURL = "http://mojorankdev.s3.amazonaws.com/";
+var BASEURL = "https://mojorankdev.s3.amazonaws.com/";
 
 var URLGenerator = {
 

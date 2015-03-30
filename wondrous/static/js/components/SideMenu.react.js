@@ -110,8 +110,8 @@ var Notification = React.createClass({
         var url = "/" + note.from_user_username;
 
         // TODO: Get sender's profile pic
-        var profilePic = note.from_user_ouuid ? URLGenerator.generate45(note.from_user_ouuid) : "/static/pictures/defaults/p.default-profile-picture.jpg";
-        // var profilePic = "/static/pictures/defaults/p.default-profile-picture.jpg";
+        var profilePic = note.from_user_ouuid ? URLGenerator.generate45(note.from_user_ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
+        // var profilePic = "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
 
         var notificationTitle = "@" + note.from_user_username;
 
@@ -164,7 +164,7 @@ var NotificationsBar = React.createClass({
                 <h5 className="notification-menu-header">Activity</h5>
                 {notifications}
                 <div>
-                {!NotificationStore.donePaging&&notifications.length>0?<img className="loading-wheel" style={{ height: 25, width: 25 }} src="/static/pictures/p.loading.gif"/>:null}
+                {!NotificationStore.donePaging&&notifications.length>0?<img className="loading-wheel" style={{ height: 25, width: 25 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.loading.gif"/>:null}
                 </div>
             </div>
 

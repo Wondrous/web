@@ -311,7 +311,9 @@ WondrousActions.register.listen(function(name, username, email, password, code) 
         code:code,
         callback: function(err, res){
             if (err == null){
-                WondrousActions.updateUser(res);
+                if(typeof code !=='undefined' && code!=null){
+                    WondrousActions.updateUser(res);
+                }
             }else{
                 WondrousActions.loginError(err);
             }

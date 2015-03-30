@@ -48,14 +48,14 @@ var Wall = React.createClass({
         if(!UserStore.loggedIn&&UserStore.loaded){
             bottomBar = <div onClick={checkLogin}>Sign Up for more</div>
         }else if(!WallStore.donePaging && posts.length > 0){
-            bottomBar = <img className="loading-wheel" src="/static/pictures/p.loading.gif"/>;
+            bottomBar = <img className="loading-wheel" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.loading.gif"/>;
         }
 
         return (
             <div>
                 {is_me ?
                     <div onClick={function(e){WondrousActions.openPostModal();}} id="new-post-launch" className="round-50" title="Create a new post on your wall">
-                        <img className="post-general-icon new-post-launch-icon" src="/static/pictures/icons/newpost/newpost_white.svg" />
+                        <img className="post-general-icon new-post-launch-icon" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/newpost/newpost_white.svg" />
                     </div>
                     : null
                 }

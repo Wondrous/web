@@ -180,7 +180,7 @@ var LandingApp = React.createClass({
             <div>
                 <div className="landing-wrapper-1" style={{ height: "100%", top: 0, paddingTop: 50 }} >
                     <div>
-                        <img className="landing-main-logo" style={{ width: 300 }} src="/static/pictures/p.logo.png" />
+                        <img className="landing-main-logo" style={{ width: 300 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.logo.png" />
                     </div>
                     <h1 className="landing-big-heading">{bigHeading}</h1>
                     {/*
@@ -191,6 +191,54 @@ var LandingApp = React.createClass({
 
                         </form>
                         : <SignedUp data={this.referrer_info} />}
+                </div>
+                <div className="masonry landing-masonry">
+                    <Post data={sp1}/>
+                </div>
+                <div className="landing-wrapper-2">
+                    <div style={{ paddingBottom: 50 }}>
+                        <h2 className="landing-med-heading">Use Wondrous However You Like</h2>
+
+                        <div>
+                            <div className="landing-feature">
+                                <img className="landing-feature-img round-50" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/landing/clock2.png" />
+                                <h2 className="landing-feature-h2">Read and write meaningful content in just minutes</h2>
+                            </div>
+
+                            <div className="landing-feature">
+                                <div className="landing-feature-img round-50">
+                                    <span style={{ position: "relative", fontSize: 60, color: "rgb(255,255,255)", top: 25, fontFamily: "geosanslight", fontSize: 160 }}>
+                                        ?
+                                    </span>
+                                </div>
+                                <h2 className="landing-feature-h2">Can you answer the question of the day?</h2>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="landing-feature">
+                                <img className="landing-feature-img round-50" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/landing/trend-line.png" />
+                                <h2 className="landing-feature-h2">Join the conversation on trending topics</h2>
+                            </div>
+
+                            <div className="landing-feature">
+                                <div className="landing-feature-img round-50">
+                                    <span style={{ position: "relative", fontSize: 60, color: "rgb(255,255,255)", top: 25, fontFamily: "geosanslight", fontSize: 150 }}>
+                                        99
+                                    </span>
+                                </div>
+                                <h2 className="landing-feature-h2">Become a Wondrous influencer</h2>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="landing-wrapper-3">
+                    <h2 className="landing-med-heading">Would you like to join Wondrous?</h2>
+                    <input className="landing-input landing-input-override round-5" ref="email1" type="email" placeholder="Enter your email!" />
+                    <button className="landing-btn landing-btn-override round-5" onClick={this.formSubmit}>Sign up</button>
+                </div>
                     */}
 
                     <div className="footer-links">
