@@ -46,7 +46,12 @@ var Linkify = function(rawText, hashtagOverrideClass) {
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if (word.indexOf('.') > -1 && word.indexOf("..") == -1 && word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
-                        return (<span key={ind}><a className="linkify" href="javascript:" onClick={function(evt) { return window.open(word) }} target="_blank">{word}</a> </span>);
+                        var url = word;
+                        if (word.indexOf('http://')==-1){
+                            url = "http://"+word;
+                            console.log("adding",url);
+                        }
+                        return (<span key={ind}><a className="linkify" href="javascript:" onClick={function(evt) { return window.open(url) }} target="_blank">{url}</a> </span>);
                     }else{
                         return (<span key={ind}>{word+' '}</span>);
                     }
