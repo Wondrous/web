@@ -31,39 +31,52 @@ var TagSearch = React.createClass({
                 </h1>
 
                 <div className="grid-padding">
-                    <h2 className="search-header-sub">Users</h2>
-                    {this.props.users.length > 0 ?
+                        
+                    {this.props.users.length > 0 && !SearchStore.searchingPost ?
                         <span>
-                            <ul>{this.props.users}</ul>
-                            {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
-                                <Button>Load More Users</Button>
+                            <h2 className="search-header-sub">Users</h2>
+                            {this.props.users.length > 0 ?
+                                <span>
+                                    <ul>{this.props.users}</ul>
+                                    {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                                        <Button>Load More Users</Button>
+                                        : null}
+                                </span>
                                 : null}
                         </span>
                         : null}
 
+                    {/*
                     {this.props.users.length == 0 && !SearchStore.searchingPost?
                         <span>
                             <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no users were found</h2>
                         </span>
                         : null}
+                    */}
 
-                    <h2 className="search-header-sub">Posts</h2>
-                    {this.props.posts.length > 0 ?
+                    {this.props.posts.length > 0 && !SearchStore.searchingPost ?
                         <span>
-                            <MasonryWrapper>
-                                {this.props.posts}
-                            </MasonryWrapper>
-                            {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
-                                <Button>Load More Posts</Button>
+                            <h2 className="search-header-sub">Posts</h2>
+                            {this.props.posts.length > 0 ?
+                                <span>
+                                    <MasonryWrapper>
+                                        {this.props.posts}
+                                    </MasonryWrapper>
+                                    {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                                        <Button>Load More Posts</Button>
+                                        : null}
+                                </span>
                                 : null}
                         </span>
                         : null}
 
+                    {/*
                     {this.props.posts.length == 0 && !SearchStore.searchingPost?
                         <span>
                             <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no posts were found</h2>
                         </span>
                         : null}
+                    */}
                 </div>
             </div>
         );
@@ -78,32 +91,43 @@ var KWSearch = React.createClass({
                     Search results for <b>{this.props.searchTerm}</b>
                 </h1>
                 <div className="grid-padding">
-                    <h2 className="search-header-sub">Users</h2>
-                    <ul>{this.props.users}</ul>
-                    {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
-                        <Button>Load More Users</Button>
+                    {this.props.users.length > 0 && !SearchStore.searchingPost ?
+                        <span>
+                            <h2 className="search-header-sub">Users</h2>
+                            <ul>{this.props.users}</ul>
+                            {!SearchStore.doneSearchingPost && SearchStore.users.length > 0 ?
+                                <Button>Load More Users</Button>
+                                : null}
+                        </span>
                         : null}
 
+                    {/*
                     {this.props.users.length == 0 && !SearchStore.searchingPost ?
                         <span>
                             <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no users were found</h2>
                         </span>
                         : null}
+                    */}
 
-                    <h2 className="search-header-sub">Posts</h2>
-                    <MasonryWrapper>
-                        {this.props.posts}
-                    </MasonryWrapper>
-
-                    {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
-                        <Button>Load More Posts</Button>
+                    {this.props.posts.length > 0 && !SearchStore.searchingPost ?
+                        <span>
+                            <h2 className="search-header-sub">Posts</h2>
+                            <MasonryWrapper>
+                                {this.props.posts}
+                            </MasonryWrapper>
+                            {!SearchStore.doneSearchingPost && SearchStore.posts.length > 0 ?
+                                <Button>Load More Posts</Button>
+                                : null}
+                        </span>
                         : null}
 
+                    {/*
                     {this.props.posts.length == 0 && !SearchStore.searchingPost ?
                         <span>
                             <h2 style={{ color: "rgb(100,100,100)", fontSize: 20 }}>Sorry, no posts were found</h2>
                         </span>
                         : null}
+                    */}
                 </div>
             </div>
         );
