@@ -22,7 +22,7 @@ var LoggedOut = React.createClass({
                     :
                     <div style={{ width: "90%", margin: "0 auto" }} >
                         <input type="text" spellCheck={"false"} placeholder="Enter your email" className="loggedout-modal-signup-input" />
-                        <button className="loggedout-modal-signup-submit">Join</button>
+                        <button className="loggedout-modal-signup-submit">Request early access</button>
                     </div>
                 }
                 <div className="loggedout-modal-signup-footer">
