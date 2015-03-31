@@ -974,7 +974,7 @@ class APIViews(BaseHandler):
 
         try:
             if name:
-                _s_valid_n, len_err_n   = Sanitize.length_check(name, min_length=1, max_length=30)
+                _s_valid_n, len_err_n = Sanitize.length_check(name, min_length=1, max_length=30)
 
             if pw:
                 _s_valid_pw, len_err_pw = Sanitize.length_check(pw, min_length=6, max_length=255)
@@ -995,8 +995,6 @@ class APIViews(BaseHandler):
         # to ensure the errors flow logically
         if not _s_valid_n and name:
             error_message = "Your name is {err}".format(err=len_err_n)
-        # elif _s_valid_un == None:
-        #     error_message = "Please enter a username"
         elif not _s_valid_un and username:
             error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
         elif _s_un_taken and username:
