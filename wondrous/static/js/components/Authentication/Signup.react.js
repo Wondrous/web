@@ -67,11 +67,11 @@ var Signup = React.createClass({
                 <h1 className="loggedout-header">Sign up</h1>
                 <form onSubmit={this.onRegister}>
                     <div>
-                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="name" maxLength="30"/>
+                        <input onChange={this.changeHandler} id="focusInput" className="input-basic round-3" type="text" name="name" ref="name" placeholder="Full Name" maxLength="30"/>
                     </div>
 
                     <div>
-                        <input onChange={this.changeHandler} id="usernameInput" className="input-basic round-3" type="text" name="username" ref="username" placeholder="Username" maxLength="15"/>
+                        <input onChange={this.changeHandler} id="usernameInput" className="input-basic round-3" type="text" name="username" ref="username" placeholder="Username" maxLength="20"/>
                         <span style={{"position":"absolute"}} ></span>
                     </div>
 

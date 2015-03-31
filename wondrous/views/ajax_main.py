@@ -654,54 +654,6 @@ class APIViews(BaseHandler):
 
         return NotificationManager.notification_json(**self.query_kwargs)
 
-    @view_config(request_method='POST',route_name='api_signup_check', renderer='json')
-    def api_signup_check(self):
-
-        """
-            PURPOSE: Handle a user sign up
-
-            USE: self.query_kwargs to provide all the required fields
-                name,
-                password,
-                email,
-                username
-
-            PARAMS: (None)
-
-            RETURNS: The JSON error response
-        """
-
-        error_message = None
-        try:
-            _s_valid_n, len_err_n = Sanitize.length_check(self.query_kwargs['name'], min_length=1, max_length=30)
-            _s_valid_pw, len_err_pw = Sanitize.length_check(self.query_kwargs['password'], min_length=6, max_length=255)
-            _s_valid_em = Sanitize.is_valid_email(self.query_kwargs['email'])
-            _s_em_taken = User.by_kwargs(email=self.query_kwargs['email']).first()
-            _s_valid_un = Sanitize.is_valid_username(self.query_kwargs['username'].lower())
-            _s_un_taken = User.by_kwargs(username=self.query_kwargs['username'].lower()).first()
-
-        except Exception, e:
-            error_message = str(e)
-
-        # Check for validity
-        if not _s_valid_n:
-            error_message = "Your name is {err}".format(err=len_err_n)
-        elif not _s_valid_em:
-            error_message = "Please enter a valid email address"
-        elif _s_em_taken:
-            error_message = "This email has already been used to sign up. Please use a different one."
-        elif not _s_valid_pw:
-            error_message = "Your password is {err}".format(err=len_err_pw)
-        elif not _s_valid_un:
-            error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
-        elif _s_un_taken:
-            error_message = "This username has already been taken. Please use a different one."
-
-        if error_message:
-            return {'error': error_message}
-        else:
-            return {}
-
     @api_login_required
     @view_config(request_method='DELETE', route_name='api_post_delete', renderer='json')
     def api_post_delete(self):
@@ -907,33 +859,29 @@ class APIViews(BaseHandler):
             PURPOSE: This method handles the signup process for all new users
         """
 
-        safe_in  = Sanitize.safe_input
-        p = self.request.params
-
-        # Some helpful constants
-        PERSON = 1
-        # SIGNUP_ROUTE = "/signup/step/1/"
+        safe_input = Sanitize.safe_input
+        kw = self.query_kwargs
 
         # The data we need to validate
         error_message = None
-        code     = safe_in(self.query_kwargs.get('code'))
-        name     = safe_in(self.query_kwargs.get('name'))
-        email    = safe_in(self.query_kwargs.get('email'))
-        password = safe_in(self.query_kwargs.get('password'), strip=False)
-        username = safe_in(Sanitize.strip_ampersand(self.query_kwargs.get('username')))
+        code     = safe_input(kw.get('code'))
+        name     = safe_input(kw.get('name'))
+        email    = safe_input(kw.get('email'))
+        password = safe_input(kw.get('password'), strip=False)
+        username = safe_input(Sanitize.strip_ampersand(kw.get('username')))
         ref = None
 
-        # if not code and (datetime.now()<datetime(year=2015,month=6,day=1)):
+        # if not code and (datetime.now() < datetime(year=2015, month=6, day=1)):
         #     return {'error':'registration not open yet!'}
 
         if code:
             ref = ReferrerManager.by_verification_code(code)
             if ref.email != email:
-                return {'error': "please use the email you signed up for the waitlist"}
+                return {'error': "Please use the email you signed up with on the waitlist"}
 
         # Check for presence
         if not name:
-            error_message = "Please enter your  name."
+            error_message = "Please enter your name."
         elif not email:
             error_message = "Please enter your email."
         elif not password:
@@ -979,6 +927,81 @@ class APIViews(BaseHandler):
                     wondrous.controllers.email_controller.send_activation_link(new_user)
                 return new_user.json()
             else:
-                return {'error':error_message}
+                return {'error': error_message}
         else:
-            return {'error':error_message}
+            return {'error': error_message}
+
+    @view_config(request_method='POST',route_name='api_signup_check', renderer='json')
+    def api_signup_check(self):
+
+        """
+            PURPOSE: Handle a user sign up
+
+            USE: self.query_kwargs to provide all the required fields
+                name,
+                password,
+                email,
+                username
+
+            PARAMS: (None)
+
+            RETURNS: The JSON error response
+        """
+
+        safe_input = Sanitize.safe_input
+        kw = self.query_kwargs
+
+        # Make sure everything gets run through safe_in to prevent
+        # unicode decode/encode errors
+        name     = safe_input(kw['name'])
+        email    = safe_input(kw['email'])
+        username = safe_input(Sanitize.strip_ampersand(kw['username']))
+        pw       = safe_input(kw['password'], strip=False)
+
+        # If for some reason, there is an exception,
+        # these variables need to be initialized so that
+        # the following if-elif doens't throw a 'referenced before 
+        # assignment' error
+        _s_valid_n    = None
+        len_err_n     = None
+        _s_valid_pw   = None
+        len_err_pw    = None
+        _s_valid_em   = None
+        _s_em_taken   = None
+        _s_valid_un   = None
+        _s_un_taken   = None
+        error_message = None
+
+        try:
+            _s_valid_n, len_err_n   = Sanitize.length_check(name, min_length=1, max_length=30)
+            _s_valid_pw, len_err_pw = Sanitize.length_check(pw, min_length=6, max_length=255)
+            _s_valid_em = Sanitize.is_valid_email(email)
+            _s_em_taken = User.by_kwargs(email=email).first()
+            _s_valid_un = Sanitize.is_valid_username(username.lower())
+            _s_un_taken = User.by_kwargs(username=username.lower()).first()
+
+        except Exception, e:
+            error_message = str(e)
+
+        # Check for validity, and make sure to keep
+        # these if-elifs in the same order as the form inputs
+        # to ensure the errors flow logically
+        if not _s_valid_n:
+            error_message = "Your name is {err}".format(err=len_err_n)
+        elif _s_valid_un == None:
+            error_message = "Please enter a username"
+        elif not _s_valid_un:
+            error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
+        elif _s_un_taken:
+            error_message = "This username has already been taken. Please use a different one."
+        elif not _s_valid_em:
+            error_message = "Please enter a valid email address"
+        elif _s_em_taken:
+            error_message = "This email has already been used to sign up. Please use a different one."
+        elif not _s_valid_pw:
+            error_message = "Your password is {err}".format(err=len_err_pw)
+
+        if error_message:
+            return {'error': error_message}
+        else:
+            return {}
