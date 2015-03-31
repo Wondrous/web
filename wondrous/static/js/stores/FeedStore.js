@@ -14,7 +14,9 @@ var FeedStore = Reflux.createStore({
         this.paging = false;
         this.hasNewPosts = false;
     },
+
     updateUser: function(userData) {
+
         if(userData.hasOwnProperty('username') && userData.username!==this.username){
             this.username = userData.username;
             this.currentPage = 0;
@@ -23,6 +25,7 @@ var FeedStore = Reflux.createStore({
             this.loadMore();
         }
     },
+
     newFeedItems: function(){
         this.hasNewPosts = true;
         this.trigger(this.feed.sortedSet);
@@ -32,6 +35,7 @@ var FeedStore = Reflux.createStore({
         this.hasNewPosts = false;
         WondrousActions.loadNewFeedItems();
     },
+
     loadMore: function(){
         if(!this.paging&&!this.donePaging){
             this.paging = true;
@@ -45,7 +49,7 @@ var FeedStore = Reflux.createStore({
     },
 
     unloadUser: function(){
-        this.username
+        this.username = null;
         this.feed.reset();
         this.currentPage = 0;
         this.donePaging = false;
@@ -62,7 +66,6 @@ var FeedStore = Reflux.createStore({
         for(var i = 0; i < feedItems.length; i++){
             this.feed.push(feedItems[i]);
         }
-        console.log("feed is now",this.feed.sortedSet.length);
         this.trigger(this.feed.sortedSet);
     },
 

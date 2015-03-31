@@ -20,13 +20,13 @@ var Linkify = function(rawText, hashtagOverrideClass) {
             var href = null;
             if (tk.indexOf('@') > -1) {
                 var temp = tk.replace('@','')
-                var temp = tk.replace('*','')
+                temp = temp.replace('*','')
                 href = '/'+temp;
 
                 isHashtag = false;
             } else if (tk.indexOf('#') > -1) {
                 var temp = tk.replace('#','')
-                var temp = tk.replace('*','')
+                temp = temp.replace('*','')
                 href = '/tags/'+temp;
                 isHashtag = true;
             }
