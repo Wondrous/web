@@ -7,6 +7,7 @@ var Signup = React.createClass({
         router: React.PropTypes.func
     },
     err: null,
+    isSuccess: false,
     good: true,
     mixins: [
         Reflux.listenTo(UserStore,'onUserUpdate'),
@@ -54,6 +55,7 @@ var Signup = React.createClass({
 
         if(typeof code==='undefined' || code===null){
             this.err = "Please check your email for the verification link";
+            this.isSuccess = true;
             this.refs.name.getDOMNode().value = '';
             this.refs.username.getDOMNode().value = '';
             this.refs.email.getDOMNode().value = '';
@@ -83,7 +85,7 @@ var Signup = React.createClass({
                         <input onChange={this.changeHandler} className="input-basic round-3" type="password" name="password" ref="password" placeholder="Password"/>
                     </div>
 
-                    <div className="loggedout-error">
+                    <div className="loggedout-error" style={this.isSuccess ? {color: "rgb(0,140,0)", fontWeight: 900} : {color: "auto"}}>
                         {this.err}
                     </div>
 
