@@ -973,12 +973,19 @@ class APIViews(BaseHandler):
         error_message = None
 
         try:
-            _s_valid_n, len_err_n   = Sanitize.length_check(name, min_length=1, max_length=30)
-            _s_valid_pw, len_err_pw = Sanitize.length_check(pw, min_length=6, max_length=255)
-            _s_valid_em = Sanitize.is_valid_email(email)
-            _s_em_taken = User.by_kwargs(email=email).first()
-            _s_valid_un = Sanitize.is_valid_username(username.lower())
-            _s_un_taken = User.by_kwargs(username=username.lower()).first()
+            if name:
+                _s_valid_n, len_err_n   = Sanitize.length_check(name, min_length=1, max_length=30)
+
+            if pw:
+                _s_valid_pw, len_err_pw = Sanitize.length_check(pw, min_length=6, max_length=255)
+            
+            if email:
+                _s_valid_em = Sanitize.is_valid_email(email)
+                _s_em_taken = User.by_kwargs(email=email).first()
+
+            if username:
+                _s_valid_un = Sanitize.is_valid_username(username.lower())
+                _s_un_taken = User.by_kwargs(username=username.lower()).first()
 
         except Exception, e:
             error_message = str(e)
@@ -986,19 +993,19 @@ class APIViews(BaseHandler):
         # Check for validity, and make sure to keep
         # these if-elifs in the same order as the form inputs
         # to ensure the errors flow logically
-        if not _s_valid_n:
+        if not _s_valid_n and name:
             error_message = "Your name is {err}".format(err=len_err_n)
-        elif _s_valid_un == None:
-            error_message = "Please enter a username"
-        elif not _s_valid_un:
+        # elif _s_valid_un == None:
+        #     error_message = "Please enter a username"
+        elif not _s_valid_un and username:
             error_message = "Invalid username! Use only alphanumerics, and it cannot be all numbers"
-        elif _s_un_taken:
+        elif _s_un_taken and username:
             error_message = "This username has already been taken. Please use a different one."
-        elif not _s_valid_em:
+        elif not _s_valid_em and email:
             error_message = "Please enter a valid email address"
-        elif _s_em_taken:
+        elif _s_em_taken and email:
             error_message = "This email has already been used to sign up. Please use a different one."
-        elif not _s_valid_pw:
+        elif not _s_valid_pw and pw:
             error_message = "Your password is {err}".format(err=len_err_pw)
 
         if error_message:
