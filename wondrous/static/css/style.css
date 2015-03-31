@@ -445,7 +445,7 @@ td, th {
   font-weight: normal;
   font-style: normal; }
 
-body, .top-banner, .main-content, .cover-photo, .profile-tab-bar {
+body, .top-banner, .main-content, #main-content-id, .cover-photo, .profile-tab-bar {
   min-width: 750px; }
 
 html, body, footer, .main-content {
@@ -489,7 +489,7 @@ ul {
   z-index: 11;
   /* top-banner's z-index is 10 */ }
 
-.main-content {
+.main-content, #main-content-id {
   position: relative;
   margin-top: 45px;
   min-height: 1000px; }

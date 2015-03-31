@@ -60,7 +60,7 @@ var WondrousApp = React.createClass({
             <div>
                 <Navbar />
                 <SideMenu />
-                <div className="main-content">
+                <div id="main-content-id" className="main-content">
                     <RouteHandler />
                 </div>
                 <ModalContainer />
