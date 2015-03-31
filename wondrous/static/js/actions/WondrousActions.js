@@ -395,7 +395,6 @@ WondrousActions.loadNewFeedItems.listen(function(){
 });
 
 WondrousActions.auth.listen(function(){
-    console.log("loading auth");
 
     WondrousAPI.auth({
         callback: function(err,res){

@@ -198,9 +198,6 @@ class AccountManager(BaseManager):
                 wondrous_score = float(view_count*5 + like_count*5 + follower_count*5 + comment_count*1 + post_count*1 + following_count*1)
                 wondrous_score /= 1000.0
 
-                # logging.warn(wondrous_score)
-                # logging.warn("%i %i %i %i %i %i"%(comment_count, follower_count, following_count, post_count, view_count, like_count))
-
                 # ------------------------------------------------------------------------------------------
                 # WARNING: Maybe this is unique to me (JohnZ), but when I comment out this
                 # cls.add_badge_benefits method below, I recieve a DB error, to the effect of:
@@ -238,7 +235,7 @@ class AccountManager(BaseManager):
     def add(cls, name, email, username, password):
         # First let's create the object object - point of contact for the account
         base_score = 0
-        if (datetime.now()<datetime(year=2015,month=6,day=1)):
+        if (datetime.now() < datetime(year=2015, month=6, day=1)):
             base_score = 75
         new_user = User(name=name, username=username, email=email, password=password, is_active=True, base_score=base_score)
 

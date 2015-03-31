@@ -88,8 +88,6 @@ var UserBar = React.createClass({
         var img_src = ouuid ? URLGenerator.generate150(ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
         var classes = "profile-header-nav-item follow-button round-50 ";
         var is_influencer = (this.state.data.wondrous_score >= 75);
-
-        // This is temporary...sorta
         var wondrousScore = this.state.data.wondrous_score;
 
         if (this.am_following) {
