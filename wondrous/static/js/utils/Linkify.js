@@ -45,7 +45,7 @@ var Linkify = function(rawText, hashtagOverrideClass) {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if (word.indexOf('.') > -1 && word.indexOf("..") == -1 && word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
                         var url = word;
-                        if (word.indexOf('http://')==-1){
+                        if (word.indexOf('http://') == -1 && word.indexOf('https://') == -1) {
                             url = "http://"+word;
                             console.log("adding",url);
                         }
