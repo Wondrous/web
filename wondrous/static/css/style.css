@@ -811,7 +811,7 @@ a:hover {
   .signup-big-link:hover {
     border: 3px solid #00c88c; }
 
-.follow-button {
+.wondrous-connect-btn {
   border: 1px solid #eaeaea !important;
   padding: 25px 0 !important;
   cursor: pointer;
@@ -820,25 +820,25 @@ a:hover {
   -o-box-shadow: 0 0px 2px #505050;
   box-shadow: 0 0px 2px #505050; }
 
-.follow-button > .profile-header-nav-title {
+.wondrous-connect-btn > .profile-header-nav-title {
   text-transform: uppercase;
   font-size: 11px; }
 
-.follow-button.is-following > .profile-header-nav-title {
+.wondrous-connect-btn.is-following > .profile-header-nav-title {
   font-weight: bold; }
 
-.follow-button.is-pending > .profile-header-nav-title {
+.wondrous-connect-btn.is-pending > .profile-header-nav-title {
   font-weight: bold;
   font-size: 12px; }
 
-.follow-button-plus {
+.wondrous-connect-btn-plus {
   position: relative;
   top: -12px;
   font-size: 38px;
   font-weight: 100;
   color: #b4b4b4; }
 
-.follow-button-checkmark {
+.wondrous-connect-btn-checkmark {
   position: relative;
   top: 2px;
   height: 25px;

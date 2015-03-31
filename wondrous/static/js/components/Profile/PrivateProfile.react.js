@@ -46,7 +46,7 @@ var PrivateProfile = React.createClass({
         var is_influencer = (this.state.data.wondrous_score>=75);
         var wondrousScore = this.state.data.wondrous_score;
 
-        var classes = "profile-header-nav-item follow-button round-50 _requestBtn ";
+        var classes = "profile-header-nav-item wondrous-connect-btn round-50 _requestBtn ";
         if (this.am_following) {
             var btnTitle = "Following";
             classes += "is-following";
@@ -76,17 +76,17 @@ var PrivateProfile = React.createClass({
                         <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
 
                         <div>
-                            <li className={classes} onClick={this.handleClick} style={{display:UserStore.loggedIn?"block":"none"}}>
-                                <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
+                            <li className={classes} onClick={this.handleClick} style={{ display: UserStore.loggedIn ? "block" : "none" }}>
+                                <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)", margin: "0 auto" }} >{btnTitle}</div>
                                 {!this.am_following ?
                                     <span className="_rmPending">
-                                        <span className="follow-button-plus">+</span>
-                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                        <span className="wondrous-connect-btn-plus">+</span>
+                                        <img style={{ display: "none"}} className="wondrous-connect-btn-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                         :
                                     <span className="_rmPending">
-                                        <span style={{ display: "none"}} className="follow-button-plus">+</span>
-                                        <img className="follow-button-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                        <span style={{ display: "none"}} className="wondrous-connect-btn-plus">+</span>
+                                        <img className="wondrous-connect-btn-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                 }
                             </li>

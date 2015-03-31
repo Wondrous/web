@@ -86,7 +86,7 @@ var UserBar = React.createClass({
         var is_me = username === UserStore.user.username;
         var ouuid = (typeof ProfileStore.user.ouuid !== 'undefined') ? ProfileStore.user.ouuid : null;
         var img_src = ouuid ? URLGenerator.generate150(ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
-        var classes = "profile-header-nav-item follow-button round-50 ";
+        var classes = "profile-header-nav-item wondrous-connect-btn round-50 ";
         var is_influencer = (this.state.data.wondrous_score >= 75);
         var wondrousScore = this.state.data.wondrous_score;
 
@@ -148,13 +148,13 @@ var UserBar = React.createClass({
                                 <div className="profile-header-nav-title" style={{ color: "rgb(140,140,140)" }} >{btnTitle}</div>
                                 {!this.am_following ?
                                     <span>
-                                        <span className="follow-button-plus">+</span>
-                                        <img style={{ display: "none"}} className="follow-button-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                        <span className="wondrous-connect-btn-plus">+</span>
+                                        <img style={{ display: "none"}} className="wondrous-connect-btn-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                         :
                                     <span>
-                                        <span style={{ display: "none"}} className="follow-button-plus">+</span>
-                                        <img className="follow-button-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
+                                        <span style={{ display: "none"}} className="wondrous-connect-btn-plus">+</span>
+                                        <img className="wondrous-connect-btn-checkmark" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/checkmark/checkmark-1.png?v=1" />
                                     </span>
                                 }
                             </li>
