@@ -20,7 +20,8 @@
     "underscore": "^1.7.0",
     "websocket": "^1.0.17",
     "blueimp-canvas-to-blob":"*",
-    "cropper":"*"
+    "cropper":"*",
+    "exif-js":"*"
   },
   "devDependencies": {
     "browserify": "~6.2.0",
