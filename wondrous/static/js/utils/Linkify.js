@@ -19,14 +19,14 @@ var Linkify = function(rawText, hashtagOverrideClass) {
             var tk = tokens[i];
             var href = null;
             if (tk.indexOf('@') > -1) {
-                var temp = tk.replace('@','')
-                temp = temp.replace('*','')
+
+                var temp = tk.replace('@','').replace('*','');
                 href = '/'+temp;
 
                 isHashtag = false;
             } else if (tk.indexOf('#') > -1) {
-                var temp = tk.replace('#','')
-                temp = temp.replace('*','')
+
+                var temp = tk.replace('#','').replace('*','');
                 href = '/tags/'+temp;
                 isHashtag = true;
             }
@@ -46,8 +46,11 @@ var Linkify = function(rawText, hashtagOverrideClass) {
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if (word.indexOf('.') > -1 && word.indexOf("..") == -1 && word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
+                        if(word.charAt(word.length-1)==='.'){
+                            word = word.subString(0,word.length-1);
+                        }
                         var url = word;
-                        if (word.indexOf('http://')==-1){
+                        if (word.indexOf('http://') == -1 && word.indexOf('https://') == -1) {
                             url = "http://"+word;
                             console.log("adding",url);
                         }
