@@ -10,6 +10,17 @@ var rotateDataURL = function (image, x, y, angle) {
     var canvas = document.createElement("canvas");
     canvas.height = image.height;
     canvas.width = image.width;
+
+    var addon= 0;
+
+    if (angle==90||angle==270){
+        if (canvas.width>canvas.height){
+            addon = (canvas.width-canvas.height)/2;
+            canvas.height = image.width;
+            canvas.width = image.height;
+        }
+    }
+
     var context = canvas.getContext("2d");
 	// save the current co-ordinate system
 	// before we screw with it
@@ -22,9 +33,12 @@ var rotateDataURL = function (image, x, y, angle) {
 	// angle from degrees to radians
 	context.rotate(angle * Math.PI/180);
 
+
+
+    console.log("adding",addon,-(image.width/2)+addon);
 	// draw it up and to the left by half the width
 	// and height of the image
-	context.drawImage(image, -(image.width/2), -(image.height/2));
+	context.drawImage(image, -(image.width/2)+addon, -(image.height/2)+addon);
 
 	// and restore the co-ords to how they were when we began
 	context.restore();
