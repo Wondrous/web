@@ -195,7 +195,6 @@ var PostForm = React.createClass({
         var optionActiveClass = optionClass + " post-form-bg-display-option--active";
 		var buttonStyle = {'display':!this.state.submitted?"block":"none"}
 
-        // onDrop={this.onFileSelect} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver}
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
                 <div id="full-screen-wrapper" className="fit-to-screen-wrapper" style={{display:PostFormStore.isCover?"none":"block"}}>
