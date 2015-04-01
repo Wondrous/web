@@ -39,12 +39,12 @@ var WondrousApp = React.createClass({
         var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         var s = $(document).scrollTop();
         var scrolled = (s+2*h) > document.body.offsetHeight;
-        if (scrolled){
+        if (scrolled) {
             if(SettingStore.pageType == WondrousConstants.PROFILE_PAGE){
                 if(UserStore.loggedIn&&UserStore.loaded){
                     WallStore.loadMore();
                 }
-            }else if(SettingStore.pageType == WondrousConstants.FEED_PAGE){
+            } else if(SettingStore.pageType == WondrousConstants.FEED_PAGE){
                 FeedStore.loadMore();
             }
         }
