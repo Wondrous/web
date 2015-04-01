@@ -6,6 +6,32 @@ var EXIF = require('exif-js');
 
 var defaultUser = {username:''};
 
+var rotateDataURL = function (image, x, y, angle) {
+    var canvas = document.createElement("canvas");
+    canvas.height = image.height;
+    canvas.width = image.width;
+    var context = canvas.getContext("2d");
+	// save the current co-ordinate system
+	// before we screw with it
+	context.save();
+
+	// move to the middle of where we want to draw our image
+	context.translate(x, y);
+
+	// rotate around that point, converting our
+	// angle from degrees to radians
+	context.rotate(angle * Math.PI/180);
+
+	// draw it up and to the left by half the width
+	// and height of the image
+	context.drawImage(image, -(image.width/2), -(image.height/2));
+
+	// and restore the co-ords to how they were when we began
+	context.restore();
+
+    return canvas.toDataURL();
+}
+
 var PostFormStore = Reflux.createStore({
     listenables: WondrousActions,
 
@@ -62,35 +88,19 @@ var PostFormStore = Reflux.createStore({
 
         EXIF.getData(this.file, function() {
             var orientation = this.exifdata.Orientation || 0;
-            var canvas = document.createElement("canvas");
-            var ctx = canvas.getContext("2d");
 
-            that.width = canvas.width = tempImg.width;
-            that.height = canvas.height = tempImg.height;
-
+            that.width = tempImg.width;
+            that.height = tempImg.height;
+            console.log("orientation is",this.exifdata,orientation);
             switch(orientation){
                case 8:
-                   ctx.rotate(90*Math.PI/180);
-                   ctx.drawImage(tempImg,0,0,tempImg.width,tempImg.height);
-                   that.dataURL = canvas.toDataURL();
+                   that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);
                    break;
                case 3:
-                   /// translate so rotation happens at center of image
-                    ctx.translate(tempImg.width * 0.5, tempImg.height * 0.5);
-
-                    /// rotate canvas context
-                    ctx.rotate(Math.PI); /// 90deg clock-wise
-
-                    /// translate back so next draw op happens in upper left corner
-                    ctx.translate(-tempImg.width * 0.5, -tempImg.height * 0.5);
-
-                   ctx.drawImage(tempImg,0,0,tempImg.width,tempImg.height);
-                   that.dataURL = canvas.toDataURL();
+                   that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,180);
                    break;
                case 6:
-                   ctx.rotate(-90*Math.PI/180);
-                   ctx.drawImage(tempImg,0,0,tempImg.width,tempImg.height);
-                   that.dataURL = canvas.toDataURL();
+                   that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);
                    break;
             }
 
