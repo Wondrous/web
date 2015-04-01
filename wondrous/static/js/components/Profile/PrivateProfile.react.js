@@ -76,7 +76,7 @@ var PrivateProfile = React.createClass({
                         <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
 
                         <div>
-                            <li className={classes} onClick={this.handleClick} style={{ display: UserStore.loggedIn ? "block" : "none" }}>
+                            <li className={classes} onClick={this.handleClick} style={{ display: UserStore.loggedIn ? "block" : "none", margin: "0 auto" }}>
                                 <div className="profile-header-nav-title _pendingTitle" style={{ color: "rgb(140,140,140)", margin: "0 auto" }} >{btnTitle}</div>
                                 {!this.am_following ?
                                     <span className="_rmPending">
