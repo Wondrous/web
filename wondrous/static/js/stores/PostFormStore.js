@@ -42,6 +42,7 @@ var rotateDataURL = function (image, x, y, angle) {
 
 	// and restore the co-ords to how they were when we began
 	context.restore();
+    context.fill();
 
     return canvas.toDataURL();
 }
@@ -97,30 +98,35 @@ var PostFormStore = Reflux.createStore({
 
     onLoaded: function(e){
         var tempImg = new Image();
-        tempImg.src = this.dataURL = e.target.result;
         var that = this;
 
-        EXIF.getData(this.file, function() {
-            var orientation = this.exifdata.Orientation || 0;
+        tempImg.onload = function(){
+            EXIF.getData(that.file, function() {
+                var orientation = this.exifdata.Orientation || 0;
 
-            that.width = tempImg.width;
-            that.height = tempImg.height;
-            console.log("orientation is",this.exifdata,orientation);
-            switch(orientation){
-               case 8:
-                   that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);
-                   break;
-               case 3:
-                   that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,180);
-                   break;
-               case 6:
-                   that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);
-                   break;
-            }
+                that.width = tempImg.width;
+                that.height = tempImg.height;
+                console.log("orientation is",this.exifdata,orientation);
+                switch(orientation){
+                   case 8:
+                       that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);
+                       break;
+                   case 3:
+                       that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,180);
+                       break;
+                   case 6:
+                       that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);
+                       break;
+                }
 
-            that.loaded = true;
-            that.trigger({dataURL:that.dataURL});
-        });
+                that.loaded = true;
+
+                that.trigger({dataURL:that.dataURL});
+            });
+        }
+        tempImg.src = this.dataURL = e.target.result;
+
+
 
     },
 
