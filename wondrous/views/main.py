@@ -108,7 +108,7 @@ class IndexHandler(BaseHandler):
             except Exception, e:
                 retval['social_page'] = False
 
-        elif 'cat' in self.request.matchdict.keys() and self.request.matchdict['cat']!='favicon.ico':
+        elif 'cat' in self.request.matchdict.keys() and self.request.matchdict['cat']!='favicon.ico' and self.request.matchdict['cat']!='signup':
             # is an user
             username = self.request.matchdict['cat']
             user_json = AccountManager.get_json_by_username(username=username)
