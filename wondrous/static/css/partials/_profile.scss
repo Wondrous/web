@@ -103,13 +103,13 @@
 
 .profile-header-nav-link {
     padding: 0;
-    font-size: 23px;
-    color: rgb(100,100,100) !important;
+    font-size: 25px;
+    color: rgb(20,20,20) !important;
     font-family: helvetica, arial, sans-serif;
     font-weight: 900;
 
     &:link { text-decoration: none; }
-    &:visited { color: rgb(71,71,71); }
+    &:visited { color: rgb(20,20,20); }
 }
 
 .profile-header-nav-title {
@@ -165,6 +165,7 @@
     font-size: 40px;
     font-weight: bold;
     font-family: 'arial black', helvetica, arial, sans-serif;
+    color: rgb(20,20,20);
 }
 
 .profile-username {
