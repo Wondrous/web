@@ -110,7 +110,7 @@ class IndexHandler(BaseHandler):
                 retval['social_page'] = False
 
         elif ('cat' in req_md.keys() and
-              req_md['cat'] not in ['favicon.ico','signup','login','settings']):
+              req_md['cat'] not in ['favicon.ico','signup','login','settings','ws']):
             # is an user
             username  = req_md['cat']
             user_json = AccountManager.get_json_by_username(username=username)
