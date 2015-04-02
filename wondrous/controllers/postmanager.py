@@ -96,6 +96,11 @@ class PostManager(BaseManager):
 
     @staticmethod
     def get_comments_json(user, post_id, page=0, per_page=10):
+        try:
+            post_id = int(post_id)
+        except Exception, e:
+            return {'error':'post not found'}
+
         retval = []
         exists = DBSession.query(Post).filter(Post.id==post_id).filter(Post.set_to_delete==None).first()
         if not exists:
@@ -385,10 +390,18 @@ class PostManager(BaseManager):
 
     @classmethod
     def get_by_id_json(cls,post_id,user=None):
+        try:
+            post_id = int(post_id)
+        except Exception, e:
+            return {'error': "We're sorry, this post was not found :("}
+
+        post = None
         if user:
-            post, voted = DBSession.query(Post, Vote).\
+            ret = DBSession.query(Post, Vote).\
                     outerjoin(Vote, (Vote.subject_id==Post.id)&(Vote.user_id==user.id)&(Vote.status==Vote.LIKED)).\
                     filter(Post.id==post_id).first()
+            if ret:
+                post, voted = ret
         else:
             post = Post.by_id(post_id)
 

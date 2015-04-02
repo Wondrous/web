@@ -129,9 +129,10 @@ def build_routes(config):
     config.add_route('api_admin_reported_post',                 '/api/admin/reported_posts') # GET
 
     # INDEX
-    config.add_route('index_handler1',                          '/{a}')
-    config.add_route('index_handler3',                          '/{a}/')
-    config.add_route('index_handler2',                          '/{a}/{b}')
+    config.add_route('index_handler1',                          '/{cat}')
+    config.add_route('index_handler2',                          '/{cat}/')
+    config.add_route('index_handler3',                          '/{cat}/{post_id}')
+    config.add_route('index_handler4',                          '/{cat}/{post_id}/')
     config.add_route('index_handler',                           '/')
 
     # config.add_route('index_priority_feed_handler',            '/priority-feed/')

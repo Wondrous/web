@@ -15,8 +15,16 @@ var PostModal = React.createClass({
     },
 
 	mixins:[
-        Reflux.connect(ModalStore)
+        Reflux.connect(ModalStore),
+        Reflux.listenTo(PostStore, 'onPostUpdate')
     ],
+
+	onPostUpdate: function(postData){
+		if (postData.hasOwnProperty('postError')){
+			this.forceUpdate();
+
+		}
+	},
 
 	getInitialState: function() {
 		return {cardOpen:false};
@@ -32,10 +40,10 @@ var PostModal = React.createClass({
 
 	render: function() {
 		divStyle = this.state.cardOpen ? {display:"block"} : {display:"none"};
-
+		console.log("err",PostStore.postError)
 		return (
 				<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
-                    {PostStore.postError !== null ?
+                    {PostStore.postError != null ?
                         <span className="post-not-found-error">{PostStore.postError}</span>
                         :
                         <Post/>

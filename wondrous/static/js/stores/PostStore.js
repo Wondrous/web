@@ -42,7 +42,8 @@ var PostStore = Reflux.createStore({
             post:this.post,
             moreOptions: this.moreOptions,
             likedUsers:this.likedUsers.sortedSet,
-            postLink:this.postLink
+            postLink:this.postLink,
+            postError:this.postError
         }
     },
 

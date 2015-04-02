@@ -25,6 +25,7 @@ from wondrous.models import DBSession
 
 from wondrous.controllers import (
     AccountManager,
+    PostManager,
     VoteManager,
     TagManager
 )
@@ -87,7 +88,49 @@ class IndexHandler(BaseHandler):
             logged in AND logged out.
         """
 
-        return {}
+        base_url = 'http://mojorankdev.s3.amazonaws.com/'
+
+        retval = {'page_title':None, 'page_url': None, 'page_content': None, 'page_image': None, 'social_page':True}
+        if 'cat' in self.request.matchdict.keys() and 'post_id' in self.request.matchdict.keys():
+            # see if it is post
+            retval['social_page'] = self.request.matchdict['cat'].lower()=='post'
+            try:
+                post_id = int(self.request.matchdict['post_id'])
+                post_json = PostManager.get_by_id_json(post_id)
+                if 'error' in post_json.keys():
+                    retval['social_page'] = False
+                else:
+                    retval['page_title'] = post_json['subject']
+                    retval['page_url'] = "https://wondrous.co/post/{0}".format(post_json['id'])
+                    retval['page_content'] = post_json['text']
+                    retval['page_image'] = base_url + post_json['ouuid']+'-med'
+
+            except Exception, e:
+                retval['social_page'] = False
+
+        elif 'cat' in self.request.matchdict.keys() and self.request.matchdict['cat']!='favicon.ico':
+            # is an user
+            username = self.request.matchdict['cat']
+            user_json = AccountManager.get_json_by_username(username=username)
+
+            if 'error' in user_json.keys():
+                retval['social_page'] = False
+            elif user_json['is_private']:
+                retval['page_title'] = "{0} @{1}".format(user_json['name'],user_json['username'])
+                retval['page_url'] = "https://wondrous.co/{0}".format(user_json['username'])
+                retval['page_content'] = "This profile is private"
+                retval['page_image'] = "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg"
+            else:
+                retval['page_title'] = "{0} @{1}".format(user_json['name'],user_json['username'])
+                retval['page_url'] = "https://wondrous.co/{0}".format(user_json['username'])
+                retval['page_content'] = user_json['description']
+                retval['page_image'] = base_url + user_json['ouuid']+'-dim150x150'
+
+        else:
+            retval['social_page'] = False
+
+
+        return retval
 
 
 class ExcSQL(BaseHandler):
