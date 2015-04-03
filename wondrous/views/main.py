@@ -104,7 +104,8 @@ class IndexHandler(BaseHandler):
                     retval['page_title']   = post_json['subject']
                     retval['page_url']     = "https://wondrous.co/post/{0}".format(post_json['id'])
                     retval['page_content'] = post_json['text']
-                    retval['page_image']   = base_url + post_json['ouuid']+'-med'
+                    if 'ouuid' in post_json.keys():
+                        retval['page_image']   = base_url + post_json['ouuid']+'-med'
 
             except Exception, e:
                 retval['social_page'] = False
@@ -126,7 +127,8 @@ class IndexHandler(BaseHandler):
                 retval['page_title']   = "{0} @{1}".format(user_json['name'],user_json['username'])
                 retval['page_url']     = "https://wondrous.co/{0}".format(user_json['username'])
                 retval['page_content'] = user_json['description']
-                retval['page_image']   = base_url + user_json['ouuid']+'-dim150x150'
+                if 'ouuid' in user_json.keys():
+                    retval['page_image']   = base_url + user_json['ouuid']+'-dim150x150'
 
         else:
             retval['social_page'] = False
