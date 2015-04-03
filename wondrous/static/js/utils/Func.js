@@ -58,7 +58,7 @@ module.exports = {
     },
 
     dateToString: function(raw){
-        var createdAt = moment(raw);
+        var createdAt = moment(raw).local();
         var mmtMidnight = moment().startOf('day');
         var createdAtDisplay = "";
 
