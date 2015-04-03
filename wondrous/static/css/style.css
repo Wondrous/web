@@ -1120,14 +1120,14 @@ a:hover {
 
 .profile-header-nav-link {
   padding: 0;
-  font-size: 23px;
-  color: #646464 !important;
+  font-size: 25px;
+  color: #141414 !important;
   font-family: helvetica, arial, sans-serif;
   font-weight: 900; }
   .profile-header-nav-link:link {
     text-decoration: none; }
   .profile-header-nav-link:visited {
-    color: #474747; }
+    color: #141414; }
 
 .profile-header-nav-title {
   font-size: 15px;
@@ -1173,7 +1173,8 @@ a:hover {
 .profile-name {
   font-size: 40px;
   font-weight: bold;
-  font-family: 'arial black', helvetica, arial, sans-serif; }
+  font-family: 'arial black', helvetica, arial, sans-serif;
+  color: #141414; }
 
 .profile-username {
   font-size: 20px;
