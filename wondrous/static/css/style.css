@@ -704,7 +704,8 @@ ul {
   font-weight: 900; }
 
 .information-banner--general {
-  background-color: #43b6ef; }
+  /*background-color: rgb(67,182,239);*/
+  background-color: #00e2ae; }
 
 .information-banner--alert {
   background-color: #f79314; }
@@ -3392,7 +3393,8 @@ svg {
   fill: #c8c8c8; }
 
 .search-header {
-  background-color: white;
+  background-color: #03c99c;
+  color: white;
   padding: 50px 5%;
   font-size: 40px;
   font-weight: 100; }
