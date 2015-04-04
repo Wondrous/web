@@ -3,6 +3,7 @@
 // scales the image by (float) scale < 1
 // returns a canvas containing the scaled image.
 var downScaleImage = function (img, scale) {
+    console.log(img,scale);
     var imgCV = document.createElement('canvas');
     imgCV.width = img.width;
     imgCV.height = img.height;
@@ -14,6 +15,7 @@ var downScaleImage = function (img, scale) {
 // scales the canvas by (float) scale < 1
 // returns a new canvas containing the scaled image.
 function downScaleCanvas(cv, scale) {
+
     if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
 scale = normaliseScale(scale);
     var sqScale = scale * scale; // square scale =  area of a source pixel within target
