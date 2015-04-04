@@ -295,7 +295,12 @@ var PostForm = React.createClass({
 
             /* 0-timeout to get the already changed text */
             function delayedResize () {
-                window.setTimeout(resize, 0);
+                var cursorPosition = $('#postTextarea').prop("selectionStart");
+                var textareaLength = $('#postTextarea').val().length;
+                var isLast = cursorPosition == textareaLength;
+                if (isLast) {
+                    window.setTimeout(resize, 0);
+                }
             }
 
             observe(text, 'change',  resize);

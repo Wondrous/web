@@ -50,29 +50,36 @@ var Notification = React.createClass({
     contextTypes: {
         router: React.PropTypes.func
     },
-    handleAcceptData:function(err,res){
-        if(err==null){
+
+    handleAcceptData: function(err, res) {
+        if (err === null) {
             console.log("accepted! ",res);
-        }else{
+        } else {
 
         }
     },
-    handleAccept:function(){
+
+    handleAccept: function() {
         WondrousAPI.acceptRequest({
             user_id: this.props.data.from_user_id,
             callback: this.handleAcceptData
         });
     },
-    handleClick: function(){
+
+    handleClick: function() {
         note = this.props.data;
         var reason = note.reason;
-        if (reason == NotificationConstants.LIKED || reason == NotificationConstants.REPOSTED || reason == NotificationConstants.COMMENTED || reason == NotificationConstants.MENTIONED) {
+        if (reason == NotificationConstants.LIKED || 
+            reason == NotificationConstants.REPOSTED || 
+            reason == NotificationConstants.COMMENTED || 
+            reason == NotificationConstants.MENTIONED) {
             WondrousActions.newPostLoad(note.subject_id);
         } else {
             var url = "/"+note.from_user_username;
             this.context.router.transitionTo(url);
         }
     },
+
     generateContent: function(reason){
         var content = '';
         if (reason == NotificationConstants.FOLLOW_REQUEST) {

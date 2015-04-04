@@ -7,6 +7,7 @@ var WondrousActions = require('../../actions/WondrousActions');
 var MasonryMixin = require('../../vendor/masonry.mixin');
 var checkLogin = require('../../utils/Func').checkLogin;
 var DiscoveryBox = require('../Box/DiscoveryBox.react');
+var InformationBanner = require('../InformationBanner.react');
 
 var masonryOptions = {
     transitionDuration: 0,
@@ -90,7 +91,7 @@ var Feed = React.createClass({
             }
         });
 
-        if (posts.length<3){
+        if (posts.length < 3) {
             posts.push((
                 <span>
                     <div ref="brick" className="masonry-brick">
@@ -103,7 +104,8 @@ var Feed = React.createClass({
         return (
             <div className="grid-padding">
                 <div ref="scrollBox">
-                    {/*<h1 className="tmp-feed-h1">Home Feed</h1>*/}
+                    <InformationBanner actionType="loadPost" bannerType="general" canExit="false" text="While you were gone, here are some things we've done to the site..." />
+
                     {FeedStore.hasNewPosts ?
                         <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
                             Load new posts

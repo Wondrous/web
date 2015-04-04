@@ -31,6 +31,7 @@ class SearchManager:
                 join(Vote,(Vote.subject_id==User.id)&((Vote.status==Vote.FOLLOWED) | (Vote.status==Vote.TOPFRIEND))).\
                 filter(\
                     (func.lower(User.username).ilike("%{0}%".format(search)))|\
+                    (func.lower(User.email).ilike("%{0}%".format(search)))|\
                     (func.lower(User.description).ilike("%{0}%".format(search)))|\
                     (func.lower(User.name).ilike("%{0}%".format(search)))|\
                     (func.lower(User.ascii_name).ilike("%{0}%".format(search)))\

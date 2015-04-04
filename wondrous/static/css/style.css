@@ -693,6 +693,25 @@ ul {
 .linkify:visited {
   color: #0064aa; }
 
+/* Information Banner */
+.information-banner {
+  position: relative;
+  margin: 60px 15px 10px;
+  padding: 8px;
+  text-align: center;
+  color: #fbfbfb;
+  font-size: 15px;
+  font-weight: 900; }
+
+.information-banner--general {
+  background-color: #43b6ef; }
+
+.information-banner--alert {
+  background-color: #f79314; }
+
+.information-banner--warn {
+  background-color: #dc5050; }
+
 /* ============================= */
 /* MASONRY --------------------- */
 /* ============================= */
