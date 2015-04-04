@@ -29,7 +29,9 @@ var Post = React.createClass({
     handleUsernameClick: function(evt) {
         if (typeof this.state.post.username !== 'undefined') {
             if (checkLogin()) {
-                WondrousActions.closeCardModal();
+                if(!evt.metaKey){
+                    WondrousActions.closeCardModal();
+                }
             } else {
                 evt.preventDefault();
             }

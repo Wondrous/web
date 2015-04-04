@@ -16,7 +16,9 @@ var Comment = React.createClass({
     handleClick: function(evt) {
         if (typeof this.props.data.username !== 'undefined') {
             if (checkLogin()) {
-                WondrousActions.closeCardModal();
+                if(!evt.metaKey){
+                    WondrousActions.closeCardModal();
+                }
             } else {
                 evt.preventDefault();
             }
