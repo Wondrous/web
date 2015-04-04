@@ -373,6 +373,9 @@ class AccountManager(BaseManager):
             elif user_id:
                 profile_user = User.by_id(user_id)
 
+            if not profile_user:
+                return {'error':'No users found!'}
+
         #TODO combine the two sql calls
         score = cls.calculate_wondrous_score(profile_user)
         if score:
