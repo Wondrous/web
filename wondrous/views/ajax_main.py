@@ -960,7 +960,7 @@ class APIViews(BaseHandler):
 
         # If for some reason, there is an exception,
         # these variables need to be initialized so that
-        # the following if-elif doens't throw a 'referenced before 
+        # the following if-elif doens't throw a 'referenced before
         # assignment' error
         _s_valid_n    = None
         len_err_n     = None
@@ -978,7 +978,7 @@ class APIViews(BaseHandler):
 
             if pw:
                 _s_valid_pw, len_err_pw = Sanitize.length_check(pw, min_length=6, max_length=255)
-            
+
             if email:
                 _s_valid_em = Sanitize.is_valid_email(email)
                 _s_em_taken = User.by_kwargs(email=email).first()

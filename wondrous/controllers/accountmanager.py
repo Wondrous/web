@@ -29,6 +29,7 @@ import transaction
 
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.notificationmanager import NotificationManager
+import wondrous.controllers
 
 import wondrous.utilities.validation_utilities as UploadManager
 from wondrous.utilities.notification_utilities import send_notification
@@ -251,10 +252,13 @@ class AccountManager(BaseManager):
 
         DBSession.add(vote)
 
-        cls.add_influencer(new_user)
+        #cls.add_influencer(new_user)
 
         DBSession.flush()
-
+        if name.lower()!='wondrous':
+            wondrous_acc = DBSession.query(User).filter(func.lower(User.username)=='wondrous').first()
+            vote = wondrous.controllers.VoteManager.follow(new_user.id,wondrous_acc.id)
+            DBSession.add(vote)
         return new_user
 
     @staticmethod
