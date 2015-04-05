@@ -170,11 +170,11 @@ class AccountManager(BaseManager):
 
                     (select sum(post.like_count)
                     from post
-                    where post.user_id=:user_id) as like_count,
+                    where post.set_to_delete is NULL and post.user_id=:user_id) as like_count,
 
                     (select sum(post.view_count)
                     from post
-                    where post.user_id=:user_id) as view_count,
+                    where post.set_to_delete is NULL and post.user_id=:user_id) as view_count,
 
                     (select count(*)
                     from comment
@@ -195,7 +195,6 @@ class AccountManager(BaseManager):
             # print row_list
             if ret:
                 follower_count, following_count, post_count, like_count, view_count, comment_count = row_list
-
                 wondrous_score = float(view_count*5 + like_count*5 + follower_count*5 + comment_count*1 + post_count*1 + following_count*1)
                 wondrous_score /= 1000.0
 
@@ -229,7 +228,7 @@ class AccountManager(BaseManager):
                 # ------------------------------------------------------------------------------------------
                 # wondrous_score += cls.add_badge_benefits(user)
                 wondrous_score = round_num(wondrous_score)+user.base_score
-            return wondrous_score
+            return wondrous_score,int(view_count), int(like_count)
         return None
 
     @classmethod
@@ -383,6 +382,7 @@ class AccountManager(BaseManager):
         #TODO combine the two sql calls
         score = cls.calculate_wondrous_score(profile_user)
         if score:
+            score, view_count, like_count = score
             profile_user.last_calculated = datetime.now()
             profile_user.wondrous_score = score
             DBSession.flush()
@@ -402,7 +402,9 @@ class AccountManager(BaseManager):
             "following_count" : following_count,
             "follower_count"  : follower_count,
             "following"       : am_following != 0,
-            "post_count"      : post_count
+            "post_count"      : post_count,
+            "view_count"     : view_count,
+            "like_count"     : like_count
         }
 
         # Am I querying for myself?
