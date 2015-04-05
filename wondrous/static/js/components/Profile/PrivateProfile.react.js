@@ -73,7 +73,7 @@ var PrivateProfile = React.createClass({
                         <ProfileBarBadge to={"wall"} name={"posts"} number={this.state.data.post_count} username={this.state.data.username} />
                         <ProfileBarBadge to={"followers"} name={"followers"} number={this.state.data.follower_count-1} username={this.state.data.username} />
                         <ProfileBarBadge to={"following"} name={"following"} number={this.state.data.following_count-1} username={this.state.data.username} />
-                        <ProfileBarBadge to={"wall"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
+                        <ProfileBarBadge to={"stats"} name={"influence"} number={wondrousScore} username={this.state.data.username} />
 
                         <div>
                             <li className={classes} onClick={this.handleClick} style={{ display: UserStore.loggedIn ? "block" : "none", margin: "0 auto" }}>
