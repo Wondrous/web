@@ -6,6 +6,8 @@ var InformationBanner = React.createClass({
 		// What happens when the user clicks on the banner?
 		if (this.props.actionType == "loadPost") {
 			WondrousActions.newPostLoad(103);
+		} else if (this.props.actionType == "uploadProfilePicture") {
+			WondrousActions.openPictureModal();
 		} else {
 			// Do nothing
 		}
@@ -16,8 +18,8 @@ var InformationBanner = React.createClass({
 		var bannerType = this.props.bannerType;
 		var actionType = this.props.actionType;
 		var canExit    = this.props.canExit;
-		var classes = "information-banner round-2 ";
-		var style = null;
+		var styles 	   = this.props.styles;
+		var classes    = "information-banner round-2 ";
 
 		// What color do we want the banner?
 		if (bannerType == "general") {
@@ -30,15 +32,9 @@ var InformationBanner = React.createClass({
 			classes += "information-banner--general";
 		}
 
-		// Do we have an action of some sort?
-		// If so, make the curosr a pointer.
-		if (actionType) {
-			style = { cursor: "pointer" };
-		}
-
 		return (
 			<div ref="infoBanner" onClick={this.handleClick}>
-				<div className={classes} style={style}>
+				<div className={classes} style={styles}>
 					{bannerText}
 					{canExit == "true" ? 
 						<span ref="infoBannerExit" onClick={this.exitInfoBanner} style={{ fontFamily: "heydings_iconsregular", float: "right" }} title="Close this banner">

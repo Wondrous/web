@@ -104,7 +104,13 @@ var Feed = React.createClass({
         return (
             <div className="grid-padding">
                 <div ref="scrollBox">
-                    <InformationBanner actionType="loadPost" bannerType="general" canExit="false" text="While you were gone, here are some things we've done to the site..." />
+                    <InformationBanner
+                        actionType="loadPost" 
+                        bannerType="general" 
+                        canExit="false" 
+                        text="While you were gone, here are some things we've done to the site..." 
+                        styles={{ cursor: "pointer" }}
+                        />
 
                     {FeedStore.hasNewPosts ?
                         <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
