@@ -7,7 +7,7 @@ var PostStore = Reflux.createStore({
 
     init: function() {
         this.unloadUser();
-        this.listenTo(CommentStore,this.onCommentChange);
+        this.listenTo(CommentStore, this.onCommentChange);
     },
 
     onCommentChange: function(comments){
@@ -16,34 +16,29 @@ var PostStore = Reflux.createStore({
     },
 
     unloadUser: function() {
-        this.post = { subject: '',text: '',id: -1 };
+        this.post = { subject: '', text: '', id: -1 };
         this.userPage = 0;
-
         this.likedUsers = new FeedSet(null, true, false);
         this.postError = null;
-
+        this.postLink = null;
         this.likedUserPaging = false;
         this.doneLikedUserPaging = false;
-
         this.loading = false;
-
-        this.postLink = null;
-
         this.moreOptions = false;
     },
 
-    closeCardModal: function(){
+    closeCardModal: function() {
         this.postLink = null;
         this.moreOptions = false;
     },
 
-    getPostState: function(){
+    getPostState: function() {
         return {
-            post:this.post,
+            post: this.post,
             moreOptions: this.moreOptions,
-            likedUsers:this.likedUsers.sortedSet,
-            postLink:this.postLink,
-            postError:this.postError
+            likedUsers: this.likedUsers.sortedSet,
+            postLink: this.postLink,
+            postError: this.postError
         }
     },
 
@@ -101,7 +96,7 @@ var PostStore = Reflux.createStore({
         this.trigger(this.getPostState());
     },
 
-    updateLikedUsers: function(users){
+    updateLikedUsers: function(users) {
         this.likedUserPaging = false;
         if (users.length < 15) {
             this.doneLikedUserPaging = true;

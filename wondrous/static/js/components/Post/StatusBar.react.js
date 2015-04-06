@@ -5,6 +5,9 @@ var StatusBar = React.createClass({
                 <div>
                     {this.props.data.subject}
                 </div>
+                <div className="post-text-preview">
+                    {this.props.data.textPreview}
+                </div>
                 <span className="post-micro-data-super-analytics-item">
                     <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
                     {this.props.data.view_count}

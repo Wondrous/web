@@ -49,7 +49,7 @@ var Photo = React.createClass({
             <div ref="container" className="post-cover-photo cover no-top-border nh" style={photoStyle}>
                 <div className="post-subject-text nh">
                     <div className="post-subject-wrapper">
-                        {isStillUploading?this.state.percent+"% uploaded":<StatusBar data={this.props.data}/>}
+                        {isStillUploading ? this.state.percent+"% uploaded" : <StatusBar data={this.props.data}/>}
                     </div>
                 </div>
             </div>

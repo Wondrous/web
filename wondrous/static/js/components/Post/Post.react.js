@@ -1,14 +1,22 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var WondrousAPI = require('../../utils/WondrousAPI');
+var PostStore = require('../../stores/PostStore');
 var UserStore = require('../../stores/UserStore');
 var checkLogin = require('../../utils/Func').checkLogin;
 var Photo = require('./Photo.react');
 var UserTitle = require('./UserTitle.react');
 
 var Post = React.createClass({
+    mixins: [ Reflux.connect(PostStore) ],
+
     contextTypes: {
         router: React.PropTypes.func
     },
+
+    getInitialState: function(){
+        return PostStore.getPostState();
+    },
+
     handleClick: function(evt) {
         if (!evt.metaKey){
             evt.preventDefault();
@@ -36,6 +44,13 @@ var Post = React.createClass({
             this.props.data.subject = repost.subject;
         }
 
+        var thisTextSlice = this.props.data.text;
+        if (thisTextSlice && thisTextSlice.length > 0) {
+            thisTextSlice = thisTextSlice.substring(0, 70);
+            if (thisTextSlice.length >= 70) thisTextSlice += "...";
+            this.props.data.textPreview = thisTextSlice;
+        }
+
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post" className="post-body round-3">
@@ -45,7 +60,7 @@ var Post = React.createClass({
 
                     {/*<div className="post-title">{this.props.data.subject}</div>*/}
                     <a href={"/post/"+this.props.data.id} onClick={this.handleClick} id="slidePhoto">
-                        <Photo ref="photo" data={this.props.data}/>
+                        <Photo ref="photo" data={this.props.data} />
                     </a>
                 </div>
             </div>

@@ -49,6 +49,7 @@
     font-weight: normal;
     color: rgb(41,41,41);
     letter-spacing: 0.01rem;
+    word-break: break-word;
 
 /*    font-family: "Helvetica Neue", helvetica, arial, sans-serif;
     font-size: 16px;
@@ -294,7 +295,7 @@ $post-cover-photo-height: 390px;
 .post-subject-wrapper {
     position: absolute;
     background-color: rgb(41,41,41);
-    background-color: rgba(0,0,0,0.575);
+    background-color: rgba(0,0,0,0.675);
     width: 100%;
     bottom: 10%;
 }
@@ -302,6 +303,14 @@ $post-cover-photo-height: 390px;
 .post-subject-text-position {
     position: relative;
     padding: 10px 10px 0;
+}
+
+.post-text-preview {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.1em;
+    padding: 10px 0 0;
 }
 
 .post-title {

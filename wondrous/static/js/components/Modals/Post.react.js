@@ -86,7 +86,7 @@ var Post = React.createClass({
 				</div>
 
                 <div>
-                    <div className="post-modal-micro-data-wrapper" style={{ maxWidth: "60%" }}>
+                    <div className="post-modal-micro-data-wrapper" style={{ maxWidth: "100%" }}>
                         <span className="post-micro-data-super-analytics-item">
                             <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.state.post.view_count}

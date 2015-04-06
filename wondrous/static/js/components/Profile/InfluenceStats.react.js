@@ -2,6 +2,49 @@ var WondrousActions = require('../../actions/WondrousActions');
 var ProfileStore = require('../../stores/ProfileStore');
 var UserStore = require('../../stores/UserStore');
 
+var WondrousScoreInfo = React.createClass({
+    render: function() {
+
+        var wondrousScore = this.props.score;
+        var styles = null;
+        if (wondrousScore >= 75) {
+            styles = {color: "rgb(0,226,174)"};
+        }
+
+        return (
+            <div className="private-profile-content-sub round-5" style={{ padding: 20, fontSize: 14, backgroundColor: "rgb(251,251,251)", color: "rgb(51,51,51)" }}>
+                <div style={{ fontWeight: 900, padding: "0 0 15px", fontSize: 16 }}>
+                    What is this "Influence" score?
+                </div>
+                
+                Good question! This number is unique to Wondrous. It takes into account various factors
+                (such as the quality of your posts, how much interaction they get, etc.) that are
+                then combined into one perfect number which summarizes how "influential"
+                you are. Everyone starts at <b>1</b>, and once you reach <b style={{ color: "rgb(0,196,144)" }}>75</b>, you earn the respected green "influencer" badge.
+
+                <div style={{ fontSize: 20, fontWeight: 900, padding: "10px 0", fontFamily: "courier" }}>
+                    More Followers + Healthy Interaction = <span style={{ color: "rgb(0,206,174)" }}>More Influence</span>
+                </div>
+
+                {this.props.score ?
+                    <div className="profile-analytics-number" style={styles} title="Your current amount of influence">
+                        <b>{wondrousScore}</b>
+                    </div>
+                    : null}
+
+                <div>
+                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/newpost/newpost_gray_shadow.svg" className="post-general-icon post-view-icon" style={{ height: "55px !important", width: "55px !important", marginRight: 5 }} />
+                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" style={{ height: "60px !important", width: "60px !important" }} />
+                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" style={{ height: "60px !important", width: "60px !important" }} />
+                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-like-icon" style={{ height: "60px !important", width: "60px !important" }} />
+                </div>
+
+                <div style={{ fontSize: 16, fontWeight: 900, paddingTop: 10 }}>Have fun!</div>
+            </div>
+        );
+    }
+});
+
 var InfluenceStats = React.createClass({
     contextTypes: {
         router: React.PropTypes.func
@@ -47,8 +90,8 @@ var InfluenceStats = React.createClass({
 
             return (
                 <div className="profile-analytics-wrapper">
-                    <h2 className="profile-analytics-header" title="Profile Analyics (private to you)">
-                        Profile Analyics <span style={{ color: "rgb(121,121,121)", fontFamily: "heydings_iconsregular" }}>L</span>
+                    <h2 className="profile-analytics-header" title="Profile Analytics (private to you)">
+                        Profile Analytics <span style={{ color: "rgb(121,121,121)", fontFamily: "heydings_iconsregular" }}>L</span>
                     </h2>
                     <div className="profile-analytics-item">
                         <h2 className="profile-analytics-item-header">
@@ -69,7 +112,7 @@ var InfluenceStats = React.createClass({
                     </div>
 
                     <div className="profile-analytics-item">
-                        <div className="profile-analytics-number" title="Total number posts">
+                        <div className="profile-analytics-number" title="Total number of posts">
                             <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/newpost/newpost_gray_shadow.svg" className="post-general-icon post-view-icon" style={{ height: "55px !important", width: "55px !important", marginRight: 5 }} />
                             <span style={{ paddingLeft: 10 }}>{post_count}</span>
                         </div>
@@ -101,6 +144,10 @@ var InfluenceStats = React.createClass({
                         </div>
                     </div>
 
+                    <div className="private-profile-content">
+                        <WondrousScoreInfo score={this.state.data.wondrous_score} />
+                    </div>
+
                     <div style={{ height: 100 }}></div>
                 </div>
             );
@@ -108,28 +155,8 @@ var InfluenceStats = React.createClass({
             return (
                 <div className="private-profile-content">
                     <div>You can only view your own profile's analytics</div>
-                    <div className="private-profile-content-sub round-5" style={{ margin: "10px 10%", padding: 20, fontSize: 14, backgroundColor: "rgb(251,251,251)", color: "rgb(51,51,51)" }}>
-                        <div style={{ fontWeight: 900, padding: "0 0 15px", fontSize: 16 }}>
-                            What is this "Influence" score?
-                        </div>
-                        
-                        Good question! This number is unique to Wondrous. It takes into account various factors
-                        (such as the quality of your posts, how much interaction they get, etc.) that are
-                        then combined into one perfect number which summarizes how "influential"
-                        you are. Everyone starts at <b>1</b>, and once you reach <b style={{ color: "rgb(0,196,144)" }}>75</b>, you earn the respected green "influencer" badge.
-
-                        <div style={{ fontSize: 20, fontWeight: 900, padding: "10px 0", fontFamily: "courier" }}>
-                            More Followers + Healthy Interaction = <span style={{ color: "rgb(0,206,174)" }}>More Influence</span>
-                        </div>
-
-                        <div>
-                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/newpost/newpost_gray_shadow.svg" className="post-general-icon post-view-icon" style={{ height: "55px !important", width: "55px !important", marginRight: 5 }} />
-                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" style={{ height: "60px !important", width: "60px !important" }} />
-                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" style={{ height: "60px !important", width: "60px !important" }} />
-                            <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-like-icon" style={{ height: "60px !important", width: "60px !important" }} />
-                        </div>
-
-                        <div style={{ fontSize: 16, fontWeight: 900, paddingTop: 10 }}>Have fun!</div>
+                    <div style={{ margin: "10px 10%" }}>
+                        <WondrousScoreInfo />
                     </div>
                 </div>
             );
