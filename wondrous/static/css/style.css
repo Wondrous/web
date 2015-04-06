@@ -1343,6 +1343,71 @@ a:hover {
 .item-ul {
   margin: 20px; }
 
+.private-profile-content {
+  text-align: center;
+  margin: 40px 0;
+  color: #b4b4b4;
+  font-weight: 900;
+  font-size: 16px; }
+
+.private-profile-content-sub {
+  font-weight: 400;
+  font-size: 14px;
+  margin: 10px 0; }
+
+/* --- ANALYTICS --- */
+.profile-analytics-wrapper {
+  text-align: left;
+  padding: 20px;
+  margin: 0 auto;
+  width: 80%; }
+
+.profile-analytics-header {
+  padding: 0 0 10px;
+  font-size: 20px;
+  border-bottom: 1px solid #e4e4e4; }
+
+.profile-analytics-item {
+  padding: 10px 0; }
+
+.profile-analytics-sub-item {
+  color: #646464; }
+
+.profile-analytics-item-header {
+  font-size: 12px;
+  font-weight: 900;
+  color: #333333;
+  text-transform: uppercase;
+  margin: 5px 0; }
+
+.profile-analytics-number {
+  font-size: 70px;
+  font-weight: 100;
+  color: white;
+  text-shadow: 0 0 2px #474747; }
+
+.profile-analytics-sub-number {
+  font-size: 20px;
+  font-weight: 900;
+  color: #474747; }
+
+.profile-analytics-ffkey {
+  height: 11px;
+  width: 11px;
+  vertical-align: -1px;
+  display: inline-block;
+  margin-right: 5px; }
+
+.profile-analytics-ffbar {
+  display: inline-block;
+  height: 12px; }
+
+.profile-analytics-ffbar--left {
+  background-color: #0ca8ef; }
+
+.profile-analytics-ffbar--right {
+  background-color: #ef870c; }
+
 /* post-body is visible, and transitions size */
 .post-body {
   width: 100%;
