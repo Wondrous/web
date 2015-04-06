@@ -54,10 +54,18 @@ var InfluenceStats = React.createClass({
                         <h2 className="profile-analytics-item-header">
                             Followers <span className="profile-analytics-ffkey profile-analytics-ffbar--left"></span> to Following <span className="profile-analytics-ffkey profile-analytics-ffbar--right"></span> Ratio
                         </h2>
-                        <div title="Your followers to following ratio (followers : following)">
-                            <span className="profile-analytics-ffbar profile-analytics-ffbar--left" style={{ width: follower_count / total_connections * 100 +"%" }}></span>
-                            <span className="profile-analytics-ffbar profile-analytics-ffbar--right" style={{ width: following_count / total_connections * 100 +"%" }}></span>
-                        </div>
+                        {follower_count > 0 || following_count > 0 ?
+                            <div title="Your followers to following ratio (followers : following)">
+                                <span className="profile-analytics-ffbar profile-analytics-ffbar--left" style={{ width: follower_count / total_connections * 100 +"%" }}></span>
+                                <span className="profile-analytics-ffbar profile-analytics-ffbar--right" style={{ width: following_count / total_connections * 100 +"%" }}></span>
+                            </div>
+                            :
+                            <div>
+                                <span style={{ color: "rgb(100,100,100)", fontSize: 13, fontStyle: "italic" }}>
+                                    Not enough data to display anything
+                                </span>
+                            </div>
+                        }
                     </div>
 
                     <div className="profile-analytics-item">
@@ -104,6 +112,7 @@ var InfluenceStats = React.createClass({
                         <div style={{ fontWeight: 900, padding: "0 0 15px", fontSize: 16 }}>
                             What is this "Influence" score?
                         </div>
+                        
                         Good question! This number is unique to Wondrous. It takes into account various factors
                         (such as the quality of your posts, how much interaction they get, etc.) that are
                         then combined into one perfect number which summarizes how "influential"
