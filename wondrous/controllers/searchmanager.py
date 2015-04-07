@@ -67,17 +67,17 @@ class SearchManager:
         return retval
 
     @staticmethod
-    def user_tag_search_json(user,search,page):
+    def user_tag_search_json(user, search, page):
         tags = [tag.lower() for tag in search.split(' ') if len(tag)]
         users = DBSession.query(User).\
                 join(UserTag, UserTag.user_id==User.id).\
-                join(Vote, (User.is_private==False) |\
-                    ( (Vote.user_id==user.id) \
-                        & ((Vote.subject_id == User.id)) &\
-                         ((Vote.status==Vote.FOLLOWED) | (Vote.status==Vote.TOPFRIEND)) ))
+                join(Vote, (User.is_private==False) | \
+                ( (Vote.user_id==user.id) \
+                   & ((Vote.subject_id == User.id)) & \
+                    ((Vote.status==Vote.FOLLOWED) | (Vote.status==Vote.TOPFRIEND)) ))
 
-        if len(tags)>0:
-            users = users.filter(func.lower(UserTag.tag_name).in_(tags))
+        if len(tags) > 0:
+            users = users.filter(func.lower(UserTag.tag_name).in_(tags)).distinct()
 
         users = users.offset(page*15).limit(15).all()
 
@@ -85,6 +85,7 @@ class SearchManager:
         for u in users:
             data = u.json()
             retval.append(data)
+
         return retval
 
     @staticmethod

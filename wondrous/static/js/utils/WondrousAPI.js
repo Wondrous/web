@@ -742,7 +742,7 @@ module.exports = {
     // callback
     // search term
     // page
-    searchForUserTags: function(options){
+    searchForUserTags: function(options) {
         var url = "/api/search/users";
         var search = encodeURIComponent(options.search);
         var page = options.page;

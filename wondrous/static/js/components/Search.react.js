@@ -21,9 +21,11 @@ var MasonryWrapper = React.createClass({
             </div>
         );
     }
-})
+});
+
 var TagSearch = React.createClass({
-    render: function(){
+    
+    render: function() {
         return (
             <div>
                 <h1 className="search-header">
