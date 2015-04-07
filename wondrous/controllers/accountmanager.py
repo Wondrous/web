@@ -536,13 +536,13 @@ class AccountManager(BaseManager):
         user.description = description
         [DBSession.delete(tag) for tag in user.tags]
         tags = [re.sub(r'\W+', '', tag) for tag in list(set(re.findall('\s*#\s*(\w+)', description)))]
-        if len(tags)>0:
+        if len(tags) > 0:
             cls._process_tags(tags,user)
         try:
             DBSession.flush()
             return user.json(1)
         except Exception, e:
-            return {'error', e.message}
+            return {'error': e.message}
 
     @classmethod
     def change_profile_json(cls, user, field, new_value):
