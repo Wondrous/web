@@ -3,7 +3,7 @@
 // scales the image by (float) scale < 1
 // returns a canvas containing the scaled image.
 var downScaleImage = function (img, scale) {
-    console.log(img,scale);
+    console.log(img.height,scale);
     var imgCV = document.createElement('canvas');
     imgCV.width = img.width;
     imgCV.height = img.height;

@@ -75,9 +75,9 @@ var PictureForm = React.createClass({
                     {
                         "dataURL":dataURL,
                         "fullsize":uri2blob(dataURL),
-                        "150x150":uri2blob(DownScaleImage(sourceImg,1/(400/150)).toDataURL()),
-                        "75x75":uri2blob(DownScaleImage(sourceImg,1/(400/75)).toDataURL()),
-                        "45x45":uri2blob(DownScaleImage(sourceImg,1/(400/45)).toDataURL())
+                        "150x150":uri2blob(DownScaleImage(sourceImg,1/(sourceImg.height/150)).toDataURL()),
+                        "75x75":uri2blob(DownScaleImage(sourceImg,1/(sourceImg.height/75)).toDataURL()),
+                        "45x45":uri2blob(DownScaleImage(sourceImg,1/(sourceImg.height/45)).toDataURL())
                     }
                 );
             }
