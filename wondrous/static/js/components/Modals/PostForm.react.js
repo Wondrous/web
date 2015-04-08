@@ -8,6 +8,7 @@ var PostFormStore = require('../../stores/PostFormStore');
 var uri2blob = require('../../utils/Func').uri2blob;
 var DownScaleImage = require('../../utils/DownScaleImage');
 var buildCropper = require('../../utils/Func').buildCropper;
+var WondrousConstants = require('../../constants/WondrousConstants');
 
 function resizeImage(url, callback) {
     var sourceImage = new Image();
@@ -95,9 +96,8 @@ var PostForm = React.createClass({
 
     handlePostCancel: function(e){
 		WondrousActions.closePostModal();
-
         this.state.loaded = this.state.submitted = false;
-		console.log(this.state.submitted);
+
         // Fade out the post form
         $(this.refs.cropBox.getDOMNode()).cropper('destroy');
         $(this.refs.cropBox.getDOMNode()).attr('src', "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/transparent.gif");
@@ -107,9 +107,6 @@ var PostForm = React.createClass({
             this.file = null;
             $(this.refs.cropBox.getDOMNode()).cropper('destroy');
         }
-
-        $("#postTextarea").val('');
-        $("#postSubject").val('');
 
         // Reset any post error messages
         $(".post-error").empty();
@@ -153,6 +150,11 @@ var PostForm = React.createClass({
             this.forceUpdate();
             return;
 		}
+
+        if(PostFormStore.file==null){
+            WondrousActions.openDialogue("Add a picture!",WondrousConstants.DIALOGUE_INFO);
+            return;
+        }
 
         if(SettingStore.uploading){
             this.state.error="already uploading something else"
@@ -225,7 +227,7 @@ var PostForm = React.createClass({
                 <div className="new-post-element">
                     <div className="post-input-wrapper">
                         <div className="typehead">
-                            <textarea onChange={this.onChange("postTextArea")} id="postTextarea" ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
+                            <textarea onChange={ this.onChange("postTextArea")} id="postTextarea" ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
                             style={{ overflow: "y-scroll", wordWrap: "break-word", resize: "none", height: 48 }} value={PostFormStore.text}></textarea>
                         </div>
                     </div>
@@ -259,6 +261,7 @@ var PostForm = React.createClass({
     },
 
     onChange: function(ref){
+        var that = this;
         return function(e){
 			var val = $(e.target).val();
 			if (ref==='postTextArea'){
@@ -266,9 +269,7 @@ var PostForm = React.createClass({
 			}else{
 				PostFormStore.subject = val;
 			}
-
-            this.props.value = val;
-            this.forceUpdate();
+            that.forceUpdate();
         }
     },
 

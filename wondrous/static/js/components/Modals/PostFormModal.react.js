@@ -12,6 +12,7 @@ var PostFormModal = React.createClass({
 	getInitialState: function(){
 		return {postFormOpen:false}
 	},
+
 	componentDidMount: function(){
 		var con = $(this.refs.modalWrapper.getDOMNode());
 		con.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
@@ -32,7 +33,9 @@ var PostFormModal = React.createClass({
 	componentDidUpdate: function(){
 		if (this.state.postFormOpen){
 			var con = $(this.refs.modalWrapper.getDOMNode());
-			con.addClass("animated bounceInDown");
+			if(this.state.dialogueOpen!=true){
+				con.addClass("animated bounceInDown");
+			}
 		}
 	},
 
