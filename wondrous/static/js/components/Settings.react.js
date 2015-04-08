@@ -1,6 +1,8 @@
 var UserStore = require('../stores/UserStore');
 var WondrousAPI = require('../utils/WondrousAPI');
 var WondrousActions = require('../actions/WondrousActions');
+var WondrousConstants = require('../constants/WondrousConstants');
+
 
 var NameChange = React.createClass({
     getInitialState: function(){
@@ -11,6 +13,8 @@ var NameChange = React.createClass({
         if (err === null) {
             this.setState({error:null});
             WondrousActions.updateUser(res);
+            WondrousActions.openDialogue("Name Changed!",WondrousConstants.DIALOGUE_INFO);
+            this.refs.name.getDOMNode().value = '';
         } else {
             this.setState({error: err.error});
         }
@@ -20,7 +24,7 @@ var NameChange = React.createClass({
         evt.preventDefault();
         WondrousAPI.changeName({
             callback: this.handleData,
-            name: this.refs.name.getDOMNode().value,
+            name: this.refs.name.getDOMNode().value
         });
     },
 
@@ -37,7 +41,7 @@ var NameChange = React.createClass({
                     </div>
                     <form onSubmit={this.handleSubmit}>
                         <input type="text" ref="name" className="input-basic" placeholder={name}/>
-                        
+
                         <div className="loggedout-error">
                             {this.state.error !== null ?
                                 <b>{this.state.error}</b>
@@ -61,6 +65,8 @@ var UsernameChange = React.createClass({
         if (err === null) {
             this.setState({error: null});
             WondrousActions.updateUser(res);
+            WondrousActions.openDialogue("Username Changed!",WondrousConstants.DIALOGUE_INFO);
+            this.refs.username.getDOMNode().value = '';
         } else {
             this.setState({error:err.error});
         }
@@ -114,6 +120,8 @@ var PasswordChange = React.createClass({
         if (err === null) {
             this.setState({error: null});
             WondrousActions.updateUser(res);
+            WondrousActions.openDialogue("Password Changed!",WondrousConstants.DIALOGUE_INFO);
+            this.refs.old_password.getDOMNode().value = this.refs.new_password.getDOMNode().value = this.refs.new_password_confirm.getDOMNode().value = '';
         } else {
             this.setState({error:err.error});
         }
@@ -143,13 +151,13 @@ var PasswordChange = React.createClass({
                         <div><input type="password" ref="old_password" className="input-basic" placeholder="Current password"/></div>
                         <div><input type="password" ref="new_password" className="input-basic" placeholder="New password"/></div>
                         <div><input type="password" ref="new_password_confirm" className="input-basic" placeholder="Confirm new password"/></div>
-                        
+
                         <div className="loggedout-error">
                             {this.state.error !== null ?
                                 <b>{this.state.error}</b>
                                 : null}
                         </div>
-                        
+
                         <div><input className="info-settings-submit" type="submit" value="Save changes"/></div>
                     </form>
                 </div>
@@ -231,8 +239,6 @@ function getUserState() {
 }
 
 var Settings = React.createClass({
-    mixins: [Reflux.listenTo(UserStore,"onUserChange")],
-    
     getInitialState: function() {
         return getUserState();
     },

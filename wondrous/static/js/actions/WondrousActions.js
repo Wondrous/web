@@ -1,6 +1,10 @@
 var WondrousAPI = require("../utils/WondrousAPI");
 
 var WondrousActions = Reflux.createActions({
+    "openDialogue": {},
+    "acceptDialogue": {},
+    "cancelDialogue": {},
+
     "editPost": {},
 
     "loadTrending": {},

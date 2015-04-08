@@ -19,7 +19,13 @@ var ModalStore = Reflux.createStore({
         this.cardOpen = false;
         this.likedUserOpen = false;
 
+        this.dialogueOpen = false;
+        this.dialogueType = null;
+        this.dialogueMessage = null;
+        this.dialogueAccept = false;
+
         this.reportSubmitted = false;
+
     },
 
     getModalState: function(){
@@ -32,10 +38,37 @@ var ModalStore = Reflux.createStore({
             pictureFormOpen: this.pictureFormOpen,
             cardOpen: this.cardOpen,
             likedUserOpen:this.likedUserOpen,
+            dialogueOpen: this.dialogueOpen,
+            dialogueMessage: this.dialogueMessage,
+            dialogueAccept: this.dialogueAccept,
+            dialogueType: this.dialogueType,
             reportSubmitted: this.reportSubmitted
         }
     },
-
+    openDialogue: function(message,type){
+        if (this.dialogueOpen != true){
+            this.dialogueOpen = true;
+            this.dialogueType = type;
+            this.dialogueMessage = message; 
+            $('body').addClass('modal-open');
+            this.trigger(this.getModalState());
+        }
+    },
+    cancelDialogue: function(){
+        if (this.dialogueOpen != false) {
+            this.dialogueOpen = false;
+            $('body').removeClass('modal-open');
+            this.trigger(this.getModalState());
+        }
+    },
+    acceptDialogue: function(message,type){
+        if (this.dialogueOpen != false) {
+            this.dialogueOpen = false;
+            this.dialogueAccept = true;
+            $('body').removeClass('modal-open');
+            this.trigger(this.getModalState());
+        }
+    },
     openCardModal: function() {
         if (this.cardOpen != true){
             this.cardOpen = true;
@@ -131,7 +164,7 @@ var ModalStore = Reflux.createStore({
         setTimeout(function(){that.reportSubmitted=false},1000);
         this.trigger(this.getModalState());
     },
-    
+
     closeSignupPrompt: function() {
         if (this.signupOpen == true) {
             this.signupOpen = false;

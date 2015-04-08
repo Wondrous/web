@@ -2,13 +2,32 @@ var WondrousActions = require('../../actions/WondrousActions');
 var WondrousAPI = require('../../utils/WondrousAPI');
 var PostStore = require('../../stores/PostStore');
 var UserStore = require('../../stores/UserStore');
+var ModalStore = require('../../stores/ModalStore');
 var checkLogin = require('../../utils/Func').checkLogin;
+var WondrousConstants = require('../../constants/WondrousConstants');
 
 var PostFooter = React.createClass({
+    deleteClicked: false,
+    mixins: [Reflux.listenTo(ModalStore,'onModalChange')],
+    onModalChange: function(modalProp){
+        if(modalProp.dialogueAccept==true&&this.deleteClicked==true){
+            ModalStore.dialogueAccept=false;
+            this.deleteClicked = false;
+            this.deletePost();
+        }else if(modalProp.dialogueOpen==false){
+            this.deleteClicked = false;
+        }
+    },
+
+    onDeleteClick: function(e){
+        this.deleteClicked = true;
+        WondrousActions.openDialogue("Are you sure you want to delete this post?",WondrousConstants.DIALOGUE_INPUT);
+    },
 
     deletePost: function() {
         WondrousActions.closeCardModal();
         WondrousActions.deletePost(this.props.data.id);
+        this.deleteClicked = false;
     },
 
     editPost: function(){
@@ -109,7 +128,7 @@ var PostFooter = React.createClass({
 
 
                         {is_it_mine ?
-                            <span onClick={this.deletePost} className="post-footer-btn post-delete-btn round-50" style={{ margin: "0 5px" }} title="Delete this post">
+                            <span onClick={this.onDeleteClick} className="post-footer-btn post-delete-btn round-50" style={{ margin: "0 5px" }} title="Delete this post">
                                 <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/delete/trash.png" className="post-delete-icon" />
                             </span>
                             : null}

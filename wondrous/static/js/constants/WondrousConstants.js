@@ -9,6 +9,8 @@ module.exports = keyMirror({
     MODALTYPE_PICTURE: null,    // modaltype picture
     MODALTYPE_POST: null,       // modaltype picture
     PROFILE_PAGE: null,
+    DIALOGUE_INFO: null,
+    DIALOGUE_INPUT:null,
     FEED_PAGE: null,
     SEARCH_PAGE: null
 });
