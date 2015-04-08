@@ -46,7 +46,7 @@ var Linkify = function(rawText, hashtagOverrideClass) {
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if (word.indexOf('.') > -1 && word.indexOf("..") == -1 && word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
-                        if(word.charAt(word.length-1)==='.'){
+                        if(word.charAt(word.length-1)==='.' || word.charAt(word.length-1)===','){
                             word = word.substring(0,word.length-1);
                         }
                         var url = word;
