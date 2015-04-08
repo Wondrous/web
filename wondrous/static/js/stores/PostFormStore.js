@@ -106,7 +106,6 @@ var PostFormStore = Reflux.createStore({
 
                 that.width = tempImg.width;
                 that.height = tempImg.height;
-                console.log("orientation is",this.exifdata,orientation);
                 switch(orientation){
                    case 8:
                        that.dataURL = rotateDataURL(tempImg,tempImg.width/2,tempImg.height/2,90);

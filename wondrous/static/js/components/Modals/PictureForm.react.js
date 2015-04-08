@@ -104,7 +104,7 @@ var PictureForm = React.createClass({
                     <div className="upload-photo-icon">
                         I
                     </div>
-                    <input id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>
+                    <input accept="image/*" id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>
                 </div>
 
                 <div id="progress" className="small-red-bar fileinput-button progress post-dialogue-progress">
@@ -119,7 +119,7 @@ var PictureForm = React.createClass({
 
                 <div onClick={this.handleSubmit} id="post-button" role="button" className="post-button round-3">Done</div>
                 <div onClick={this.handlePictureCancel} role="button" className="post-button round-3 cancel-post-button">Cancel</div>
-                {PostFormStore.loaded?<input id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>:null}
+                {PostFormStore.loaded?<input accept="image/*" id="fileuploadPostImage" onChange={this.handleDrop} type="file" name="files[]"/>:null}
             </div>
         );
     }

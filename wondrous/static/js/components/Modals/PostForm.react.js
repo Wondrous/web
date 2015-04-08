@@ -209,7 +209,7 @@ var PostForm = React.createClass({
                 <div>
                     <div onClick={PostFormStore.toggleBackgroundDisplay} className={!PostFormStore.isCover ? optionClass : optionActiveClass}>Cover</div>
                     <div onClick={PostFormStore.toggleBackgroundDisplay} className={PostFormStore.isCover  ? optionClass : optionActiveClass}>Fit-to-screen</div>
-                    {PostFormStore.loaded?<input onChange={this.onFileSelect} className="fileuploadPostImage" type="file" name="files[]"/>:null}
+                    {PostFormStore.loaded?<input accept="image/*" onChange={this.onFileSelect} className="fileuploadPostImage" type="file" name="files[]" />:null}
                 </div>
 
                 <div className="new-post-progress-bar">
@@ -238,7 +238,7 @@ var PostForm = React.createClass({
                     <div className="upload-photo-icon">
                         I
                     </div>
-                    <input id="fileuploadPostImage" onChange={this.onFileSelect} type="file" name="files[]"/>
+                    <input accept="image/*" id="fileuploadPostImage" onChange={this.onFileSelect} type="file" name="files[]"/>
                 </div>
 
                 {/*}<div id="progress" className="small-red-bar fileinput-button progress post-dialogue-progress">
