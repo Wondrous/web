@@ -1670,7 +1670,7 @@ a:hover {
   cursor: default; }
   .post-identifier a {
     display: inline-block;
-    color: #0000c8;
+    color: #444444;
     cursor: pointer; }
   .post-identifier > .recipient {
     display: inline-block;
@@ -3022,7 +3022,7 @@ a:hover {
   color: #828282; }
 
 .navbar-newpost-wrapper {
-  background-color: #eaeaea; }
+  /*background-color: rgb(234,234,234);*/ }
   .navbar-newpost-wrapper:hover {
     background-color: #f0f0f0; }
 
