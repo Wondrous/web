@@ -106,3 +106,34 @@ a:hover {text-decoration: underline;}
     cursor: default;
     background-color: rgb(248,248,248) !important;
 }
+
+.dialogue-btn {
+    border: none;
+    font-size: 15px; 
+    font-weight: 900;
+    color: rgb(255,255,255);
+    background-color: rgb(220,220,220);
+    padding: 6px 15px;
+    margin: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.dialogue-btn--accept {
+    background-color: rgb(0,226,174);
+
+    &:hover {
+        background-color: rgb(0,236,174);
+    }
+}
+
+.dialogue-btn--cancel {
+    background-color: transparent;
+    color: rgb(68,68,68);
+    font-weight: 400;
+    padding-left: 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

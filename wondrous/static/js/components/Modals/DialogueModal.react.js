@@ -9,7 +9,10 @@ var DialogueModal =  React.createClass({
         this.forceUpdate();
     },
     render: function(){
-        divStyle = ModalStore.dialogueOpen?{display:"block"} : {display:"none"};
+        divStyle = {
+            display: ModalStore.dialogueOpen ? "block" : "none",
+            backgroundColor: "rgba(55,55,55,0.75)",
+        };
         return (
             <ModalWrapper handleClose={WondrousActions.cancelDialogue} divStyle={divStyle}>
                 <Dialogue/>

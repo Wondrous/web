@@ -713,6 +713,15 @@ ul {
 .information-banner--warn {
   background-color: #dc5050; }
 
+.dialogue-header {
+  font-weight: 100;
+  font-size: 20px;
+  color: #3d3d3d;
+  /*
+        NOTE: The dialogue buttons are in the _buttons.scss file.
+        The actual dialogue styles are inline in the Dialogue.react file.
+    */ }
+
 /* ============================= */
 /* MASONRY --------------------- */
 /* ============================= */
@@ -884,6 +893,30 @@ a:hover {
   box-shadow: none;
   cursor: default;
   background-color: #f8f8f8 !important; }
+
+.dialogue-btn {
+  border: none;
+  font-size: 15px;
+  font-weight: 900;
+  color: white;
+  background-color: gainsboro;
+  padding: 6px 15px;
+  margin: 5px;
+  outline: none;
+  cursor: pointer; }
+
+.dialogue-btn--accept {
+  background-color: #00e2ae; }
+  .dialogue-btn--accept:hover {
+    background-color: #00ecae; }
+
+.dialogue-btn--cancel {
+  background-color: transparent;
+  color: #444444;
+  font-weight: 400;
+  padding-left: 0; }
+  .dialogue-btn--cancel:hover {
+    text-decoration: underline; }
 
 .landing-wrapper-1 {
   position: absolute;

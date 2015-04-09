@@ -325,3 +325,14 @@ ul {
 .information-banner--warn {
     background-color: rgb(220,80,80);
 }
+
+.dialogue-header {
+    font-weight: 100;
+    font-size: 20px;
+    color: rgb(61,61,61);
+
+    /*
+        NOTE: The dialogue buttons are in the _buttons.scss file.
+        The actual dialogue styles are inline in the Dialogue.react file.
+    */
+}
