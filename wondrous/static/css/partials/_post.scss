@@ -6,10 +6,10 @@
     background-color: rgb(255,255,255);
     overflow: hidden;
 
-    -webkit-box-shadow: 0 1px 3px 0 rgb(159,159,159);
-       -moz-box-shadow: 0 1px 3px 0 rgb(159,159,159);
-         -o-box-shadow: 0 1px 3px 0 rgb(159,159,159);
-            box-shadow: 0 1px 3px 0 rgb(159,159,159);
+    -webkit-box-shadow: 0 1px 1px 0 rgb(159,159,159);
+       -moz-box-shadow: 0 1px 1px 0 rgb(159,159,159);
+         -o-box-shadow: 0 1px 1px 0 rgb(159,159,159);
+            box-shadow: 0 1px 1px 0 rgb(159,159,159); /* 0 1px 3px 0 */
 
 /*    -webkit-box-shadow: 0 1px 5px 0 rgb(159,159,159);
        -moz-box-shadow: 0 1px 5px 0 rgb(159,159,159);
@@ -281,7 +281,7 @@ $post-cover-photo-height: 390px;
 }
 
 .post-subject-text {
-    font-size: 23px;
+    font-size: 27px;
     font-family: 'arial black', arial, helvetica, sans-serif;
     letter-spacing: -1px;
     line-height: 1.1em;

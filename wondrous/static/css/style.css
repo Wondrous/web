@@ -449,7 +449,8 @@ body, .top-banner, .main-content, #main-content-id, .cover-photo, .profile-tab-b
   min-width: 750px; }
 
 html, body, footer, .main-content {
-  background-color: #f1f1f1;
+  background-color: #eeeeee;
+  /* 241,241,241 */
   -webkit-font-smoothing: antialiased; }
 
 body {
@@ -492,7 +493,8 @@ ul {
 .main-content, #main-content-id {
   position: relative;
   margin-top: 45px;
-  min-height: 1000px; }
+  min-height: 1000px;
+  background: #eeeeee url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png"); }
 
 .input-basic {
   -webkit-transition: all 0.3s ease-in-out;
@@ -764,7 +766,7 @@ body {
 .trending-ul {
   padding: 10px;
   background-color: white;
-  border-top: 2px solid #00e2ae; }
+  border-top: 2px solid #03bfa0; }
 
 .trending-li {
   padding: 7px 0;
@@ -787,7 +789,7 @@ body {
   margin: 0 auto;
   background-color: white;
   border: none;
-  border-bottom: 2px solid #00e2ae;
+  border-bottom: 2px solid #03bfa0;
   font-family: helvetica, arial, sans-serif;
   font-size: 13px;
   font-weight: 900;
@@ -1446,10 +1448,11 @@ a:hover {
   width: 100%;
   background-color: white;
   overflow: hidden;
-  -webkit-box-shadow: 0 1px 3px 0 #9f9f9f;
-  -moz-box-shadow: 0 1px 3px 0 #9f9f9f;
-  -o-box-shadow: 0 1px 3px 0 #9f9f9f;
-  box-shadow: 0 1px 3px 0 #9f9f9f;
+  -webkit-box-shadow: 0 1px 1px 0 #9f9f9f;
+  -moz-box-shadow: 0 1px 1px 0 #9f9f9f;
+  -o-box-shadow: 0 1px 1px 0 #9f9f9f;
+  box-shadow: 0 1px 1px 0 #9f9f9f;
+  /* 0 1px 3px 0 */
   /*    -webkit-box-shadow: 0 1px 5px 0 rgb(159,159,159);
        -moz-box-shadow: 0 1px 5px 0 rgb(159,159,159);
          -o-box-shadow: 0 1px 5px 0 rgb(159,159,159);
@@ -1677,7 +1680,7 @@ a:hover {
     vertical-align: bottom; }
 
 .post-subject-text {
-  font-size: 23px;
+  font-size: 27px;
   font-family: 'arial black', arial, helvetica, sans-serif;
   letter-spacing: -1px;
   line-height: 1.1em;
@@ -2913,7 +2916,8 @@ a:hover {
   position: relative;
   display: inline-block;
   left: 5%;
-  margin-right: 10px;
+  margin-right: 7px;
+  /* 10px */
   margin-top: 5px;
   height: 36px;
   width: 36px;
@@ -2945,15 +2949,16 @@ a:hover {
   width: 30%;
   margin-top: 6px;
   margin-left: 5%;
-  padding: 9px 0 7px 5px;
+  padding: 9px 0 7px 12px;
+  /* 9px 0 7px 5px */
   border: none;
-  background-color: #eaeaea;
-  font-family: helvetica, arial, sans-serif;
+  background-color: #eeeeee;
+  font-family: arial, sans-serif;
   font-size: 15px;
   line-height: 17px; }
   .navbar-search-input:focus {
     outline: none;
-    background-color: #e4e4e4; }
+    background-color: #e8e8e8; }
 
 .navbar-right {
   position: absolute;

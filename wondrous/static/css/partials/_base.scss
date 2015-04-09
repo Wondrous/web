@@ -11,7 +11,7 @@ body,
 }
 
 html, body, footer, .main-content {
-    background-color: rgb(241,241,241);
+    background-color: rgb(238,238,238); /* 241,241,241 */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -66,6 +66,8 @@ ul {
     position: relative;
     margin-top: 45px;
     min-height: 1000px;
+
+    background: rgb(238,238,238) url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png");
 }
 
 .input-basic {

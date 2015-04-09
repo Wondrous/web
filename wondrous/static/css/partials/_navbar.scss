@@ -62,7 +62,7 @@
     position: relative;
     display: inline-block;
     left: 5%;
-    margin-right: 10px;
+    margin-right: 7px; /* 10px */
     margin-top: 5px;
     height: 36px;
     width: 36px;
@@ -99,16 +99,16 @@
     width: 30%;
     margin-top: 6px;
     margin-left: 5%;
-    padding: 9px 0 7px 5px;
+    padding: 9px 0 7px 12px; /* 9px 0 7px 5px */
     border: none;
-    background-color: rgb(234,234,234);
-    font-family: helvetica, arial, sans-serif;
+    background-color: rgb(238,238,238);
+    font-family: arial, sans-serif;
     font-size: 15px;
     line-height: 17px;
 
     &:focus {
         outline: none;
-        background-color: rgb(228,228,228);
+        background-color: rgb(232,232,232);
     }
 }
 

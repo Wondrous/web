@@ -95,7 +95,7 @@ var InfluenceStats = React.createClass({
                     </h2>
                     <div className="profile-analytics-item">
                         <h2 className="profile-analytics-item-header">
-                            Followers <span className="profile-analytics-ffkey profile-analytics-ffbar--left"></span> to Following <span className="profile-analytics-ffkey profile-analytics-ffbar--right"></span> Ratio
+                            Followers <span className="profile-analytics-ffkey profile-analytics-ffbar--left"></span> Following <span className="profile-analytics-ffkey profile-analytics-ffbar--right"></span>
                         </h2>
                         {follower_count > 0 || following_count > 0 ?
                             <div title="Your followers to following ratio (followers : following)">
