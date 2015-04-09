@@ -766,7 +766,13 @@ body {
 .trending-ul {
   padding: 10px;
   background-color: white;
-  border-top: 2px solid #03bfa0; }
+  background-color: rgba(255, 255, 255, 0.7);
+  border-top: 2px solid #03bfa0;
+  -webkit-box-shadow: 0 1px 1px 0 #9f9f9f;
+  -moz-box-shadow: 0 1px 1px 0 #9f9f9f;
+  -o-box-shadow: 0 1px 1px 0 #9f9f9f;
+  box-shadow: 0 1px 1px 0 #9f9f9f;
+  /* 0 1px 3px 0 */ }
 
 .trending-li {
   padding: 7px 0;
