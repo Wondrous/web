@@ -10,7 +10,7 @@
 
 from collections import defaultdict
 from unidecode import unidecode
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pyramid.view import view_config
 from pyramid.security import forget
@@ -832,8 +832,8 @@ class APIViews(BaseHandler):
             this_user = User.by_kwargs(email=credential).first()
         else:
             this_user = User.by_case_insensitive_username(credential).first()
-
-        if this_user and this_user.validate_password(password) and not this_user.is_banned and this_user.verified:
+        if this_user and this_user.validate_password(password) and not this_user.is_banned\
+            and this_user.verified:
             # Reactivating a user when they log in
             # TODO -- this needs to be more 'offical'
             self._set_session_headers(this_user)
@@ -847,6 +847,9 @@ class APIViews(BaseHandler):
         elif this_user and this_user.is_banned:
             return {'error': 'banned'}
         elif this_user and not this_user.verified:
+            if datetime.now()-this_user.created_at<=timedelta(days=7):
+                self._set_session_headers(this_user)
+                return this_user.json()
             return {'error': 'verification'}
         else:
             return {'error': 'Sorry, incorrect username/email or password. Please try again.'}
@@ -922,9 +925,10 @@ class APIViews(BaseHandler):
                 if ref:
                     ref.used = True
                     ref.verification_code = None
-                    self._set_session_headers(new_user)
                 else:
                     wondrous.controllers.email_controller.send_activation_link(new_user)
+
+                self._set_session_headers(new_user)
                 return new_user.json()
             else:
                 return {'error': error_message}
