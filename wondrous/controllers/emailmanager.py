@@ -59,7 +59,7 @@ class EmailManager:
 Hey Friend,
 Welcome to Wondrous, your next generation expression platform.
 
-We couldn't be more excited jacked up to invite you to be one of the first users on our ever-evolving baby/child/alien from another planet.
+We couldn't be more excited to invite you to be one of the first users on our ever-evolving baby/child/alien from another planet.
 
 The best part about it all? You decide how Wondrous will be used. Do you want to share funny memes? Start meaningful discussions? Show off your art? Repackage and distribute your blog content?
 
