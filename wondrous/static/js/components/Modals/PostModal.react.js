@@ -40,7 +40,6 @@ var PostModal = React.createClass({
 
 	render: function() {
 		divStyle = this.state.cardOpen ? {display:"block"} : {display:"none"};
-		console.log("err",PostStore.postError)
 		return (
 				<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
                     {PostStore.postError != null ?

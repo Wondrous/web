@@ -151,7 +151,7 @@ var PostForm = React.createClass({
             return;
 		}
 
-        if(PostFormStore.file==null){
+        if(PostFormStore.loaded!=true){
             WondrousActions.openDialogue("Add a picture!",WondrousConstants.DIALOGUE_INFO);
             return;
         }
