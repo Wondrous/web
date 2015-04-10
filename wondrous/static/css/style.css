@@ -2970,7 +2970,7 @@ a:hover {
 
 .navbar-right {
   position: absolute;
-  top: 9px;
+  top: 8px;
   /*right: 15px;*/
   right: 5%; }
 
@@ -3101,8 +3101,8 @@ a:hover {
   display: inline-block;
   /* For the overflow to work */
   font-family: arial, helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 33px;
+  font-size: 15px;
+  line-height: 32px;
   max-width: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
