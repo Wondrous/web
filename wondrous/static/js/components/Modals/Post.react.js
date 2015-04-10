@@ -6,6 +6,7 @@ var Photo = require('./Photo.react');
 var CommentBox = require('./CommentBox.react');
 var PostFooter = require('./PostFooter.react');
 var checkLogin = require('../../utils/Func').checkLogin;
+var dateToString = require('../../utils/Func').dateToString;
 
 var Post = React.createClass({
     mixins: [Reflux.connect(PostStore)],
@@ -115,6 +116,8 @@ var Post = React.createClass({
                             {this.state.post.like_count <= 10 ? likedUsers : this.state.post.like_count}
                             {this.state.post.like_count > 10 ? " likes" : {}}
                         </span>
+
+                        {dateToString(this.state.post.created_at)}
                     </div>
 
                     <hr style={{  width: "60%", margin: "0 28px", height: 2, borderColor: "rgb(234,234,234)" }} />
