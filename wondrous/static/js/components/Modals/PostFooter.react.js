@@ -84,6 +84,10 @@ var PostFooter = React.createClass({
     render: function(){
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         var original_mine = is_it_mine&&(this.props.data.repost==null);
+        var urlLink = "wondrous.co/post/"+this.props.data.id;
+        var facebookLink = "http://facebook.com/sharer.php?u="+encodeURIComponent(urlLink);
+        var twitterLink = "http://twitter.com/intent/tweet?url="+encodeURIComponent(urlLink+"&text="+this.props.data.subject+"&via=Wondrous");
+        console.log(twitterLink,facebookLink);
         return (
             <div className="post-footer" style={{ paddingBottom: 0 }}>
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
@@ -109,6 +113,13 @@ var PostFooter = React.createClass({
                 <span onClick={WondrousActions.togglePostLink} className="post-footer-btn post-like-btn round-50" style={{ position: "relative", top: -13 }} title="Get link to this post">
                     <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/link/link.png" className="post-delete-icon" />
                 </span>
+
+                <div>
+                    <a href="javascript:" onClick={function(evt) { return window.open(twitterLink) }} target="_blank" >Twitter</a>
+                </div>
+                <div>
+                    <a href="javascript:" onClick={function(evt) { return window.open(facebookLink) }} target="_blank" >Facebook</a>
+                </div>
 
                 {PostStore.postLink != null ?
                     <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
