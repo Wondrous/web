@@ -3,7 +3,7 @@
 .notification-count {
     padding: 0 11px;
     background-color: rgb(234,234,234);
-    color: rgb(130,130,130);
+    color: rgb(68,68,68); /*rgb(130,130,130);*/
     line-height: 18px; 
     
     &:hover {background-color: rgb(230,230,230);}
@@ -36,10 +36,10 @@
 }
 
 .notification-alert {
-    background-color: rgb(220,100,90) !important;
+    background-color: rgb(0,226,174) !important; /*rgb(220,100,90) !important;*/
     color: rgb(251,251,251) !important;
     
-    &:active {background-color: rgb(200,100,90) !important;}
+    &:active {background-color: rgb(3,211,160) !important;}
 }
 
 .notification-bell {

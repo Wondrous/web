@@ -87,6 +87,7 @@ var Post = React.createClass({
 
                 <div>
                     <div className="post-modal-micro-data-wrapper" style={{ maxWidth: "100%" }}>
+                        {/*
                         <span className="post-micro-data-super-analytics-item">
                             <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/view/eye_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.state.post.view_count}
@@ -96,8 +97,9 @@ var Post = React.createClass({
                             <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/comment/cloud_gray_shadow.svg" className="post-general-icon post-view-icon" />
                             {this.state.post.comment_count}
                         </span>
+                        */}
 
-                        <span onClick={this.state.post.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block", paddingLeft: 2 }}>
+                        <span onClick={this.state.post.like_count > 10 ? this.viewLikedUsers : null} className="post-micro-data-super-analytics-item" style={{ display: "block", padding: "5px 0 5px 2px"   }}>
                            {this.state.post.liked ?
                                 <span>
                                     <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/like/heart_red.svg" className="post-general-icon post-like-icon" />

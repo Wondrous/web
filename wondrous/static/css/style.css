@@ -449,8 +449,8 @@ body, .top-banner, .main-content, #main-content-id, .cover-photo, .profile-tab-b
   min-width: 750px; }
 
 html, body, footer, .main-content {
-  background-color: #eeeeee;
-  /* 241,241,241 */
+  background-color: #eaeaea;
+  background: #eaeaea url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png");
   -webkit-font-smoothing: antialiased; }
 
 body {
@@ -494,7 +494,7 @@ ul {
   position: relative;
   margin-top: 45px;
   min-height: 1000px;
-  background: #eeeeee url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png"); }
+  background: #eaeaea url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png"); }
 
 .input-basic {
   -webkit-transition: all 0.3s ease-in-out;
@@ -767,7 +767,8 @@ body {
   padding: 10px;
   background-color: white;
   background-color: rgba(255, 255, 255, 0.7);
-  border-top: 2px solid #03bfa0;
+  border-top: 2px solid #00e2ae;
+  /*rgb(3,191,160);*/
   -webkit-box-shadow: 0 1px 1px 0 #9f9f9f;
   -moz-box-shadow: 0 1px 1px 0 #9f9f9f;
   -o-box-shadow: 0 1px 1px 0 #9f9f9f;
@@ -1335,7 +1336,7 @@ a:hover {
   vertical-align: top;
   max-width: 430px;
   margin-right: 0;
-  color: #3d3d3d;
+  color: #444444;
   font-size: 16px;
   font-family: "Lucida Grande", "Lucida Sans", Verdana, helvetica, arial, sans-serif;
   letter-spacing: -0.02em;
@@ -1349,9 +1350,9 @@ a:hover {
   font-weight: bold;
   cursor: pointer; }
   .user-itemizer-data-name:link {
-    color: #3d3d3d; }
+    color: #444444; }
   .user-itemizer-data-name:visited {
-    color: #3d3d3d; }
+    color: #444444; }
 
 .user-itemizer-data-desc {
   display: block;
@@ -1670,6 +1671,7 @@ a:hover {
 .post-identifier {
   position: absolute;
   display: inline-block;
+  font-family: arial, helvetica, sans-serif;
   top: 10px;
   left: 0;
   padding-left: 35px;
@@ -2969,13 +2971,13 @@ a:hover {
 .navbar-right {
   position: absolute;
   top: 9px;
-  right: 15px; }
+  /*right: 15px;*/
+  right: 5%; }
 
 .navbar-btn {
   position: relative;
   display: block;
   float: left;
-  color: #333333;
   font-weight: 700;
   height: 30px;
   line-height: 30px;
@@ -2984,8 +2986,6 @@ a:hover {
   padding: 0;
   text-decoration: none;
   cursor: pointer; }
-  .navbar-btn:link, .navbar-btn:visited {
-    color: #333333; }
   .navbar-btn:hover {
     text-decoration: none;
     background-color: #f3f3f3; }
@@ -2998,8 +2998,7 @@ a:hover {
 
 .navbar-btn-text {
   padding: 0 8px 0 5px;
-  font-size: 13px;
-  color: #828282; }
+  font-size: 13px; }
 
 .navbar-btn-icon {
   position: absolute;
@@ -3014,7 +3013,6 @@ a:hover {
   overflow: hidden;
   float: left;
   background-color: transparent;
-  color: #333333;
   text-decoration: none;
   line-height: 46px;
   height: 30px;
@@ -3029,16 +3027,15 @@ a:hover {
 
 .navbar-heydings-icon {
   font-family: 'heydings_iconsregular';
-  font-size: 20px;
-  color: #828282; }
+  font-size: 20px; }
 
 .navbar-newpost-wrapper {
   /*background-color: rgb(234,234,234);*/ }
   .navbar-newpost-wrapper:hover {
     background-color: #f0f0f0; }
 
-.navbar-newpost-icon > .navbar-btn-text {
-  color: #969696; }
+.navbar-btn, .navbar-btn:link, .navbar-btn:visited, .navbar-btn-text, .navbar-btn-icon, .navbar-heydings-icon, .navbar-newpost-icon > .navbar-btn-text {
+  color: #444444; }
 
 .navbar-newpost-icon {
   position: absolute;
@@ -3093,7 +3090,8 @@ a:hover {
 .notification-count {
   padding: 0 11px;
   background-color: #eaeaea;
-  color: #828282;
+  color: #444444;
+  /*rgb(130,130,130);*/
   line-height: 18px; }
   .notification-count:hover {
     background-color: #e6e6e6; }
@@ -3123,10 +3121,11 @@ a:hover {
   border-bottom: 1px solid #eaeaea; }
 
 .notification-alert {
-  background-color: #dc645a !important;
+  background-color: #00e2ae !important;
+  /*rgb(220,100,90) !important;*/
   color: #fbfbfb !important; }
   .notification-alert:active {
-    background-color: #c8645a !important; }
+    background-color: #03d3a0 !important; }
 
 .notification-bell {
   position: relative;

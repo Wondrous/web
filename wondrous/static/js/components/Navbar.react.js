@@ -149,7 +149,7 @@ var Navbar = React.createClass({
         return (
             <div id="topBanner" className={UserStore.loggedIn ? "navbar" : "navbar navbar-lo"}>
                 <Link to="/" onClick={ModalStore.clearModal} style={{ color: "rgb(234,234,234)" }}>
-                    <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.icon_50x50.png" className="navbar-logo" />
+                    <img style={{ width: 46 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/Icon2.png" className="navbar-logo" />
                 </Link>
                 {UserStore.loggedIn ?
                     <span>

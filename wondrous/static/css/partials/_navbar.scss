@@ -115,14 +115,14 @@
 .navbar-right {
     position: absolute;
     top: 9px;
-    right: 15px;
+    /*right: 15px;*/
+    right: 5%;
 }
 
 .navbar-btn {
     position: relative;
     display: block;
     float: left;
-    color: rgb(51,51,51);
     font-weight: 700;
     height: 30px;
     line-height: 30px;
@@ -132,8 +132,6 @@
     text-decoration: none;
     cursor: pointer;
 
-    &:link,
-    &:visited { color: rgb(51,51,51); }
     &:hover {
         text-decoration: none;
         background-color: rgb(243,243,243);
@@ -151,7 +149,6 @@
 .navbar-btn-text {
     padding: 0 8px 0 5px;
     font-size: 13px;
-    color: rgb(130,130,130);
 }
 
 .navbar-btn-icon {
@@ -168,7 +165,6 @@
     overflow: hidden;
     float: left;
     background-color: transparent;
-    color: rgb(51,51,51);
     text-decoration: none;
     line-height: 46px;
     height: 30px;
@@ -186,7 +182,6 @@
 .navbar-heydings-icon {
     font-family: 'heydings_iconsregular';
     font-size: 20px;
-    color: rgb(130,130,130);
 }
 
 .navbar-newpost-wrapper {
@@ -197,9 +192,15 @@
     }
 }
 
+.navbar-btn,
+.navbar-btn:link,
+.navbar-btn:visited,
+.navbar-btn-text,
+.navbar-btn-icon,
+.navbar-heydings-icon,
 .navbar-newpost-icon > .navbar-btn-text {
-    color: rgb(150,150,150);
-}
+    color: rgb(68,68,68);
+} 
 
 .navbar-newpost-icon {
     position: absolute;

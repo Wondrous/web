@@ -11,7 +11,8 @@ body,
 }
 
 html, body, footer, .main-content {
-    background-color: rgb(238,238,238); /* 241,241,241 */
+    background-color: rgb(234,234,234);
+    background: rgb(234,234,234) url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png");
     -webkit-font-smoothing: antialiased;
 }
 
@@ -67,7 +68,7 @@ ul {
     margin-top: 45px;
     min-height: 1000px;
 
-    background: rgb(238,238,238) url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png");
+    background: rgb(234,234,234) url("https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/static-boom.png");
 }
 
 .input-basic {
