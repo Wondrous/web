@@ -21,7 +21,7 @@ var PostFooter = React.createClass({
 
     onDeleteClick: function(e){
         this.deleteClicked = true;
-        WondrousActions.openDialogue("Are you sure you want to delete this post?",WondrousConstants.DIALOGUE_INPUT);
+        WondrousActions.openDialogue("Are you sure you want to delete this post?", null, WondrousConstants.DIALOGUE_INPUT);
     },
 
     deletePost: function() {
