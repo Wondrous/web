@@ -1277,7 +1277,8 @@ a:hover {
 .profile-about {
   margin: 20px auto;
   max-width: 60%;
-  border: 1px solid white; }
+  border: 1px solid white;
+  word-break: break-word; }
 
 .profile-about--font {
   font-family: helvetica, arial, sans-serif;

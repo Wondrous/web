@@ -42,7 +42,8 @@ var Linkify = function(rawText, hashtagOverrideClass) {
             }
 
             if (href !== null) {
-                tokens[i] = <Link key={i} className={classes} to={href} onClick={handleClose} >{tokens[i]}</Link>;
+                // NOTE: The space between tokens[i] and </Link> is critically important to ensure proper word breaking
+                tokens[i] = <Link key={i} className={classes} to={href} onClick={handleClose} >{tokens[i]} </Link>;
             }else {
                 var links = tokens[i].split(' ').map(function(word,ind){
                     if (word.indexOf('.') > -1 && word.indexOf("..") == -1 && word.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)!=null){
@@ -67,10 +68,10 @@ var Linkify = function(rawText, hashtagOverrideClass) {
         }
 
         if (ind == textChunks.length - 1) {
-            return (<span key={ind}>{tokens}</span>);
+            return (<span key={ind}>{tokens}</span> );
         } else {
             return (
-                <span key={ind}>{tokens}<br /></span>
+                <span key={ind}>{tokens}<br /></span> 
             );
         }
     });
