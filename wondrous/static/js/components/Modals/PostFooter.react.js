@@ -85,7 +85,7 @@ var PostFooter = React.createClass({
         var is_it_mine = (this.props.data.username === UserStore.user.username);
         var original_mine = is_it_mine&&(this.props.data.repost==null);
         if(this.props.data.repost!=null){
-            this.props.data.subject = this.props.repost.subject;
+            this.props.data.subject = this.props.data.repost.subject;
         }
         var urlLink = "wondrous.co/post/"+this.props.data.id;
         var facebookLink = "http://facebook.com/sharer.php?u="+encodeURIComponent(urlLink);
