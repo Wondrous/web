@@ -41,7 +41,10 @@ var PostFormModal = React.createClass({
 
 	render: function() {
 
-		divStyle = this.state.postFormOpen ? {display:"block"} : {display:"none"};
+		divStyle = {
+			display: this.state.postFormOpen ? "block" : "none",
+			backgroundColor: "rgba(100,100,100,0.7)"
+		};
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>

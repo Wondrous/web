@@ -19,7 +19,7 @@ var Trending = React.createClass({
             if (ind < 10) {
                 return (
                     <li className="trending-li" key={tag.tag_name}>
-                        <Link className="hashtagify trending-a" to={'/tags/'+tag.tag_name}>
+                        <Link className="hashtagify trending-a" to={'/tags/'+tag.tag_name} style={{ backgroundColor: "rgb(255,255,255)" }}>
                             #{tag.tag_name}
                         </Link>
                     </li>
@@ -28,8 +28,8 @@ var Trending = React.createClass({
         });
 
         return (
-            <ul className="trending-ul round-3">
-                <li className="trending-li-header">Trending #tags</li>
+            <ul className="trending-ul round-3" style={{ paddingBottom: 7 }}>
+                <li className="trending-li-header" style={{ marginBottom: 5 }}>Trending #tags</li>
                 {tags}
             </ul>
         );

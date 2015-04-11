@@ -36,7 +36,10 @@ var PictureFormModal = React.createClass({
 	},
 
 	render: function() {
-		divStyle = this.state.pictureFormOpen ? {display:"block"} : {display:"none"};
+		divStyle = {
+			display: this.state.pictureFormOpen ? "block" : "none",
+			backgroundColor: "rgba(100,100,100,0.7)"
+		};
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} isPicture={true} divStyle={divStyle}>

@@ -15,7 +15,7 @@ var UserIcon = React.createClass({
     render: function() {
 
         var userItemizerStyleOverrides = {
-            padding: "10px 5px",
+            padding: "10px 15px",
             borderTop: "1px solid rgb(240,240,240)",
         }
 

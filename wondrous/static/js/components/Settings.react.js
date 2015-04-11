@@ -5,15 +5,15 @@ var WondrousConstants = require('../constants/WondrousConstants');
 
 
 var NameChange = React.createClass({
-    getInitialState: function(){
-        return {'error':null};
+    getInitialState: function() {
+        return {'error': null};
     },
 
     handleData: function(err, res) {
         if (err === null) {
             this.setState({error:null});
             WondrousActions.updateUser(res);
-            WondrousActions.openDialogue("Name Changed!",WondrousConstants.DIALOGUE_INFO);
+            WondrousActions.openDialogue("Name Changed!", null, WondrousConstants.DIALOGUE_INFO);
             this.refs.name.getDOMNode().value = '';
         } else {
             this.setState({error: err.error});
@@ -65,7 +65,7 @@ var UsernameChange = React.createClass({
         if (err === null) {
             this.setState({error: null});
             WondrousActions.updateUser(res);
-            WondrousActions.openDialogue("Username Changed!",WondrousConstants.DIALOGUE_INFO);
+            WondrousActions.openDialogue("Username Changed!", null, WondrousConstants.DIALOGUE_INFO);
             this.refs.username.getDOMNode().value = '';
         } else {
             this.setState({error:err.error});
@@ -120,7 +120,7 @@ var PasswordChange = React.createClass({
         if (err === null) {
             this.setState({error: null});
             WondrousActions.updateUser(res);
-            WondrousActions.openDialogue("Password Changed!",WondrousConstants.DIALOGUE_INFO);
+            WondrousActions.openDialogue("Password Changed!", null, WondrousConstants.DIALOGUE_INFO);
             this.refs.old_password.getDOMNode().value = this.refs.new_password.getDOMNode().value = this.refs.new_password_confirm.getDOMNode().value = '';
         } else {
             this.setState({error:err.error});

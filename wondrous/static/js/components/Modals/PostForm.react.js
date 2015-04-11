@@ -145,24 +145,24 @@ var PostForm = React.createClass({
 		var postSubject = $('#postSubject').val();
 		var postText    = $('#postTextarea').val();
 
-		if (postSubject.length==0||postText.length==0){
-			this.state.error="Please fill in a subject and write some text";
+		if (postSubject.length == 0) {
+			this.state.error = "Please add a title to your post";
             this.forceUpdate();
             return;
-		}
-
-        if(PostFormStore.loaded!=true){
-            WondrousActions.openDialogue("Add a picture!",WondrousConstants.DIALOGUE_INFO);
+		} else if (postText.length == 0) {
+            this.state.error = "Please add some content to your post. Feel free to add #tags!";
+            this.forceUpdate();
+            return;
+        } else if (PostFormStore.loaded !== true) {
+            WondrousActions.openDialogue("Please add a picture!", "__no_picture", WondrousConstants.DIALOGUE_INFO);
+            return;
+        } else if (SettingStore.uploading) {
+            this.state.error = "It looks like you're already uploading something else!"
+            this.forceUpdate();
             return;
         }
 
-        if(SettingStore.uploading){
-            this.state.error="already uploading something else"
-            this.forceUpdate();
-            return;
-        }
-
-        SettingStore.uploading = PostFormStore.file!=null;
+        SettingStore.uploading = PostFormStore.file !== null;
         if (typeof(PostFormStore.file) !== 'undefined' && PostFormStore.file) {
             var dataURL = null;
             var dataBlob = null;
@@ -180,7 +180,7 @@ var PostForm = React.createClass({
                 var blobs = {"fullsize": dataBlob,"medium":uri2blob(mediumDataURL), "dataURL":mediumDataURL}
                 that._submitData(postSubject,postText,blobs);
             });
-        }else{
+        } else {
 			this._submitData(
 				postSubject,
                 postText,
@@ -216,8 +216,6 @@ var PostForm = React.createClass({
                     <div className="new-post-progress-bar--juice" style={{ width: this.state.percent * 8 }}></div>
                 </div>
 
-                {this.state.error ? <span>{this.state.error}</span> : null}
-
                 <div className="new-post-element">
                     <div style={{ position: "relative", margin: "0 auto", marginBottom : -1 }}>
                         <input ref="postSubject" id="postSubject" onChange={this.onChange("postSubject")} className="new-post-subject" maxLength="45" placeholder="Add a title!" spellCheck="False" value={PostFormStore.subject}/>
@@ -227,7 +225,7 @@ var PostForm = React.createClass({
                 <div className="new-post-element">
                     <div className="post-input-wrapper">
                         <div className="typehead">
-                            <textarea onChange={ this.onChange("postTextArea")} id="postTextarea" ref="postTextArea" maxLength="5000" placeholder="Write something. Post a link. Add #hashtags." className="post-input"
+                            <textarea onChange={ this.onChange("postTextArea")} id="postTextarea" ref="postTextArea" maxLength="5000" placeholder="What's on your mind? #Something #Meaningful" className="post-input"
                             style={{ overflow: "y-scroll", wordWrap: "break-word", resize: "none", height: 48 }} value={PostFormStore.text}></textarea>
                         </div>
                     </div>
@@ -247,8 +245,8 @@ var PostForm = React.createClass({
 
                 <div id="post-upload-file"  className="files" style={{ postion: "relative", marginLeft: 5, fontSize: 14 }}></div>
 
-                <div className="post-error-wrapper">
-                    <span className="post-error"></span>
+                <div className="post-error-wrapper" style={{ display: this.state.error ? "block" : "none" }}>
+                    <span className="post-error">{this.state.error ? this.state.error : null}</span>
                 </div>
 
                 <div ref="buttons" style={buttonStyle}>

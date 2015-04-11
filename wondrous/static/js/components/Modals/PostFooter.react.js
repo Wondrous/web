@@ -9,7 +9,8 @@ var WondrousConstants = require('../../constants/WondrousConstants');
 var PostFooter = React.createClass({
     deleteClicked: false,
     mixins: [Reflux.listenTo(ModalStore,'onModalChange')],
-    onModalChange: function(modalProp){
+    
+    onModalChange: function(modalProp) {
         if(modalProp.dialogueAccept==true&&this.deleteClicked==true){
             ModalStore.dialogueAccept=false;
             this.deleteClicked = false;
@@ -19,9 +20,9 @@ var PostFooter = React.createClass({
         }
     },
 
-    onDeleteClick: function(e){
+    onDeleteClick: function(e) {
         this.deleteClicked = true;
-        WondrousActions.openDialogue("Are you sure you want to delete this post?",WondrousConstants.DIALOGUE_INPUT);
+        WondrousActions.openDialogue("Are you sure you want to delete this post?", null, WondrousConstants.DIALOGUE_INPUT);
     },
 
     deletePost: function() {
@@ -30,7 +31,7 @@ var PostFooter = React.createClass({
         this.deleteClicked = false;
     },
 
-    editPost: function(){
+    editPost: function() {
         WondrousActions.openPostModal();
         WondrousActions.editPost(this.props.data);
     },
@@ -114,16 +115,17 @@ var PostFooter = React.createClass({
                     <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/link/link.png" className="post-delete-icon" />
                 </span>
 
-                <div>
-                    <a href="javascript:" onClick={function(evt) { return window.open(twitterLink) }} target="_blank" >Twitter</a>
-                </div>
-                <div>
-                    <a href="javascript:" onClick={function(evt) { return window.open(facebookLink) }} target="_blank" >Facebook</a>
-                </div>
-
                 {PostStore.postLink != null ?
                     <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
                     : {}}
+
+                <a href="javascript:" onClick={function(evt) { return window.open(facebookLink) }} target="_blank" >
+                    <img className="post-footer-btn round-50" style={{ position: "relative", top: 7 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/social/social-facebook.png" title="Share this post to Facebook" />
+                </a>
+
+                <a href="javascript:" onClick={function(evt) { return window.open(twitterLink) }} target="_blank" >
+                    <img className="post-footer-btn round-50" style={{ position: "relative", top: 7 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/social/social-twitter.png" title="Share this post to Twitter" />
+                </a>
 
                 <span onClick={WondrousActions.toggleMoreOptions} className="post-footer-btn post-options-btn round-50 nh" style={{ paddingTop: "3px" }} title="See more options">
                     +

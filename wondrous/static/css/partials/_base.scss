@@ -330,7 +330,7 @@ ul {
 }
 
 .dialogue-header {
-    font-weight: 100;
+    font-weight: 900;
     font-size: 20px;
     color: rgb(61,61,61);
 
@@ -338,4 +338,11 @@ ul {
         NOTE: The dialogue buttons are in the _buttons.scss file.
         The actual dialogue styles are inline in the Dialogue.react file.
     */
+}
+
+.dialogue-info {
+    font-size: 15px;
+    padding: 10px 0;
+    color: rgb(51,51,51);
+    font-weight: 300;
 }

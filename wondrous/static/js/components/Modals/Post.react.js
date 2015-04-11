@@ -10,6 +10,7 @@ var dateToString = require('../../utils/Func').dateToString;
 
 var Post = React.createClass({
     mixins: [Reflux.connect(PostStore)],
+    
     getInitialState: function(){
         return PostStore.getPostState();
     },
@@ -116,7 +117,8 @@ var Post = React.createClass({
                             {this.state.post.like_count <= 10 ? likedUsers : this.state.post.like_count}
                             {this.state.post.like_count > 10 ? " likes" : {}}
                         </span>
-
+                    </div>
+                    <div className="post-timestamp">
                         {dateToString(this.state.post.created_at)}
                     </div>
 
@@ -127,8 +129,6 @@ var Post = React.createClass({
 				</div>
 
                 <PostFooter data={this.state.post} />
-
-                {/*<hr style={{  width: "60%", margin: "1.1em 0", marginBottom: -2, marginLeft: 16 }} />*/}
 
                 <div className="post-comment-wrapper">
                     <CommentBox post_id={this.state.post.id} />

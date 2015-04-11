@@ -22,6 +22,7 @@ var ModalStore = Reflux.createStore({
         this.dialogueOpen = false;
         this.dialogueType = null;
         this.dialogueMessage = null;
+        this.dialogueInfo = null;
         this.dialogueAccept = false;
 
         this.reportSubmitted = false;
@@ -40,35 +41,41 @@ var ModalStore = Reflux.createStore({
             likedUserOpen:this.likedUserOpen,
             dialogueOpen: this.dialogueOpen,
             dialogueMessage: this.dialogueMessage,
+            dialogueInfo: this.dialogueInfo,
             dialogueAccept: this.dialogueAccept,
             dialogueType: this.dialogueType,
             reportSubmitted: this.reportSubmitted
         }
     },
-    openDialogue: function(message,type){
+
+    openDialogue: function(message, info, type){
         if (this.dialogueOpen != true){
             this.dialogueOpen = true;
             this.dialogueType = type;
-            this.dialogueMessage = message; 
+            this.dialogueMessage = message;
+            this.dialogueInfo = info;
             $('body').addClass('modal-open');
             this.trigger(this.getModalState());
         }
     },
-    cancelDialogue: function(){
-        if (this.dialogueOpen != false) {
+
+    cancelDialogue: function() {
+        if (this.dialogueOpen !== false) {
             this.dialogueOpen = false;
             $('body').removeClass('modal-open');
             this.trigger(this.getModalState());
         }
     },
-    acceptDialogue: function(message,type){
-        if (this.dialogueOpen != false) {
+
+    acceptDialogue: function(message, type){
+        if (this.dialogueOpen !== false) {
             this.dialogueOpen = false;
             this.dialogueAccept = true;
             $('body').removeClass('modal-open');
             this.trigger(this.getModalState());
         }
     },
+
     openCardModal: function() {
         if (this.cardOpen != true){
             this.cardOpen = true;
@@ -161,7 +168,7 @@ var ModalStore = Reflux.createStore({
     reportReceived: function(){
         this.reportSubmitted = true;
         var that = this;
-        setTimeout(function(){that.reportSubmitted=false},1000);
+        setTimeout(function() {that.reportSubmitted=false}, 1000);
         this.trigger(this.getModalState());
     },
 

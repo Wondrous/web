@@ -17,6 +17,18 @@ var Dialogue = React.createClass({
 			<div style={styles} className="round-3" ref="dialogue">
 				<div className="dialogue-header">{this.state.dialogueMessage}</div>
 
+                {this.state.dialogueInfo === "__no_picture" ?
+                    <div className="dialogue-info">
+                        If you're having trouble finding an image, take a look at these amazing ones on <b><a style={{ color: "rgb(61,61,61)" }} target="_blank" href="https://unsplash.com">Unsplash</a></b>!
+                    </div>
+                    : null}
+
+                {this.state.dialogueInfo && this.state.dialogueInfo !== "__no_picture" ?
+                    <div className="dialogue-info">
+                        {this.state.dialogueInfo}
+                    </div>
+                    : null}
+
                 <div style={{ margin: "10px 0 0" }}>
                     {this.state.dialogueType === WondrousConstants.DIALOGUE_INPUT ?
                         <button className="dialogue-btn dialogue-btn--accept round-2" onClick={WondrousActions.acceptDialogue}>Okay</button>

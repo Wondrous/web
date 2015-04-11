@@ -55,7 +55,7 @@ $num-cols: $masonry-width / 3;
 /* --- Trending Box --- */
 
 .trending-ul {
-    padding: 10px;
+    padding: 0;
     background-color: rgb(255,255,255);
     background-color: rgba(255,255,255,0.7);
     border-top: 2px solid rgb(0,226,174); /*rgb(3,191,160);*/
@@ -67,7 +67,7 @@ $num-cols: $masonry-width / 3;
 }
 
 .trending-li {
-    padding: 7px 0;
+    padding: 7px 15px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -78,9 +78,9 @@ $num-cols: $masonry-width / 3;
     font-weight: bold;
     font-size: 13px;
     color: rgb(141,141,141);
+    background-color: rgb(255,255,255);
     border-bottom: 1px solid rgb(244,244,244);
-    padding-bottom: 4px;
-    margin-bottom: 6px;
+    padding: 10px;
 }
 
 .load-new-posts-btn {

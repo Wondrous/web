@@ -329,6 +329,18 @@ $post-cover-photo-height: 390px;
     font-size: 25px;
 }
 
+.post-timestamp {
+    position: relative;
+    display: inline-block;
+    float: right;
+    top: -28px;
+    right: 31px;
+
+    font-size: 12px;
+    color: rgb(180,180,180);
+    padding: 3px 7px;
+}
+
 .post-micro-data-super-analytics-item {
     position: relative;
     margin: 0 4px;
