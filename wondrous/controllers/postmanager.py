@@ -199,7 +199,7 @@ class PostManager(BaseManager):
 
     @classmethod
     def move_n_posts_into_feed(cls,from_user_id,to_user_id,n=5):
-        posts = DBSession.query(Post).filter(Post.user_id==from_user_id).order_by(desc(Post.created_at)).limit(n).all()
+        posts = DBSession.query(Post).filter(Post.user_id==from_user_id).order_by(desc(Post.created_at)).distinct().limit(n).all()
         to_user = DBSession.query(User).get(to_user_id)
         if posts and to_user:
             for post in posts:
