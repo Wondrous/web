@@ -87,8 +87,9 @@ var PostFooter = React.createClass({
         if(this.props.data.repost!=null){
             this.props.data.subject = this.props.data.repost.subject;
         }
-        var urlLink = "wondrous.co/post/"+this.props.data.id;
+        var urlLink = "https://wondrous.co/post/"+this.props.data.id;
         var facebookLink = "http://facebook.com/sharer.php?u="+encodeURIComponent(urlLink);
+        console.log("asd",facebookLink,urlLink);
         var twitterLink = "http://twitter.com/intent/tweet?url="+encodeURIComponent(urlLink+"&text="+this.props.data.subject+"&via=Wondrous");
         return (
             <div className="post-footer" style={{ paddingBottom: 0 }}>
