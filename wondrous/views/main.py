@@ -101,10 +101,10 @@ class IndexHandler(BaseHandler):
                 if 'error' in post_json.keys():
                     retval['social_page'] = False
                 else:
-                    if 'repost' in post_json.keys():
-                        post_json = post_json['repost'] 
-                    retval['page_title']   = post_json['subject']
                     retval['page_url']     = "https://wondrous.co/post/{0}".format(post_json['id'])
+                    if 'repost' in post_json.keys():
+                        post_json = post_json['repost']
+                    retval['page_title']   = post_json['subject']
                     retval['page_content'] = post_json['text']
                     if 'ouuid' in post_json.keys():
                         retval['page_image']   = base_url + post_json['ouuid']+'-med'

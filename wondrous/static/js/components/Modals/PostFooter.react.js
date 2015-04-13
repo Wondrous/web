@@ -87,9 +87,19 @@ var PostFooter = React.createClass({
         if(this.props.data.repost!=null){
             this.props.data.subject = this.props.data.repost.subject;
         }
-        var urlLink = "wondrous.co/post/"+this.props.data.id;
+
+        hashtags = '';
+        var words = this.props.data.text.split(' ');
+        for(var i = 0; i < words.length; i++){
+            if(words[i].charAt(0)==="#"){
+                hashtags+=words[i].substring(1,words[i].length)+',';
+            }
+        }
+        var urlLink = "https://wondrous.co/post/"+this.props.data.id;
         var facebookLink = "http://facebook.com/sharer.php?u="+encodeURIComponent(urlLink);
-        var twitterLink = "http://twitter.com/intent/tweet?url="+encodeURIComponent(urlLink+"&text="+this.props.data.subject+"&via=Wondrous");
+
+
+        var twitterLink = "http://twitter.com/share?text="+encodeURIComponent(this.props.data.subject)+"&url="+encodeURIComponent(urlLink)+"&hashtags="+encodeURIComponent(hashtags);
         return (
             <div className="post-footer" style={{ paddingBottom: 0 }}>
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
