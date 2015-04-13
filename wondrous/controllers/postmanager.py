@@ -372,10 +372,8 @@ class PostManager(BaseManager):
             # this is an edit
             return cls.edit_post_json(user,subject, text, post_id, file_type, is_cover, height, width)
 
-        post = PostManager.add(user.id,  subject, text, repost_id=None, file_type=file_type,is_cover=is_cover, height=height, width=width)
-
-        obj = post.object
-
+        post = PostManager.add(user.id, subject, text, repost_id=None, file_type=file_type, is_cover=is_cover, height=height, width=width)
+        obj  = post.object
         data = {}
 
         if file_type:
@@ -418,7 +416,13 @@ class PostManager(BaseManager):
                 if not user:
                     return post_dict
 
-                post_dict.update({'liked':voted!=None})
+                post_dict.update({'liked': voted!=None})
+
+                # Add in the wondrous score
+                score = AccountManager.calculate_wondrous_score(post.user)
+                if score:
+                    score, view_count, like_count = score
+                    post_dict.update({'wondrous_score': score})
 
                 pv = DBSession.query(PostView).filter_by(post_id=post.id, user_id=user.id).first()
 

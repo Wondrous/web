@@ -107,7 +107,7 @@ var UserBar = React.createClass({
                         bannerType="alert"
                         actionType="uploadProfilePicture"
                         canExit="false"
-                        text="We encourage you to upload a profile picture – it will make your profile look 100x better!"
+                        text="Don't forget to upload a profile photo!"
                         styles={{ margin: 0, cursor: "pointer" }}
                         />
                     : null}

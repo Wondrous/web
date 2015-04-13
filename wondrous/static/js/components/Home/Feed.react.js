@@ -1,6 +1,7 @@
 var Post = require('../Post/Post.react');
 
 var FeedStore = require('../../stores/FeedStore');
+var ProfileStore = require('../../stores/ProfileStore');
 var UserStore = require('../../stores/UserStore');
 var ModalStore = require('../../stores/ModalStore');
 var WondrousActions = require('../../actions/WondrousActions');
@@ -65,7 +66,10 @@ var Feed = React.createClass({
     },
 
     render: function() {
-        if (!UserStore.loggedIn && UserStore.loaded){
+
+        var ouuid = (typeof UserStore.user.ouuid !== 'undefined') ? UserStore.user.ouuid : null;
+
+        if (!UserStore.loggedIn && UserStore.loaded) {
             return (
                 <div className="masonry" ref="masonryContainer" id="asyncPosts">
                     <div className="backdrop"></div>
@@ -101,47 +105,61 @@ var Feed = React.createClass({
             ));
         }
 
+        updateBannerStyles = { cursor: "pointer" };
+        if (!ouuid) {
+            updateBannerStyles['marginTop'] = 20;
+        }
+
         return (
-            <div className="grid-padding">
-                <div ref="scrollBox">
-                    {/*
+            <span>
+                {!ouuid ?
                     <InformationBanner
-                        actionType="loadPost" 
-                        bannerType="general" 
-                        canExit="false" 
-                        text="While you were gone, here are some things we've done to the site..." 
-                        styles={{ cursor: "pointer" }}
+                        bannerType="alert"
+                        actionType="uploadProfilePicture"
+                        canExit="false"
+                        text="Don't forget to upload a profile photo!"
+                        styles={{ cursor: "pointer", margin: 0 }}
                         />
-                    */}
+                    : null}
+                <div className="grid-padding">
+                    <div ref="scrollBox">
+                        <InformationBanner
+                            actionType="loadPost" 
+                            bannerType="general" 
+                            canExit="false" 
+                            text="While you were gone, here are some things we've done to the site..." 
+                            styles={updateBannerStyles}
+                            />
 
-                    {FeedStore.hasNewPosts ?
-                        <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
-                            Load new posts
-                        </button>
-                        : null}
+                        {FeedStore.hasNewPosts ?
+                            <button className="load-new-posts-btn round-2" onClick={FeedStore.loadNewest}>
+                                Load new posts
+                            </button>
+                            : null}
 
-                    {FeedStore.loaded && posts.length < 3 ?
-                        <div style={{ paddingTop: 20 }}>
-                            <DiscoveryBox />
-                            {posts.length == 0 ?
-                                <div className="no-data-to-display">
-                                    There are no posts in your feed yet
-                                </div>
-                                : null }
+                        {FeedStore.loaded && posts.length < 3 ?
+                            <div style={{ paddingTop: 20 }}>
+                                <DiscoveryBox />
+                                {posts.length == 0 ?
+                                    <div className="no-data-to-display">
+                                        There are no posts in your feed yet
+                                    </div>
+                                    : null }
+                            </div>
+                            : null}
+
+                        <div className="masonry" ref="masonryContainer" id="asyncPosts">
+                            <div className="backdrop"></div>
+                            <div className="grid-sizer" style={{"display": "none"}}></div>
+                            {posts}
                         </div>
-                        : null}
-
-                    <div className="masonry" ref="masonryContainer" id="asyncPosts">
-                        <div className="backdrop"></div>
-                        <div className="grid-sizer" style={{"display": "none"}}></div>
-                        {posts}
-                    </div>
-                    <div>
-                    {!FeedStore.donePaging&&posts.length>0&&UserStore.loggedIn?<img className="loading-wheel" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.loading.gif"/>:{}}
-                    {UserStore.loaded&&!UserStore.loggedIn?<a onClick={this.promptSignup}><h1>Load More</h1></a>:{}}
+                        <div>
+                        {!FeedStore.donePaging&&posts.length>0&&UserStore.loggedIn?<img className="loading-wheel" src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/p.loading.gif"/>:{}}
+                        {UserStore.loaded&&!UserStore.loggedIn?<a onClick={this.promptSignup}><h1>Load More</h1></a>:{}}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </span>
         );
     },
 });
