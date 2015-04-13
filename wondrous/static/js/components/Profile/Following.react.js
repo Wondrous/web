@@ -21,8 +21,8 @@ var Following = React.createClass({
     is_private: ProfileStore.user.is_private,
 
     getInitialState: function() {
-        WondrousActions.loadFollowing(ProfileStore.user.username,ProfileStore.followingPage);
-        return {data:ProfileStore.following.sortedSet};
+        WondrousActions.loadFollowing(ProfileStore.user.username, ProfileStore.followingPage);
+        return {data: ProfileStore.following.sortedSet};
     },
 
     render: function() {

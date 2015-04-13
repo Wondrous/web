@@ -20,6 +20,8 @@ from wondrous.models import (
     UserTag,
     Vote
 )
+
+from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.votemanager import VoteManager
 
 class SearchManager:
@@ -63,6 +65,13 @@ class SearchManager:
         for post, vote in ret:
             data = post.json()
             data.update({'liked':vote!=None})
+
+            # Add in the wondrous score
+            score = AccountManager.calculate_wondrous_score(post.user)
+            if score:
+                score, view_count, like_count = score
+                data.update({'wondrous_score': score})
+
             retval.append(data)
         return retval
 
@@ -106,5 +115,12 @@ class SearchManager:
         for post, vote in ret:
             data = post.json()
             data.update({'liked':vote!=None})
+
+            # Add in the wondrous score
+            score = AccountManager.calculate_wondrous_score(post.user)
+            if score:
+                score, view_count, like_count = score
+                data.update({'wondrous_score': score})
+
             retval.append(data)
         return retval

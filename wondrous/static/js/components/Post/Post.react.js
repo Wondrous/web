@@ -51,14 +51,21 @@ var Post = React.createClass({
             this.props.data.textPreview = thisTextSlice;
         }
 
+        var postHeaderStyles = { position: "relative" };
+        var is_influencer = (this.props.data.wondrous_score >= 75);
+        if (!is_influencer) {
+            postHeaderStyles['backgroundColor'] = "rgb(255,255,255)";
+        } else {
+            postHeaderStyles['backgroundColor'] = "rgb(0,226,174)";
+        }
+
         return (
             <div ref="brick" className="masonry-brick">
                 <div ref="post" className="post-body round-3">
-                    <div style={{ backgroundColor: "#FFFFFF", position: "relative" }}>
+                    <div style={postHeaderStyles}>
                         <UserTitle data={this.props.data} />
                     </div>
 
-                    {/*<div className="post-title">{this.props.data.subject}</div>*/}
                     <a href={"/post/"+this.props.data.id} onClick={this.handleClick} id="slidePhoto">
                         <Photo ref="photo" data={this.props.data} />
                     </a>

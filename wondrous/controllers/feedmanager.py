@@ -11,6 +11,7 @@
 from sqlalchemy import desc
 from sqlalchemy.orm import aliased
 
+from wondrous.controllers.accountmanager import AccountManager
 from wondrous.controllers.basemanager import BaseManager
 from wondrous.controllers.votemanager import VoteManager
 
@@ -42,13 +43,18 @@ class FeedManager(BaseManager):
             filter(Post.set_to_delete==None).\
             order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
 
-
         data = []
-
         for post, vote in retval:
             if not post.is_hidden and post.is_active and not post.set_to_delete:
                 post_dict = post.json()
-                post_dict.update({'liked':vote!=None})
+                post_dict.update({'liked': vote!=None})
+                
+                # Add in the wondrous score
+                score = AccountManager.calculate_wondrous_score(post.user)
+                if score:
+                    score, view_count, like_count = score
+                    post_dict.update({'wondrous_score': score})
+
                 data.append(post_dict)
         return data
 

@@ -130,11 +130,11 @@ var PostFooter = React.createClass({
                     <input className="post-share-link-input round-2" type='text' value={PostStore.postLink} readOnly/>
                     : {}}
 
-                <a href="javascript:" onClick={function(evt) { return window.open(facebookLink) }} target="_blank" >
+                <a href="javascript:" onClick={function(evt) { return window.open(facebookLink, '_blank', 'width=400,height=500') }} >
                     <img className="post-footer-btn round-50" style={{ position: "relative", top: 7 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/social/social-facebook.png" title="Share this post to Facebook" />
                 </a>
 
-                <a href="javascript:" onClick={function(evt) { return window.open(twitterLink) }} target="_blank" >
+                <a href="javascript:" onClick={function(evt) { return window.open(twitterLink, '_blank', 'width=400,height=500') }} >
                     <img className="post-footer-btn round-50" style={{ position: "relative", top: 7 }} src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/social/social-twitter.png" title="Share this post to Twitter" />
                 </a>
 

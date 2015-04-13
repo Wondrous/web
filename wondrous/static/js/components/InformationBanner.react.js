@@ -5,7 +5,7 @@ var InformationBanner = React.createClass({
 	handleClick: function() {
 		// What happens when the user clicks on the banner?
 		if (this.props.actionType == "loadPost") {
-			WondrousActions.newPostLoad(103);
+			WondrousActions.newPostLoad(166);
 		} else if (this.props.actionType == "uploadProfilePicture") {
 			WondrousActions.openPictureModal();
 		} else {
