@@ -240,7 +240,7 @@ class PostManager(BaseManager):
                 if height and width:
                     new_object.height = int(height)
                     new_object.width = int(width)
-                    new_object.is_cover = is_cover if not None else True
+                    new_object.is_cover = is_cover if is_cover != None else True
             except Exception, e:
                 new_object.height = None
                 new_object.width = None
@@ -337,9 +337,11 @@ class PostManager(BaseManager):
             ouuid = obj.ouuid
             obj.set_to_delete = datetime.now()
 
-            obj = cls.create_new_object(subject,text,file_type,height,width,is_cover)
             if not file_type:
                 obj.ouuid = ouuid
+            else:
+                obj = cls.create_new_object(subject,text,file_type,height,width,is_cover)
+
 
             post.object_id = obj.id
             DBSession.add(post)
@@ -368,7 +370,6 @@ class PostManager(BaseManager):
             return {'error': 'Insufficient data'}
 
         if post_id:
-            print "edit"
             # this is an edit
             return cls.edit_post_json(user,subject, text, post_id, file_type, is_cover, height, width)
 
