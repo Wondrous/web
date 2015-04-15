@@ -54,13 +54,17 @@ var WondrousApp = React.createClass({
         window.addEventListener('scroll', this.checkWindowScroll);
     },
 
+    onClick:function(e){
+        WondrousActions.closeSidebar();
+    },
+
     // Render our child components
     render: function() {
         return (
             <div>
                 <Navbar />
                 <SideMenu />
-                <div id="main-content-id" className="main-content">
+                <div id="main-content-id" className="main-content" onClick={this.onClick}>
                     <RouteHandler />
                 </div>
                 <ModalContainer />

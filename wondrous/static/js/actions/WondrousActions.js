@@ -136,6 +136,8 @@ var WondrousActions = Reflux.createActions({
 
     "uploadProgress": {},
 
+    "closeSidebar":{},
+
     // toggles settings side bar
     "toggleSettings": {},
 

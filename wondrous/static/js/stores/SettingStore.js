@@ -36,23 +36,40 @@ var SettingStore = Reflux.createStore({
         this.trigger();
     },
 
-    toggleSideBar:function() {
-        this.sidebarOpen = !this.sidebarOpen;
+    toggleSideBar:function(sidebarType) {
+        console.log(this.sidebarOpen,this.sidebarType,sidebarType);
+        if (this.sidebarOpen&&this.sidebarType===sidebarType){
+            this.sidebarOpen=false;
+        }else if(this.sidebarOpen&&this.sidebarType!==sidebarType){
+            this.sidebarOpen=true;
+        }else {
+            this.sidebarOpen = !this.sidebarOpen;
+        }
+
+        if(!this.sidebarOpen) {
+            this.sidebarType = null;
+        }
+
+        this.trigger();
+    },
+
+    toggleSettings: function() {
+        this.toggleSideBar(WondrousConstants.SHOW_SETTINGS);
+        this.sidebarType = WondrousConstants.SHOW_SETTINGS;
+        this.trigger({sidebarType:this.sidebarType});
+    },
+
+    closeSidebar: function(){
+        this.sidebarOpen = false;
         if(!this.sidebarOpen) {
             this.sidebarType = null;
         }
         this.trigger();
     },
 
-    toggleSettings: function() {
-        this.sidebarType = WondrousConstants.SHOW_SETTINGS;
-        this.toggleSideBar();
-        this.trigger({sidebarType:this.sidebarType});
-    },
-
     toggleNotifications: function() {
+        this.toggleSideBar(WondrousConstants.SHOW_NOTIFICATIONS);
         this.sidebarType = WondrousConstants.SHOW_NOTIFICATIONS;
-        this.toggleSideBar();
         this.trigger({sidebarType:this.sidebarType});
     },
 
