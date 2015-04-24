@@ -1,5 +1,5 @@
 var StatusBar = React.createClass({
-    render: function(){
+    render: function() {
         return (
             <div className="post-subject-text-position">
                 <div>

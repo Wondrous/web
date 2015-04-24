@@ -20,11 +20,11 @@ var UserTitle = React.createClass({
         var img_src = (typeof this.props.data.user_ouuid !== 'undefined') ? URLGenerator.generate45(this.props.data.user_ouuid) : "https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/defaults/p.default-profile-picture.jpg";
         var hrefPlaceholder = '/' + this.props.data.username;
 
-        var is_influencer = (this.props.data.wondrous_score >= 75);
+        // var is_influencer = (this.props.data.wondrous_score >= 75);
         var postHeaderStyles = {};
-        if (is_influencer) {
-            postHeaderStyles['color'] = "rgb(255,255,255)";
-        }
+        // if (is_influencer) {
+        //     postHeaderStyles['color'] = "rgb(255,255,255)";
+        // }
 
         return (
             <div>

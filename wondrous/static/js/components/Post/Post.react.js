@@ -52,12 +52,14 @@ var Post = React.createClass({
         }
 
         var postHeaderStyles = { position: "relative" };
-        var is_influencer = (this.props.data.wondrous_score >= 75);
-        if (!is_influencer) {
-            postHeaderStyles['backgroundColor'] = "rgb(255,255,255)";
-        } else {
-            postHeaderStyles['backgroundColor'] = "rgb(0,226,174)";
-        }
+        postHeaderStyles['backgroundColor'] = "rgb(255,255,255)";
+
+        // var is_influencer = (this.props.data.wondrous_score >= 75);
+        // if (!is_influencer) {
+        //     postHeaderStyles['backgroundColor'] = "rgb(255,255,255)";
+        // } else {
+        //     postHeaderStyles['backgroundColor'] = "rgb(0,226,174)";
+        // }
 
         return (
             <div ref="brick" className="masonry-brick">
