@@ -330,7 +330,7 @@ class AccountManager(BaseManager):
         script+="""
             (select count(*)
             from post
-            where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+            where post.repost_id is Null and post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
 
             (select count(*)
             from notification
