@@ -100,6 +100,12 @@ var PostFooter = React.createClass({
 
 
         var twitterLink = "http://twitter.com/share?text="+encodeURIComponent(this.props.data.subject)+"&url="+encodeURIComponent(urlLink)+"&hashtags="+encodeURIComponent(hashtags);
+        // {!is_it_mine ?
+        //     <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50" title="Repost this post">
+        //         <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
+        //     </span>
+        //     : null}
+
         return (
             <div className="post-footer" style={{ paddingBottom: 0 }}>
                 <span onClick={this.likePost} className="post-footer-btn post-like-btn round-50" title="Like this post">
@@ -116,11 +122,6 @@ var PostFooter = React.createClass({
                     }
                 </span>
 
-                {!is_it_mine ?
-                    <span onClick={this.clickRepost} className="post-footer-btn post-like-btn round-50" title="Repost this post">
-                        <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/repost/repost_white.svg" className="post-general-icon" />
-                    </span>
-                    : null}
 
                 <span onClick={WondrousActions.togglePostLink} className="post-footer-btn post-like-btn round-50" style={{ position: "relative", top: -13 }} title="Get link to this post">
                     <img src="https://s3-us-west-2.amazonaws.com/wondrousstatic/pictures/icons/link/link.png" className="post-delete-icon" />

@@ -41,6 +41,7 @@ class FeedManager(BaseManager):
             outerjoin(v1, (((Post.owner_id==v1.subject_id )|(Post.user_id==v1.subject_id))&((v1.status==6) or (v1.status==7)))).\
             filter((User.is_private==False)|(v1.user_id==user.id)).\
             filter(Post.set_to_delete==None).\
+            filter(Post.repost_id==None).\
             order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
 
         data = []
@@ -139,6 +140,7 @@ class FeedManager(BaseManager):
                 filter(Post.user_id==profile_user.id).\
                 filter((User.is_private==False)|(v1.user_id==my_user_id)).\
                 filter(Post.set_to_delete==None).\
+                filter(Post.repost_id==None).\
                 order_by(desc(Post.created_at)).distinct().limit(15).offset(page*15).all()
 
             for post, vote in retval:
