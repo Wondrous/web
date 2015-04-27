@@ -166,15 +166,15 @@ class AccountManager(BaseManager):
 
                     (select count(*)
                     from post
-                    where post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
+                    where post.repost_id is NULL and post.user_id=:user_id and post.set_to_delete is NULL) as post_count,
 
                     (select sum(post.like_count)
                     from post
-                    where post.set_to_delete is NULL and post.user_id=:user_id) as like_count,
+                    where post.repost_id is NULL and post.set_to_delete is NULL and post.user_id=:user_id) as like_count,
 
                     (select sum(post.view_count)
                     from post
-                    where post.set_to_delete is NULL and post.user_id=:user_id) as view_count,
+                    where post.repost_id is NULL and post.set_to_delete is NULL and post.user_id=:user_id) as view_count,
 
                     (select count(*)
                     from comment
