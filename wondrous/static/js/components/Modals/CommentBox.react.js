@@ -11,7 +11,7 @@ var dateToString = require('../../utils/Func').dateToString;
 var Comment = React.createClass({
 
     getInitialState: function(){
-        return {editting:false}
+        return {editting:false};
     },
     handleClick: function(evt) {
         if (typeof this.props.data.username !== 'undefined') {
@@ -139,7 +139,7 @@ var CommentBox = React.createClass({
     },
 
     loadMoreComments: function() {
-        PostStore.loadMoreComments();
+        CommentStore.loadMoreComments();
     },
 
     render: function() {

@@ -39,7 +39,7 @@ function resizeImage(url, callback) {
         // resample_hermite(canvas,this.width,this.height, width, height);
         // Convert the canvas to a data URL in PNG format
         callback(canvas.toDataURL());
-    }
+    };
 
     sourceImage.src = url;
 }
@@ -117,7 +117,7 @@ var PostForm = React.createClass({
     },
 
     _submitData: function(postSubject,postText,blobs){
-        if (PostFormStore.post_id==null){
+        if (PostFormStore.post_id === null){
             WondrousActions.addNewPost(
                 postSubject,
                 postText,
@@ -145,11 +145,11 @@ var PostForm = React.createClass({
 		var postSubject = $('#postSubject').val();
 		var postText    = $('#postTextarea').val();
 
-		if (postSubject.length == 0) {
+		if (postSubject.length === 0) {
 			this.state.error = "Please add a title to your post";
             this.forceUpdate();
             return;
-		} else if (postText.length == 0) {
+		} else if (postText.length === 0) {
             this.state.error = "Please add some content to your post. Feel free to add #tags!";
             this.forceUpdate();
             return;
@@ -157,7 +157,7 @@ var PostForm = React.createClass({
             WondrousActions.openDialogue("Please add a picture!", "__no_picture", WondrousConstants.DIALOGUE_INFO);
             return;
         } else if (SettingStore.uploading) {
-            this.state.error = "It looks like you're already uploading something else!"
+            this.state.error = "It looks like you're already uploading something else!";
             this.forceUpdate();
             return;
         }
@@ -168,7 +168,7 @@ var PostForm = React.createClass({
             var dataBlob = null;
 
             if (PostFormStore.isCover) {
-                dataURL = $(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL()
+                dataURL = $(this.refs.cropBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL();
                 dataBlob = uri2blob(dataURL);
             } else {
                 dataURL = $(this.refs.fsBox.getDOMNode()).attr("src");
@@ -177,7 +177,7 @@ var PostForm = React.createClass({
 
             var that = this;
             resizeImage(dataURL,function(mediumDataURL){
-                var blobs = {"fullsize": dataBlob,"medium":uri2blob(mediumDataURL), "dataURL":mediumDataURL}
+                var blobs = {"fullsize": dataBlob,"medium":uri2blob(mediumDataURL), "dataURL":mediumDataURL};
                 that._submitData(postSubject,postText,blobs);
             });
         } else {
@@ -195,7 +195,7 @@ var PostForm = React.createClass({
 
         var optionClass = "post-form-bg-display-option";
         var optionActiveClass = optionClass + " post-form-bg-display-option--active";
-		var buttonStyle = {'display':!this.state.submitted?"block":"none"}
+		var buttonStyle = {'display':!this.state.submitted?"block":"none"};
 
         return (
             <div id="new-post-dialogue" ref="postform" className="new-post-wrapper round-3" style={{ width: 780 }}>
@@ -225,7 +225,7 @@ var PostForm = React.createClass({
                 <div className="new-post-element">
                     <div className="post-input-wrapper">
                         <div className="typehead">
-                            <textarea onChange={ this.onChange("postTextArea")} id="postTextarea" ref="postTextArea" maxLength="5000" placeholder="What's on your mind? #Something #Meaningful" className="post-input"
+                            <textarea onChange={ this.onChange("postTextArea")} id="postTextarea" ref="postTextArea" maxLength="50000" placeholder="What's on your mind? #Something #Meaningful" className="post-input"
                             style={{ overflow: "y-scroll", wordWrap: "break-word", resize: "none", height: 48 }} value={PostFormStore.text}></textarea>
                         </div>
                     </div>

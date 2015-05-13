@@ -15,7 +15,7 @@ from wondrous.utilities._url_regex_pattern import PATTERN
 GLOBAL_CONFIGURATIONS = {
     "POSTS_PER_PAGE"      : 5,
 
-    "POST_TEXT_LENGTH"    : 6000,  # Chars
+    "POST_TEXT_LENGTH"    : 55000,  # Chars
     "POST_SUBJECT_LENGTH" : 50,    # Chars
     "MAX_COMMENT_LENGTH"  : 1100,  # Chars
 

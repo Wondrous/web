@@ -28,7 +28,7 @@ var Follower = React.createClass({
     },
 
     handleClick: function(username) {
-        return this.context.router.transitionTo('/' + username)
+        return this.context.router.transitionTo('/' + username);
     },
     render: function(){
         this.am_following = ProfileStore.user.following;

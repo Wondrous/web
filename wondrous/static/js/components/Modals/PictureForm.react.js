@@ -66,7 +66,7 @@ var PictureForm = React.createClass({
     },
 
     handleSubmit:function(e){
-        if (typeof PostFormStore.file !=='undefined' && PostFormStore.file != null){
+        if (typeof PostFormStore.file !=='undefined' && PostFormStore.file !== null){
             var sourceImg = new Image();
             var dataURL = $(this.refs.cropPictureBox.getDOMNode()).cropper("getCroppedCanvas").toDataURL();
 
@@ -80,7 +80,7 @@ var PictureForm = React.createClass({
                         "45x45":uri2blob(DownScaleImage(sourceImg,1/(sourceImg.height/45)).toDataURL())
                     }
                 );
-            }
+            };
             sourceImg.src = dataURL;
         }
     },

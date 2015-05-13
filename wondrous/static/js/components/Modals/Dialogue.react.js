@@ -1,6 +1,6 @@
 var WondrousActions = require('../../actions/WondrousActions');
 var WondrousConstants = require('../../constants/WondrousConstants');
-var ModalStore = require('../../stores/ModalStore')
+var ModalStore = require('../../stores/ModalStore');
 var Dialogue = React.createClass({
     mixins: [Reflux.connect(ModalStore)],
 
@@ -11,7 +11,7 @@ var Dialogue = React.createClass({
             backgroundColor: "rgb(255,255,255)",
             margin: "0 auto",
             width: "70%",
-        }
+        };
 
 		return (
 			<div style={styles} className="round-3" ref="dialogue">

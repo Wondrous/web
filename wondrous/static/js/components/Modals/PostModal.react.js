@@ -42,7 +42,7 @@ var PostModal = React.createClass({
 		divStyle = this.state.cardOpen ? {display:"block"} : {display:"none"};
 		return (
 				<ModalWrapper handleClose={this.handleClose} divStyle={divStyle}>
-                    {PostStore.postError != null ?
+                    {PostStore.postError !== null ?
                         <span className="post-not-found-error">{PostStore.postError}</span>
                         :
                         <Post/>

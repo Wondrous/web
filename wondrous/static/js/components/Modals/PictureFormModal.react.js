@@ -9,7 +9,7 @@ var PictureFormModal = React.createClass({
         Reflux.connect(ModalStore)
     ],
 	getInitialState: function(){
-		return {pictureFormOpen:false}
+		return {pictureFormOpen:false};
 	},
 	componentDidMount: function(){
 		var con = $(this.refs.modalWrapper.getDOMNode());
@@ -31,7 +31,7 @@ var PictureFormModal = React.createClass({
 
 		if (typeof evt !== 'undefined' && evt){
 			evt.preventDefault();
-	        evt.stopPropagation();
+			evt.stopPropagation();
 		}
 	},
 
@@ -43,7 +43,7 @@ var PictureFormModal = React.createClass({
 
 		return (
 			<ModalWrapper handleClose={this.handleClose} isPicture={true} divStyle={divStyle}>
-                <PictureForm ref="modalWrapper" handleClose={this.handleClose}/>
+                <PictureForm ref="modalWrapper" handleClose={this.handleClose} />
             </ModalWrapper>
 		);
 	}

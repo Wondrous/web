@@ -11,7 +11,7 @@ var LikedUserModal = React.createClass({
     },
 
     getInitialState: function(){
-        return {users:[]}
+        return {users:[]};
     },
 
     onModalChange: function(stuff) {
@@ -20,7 +20,7 @@ var LikedUserModal = React.createClass({
 
     onPostChange: function(postUpdate) {
         if(typeof postUpdate!=='undefined' && postUpdate.hasOwnProperty('likedUsers')){
-            this.setState({users:postUpdate.likedUsers})
+            this.setState({users:postUpdate.likedUsers});
         }
     },
 

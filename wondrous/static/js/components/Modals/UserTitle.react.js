@@ -32,7 +32,7 @@ var UserTitle = React.createClass({
     render: function() {
         this.repost = null;
 
-        if (typeof this.props.data === 'undefined' || this.props.data.subject.length==0) {
+        if (typeof this.props.data === 'undefined' || this.props.data.subject.length === 0) {
             return (<div></div>);
         }
 

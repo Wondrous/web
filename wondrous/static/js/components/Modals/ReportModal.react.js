@@ -6,7 +6,7 @@ var ModalWrapper = require('./ModalWrapper.react');
 var ReportingForm = React.createClass({
     mixins: [ Reflux.connect(ModalStore) ],
     getInitialState: function(){
-        return {reportSubmitted:false, reportId:null}
+        return {reportSubmitted:false, reportId:null};
     },
     report: function(e){
         e.preventDefault();

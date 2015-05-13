@@ -6,7 +6,7 @@ var ModalWrapper = require('./ModalWrapper.react');
 var SignupModal = React.createClass({
     mixins:[ Reflux.connect(ModalStore) ],
     getInitialState: function(){
-        return {signupOpen:false}
+        return {signupOpen:false};
     },
 
     render: function() {

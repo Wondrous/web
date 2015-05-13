@@ -10,7 +10,7 @@ var PostFormModal = React.createClass({
         Reflux.connect(ModalStore)
     ],
 	getInitialState: function(){
-		return {postFormOpen:false}
+		return {postFormOpen:false};
 	},
 
 	componentDidMount: function(){
@@ -33,7 +33,7 @@ var PostFormModal = React.createClass({
 	componentDidUpdate: function(){
 		if (this.state.postFormOpen){
 			var con = $(this.refs.modalWrapper.getDOMNode());
-			if(this.state.dialogueOpen!=true){
+			if(this.state.dialogueOpen !== true){
 				con.addClass("animated bounceInDown");
 			}
 		}

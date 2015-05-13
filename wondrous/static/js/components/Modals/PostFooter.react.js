@@ -41,7 +41,7 @@ var PostFooter = React.createClass({
     },
 
     onLikeHandler: function(err, res) {
-        if (err == null) {
+        if (err === null) {
             PostStore.post.liked = this.props.data.liked;
             if (PostStore.post.liked) {
                 PostStore.post.like_count++;
@@ -81,10 +81,10 @@ var PostFooter = React.createClass({
         WondrousActions.repost(this.props.data.id);
     },
 
-    render: function(){
+    render: function() {
         var is_it_mine = (this.props.data.username === UserStore.user.username);
-        var original_mine = is_it_mine&&(this.props.data.repost==null);
-        if(this.props.data.repost!=null){
+        var original_mine = is_it_mine&&(this.props.data.repost === null);
+        if(this.props.data.repost != null) {
             this.props.data.subject = this.props.data.repost.subject;
         }
 

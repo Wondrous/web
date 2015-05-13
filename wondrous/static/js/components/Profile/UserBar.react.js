@@ -31,9 +31,9 @@ var UserBar = React.createClass({
     },
 
     handleData: function(err, data) {
-        if (err == null){
+        if (err === null){
             var currentState = this.state.data;
-            currentState.following = data.following == true;
+            currentState.following = data.following === true;
             this.setState({data: currentState});
         } else{
             console.error("error", err);
@@ -46,7 +46,7 @@ var UserBar = React.createClass({
         WondrousAPI.toggleFollow({
             user_id: user_id,
             callback: this.handleData
-        })
+        });
     },
 
     handleClick: function() {
@@ -76,7 +76,7 @@ var UserBar = React.createClass({
                     });
                 }
             }
-        })
+        });
     },
 
     render: function() {

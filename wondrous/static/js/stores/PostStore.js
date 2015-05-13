@@ -39,7 +39,7 @@ var PostStore = Reflux.createStore({
             likedUsers: this.likedUsers.sortedSet,
             postLink: this.postLink,
             postError: this.postError
-        }
+        };
     },
 
     togglePostLink: function() {

@@ -20,7 +20,7 @@ var PrivateProfile = React.createClass({
     },
 
     handleData: function(err, data){
-        if (err == null){
+        if (err === null){
             $('._rmPending').hide();
             $('._pendingTitle').html("Request<br/>Sent");
             $('._requestBtn').removeClass('not-following').addClass('is-pending');
@@ -37,7 +37,7 @@ var PrivateProfile = React.createClass({
         WondrousAPI.toggleFollow({
             user_id: user_id,
             callback: this.handleData
-        })
+        });
     },
     render: function() {
         var ouuid = (typeof this.state.data.ouuid !== 'undefined') ? this.state.data.ouuid : false;

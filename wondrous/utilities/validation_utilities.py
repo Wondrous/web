@@ -538,7 +538,7 @@ class ValidatePost(object):
             PURPOSE:
             This checks to see if the post text is valid:
                 Is it None or just empty?
-                Is it 6000 characters or less?
+                Is it 55000 characters or less?
 
             USE: Provide post_text as the parameter
 

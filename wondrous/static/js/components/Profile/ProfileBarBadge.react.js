@@ -3,7 +3,7 @@ var ProfileBarBadge = React.createClass({
     render: function() {
         var isInfluencer = null;
         if (this.props.name == "influence") {
-            isInfluencer = this.props.number >= 75 ? "profile-header-nav-number--is-influencer" : null
+            isInfluencer = this.props.number >= 75 ? "profile-header-nav-number--is-influencer" : null;
         }
 
         return (

@@ -42,7 +42,7 @@ var Post = React.createClass({
 
 	render: function() {
 		var repost = null;
-		if (typeof this.state.post === 'undefined' || this.state.post.subject==0) {
+		if (typeof this.state.post === 'undefined' || this.state.post.subject === 0) {
 			return (
 				<div></div>
 			);
